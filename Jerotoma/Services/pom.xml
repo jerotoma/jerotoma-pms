@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+      <groupId>com.jerotoma</groupId>
+      <artifactId>jerotoma-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>jerotoma-services</artifactId>
+  <name>JerotomaJervices</name>
+  <packaging>jar</packaging>	 
+  <url>https://jerotoma.com</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>    
+  </properties>
+  <dependencies>
+    <dependency>
+      	<groupId>com.jerotoma</groupId>
+      	<artifactId>jerotoma-common</artifactId>
+      	<version>1.0-SNAPSHOT</version>      	
+    </dependency>
+    <dependency>
+      	<groupId>com.jerotoma</groupId>
+      	<artifactId>jerotoma-database</artifactId>
+      	<version>1.0-SNAPSHOT</version>      	
+    </dependency>
+ </dependencies>
+  <build>
+		<finalName>jerotoma-services</finalName>
+  </build>
+</project>
