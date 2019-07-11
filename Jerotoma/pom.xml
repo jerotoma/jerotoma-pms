@@ -17,7 +17,7 @@
   	<module>Services</module>
 	<module>Web</module>
 	<module>Database</module>
-    <module>Common</module>
+    <module>Common</module>    
   </modules>
   <dependencies>
   		<dependency>

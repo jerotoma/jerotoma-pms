@@ -20,14 +20,8 @@ public class AuthUser extends User {
 	
 	private Integer id;
 	private Collection<Role> roles;
-	String username;
-	String password;
 	String firstName;
 	String lastName;
-	Boolean enabled; 
-	Boolean accountNonExpired;
-	Boolean credentialsNonExpire; 
-	Boolean accountNonLocked;	
 	Date createdOn;
 	Date updatedOn;
 		
@@ -40,6 +34,7 @@ public class AuthUser extends User {
 			Boolean accountNonLocked,
 			Collection<Role> roles) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(roles));
+		this.roles = roles;
 		
 	}
 	
@@ -59,31 +54,8 @@ public class AuthUser extends User {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public Collection<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Collection<Role> roles) {
-		this.roles = roles;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
+	
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -100,37 +72,7 @@ public class AuthUser extends User {
 		this.lastName = lastName;
 	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	public Boolean getAccountNonExpired() {
-		return accountNonExpired;
-	}
-
-	public void setAccountNonExpired(Boolean accountNonExpired) {
-		this.accountNonExpired = accountNonExpired;
-	}
-
-	public Boolean getCredentialsNonExpire() {
-		return credentialsNonExpire;
-	}
-
-	public void setCredentialsNonExpire(Boolean credentialsNonExpire) {
-		this.credentialsNonExpire = credentialsNonExpire;
-	}
-
-	public Boolean getAccountNonLocked() {
-		return accountNonLocked;
-	}
-
-	public void setAccountNonLocked(Boolean accountNonLocked) {
-		this.accountNonLocked = accountNonLocked;
-	}
+	
 
 	public Date getCreatedOn() {
 		return createdOn;
@@ -146,6 +88,16 @@ public class AuthUser extends User {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+
+	public Collection<Role> getRoles() {
+		return roles;
+	}
+
+
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
 	}	
 	
 }

@@ -34,7 +34,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 			.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	private StringBuilder ROLE_INSERT_QUERY = new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
 			.append("VALUES (?, ?)");	
-	private StringBuilder SELECT_COMMON_QUERY = new StringBuilder("SELECT username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+	
 	private StringBuilder DELETE_QUERY = new StringBuilder("DELETE FROM public.users WHERE id = ?");
 	
 	private Integer primaryKey;
@@ -51,8 +51,8 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser findObject(Integer primaryKey) throws SQLException {
-		SELECT_COMMON_QUERY.append("WHERE id = ? ");
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new AuthUserSingleResultProcessor(), primaryKey);
+		String query = commonSelectQuery().append("WHERE id = ? ").toString();
+		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), primaryKey);
 	
 	}
 
@@ -64,10 +64,10 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 				passwordEncoder.encode(object.getPassword()),
 				object.getFirstName(),
 				object.getLastName(),
-				object.getEnabled(),
-				object.getAccountNonExpired(),
-				object.getCredentialsNonExpire(),
-				object.getAccountNonLocked(),
+				object.isEnabled(),
+				object.isAccountNonExpired(),
+				object.isCredentialsNonExpired(),
+				object.isAccountNonLocked(),
 				object.getCreatedOn(),
 				object.getUpdatedOn()
 		};
@@ -85,7 +85,8 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public List<AuthUser> loadList(QueryParam queryParam) throws SQLException {
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new AuthUserResultProcessor());
+		String query = commonSelectQuery().toString();
+		return this.jdbcTemplate.query(query, new AuthUserResultProcessor());
 	}
 
 	@Override
@@ -101,8 +102,8 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
-		SELECT_COMMON_QUERY.append("WHERE username = ? ");
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new AuthUserSingleResultProcessor(), username);
+		String query = commonSelectQuery().append("WHERE username = ? ").toString();
+		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), username);
 	
 	}
 	
@@ -150,6 +151,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		Date createdOn = rs.getDate("created_on");
 		Date updatedOn = rs.getDate("updated_on");		
 		authUser = new AuthUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, loadAuthorities(userId));
+		authUser.setId(userId);
 		authUser.setCreatedOn(createdOn);
 		authUser.setUpdatedOn(updatedOn);
 		authUser.setFirstName(firstName);
@@ -158,13 +160,19 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	private Collection<Role> loadAuthorities(Integer userId) {
-		StringBuilder builder = new StringBuilder("SELECT r.id, r.name, r.displayName, r.created_on, r.updated_on FROM public.roles ")
-				.append("JOIN INNER user_roles ur ON ur.role_id = r.id ")
+		StringBuilder builder = new StringBuilder("SELECT r.id, r.name, r.display_name, r.created_on, r.updated_on FROM public.roles r ")
+				.append("INNER JOIN public.user_roles ur ON ur.role_id = r.id ")
 				.append("WHERE ur.user_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new RowMapper<Role>() {
-			@Override
-			public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
-				return new Role(rs);
-			}});
+				@Override
+				public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
+					return new Role(rs);
+				}
+			}, userId);
 	}
+	
+	private StringBuilder commonSelectQuery() {		
+		return new StringBuilder("SELECT id, username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+	}
+	
 }
