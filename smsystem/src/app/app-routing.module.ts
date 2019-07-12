@@ -11,9 +11,9 @@ import {
 
 const routes: Routes = [
   {
-    path: 'pages',
-    loadChildren: () => import('app/pages/pages.module')
-      .then(m => m.PagesModule),
+    path: 'dashboard',
+    loadChildren: () => import('./features/features.module')
+      .then(m => m.FeaturesModule),
   },
   {
     path: 'auth',
@@ -45,8 +45,8 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: 'dashboard' },
 ];
 
 const config: ExtraOptions = {

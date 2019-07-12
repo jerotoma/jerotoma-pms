@@ -1,17 +1,17 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
-import { PagesComponent } from './pages.component';
+import { FeaturesComponent } from './features.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 
 const routes: Routes = [{
   path: '',
-  component: PagesComponent,
+  component: FeaturesComponent,
   children: [
     {
-      path: 'dashboard',
+      path: '',
       component: ECommerceComponent,
     },
     {
@@ -84,5 +84,5 @@ const routes: Routes = [{
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class PagesRoutingModule {
+export class FeaturesRoutingModule {
 }
