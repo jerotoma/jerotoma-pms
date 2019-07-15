@@ -12,16 +12,21 @@ const routes: Routes = [{
   children: [
     {
       path: '',
-      component: ECommerceComponent,
-    },
-    {
-      path: 'iot-dashboard',
       component: DashboardComponent,
     },
     {
-      path: 'layout',
-      loadChildren: () => import('./layout/layout.module')
-        .then(m => m.LayoutModule),
+      path: 'resources',
+      component: ECommerceComponent,
+    },
+    {
+      path: 'users',
+      loadChildren: () => import('./users/users.module')
+        .then(m => m.UsersModule),
+    },
+    {
+      path: 'account',
+      loadChildren: () => import('../@theme/components/header/header.module')
+        .then(m => m.HeaderModule),
     },
     {
       path: 'forms',

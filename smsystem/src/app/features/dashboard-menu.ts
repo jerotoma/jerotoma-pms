@@ -2,50 +2,45 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'E-commerce',
-    icon: 'shopping-cart-outline',
+    title: 'Dashboard',
+    icon: 'home-outline',
     link: '/dashboard',
     home: true,
   },
   {
-    title: 'IoT Dashboard',
-    icon: 'home-outline',
-    link: '/dashboard/iot-dashboard',
+    title: 'School Resources',
+    icon: 'monitor-outline',
+    link: '/dashboard/resources',
   },
   {
     title: 'FEATURES',
     group: true,
   },
   {
-    title: 'Layout',
-    icon: 'layout-outline',
+    title: 'Users',
+    icon: 'people-outline',
     children: [
       {
-        title: 'Stepper',
-        link: '/dashboard/layout/stepper',
+        title: 'Teachers',
+        link: '/dashboard/users/teachers',
       },
       {
-        title: 'List',
-        link: '/dashboard/layout/list',
+        title: 'Students',
+        link: '/dashboard/users/students',
       },
       {
-        title: 'Infinite List',
-        link: '/dashboard/layout/infinite-list',
+        title: 'Parents',
+        link: '/dashboard/users/parents',
       },
       {
-        title: 'Accordion',
-        link: '/dashboard/layout/accordion',
-      },
-      {
-        title: 'Tabs',
-        pathMatch: 'prefix',
-        link: '/dashboard/layout/tabs',
+        title: 'Other Staffs',
+        link: '/dashboard/users/other-staffs',
       },
     ],
   },
   {
-    title: 'Forms',
-    icon: 'edit-2-outline',
+    title: 'Admission',
+    icon: 'book-open-outline',
     children: [
       {
         title: 'Form Inputs',
@@ -115,7 +110,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Extra Components',
+    title: 'Schedules',
     icon: 'message-circle-outline',
     children: [
       {
@@ -145,7 +140,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Maps',
+    title: 'School Maps',
     icon: 'map-outline',
     children: [
       {

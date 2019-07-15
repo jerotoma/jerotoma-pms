@@ -12,7 +12,7 @@ import com.jerotoma.http.endpoints.EndPointConstants;
 import com.jerotoma.services.users.AuthUserService;
 
 @RestController
-@RequestMapping(EndPointConstants.LOGIN_CONTROLLER.BASE)
+@RequestMapping(EndPointConstants.REST_LOGIN_CONTROLLER.BASE)
 public class RestLoginController {
 	
 	@Autowired AuthUserService authUserService;
@@ -21,7 +21,7 @@ public class RestLoginController {
 		
 	}
 	
-	@GetMapping(value={"",EndPointConstants.LOGIN_CONTROLLER.INDEX})
+	@GetMapping(value={"",EndPointConstants.REST_LOGIN_CONTROLLER.BASE})
 	@ResponseBody
 	public HttpResponseEntity<AuthUser> getIndexLogin(){
 		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();

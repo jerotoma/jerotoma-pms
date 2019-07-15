@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+
+import { USER_DROPDOWN_ITEMS, THEMES } from './header-menu';
 
 @Component({
   selector: 'ngx-header',
@@ -16,34 +19,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-
-  themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ];
-
+  themes = THEMES;
   currentTheme = 'default';
-
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = USER_DROPDOWN_ITEMS;
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
+              private route: ActivatedRoute,
+              private router: Router,
               private layoutService: LayoutService,
               private breakpointService: NbMediaBreakpointsService) {
   }
@@ -69,8 +54,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
-  }
 
+      this.menuService.onItemClick().subscribe(( event ) => {
+        this.onItemSelection(event.item.title);
+      });
+  }
+  onItemSelection( title ) {
+    if ( title === 'Log out' ) {
+      // Do something on Log out
+      console.log('Log out Clicked ');
+    } else if ( title === 'Profile' ) {
+      // Do something on Profile
+      console.log('Profile Clicked ');
+    }
+  }
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

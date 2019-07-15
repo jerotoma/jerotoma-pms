@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { MENU_ITEMS } from './dashboard-menu';
 
 @Component({
-  selector: 'ngx-pages',
+  selector: 'ngx-features',
   styleUrls: ['features.component.scss'],
   template: `
     <ngx-one-column-layout>
