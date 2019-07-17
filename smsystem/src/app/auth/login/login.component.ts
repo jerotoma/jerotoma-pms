@@ -5,10 +5,11 @@ import {
   NbSpinnerService,
   } from '@nebular/theme';
 import {
-    NbLoginComponent,
-    NbAuthService,
-    NB_AUTH_OPTIONS,
-    NbAuthSocialLink } from '@nebular/auth';
+  NbAuthResult,
+  NbLoginComponent,
+  NbAuthService,
+  NB_AUTH_OPTIONS,
+  NbAuthSocialLink } from '@nebular/auth';
 
 @Component({
   selector: 'ngx-login',
@@ -26,10 +27,34 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
     cd: ChangeDetectorRef,
     router: Router) {
     super(service, options, cd, router);
+    console.log(this.service);
    }
 
   ngOnInit() {
-    this.spinnerService.load();
+
   }
 
+  login(): void {
+    this.errors = [];
+    this.messages = [];
+    this.submitted = true;
+    console.log(this.user);
+    this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+      this.submitted = false;
+      console.log(result);
+      if (result.isSuccess()) {
+        this.messages = result.getMessages();
+      } else {
+        this.errors = result.getErrors();
+      }
+
+      const redirect = result.getRedirect();
+      if (redirect) {
+        setTimeout(() => {
+          return this.router.navigateByUrl(redirect);
+        }, this.redirectDelay);
+      }
+      this.cd.detectChanges();
+    });
+  }
 }

@@ -13,16 +13,13 @@ import {
 } from '@nebular/theme';
 
 import { HeaderRoutingModule } from './header-routing.module';
-
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
-import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     SettingsComponent,
-    LogoutComponent,
   ],
   imports: [
     CommonModule,

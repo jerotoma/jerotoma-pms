@@ -223,19 +223,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Login',
-        link: '/auth/login',
+        link: '/account/login',
       },
       {
         title: 'Register',
-        link: '/auth/register',
+        link: '/account/register',
       },
       {
         title: 'Request Password',
-        link: '/auth/request-password',
+        link: '/account/request-password',
       },
       {
         title: 'Reset Password',
-        link: '/auth/reset-password',
+        link: '/account/reset-password',
       },
     ],
   },

@@ -8,7 +8,7 @@ const routes: Routes = [
       .then(m => m.FeaturesModule),
   },
   {
-    path: 'auth',
+    path: 'account',
     loadChildren: () => import('./auth/auth.module')
       .then(m => m.NgxAuthModule),
   },

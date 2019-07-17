@@ -13,7 +13,7 @@ export const USER_DROPDOWN_ITEMS: NbMenuItem[] = [
    },
    {
      title: 'Log out',
-     link: '/dashboard/account/logout',
+     link: '/account/logout',
      icon: 'log-out-outline',
    },
 ];

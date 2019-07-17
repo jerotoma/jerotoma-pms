@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.users.OtherStaff;
 import com.jerotoma.common.users.Parent;
 import com.jerotoma.common.users.Student;
@@ -15,7 +16,6 @@ import com.jerotoma.common.users.Teacher;
 import com.jerotoma.common.utils.UserType;
 import com.jerotoma.common.utils.UserTypeConverter;
 import com.jerotoma.http.HttpResponseEntity;
-import com.jerotoma.http.endpoints.EndPointConstants;
 
 @RestController
 @RequestMapping(EndPointConstants.USER_CONTROLLER.BASE)

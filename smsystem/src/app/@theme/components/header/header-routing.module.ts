@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
-import { LogoutComponent } from './logout/logout.component';
 
 
 const routes: Routes = [
@@ -19,10 +18,6 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
-  },
-  {
-    path: 'logout',
-    component: LogoutComponent,
   },
 ];
 
