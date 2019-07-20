@@ -23,6 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.config.auth.AuthenticationFailureHandler;
+import com.jerotoma.config.auth.CustomLogoutSuccessHandler;
 import com.jerotoma.config.auth.filters.AjaxLoginProcessingFilter;
 import com.jerotoma.config.auth.filters.ApiCorsFilter;
 import com.jerotoma.config.auth.filters.JwtTokenAuthenticationProcessingFilter;
@@ -32,7 +33,6 @@ import com.jerotoma.config.auth.providers.CustomAuthenticationProvider;
 import com.jerotoma.config.auth.providers.JwtAuthenticationProvider;
 import com.jerotoma.services.cookies.CookieService;
 import com.jerotoma.services.users.AuthUserService;
-import com.stripe.net.APIResource.RequestMethod;
 
 @Configuration
 @ComponentScan
@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired AuthenticationManager authenticationManager;	
 	@Autowired JwtAuthenticationProvider jwtAuthenticationProvider;
 	@Autowired CustomAuthenticationProvider ajaxAuthenticationProvider;
+	@Autowired CustomLogoutSuccessHandler logoutSuccessHandler;
 	@Autowired CookieService cookieService;
 	@Autowired TokenExtractor tokenExtractor;
 	@Autowired ObjectMapper objectMapper;
@@ -57,11 +58,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http 
 		.csrf()
      		.disable()
-     		.antMatcher(EndPointConstants.API_SECURED_ROOT + EndPointConstants.SLASH_DOUBLE_ASTERIK)		    		
+     		.antMatcher(EndPointConstants.API_ROOT + EndPointConstants.SLASH_DOUBLE_ASTERIK)		    		
 	    .authorizeRequests()
     		.antMatchers(EndPointConstants.loadPermittedAppEndpoints().split(",")).permitAll() 
-    		.anyRequest().authenticated()    		        		
-    		.and()        	  	 		
+    		.antMatchers(EndPointConstants.loadAPIPermittedAppEndpoints().split(",")).permitAll() 
+    		.anyRequest()
+    		.authenticated()    		        		
+    		.and()    	
+    	.addFilterBefore(new ApiCorsFilter(), UsernamePasswordAuthenticationFilter.class)
+   	     	.addFilterBefore(buildAjaxLoginProcessingFilter(EndPointConstants.API_AUTH_LOGIN_URL), UsernamePasswordAuthenticationFilter.class)
+   	     	.addFilterBefore(buildJwtTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+   	     	.httpBasic()
+   	     	.and() 
     	.exceptionHandling()
 	 	 	.authenticationEntryPoint(authenticationEntryPoint)
 	 	 	.and()
@@ -69,12 +77,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 		.configurationSource(corsConfigurationSource())
 	 		.and()   
 	 	.sessionManagement()
-           	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)           	
-           	.and()     	 	
-	     .addFilterBefore(new ApiCorsFilter(), UsernamePasswordAuthenticationFilter.class)
-	     .addFilterBefore(buildAjaxLoginProcessingFilter(EndPointConstants.API_AUTH_LOGIN_URL), UsernamePasswordAuthenticationFilter.class)
-	     .addFilterBefore(buildJwtTokenAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
-	     .httpBasic();	    			
+           	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+           	.and()
+         .logout()
+         .invalidateHttpSession(true)
+         .clearAuthentication(true)
+         .logoutSuccessHandler(logoutSuccessHandler)
+         .logoutUrl(EndPointConstants.API_LOGOUT_URL);
     }
    	
     protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String loginUrl) throws Exception {
@@ -105,7 +114,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CustomCorsConfiguration configuration = new CustomCorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(env.getProperty("app.frontend.url")));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", RequestMethod.DELETE.toString()));
+        configuration.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -122,8 +131,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 	
-	@Bean
-    public CustomAuthenticationProvider customAuthenticationProvider() {
-    	return new CustomAuthenticationProvider(userService, encoder);
-    }
 }

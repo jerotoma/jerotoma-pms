@@ -1,5 +1,6 @@
 package com.jerotoma.controllers;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 public class DashboardController {
 	
 	@GetMapping(value = {"","/{path:[^\\.]*}"})
-	public String redirect() {
-	   return "forward:/index.html";
+	public String redirect(Authentication auth) {		
+	   return "forward:/";
 	}
 }

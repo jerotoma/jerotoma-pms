@@ -2,9 +2,14 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { HttpResponse } from '@angular/common/http';
 import { NgxAuthRoutingModule } from './auth-routing.module';
-import { NbAuthModule, NbPasswordAuthStrategy } from '@nebular/auth';
+import {
+  NbAuthModule,
+  NbPasswordAuthStrategy,
+  NbAuthJWTToken,
+  NbPasswordAuthStrategyOptions,
+ } from '@nebular/auth';
 import {
   NbAlertModule,
   NbButtonModule,
@@ -39,17 +44,34 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
         strategies: [
           NbPasswordAuthStrategy.setup({
             name: 'email',
+            token: {
+              class: NbAuthJWTToken,
+              getter: (
+                module: string,
+                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => res.headers.get('Authorization'),
+            },
+            errors: {
+              getter: (
+                module: string,
+                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => res.body,
+            },
+            messages: {
+              getter: (
+                module: string,
+                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => res.body,
+            },
             baseEndpoint: '/api/auth',
-             login: {
-               // ...
-               endpoint: '/login',
-             },
-             register: {
-               // ...
-               endpoint: '/register',
-             },
-             logout: {
+            login: {
+              // ...
+              endpoint: '/login',
+            },
+            register: {
+              // ...
+              endpoint: '/register',
+            },
+            logout: {
               endpoint: '/sign-out',
+              method: 'POST',
             },
             requestPass: {
               endpoint: '/request-pass',
@@ -61,7 +83,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
         ],
         forms: {
           login: {
-            redirectDelay: 0,
+            redirectDelay:0,
             showMessages: {
               success: true,
             },
@@ -85,7 +107,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
             },
           },
           logout: {
-            redirectDelay: 0,
+            redirectDelay:0,
           },
         },
       }),

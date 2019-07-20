@@ -8,6 +8,10 @@ public class LoginRequest {
         this.username = username;
         this.password = password;
     }
+    
+    public LoginRequest() {
+        super();
+    }
 
     public String getUsername() {
         return username;

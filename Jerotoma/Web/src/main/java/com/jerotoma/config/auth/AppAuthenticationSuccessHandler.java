@@ -32,6 +32,7 @@ import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.config.auth.tokens.AuthToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
+import com.jerotoma.config.constants.SecurityConstant;
 import com.jerotoma.services.users.AuthUserService;
 
 
@@ -71,7 +72,7 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
     	if(authentication.isAuthenticated()) { 
        		UserContext userContext = authFacade.getUserContext(authentication);
        		AuthUser auth =  userservice.loadUserByUsername(userContext.getUsername());
-       		if(WebUtil.isAjax(request)) {
+       		if(WebUtil.isContentTypeJson(request)) {
             	jwtSuccessProcessor(request, response, authentication, auth);
             }else{
             	 handle(request, response, authentication);
@@ -117,7 +118,6 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
 	public void jwtSuccessProcessor(HttpServletRequest request, 
 			HttpServletResponse response, Authentication authentication,  AuthUser auth) 
 					throws IOException, JsonGenerationException, JsonMappingException {
-		
 		Map<String, Object> tokenMap = new HashMap<>();
 		UserContext userContext = authFacade.getUserContext(authentication);
         AuthToken authToken = authProcessor.extractAuthToken(userContext, tokenFactory);
@@ -125,6 +125,7 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
         tokenMap.put("auth", auth);       
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setHeader(SecurityConstant.AUTHENTICATION_HEADER_NAME, SecurityConstant.HEADER_PREFIX + " " + authToken.getToken());
         
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + request.getRequestURL());

@@ -15,9 +15,10 @@ public class EndPointConstants {
 	public static final String APP_DASHBOARD_URL = "/dashboard";
 	public static final String SLASH_DOUBLE_ASTERIK = "/**";
 	public static final String APP_AUTH = "/auth";
+	public static final String API_APP_AUTH = "/api/auth";
 	public static final String APP_ACCOUNT = "/account";
 	public static final String APP_AUTH_LOGIN_URL =  APP_AUTH + "/login";
-	public static final String APP_LOGOUT_URL =  API_ROOT + "/auth/logout";
+	public static final String API_LOGOUT_URL =  API_ROOT + "/auth/sign-out";
 	
 	
 	public static final String APP_AUTH_SIGNUP_URL = "/auth/register";
@@ -33,6 +34,14 @@ public class EndPointConstants {
 		
 		
 	}
+	public static interface REST_AUTH_CONTROLLER {
+		public static final String BASE = API_APP_AUTH;
+		public static final String REGISTER = "/register";
+		
+		
+		
+	}
+	
 	public static interface AUTH_CONTROLLER {
 		public static final String BASE = APP_ACCOUNT;
 		
@@ -71,12 +80,24 @@ public class EndPointConstants {
 	}
 	
 	public static final List<String> PERMITTED_APP_ENDPOINTS = Arrays.asList(
-			 //ROOT_URL,
 			 APP_AUTH_LOGIN_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_AUTH_SIGNUP_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_AUTH_FORGOT_PASSWORD_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_RESOURCES_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_ASSETS_URL + SLASH_DOUBLE_ASTERIK					
+	        );
+	
+	public static String loadAPIPermittedAppEndpoints() {
+		StringBuilder builder = new StringBuilder();
+    	for(String endPoint: PERMITTED_API_APP_ENDPOINTS) {
+    		builder.append(endPoint);
+    		builder.append(",");    		
+    	}    	
+    	return builder.toString(); 
+	}
+	
+	public static final List<String> PERMITTED_API_APP_ENDPOINTS = Arrays.asList(
+			API_APP_AUTH + SLASH_DOUBLE_ASTERIK						
 	        );
 	
 }

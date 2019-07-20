@@ -13,7 +13,7 @@ public class AuthToken implements Serializable {
 	Claims claims;
 	String token;
 	String refreshToken;
-	String tokenIssuer;
+	String issuer;
 	Long refreshTokenExpTime;
 	Long tokenExpirationTime;
 	Long tokenIssuedAt;
@@ -32,10 +32,10 @@ public class AuthToken implements Serializable {
 		this.refreshToken = refreshToken;
 	}
 	public String getTokenIssuer() {
-		return tokenIssuer;
+		return issuer;
 	}
 	public void setTokenIssuer(String tokenIssuer) {
-		this.tokenIssuer = tokenIssuer;
+		this.issuer = tokenIssuer;
 	}
 	public Long getRefreshTokenExpTime() {
 		return refreshTokenExpTime;

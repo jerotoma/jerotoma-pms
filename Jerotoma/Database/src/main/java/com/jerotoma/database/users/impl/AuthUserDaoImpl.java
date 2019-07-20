@@ -1,5 +1,6 @@
 package com.jerotoma.database.users.impl;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -16,6 +17,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,8 +33,6 @@ import com.jerotoma.database.users.dao.AuthUserDao;
 @Repository
 public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	
-	private StringBuilder INSERT_QUERY = new StringBuilder("INSERT INTO public.users(username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on) ")
-			.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	private StringBuilder ROLE_INSERT_QUERY = new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
 			.append("VALUES (?, ?)");	
 	
@@ -59,23 +60,49 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	@Override
 	public AuthUser createObject(AuthUser object) throws SQLException {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();//PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		Object[] objects = {
-				object.getUsername(),
-				passwordEncoder.encode(object.getPassword()),
-				object.getFirstName(),
-				object.getLastName(),
-				object.isEnabled(),
-				object.isAccountNonExpired(),
-				object.isCredentialsNonExpired(),
-				object.isAccountNonLocked(),
-				object.getCreatedOn(),
-				object.getUpdatedOn()
-		};
-		primaryKey = this.jdbcTemplate.update(INSERT_QUERY.toString(), objects);
-		for(Role role : object.getRoles()) {
-			this.jdbcTemplate.update(ROLE_INSERT_QUERY.toString(), primaryKey, role.getId());			
-		}		
-		return findObject(primaryKey);
+		
+		if(object != null && doesRoleExists(object.getRoles())){
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbcTemplate.update(conn -> {
+				int pos = 1;
+		        PreparedStatement ps = conn.prepareStatement(commonInsertQuery().toString(),new String[] { "id" /* name of your id column */ });
+			        ps.setString(pos++, object.getUsername());
+			        ps.setString(pos++, passwordEncoder.encode(object.getPassword()));
+			        ps.setString(pos++, object.getFirstName());
+			        ps.setString(pos++, object.getLastName());
+			        ps.setBoolean(pos++, object.isEnabled());
+			        ps.setBoolean(pos++, object.isAccountNonExpired());
+			        ps.setBoolean(pos++,object.isCredentialsNonExpired());
+			        ps.setBoolean(pos++,object.isAccountNonLocked());
+					ps.setDate(pos++,new java.sql.Date(object.getCreatedOn().getTime()));
+					ps.setDate(pos++,new java.sql.Date(object.getUpdatedOn().getTime()));
+		          
+		         return ps;
+		        }, keyHolder);
+		 
+			for(Role role : object.getRoles()) {
+				Role r = roleDao.findObjectUniqueKey(role.getName());
+				
+				this.jdbcTemplate.update(commonRoleUserInsertQuery().toString(), r.getId(), keyHolder.getKey().intValue());			
+			}
+			return findObject(keyHolder.getKey().intValue());
+		}
+		return null;
+		
+	}
+
+	private boolean doesRoleExists(Collection<Role> roles) throws SQLException {
+		if(roles == null || roles.isEmpty()) {
+			throw new SQLException("Role can't be null or empty");
+		}
+		
+		for(Role role : roles) {
+			Role r = roleDao.findObjectUniqueKey(role.getName());
+			if(r == null) {
+				throw new SQLException("Role can't be null or empty");
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -173,6 +200,16 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	
 	private StringBuilder commonSelectQuery() {		
 		return new StringBuilder("SELECT id, username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+	}
+	
+	private StringBuilder commonInsertQuery() {		
+		return new StringBuilder("INSERT INTO public.users(username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on) ")
+				.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	}
+	
+	private StringBuilder commonRoleUserInsertQuery() {
+		return new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
+				.append("VALUES (?, ?)");	
 	}
 	
 }

@@ -3239,7 +3239,7 @@ SettingsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*!********************************************!*\
   !*** ./src/app/@theme/components/index.ts ***!
   \********************************************/
-/*! exports provided: FooterComponent, SearchInputComponent, TinyMCEComponent, HeaderComponent */
+/*! exports provided: HeaderComponent, FooterComponent, SearchInputComponent, TinyMCEComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5145,12 +5145,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _auth_guard_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./auth-guard.service */ "./src/app/auth-guard.service.ts");
+
 
 
 
 const routes = [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: 'dashboard',
+        canActivate: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_3__["AuthGuard"]],
         loadChildren: () => __webpack_require__.e(/*! import() | features-features-module */ "features-features-module").then(__webpack_require__.bind(null, /*! ./features/features.module */ "./src/app/features/features.module.ts"))
             .then(m => m.FeaturesModule),
     },
@@ -5159,8 +5163,6 @@ const routes = [
         loadChildren: () => __webpack_require__.e(/*! import() | auth-auth-module */ "auth-auth-module").then(__webpack_require__.bind(null, /*! ./auth/auth.module */ "./src/app/auth/auth.module.ts"))
             .then(m => m.NgxAuthModule),
     },
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-    { path: '**', redirectTo: 'dashboard' },
 ];
 const config = {
     useHash: false,
@@ -5279,6 +5281,56 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]],
     })
 ], AppModule);
+
+
+
+/***/ }),
+
+/***/ "./src/app/auth-guard.service.ts":
+/*!***************************************!*\
+  !*** ./src/app/auth-guard.service.ts ***!
+  \***************************************/
+/*! exports provided: AuthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+
+
+
+
+
+let AuthGuard = class AuthGuard {
+    constructor(authService, router) {
+        this.authService = authService;
+        this.router = router;
+        this.isAuthenticated = false;
+    }
+    canActivate(route, state) {
+        const url = state.url;
+        console.log('AuthGuard#canActivate called');
+        return this.checkLogin(url);
+    }
+    checkLogin(url) {
+        return this.authService.isAuthenticated().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])(authenticated => {
+            if (!authenticated) {
+                this.router.navigate(['/account/login']);
+            }
+        }));
+    }
+};
+AuthGuard = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root',
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+], AuthGuard);
 
 
 

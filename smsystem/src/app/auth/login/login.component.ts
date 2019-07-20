@@ -1,3 +1,4 @@
+import { messages } from './../../features/extra-components/chat/messages';
 import { Component, OnInit, ChangeDetectorRef, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -5,6 +6,8 @@ import {
   NbSpinnerService,
   } from '@nebular/theme';
 import {
+  NbTokenService,
+  NbAuthToken,
   NbAuthResult,
   NbLoginComponent,
   NbAuthService,
@@ -21,13 +24,12 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
   socialLinks: NbAuthSocialLink[];
 
   constructor(
-    private spinnerService: NbSpinnerService,
     service: NbAuthService,
     @Inject(NB_AUTH_OPTIONS) options: {},
     cd: ChangeDetectorRef,
-    router: Router) {
+    router: Router,
+    tokenService: NbTokenService ) {
     super(service, options, cd, router);
-    console.log(this.service);
    }
 
   ngOnInit() {
@@ -38,21 +40,24 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
     this.errors = [];
     this.messages = [];
     this.submitted = true;
-    console.log(this.user);
     this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
       this.submitted = false;
-      console.log(result);
       if (result.isSuccess()) {
+        const response = result.getResponse().body;
         this.messages = result.getMessages();
+        if (response.success) {
+          this.messages.push(response.message);
+          setTimeout(() => {
+            return this.router.navigateByUrl('/dashboard');
+          }, this.redirectDelay);
+        } else {
+          this.errors.push(response.message);
+        }
       } else {
+        const response = result.getResponse();
         this.errors = result.getErrors();
-      }
-
-      const redirect = result.getRedirect();
-      if (redirect) {
-        setTimeout(() => {
-          return this.router.navigateByUrl(redirect);
-        }, this.redirectDelay);
+        this.errors.push(response.message);
+        this.errors.push(response.error.message);
       }
       this.cd.detectChanges();
     });

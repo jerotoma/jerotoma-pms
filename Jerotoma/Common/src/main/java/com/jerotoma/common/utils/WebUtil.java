@@ -19,7 +19,8 @@ public class WebUtil {
         return request.getHeaderValues(X_REQUESTED_WITH).contains(XML_HTTP_REQUEST);
     }
 
-    public static boolean isContentTypeJson(SavedRequest request) {
-        return request.getHeaderValues(CONTENT_TYPE).contains(CONTENT_TYPE_JSON);
+    public static boolean isContentTypeJson(HttpServletRequest request) {
+    	System.out.println(request.getContentType());
+        return request.getHeader(CONTENT_TYPE).contains(CONTENT_TYPE_JSON);
     }
 }

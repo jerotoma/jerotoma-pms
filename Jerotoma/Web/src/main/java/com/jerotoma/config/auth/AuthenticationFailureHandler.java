@@ -47,7 +47,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
         
     	final Locale locale = localeResolver.resolveLocale(request);
     	setUseForward(true);
-        if(WebUtil.isAjax(request)) {
+        if(WebUtil.isContentTypeJson(request)) {
         	 setDefaultFailureUrl(EndPointConstants.API_AUTH_LOGIN_URL);
         	 ajaxRequestProcessor(response, exception);        	
         }else {

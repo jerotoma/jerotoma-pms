@@ -13,6 +13,28 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/dashboard/resources',
   },
   {
+    title: 'Auth',
+    icon: 'lock-outline',
+    children: [
+      {
+        title: 'Login',
+        link: '/account/login',
+      },
+      {
+        title: 'Register',
+        link: '/account/register',
+      },
+      {
+        title: 'Request Password',
+        link: '/account/request-password',
+      },
+      {
+        title: 'Reset Password',
+        link: '/account/reset-password',
+      },
+    ],
+  },
+  {
     title: 'FEATURES',
     group: true,
   },
@@ -214,28 +236,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: '404',
         link: '/dashboard/miscellaneous/404',
-      },
-    ],
-  },
-  {
-    title: 'Auth',
-    icon: 'lock-outline',
-    children: [
-      {
-        title: 'Login',
-        link: '/account/login',
-      },
-      {
-        title: 'Register',
-        link: '/account/register',
-      },
-      {
-        title: 'Request Password',
-        link: '/account/request-password',
-      },
-      {
-        title: 'Reset Password',
-        link: '/account/reset-password',
       },
     ],
   },

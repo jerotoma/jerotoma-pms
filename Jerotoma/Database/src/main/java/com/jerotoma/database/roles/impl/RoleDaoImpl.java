@@ -26,10 +26,6 @@ import com.jerotoma.database.roles.dao.RoleDao;
 @Repository
 public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 	
-	private static StringBuilder INSERT_QUERY = new StringBuilder("INSERT INTO public.roles(name, display_name, created_on, update_on) VALUES(?, ?, now(), now())");
-	private static StringBuilder SELECT_COMMON_QUERY = new StringBuilder("SELECT name, display_name, created_on, update_on FROM public.roles ");
-	private static StringBuilder DELETE_QUERY = new StringBuilder("DELETE FROM public.roles WHERE id = ?");
-	
 	private Integer primaryKey;
 	private JdbcTemplate jdbcTemplate;
 	
@@ -44,14 +40,13 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 	
 	@Override
 	public Role findObject(Integer primaryKey) throws SQLException {
-		SELECT_COMMON_QUERY.append("WHERE id = ?");		
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new RoleSingleResultProcessor(), primaryKey);
+				
+		return this.jdbcTemplate.query(getBaseSelectQuery().append("WHERE id = ?").toString(), new RoleSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
 	public Role findObjectUniqueKey(String uniqueKey) throws SQLException {
-		SELECT_COMMON_QUERY.append("WHERE name = ?");		
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new RoleSingleResultProcessor(), uniqueKey);
+		return this.jdbcTemplate.query(getBaseSelectQuery().append("WHERE name = ? ").toString(), new RoleSingleResultProcessor(), uniqueKey);
 	}
 
 	@Override
@@ -60,18 +55,18 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 				object.getName(),				
 				object.getDisplayName()				
 		};
-		primaryKey = this.jdbcTemplate.update(INSERT_QUERY.toString(), objects);
+		primaryKey = this.jdbcTemplate.update(getBaseInsertQuery().toString(), objects);
 		return findObject(primaryKey);
 	}
 
 	@Override
 	public Boolean deleteObject(Role object) throws SQLException {
-		return this.jdbcTemplate.update(DELETE_QUERY.toString(), object.getId()) != 0 ? true : false;
+		return this.jdbcTemplate.update(getBaseDeleteQuery().toString(), object.getId()) != 0 ? true : false;
 	}
 
 	@Override
 	public List<Role> loadList(QueryParam queryParam) throws SQLException {
-		return this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new RoleResultProcessor());
+		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new RoleResultProcessor());
 	}
 
 	@Override
@@ -79,7 +74,7 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 		
 		Map<String, Object> map = new HashMap<>();
 		List<Role> roles = new ArrayList<Role>();
-		roles = this.jdbcTemplate.query(SELECT_COMMON_QUERY.toString(), new RoleResultProcessor());		
+		roles = this.jdbcTemplate.query(getBaseSelectQuery().toString(), new RoleResultProcessor());		
 		map.put(RoleConstant.ROLES, roles);
 		
 		return map;
@@ -117,6 +112,17 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 
 	public Role mapRoleResult(ResultSet rs) throws SQLException {		
 		return new Role(rs);
+	}
+	
+	private StringBuilder getBaseSelectQuery() {
+		return new StringBuilder("SELECT id, name, display_name, created_on, updated_on FROM public.roles ");
+	}
+	
+	private StringBuilder getBaseInsertQuery() {
+		return new StringBuilder("INSERT INTO public.roles(name, display_name, created_on, updated_on) VALUES(?, ?, now(), now())");
+	}
+	private StringBuilder getBaseDeleteQuery() {
+		return new StringBuilder("DELETE FROM public.roles WHERE id = ?");
 	}
 
 }

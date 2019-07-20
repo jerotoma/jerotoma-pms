@@ -18,7 +18,7 @@ module.exports = "<nb-layout>\n  <nb-layout-column>\n    <nb-card>\n      <nb-ca
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-auth-block>\n  <h1 id=\"title\" class=\"title\">Login</h1>\n  <p class=\"sub-title\">Hello! Log in with your email.</p>\n\n  <nb-alert *ngIf=\"showMessages.error && errors?.length && !submitted\" outline=\"danger\" role=\"alert\">\n    <p class=\"alert-title\"><b>Oh snap!</b></p>\n    <ul class=\"alert-message-list\">\n      <li *ngFor=\"let error of errors\" class=\"alert-message\">{{ error }}</li>\n    </ul>\n  </nb-alert>\n\n  <nb-alert *ngIf=\"showMessages.success && messages?.length && !submitted\" outline=\"success\" role=\"alert\">\n    <p class=\"alert-title\"><b>Hooray!</b></p>\n    <ul class=\"alert-message-list\">\n      <li *ngFor=\"let message of messages\" class=\"alert-message\">{{ message }}</li>\n    </ul>\n  </nb-alert>\n\n  <form (ngSubmit)=\"login()\" #form=\"ngForm\" aria-labelledby=\"title\">\n\n    <div class=\"form-control-group\">\n      <label class=\"label\" for=\"input-email\">Email address:</label>\n      <input nbInput\n            fullWidth\n            [(ngModel)]=\"user.email\"\n            #email=\"ngModel\"\n            name=\"email\"\n            id=\"input-email\"\n            pattern=\".+@.+\\..+\"\n            placeholder=\"Email address\"\n            fieldSize=\"large\"\n            autofocus\n            [status]=\"email.dirty ? (email.invalid  ? 'danger' : 'success') : ''\"\n            [required]=\"getConfigValue('forms.validation.email.required')\"\n            [attr.aria-invalid]=\"email.invalid && email.touched ? true : null\">\n      <ng-container *ngIf=\"email.invalid && email.touched\">\n        <p class=\"caption status-danger\" *ngIf=\"email?.errors?.required\">\n          Email is required!\n        </p>\n        <p class=\"caption status-danger\" *ngIf=\"email?.errors?.pattern\">\n          Email should be the real one!\n        </p>\n      </ng-container>\n    </div>\n\n    <div class=\"form-control-group\">\n      <span class=\"label-with-link\">\n        <label class=\"label\" for=\"input-password\">Password:</label>\n        <a class=\"forgot-password caption-2\" routerLink=\"../request-password\">Forgot Password?</a>\n      </span>\n      <input nbInput\n            fullWidth\n            [(ngModel)]=\"user.password\"\n            #password=\"ngModel\"\n            name=\"password\"\n            type=\"password\"\n            id=\"input-password\"\n            placeholder=\"Password\"\n            fieldSize=\"large\"\n            [status]=\"password.dirty ? (password.invalid  ? 'danger' : 'success') : ''\"\n            [required]=\"getConfigValue('forms.validation.password.required')\"\n            [minlength]=\"getConfigValue('forms.validation.password.minLength')\"\n            [maxlength]=\"getConfigValue('forms.validation.password.maxLength')\"\n            [attr.aria-invalid]=\"password.invalid && password.touched ? true : null\">\n      <ng-container *ngIf=\"password.invalid && password.touched \">\n        <p class=\"caption status-danger\" *ngIf=\"password?.errors?.required\">\n          Password is required!\n        </p>\n        <p class=\"caption status-danger\" *ngIf=\"password?.errors?.minlength || password?.errors?.maxlength\">\n          Password should contains\n          from {{ getConfigValue('forms.validation.password.minLength') }}\n          to {{ getConfigValue('forms.validation.password.maxLength') }}\n          characters\n        </p>\n      </ng-container>\n    </div>\n\n    <div class=\"form-control-group accept-group\">\n      <nb-checkbox name=\"rememberMe\" [(ngModel)]=\"user.rememberMe\" *ngIf=\"rememberMe\">Remember me</nb-checkbox>\n    </div>\n\n    <button nbButton\n            fullWidth\n            status=\"primary\"\n            size=\"large\"\n            [disabled]=\"submitted || !form.valid\"\n            [class.btn-pulse]=\"submitted\">\n      Log In\n    </button>\n  </form>\n\n  <section *ngIf=\"socialLinks && socialLinks.length > 0\" class=\"links\" aria-label=\"Social sign in\">\n    or enter with:\n    <div class=\"socials\">\n      <ng-container *ngFor=\"let socialLink of socialLinks\">\n        <a *ngIf=\"socialLink.link\"\n          [routerLink]=\"socialLink.link\"\n          [attr.target]=\"socialLink.target\"\n          [attr.class]=\"socialLink.icon\"\n          [class.with-icon]=\"socialLink.icon\">\n          <nb-icon *ngIf=\"socialLink.icon; else title\" [icon]=\"socialLink.icon\"></nb-icon>\n          <ng-template #title>{{ socialLink.title }}</ng-template>\n        </a>\n        <a *ngIf=\"socialLink.url\"\n          [attr.href]=\"socialLink.url\"\n          [attr.target]=\"socialLink.target\"\n          [attr.class]=\"socialLink.icon\"\n          [class.with-icon]=\"socialLink.icon\">\n          <nb-icon *ngIf=\"socialLink.icon; else title\" [icon]=\"socialLink.icon\"></nb-icon>\n          <ng-template #title>{{ socialLink.title }}</ng-template>\n        </a>\n      </ng-container>\n    </div>\n  </section>\n\n  <section class=\"another-action\" aria-label=\"Register\">\n    Don't have an account? <a class=\"text-link\" routerLink=\"../register\">Register</a>\n  </section>\n</nb-auth-block>\n"
+module.exports = "<nb-auth-block>\n  <h1 id=\"title\" class=\"title\">Login</h1>\n  <p class=\"sub-title\">Hello! Log in with your username.</p>\n\n  <nb-alert *ngIf=\"showMessages.error && errors?.length && !submitted\" outline=\"danger\" role=\"alert\">\n    <p class=\"alert-title\"><b>Oh snap!</b></p>\n    <ul class=\"alert-message-list\">\n      <li *ngFor=\"let error of errors\" class=\"alert-message\">{{ error }}</li>\n    </ul>\n  </nb-alert>\n\n  <nb-alert *ngIf=\"showMessages.success && messages?.length && !submitted\" outline=\"success\" role=\"alert\">\n    <p class=\"alert-title\"><b>Hooray!</b></p>\n    <ul class=\"alert-message-list\">\n      <li *ngFor=\"let message of messages\" class=\"alert-message\">{{ message }}</li>\n    </ul>\n  </nb-alert>\n\n  <form (ngSubmit)=\"login()\" #form=\"ngForm\" aria-labelledby=\"title\">\n\n    <div class=\"form-control-group\">\n      <label class=\"label\" for=\"input-username\">Username:</label>\n      <input nbInput\n            fullWidth\n            [(ngModel)]=\"user.username\"\n            #username=\"ngModel\"\n            name=\"username\"\n            id=\"input-username\"\n            pattern=\".+@.+\\..+\"\n            placeholder=\"Email address\"\n            fieldSize=\"large\"\n            autofocus\n            [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n            [required]=\"getConfigValue('forms.validation.username.required')\"\n            [attr.aria-invalid]=\"username.invalid && username.touched ? true : null\">\n      <ng-container *ngIf=\"username.invalid && username.touched\">\n        <p class=\"caption status-danger\" *ngIf=\"username?.errors?.required\">\n          Username is required!\n        </p>\n        <p class=\"caption status-danger\" *ngIf=\"username?.errors?.pattern\">\n          Username should be the real one!\n        </p>\n      </ng-container>\n    </div>\n\n    <div class=\"form-control-group\">\n      <span class=\"label-with-link\">\n        <label class=\"label\" for=\"input-password\">Password:</label>\n        <a class=\"forgot-password caption-2\" routerLink=\"../request-password\">Forgot Password?</a>\n      </span>\n      <input nbInput\n            fullWidth\n            [(ngModel)]=\"user.password\"\n            #password=\"ngModel\"\n            name=\"password\"\n            type=\"password\"\n            id=\"input-password\"\n            placeholder=\"Password\"\n            fieldSize=\"large\"\n            [status]=\"password.dirty ? (password.invalid  ? 'danger' : 'success') : ''\"\n            [required]=\"getConfigValue('forms.validation.password.required')\"\n            [minlength]=\"getConfigValue('forms.validation.password.minLength')\"\n            [maxlength]=\"getConfigValue('forms.validation.password.maxLength')\"\n            [attr.aria-invalid]=\"password.invalid && password.touched ? true : null\">\n      <ng-container *ngIf=\"password.invalid && password.touched \">\n        <p class=\"caption status-danger\" *ngIf=\"password?.errors?.required\">\n          Password is required!\n        </p>\n        <p class=\"caption status-danger\" *ngIf=\"password?.errors?.minlength || password?.errors?.maxlength\">\n          Password should contains\n          from {{ getConfigValue('forms.validation.password.minLength') }}\n          to {{ getConfigValue('forms.validation.password.maxLength') }}\n          characters\n        </p>\n      </ng-container>\n    </div>\n\n    <div class=\"form-control-group accept-group\">\n      <nb-checkbox name=\"rememberMe\" [(ngModel)]=\"user.rememberMe\" *ngIf=\"rememberMe\">Remember me</nb-checkbox>\n    </div>\n\n    <button nbButton\n            fullWidth\n            status=\"primary\"\n            size=\"large\"\n            [disabled]=\"submitted || !form.valid\"\n            [class.btn-pulse]=\"submitted\">\n      Log In\n    </button>\n  </form>\n\n  <section *ngIf=\"socialLinks && socialLinks.length > 0\" class=\"links\" aria-label=\"Social sign in\">\n    or enter with:\n    <div class=\"socials\">\n      <ng-container *ngFor=\"let socialLink of socialLinks\">\n        <a *ngIf=\"socialLink.link\"\n          [routerLink]=\"socialLink.link\"\n          [attr.target]=\"socialLink.target\"\n          [attr.class]=\"socialLink.icon\"\n          [class.with-icon]=\"socialLink.icon\">\n          <nb-icon *ngIf=\"socialLink.icon; else title\" [icon]=\"socialLink.icon\"></nb-icon>\n          <ng-template #title>{{ socialLink.title }}</ng-template>\n        </a>\n        <a *ngIf=\"socialLink.url\"\n          [attr.href]=\"socialLink.url\"\n          [attr.target]=\"socialLink.target\"\n          [attr.class]=\"socialLink.icon\"\n          [class.with-icon]=\"socialLink.icon\">\n          <nb-icon *ngIf=\"socialLink.icon; else title\" [icon]=\"socialLink.icon\"></nb-icon>\n          <ng-template #title>{{ socialLink.title }}</ng-template>\n        </a>\n      </ng-container>\n    </div>\n  </section>\n\n  <section class=\"another-action\" aria-label=\"Register\">\n    Don't have an account? <a class=\"text-link\" routerLink=\"../register\">Register</a>\n  </section>\n</nb-auth-block>\n"
 
 /***/ }),
 
@@ -40,7 +40,7 @@ module.exports = "<div>Logging out, please wait...</div>\n"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<h1 id=\"title\" class=\"title\">Register</h1>\n\n<nb-alert *ngIf=\"showMessages.error && errors?.length && !submitted\" outline=\"danger\" role=\"alert\">\n  <p class=\"alert-title\"><b>Oh snap!</b></p>\n  <ul class=\"alert-message-list\">\n    <li *ngFor=\"let error of errors\" class=\"alert-message\">{{ error }}</li>\n  </ul>\n</nb-alert>\n\n<nb-alert *ngIf=\"showMessages.success && messages?.length && !submitted\" outline=\"success\" role=\"alert\">\n  <p class=\"alert-title\"><b>Hooray!</b></p>\n  <ul class=\"alert-message-list\">\n    <li *ngFor=\"let message of messages\" class=\"alert-message\">{{ message }}</li>\n  </ul>\n</nb-alert>\n\n<form (ngSubmit)=\"register()\" #form=\"ngForm\" aria-labelledby=\"title\">\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-name\">Full name:</label>\n    <input nbInput\n           [(ngModel)]=\"user.fullName\"\n           #fullName=\"ngModel\"\n           id=\"input-name\"\n           name=\"fullName\"\n           placeholder=\"Full name\"\n           autofocus\n           fullWidth\n           [status]=\"email.dirty ? (email.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.fullName.required')\"\n           [minlength]=\"getConfigValue('forms.validation.fullName.minLength')\"\n           [maxlength]=\"getConfigValue('forms.validation.fullName.maxLength')\"\n           [attr.aria-invalid]=\"fullName.invalid && fullName.touched ? true : null\">\n    <ng-container *ngIf=\"fullName.invalid && fullName.touched\">\n      <p class=\"error-message\" *ngIf=\"fullName?.errors?.required\">\n        Full name is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"fullName?.errors?.minlength || fullName?.errors?.maxlength\">\n        Full name should contains\n        from {{getConfigValue('forms.validation.fullName.minLength')}}\n        to {{getConfigValue('forms.validation.fullName.maxLength')}}\n        characters\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-email\">Email address:</label>\n    <input nbInput\n           [(ngModel)]=\"user.email\"\n           #email=\"ngModel\"\n           id=\"input-email\"\n           name=\"email\"\n           pattern=\".+@.+..+\"\n           placeholder=\"Email address\"\n           fullWidth\n           [status]=\"email.dirty ? (email.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.email.required')\"\n           [attr.aria-invalid]=\"email.invalid && email.touched ? true : null\">\n    <ng-container *ngIf=\"email.invalid && email.touched\">\n      <p class=\"error-message\" *ngIf=\"email?.errors?.required\">\n        Email is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"email?.errors?.pattern\">\n        Email should be the real one!\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-password\">Password:</label>\n    <input nbInput\n           [(ngModel)]=\"user.password\"\n           #password=\"ngModel\"\n           type=\"password\"\n           id=\"input-password\"\n           name=\"password\"\n           placeholder=\"Password\"\n           fullWidth\n           [status]=\"email.dirty ? (email.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.password.required')\"\n           [minlength]=\"getConfigValue('forms.validation.password.minLength')\"\n           [maxlength]=\"getConfigValue('forms.validation.password.maxLength')\"\n           [attr.aria-invalid]=\"password.invalid && password.touched ? true : null\">\n    <ng-container *ngIf=\"password.invalid && password.touched\">\n      <p class=\"error-message\" *ngIf=\"password?.errors?.required\">\n        Password is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"password?.errors?.minlength || password?.errors?.maxlength\">\n        Password should contains\n        from {{ getConfigValue('forms.validation.password.minLength') }}\n        to {{ getConfigValue('forms.validation.password.maxLength') }}\n        characters\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-re-password\">Repeat password:</label>\n    <input nbInput\n           [(ngModel)]=\"user.confirmPassword\"\n           #rePass=\"ngModel\"\n           type=\"password\"\n           id=\"input-re-password\"\n           name=\"rePass\"\n           placeholder=\"Confirm Password\"\n           fullWidth\n           [status]=\"email.dirty ? (email.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.password.required')\"\n           [attr.aria-invalid]=\"rePass.invalid && rePass.touched ? true : null\">\n    <ng-container *ngIf=\"rePass.invalid && rePass.touched\">\n      <p class=\"error-message\" *ngIf=\"rePass?.errors?.required\">\n        Password confirmation is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"password.value != rePass.value && !rePass.errors?.required\">\n        Password does not match the confirm password.\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group accept-group\" *ngIf=\"getConfigValue('forms.register.terms')\">\n    <nb-checkbox name=\"terms\" [(ngModel)]=\"user.terms\" [required]=\"getConfigValue('forms.register.terms')\">\n      Agree to <a href=\"#\" target=\"_blank\"><strong>Terms & Conditions</strong></a>\n    </nb-checkbox>\n  </div>\n\n  <button nbButton\n          fullWidth\n          status=\"success\"\n          [disabled]=\"submitted || !form.valid\"\n          [class.btn-pulse]=\"submitted\">\n    Register\n  </button>\n</form>\n\n<section *ngIf=\"socialLinks && socialLinks.length > 0\" class=\"links\" aria-label=\"Social sign in\">\n  or enter with:\n  <div class=\"socials\">\n    <ng-container *ngFor=\"let socialLink of socialLinks\">\n      <a *ngIf=\"socialLink.link\"\n         [routerLink]=\"socialLink.link\"\n         [attr.target]=\"socialLink.target\"\n         [attr.class]=\"socialLink.icon\"\n         [class.with-icon]=\"socialLink.icon\">{{ socialLink.title }}</a>\n      <a *ngIf=\"socialLink.url\"\n         [attr.href]=\"socialLink.url\"\n         [attr.target]=\"socialLink.target\"\n         [attr.class]=\"socialLink.icon\"\n         [class.with-icon]=\"socialLink.icon\">{{ socialLink.title }}</a>\n    </ng-container>\n  </div>\n</section>\n\n<section class=\"another-action\" aria-label=\"Sign in\">\n  Already have an account? <a class=\"text-link\" routerLink=\"../login\">Log in</a>\n</section>\n"
+module.exports = "\n<h1 id=\"title\" class=\"title\">Register</h1>\n\n<nb-alert *ngIf=\"showMessages.error && errors?.length && !submitted\" outline=\"danger\" role=\"alert\">\n  <p class=\"alert-title\"><b>Oh snap!</b></p>\n  <ul class=\"alert-message-list\">\n    <li *ngFor=\"let error of errors\" class=\"alert-message\">{{ error }}</li>\n  </ul>\n</nb-alert>\n\n<nb-alert *ngIf=\"showMessages.success && messages?.length && !submitted\" outline=\"success\" role=\"alert\">\n  <p class=\"alert-title\"><b>Hooray!</b></p>\n  <ul class=\"alert-message-list\">\n    <li *ngFor=\"let message of messages\" class=\"alert-message\">{{ message }}</li>\n  </ul>\n</nb-alert>\n\n<form (ngSubmit)=\"register()\" #form=\"ngForm\" aria-labelledby=\"title\">\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-firstName\">First Name:</label>\n    <input nbInput\n           [(ngModel)]=\"user.firstName\"\n           #firstName=\"ngModel\"\n           id=\"input-firstName\"\n           name=\"firstName\"\n           placeholder=\"First Name\"\n           autofocus\n           fullWidth\n           [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.firstName.required')\"\n           [minlength]=\"getConfigValue('forms.validation.firstName.minLength')\"\n           [maxlength]=\"getConfigValue('forms.validation.firstName.maxLength')\"\n           [attr.aria-invalid]=\"firstName.invalid && firstName.touched ? true : null\">\n    <ng-container *ngIf=\"firstName.invalid && firstName.touched\">\n      <p class=\"error-message\" *ngIf=\"firstName?.errors?.required\">\n        First name is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"firstName?.errors?.minlength || firstName?.errors?.maxlength\">\n        First name should contains\n        from {{getConfigValue('forms.validation.firstName.minLength')}}\n        to {{getConfigValue('forms.validation.firstName.maxLength')}}\n        characters\n      </p>\n    </ng-container>\n  </div>\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-lastName\">Last name:</label>\n    <input nbInput\n           [(ngModel)]=\"user.lastName\"\n           #lastName=\"ngModel\"\n           id=\"input-lastName\"\n           name=\"lastName\"\n           placeholder=\"Last name\"\n           autofocus\n           fullWidth\n           [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.lastName.required')\"\n           [minlength]=\"getConfigValue('forms.validation.lastName.minLength')\"\n           [maxlength]=\"getConfigValue('forms.validation.lastName.maxLength')\"\n           [attr.aria-invalid]=\"lastName.invalid && lastName.touched ? true : null\">\n    <ng-container *ngIf=\"lastName.invalid && lastName.touched\">\n      <p class=\"error-message\" *ngIf=\"lastName?.errors?.required\">\n        Full name is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"lastName?.errors?.minlength || lastName?.errors?.maxlength\">\n        Full name should contains\n        from {{getConfigValue('forms.validation.lastName.minLength')}}\n        to {{getConfigValue('forms.validation.lastName.maxLength')}}\n        characters\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-username\">username address:</label>\n    <input nbInput\n           [(ngModel)]=\"user.username\"\n           #username=\"ngModel\"\n           id=\"input-username\"\n           name=\"username\"\n           pattern=\".+@.+..+\"\n           placeholder=\"username address\"\n           fullWidth\n           [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.username.required')\"\n           [attr.aria-invalid]=\"username.invalid && username.touched ? true : null\">\n    <ng-container *ngIf=\"username.invalid && username.touched\">\n      <p class=\"error-message\" *ngIf=\"username?.errors?.required\">\n        Username is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"username?.errors?.pattern\">\n        Username should be the real one!\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-password\">Password:</label>\n    <input nbInput\n           [(ngModel)]=\"user.password\"\n           #password=\"ngModel\"\n           type=\"password\"\n           id=\"input-password\"\n           name=\"password\"\n           placeholder=\"Password\"\n           fullWidth\n           [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.password.required')\"\n           [minlength]=\"getConfigValue('forms.validation.password.minLength')\"\n           [maxlength]=\"getConfigValue('forms.validation.password.maxLength')\"\n           [attr.aria-invalid]=\"password.invalid && password.touched ? true : null\">\n    <ng-container *ngIf=\"password.invalid && password.touched\">\n      <p class=\"error-message\" *ngIf=\"password?.errors?.required\">\n        Password is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"password?.errors?.minlength || password?.errors?.maxlength\">\n        Password should contains\n        from {{ getConfigValue('forms.validation.password.minLength') }}\n        to {{ getConfigValue('forms.validation.password.maxLength') }}\n        characters\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group\">\n    <label class=\"label\" for=\"input-re-password\">Repeat password:</label>\n    <input nbInput\n           [(ngModel)]=\"user.confirmPassword\"\n           #rePass=\"ngModel\"\n           type=\"password\"\n           id=\"input-re-password\"\n           name=\"rePass\"\n           placeholder=\"Confirm Password\"\n           fullWidth\n           [status]=\"username.dirty ? (username.invalid || password.value != rePass.value  ? 'danger' : 'success') : ''\"\n           [required]=\"getConfigValue('forms.validation.password.required')\"\n           [attr.aria-invalid]=\"rePass.invalid && rePass.touched ? true : null\">\n    <ng-container *ngIf=\"rePass.invalid && rePass.touched\">\n      <p class=\"error-message\" *ngIf=\"rePass?.errors?.required\">\n        Password confirmation is required!\n      </p>\n      <p class=\"error-message\" *ngIf=\"password.value != rePass.value && !rePass.errors?.required\">\n        Password does not match the confirm password.\n      </p>\n    </ng-container>\n  </div>\n\n  <div class=\"form-control-group accept-group\" *ngIf=\"getConfigValue('forms.register.terms')\">\n    <nb-checkbox name=\"terms\" [(ngModel)]=\"user.terms\" [required]=\"getConfigValue('forms.register.terms')\">\n      Agree to <a href=\"#\" target=\"_blank\"><strong>Terms & Conditions</strong></a>\n    </nb-checkbox>\n  </div>\n\n  <button nbButton\n          fullWidth\n          status=\"success\"\n          [disabled]=\"submitted || !form.valid\"\n          [class.btn-pulse]=\"submitted\">\n    Register\n  </button>\n</form>\n\n<section *ngIf=\"socialLinks && socialLinks.length > 0\" class=\"links\" aria-label=\"Social sign in\">\n  or enter with:\n  <div class=\"socials\">\n    <ng-container *ngFor=\"let socialLink of socialLinks\">\n      <a *ngIf=\"socialLink.link\"\n         [routerLink]=\"socialLink.link\"\n         [attr.target]=\"socialLink.target\"\n         [attr.class]=\"socialLink.icon\"\n         [class.with-icon]=\"socialLink.icon\">{{ socialLink.title }}</a>\n      <a *ngIf=\"socialLink.url\"\n         [attr.href]=\"socialLink.url\"\n         [attr.target]=\"socialLink.target\"\n         [attr.class]=\"socialLink.icon\"\n         [class.with-icon]=\"socialLink.icon\">{{ socialLink.title }}</a>\n    </ng-container>\n  </div>\n</section>\n\n<section class=\"another-action\" aria-label=\"Sign in\">\n  Already have an account? <a class=\"text-link\" routerLink=\"../login\">Log in</a>\n</section>\n"
 
 /***/ }),
 
@@ -249,6 +249,16 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 strategies: [
                     _nebular_auth__WEBPACK_IMPORTED_MODULE_6__["NbPasswordAuthStrategy"].setup({
                         name: 'email',
+                        token: {
+                            class: _nebular_auth__WEBPACK_IMPORTED_MODULE_6__["NbAuthJWTToken"],
+                            getter: (module, res, options) => res.headers.get('Authorization'),
+                        },
+                        errors: {
+                            getter: (module, res, options) => res.body,
+                        },
+                        messages: {
+                            getter: (module, res, options) => res.body,
+                        },
                         baseEndpoint: '/api/auth',
                         login: {
                             // ...
@@ -260,6 +270,7 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                         },
                         logout: {
                             endpoint: '/sign-out',
+                            method: 'POST',
                         },
                         requestPass: {
                             endpoint: '/request-pass',
@@ -341,18 +352,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
+/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
 
 
 
 
-
-let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTED_MODULE_4__["NbLoginComponent"] {
-    constructor(spinnerService, service, options, cd, router) {
+let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbLoginComponent"] {
+    constructor(service, options, cd, router, tokenService) {
         super(service, options, cd, router);
-        this.spinnerService = spinnerService;
-        console.log(this.service);
     }
     ngOnInit() {
     }
@@ -360,21 +367,26 @@ let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTE
         this.errors = [];
         this.messages = [];
         this.submitted = true;
-        console.log(this.user);
         this.service.authenticate(this.strategy, this.user).subscribe((result) => {
             this.submitted = false;
-            console.log(result);
             if (result.isSuccess()) {
+                const response = result.getResponse().body;
                 this.messages = result.getMessages();
+                if (response.success) {
+                    this.messages.push(response.message);
+                    setTimeout(() => {
+                        return this.router.navigateByUrl('/dashboard');
+                    }, this.redirectDelay);
+                }
+                else {
+                    this.errors.push(response.message);
+                }
             }
             else {
+                const response = result.getResponse();
                 this.errors = result.getErrors();
-            }
-            const redirect = result.getRedirect();
-            if (redirect) {
-                setTimeout(() => {
-                    return this.router.navigateByUrl(redirect);
-                }, this.redirectDelay);
+                this.errors.push(response.message);
+                this.errors.push(response.error.message);
             }
             this.cd.detectChanges();
         });
@@ -386,10 +398,10 @@ LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./login.component.html */ "./node_modules/raw-loader/index.js!./src/app/auth/login/login.component.html"),
         styles: [__webpack_require__(/*! ./login.component.scss */ "./src/app/auth/login/login.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_nebular_auth__WEBPACK_IMPORTED_MODULE_4__["NB_AUTH_OPTIONS"])),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbSpinnerService"],
-        _nebular_auth__WEBPACK_IMPORTED_MODULE_4__["NbAuthService"], Object, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"],
-        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NB_AUTH_OPTIONS"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], Object, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+        _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbTokenService"]])
 ], LoginComponent);
 
 
@@ -426,13 +438,32 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let LogoutComponent = class LogoutComponent extends _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbLogoutComponent"] {
-    constructor(service, options = {}, router) {
+    constructor(tokenService, service, options = {}, router) {
         super(service, options, router);
+        this.tokenService = tokenService;
         this.service = service;
         this.options = options;
         this.router = router;
     }
     ngOnInit() {
+        this.logout();
+    }
+    logout() {
+        this.service.logout('email').subscribe((result) => {
+            window.console.log(result);
+            if (result.isSuccess()) {
+                const response = result.getResponse().body;
+                if (response.success) {
+                    this.router.navigate(['/account/login']);
+                }
+            }
+            else {
+                const response = result.getResponse();
+                this.errors = result.getErrors();
+                this.errors.push(response.message);
+                this.errors.push(response.error.message);
+            }
+        });
     }
 };
 LogoutComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -441,8 +472,9 @@ LogoutComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./logout.component.html */ "./node_modules/raw-loader/index.js!./src/app/auth/logout/logout.component.html"),
         styles: [__webpack_require__(/*! ./logout.component.scss */ "./src/app/auth/logout/logout.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NB_AUTH_OPTIONS"])),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], Object, _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NB_AUTH_OPTIONS"])),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbTokenService"],
+        _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], Object, _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
 ], LogoutComponent);
 
 
@@ -492,6 +524,34 @@ let RegisterComponent = class RegisterComponent extends _nebular_auth__WEBPACK_I
         this.socialLinks = [];
     }
     ngOnInit() {
+    }
+    register() {
+        this.errors = [];
+        this.messages = [];
+        this.submitted = true;
+        this.service.register(this.strategy, this.user).subscribe((result) => {
+            this.submitted = false;
+            if (result.isSuccess()) {
+                const response = result.getResponse().body;
+                this.messages = result.getMessages();
+                if (response.success) {
+                    this.messages.push(response.message);
+                    setTimeout(() => {
+                        return this.router.navigateByUrl('/dashboard');
+                    }, this.redirectDelay);
+                }
+                else {
+                    this.errors.push(response.message);
+                }
+            }
+            else {
+                const response = result.getResponse();
+                this.errors = result.getErrors();
+                this.errors.push(response.message);
+                this.errors.push(response.error.message);
+            }
+            this.cd.detectChanges();
+        });
     }
 };
 RegisterComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
