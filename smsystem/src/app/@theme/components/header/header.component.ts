@@ -1,8 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
+import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import { UserData } from '../../../@core/data/users';
+import { UserService } from './../../../services/users/user.service';
+import { User } from './../../../models/users/user';
+
+
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -18,15 +22,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
-  user: any;
+  user: User;
   themes = THEMES;
   currentTheme = 'default';
   userMenu = USER_DROPDOWN_ITEMS;
 
-  constructor(private sidebarService: NbSidebarService,
+  constructor(
+              private userService: UserService,
+              private authService: NbAuthService,
+              private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
-              private userService: UserData,
               private route: ActivatedRoute,
               private router: Router,
               private layoutService: LayoutService,
@@ -35,11 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-
-    this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
-
+    this.loadCurrentUser();
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
@@ -58,6 +60,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.menuService.onItemClick().subscribe(( event ) => {
         this.onItemSelection(event.item.title);
       });
+  }
+
+  loadCurrentUser() {
+    if (this.authService.isAuthenticatedOrRefresh()) {
+      this.userService.getCurrentUser().subscribe((result: any) => {
+        this.user = result.data;
+      });
+    }
   }
   onItemSelection( title ) {
     if ( title === 'Log out' ) {

@@ -44,7 +44,6 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
       this.submitted = false;
       if (result.isSuccess()) {
         const response = result.getResponse().body;
-        this.messages = result.getMessages();
         if (response.success) {
           this.messages.push(response.message);
           setTimeout(() => {

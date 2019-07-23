@@ -14,7 +14,7 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.utils.StringUtility;
 
 @Service
-public class CookieServiceImpl  implements CookieService{
+public class CookieServiceImpl implements CookieService{
 	
 	private String rootURL = "/";
 
@@ -26,7 +26,8 @@ public class CookieServiceImpl  implements CookieService{
 			int cookieAge = SystemConstant.COOKIE_LIFE_TIME;
 			if(maxAge != null) {
 				cookieAge = maxAge;
-			}			
+			}	
+			cookieToken.setHttpOnly(true);
 			cookieToken.setMaxAge(cookieAge);
 			cookieToken.setPath(rootURL);
 			response.addCookie(cookieToken);

@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"header-container\">\n  <div class=\"logo-container\">\n    <a (click)=\"toggleSidebar()\" href=\"#\" class=\"sidebar-toggle\">\n      <nb-icon icon=\"menu-2-outline\"></nb-icon>\n    </a>\n    <a class=\"logo\" href=\"#\" (click)=\"navigateHome()\">School <span>Manager</span></a>\n  </div>\n</div>\n\n<div class=\"header-container\">\n  <nb-actions size=\"small\">\n    <nb-action class=\"control-item\">\n      <nb-search type=\"rotate-layout\"></nb-search>\n    </nb-action>\n    <nb-action class=\"control-item\" icon=\"email-outline\"></nb-action>\n    <nb-action class=\"control-item\" icon=\"bell-outline\"></nb-action>\n    <nb-action class=\"user-action\" *nbIsGranted=\"['view', 'user']\" >\n      <nb-user [nbContextMenu]=\"userMenu\"\n               [onlyPicture]=\"userPictureOnly\"\n               [name]=\"user?.name\"\n               [picture]=\"user?.picture\">\n      </nb-user>\n    </nb-action>\n  </nb-actions>\n</div>\n"
+module.exports = "<div class=\"header-container\">\n  <div class=\"logo-container\">\n    <a (click)=\"toggleSidebar()\" href=\"#\" class=\"sidebar-toggle\">\n      <nb-icon icon=\"menu-2-outline\"></nb-icon>\n    </a>\n    <a class=\"logo\" href=\"#\" (click)=\"navigateHome()\">School <span>Manager</span></a>\n  </div>\n</div>\n\n<div class=\"header-container\">\n  <nb-actions size=\"small\">\n    <nb-action class=\"control-item\">\n      <nb-search type=\"rotate-layout\"></nb-search>\n    </nb-action>\n    <nb-action class=\"control-item\" icon=\"email-outline\"></nb-action>\n    <nb-action class=\"control-item\" icon=\"bell-outline\"></nb-action>\n    <nb-action class=\"user-action\" *nbIsGranted=\"['view', 'user']\" >\n      <nb-user [nbContextMenu]=\"userMenu\"\n               [onlyPicture]=\"userPictureOnly\"\n               [name]=\"user?.fullName\"\n               [picture]=\"user?.picture\">\n      </nb-user>\n    </nb-action>\n  </nb-actions>\n</div>\n"
 
 /***/ }),
 
@@ -18,7 +18,7 @@ module.exports = "<div class=\"header-container\">\n  <div class=\"logo-containe
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-12\">\n    <nb-card>\n      <nb-card-header>User Profile</nb-card-header>\n      <nb-card-body>\n        <div class=\"row\">\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"inputFirstName\" class=\"label\">First Name</label>\n              <input type=\"text\" nbInput fullWidth id=\"inputFirstName\" placeholder=\"First Name\">\n            </div>\n          </div>\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"inputLastName\" class=\"label\">Last Name</label>\n              <input type=\"text\" nbInput fullWidth id=\"inputLastName\" placeholder=\"Last Name\">\n            </div>\n          </div>\n        </div>\n        <div class=\"row\">\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"inputEmail\" class=\"label\">Email</label>\n              <input type=\"email\" nbInput fullWidth id=\"inputEmail\" placeholder=\"Email\">\n            </div>\n          </div>\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"inputWebsite\" class=\"label\">Website</label>\n              <input type=\"text\" nbInput fullWidth id=\"inputWebsite\" placeholder=\"Website\">\n            </div>\n          </div>\n        </div>\n        <button type=\"submit\" nbButton>Submit</button>\n      </nb-card-body>\n    </nb-card>\n  </div>\n</div>\n"
+module.exports = "<div class=\"row\">\n  <div class=\"col-md-12\">\n    <nb-card>\n      <nb-card-header>User Profile</nb-card-header>\n      <nb-card-body>\n        <div class=\"row\">\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"inputFirstName\" class=\"label\">First Name</label>\n              <input nbInput\n                    fullWidth\n                    [(ngModel)]=\"user.firstName\"\n                    #firstName=\"ngModel\"\n                    name=\"firstName\"\n                    id=\"input-firstName\"\n                    placeholder=\"First Name\"\n                    fieldSize=\"large\"\n                    autofocus\n                    [status]=\"firstName.dirty ? (firstName.invalid  ? 'danger' : 'success') : ''\"\n                    [required]=\"getConfigValue('forms.validation.lastName.required')\"\n                    [attr.aria-invalid]=\"firstName?.invalid && lastName.touched ? true : null\">\n              <ng-container *ngIf=\"firstName?.invalid && firstName?.touched\">\n                <p class=\"caption status-danger\" *ngIf=\"firstName?.errors?.required\">\n                 First Name is required!\n                </p>\n                <p class=\"caption status-danger\" *ngIf=\"firstName?.errors?.pattern\">\n                  First Name should be the real one!\n                </p>\n              </ng-container>\n            </div>\n          </div>\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"input-lastName\" class=\"label\">Last Name</label>\n              <input nbInput\n                    fullWidth\n                    [(ngModel)]=\"user.lastName\"\n                    #lastName=\"ngModel\"\n                    name=\"lastName\"\n                    id=\"input-lastName\"\n                    placeholder=\"Last Name\"\n                    fieldSize=\"large\"\n                    autofocus\n                    [status]=\"lastName.dirty ? (lastName.invalid  ? 'danger' : 'success') : ''\"\n                    [required]=\"getConfigValue('forms.validation.lastName.required')\"\n                    [attr.aria-invalid]=\"lastName?.invalid && lastName.touched ? true : null\">\n              <ng-container *ngIf=\"lastName?.invalid && lastName?.touched\">\n                <p class=\"caption status-danger\" *ngIf=\"lastName?.errors?.required\">\n                  Last Name is required!\n                </p>\n                <p class=\"caption status-danger\" *ngIf=\"lastName?.errors?.pattern\">\n                  Last name should be the real one!\n                </p>\n              </ng-container>\n            </div>\n          </div>\n        </div>\n        <div class=\"row\">\n          <div class=\"col-sm-6\">\n              <div class=\"form-group\">\n                  <label for=\"input-username\" class=\"label\">Username</label>\n                  <input nbInput\n                            fullWidth\n                            [(ngModel)]=\"user.username\"\n                            #username=\"ngModel\"\n                            name=\"username\"\n                            id=\"input-username\"\n                            pattern=\".+@.+\\..+\"\n                            placeholder=\"Email address\"\n                            fieldSize=\"large\"\n                            autofocus\n                            [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n                            [required]=\"getConfigValue('forms.validation.username.required')\"\n                            [attr.aria-invalid]=\"username?.invalid && username.touched ? true : null\">\n                      <ng-container *ngIf=\"username?.invalid && username?.touched\">\n                        <p class=\"caption status-danger\" *ngIf=\"username?.errors?.required\">\n                          Username is required!\n                        </p>\n                        <p class=\"caption status-danger\" *ngIf=\"username?.errors?.pattern\">\n                          Username should be the real one!\n                        </p>\n                      </ng-container>\n                </div>\n          </div>\n          <div class=\"col-sm-6\">\n            <div class=\"form-group\">\n              <label for=\"input-occupation\" class=\"label\">Occupation</label>\n              <input nbInput\n                    fullWidth\n                    [(ngModel)]=\"user.occupation\"\n                    #occupation=\"ngModel\"\n                    name=\"occupation\"\n                    id=\"input-occupation\"\n                    placeholder=\"Occupation\"\n                    fieldSize=\"large\"\n                    autofocus\n                    [status]=\"occupation.dirty ? (occupation.invalid  ? 'danger' : 'success') : ''\"\n                    [required]=\"getConfigValue('forms.validation.occupation.required')\"\n                    [attr.aria-invalid]=\"occupation?.invalid && occupation.touched ? true : null\">\n              <ng-container *ngIf=\"occupation?.invalid && occupation?.touched\">\n                <p class=\"caption status-danger\" *ngIf=\"occupation?.errors?.required\">\n                    Occupation is required!\n                </p>\n                <p class=\"caption status-danger\" *ngIf=\"occupation?.errors?.pattern\">\n                    Occupation should be the real one!\n                </p>\n              </ng-container>\n            </div>\n          </div>\n        </div>\n          <div class=\"row\">\n              <div class=\"col-sm-6\">\n                  <div class=\"form-group\">\n                      <label for=\"input-username\" class=\"label\">Username</label>\n                      <input nbInput\n                                fullWidth\n                                [(ngModel)]=\"user.username\"\n                                #username=\"ngModel\"\n                                name=\"username\"\n                                id=\"input-username\"\n                                pattern=\".+@.+\\..+\"\n                                placeholder=\"Email address\"\n                                fieldSize=\"large\"\n                                autofocus\n                                [status]=\"username.dirty ? (username.invalid  ? 'danger' : 'success') : ''\"\n                                [required]=\"getConfigValue('forms.validation.username.required')\"\n                                [attr.aria-invalid]=\"username?.invalid && username.touched ? true : null\">\n                          <ng-container *ngIf=\"username?.invalid && username?.touched\">\n                            <p class=\"caption status-danger\" *ngIf=\"username?.errors?.required\">\n                              Username is required!\n                            </p>\n                            <p class=\"caption status-danger\" *ngIf=\"username?.errors?.pattern\">\n                              Username should be the real one!\n                            </p>\n                          </ng-container>\n                    </div>\n              </div>\n              <div class=\"col-sm-6\">\n                <div class=\"form-group\">\n                  <label for=\"input-occupation\" class=\"label\">Gender</label>\n                  <nb-radio-group [(value)]=\"user.gender\">\n                      <nb-radio\n                        [value]=\"'male'\">\n                        Male\n                      </nb-radio>\n                      <nb-radio\n                        [value]=\"'female'\">\n                        Female\n                      </nb-radio>\n                      <nb-radio\n                        [value]=\"'other'\">\n                        Other\n                      </nb-radio>\n                    </nb-radio-group>\n                </div>\n              </div>\n        </div>\n        <button type=\"submit\" nbButton>Update</button>\n      </nb-card-body>\n    </nb-card>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -2962,12 +2962,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _core_data_users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../@core/data/users */ "./src/app/@core/data/users.ts");
-/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../@core/utils */ "./src/app/@core/utils/index.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
-/* harmony import */ var _header_menu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./header-menu */ "./src/app/@theme/components/header/header-menu.ts");
+/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
+/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
+/* harmony import */ var _services_users_user_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../services/users/user.service */ "./src/app/services/users/user.service.ts");
+/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../@core/utils */ "./src/app/@core/utils/index.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+/* harmony import */ var _header_menu__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./header-menu */ "./src/app/@theme/components/header/header-menu.ts");
+
 
 
 
@@ -2978,36 +2980,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let HeaderComponent = class HeaderComponent {
-    constructor(sidebarService, menuService, themeService, userService, route, router, layoutService, breakpointService) {
+    constructor(userService, authService, sidebarService, menuService, themeService, route, router, layoutService, breakpointService) {
+        this.userService = userService;
+        this.authService = authService;
         this.sidebarService = sidebarService;
         this.menuService = menuService;
         this.themeService = themeService;
-        this.userService = userService;
         this.route = route;
         this.router = router;
         this.layoutService = layoutService;
         this.breakpointService = breakpointService;
-        this.destroy$ = new rxjs__WEBPACK_IMPORTED_MODULE_7__["Subject"]();
+        this.destroy$ = new rxjs__WEBPACK_IMPORTED_MODULE_8__["Subject"]();
         this.userPictureOnly = false;
-        this.themes = _header_menu__WEBPACK_IMPORTED_MODULE_8__["THEMES"];
+        this.themes = _header_menu__WEBPACK_IMPORTED_MODULE_9__["THEMES"];
         this.currentTheme = 'default';
-        this.userMenu = _header_menu__WEBPACK_IMPORTED_MODULE_8__["USER_DROPDOWN_ITEMS"];
+        this.userMenu = _header_menu__WEBPACK_IMPORTED_MODULE_9__["USER_DROPDOWN_ITEMS"];
     }
     ngOnInit() {
         this.currentTheme = this.themeService.currentTheme;
-        this.userService.getUsers()
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.destroy$))
-            .subscribe((users) => this.user = users.nick);
+        this.loadCurrentUser();
         const { xl } = this.breakpointService.getBreakpointsMap();
         this.themeService.onMediaQueryChange()
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(([, currentBreakpoint]) => currentBreakpoint.width < xl), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.destroy$))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["map"])(([, currentBreakpoint]) => currentBreakpoint.width < xl), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["takeUntil"])(this.destroy$))
             .subscribe((isLessThanXl) => this.userPictureOnly = isLessThanXl);
         this.themeService.onThemeChange()
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(({ name }) => name), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.destroy$))
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["map"])(({ name }) => name), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["takeUntil"])(this.destroy$))
             .subscribe(themeName => this.currentTheme = themeName);
         this.menuService.onItemClick().subscribe((event) => {
             this.onItemSelection(event.item.title);
         });
+    }
+    loadCurrentUser() {
+        if (this.authService.isAuthenticatedOrRefresh()) {
+            this.userService.getCurrentUser().subscribe((result) => {
+                this.user = result.data;
+            });
+        }
     }
     onItemSelection(title) {
         if (title === 'Log out') {
@@ -3042,14 +3050,15 @@ HeaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./header.component.html */ "./node_modules/raw-loader/index.js!./src/app/@theme/components/header/header.component.html"),
         styles: [__webpack_require__(/*! ./header.component.scss */ "./src/app/@theme/components/header/header.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbSidebarService"],
-        _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbMenuService"],
-        _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbThemeService"],
-        _core_data_users__WEBPACK_IMPORTED_MODULE_4__["UserData"],
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_users_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"],
+        _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbSidebarService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMenuService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbThemeService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
         _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-        _core_utils__WEBPACK_IMPORTED_MODULE_5__["LayoutService"],
-        _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbMediaBreakpointsService"]])
+        _core_utils__WEBPACK_IMPORTED_MODULE_6__["LayoutService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMediaBreakpointsService"]])
 ], HeaderComponent);
 
 
@@ -3069,10 +3078,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _header_routing_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./header-routing.module */ "./src/app/@theme/components/header/header-routing.module.ts");
-/* harmony import */ var _profile_profile_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./profile/profile.component */ "./src/app/@theme/components/header/profile/profile.component.ts");
-/* harmony import */ var _settings_settings_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./settings/settings.component */ "./src/app/@theme/components/header/settings/settings.component.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
+/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
+/* harmony import */ var _header_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./header-routing.module */ "./src/app/@theme/components/header/header-routing.module.ts");
+/* harmony import */ var _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./profile/profile.component */ "./src/app/@theme/components/header/profile/profile.component.ts");
+/* harmony import */ var _settings_settings_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./settings/settings.component */ "./src/app/@theme/components/header/settings/settings.component.ts");
+
 
 
 
@@ -3085,21 +3096,22 @@ let HeaderModule = class HeaderModule {
 HeaderModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [
-            _profile_profile_component__WEBPACK_IMPORTED_MODULE_5__["ProfileComponent"],
-            _settings_settings_component__WEBPACK_IMPORTED_MODULE_6__["SettingsComponent"],
+            _profile_profile_component__WEBPACK_IMPORTED_MODULE_6__["ProfileComponent"],
+            _settings_settings_component__WEBPACK_IMPORTED_MODULE_7__["SettingsComponent"],
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbActionsModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbButtonModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbCardModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbCheckboxModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbIconModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbInputModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbRadioModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbSelectModule"],
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbUserModule"],
-            _header_routing_module__WEBPACK_IMPORTED_MODULE_4__["HeaderRoutingModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbActionsModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbButtonModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbCardModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbCheckboxModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbDatepickerModule"], _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbIconModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbInputModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbRadioModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbSelectModule"],
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbUserModule"],
+            _header_routing_module__WEBPACK_IMPORTED_MODULE_5__["HeaderRoutingModule"],
         ],
     })
 ], HeaderModule);
@@ -3131,12 +3143,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfileComponent", function() { return ProfileComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
+/* harmony import */ var _services_users_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../../../services/users/user.service */ "./src/app/services/users/user.service.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../../../utils */ "./src/app/utils/index.ts");
+
+
+
 
 
 let ProfileComponent = class ProfileComponent {
-    constructor() { }
-    ngOnInit() {
+    constructor(userService, authService) {
+        this.userService = userService;
+        this.authService = authService;
+        this.user = {
+            id: null,
+            username: '',
+            firstName: '',
+            lastName: '',
+            age: null,
+            gender: 'female',
+            occupation: '',
+            birthDate: null,
+            fullName: '',
+            picture: '',
+        };
     }
+    ngOnInit() {
+        this.loadCurrentUser();
+    }
+    loadCurrentUser() {
+        if (this.authService.isAuthenticatedOrRefresh()) {
+            this.userService.getCurrentUser().subscribe((result) => {
+                this.user = result.data;
+            });
+        }
+    }
+    getConfigValue(key) {
+        return Object(_utils__WEBPACK_IMPORTED_MODULE_4__["getDeepFromObject"])(this.options, key);
+    }
+    ;
 };
 ProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -3144,7 +3189,8 @@ ProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./profile.component.html */ "./node_modules/raw-loader/index.js!./src/app/@theme/components/header/profile/profile.component.html"),
         styles: [__webpack_require__(/*! ./profile.component.scss */ "./src/app/@theme/components/header/profile/profile.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"],
+        _nebular_auth__WEBPACK_IMPORTED_MODULE_2__["NbAuthService"]])
 ], ProfileComponent);
 
 
@@ -5163,6 +5209,7 @@ const routes = [
         loadChildren: () => __webpack_require__.e(/*! import() | auth-auth-module */ "auth-auth-module").then(__webpack_require__.bind(null, /*! ./auth/auth.module */ "./src/app/auth/auth.module.ts"))
             .then(m => m.NgxAuthModule),
     },
+    { path: '**', redirectTo: '' },
 ];
 const config = {
     useHash: false,
@@ -5240,13 +5287,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _theme_theme_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./@theme/theme.module */ "./src/app/@theme/theme.module.ts");
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
+/* harmony import */ var _interceptors__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./interceptors */ "./src/app/interceptors/index.ts");
+/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
 
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
+
+
 
 
 
@@ -5267,16 +5312,23 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_8__["AppRoutingModule"],
             _theme_theme_module__WEBPACK_IMPORTED_MODULE_6__["ThemeModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbSidebarModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbMenuModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbDatepickerModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbDialogModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbWindowModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbToastrModule"].forRoot(),
-            _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbChatModule"].forRoot({
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbSidebarModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbMenuModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbDatepickerModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbDialogModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbWindowModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbToastrModule"].forRoot(),
+            _nebular_theme__WEBPACK_IMPORTED_MODULE_10__["NbChatModule"].forRoot({
                 messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
             }),
             _core_core_module__WEBPACK_IMPORTED_MODULE_5__["CoreModule"].forRoot(),
+        ],
+        providers: [
+            {
+                provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HTTP_INTERCEPTORS"],
+                useClass: _interceptors__WEBPACK_IMPORTED_MODULE_9__["AuthInterceptor"],
+                multi: true,
+            },
         ],
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"]],
     })
@@ -5331,6 +5383,397 @@ AuthGuard = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
 ], AuthGuard);
+
+
+
+/***/ }),
+
+/***/ "./src/app/interceptors/auth.interceptor.ts":
+/*!**************************************************!*\
+  !*** ./src/app/interceptors/auth.interceptor.ts ***!
+  \**************************************************/
+/*! exports provided: AuthInterceptor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthInterceptor", function() { return AuthInterceptor; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var rxjs_add_operator_do__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/add/operator/do */ "./node_modules/rxjs-compat/_esm2015/add/operator/do.js");
+/* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
+
+
+
+
+
+
+let AuthInterceptor = class AuthInterceptor {
+    constructor(authService, tokenService, router) {
+        this.authService = authService;
+        this.tokenService = tokenService;
+        this.router = router;
+        this.token = '';
+        this.redirectUrl = '/account/login';
+    }
+    intercept(req, next) {
+        this.authService.getToken().subscribe((authToken) => {
+            this.token = authToken.getValue();
+        });
+        req = req.clone({
+            setHeaders: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Accept': 'application/json',
+                'Authorization': this.token,
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+        return next.handle(req).do((event) => {
+            if (event instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpResponse"]) {
+                const resp = event.body;
+                if (resp && resp.status === 401) {
+                    this.authService.logout('email').subscribe((result) => {
+                        if (result.isSuccess()) {
+                            const response = result.getResponse().body;
+                            if (response.success) {
+                                this.router.navigate([this.redirectUrl]);
+                            }
+                        }
+                    });
+                    this.tokenService.clear();
+                    this.router.navigate([this.redirectUrl]);
+                }
+            }
+        }, (err) => {
+            if (err instanceof _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpErrorResponse"]) {
+                if (err.status === 401) {
+                    this.tokenService.clear();
+                    this.router.navigate([this.redirectUrl]);
+                }
+            }
+        });
+    }
+};
+AuthInterceptor = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["Injectable"])(),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_5__["NbAuthService"],
+        _nebular_auth__WEBPACK_IMPORTED_MODULE_5__["NbTokenService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+], AuthInterceptor);
+
+
+
+/***/ }),
+
+/***/ "./src/app/interceptors/index.ts":
+/*!***************************************!*\
+  !*** ./src/app/interceptors/index.ts ***!
+  \***************************************/
+/*! exports provided: AuthInterceptor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _auth_interceptor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./auth.interceptor */ "./src/app/interceptors/auth.interceptor.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "AuthInterceptor", function() { return _auth_interceptor__WEBPACK_IMPORTED_MODULE_0__["AuthInterceptor"]; });
+
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/users/user.service.ts":
+/*!************************************************!*\
+  !*** ./src/app/services/users/user.service.ts ***!
+  \************************************************/
+/*! exports provided: UserService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils */ "./src/app/utils/index.ts");
+
+
+
+
+
+
+const httpOptions = {
+    headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+        'Content-Type': 'application/json',
+    }),
+};
+let UserService = class UserService {
+    constructor(http) {
+        this.http = http;
+    }
+    getCurrentUser() {
+        return this.http
+            .get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}/currentUser`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    getUser(userId) {
+        return this.http
+            .get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}/${userId}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    load(param) {
+        return this.http
+            .get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    addUser(data) {
+        return this.http.post(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}`, data, httpOptions)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    errorHandler(error) {
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])(error.message || 'Server error');
+    }
+};
+UserService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root',
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
+], UserService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/utils/constants/endpoints.ts":
+/*!**********************************************!*\
+  !*** ./src/app/utils/constants/endpoints.ts ***!
+  \**********************************************/
+/*! exports provided: END_POINTS */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "END_POINTS", function() { return END_POINTS; });
+const END_POINTS = {
+    rootURL: '/api/secured',
+    users: '/api/secured/users',
+};
+
+
+/***/ }),
+
+/***/ "./src/app/utils/helpers.ts":
+/*!**********************************!*\
+  !*** ./src/app/utils/helpers.ts ***!
+  \**********************************/
+/*! exports provided: deepExtend, getDeepFromObject, urlBase64Decode, b64decode, b64DecodeUnicode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deepExtend", function() { return deepExtend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getDeepFromObject", function() { return getDeepFromObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "urlBase64Decode", function() { return urlBase64Decode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b64decode", function() { return b64decode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b64DecodeUnicode", function() { return b64DecodeUnicode; });
+/**
+ * Extending object that entered in first argument.
+ *
+ * Returns extended object or false if have no target object or incorrect type.
+ *
+ * If you wish to clone source object (without modify it), just use empty new
+ * object as first argument, like this:
+ *   deepExtend({}, yourObj_1, [yourObj_N]);
+ */
+const deepExtend = function (...objects) {
+    if (arguments.length < 1 || typeof arguments[0] !== 'object') {
+        return false;
+    }
+    if (arguments.length < 2) {
+        return arguments[0];
+    }
+    const target = arguments[0];
+    // convert arguments to array and cut off target object
+    const args = Array.prototype.slice.call(arguments, 1);
+    let val, src;
+    args.forEach(function (obj) {
+        // skip argument if it is array or isn't object
+        if (typeof obj !== 'object' || Array.isArray(obj)) {
+            return;
+        }
+        Object.keys(obj).forEach(function (key) {
+            src = target[key]; // source value
+            val = obj[key]; // new value
+            // recursion prevention
+            if (val === target) {
+                return;
+                /**
+                 * if new value isn't object then just overwrite by new value
+                 * instead of extending.
+                 */
+            }
+            else if (typeof val !== 'object' || val === null) {
+                target[key] = val;
+                return;
+                // just clone arrays (and recursive clone objects inside)
+            }
+            else if (Array.isArray(val)) {
+                target[key] = deepCloneArray(val);
+                return;
+                // custom cloning and overwrite for specific objects
+            }
+            else if (isSpecificValue(val)) {
+                target[key] = cloneSpecificValue(val);
+                return;
+                // overwrite by new value if source isn't object or array
+            }
+            else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
+                target[key] = deepExtend({}, val);
+                return;
+                // source value and new value is objects both, extending...
+            }
+            else {
+                target[key] = deepExtend(src, val);
+                return;
+            }
+        });
+    });
+    return target;
+};
+function isSpecificValue(val) {
+    return (val instanceof Date
+        || val instanceof RegExp) ? true : false;
+}
+function cloneSpecificValue(val) {
+    if (val instanceof Date) {
+        return new Date(val.getTime());
+    }
+    else if (val instanceof RegExp) {
+        return new RegExp(val);
+    }
+    else {
+        throw new Error('cloneSpecificValue: Unexpected situation');
+    }
+}
+/**
+ * Recursive cloning array.
+ */
+function deepCloneArray(arr) {
+    const clone = [];
+    arr.forEach(function (item, index) {
+        if (typeof item === 'object' && item !== null) {
+            if (Array.isArray(item)) {
+                clone[index] = deepCloneArray(item);
+            }
+            else if (isSpecificValue(item)) {
+                clone[index] = cloneSpecificValue(item);
+            }
+            else {
+                clone[index] = deepExtend({}, item);
+            }
+        }
+        else {
+            clone[index] = item;
+        }
+    });
+    return clone;
+}
+// getDeepFromObject({result: {data: 1}}, 'result.data', 2); // returns 1
+function getDeepFromObject(object = {}, name, defaultValue) {
+    const keys = name.split('.');
+    // clone the object
+    let level = deepExtend({}, object || {});
+    keys.forEach((k) => {
+        if (level && typeof level[k] !== 'undefined') {
+            level = level[k];
+        }
+        else {
+            level = undefined;
+        }
+    });
+    return typeof level === 'undefined' ? defaultValue : level;
+}
+function urlBase64Decode(str) {
+    let output = str.replace(/-/g, '+').replace(/_/g, '/');
+    switch (output.length % 4) {
+        case 0: {
+            break;
+        }
+        case 2: {
+            output += '==';
+            break;
+        }
+        case 3: {
+            output += '=';
+            break;
+        }
+        default: {
+            throw new Error('Illegal base64url string!');
+        }
+    }
+    return b64DecodeUnicode(output);
+}
+function b64decode(str) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    let output = '';
+    str = String(str).replace(/=+$/, '');
+    if (str.length % 4 === 1) {
+        throw new Error(`'atob' failed: The string to be decoded is not correctly encoded.`);
+    }
+    for (
+    // initialize result and counters
+    let bc = 0, bs, buffer, idx = 0; 
+    // get next character
+    buffer = str.charAt(idx++); 
+    // character found in table? initialize bit storage and add its ascii value;
+    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+        // and if not first of each 4 characters,
+        // convert the first 8 bits to one ascii character
+        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0) {
+        // try to find character in table (0-63, not found => -1)
+        buffer = chars.indexOf(buffer);
+    }
+    return output;
+}
+// https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+function b64DecodeUnicode(str) {
+    return decodeURIComponent(Array.prototype.map.call(b64decode(str), (c) => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+}
+
+
+/***/ }),
+
+/***/ "./src/app/utils/index.ts":
+/*!********************************!*\
+  !*** ./src/app/utils/index.ts ***!
+  \********************************/
+/*! exports provided: END_POINTS, deepExtend, getDeepFromObject, urlBase64Decode, b64decode, b64DecodeUnicode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _constants_endpoints__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants/endpoints */ "./src/app/utils/constants/endpoints.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "END_POINTS", function() { return _constants_endpoints__WEBPACK_IMPORTED_MODULE_0__["END_POINTS"]; });
+
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./helpers */ "./src/app/utils/helpers.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "deepExtend", function() { return _helpers__WEBPACK_IMPORTED_MODULE_1__["deepExtend"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getDeepFromObject", function() { return _helpers__WEBPACK_IMPORTED_MODULE_1__["getDeepFromObject"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "urlBase64Decode", function() { return _helpers__WEBPACK_IMPORTED_MODULE_1__["urlBase64Decode"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "b64decode", function() { return _helpers__WEBPACK_IMPORTED_MODULE_1__["b64decode"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "b64DecodeUnicode", function() { return _helpers__WEBPACK_IMPORTED_MODULE_1__["b64DecodeUnicode"]; });
+
+
 
 
 

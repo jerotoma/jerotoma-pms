@@ -15,6 +15,7 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module')
       .then(m => m.NgxAuthModule),
   },
+  { path: '**', redirectTo: '' },
 ];
 
 const config: ExtraOptions = {

@@ -5,9 +5,9 @@ import org.springframework.security.core.Authentication;
 import com.jerotoma.config.auth.common.UserContext;
 
 public interface IAuthenticationFacade {
-	 Authentication getAuthentication();
+	Authentication getAuthentication();
 	 
-	 UserContext getUserContext(Authentication authentication);
+	UserContext getUserContext(Authentication authentication);
 
 	UserContext getUserContextByPrincipal(Object principal);
 }

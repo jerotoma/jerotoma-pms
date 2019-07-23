@@ -3,8 +3,8 @@ package com.jerotoma.config.auth.tokens;
 import java.util.List;
 import java.util.Optional;
 
-import com.jerotoma.exceptions.JwtExpiredTokenException;
 import com.jerotoma.config.auth.common.Scopes;
+import com.jerotoma.exceptions.JwtExpiredTokenException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

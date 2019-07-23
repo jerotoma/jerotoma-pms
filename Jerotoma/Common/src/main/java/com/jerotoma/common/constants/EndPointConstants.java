@@ -29,17 +29,17 @@ public class EndPointConstants {
 	public static final String API_AUTH_LOGIN_URL = "/api/auth/login";
 	
 	public static interface REST_LOGIN_CONTROLLER {
-		public static final String BASE =  API_SECURED_ROOT + "/auth/login";
-		
-		
-		
+		public static final String BASE =  API_SECURED_ROOT + "/auth/login";		
 	}
+	
+	public static interface REST_USER_CONTROLLER {
+		public static final String BASE = API_SECURED_ROOT+ "/users";
+		public static final String CURRENT_USER = "/currentUser";		
+	}
+	
 	public static interface REST_AUTH_CONTROLLER {
 		public static final String BASE = API_APP_AUTH;
-		public static final String REGISTER = "/register";
-		
-		
-		
+		public static final String REGISTER = "/register";		
 	}
 	
 	public static interface AUTH_CONTROLLER {

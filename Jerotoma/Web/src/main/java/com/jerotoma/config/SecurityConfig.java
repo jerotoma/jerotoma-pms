@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.exceptions.CustomAccessDiniedException;
 import com.jerotoma.config.auth.AuthenticationFailureHandler;
 import com.jerotoma.config.auth.CustomLogoutSuccessHandler;
 import com.jerotoma.config.auth.filters.AjaxLoginProcessingFilter;
@@ -51,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired ObjectMapper objectMapper;
 	@Autowired BCryptPasswordEncoder encoder;
 	@Autowired AuthUserService userService;
+	@Autowired CustomAccessDiniedException accessDeniedHandler;
 	
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -63,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     		.antMatchers(EndPointConstants.loadPermittedAppEndpoints().split(",")).permitAll() 
     		.antMatchers(EndPointConstants.loadAPIPermittedAppEndpoints().split(",")).permitAll() 
     		.anyRequest()
-    		.authenticated()    		        		
+    		.authenticated()   		        		
     		.and()    	
     	.addFilterBefore(new ApiCorsFilter(), UsernamePasswordAuthenticationFilter.class)
    	     	.addFilterBefore(buildAjaxLoginProcessingFilter(EndPointConstants.API_AUTH_LOGIN_URL), UsernamePasswordAuthenticationFilter.class)
@@ -72,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
    	     	.and() 
     	.exceptionHandling()
 	 	 	.authenticationEntryPoint(authenticationEntryPoint)
+	 	 	.accessDeniedHandler(accessDeniedHandler)
 	 	 	.and()
 	 	.cors()
 	 		.configurationSource(corsConfigurationSource())
@@ -80,10 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
            	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
            	.and()
          .logout()
-         .invalidateHttpSession(true)
-         .clearAuthentication(true)
-         .logoutSuccessHandler(logoutSuccessHandler)
-         .logoutUrl(EndPointConstants.API_LOGOUT_URL);
+         	.invalidateHttpSession(true)
+         	.clearAuthentication(true)
+         	.logoutSuccessHandler(logoutSuccessHandler)
+         	.logoutUrl(EndPointConstants.API_LOGOUT_URL);
     }
    	
     protected AjaxLoginProcessingFilter buildAjaxLoginProcessingFilter(String loginUrl) throws Exception {

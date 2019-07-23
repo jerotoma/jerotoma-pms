@@ -61,15 +61,15 @@ public class AuthProcessor {
 	
 	public void createCookie(HttpServletRequest request, HttpServletResponse response, AuthToken authToken, CookieService cookieService) {
 				
-        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN, authToken.getToken(), -1);
-        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN, authToken.getRefreshToken(), -1);
+        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN, SecurityConstant.HEADER_PREFIX  + authToken.getToken(), -1);
+        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN, SecurityConstant.HEADER_PREFIX  + authToken.getRefreshToken(), -1);
         cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN_EXPIRATION_TIME, TextUtility.longToString(authToken.getTokenExpirationTime()), -1);
 	}
 	
 	
 	public void deleteAllTokenCookie(HttpServletRequest request, HttpServletResponse response, CookieService cookieService) {
 		
-		if(cookieService.isCookiePresent(request,  SecurityConstant.JWT_COOKIE_AUTH_TOKEN)) {
+		if(cookieService.isCookiePresent(request,  SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN)) {
 			cookieService.deleteCookie(request, response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN);
 			cookieService.deleteCookie(request, response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN);
 			cookieService.deleteCookie(request, response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN_EXPIRATION_TIME);

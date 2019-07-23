@@ -3,6 +3,8 @@ package com.jerotoma.http;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
+
 public class HttpResponseEntity<T> implements Serializable {
 
 	/**
@@ -15,6 +17,7 @@ public class HttpResponseEntity<T> implements Serializable {
 	private String message;
 	private String statusCode;
 	private Boolean success;
+	private HttpStatus httpStatus;
 	
 	public static HttpResponseEntity<Object>  getInstance(){
 		return new HttpResponseEntity<Object>();
@@ -58,5 +61,18 @@ public class HttpResponseEntity<T> implements Serializable {
 	
 	public void setMapData(Map<String, Object> mapData) {
 		this.mapData = mapData;
+	}
+
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
+	}
+
+	public void setHttpStatus(HttpStatus httpStatus) {
+		this.httpStatus = httpStatus;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}	
+	
 }

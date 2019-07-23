@@ -10,15 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
@@ -34,6 +30,7 @@ import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
 import com.jerotoma.config.auth.tokens.RefreshToken;
 import com.jerotoma.config.constants.SecurityConstant;
+import com.jerotoma.services.cookies.CookieService;
 import com.jerotoma.services.users.AuthUserService;
 
 /**
@@ -44,70 +41,25 @@ import com.jerotoma.services.users.AuthUserService;
  * Aug 17, 2016
  */
 @RestController
-@RequestMapping("/api/secure/auth")
+@RequestMapping("/api/auth")
 public class RefreshTokenEndpoint {
 	
+    @Autowired private CookieService cookieService;
     @Autowired private JwtTokenFactory tokenFactory;
     @Autowired private AuthUserService userService;
     @Autowired private TokenVerifier tokenVerifier;
     @Autowired private AuthProcessor authProcessor;
     @Autowired @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor;
-    @Autowired IAuthenticationFacade authenticationFacade;
-    
-	@RequestMapping(value = {"/user","/user/"}, method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-	public Map<String, Object> loadAuthenticatedUser(Authentication authentication){
-		  
-	    Map<String, Object> map = new HashMap<>();
-	    
-	    if( authentication == null) {
-			map.put("success",false); 
-			map.put("message","The session is not valid anymore please login again"); 
-			
-			return map;
-		 }
-		 
-		UserContext userContext = authenticationFacade.getUserContext(authentication);
-		AuthUser auth =  userService.loadUserByUsername(userContext.getUsername());
-	    
-	    map.put("success", true);
-	    map.put("auth", auth);		
-		return map;
-	}
+    @Autowired IAuthenticationFacade authenticationFacade;   
 	
-	@RequestMapping(value = "/current", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.OK)
-    @ResponseBody
-	public Map<String, Object> loadCurrentUser(
-			@RequestBody Map<String, String> params,
-			Authentication authentication){
-		  
-	    Map<String, Object> map = new HashMap<>();
-	    
-	    if( authentication == null) {
-			map.put("success",false); 
-			map.put("message","The session is not valid anymore please login again"); 
-			
-			return map;
-		 }
-		 
-		UserContext userContext = authenticationFacade.getUserContext(authentication);
-		AuthUser auth =  userService.loadUserByUsername(userContext.getUsername());
-	    
-	    map.put("success", true);
-	    map.put("auth", auth);		
-		return map;
-	}
-  
     
-    @RequestMapping(value="/token", method=RequestMethod.GET, produces={ MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value="/refresh-token", method=RequestMethod.GET, produces={ MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     	
 
 		Map<String, Object> tokenMap = new HashMap<>();
                  
-    	String tokenPayload = request.getHeader(SecurityConstant.JWT_TOKEN_HEADER_PARAM);
+    	String tokenPayload = cookieService.findCookieValue(request, SecurityConstant.JWT_COOKIE_AUTH_TOKEN);
     	
     	String token = tokenExtractor.extract(tokenPayload);
        

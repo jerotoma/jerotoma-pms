@@ -20,6 +20,12 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  getCurrentUser(): Observable<any> {
+    return this.http
+      .get<any>(`${END_POINTS.users}/currentUser`)
+      .pipe(retry(3), catchError(this.errorHandler));
+  }
+
   getUser(userId: number): Observable<User> {
     return this.http
       .get<User>(`${END_POINTS.users}/${userId}`)
@@ -32,12 +38,12 @@ export class UserService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
-  addUser(data: Data): Observable<any>{
+  addUser(data: any): Observable<any> {
     return this.http.post<any>(`${END_POINTS.users}`, data, httpOptions)
                     .pipe(catchError(this.errorHandler));
   }
 
-  errorHandler(error: HttpErrorResponse){
+  errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || 'Server error');
   }
 }

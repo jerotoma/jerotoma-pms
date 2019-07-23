@@ -33,6 +33,7 @@ import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.config.auth.tokens.AuthToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.constants.SecurityConstant;
+import com.jerotoma.services.cookies.CookieService;
 import com.jerotoma.services.users.AuthUserService;
 
 
@@ -42,10 +43,11 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
 	private final Logger logger = LoggerFactory.getLogger(getClass());
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private final JwtTokenFactory tokenFactory;
-   private final AuthUserService userservice;    
+    private final AuthUserService userservice;    
     private final ObjectMapper mapper;
     private final IAuthenticationFacade authFacade;
     private final AuthProcessor authProcessor;
+    private final CookieService cookieService;
    
     @Autowired
     public AppAuthenticationSuccessHandler(
@@ -53,13 +55,15 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
     		AuthUserService userservice,
     		JwtTokenFactory tokenFactory,
     		IAuthenticationFacade authFacade,
-    		AuthProcessor authProcessor
+    		AuthProcessor authProcessor,
+    		CookieService cookieService
     		) {
         this.mapper = mapper;
         this.userservice = userservice;
         this.tokenFactory = tokenFactory;
         this.authFacade = authFacade;
         this.authProcessor = authProcessor;
+        this.cookieService = cookieService;
         
     }
         
@@ -115,17 +119,22 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
         return redirectStrategy;
     }
     
-	public void jwtSuccessProcessor(HttpServletRequest request, 
-			HttpServletResponse response, Authentication authentication,  AuthUser auth) 
-					throws IOException, JsonGenerationException, JsonMappingException {
+	public void jwtSuccessProcessor(
+								HttpServletRequest request, 
+								HttpServletResponse response, 
+								Authentication authentication,  
+								AuthUser auth) throws IOException, JsonGenerationException, JsonMappingException {
+		
 		Map<String, Object> tokenMap = new HashMap<>();
+		
 		UserContext userContext = authFacade.getUserContext(authentication);
         AuthToken authToken = authProcessor.extractAuthToken(userContext, tokenFactory);
-        tokenMap.put("authToken", authToken);
-        tokenMap.put("auth", auth);       
+        
+        authProcessor.createCookie(request, response, authToken, cookieService);
+        
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setHeader(SecurityConstant.AUTHENTICATION_HEADER_NAME, SecurityConstant.HEADER_PREFIX + " " + authToken.getToken());
+        response.setHeader(SecurityConstant.AUTHENTICATION_HEADER_NAME, SecurityConstant.HEADER_PREFIX + authToken.getToken());
         
         if (response.isCommitted()) {
             logger.debug("Response has already been committed. Unable to redirect to " + request.getRequestURL());

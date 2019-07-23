@@ -42,12 +42,8 @@ export class RegisterComponent extends NbRegisterComponent implements OnInit {
       this.submitted = false;
       if (result.isSuccess()) {
         const response = result.getResponse().body;
-        this.messages = result.getMessages();
         if (response.success) {
           this.messages.push(response.message);
-          setTimeout(() => {
-            return this.router.navigateByUrl('/dashboard');
-          }, this.redirectDelay);
         } else {
           this.errors.push(response.message);
         }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
+import com.jerotoma.common.exceptions.DataAccessException;
 import com.jerotoma.common.roles.Role;
 import com.jerotoma.common.users.AuthUser;
 import com.jerotoma.http.HttpResponseEntity;
@@ -63,7 +64,7 @@ public class RestAuthController {
 		try {
 			authUser = authUserService.createObject(authUser);
 		} catch (SQLException e) {
-			throw new SQLException(e.getMessage());			
+			throw new DataAccessException(e.getMessage());			
 		}	
 		instance.setSuccess(true);
 		instance.setStatusCode("200");
@@ -71,5 +72,6 @@ public class RestAuthController {
 		return instance;
 		
 	}
+	
 
 }

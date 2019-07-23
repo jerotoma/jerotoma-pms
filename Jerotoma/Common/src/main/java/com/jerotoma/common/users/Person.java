@@ -13,6 +13,12 @@ public abstract class Person {
 		
 	}
 	
+	public Person(AuthUser authUser) {
+		this.firstName = authUser.getFirstName();
+		this.lastName = authUser.getLastName();
+		this.fullName = getFirstName() + " " + getLastName();
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -55,9 +61,4 @@ public abstract class Person {
 	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
-	
-	
-	
-	
-
 }

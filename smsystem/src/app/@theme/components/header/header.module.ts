@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   NbActionsModule,
   NbButtonModule,
@@ -23,6 +24,7 @@ import { SettingsComponent } from './settings/settings.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     NbActionsModule,
     NbButtonModule,
     NbCardModule,

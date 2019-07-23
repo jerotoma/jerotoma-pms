@@ -17,6 +17,8 @@ import {
   styleUrls: ['./logout.component.scss']
 })
 export class LogoutComponent extends NbLogoutComponent implements OnInit {
+  redirectUrl: string = '/account/login';
+  strategyName: string = 'email';
   errors: string[];
   constructor(
     private tokenService: NbTokenService,
@@ -31,13 +33,17 @@ export class LogoutComponent extends NbLogoutComponent implements OnInit {
     this.logout();
   }
 
-  logout(){
-    this.service.logout('email').subscribe((result: NbAuthResult) => {
-      window.console.log(result);
+  logout() {
+    if (!this.service.isAuthenticated()) {
+      this.router.navigate([this.redirectUrl]);
+      return;
+    }
+    this.service.logout(this.strategyName).subscribe((result: NbAuthResult) => {
       if (result.isSuccess()) {
         const response = result.getResponse().body;
         if (response.success) {
-          this.router.navigate(['/account/login']);        }
+          this.router.navigate([this.redirectUrl]);
+        }
       } else {
         const response = result.getResponse();
         this.errors = result.getErrors();

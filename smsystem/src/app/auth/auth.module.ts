@@ -1,3 +1,4 @@
+import { messages } from './../features/extra-components/chat/messages';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -53,17 +54,35 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
             errors: {
               getter: (
                 module: string,
-                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => res.body,
+                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => {
+                  const resp: any =  res.body;
+                  let message = 'Sorry, some thing went wrong with error code of : ' + resp.status;
+                  if (!resp.success && resp.message) {
+                    message = resp.message;
+                  }
+                  return message;
+                },
             },
             messages: {
               getter: (
                 module: string,
-                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => res.body,
+                res: HttpResponse<Object>, options: NbPasswordAuthStrategyOptions ) => {
+                  const resp: any =  res.body;
+                  let message = 'No message to show';
+                  if (resp.success && resp.message) {
+                    message = resp.message;
+                  }
+                  return message;
+                },
             },
             baseEndpoint: '/api/auth',
             login: {
               // ...
               endpoint: '/login',
+              redirect: {
+                success: '/dashboard',
+                failure: null,
+              },
             },
             register: {
               // ...
@@ -72,6 +91,10 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
             logout: {
               endpoint: '/sign-out',
               method: 'POST',
+              redirect: {
+                success: '/account/login',
+                failure: null,
+              },
             },
             requestPass: {
               endpoint: '/request-pass',

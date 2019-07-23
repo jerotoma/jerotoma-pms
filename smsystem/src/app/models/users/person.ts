@@ -1,7 +1,9 @@
 export interface Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-  otherName: string;
-  picture: string;
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  age?: number;
+  gender?: string;
+  occupation?: string;
+  birthDate: Date;
 }

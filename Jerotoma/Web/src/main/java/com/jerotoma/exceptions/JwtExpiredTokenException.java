@@ -17,6 +17,9 @@ public class JwtExpiredTokenException extends AuthenticationException {
         super(msg, t);
         this.token = token;
     }
+    public JwtExpiredTokenException(String msg, Throwable t) {
+        super(msg, t);       
+    }
 
     public String token() {
         return this.token.getToken();

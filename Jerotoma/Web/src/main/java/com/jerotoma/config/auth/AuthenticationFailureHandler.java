@@ -23,9 +23,9 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.utils.WebUtil;
+import com.jerotoma.exceptions.JwtExpiredTokenException;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.AuthMethodNotSupportedException;
-import com.jerotoma.exceptions.JwtExpiredTokenException;
 import com.jerotoma.common.errors.ErrorCode;
 import com.jerotoma.common.errors.ErrorResponse;
 
@@ -47,7 +47,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
         
     	final Locale locale = localeResolver.resolveLocale(request);
     	setUseForward(true);
-        if(WebUtil.isContentTypeJson(request)) {
+        if(WebUtil.isAjax(request)) {
         	 setDefaultFailureUrl(EndPointConstants.API_AUTH_LOGIN_URL);
         	 ajaxRequestProcessor(response, exception);        	
         }else {
@@ -82,7 +82,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
 		if (exception instanceof BadCredentialsException) {
 			errorResponse = ErrorResponse.of("Invalid username or password", ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED);
         } else if (exception instanceof JwtExpiredTokenException) {
-        	errorResponse = ErrorResponse.of("Token has expired", ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED);        	
+        	errorResponse = ErrorResponse.of(messages.getMessage("auth.message.expired", null, locale), ErrorCode.JWT_TOKEN_EXPIRED, HttpStatus.UNAUTHORIZED);        	
         } else if (exception instanceof AuthMethodNotSupportedException) {
         	errorResponse = ErrorResponse.of(exception.getMessage(), ErrorCode.AUTHENTICATION, HttpStatus.UNAUTHORIZED);          
         }else {

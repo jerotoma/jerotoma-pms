@@ -1,6 +1,7 @@
 package com.jerotoma.config.auth.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -15,13 +16,13 @@ public class UserContext implements Serializable{
 	
 	private final String username;
     private final Collection<GrantedAuthority> authorities;
-    private String authority;
+    private String[] currentAuthorities;
     
 
     public UserContext(String username, Collection<GrantedAuthority> authorities) {
         this.username = username;
         this.authorities = authorities;
-        this.authority = getGrantedAuthority(authorities);
+        this.currentAuthorities = getGrantedAuthority(authorities);
     }
     
     public static UserContext create(String username, Collection<GrantedAuthority> authorities) {
@@ -37,18 +38,23 @@ public class UserContext implements Serializable{
         return authorities;
     }
     
-    private String getGrantedAuthority(Collection<GrantedAuthority> authorities){
-    	String authority = null;
+    private String[] getGrantedAuthority(Collection<GrantedAuthority> authorities){
+    	
+    	
+    	String[] currentAuthorities =  new String[]{};
     	if(authorities == null) {
-    		return authority;
+    		return currentAuthorities;
     	}
-    	for(GrantedAuthority grant : authorities) {
-    		return grant.getAuthority();
+    	ArrayList<GrantedAuthority> newAuthorities = new ArrayList<>(authorities);
+    	currentAuthorities =  new String[newAuthorities.size()];
+    	
+    	for( int i = 0; i < newAuthorities.size(); i++ ) {    		
+    		currentAuthorities[i] = newAuthorities.get(i).getAuthority();    		
     	}
-		return authority;
+		return currentAuthorities;
     }
 
-	public String getAuthority() {
-		return authority;
+	public String[] getAuthority() {
+		return currentAuthorities;
 	}
 }

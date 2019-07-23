@@ -254,15 +254,33 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                             getter: (module, res, options) => res.headers.get('Authorization'),
                         },
                         errors: {
-                            getter: (module, res, options) => res.body,
+                            getter: (module, res, options) => {
+                                const resp = res.body;
+                                let message = 'Sorry, some thing went wrong with error code of : ' + resp.status;
+                                if (!resp.success && resp.message) {
+                                    message = resp.message;
+                                }
+                                return message;
+                            },
                         },
                         messages: {
-                            getter: (module, res, options) => res.body,
+                            getter: (module, res, options) => {
+                                const resp = res.body;
+                                let message = 'No message to show';
+                                if (resp.success && resp.message) {
+                                    message = resp.message;
+                                }
+                                return message;
+                            },
                         },
                         baseEndpoint: '/api/auth',
                         login: {
                             // ...
                             endpoint: '/login',
+                            redirect: {
+                                success: '/dashboard',
+                                failure: null,
+                            },
                         },
                         register: {
                             // ...
@@ -271,6 +289,10 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                         logout: {
                             endpoint: '/sign-out',
                             method: 'POST',
+                            redirect: {
+                                success: '/account/login',
+                                failure: null,
+                            },
                         },
                         requestPass: {
                             endpoint: '/request-pass',
@@ -371,7 +393,6 @@ let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTE
             this.submitted = false;
             if (result.isSuccess()) {
                 const response = result.getResponse().body;
-                this.messages = result.getMessages();
                 if (response.success) {
                     this.messages.push(response.message);
                     setTimeout(() => {
@@ -444,17 +465,22 @@ let LogoutComponent = class LogoutComponent extends _nebular_auth__WEBPACK_IMPOR
         this.service = service;
         this.options = options;
         this.router = router;
+        this.redirectUrl = '/account/login';
+        this.strategyName = 'email';
     }
     ngOnInit() {
         this.logout();
     }
     logout() {
-        this.service.logout('email').subscribe((result) => {
-            window.console.log(result);
+        if (!this.service.isAuthenticated()) {
+            this.router.navigate([this.redirectUrl]);
+            return;
+        }
+        this.service.logout(this.strategyName).subscribe((result) => {
             if (result.isSuccess()) {
                 const response = result.getResponse().body;
                 if (response.success) {
-                    this.router.navigate(['/account/login']);
+                    this.router.navigate([this.redirectUrl]);
                 }
             }
             else {
@@ -533,12 +559,8 @@ let RegisterComponent = class RegisterComponent extends _nebular_auth__WEBPACK_I
             this.submitted = false;
             if (result.isSuccess()) {
                 const response = result.getResponse().body;
-                this.messages = result.getMessages();
                 if (response.success) {
                     this.messages.push(response.message);
-                    setTimeout(() => {
-                        return this.router.navigateByUrl('/dashboard');
-                    }, this.redirectDelay);
                 }
                 else {
                     this.errors.push(response.message);
