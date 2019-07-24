@@ -3,8 +3,8 @@ package com.jerotoma.config.auth.jwt.extractor;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Component;
 
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.config.constants.SecurityConstant;
 
 @Component
 public class JwtHeaderTokenExtractor implements TokenExtractor {

@@ -9,14 +9,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
 import com.jerotoma.common.utils.TextUtility;
 import com.jerotoma.config.auth.tokens.AccessJwtToken;
 import com.jerotoma.config.auth.tokens.AuthToken;
+import com.jerotoma.config.auth.tokens.JwtToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
 import com.jerotoma.config.auth.tokens.RefreshToken;
-import com.jerotoma.config.constants.SecurityConstant;
 import com.jerotoma.exceptions.JwtExpiredTokenException;
 import com.jerotoma.services.cookies.CookieService;
 
@@ -32,10 +33,10 @@ public class AuthProcessor {
 		
 		
 		AccessJwtToken accessToken = tokenFactory.createAccessJwtToken(userContext);
-		AccessJwtToken refreshAccessToken = tokenFactory.createRefreshToken(userContext);
+		JwtToken refreshAccessToken = tokenFactory.createRefreshToken(userContext);
 		RawAccessJwtToken rawAccessToken = new RawAccessJwtToken(refreshAccessToken.getToken());
 		
-		RefreshToken refreshToken = RefreshToken.create(rawAccessToken, tokenFactory.getJwtSettings().getTokenSigningKey()).orElseThrow(() -> new InvalidJwtTokenException());
+		RefreshToken refreshToken = RefreshToken.create(rawAccessToken, tokenFactory.getJwtSettings().getTokenSigningKey()).orElseThrow(() -> new InvalidJwtTokenException("Invalid token"));
 		
 		return getAuthToken(accessToken,refreshToken);
         
@@ -61,8 +62,8 @@ public class AuthProcessor {
 	
 	public void createCookie(HttpServletRequest request, HttpServletResponse response, AuthToken authToken, CookieService cookieService) {
 				
-        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN, SecurityConstant.HEADER_PREFIX  + authToken.getToken(), -1);
-        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN, SecurityConstant.HEADER_PREFIX  + authToken.getRefreshToken(), -1);
+        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN,  authToken.getToken(), -1);
+        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN,  authToken.getRefreshToken(), -1);
         cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_TOKEN_EXPIRATION_TIME, TextUtility.longToString(authToken.getTokenExpirationTime()), -1);
 	}
 	

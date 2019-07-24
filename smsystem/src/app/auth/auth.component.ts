@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import {
-  NbSpinnerService,
-  } from '@nebular/theme';
 import { NbAuthComponent, NbAuthService } from '@nebular/auth';
-import { takeWhile } from 'rxjs/operators';
+
+import { AuthService } from '../../app/services/auth'
+
 
 @Component({
   selector: 'ngx-auth',

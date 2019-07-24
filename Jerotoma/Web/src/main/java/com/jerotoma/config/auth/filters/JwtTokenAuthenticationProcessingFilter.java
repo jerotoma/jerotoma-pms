@@ -16,10 +16,10 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.config.auth.jwt.JwtAuthenticationToken;
 import com.jerotoma.config.auth.jwt.extractor.TokenExtractor;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
-import com.jerotoma.config.constants.SecurityConstant;
 
 
 public class JwtTokenAuthenticationProcessingFilter extends AbstractAuthenticationProcessingFilter {

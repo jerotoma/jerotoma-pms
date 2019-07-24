@@ -1,7 +1,6 @@
 package com.jerotoma.api.controllers;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -12,25 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
 import com.jerotoma.common.users.AuthUser;
-import com.jerotoma.config.auth.common.AuthProcessor;
+import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.config.auth.jwt.extractor.TokenExtractor;
 import com.jerotoma.config.auth.jwt.verifier.TokenVerifier;
 import com.jerotoma.config.auth.tokens.AccessJwtToken;
-import com.jerotoma.config.auth.tokens.AuthToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
 import com.jerotoma.config.auth.tokens.RefreshToken;
-import com.jerotoma.config.constants.SecurityConstant;
 import com.jerotoma.services.cookies.CookieService;
+import com.jerotoma.services.http.HttpService;
 import com.jerotoma.services.users.AuthUserService;
 
 /**
@@ -45,47 +45,53 @@ import com.jerotoma.services.users.AuthUserService;
 public class RefreshTokenEndpoint {
 	
     @Autowired private CookieService cookieService;
+    @Autowired private HttpService httpService;
     @Autowired private JwtTokenFactory tokenFactory;
     @Autowired private AuthUserService userService;
     @Autowired private TokenVerifier tokenVerifier;
-    @Autowired private AuthProcessor authProcessor;
     @Autowired @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor;
     @Autowired IAuthenticationFacade authenticationFacade;   
 	
     
-    @RequestMapping(value="/refresh-token", method=RequestMethod.GET, produces={ MediaType.APPLICATION_JSON_VALUE })
-    public @ResponseBody Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    @RequestMapping(value="/refresh-token", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
+    public void refreshToken(@RequestBody Map<String, String> params, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     	
-
-		Map<String, Object> tokenMap = new HashMap<>();
-                 
-    	String tokenPayload = cookieService.findCookieValue(request, SecurityConstant.JWT_COOKIE_AUTH_TOKEN);
+    	if(!params.containsKey(SecurityConstant.REFRESH_TOKEN_KEY)) {
+    		throw new InvalidJwtTokenException("Invalid Token");
+    	}
     	
-    	String token = tokenExtractor.extract(tokenPayload);
+    	String refreshTokenKey = params.get(SecurityConstant.REFRESH_TOKEN_KEY);
+    	
+    	if (!refreshTokenKey.equals(SecurityConstant.REFRESH_TOKEN_VALUE)) {
+    		throw new InvalidJwtTokenException("Invalid Token");
+    	}	
+    			
+    	String tokenPayload = cookieService.findCookieValue(request, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN);
+    	if (StringUtility.isEmpty(tokenPayload)) {
+        	throw new InsufficientAuthenticationException("Token can not be null");
+        }
+    	   	
+    	String token = tokenExtractor.extract(SecurityConstant.HEADER_PREFIX + tokenPayload);
        
     	RawAccessJwtToken rawToken = new RawAccessJwtToken(token);
-        RefreshToken refreshToken = RefreshToken.create(rawToken, tokenFactory.getJwtSettings().getTokenSigningKey()).orElseThrow(() -> new InvalidJwtTokenException());
+        RefreshToken refreshToken = RefreshToken.create(rawToken, tokenFactory.getJwtSettings().getTokenSigningKey()).orElseThrow(() -> new InvalidJwtTokenException("Invalid Token"));
 
         String jti = refreshToken.getJti();
         if (!tokenVerifier.verify(jti)) {
-            throw new InvalidJwtTokenException();
+            throw new InvalidJwtTokenException("Invalid Token");
         }
 
         String subject = refreshToken.getSubject();
         AuthUser user = userService.loadUserByUsername(subject);
 
         if (user == null) {
-        	throw new InsufficientAuthenticationException("User has no roles assigned");
+        	throw new UsernameNotFoundException("User not found of the provided token");
         }
         
         
         UserContext userContext = UserContext.create(user.getUsername(), user.getAuthorities());
         AccessJwtToken accessJwtToken = tokenFactory.createAccessJwtToken(userContext);
+        httpService.processResponse(request, response, refreshToken.getToken(), accessJwtToken.getToken());
         
-        AuthToken authToken = authProcessor.getAuthToken(accessJwtToken, refreshToken);
-        tokenMap.put("authToken", authToken);
-        tokenMap.put("auth", user);
-       
-        return tokenMap;
-    }
+      }
 }

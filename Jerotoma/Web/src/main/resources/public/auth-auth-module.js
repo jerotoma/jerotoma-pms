@@ -203,8 +203,8 @@ AuthComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgxAuthModule", function() { return NgxAuthModule; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm2015/common.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _auth_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./auth-routing.module */ "./src/app/auth/auth-routing.module.ts");
@@ -233,9 +233,9 @@ __webpack_require__.r(__webpack_exports__);
 let NgxAuthModule = class NgxAuthModule {
 };
 NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         imports: [
-            _angular_common__WEBPACK_IMPORTED_MODULE_1__["CommonModule"],
+            _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
             _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"],
             _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbAlertModule"],
@@ -300,6 +300,10 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                         resetPass: {
                             endpoint: '/reset-pass',
                         },
+                        refreshToken: {
+                            endpoint: '/refresh-token',
+                            method: 'POST',
+                        },
                     }),
                 ],
                 forms: {
@@ -331,8 +335,12 @@ NgxAuthModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                         redirectDelay: 0,
                     },
                 },
-            }),
+            }).providers,
             _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbLayoutModule"],
+        ],
+        providers: [
+            _nebular_auth__WEBPACK_IMPORTED_MODULE_6__["NbAuthService"],
+            _nebular_auth__WEBPACK_IMPORTED_MODULE_6__["NbTokenService"],
         ],
         declarations: [
             // ... here goes our new components
@@ -380,8 +388,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbLoginComponent"] {
-    constructor(service, options, cd, router, tokenService) {
-        super(service, options, cd, router);
+    constructor(authService, options, cd, router) {
+        super(authService, options, cd, router);
+        this.authService = authService;
     }
     ngOnInit() {
     }
@@ -389,15 +398,13 @@ let LoginComponent = class LoginComponent extends _nebular_auth__WEBPACK_IMPORTE
         this.errors = [];
         this.messages = [];
         this.submitted = true;
-        this.service.authenticate(this.strategy, this.user).subscribe((result) => {
+        this.authService.authenticate(this.strategy, this.user).subscribe((result) => {
             this.submitted = false;
             if (result.isSuccess()) {
                 const response = result.getResponse().body;
                 if (response.success) {
                     this.messages.push(response.message);
-                    setTimeout(() => {
-                        return this.router.navigateByUrl('/dashboard');
-                    }, this.redirectDelay);
+                    this.router.navigateByUrl('/dashboard');
                 }
                 else {
                     this.errors.push(response.message);
@@ -421,8 +428,7 @@ LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NB_AUTH_OPTIONS"])),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"], Object, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ChangeDetectorRef"],
-        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-        _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbTokenService"]])
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
 ], LoginComponent);
 
 

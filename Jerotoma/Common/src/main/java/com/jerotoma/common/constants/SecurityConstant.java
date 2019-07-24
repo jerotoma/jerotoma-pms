@@ -1,4 +1,4 @@
-package com.jerotoma.config.constants;
+package com.jerotoma.common.constants;
 
 public class SecurityConstant {
 	
@@ -12,6 +12,8 @@ public class SecurityConstant {
 	public static final String HEADER_PREFIX = "Bearer ";
 	public static final String AUTHENTICATION_HEADER_NAME = "Authorization";
 	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
+	public static final String REFRESH_TOKEN_KEY = "refreshToken";
+	public static final String REFRESH_TOKEN_VALUE = "ROLE_REFRESH_TOKEN";
 	
 	
 

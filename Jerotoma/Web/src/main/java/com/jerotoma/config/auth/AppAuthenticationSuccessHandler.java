@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.users.AuthUser;
 import com.jerotoma.common.utils.WebUtil;
 import com.jerotoma.config.auth.common.AuthProcessor;
@@ -32,7 +33,6 @@ import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.config.auth.tokens.AuthToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
-import com.jerotoma.config.constants.SecurityConstant;
 import com.jerotoma.services.cookies.CookieService;
 import com.jerotoma.services.users.AuthUserService;
 
@@ -130,9 +130,8 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
 		UserContext userContext = authFacade.getUserContext(authentication);
         AuthToken authToken = authProcessor.extractAuthToken(userContext, tokenFactory);
         
-        authProcessor.createCookie(request, response, authToken, cookieService);
-        
-        response.setStatus(HttpStatus.OK.value());
+        cookieService.createCookie(response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN,  authToken.getRefreshToken(), -1);
+		response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setHeader(SecurityConstant.AUTHENTICATION_HEADER_NAME, SecurityConstant.HEADER_PREFIX + authToken.getToken());
         

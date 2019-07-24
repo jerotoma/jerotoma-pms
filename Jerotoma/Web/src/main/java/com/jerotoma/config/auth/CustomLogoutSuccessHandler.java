@@ -17,8 +17,8 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.config.auth.common.AuthProcessor;
-import com.jerotoma.config.constants.SecurityConstant;
 import com.jerotoma.services.cookies.CookieService;
 
 @Component

@@ -1,6 +1,5 @@
-import { messages } from './../features/extra-components/chat/messages';
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
@@ -9,6 +8,8 @@ import {
   NbAuthModule,
   NbPasswordAuthStrategy,
   NbAuthJWTToken,
+  NbAuthService,
+  NbTokenService,
   NbPasswordAuthStrategyOptions,
  } from '@nebular/auth';
 import {
@@ -101,6 +102,10 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
             },
             resetPass: {
               endpoint: '/reset-pass',
+            },
+            refreshToken: {
+              endpoint: '/refresh-token',
+              method: 'POST',
             },
           }),
         ],

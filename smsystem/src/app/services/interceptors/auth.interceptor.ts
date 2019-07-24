@@ -11,8 +11,9 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/do';
 
 import { Observable } from 'rxjs/Observable';
-
 import { NbAuthService, NbAuthToken, NbTokenService, NbAuthResult } from '@nebular/auth';
+
+import { AuthService  } from '../auth';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -22,7 +23,8 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private authService: NbAuthService,
     private tokenService: NbTokenService,
-    protected router: Router) {
+    protected router: Router,
+    private auth: AuthService) {
 
   }
 
@@ -45,24 +47,39 @@ export class AuthInterceptor implements HttpInterceptor {
       if (event instanceof HttpResponse) {
         const resp =  event.body;
           if (resp && resp.status === 401) {
-            this.authService.logout('email').subscribe((result: NbAuthResult) => {
-              if (result.isSuccess()) {
-                const response = result.getResponse().body;
-                if (response.success) {
-                  this.router.navigate([this.redirectUrl]);
-                }
-              }
-            });
-            this.tokenService.clear();
-            this.router.navigate([this.redirectUrl]);          }
+            this.refreshToken();
+          }
       }
     }, (err: any) => {
       if (err instanceof HttpErrorResponse) {
         if (err.status === 401) {
-          this.tokenService.clear();
+          this.refreshToken();
+        }
+      }
+    });
+  }
+
+  refreshToken() {
+    this.authService.refreshToken('email', {refreshToken: 'ROLE_REFRESH_TOKEN'}).subscribe((result: NbAuthResult) => {
+         window.console.log(result);
+        if (result.isSuccess()) {
+            const response = result.getResponse().body;
+            if (response.success) {
+
+            }
+        }
+    });
+  }
+  logout() {
+    this.authService.logout('email').subscribe((result: NbAuthResult) => {
+      if (result.isSuccess()) {
+        const response = result.getResponse().body;
+        if (response.success) {
           this.router.navigate([this.redirectUrl]);
         }
       }
     });
+    this.tokenService.clear();
+    this.router.navigate([this.redirectUrl]);
   }
 }

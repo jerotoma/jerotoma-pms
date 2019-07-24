@@ -59,7 +59,7 @@ public class JwtTokenFactory {
         return new AccessJwtToken(token, claims);
     }
 
-    public AccessJwtToken createRefreshToken(UserContext userContext) {
+    public JwtToken createRefreshToken(UserContext userContext) {
         if (StringUtility.isEmpty(userContext.getUsername())) {
             throw new IllegalArgumentException("Cannot create JWT Token without username");
         }
@@ -74,7 +74,7 @@ public class JwtTokenFactory {
 		          .setId(UUID.randomUUID().toString())
 		          .setIssuedAt(Date.from(currentTime.atZone(ZoneId.systemDefault()).toInstant()))
 		          .setExpiration(Date.from(currentTime
-		              .plusMinutes(jwtSettings.getTokenExpirationTime())
+		              .plusMinutes(jwtSettings.getRefreshTokenExpTime())
 		              .atZone(ZoneId.systemDefault()).toInstant()))
 		          .signWith(SignatureAlgorithm.HS512, jwtSettings.getTokenSigningKey())
 		        .compact();

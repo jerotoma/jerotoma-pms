@@ -1,16 +1,9 @@
-import { messages } from './../../features/extra-components/chat/messages';
 import { Component, OnInit, ChangeDetectorRef, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
-
 import {
-  NbSpinnerService,
-  } from '@nebular/theme';
-import {
-  NbTokenService,
-  NbAuthToken,
   NbAuthResult,
-  NbLoginComponent,
   NbAuthService,
+  NbLoginComponent,
   NB_AUTH_OPTIONS,
   NbAuthSocialLink } from '@nebular/auth';
 
@@ -24,12 +17,11 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
   socialLinks: NbAuthSocialLink[];
 
   constructor(
-    service: NbAuthService,
+    private authService: NbAuthService,
     @Inject(NB_AUTH_OPTIONS) options: {},
     cd: ChangeDetectorRef,
-    router: Router,
-    tokenService: NbTokenService ) {
-    super(service, options, cd, router);
+    router: Router ) {
+    super(authService, options, cd, router);
    }
 
   ngOnInit() {
@@ -40,15 +32,13 @@ export class LoginComponent extends NbLoginComponent implements OnInit {
     this.errors = [];
     this.messages = [];
     this.submitted = true;
-    this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+    this.authService.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
       this.submitted = false;
       if (result.isSuccess()) {
         const response = result.getResponse().body;
         if (response.success) {
           this.messages.push(response.message);
-          setTimeout(() => {
-            return this.router.navigateByUrl('/dashboard');
-          }, this.redirectDelay);
+          this.router.navigateByUrl('/dashboard');
         } else {
           this.errors.push(response.message);
         }
