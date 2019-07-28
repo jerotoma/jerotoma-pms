@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
@@ -7,79 +8,89 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/do';
-
-import { Observable } from 'rxjs/Observable';
-import { NbAuthService, NbAuthToken, NbTokenService, NbAuthResult } from '@nebular/auth';
-
-import { AuthService  } from '../auth';
+import { Observable, throwError } from 'rxjs';
+import { catchError, switchMap, take, filter} from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import {
+  AuthService,
+  TokenService,
+  AUTH_CONSTANT,
+} from '../auth';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private token: string = '';
   private redirectUrl: string = '/account/login';
+  private isRefreshing: boolean = false;
+
+  // Refresh Token Subject tracks the current token, or is null if no token is currently
+    // available (e.g. refresh pending).
+    private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(
-    private authService: NbAuthService,
-    private tokenService: NbTokenService,
-    protected router: Router,
-    private auth: AuthService) {
+    private authService: AuthService,
+    protected router: Router) {
 
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.token = this.authService.getAccessToken();
+    const url = req.url;
+    return next.handle(this.addHeaders(req, this.token)).pipe(catchError( error => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        return this.handle401Error(req, next);
+      }
+      return throwError(error);
+    }));
+  }
 
-    this.authService.getToken().subscribe((authToken: NbAuthToken ) => {
-      this.token =  authToken.getValue();
-    });
+  private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+      return this.authService.refreshToken().pipe(
+        switchMap((resp: HttpResponse<any>) => {
+          window.console.log(resp);
+          this.isRefreshing = false;
+          const token = resp.headers.get(AUTH_CONSTANT.authorization);
+          this.refreshTokenSubject.next(token);
+          return next.handle(this.addHeaders(request, token));
+        }));
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(jwt => {
+          return next.handle(this.addHeaders(request, jwt));
+        }));
+    }
+  }
 
-    req = req.clone({
+  addHeaders(req: HttpRequest<any>, token: string) {
+    return req.clone({
       setHeaders: {
         'Content-Type' : 'application/json; charset=utf-8',
         'Accept'       : 'application/json',
-        'Authorization': this.token,
+        'Authorization': token,
         'X-Requested-With' : 'XMLHttpRequest',
       },
     });
+  }
 
-    return next.handle(req).do((event: HttpEvent<any>) => {
+  /**
+   * .do((event: HttpEvent<any>) => {
       if (event instanceof HttpResponse) {
         const resp =  event.body;
-          if (resp && resp.status === 401) {
-            this.refreshToken();
+         if (url.match(END_POINTS.dashboard) && resp && resp.status === 401) {
+           return this.handle401Error(req, next);
           }
       }
     }, (err: any) => {
       if (err instanceof HttpErrorResponse) {
-        if (err.status === 401) {
-          this.refreshToken();
+        if (url.match(END_POINTS.dashboard) && err.status === 401) {
+          return this.handle401Error(req, next);
         }
       }
     });
-  }
-
-  refreshToken() {
-    this.authService.refreshToken('email', {refreshToken: 'ROLE_REFRESH_TOKEN'}).subscribe((result: NbAuthResult) => {
-         window.console.log(result);
-        if (result.isSuccess()) {
-            const response = result.getResponse().body;
-            if (response.success) {
-
-            }
-        }
-    });
-  }
-  logout() {
-    this.authService.logout('email').subscribe((result: NbAuthResult) => {
-      if (result.isSuccess()) {
-        const response = result.getResponse().body;
-        if (response.success) {
-          this.router.navigate([this.redirectUrl]);
-        }
-      }
-    });
-    this.tokenService.clear();
-    this.router.navigate([this.redirectUrl]);
-  }
+  */
 }

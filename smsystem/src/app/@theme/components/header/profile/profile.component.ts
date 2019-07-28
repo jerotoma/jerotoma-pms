@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadCurrentUser() {
-    if (this.authService.isAuthenticatedOrRefresh()) {
+    if (this.authService.isAuthenticated()) {
       this.userService.getCurrentUser().subscribe((result: any) => {
         this.user = result.data;
       });

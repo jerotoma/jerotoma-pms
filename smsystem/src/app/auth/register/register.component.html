@@ -1,14 +1,14 @@
 
 <h1 id="title" class="title">Register</h1>
 
-<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+<nb-alert *ngIf="showMessage.error && errors?.length && !submitted" outline="danger" role="alert">
   <p class="alert-title"><b>Oh snap!</b></p>
   <ul class="alert-message-list">
     <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
   </ul>
 </nb-alert>
 
-<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+<nb-alert *ngIf="showMessage.success && messages?.length && !submitted" outline="success" role="alert">
   <p class="alert-title"><b>Hooray!</b></p>
   <ul class="alert-message-list">
     <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
@@ -160,25 +160,6 @@
     Register
   </button>
 </form>
-
-<section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">
-  or enter with:
-  <div class="socials">
-    <ng-container *ngFor="let socialLink of socialLinks">
-      <a *ngIf="socialLink.link"
-         [routerLink]="socialLink.link"
-         [attr.target]="socialLink.target"
-         [attr.class]="socialLink.icon"
-         [class.with-icon]="socialLink.icon">{{ socialLink.title }}</a>
-      <a *ngIf="socialLink.url"
-         [attr.href]="socialLink.url"
-         [attr.target]="socialLink.target"
-         [attr.class]="socialLink.icon"
-         [class.with-icon]="socialLink.icon">{{ socialLink.title }}</a>
-    </ng-container>
-  </div>
-</section>
-
 <section class="another-action" aria-label="Sign in">
   Already have an account? <a class="text-link" routerLink="../login">Log in</a>
 </section>

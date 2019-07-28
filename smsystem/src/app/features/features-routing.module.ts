@@ -5,9 +5,11 @@ import { FeaturesComponent } from './features.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { AuthGuard } from '../services/guards/auth-guard.service';
 
 const routes: Routes = [{
   path: '',
+  canActivateChild: [AuthGuard],
   component: FeaturesComponent,
   children: [
     {

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 
 import { AppComponent } from './app.component';
@@ -46,6 +47,7 @@ import {
     CoreModule.forRoot(),
   ],
   providers: [
+    JwtHelperService,
     NbAuthService,
     NbTokenService,
     {
