@@ -6,6 +6,7 @@ import java.util.List;
 public class EndPointConstants {
 	
 	public static final String ROOT_URL = "/";
+	public static final String ERROR_URL = "/error";
 	public static final String API_ROOT = "/api";
 	public static final String API_SECURED_ROOT = API_ROOT + "/secured";
 	

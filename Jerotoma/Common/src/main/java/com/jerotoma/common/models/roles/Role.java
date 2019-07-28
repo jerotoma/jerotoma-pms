@@ -1,4 +1,4 @@
-package com.jerotoma.common.roles;
+package com.jerotoma.common.models.roles;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

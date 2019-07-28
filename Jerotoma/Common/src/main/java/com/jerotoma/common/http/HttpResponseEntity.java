@@ -1,4 +1,4 @@
-package com.jerotoma.http;
+package com.jerotoma.common.http;
 
 import java.io.Serializable;
 import java.util.Map;

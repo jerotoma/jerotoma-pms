@@ -1,4 +1,4 @@
-package com.jerotoma.config.auth.tokens;
+package com.jerotoma.common.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,7 +10,7 @@ public final class AccessJwtToken implements JwtToken {
     @JsonIgnore 
     private Claims claims;
 
-    protected AccessJwtToken(final String token, Claims claims) {
+    public AccessJwtToken(final String token, Claims claims) {
         this.rawToken = token;
         this.claims = claims;
     }

@@ -12,7 +12,7 @@ public class AuthCoontroller {
 	
 	@GetMapping(value = {"","/{path:[^\\.]*}"})
 	public String redirect() {
-	   return "forward:/";
+	   return "forward:/index.html";
 	}
 	
 

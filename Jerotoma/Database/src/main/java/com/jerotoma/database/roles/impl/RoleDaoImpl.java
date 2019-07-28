@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.RoleConstant;
-import com.jerotoma.common.roles.Role;
+import com.jerotoma.common.models.roles.Role;
 import com.jerotoma.database.roles.dao.RoleDao;
 
 @Repository

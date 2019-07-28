@@ -11,14 +11,14 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
+import com.jerotoma.common.exceptions.JwtExpiredTokenException;
+import com.jerotoma.common.jwt.AccessJwtToken;
+import com.jerotoma.common.jwt.AuthToken;
+import com.jerotoma.common.jwt.JwtToken;
 import com.jerotoma.common.utils.TextUtility;
-import com.jerotoma.config.auth.tokens.AccessJwtToken;
-import com.jerotoma.config.auth.tokens.AuthToken;
-import com.jerotoma.config.auth.tokens.JwtToken;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
 import com.jerotoma.config.auth.tokens.RefreshToken;
-import com.jerotoma.exceptions.JwtExpiredTokenException;
 import com.jerotoma.services.cookies.CookieService;
 
 import io.jsonwebtoken.Claims;

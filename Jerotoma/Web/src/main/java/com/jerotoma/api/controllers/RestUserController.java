@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.constants.EndPointConstants;
-import com.jerotoma.common.users.AuthUser;
+import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
-import com.jerotoma.http.HttpResponseEntity;
 import com.jerotoma.services.users.AuthUserService;
 
 @RestController

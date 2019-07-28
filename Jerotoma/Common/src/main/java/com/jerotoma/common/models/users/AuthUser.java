@@ -1,4 +1,4 @@
-package com.jerotoma.common.users;
+package com.jerotoma.common.models.users;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import com.jerotoma.common.roles.Role;
+import com.jerotoma.common.models.roles.Role;
 
 public class AuthUser extends User {
 	

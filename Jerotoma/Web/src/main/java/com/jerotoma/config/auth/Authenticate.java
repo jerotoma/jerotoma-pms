@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
-import com.jerotoma.common.users.AuthUser;
+import com.jerotoma.common.models.users.AuthUser;
 
 public class Authenticate {
 	

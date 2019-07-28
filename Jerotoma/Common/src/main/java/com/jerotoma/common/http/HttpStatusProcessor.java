@@ -1,14 +1,14 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.common.http;
 
 import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.postgresql.util.PSQLException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,52 +21,30 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jerotoma.common.exceptions.JwtExpiredTokenException;
-import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.http.HttpStatusProcessor;
-import com.jerotoma.common.models.users.AuthUser;
 
-
-@ControllerAdvice
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class HttpStatusProcessor {
 	
-	String stringPattern = "duplicate key value violates unique constraint \"username\"";
 	
-	@ExceptionHandler(value = { 
-		IllegalArgumentException.class, 
-		IllegalStateException.class, 
-		RuntimeException.class,
-		BadCredentialsException.class,
-		SQLException.class,
-		JwtExpiredTokenException.class,
-		UsernameNotFoundException.class
-	})
-    protected ResponseEntity<Object> handleGenericException(Exception ex, WebRequest request) {
-		HttpResponseEntity<AuthUser> bodyOfResponse = new HttpResponseEntity<AuthUser>();
-		HttpStatus httpStatus = HttpStatusProcessor.getStatus(ex);
-		String message = ex.getMessage();
-		
-		bodyOfResponse.setSuccess(false);
-		bodyOfResponse.setStatusCode(String.valueOf(httpStatus.value()));
-		bodyOfResponse.setHttpStatus(getStatus(ex));
-		
-		if (message.contains(stringPattern)) {
-			message = "Sorry, the username you are trying to signup with already exists";
+	public static HttpStatus getStatus(HttpServletRequest request) {
+		Integer statusCode = (Integer) request
+				.getAttribute("javax.servlet.error.status_code");
+		if (statusCode == null) {
+			return HttpStatus.INTERNAL_SERVER_ERROR;
 		}
-		bodyOfResponse.setMessage(message);
-		return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), httpStatus, request);
-    }
+		try {
+			return HttpStatus.valueOf(statusCode);
+		}
+		catch (Exception ex) {
+			return HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+	}
 	
-	
-	private HttpStatus getStatus(Exception ex) {
+	public static HttpStatus getStatus(Exception ex) {
 		HttpStatus status = null;
 		if (ex instanceof HttpRequestMethodNotSupportedException) {
 			status = HttpStatus.METHOD_NOT_ALLOWED;
@@ -137,5 +115,4 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		return status;
 		
 	}
-
 }

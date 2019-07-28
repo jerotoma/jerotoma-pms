@@ -12,7 +12,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 public class DashboardController {
 	
 	@GetMapping(value = {"","/{path:[^\\.]*}"})
-	public String redirect(Authentication auth) {		
+	public String redirect(Authentication auth) {	
 	   return "forward:/";
 	}
 }

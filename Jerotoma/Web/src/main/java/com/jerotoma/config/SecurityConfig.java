@@ -75,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	.exceptionHandling()
 	 	 	.authenticationEntryPoint(authenticationEntryPoint)
 	 	 	.accessDeniedHandler(accessDeniedHandler)
+	 	 	.accessDeniedPage(EndPointConstants.ROOT_URL)
 	 	 	.and()
 	 	.cors()
 	 		.configurationSource(corsConfigurationSource())

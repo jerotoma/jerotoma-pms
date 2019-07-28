@@ -1,9 +1,9 @@
-package com.jerotoma.common.exceptions;
+package com.jerotoma.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 
 import com.jerotoma.common.errors.ErrorResponse;
-import com.jerotoma.common.jwt.JwtToken;
+import com.jerotoma.config.auth.tokens.JwtToken;
 
 public class JwtExpiredTokenException extends AuthenticationException {
     private static final long serialVersionUID = -5959543783324224864L;

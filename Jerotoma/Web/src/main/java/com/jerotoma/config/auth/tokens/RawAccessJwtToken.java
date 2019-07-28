@@ -4,7 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.jerotoma.exceptions.JwtExpiredTokenException;
+import com.jerotoma.common.exceptions.JwtExpiredTokenException;
+import com.jerotoma.common.jwt.JwtToken;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

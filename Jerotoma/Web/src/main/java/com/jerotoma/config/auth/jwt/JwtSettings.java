@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import com.jerotoma.config.auth.tokens.JwtToken;
+import com.jerotoma.common.jwt.JwtToken;
 
 @Configuration
 @PropertySource("classpath:jwtsettings.properties")

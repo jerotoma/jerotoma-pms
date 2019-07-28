@@ -7,7 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.roles.Role;
+import com.jerotoma.common.models.roles.Role;
 import com.jerotoma.database.roles.dao.RoleDao;
 
 public class RoleServiceImpl  implements RoleService {

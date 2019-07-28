@@ -8,4 +8,8 @@ public class AuthMethodNotSupportedException extends AuthenticationServiceExcept
     public AuthMethodNotSupportedException(String msg) {
         super(msg);
     }
+    
+    public AuthMethodNotSupportedException(String msg, Throwable t) {
+        super(msg, t);
+    }
 }

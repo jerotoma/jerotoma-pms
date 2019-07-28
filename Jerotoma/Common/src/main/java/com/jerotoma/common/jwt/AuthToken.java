@@ -1,4 +1,4 @@
-package com.jerotoma.config.auth.tokens;
+package com.jerotoma.common.jwt;
 
 import java.io.Serializable;
 

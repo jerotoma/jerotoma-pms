@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.jerotoma.common.users.AuthUser;
+import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.services.users.AuthUserService;
 

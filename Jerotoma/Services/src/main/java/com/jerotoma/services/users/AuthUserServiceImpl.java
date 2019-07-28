@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.users.AuthUser;
+import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.database.users.dao.AuthUserDao;
 
 @Service

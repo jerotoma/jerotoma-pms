@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.constants.EndPointConstants;
-import com.jerotoma.common.users.OtherStaff;
-import com.jerotoma.common.users.Parent;
-import com.jerotoma.common.users.Student;
-import com.jerotoma.common.users.Teacher;
+import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.users.OtherStaff;
+import com.jerotoma.common.models.users.Parent;
+import com.jerotoma.common.models.users.Student;
+import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.UserType;
 import com.jerotoma.common.utils.UserTypeConverter;
-import com.jerotoma.http.HttpResponseEntity;
 
 @RestController
 @RequestMapping(EndPointConstants.USER_CONTROLLER.BASE)

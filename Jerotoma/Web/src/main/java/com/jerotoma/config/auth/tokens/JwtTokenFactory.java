@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.jerotoma.common.jwt.AccessJwtToken;
+import com.jerotoma.common.jwt.JwtToken;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.Scopes;
 import com.jerotoma.config.auth.common.UserContext;
