@@ -10,7 +10,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor } from './services/interceptors';
-import { NgxAuthModule } from './auth/auth.module';
+import { appAuthModule } from './auth/auth.module';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {
   NbAuthService,
   NbTokenService,
@@ -22,6 +23,7 @@ import {
   NbMenuModule,
   NbSidebarModule,
   NbToastrModule,
+  NbActionsModule,
   NbWindowModule,
 
 } from '@nebular/theme';
@@ -33,7 +35,9 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    NgxAuthModule,
+    appAuthModule,
+    NbEvaIconsModule,
+    NbActionsModule,
     ThemeModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),

@@ -27,8 +27,8 @@ import { WindowFormComponent } from './window/window-form/window-form.component'
 import { ToastrComponent } from './toastr/toastr.component';
 import { PopoversComponent } from './popovers/popovers.component';
 import {
-  NgxPopoverCardComponent, NgxPopoverFormComponent,
-  NgxPopoverTabsComponent,
+  appPopoverCardComponent, appPopoverFormComponent,
+  appPopoverTabsComponent,
 } from './popovers/popover-examples.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
 
@@ -42,9 +42,9 @@ const COMPONENTS = [
   WindowComponent,
   WindowFormComponent,
   PopoversComponent,
-  NgxPopoverCardComponent,
-  NgxPopoverFormComponent,
-  NgxPopoverTabsComponent,
+  appPopoverCardComponent,
+  appPopoverFormComponent,
+  appPopoverTabsComponent,
   TooltipComponent,
 ];
 
@@ -52,9 +52,9 @@ const ENTRY_COMPONENTS = [
   ShowcaseDialogComponent,
   DialogNamePromptComponent,
   WindowFormComponent,
-  NgxPopoverCardComponent,
-  NgxPopoverFormComponent,
-  NgxPopoverTabsComponent,
+  appPopoverCardComponent,
+  appPopoverFormComponent,
+  appPopoverTabsComponent,
 ];
 
 const MODULES = [

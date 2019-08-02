@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.database.users.dao.AuthUserDao;
+import com.jerotoma.database.dao.users.AuthUserDao;
 
 @Service
 public class AuthUserServiceImpl implements AuthUserService {
@@ -50,6 +50,11 @@ public class AuthUserServiceImpl implements AuthUserService {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		return authUserDao.loadMapList(queryParam);
+	}
+
+	@Override
+	public AuthUser updateObject(AuthUser object) throws SQLException {
+		return authUserDao.updateObject(object);
 	}
 
 

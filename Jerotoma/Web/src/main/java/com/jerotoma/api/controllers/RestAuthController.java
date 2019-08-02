@@ -31,7 +31,7 @@ import com.jerotoma.common.exceptions.DataAccessException;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
-import com.jerotoma.common.models.roles.Role;
+import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.UserContext;

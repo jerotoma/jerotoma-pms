@@ -8,7 +8,7 @@ import {
   NbAuthSocialLink } from '@nebular/auth';
 
 @Component({
-  selector: 'ngx-request-password',
+  selector: 'app-request-password',
   templateUrl: './request-password.component.html',
   styleUrls: ['./request-password.component.scss'],
 })

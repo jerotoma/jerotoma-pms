@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
 import { USER_DROPDOWN_ITEMS, THEMES } from './header-menu';
 
 @Component({
-  selector: 'ngx-header',
+  selector: 'app-header',
   styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
 })

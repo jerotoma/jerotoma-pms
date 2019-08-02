@@ -1,13 +1,35 @@
 package com.jerotoma.common.models.users;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public abstract class Person {
-	String firstName;
-	String lastName;
-	String fullName;
-	Integer age;
-	String gender;
-	String ocupation;
-	String birthDate;
+	@Column(name = "first_name")
+	protected String firstName;
+	
+	@Column(name = "last_name")
+	protected String lastName;
+	
+	protected String fullName;
+	
+	@Column(name = "age")
+	protected Integer age;
+	
+	@Column(name = "gender")
+	protected String gender;
+	
+	@Column(name = "occupation")
+	protected String ocupation;
+	
+	@Column(name = "birth_date")
+	protected String birthDate;
+	
+	@Column(name = "avatar")
+	protected String picture;
+	
+	/*@OneToMany(mappedBy="address")
+	protected List<Address> addresses; */
 	
 	public Person() {
 		

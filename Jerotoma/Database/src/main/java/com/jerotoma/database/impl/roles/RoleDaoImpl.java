@@ -1,4 +1,4 @@
-package com.jerotoma.database.roles.impl;
+package com.jerotoma.database.impl.roles;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +20,8 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.RoleConstant;
-import com.jerotoma.common.models.roles.Role;
-import com.jerotoma.database.roles.dao.RoleDao;
+import com.jerotoma.common.models.security.Role;
+import com.jerotoma.database.dao.roles.RoleDao;
 
 @Repository
 public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
@@ -123,6 +123,12 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 	}
 	private StringBuilder getBaseDeleteQuery() {
 		return new StringBuilder("DELETE FROM public.roles WHERE id = ?");
+	}
+
+	@Override
+	public Role updateObject(Role object) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

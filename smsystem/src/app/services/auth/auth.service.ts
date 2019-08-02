@@ -20,16 +20,16 @@ export class AuthService {
   refreshToken(): Observable<HttpResponse<any> | HttpErrorResponse > {
       return this.http
       .post<any>(`${END_POINTS.refreshToken}`, {refreshToken: 'ROLE_REFRESH_TOKEN'}, {observe: 'response'})
-                      .pipe(tap(result => {
-                        const resp = result;
-                        const token = resp.headers.get(AUTH_CONSTANT.authorization);
-                        const status = resp.status;
-                        if (status !== null && status === 200) {
-                          if (token !== null) {
-                            this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
-                          }
-                        }
-                      }));
+        .pipe(tap(result => {
+          const resp = result;
+          const token = resp.headers.get(AUTH_CONSTANT.authorization);
+          const status = resp.status;
+          if (status !== null && status === 200) {
+            if (token !== null) {
+              this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
+            }
+          }
+        }));
   }
 
   errorHandler(error: HttpErrorResponse): Observable<HttpErrorResponse> {
@@ -53,11 +53,7 @@ export class AuthService {
    * @returns {Observable<boolean>}
    */
   isAuthenticated(): Observable<boolean> {
-    const isAuth = this.tokenService.isTokenValid();
-    if (isAuth) {
-      return observableOf(true);
-    }
-    return observableOf(this.tokenService.isTokenValid());
+   return observableOf(this.tokenService.isTokenValid());
   }
 
   /**
@@ -107,7 +103,14 @@ export class AuthService {
    */
   logout(): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.post<any>(`${END_POINTS.logout}`, {}, {observe: 'response'})
-    .pipe(tap(resp => resp, catchError(this.errorHandler)));
+    .pipe(map(result => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.tokenService.clear();
+      }
+      return result;
+    }));
   }
 
   /**

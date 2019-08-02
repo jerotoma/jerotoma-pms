@@ -4,7 +4,7 @@ const jwtDecode = require('jwt-decode');
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AUTH_CONSTANT } from './auth-constant';
-import { LocalStorage } from '../../utils';
+import { LocalStorage, isObjectEmpty } from '../../utils';
 import { Token } from '../../models/tokens/Token';
 
 
@@ -53,11 +53,21 @@ export class TokenService {
   }
 
   isTokenExpired(): boolean {
-    const token = this.getAccessToken(AUTH_CONSTANT.appAccessToken);
+    let token = this.getAccessToken(AUTH_CONSTANT.appAccessToken);
     if (token == null || token === '') {
         return false;
     }
+    token = token.replace(AUTH_CONSTANT.authorizationPrefix, '');
     return this.jwtHelper.isTokenExpired(token);
+  }
+
+  isTokenExpiredAsOf(offsetSecond: number): boolean {
+    let token = this.getAccessToken(AUTH_CONSTANT.appAccessToken);
+    if (token == null || token === '') {
+        return false;
+    }
+    token = token.replace(AUTH_CONSTANT.authorizationPrefix, '');
+    return this.jwtHelper.isTokenExpired(token, offsetSecond);
   }
 
   getTokenExpirationDate(): Date | null {
@@ -73,8 +83,14 @@ export class TokenService {
     if (token == null || token === '') {
         return false;
     }
-    const payload = jwtDecode(token.replace(AUTH_CONSTANT.authorizationPrefix, ''));
-    return payload.sub && payload.scopes && payload.scopes.length > 0;
+    const payload = this.jwtHelper.decodeToken(token.replace(AUTH_CONSTANT.authorizationPrefix, ''));
+
+   if (payload && isObjectEmpty(payload)) {
+      return false;
+    }
+    const isExpired: boolean = this.isTokenExpiredAsOf(AUTH_CONSTANT.time_before_token_expires);
+
+    return payload.sub && payload.scopes && payload.scopes.length > 0 && !isExpired;
   }
 
 }

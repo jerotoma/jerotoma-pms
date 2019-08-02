@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NewsService } from '../news.service';
 
 @Component({
-  selector: 'ngx-infinite-list',
+  selector: 'app-infinite-list',
   templateUrl: 'infinite-list.component.html',
   styleUrls: ['infinite-list.component.scss'],
 })

@@ -9,7 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import com.jerotoma.common.models.roles.Role;
+import com.jerotoma.common.models.security.Role;
 
 public class AuthUser extends User {
 	
@@ -20,10 +20,10 @@ public class AuthUser extends User {
 	
 	private Integer id;
 	private Collection<Role> roles;
-	String firstName;
-	String lastName;
-	Date createdOn;
-	Date updatedOn;
+	private String firstName;
+	private String lastName;
+	private Date createdOn;
+	private Date updatedOn;
 		
 	public AuthUser(
 			String username, 

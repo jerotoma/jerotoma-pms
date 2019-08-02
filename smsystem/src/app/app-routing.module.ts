@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./auth/auth.module')
-      .then(m => m.NgxAuthModule),
+      .then(m => m.appAuthModule),
   },
   { path: '**', redirectTo: '' },
 ];

@@ -1,4 +1,4 @@
-package com.jerotoma.database.users.impl;
+package com.jerotoma.database.impl.users;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,20 +25,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.roles.Role;
+import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.database.roles.dao.RoleDao;
-import com.jerotoma.database.users.dao.AuthUserDao;
+import com.jerotoma.database.dao.roles.RoleDao;
+import com.jerotoma.database.dao.users.AuthUserDao;
 
 @Repository
 public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	
-	private StringBuilder ROLE_INSERT_QUERY = new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
-			.append("VALUES (?, ?)");	
-	
 	private StringBuilder DELETE_QUERY = new StringBuilder("DELETE FROM public.users WHERE id = ?");
 	
-	private Integer primaryKey;
+	
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
@@ -210,6 +207,12 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	private StringBuilder commonRoleUserInsertQuery() {
 		return new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
 				.append("VALUES (?, ?)");	
+	}
+
+	@Override
+	public AuthUser updateObject(AuthUser object) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

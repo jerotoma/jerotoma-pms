@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.roles.Role;
-import com.jerotoma.database.roles.dao.RoleDao;
+import com.jerotoma.common.models.security.Role;
+import com.jerotoma.database.dao.roles.RoleDao;
 
+@Service
 public class RoleServiceImpl  implements RoleService {
 	
 	@Autowired RoleDao roleDao;
@@ -42,6 +44,11 @@ public class RoleServiceImpl  implements RoleService {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		return roleDao.loadMapList(queryParam);
+	}
+
+	@Override
+	public Role updateObject(Role object) throws SQLException {
+		return roleDao.updateObject(object);
 	}
 
 }

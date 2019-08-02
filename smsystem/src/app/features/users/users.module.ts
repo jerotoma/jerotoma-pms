@@ -1,3 +1,4 @@
+
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -7,9 +8,13 @@ import {
   NbListModule,
   NbRouteTabsetModule,
   NbStepperModule,
-  NbTabsetModule, NbUserModule,
+  NbTabsetModule,
+  NbActionsModule,
+  NbIconModule,
+  NbUserModule,
 } from '@nebular/theme';
 
+import { UserTableComponent } from './../../shared-components';
 import { ThemeModule } from '../../@theme/theme.module';
 import { LayoutRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
@@ -35,9 +40,12 @@ import { NewsService } from './news.service';
     NbListModule,
     NbAccordionModule,
     NbUserModule,
+    NbActionsModule,
     LayoutRoutingModule,
+    NbIconModule,
   ],
   declarations: [
+    UserTableComponent,
     UsersComponent,
     ParentsComponent,
     Tab1Component,

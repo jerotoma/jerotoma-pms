@@ -1,4 +1,14 @@
+
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
+  <nb-card-header> {{title}} </nb-card-header>
+  <nb-card-body>
+      <app-user-table
+        [columns]='columns'
+        [rows]='teachers'>
+      </app-user-table>
+  </nb-card-body>
+</nb-card>
+<!--<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
   <nb-card-body>
     <nb-stepper orientation="horizontal">
       <nb-step [label]="labelOne">
@@ -141,3 +151,4 @@
     </nb-card>
   </div>
 </div>
+-->

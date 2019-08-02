@@ -75,9 +75,9 @@
     "text": "As you know, Angular’s dependency injection mechanism includes a bunch of decorators like @Optional and @Self which impact the way dependencies are resolved. And while most of them are pretty straightforward and self-explanatory, the @Host decorator has puzzled me for a long time."
   },
   {
-    "title": "Simple state mutations in NGXS with Immer",
-    "link": "https://blog.angularindepth.com/simple-state-mutations-in-ngxs-with-immer-48b908874a5e",
-    "text": "NGXS is a state management pattern + library for Angular. Just like Redux and NgRx it’s modeled after the CQRS pattern. NGXS uses TypeScript functionality to its fullest extent and because of this it may feel more Angular-y."
+    "title": "Simple state mutations in appS with Immer",
+    "link": "https://blog.angularindepth.com/simple-state-mutations-in-apps-with-immer-48b908874a5e",
+    "text": "appS is a state management pattern + library for Angular. Just like Redux and NgRx it’s modeled after the CQRS pattern. appS uses TypeScript functionality to its fullest extent and because of this it may feel more Angular-y."
   },
   {
     "title": "Upgrading a project without CLI to Angular 6",

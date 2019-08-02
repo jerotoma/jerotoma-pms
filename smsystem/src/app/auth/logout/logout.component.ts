@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import {TokenService, AuthService } from '../..//services/auth';
 
 @Component({
-  selector: 'ngx-logout',
+  selector: 'app-logout',
   templateUrl: './logout.component.html',
   styleUrls: ['./logout.component.scss']
 })

@@ -23,7 +23,7 @@
   @include nb-bootstrap-global();
 
   // loading progress bar
-  @include ngx-pace-theme();
+  @include app-pace-theme();
 
   @include nb-overrides();
 };

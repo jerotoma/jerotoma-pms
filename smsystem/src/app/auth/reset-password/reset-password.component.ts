@@ -9,7 +9,7 @@ import {
 
 
 @Component({
-  selector: 'ngx-reset-password',
+  selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss']
 })

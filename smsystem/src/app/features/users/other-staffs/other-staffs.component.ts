@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'ngx-accordion',
+  selector: 'app-accordion',
   templateUrl: 'other-staffs.component.html',
   styleUrls: ['other-staffs.component.scss'],
 })

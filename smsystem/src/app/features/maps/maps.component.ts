@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-maps',
+  selector: 'app-maps',
   template: `
     <router-outlet></router-outlet>
   `,

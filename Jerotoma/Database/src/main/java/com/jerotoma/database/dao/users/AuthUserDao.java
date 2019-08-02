@@ -1,4 +1,4 @@
-package com.jerotoma.database.users.dao;
+package com.jerotoma.database.dao.users;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 

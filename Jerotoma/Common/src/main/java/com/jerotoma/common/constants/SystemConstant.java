@@ -3,13 +3,13 @@ package com.jerotoma.common.constants;
 public class SystemConstant {
 
 	public static final String DOC_FILE_PATH = "/resources/";
-	public static final String PACKAGES_TO_SCAN = "com.vimmak";
+	public static final String PACKAGES_TO_SCAN = "com.jerotoma";
 	
 	public static final String CDN_PART = ".sfo2.cdn.";
 	public static final String REPLACED_PART = ".sfo2.";
 	
-	public static final String DIGITAL_OCEAN_BASE_CDN_URL = "https://vimmak.sfo2.digitaloceanspaces.com";
-	public static final String DIGITAL_OCEAN_CDN_URL = "https://vimmak.sfo2.cdn.digitaloceanspaces.com";
+	public static final String DIGITAL_OCEAN_BASE_CDN_URL = "https://jerotoma.sfo2.digitaloceanspaces.com";
+	public static final String DIGITAL_OCEAN_CDN_URL = "https://jerotoma.sfo2.cdn.digitaloceanspaces.com";
 	
 	
 	public static final String UPLOAD_PATH =   System.getProperty("catalina.base") + "/storage/resources/uploads";

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { NgxAuthRoutingModule } from './auth-routing.module';
+import { appAuthRoutingModule } from './auth-routing.module';
 import {
   NbAuthModule,
   NbPasswordAuthStrategy,
@@ -41,7 +41,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     NbCheckboxModule,
     NbIconModule,
     NbCardModule,
-    NgxAuthRoutingModule,
+    appAuthRoutingModule,
     NbAuthModule.forRoot(),
     NbLayoutModule,
   ],
@@ -55,5 +55,5 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ResetPasswordComponent,
   ],
 })
-export class NgxAuthModule {
+export class appAuthModule {
 }

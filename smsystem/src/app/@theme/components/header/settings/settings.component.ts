@@ -13,7 +13,7 @@ import { Subject } from 'rxjs';
 import { THEMES } from '../header-menu';
 
 @Component({
-  selector: 'ngx-settings',
+  selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
 })

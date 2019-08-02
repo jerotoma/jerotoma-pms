@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { NbAuthComponent, NbAuthService } from '@nebular/auth';
 
 @Component({
-  selector: 'ngx-auth',
+  selector: 'app-auth',
   styleUrls: ['./auth.component.scss'],
   templateUrl: './auth.component.html',
 })

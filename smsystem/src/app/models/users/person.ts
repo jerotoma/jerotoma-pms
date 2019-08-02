@@ -6,4 +6,5 @@ export interface Person {
   gender?: string;
   occupation?: string;
   birthDate: Date;
+  picture?: string;
 }

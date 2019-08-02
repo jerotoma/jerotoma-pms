@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { Contacts, RecentUsers, UserData } from '../../../@core/data/users';
 
 @Component({
-  selector: 'ngx-contacts',
+  selector: 'app-contacts',
   styleUrls: ['./contacts.component.scss'],
   templateUrl: './contacts.component.html',
 })

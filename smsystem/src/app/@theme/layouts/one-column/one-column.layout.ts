@@ -5,12 +5,12 @@ import { NbLayoutComponent } from '@nebular/theme';
 import { WindowModeBlockScrollService } from '../../services/window-mode-block-scroll.service';
 
 @Component({
-  selector: 'ngx-one-column-layout',
+  selector: 'app-one-column-layout',
   styleUrls: ['./one-column.layout.scss'],
   template: `
     <nb-layout windowMode>
       <nb-layout-header fixed>
-        <ngx-header></ngx-header>
+        <app-header></app-header>
       </nb-layout-header>
 
       <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
@@ -22,7 +22,7 @@ import { WindowModeBlockScrollService } from '../../services/window-mode-block-s
       </nb-layout-column>
 
       <nb-layout-footer fixed>
-        <ngx-footer></ngx-footer>
+        <app-footer></app-footer>
       </nb-layout-footer>
     </nb-layout>
   `,

@@ -9,7 +9,7 @@ import { ShowMessage } from './../../models/messages/show-message';
 
 
 @Component({
-  selector: 'ngx-register',
+  selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })

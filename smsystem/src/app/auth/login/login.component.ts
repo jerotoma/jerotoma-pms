@@ -8,7 +8,7 @@ import { UserContext } from './../../models/users/user-context';
 import { ShowMessage } from './../../models/messages/show-message';
 
 @Component({
-  selector: 'ngx-login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
   processLoginResult(data: any, status: number): void {
     if (status !== null && status === 200 && data && data.success) {
-        if (this.tokenService.isTokenValid()){
+        if (this.authService.isAuthenticated()) {
           this.showMessage.error = false;
           this.showMessage.success = true;
           this.router.navigate(['/dashboard']);

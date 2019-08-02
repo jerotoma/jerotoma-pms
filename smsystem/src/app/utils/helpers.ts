@@ -177,3 +177,7 @@ export function b64DecodeUnicode(str: any) {
     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(''));
 }
+
+export function isObjectEmpty(obj){
+  return obj && Object.keys(obj).length === 0;
+}

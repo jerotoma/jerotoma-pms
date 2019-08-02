@@ -6,7 +6,7 @@ import { User } from './../../../../models/users/user';
 import { getDeepFromObject } from './../../../../utils';
 
 @Component({
-  selector: 'ngx-profile',
+  selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
