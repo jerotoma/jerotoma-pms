@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.database.dao.users.AuthUserDao;
 
 @Service
+@Transactional
 public class AuthUserServiceImpl implements AuthUserService {
 	
 	@Autowired AuthUserDao authUserDao;
@@ -55,6 +58,11 @@ public class AuthUserServiceImpl implements AuthUserService {
 	@Override
 	public AuthUser updateObject(AuthUser object) throws SQLException {
 		return authUserDao.updateObject(object);
+	}
+
+	@Override
+	public List<AuthUser> search(QueryParam queryParam) throws SQLException {
+		return  authUserDao.search(queryParam);
 	}
 
 

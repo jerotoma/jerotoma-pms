@@ -24,7 +24,7 @@ public class OtherStaff extends Person implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="other_staffs_generator")
-	@SequenceGenerator(name="other_staffs_generator", sequenceName = "seq_other_staffs", allocationSize=1)
+	@SequenceGenerator(name="other_staffs_generator", sequenceName = "other_staffs_id_seq", allocationSize=1)
 	@Column
 	private Long id;
 	

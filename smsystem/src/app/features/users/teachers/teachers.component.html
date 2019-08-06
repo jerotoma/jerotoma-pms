@@ -1,6 +1,6 @@
 
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
-  <nb-card-header> {{title}} </nb-card-header>
+  <nb-card-header> {{title}} <button class="push-right" nbButton hero status='success' (click)="open()">Add New Teacher</button></nb-card-header>
   <nb-card-body>
       <app-user-table
         [columns]='columns'
@@ -8,6 +8,15 @@
       </app-user-table>
   </nb-card-body>
 </nb-card>
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Template Dialog</nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close()">Close Dialog</button>
+      </nb-card-footer>
+    </nb-card>
+</ng-template>
 <!--<nb-card class="col-md-12 col-lg-12 col-xxxl-12">
   <nb-card-body>
     <nb-stepper orientation="horizontal">

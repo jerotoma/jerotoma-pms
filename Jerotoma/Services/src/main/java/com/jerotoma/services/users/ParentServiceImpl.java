@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.database.dao.users.ParentDao;
 
 @Service
+@Transactional
 public class ParentServiceImpl implements ParentService {
 	
 	@Autowired ParentDao parentDao;

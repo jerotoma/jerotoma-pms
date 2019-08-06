@@ -1,7 +1,10 @@
 package com.jerotoma.common.models.users;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public abstract class Person {
@@ -11,9 +14,10 @@ public abstract class Person {
 	@Column(name = "last_name")
 	protected String lastName;
 	
+	@Transient
 	protected String fullName;
 	
-	@Column(name = "age")
+	@Transient
 	protected Integer age;
 	
 	@Column(name = "gender")
@@ -23,13 +27,15 @@ public abstract class Person {
 	protected String ocupation;
 	
 	@Column(name = "birth_date")
-	protected String birthDate;
+	protected Date birthDate;
 	
 	@Column(name = "avatar")
 	protected String picture;
 	
-	/*@OneToMany(mappedBy="address")
-	protected List<Address> addresses; */
+	/*
+	@OneToMany(mappedBy="address")
+	protected List<Address> addresses; 
+	*/
 	
 	public Person() {
 		
@@ -77,10 +83,18 @@ public abstract class Person {
 	public void setOcupation(String ocupation) {
 		this.ocupation = ocupation;
 	}
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}	
 }

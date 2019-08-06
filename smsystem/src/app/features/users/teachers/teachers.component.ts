@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NbDialogService } from '@nebular/theme';
+
+import { TeacherCreateComponent } from './create/teacher-create.component';
 import { Teacher } from './../../../models/users';
+
 
 @Component({
   selector: 'app-stepper',
@@ -79,7 +83,10 @@ export class TeachersComponent implements OnInit {
   ];
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private dialogService: NbDialogService,
+    ) {
   }
 
   ngOnInit() {
@@ -106,5 +113,19 @@ export class TeachersComponent implements OnInit {
 
   onThirdSubmit() {
     this.thirdForm.markAsDirty();
+  }
+
+  open() {
+    this.dialogService.open(TeacherCreateComponent, {
+      context: {
+        title: 'This is a title passed to the dialog component',
+      },
+    });
+  }
+
+  open2(dialog: TemplateRef<any>) {
+    this.dialogService.open(
+      dialog,
+      { context: 'this is some additional data passed to dialog' });
   }
 }

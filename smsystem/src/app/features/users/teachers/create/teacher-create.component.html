@@ -1,0 +1,137 @@
+<div class='row'>
+    <div class="col-md-12 col-lg-12 col-xxxl-12">
+        <form  autocomplete="off" [formGroup]="teacherForm" (ngSubmit)="onSubmit()">
+            <nb-card size="giant" status="primary">
+              <nb-card-header>{{ title }}</nb-card-header>
+              <nb-card-body>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="teacher-full-name" class="label">Login Credential</label>
+                              <input
+                                  type="text"
+                                  nbInput fullWidth
+                                  autocomplete="off"
+                                  required
+                                  id="teacher-full-name"
+                                  formControlName="fullName"
+                                  placeholder="Login Credential">
+                            </div>
+                            <nb-card [ngStyle]="{'display': listDisplay}">
+                              <nb-list>
+                                <nb-list-item *ngFor="let user of users">
+                                  <a href="#" class="" (click)="pickUser($event, user)" >
+                                      <nb-user
+                                          [name]="user.firstName + '' + user.lastName"
+                                          [title]="user.username">
+                                      </nb-user>
+                                  </a>
+                                </nb-list-item>
+                              </nb-list>
+                            </nb-card>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="teacher-fieldOfStudy" class="label">Employment ID</label>
+                              <nb-select
+                                selected="1"
+                                fullWidth
+                                placeholder="Field of Study"
+                                formControlName="fieldOfStudy"
+                                id="teacher-fieldOfStudy">
+                                  <nb-option value="1">Chemistry</nb-option>
+                                  <nb-option value="2">Mathematics</nb-option>
+                                  <nb-option value="3">Kiswahili</nb-option>
+                                  <nb-option value="4">Biology</nb-option>
+                              </nb-select>
+                            </div>
+                      </div>
+                  </div>
+                  <div class="form-control-group">
+                    <label for="teacher-first-name" class="label">First Name</label>
+                    <input
+                          type="text"
+                          nbInput fullWidth
+                          autocomplete="off"
+                          required
+                          id="teacher-first-name"
+                          formControlName="firstName"
+                          placeholder="First Name">
+                  </div>
+                  <div class="form-control-group">
+                    <label for="teacher-last-name" class="label">Last Name</label>
+                    <input
+                          required
+                          type="text"
+                          autocomplete="off"
+                          nbInput fullWidth
+                          id="teacher-last-name"
+                          formControlName="lastName"
+                          placeholder="Last Name">
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="teacher-position" class="label">Position</label>
+                              <nb-select
+                                selected="1"
+                                fullWidth
+                                placeholder="Position"
+                                formControlName="position"
+                                id="teacher-position">
+                                  <nb-option value="1">Head Master</nb-option>
+                                  <nb-option value="2">Head of Health</nb-option>
+                                  <nb-option value="3">Head of Academic</nb-option>
+                              </nb-select>
+                            </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="teacher-fieldOfStudy" class="label">Field of Study</label>
+                              <nb-select
+                                selected="1"
+                                fullWidth
+                                placeholder="Field of Study"
+                                formControlName="fieldOfStudy"
+                                id="teacher-fieldOfStudy">
+                                  <nb-option value="1">Chemistry</nb-option>
+                                  <nb-option value="2">Mathematics</nb-option>
+                                  <nb-option value="3">Kiswahili</nb-option>
+                                  <nb-option value="4">Biology</nb-option>
+                              </nb-select>
+                            </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="teacher-position" class="label">Gender</label>
+                              <nb-radio-group formControlName="gender">
+                                <nb-radio [value]="'male'">Male</nb-radio>
+                                <nb-radio [value]="'female'">Female</nb-radio>
+                              </nb-radio-group>
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                            <label for="teacher-birthDate" class="label">Date of Birth (yyyy/MM/dd)</label>
+                            <input
+                                [nbDatepicker]="birthDate"
+                                nbInput fullWidth
+                                id="teacher-birthDate"
+                                formControlName="birthDate"
+                                placeholder="Birth Date">
+                            <nb-datepicker #birthDate format="yyyy/MM/dd"></nb-datepicker>
+                          </div>
+                      </div>
+                  </div>
+              </nb-card-body>
+              <nb-card-footer>
+                <button class='push-right' [disabled]="!teacherForm.valid" type="submit" nbButton hero status="success">Submit</button>
+                <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+              </nb-card-footer>
+            </nb-card>
+        </form>
+    </div>
+</div>
+

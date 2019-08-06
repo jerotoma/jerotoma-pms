@@ -4,12 +4,17 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.database.dao.users.StudentDao;
 
+@Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
 	
 	@Autowired StudentDao studentDao;	

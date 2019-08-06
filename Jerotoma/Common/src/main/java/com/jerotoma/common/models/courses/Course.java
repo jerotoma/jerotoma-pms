@@ -24,7 +24,7 @@ public class Course implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="courses_generator")
-	@SequenceGenerator(name="courses_generator", sequenceName = "seq_courses", allocationSize=1)
+	@SequenceGenerator(name="courses_generator", sequenceName = "courses_id_seq", allocationSize=1)
 	@Column
 	private Long id;
 	

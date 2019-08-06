@@ -42,6 +42,12 @@ export class UserService {
     return this.http.post<any>(`${END_POINTS.users}`, data, httpOptions)
                     .pipe(catchError(this.errorHandler));
   }
+  search(param: QueryParam): Observable<any> {
+    return this.http
+    .get<User[]>(`${END_POINTS.users}/search?searchTerm=${param.search}
+            &page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+            .pipe(retry(3), catchError(this.errorHandler));
+  }
 
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || 'Server error');

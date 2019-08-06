@@ -35,7 +35,9 @@ public class EndPointConstants {
 	
 	public static interface REST_USER_CONTROLLER {
 		public static final String BASE = API_SECURED_ROOT+ "/users";
-		public static final String CURRENT_USER = "/currentUser";		
+		public static final String INDEX = "/";
+		public static final String SEARCH = "/search";
+		public static final String CURRENT_USER = "/currentUser";
 	}
 	
 	public static interface REST_AUTH_CONTROLLER {

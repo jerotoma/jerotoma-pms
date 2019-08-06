@@ -29,7 +29,7 @@ public class StudentAdmission implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="student_admissions_generator")
-	@SequenceGenerator(name="student_admissions_generator", sequenceName = "seq_student_admissions", allocationSize=1)
+	@SequenceGenerator(name="student_admissions_generator", sequenceName = "student_admissions_id_seq", allocationSize=1)
 	@Column
 	private Long id;
 	

@@ -13,6 +13,5 @@ import { MENU_ITEMS } from './dashboard-menu';
   `,
 })
 export class FeaturesComponent {
-
   menu = MENU_ITEMS;
 }

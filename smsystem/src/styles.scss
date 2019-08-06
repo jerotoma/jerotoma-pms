@@ -1,0 +1,69 @@
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import './app/@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-card-body {
+    display: block;
+
+    button {
+      width: 100%;
+      margin-bottom: 2rem;
+      display: block;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .result-from-dialog {
+    flex-direction: column;
+  }
+  .form-input-card {
+    nb-card-body {
+      display: block;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    button {
+      padding: 0.8rem;
+    }
+    nb-dialog-container {
+      width:700px;
+    }
+  }
+
+  @include media-breakpoint-down(is) {
+    button {
+      padding: 0.75rem;
+    }
+  }
+}
+
+:host ::ng-deep nb-stepper .step-content {
+  text-align: center;
+
+  button {
+    cursor: pointer;
+    margin: 0.5rem;
+  }
+}
+button {
+  cursor: pointer;
+  margin: 0.2rem;
+}
+.push-right {
+  float: right;
+}
+.push-left {
+  float: left;
+}
+nb-dialog-container {
+  width:800px;
+}
+
+.form-control-group {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+}

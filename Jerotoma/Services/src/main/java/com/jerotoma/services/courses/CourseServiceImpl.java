@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.jerotoma.common.models.courses.Course;
 import com.jerotoma.database.dao.courses.CourseDao;
 
 @Service
+@Transactional
 public class CourseServiceImpl implements CourseService {
 	
 	@Autowired CourseDao courseDao;

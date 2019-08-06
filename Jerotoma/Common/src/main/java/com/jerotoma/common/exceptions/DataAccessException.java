@@ -9,7 +9,11 @@ public class DataAccessException extends SQLException {
 	public DataAccessException(String message) {
 		this.message = message;
 	}
-
+	public DataAccessException(String message, Throwable sqlE) {
+		this.message = message;
+		sqlE.printStackTrace();
+		
+	}
 	/**
 	 * 
 	 */

@@ -24,9 +24,12 @@ public class Teacher extends Person implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="teachers_generator")
-	@SequenceGenerator(name="teachers_generator", sequenceName = "seq_teachers", allocationSize=1)
+	@SequenceGenerator(name="teachers_generator", sequenceName = "teachers_id_seq", allocationSize=1)
 	@Column
-	private Long id;
+	private Integer id;
+	
+	@Column(name="user_id")
+	private Integer userId;
 	
 	@Column(name="teacher_code")
 	private String teacherCode;
@@ -40,11 +43,11 @@ public class Teacher extends Person implements Serializable{
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -78,5 +81,14 @@ public class Teacher extends Person implements Serializable{
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
-	}	
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 }

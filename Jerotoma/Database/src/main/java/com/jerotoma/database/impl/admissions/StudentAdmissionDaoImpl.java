@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,7 @@ import com.jerotoma.common.models.admissions.StudentAdmission;
 import com.jerotoma.database.dao.admissions.StudentAdmissionDao;
 
 @Repository
+@Transactional
 public class StudentAdmissionDaoImpl implements StudentAdmissionDao {
 	
 	@PersistenceContext 

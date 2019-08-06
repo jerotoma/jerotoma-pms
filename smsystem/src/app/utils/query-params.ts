@@ -3,5 +3,6 @@ export interface QueryParam {
   pageSize: number;
   status: string;
   orderby: string;
-
+  search: string;
+  fieldName: string;
 }

@@ -3,6 +3,8 @@ package com.jerotoma.config.auth.common;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 
 import com.jerotoma.common.utils.StringUtility;
@@ -54,7 +56,11 @@ public class UserContext implements Serializable{
 		return currentAuthorities;
     }
 
-	public String[] getAuthority() {
-		return currentAuthorities;
+	public List<String> getAuthority() {
+		List<String> roles = new ArrayList<>();
+		for(String role: currentAuthorities) {
+			roles.add(role);
+		}
+		return roles;
 	}
 }

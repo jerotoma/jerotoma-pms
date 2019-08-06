@@ -24,7 +24,7 @@ public class Parent extends Person implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="parents_generator")
-	@SequenceGenerator(name="parents_generator", sequenceName = "seq_parents", allocationSize=1)
+	@SequenceGenerator(name="parents_generator", sequenceName = "parents_id_seq", allocationSize=1)
 	@Column
 	private Long id;
 	

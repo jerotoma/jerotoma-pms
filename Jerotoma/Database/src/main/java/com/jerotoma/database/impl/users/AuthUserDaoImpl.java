@@ -27,8 +27,10 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 import com.jerotoma.database.dao.users.AuthUserDao;
+
 
 @Repository
 public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
@@ -49,7 +51,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser findObject(Integer primaryKey) throws SQLException {
-		String query = commonSelectQuery().append("WHERE id = ? ").toString();
+		String query = commonSelectQuery(false).append("WHERE id = ? ").toString();
 		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), primaryKey);
 	
 	}
@@ -109,7 +111,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public List<AuthUser> loadList(QueryParam queryParam) throws SQLException {
-		String query = commonSelectQuery().toString();
+		String query = commonSelectQuery(true).toString();
 		return this.jdbcTemplate.query(query, new AuthUserResultProcessor());
 	}
 
@@ -126,7 +128,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
-		String query = commonSelectQuery().append("WHERE username = ? ").toString();
+		String query = commonSelectQuery(false).append("WHERE username = ? ").toString();
 		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), username);
 	
 	}
@@ -163,9 +165,12 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	public AuthUser mapAuthUserResult(ResultSet rs) throws SQLException {	
 		AuthUser authUser = null;
+		String password = null;
 		Integer userId = rs.getInt("id");
 		String username = rs.getString("username");
-		String password = rs.getString("password");
+		if(DaoUtil.hasColumn(rs, "password")) {
+			password = rs.getString("password");
+		}		
 		String firstName = rs.getString("first_name");
 		String lastName = rs.getString("last_name");
 		Boolean enabled  = rs.getBoolean("enabled"); 
@@ -195,8 +200,13 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 			}, userId);
 	}
 	
-	private StringBuilder commonSelectQuery() {		
-		return new StringBuilder("SELECT id, username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+	private StringBuilder commonSelectQuery(boolean removePassword) {		
+		StringBuilder builder = new StringBuilder("SELECT id, username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+		if(removePassword) {
+			builder.toString().replace("password,", "");
+		}
+		
+		return builder;
 	}
 	
 	private StringBuilder commonInsertQuery() {		
@@ -213,6 +223,35 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	public AuthUser updateObject(AuthUser object) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<AuthUser> search(QueryParam queryParam) throws SQLException {
+		StringBuilder queryBuilder = commonSelectQuery(true);
+		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(username) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AuthUserResultProcessor(), paramList);
+	}
+
+	@Override
+	public Long countObject() throws SQLException {
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.users");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
 }
