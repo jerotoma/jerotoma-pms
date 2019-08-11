@@ -1,0 +1,154 @@
+package com.jerotoma.api.controllers;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.constants.PositionConstant;
+import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.exceptions.JDataAccessException;
+import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
+import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.positions.Position;
+import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.utils.validators.ValidatePositionUtil;
+import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.positions.PositionService;
+
+@RestController
+@RequestMapping(EndPointConstants.REST_POSITION_CONTROLLER.BASE)
+public class RestPositionController {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	@Autowired PositionService positionService;
+	@Autowired IAuthenticationFacade authenticationFacade;
+
+	@GetMapping(value = {"", "/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> getPositions(
+			Authentication auth,
+			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize,
+			@RequestParam(value="fieldName", required=false) String fieldName,
+			@RequestParam(value="orderby", required=false) String orderby) {
+		
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+		List<Position> positions = new ArrayList<>();
+		
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		logger.debug("getModelAndView : [model] : {}");
+		
+		page = page == null ? 1 : page;
+		pageSize = pageSize == null ? 12 : pageSize;
+		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
+
+
+		QueryParam queryParam =  QueryParam.getInstance();
+		queryParam.setPage(page);
+		queryParam.setPageSize(pageSize);
+		queryParam.setFieldName(fieldName);
+		queryParam.setOrderby(orderby);
+				
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
+		
+		try {
+			positions = positionService.loadList(queryParam);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setData(positions);
+		return instance;
+	}
+
+
+	protected HttpResponseEntity<Object> getShowPosition() {
+		
+		return null;
+	}
+
+
+	protected HttpResponseEntity<Object> updatePosition() {
+		
+		return null;
+	}
+
+	@PostMapping(value = {"", "/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> createPosition(
+			Authentication auth, 
+			@RequestBody Map<String, Object> params) throws JDataAccessException {
+		
+		List<String> requiredFields;
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
+		
+		requiredFields = new ArrayList<>(
+				Arrays.asList(
+						PositionConstant.POSITION_NAME,
+						PositionConstant.POSITION_DESCRIPTION,
+						PositionConstant.POSITION_CODE));
+		
+		Position position = ValidatePositionUtil.validate(params, requiredFields);
+		
+		try {
+			position = positionService.createObject(position);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+			
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setData(position);
+		return instance;
+	}
+
+	
+	protected HttpResponseEntity<Object> editPosition() {
+		
+		return null;
+	}
+
+
+	protected HttpResponseEntity<Object> deletePosition() {
+		
+		return null;
+	}
+
+}

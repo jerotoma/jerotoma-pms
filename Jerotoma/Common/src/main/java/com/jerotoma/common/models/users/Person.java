@@ -24,7 +24,7 @@ public abstract class Person {
 	protected String gender;
 	
 	@Column(name = "occupation")
-	protected String ocupation;
+	protected String occupation;
 	
 	@Column(name = "birth_date")
 	protected Date birthDate;
@@ -77,11 +77,11 @@ public abstract class Person {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getOcupation() {
-		return ocupation;
+	public String getOccupation() {
+		return occupation;
 	}
-	public void setOcupation(String ocupation) {
-		this.ocupation = ocupation;
+	public void setOccupation(String ocupation) {
+		this.occupation = ocupation;
 	}
 	public Date getBirthDate() {
 		return birthDate;

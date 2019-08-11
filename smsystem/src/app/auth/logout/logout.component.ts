@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, Inject  } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {TokenService, AuthService } from '../..//services/auth';
+import {TokenService, AuthService } from 'app/services/auth';
 
 @Component({
   selector: 'app-logout',

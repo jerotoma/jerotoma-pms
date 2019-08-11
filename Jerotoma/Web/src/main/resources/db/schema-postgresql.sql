@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS public.teachers(
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
    	CONSTRAINT teachers_pkey PRIMARY KEY (id),
+   	CONSTRAINT user_id UNIQUE (user_id), 
    	CONSTRAINT teacher_code UNIQUE (teacher_code),
     CONSTRAINT users_fkey FOREIGN KEY (user_id)
         REFERENCES public.users (id) MATCH SIMPLE
@@ -177,6 +178,7 @@ CREATE TABLE IF NOT EXISTS public.courses(
     description text NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
+    CONSTRAINT courses_ukey UNIQUE (code),
    	CONSTRAINT courses_pkey PRIMARY KEY (id)
     );
     
@@ -194,11 +196,11 @@ CREATE TABLE IF NOT EXISTS public.student_admissions(
    	course_id bigint NOT NULL,
    	teacher_id bigint NOT NULL,
    	year_of_study character varying(255) NOT NULL,
-   	admission_code character varying(255) NOT NULL,
+   	code character varying(255) NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
    	CONSTRAINT student_admissions_pkey PRIMARY KEY(id),
-   	CONSTRAINT admission_code UNIQUE (admission_code),
+   	CONSTRAINT student_admissions_ukey UNIQUE (code),
    	CONSTRAINT courses_fkey FOREIGN KEY (course_id)
         REFERENCES public.courses (id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -213,5 +215,23 @@ CREATE TABLE IF NOT EXISTS public.student_admissions(
         ON DELETE CASCADE
     );
  
- 
+ /**************************************************************
+ * 															  *
+ * 															  *
+ * 			POSITIONS RELATED TABLES					  		  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.positions(
+    id bigserial NOT NULL,
+    name character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    description text NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+    CONSTRAINT positions_ukey UNIQUE (code),
+   	CONSTRAINT positions_pkey PRIMARY KEY (id)
+    );
+    
+
     

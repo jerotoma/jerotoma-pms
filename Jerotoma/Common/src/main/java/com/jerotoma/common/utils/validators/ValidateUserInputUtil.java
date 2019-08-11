@@ -1,6 +1,5 @@
-package com.jerotoma.common.utils;
+package com.jerotoma.common.utils.validators;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import com.jerotoma.common.models.users.OtherStaff;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.utils.CalendarUtil;
 
 public class ValidateUserInputUtil {
 	
@@ -23,11 +23,13 @@ public class ValidateUserInputUtil {
 		Integer age = null;	
 		Integer userId = null;	
 		String gender = null;
-		String ocupation = null;		
+		String occupation = null;		
 		String birthDate = null;
 		String picture = null;
 		String teacherCode = null;		
 		String position = null;
+		Date today = null;
+		
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = params.get(UserConstant.FIRST_NAME).toString();
@@ -55,7 +57,7 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = params.get(UserConstant.OCCUPATION).toString();
+			occupation = params.get(UserConstant.OCCUPATION).toString();
 		}
 		
 		if(params.containsKey(UserConstant.BIRTH_DATE)) {
@@ -63,15 +65,15 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.PICTURE)) {
 			picture = (String) params.get(UserConstant.PICTURE);
 		}
 		
-		if(params.containsKey(UserConstant.TEACHER_CODE)) {
-			teacherCode = (String) params.get(UserConstant.TEACHER_CODE);
+		if(params.containsKey(UserConstant.EMPLOYMENT_CODE)) {
+			teacherCode = (String) params.get(UserConstant.EMPLOYMENT_CODE);
 		}
 		
 		if(params.containsKey(UserConstant.POSITION)) {
@@ -91,8 +93,8 @@ public class ValidateUserInputUtil {
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
 			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
 		}
-		Calendar cal = CalendarUtil.convertStringDateToDate(birthDate);
-		teacher.setBirthDate(cal != null ? cal.getTime(): null);
+		Date cal = CalendarUtil.convertStringToDate(birthDate);
+		teacher.setBirthDate(cal);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
 			throw new FieldCanNotBeEmptyException("First Name can not be empty");
@@ -114,12 +116,12 @@ public class ValidateUserInputUtil {
 		}
 		teacher.setGender(gender);
 		
-		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Ocupation date can not be empty");
+		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
+			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
 		}
-		teacher.setOcupation(ocupation);
+		teacher.setOccupation(occupation);
 		
-		if (teacherCode == null && requiredFields.contains(UserConstant.TEACHER_CODE)) {
+		if (teacherCode == null && requiredFields.contains(UserConstant.EMPLOYMENT_CODE)) {
 			throw new FieldCanNotBeEmptyException("Teacher Code date can not be empty");
 		}
 		teacher.setTeacherCode(teacherCode);
@@ -134,6 +136,11 @@ public class ValidateUserInputUtil {
 		}
 		teacher.setPosition(position);
 		
+		today = CalendarUtil.getTodaysDate();
+		
+		teacher.setCreatedOn(today);
+		teacher.setUpdatedOn(today);
+		
 		return teacher;
 	}
 	
@@ -145,7 +152,7 @@ public class ValidateUserInputUtil {
 		String fullName = null;	
 		Integer age = null;		
 		String gender = null;
-		String ocupation = null;		
+		String occupation = null;		
 		String birthDate = null;
 		String picture = null;
 		String studentCode = null;
@@ -173,7 +180,7 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.BIRTH_DATE)) {
@@ -181,7 +188,7 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.PICTURE)) {
@@ -204,8 +211,8 @@ public class ValidateUserInputUtil {
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
 			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
 		}
-		Calendar cal = CalendarUtil.convertStringDateToDate(birthDate);
-		student.setBirthDate(cal != null ? cal.getTime(): null);
+		Date cal = CalendarUtil.convertStringToDate(birthDate);
+		student.setBirthDate(cal);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
 			throw new FieldCanNotBeEmptyException("First Name can not be empty");
@@ -227,10 +234,10 @@ public class ValidateUserInputUtil {
 		}
 		student.setGender(gender);
 		
-		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Ocupation date can not be empty");
+		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
+			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
 		}
-		student.setOcupation(ocupation);
+		student.setOccupation(occupation);
 		
 		if (studentCode == null && requiredFields.contains(UserConstant.STUDENT_CODE)) {
 			throw new FieldCanNotBeEmptyException("Student code can not be empty");
@@ -247,6 +254,10 @@ public class ValidateUserInputUtil {
 		}
 		student.setPosition(position);
 		
+		Date today = CalendarUtil.getTodaysDate();
+		student.setCreatedOn(today);
+		student.setUpdatedOn(today);
+		
 		return student;
 	}
 	
@@ -258,7 +269,7 @@ public class ValidateUserInputUtil {
 		String fullName = null;	
 		Integer age = null;		
 		String gender = null;
-		String ocupation = null;		
+		String occupation = null;		
 		Date birthDate = null;
 		String picture = null;
 		String position = null;
@@ -285,7 +296,7 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.BIRTH_DATE)) {
@@ -293,7 +304,7 @@ public class ValidateUserInputUtil {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.PICTURE)) {
@@ -334,10 +345,10 @@ public class ValidateUserInputUtil {
 		}
 		parent.setGender(gender);
 		
-		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Ocupation date can not be empty");
+		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
+			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
 		}
-		parent.setOcupation(ocupation);
+		parent.setOccupation(occupation);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
 			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
@@ -348,6 +359,11 @@ public class ValidateUserInputUtil {
 			throw new FieldCanNotBeEmptyException("Position date can not be empty");
 		}
 		parent.setPosition(position);
+		
+		Date today = CalendarUtil.getTodaysDate();
+		
+		parent.setCreatedOn(today);
+		parent.setUpdatedOn(today);
 		
 		return parent;
 	}
@@ -439,7 +455,7 @@ public class ValidateUserInputUtil {
 		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
 			throw new FieldCanNotBeEmptyException("Ocupation date can not be empty");
 		}
-		otherStaff.setOcupation(ocupation);
+		otherStaff.setOccupation(ocupation);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
 			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
@@ -450,6 +466,11 @@ public class ValidateUserInputUtil {
 			throw new FieldCanNotBeEmptyException("Position date can not be empty");
 		}
 		otherStaff.setPosition(position);
+		
+		Date today = CalendarUtil.getTodaysDate();
+		
+		otherStaff.setCreatedOn(today);
+		otherStaff.setUpdatedOn(today);
 		
 		return otherStaff;
 	}

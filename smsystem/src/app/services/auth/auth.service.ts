@@ -6,7 +6,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { Token } from '../../models/tokens/Token';
 import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from './token.service';
-import { END_POINTS } from '../../utils';
+import { END_POINTS } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',

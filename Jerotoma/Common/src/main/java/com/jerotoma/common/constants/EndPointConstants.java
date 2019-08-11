@@ -33,6 +33,10 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/auth/login";		
 	}
 	
+	public static interface REST_POSITION_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/positions";		
+	}
+	
 	public static interface REST_USER_CONTROLLER {
 		public static final String BASE = API_SECURED_ROOT+ "/users";
 		public static final String INDEX = "/";

@@ -131,4 +131,10 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 		return null;
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

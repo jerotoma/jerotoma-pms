@@ -83,6 +83,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Positions',
+    icon: 'award-outline',
+    children: [
+      {
+        title: 'Positions',
+        link: '/dashboard/positions',
+      },
+    ],
+  },
+  {
     title: 'UI Features',
     icon: 'keypad-outline',
     link: '/dashboard/ui-features',

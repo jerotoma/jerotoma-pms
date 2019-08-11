@@ -1,31 +1,52 @@
 package com.jerotoma.common.utils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class CalendarUtil {
 	
-	public static Calendar convertStringDateToDate(String strDate){
-		Date date  = null;
-		Calendar cal = null;
-		 
-		strDate = strDate.substring(0, 10);
-		DateFormat sdf = strDate.contains("T") || strDate.contains("Z") 
-				? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ENGLISH)
-				: new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+	public static final String ISO_8601_DATE_TIME_WITH_TZ_FORMAT = "yyyy/MM/dd'T'HH:mm:ss.SSS'Z'";
+	public static final String ISO_8601_DATE_FORMAT = "yyyy/MM/dd";
+	public static final String ISO_8601_DATE_WITH_TIME_FORMAT = "yyyy/MM/dd'T'HH:mm:ss";
+
 	
-		try {
-			date = sdf.parse(strDate);
-			cal = Calendar.getInstance();
-			cal.setTime(date);
-		} catch (ParseException e) {
-			e.printStackTrace();
+	public static Date convertStringToDate(String strDate){		
+		return convertToDate(ISO_8601_DATE_FORMAT, strDate);		
+	}
+	/**
+	 * Converts a string date to the format specified.
+	 *
+	 * @param pFormat
+	 *				A String containing the date format specification.
+	 * @param pDateTxt
+	 *				A String date value.
+	 *
+	 * @return A formatted Date value.
+	 */
+	public static Date convertToDate(String pFormat, String pDateTxt) {
+		if (pFormat != null && pDateTxt != null) {
+			SimpleDateFormat aFormattter = new SimpleDateFormat(pFormat);
+			return convertToDate(aFormattter, pDateTxt);
 		}
-		return cal;		
+		return null;
+	}
+	
+	public static Date convertToDate(SimpleDateFormat pSimpleDateFormat, String pDateTxt) {
+		if (pSimpleDateFormat != null && pDateTxt != null) {
+			if (!pDateTxt.equals("")) {
+				Date date = null;
+				try {
+					date = pSimpleDateFormat.parse(pDateTxt);
+				} catch (Exception ex) {
+				}
+				return date;
+			}
+		}
+		return null;
+	}
+	public static Date getTodaysDate() {
+		
+		return new Date();
 	}
 
 }

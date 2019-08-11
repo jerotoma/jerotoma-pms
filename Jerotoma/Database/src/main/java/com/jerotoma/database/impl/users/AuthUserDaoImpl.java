@@ -234,7 +234,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 				.append("limit ? offset ?");
 		
 		Long countResults = countObject();
-		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		//int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
 		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
 		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
 		

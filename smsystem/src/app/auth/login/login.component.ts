@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 
 import { AuthService, TokenService, AUTH_CONSTANT } from './../../services/auth';
-import { UserContext } from './../../models/users/user-context';
-import { ShowMessage } from './../../models/messages/show-message';
+import { UserContext } from 'app/models/users/user-context';
+import { ShowMessage } from 'app/models/messages/show-message';
 
 @Component({
   selector: 'app-login',

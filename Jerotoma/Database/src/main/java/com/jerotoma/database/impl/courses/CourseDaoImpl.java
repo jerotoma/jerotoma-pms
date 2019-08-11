@@ -60,4 +60,10 @@ public class CourseDaoImpl implements CourseDao {
 		return findObject(object.getId().intValue());
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -61,4 +61,10 @@ public class ParentDaoImpl implements ParentDao {
 		return findObject(object.getId().intValue());
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

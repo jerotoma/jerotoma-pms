@@ -13,11 +13,16 @@ public class UserConstant {
 	public static final String OCCUPATION = "occupation";
 	public static final String BIRTH_DATE = "birthDate";
 	public static final String PICTURE = "picture";
+	public static final String AVATAR = "avatar";
 	public static final String FULL_NAME = "fullName";
-	public static final String TEACHER_CODE = "fullName";
+	public static final String EMPLOYMENT_CODE = "employmentCode";
+	public static final String TEACHER_CODE = "teacher_code";
 	public static final String POSITION = "position";
 	public static final String STUDENT_CODE = "studentCode";
 	public static final String USER_ID = "userId";
+	public static final String ID = "id";
+	public static final String UPDATED_ON = "updated_on";
+	public static final String CREATED_ON = "created_on";
 	
 	public static enum USER_TYPES{
 		TEACHER("teacher"),
@@ -37,6 +42,7 @@ public class UserConstant {
 	}
 
 	public static String USER_TYPE = "userType";
+	
 	
 	
 	public static USER_TYPES processUserType(String type) {

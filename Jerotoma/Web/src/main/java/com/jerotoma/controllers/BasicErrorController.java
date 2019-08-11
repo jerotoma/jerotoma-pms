@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jerotoma.common.constants.EndPointConstants;
-import com.jerotoma.common.http.HttpStatusProcessor;
+import com.jerotoma.common.http.HttpStatusAndMessageProcessor;
 
 @Controller
 @RequestMapping(EndPointConstants.ERROR_URL)
@@ -30,7 +30,7 @@ public class BasicErrorController extends AbstractErrorController implements Err
     @RequestMapping
 	public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
 		Map<String, Object> body = getErrorAttributes(request, isIncludeStackTrace(request, MediaType.ALL));
-		HttpStatus status = HttpStatusProcessor.getStatus(request);
+		HttpStatus status = HttpStatusAndMessageProcessor.getStatus(request);
 		return new ResponseEntity<Map<String, Object>>(body, status);
 	}
  

@@ -27,7 +27,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.exceptions.DataAccessException;
+import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
@@ -94,7 +94,7 @@ public class RestAuthController {
 		try {
 			authUser = authUserService.createObject(authUser);
 		} catch (SQLException e) {
-			throw new DataAccessException(e.getMessage());			
+			throw new JDataAccessException(e.getMessage());			
 		}	
 		instance.setSuccess(true);
 		instance.setStatusCode("200");

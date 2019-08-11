@@ -1,5 +1,5 @@
 {
-  "name": "smsystem",
+  "name": "app-smsystem",
   "version": "4.0.0",
   "license": "MIT",
   "repository": {
@@ -31,12 +31,13 @@
   },
   "dependencies": {
     "@agm/core": "^1.0.0-beta.5",
-    "@angular/animations": "^8.0.0",
-    "@angular/cdk": "^8.0.0",
+    "@angular/animations": "^8.2.1",
+    "@angular/cdk": "^8.1.2",
     "@angular/common": "^8.0.0",
     "@angular/compiler": "^8.0.0",
     "@angular/core": "^8.0.0",
     "@angular/forms": "^8.0.0",
+    "@angular/material": "^8.1.2",
     "@angular/platform-browser": "^8.0.0",
     "@angular/platform-browser-dynamic": "^8.0.0",
     "@angular/router": "^8.0.0",
@@ -59,6 +60,7 @@
     "core-js": "2.5.1",
     "echarts": "^4.0.2",
     "eva-icons": "^1.1.0",
+    "hammerjs": "^2.0.8",
     "intl": "1.2.5",
     "ionicons": "2.0.1",
     "jwt-decode": "^2.2.0",

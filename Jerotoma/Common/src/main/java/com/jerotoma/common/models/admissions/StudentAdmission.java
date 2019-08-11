@@ -36,8 +36,8 @@ public class StudentAdmission implements Serializable{
 	@Column(name="year_of_study")
 	private String yearOfStudy;
 	
-	@Column(name="admission_code")
-	private String admissionCode;
+	@Column(name="code")
+	private String code;
 	
 	@OneToOne
 	@JoinColumn(name="student_id")
@@ -52,10 +52,10 @@ public class StudentAdmission implements Serializable{
 	private Course course;
 	
 	@Column(name="created_on")
-	Date createdOn;
+	private Date createdOn;
 	
 	@Column(name="updated_on")
-	Date updatedOn;
+	private Date updatedOn;
 	
 	public StudentAdmission() {
 		
@@ -77,12 +77,12 @@ public class StudentAdmission implements Serializable{
 		this.yearOfStudy = yearOfStudy;
 	}
 
-	public String getAdmissionCode() {
-		return admissionCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setAdmissionCode(String admissionCode) {
-		this.admissionCode = admissionCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Student getStudent() {

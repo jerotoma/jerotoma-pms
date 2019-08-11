@@ -1,11 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of as observableOf, throwError } from 'rxjs';
-const jwtDecode = require('jwt-decode');
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AUTH_CONSTANT } from './auth-constant';
-import { LocalStorage, isObjectEmpty } from '../../utils';
-import { Token } from '../../models/tokens/Token';
+import { LocalStorage, isObjectEmpty } from 'app/utils';
+import { Token } from 'app/models/tokens/Token';
 
 
 @Injectable({

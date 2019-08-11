@@ -1,9 +1,9 @@
 
 import { Component, OnInit } from '@angular/core';
-import { NbAuthService } from '@nebular/auth';
-import { UserService } from './../../../../services/users/user.service';
-import { User } from './../../../../models/users/user';
-import { getDeepFromObject } from './../../../../utils';
+import { AuthService } from 'app/services/auth';
+import { UserService } from 'app/services/users/user.service';
+import { User } from 'app/models/users/user';
+import { getDeepFromObject } from 'app/utils';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private authService: NbAuthService,
+    private authService: AuthService,
     ) { }
 
   ngOnInit() {

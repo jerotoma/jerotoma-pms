@@ -19,11 +19,12 @@ import {
   NbIconModule,
   NbUserModule,
   NbCheckboxModule,
+  NbAlertModule,
 } from '@nebular/theme';
 
 import { TeacherCreateComponent } from './teachers/create/teacher-create.component';
-import { UserTableComponent } from '../../shared';
-import { ThemeModule } from '../../@theme/theme.module';
+import { UserTableComponent } from 'app/shared';
+import { ThemeModule } from 'app/@theme/theme.module';
 import { LayoutRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
 import { Tab1Component, Tab2Component, ParentsComponent } from './parents/parents.component';
@@ -63,6 +64,7 @@ const MODULES = [
     NbTabsetModule,
     NbRadioModule,
     NbDatepickerModule,
+    NbAlertModule,
     NbRouteTabsetModule,
     NbStepperModule,
     NbCardModule,

@@ -3,15 +3,15 @@ import { messages } from './../../features/extra-components/chat/messages';
 import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from './../../services/auth/auth.service';
-import { UserContext } from './../../models/users/user-context';
-import { ShowMessage } from './../../models/messages/show-message';
+import { AuthService } from 'app/services/auth/auth.service';
+import { UserContext } from 'app/models/users/user-context';
+import { ShowMessage } from 'app/models/messages/show-message';
 
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
   showMessage: ShowMessage = {

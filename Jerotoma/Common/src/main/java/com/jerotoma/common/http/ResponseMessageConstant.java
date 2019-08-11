@@ -1,4 +1,4 @@
-package com.jerotoma.contants;
+package com.jerotoma.common.http;
 
 public class ResponseMessageConstant {
 	

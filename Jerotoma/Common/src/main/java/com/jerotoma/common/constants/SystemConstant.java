@@ -38,7 +38,9 @@ public class SystemConstant {
 	public static final String STORED_OBJECT = "storedObject";
 	public static final String SUCCESS = "success";
 	public static final String MESSAGE = "message";
+	public static final String HTTP_STATUS = "httpStatus";
 	public static final String STORED_OBJECTS = "stored_objects";
+	public static final String CONSTRAINT_NAME = "constraintName";
 			
 	public static enum cronTrigger{
 		EXPIRED_TOKENS("*/2 * * * * ?"),

@@ -56,7 +56,7 @@ public class UserContext implements Serializable{
 		return currentAuthorities;
     }
 
-	public List<String> getAuthority() {
+	public List<String> getCurrentAuthorities() {
 		List<String> roles = new ArrayList<>();
 		for(String role: currentAuthorities) {
 			roles.add(role);

@@ -26,6 +26,11 @@ const routes: Routes = [{
         .then(m => m.UsersModule),
     },
     {
+      path: 'positions',
+      loadChildren: () => import('./positions/positions.module')
+        .then(m => m.PositionsModule),
+    },
+    {
       path: 'account',
       loadChildren: () => import('../@theme/components/header/header.module')
         .then(m => m.HeaderModule),

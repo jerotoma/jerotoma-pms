@@ -14,4 +14,5 @@ public abstract interface BaseDao<T>  {
 	public Boolean deleteObject(T object) throws SQLException;
 	public List<T> loadList(QueryParam queryParam) throws SQLException;
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException;
+	public Long countObject() throws SQLException;
 }

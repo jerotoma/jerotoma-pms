@@ -59,6 +59,12 @@ public class StudentAdmissionDaoImpl implements StudentAdmissionDao {
 		return findObject(object.getId().intValue());
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		return entityManager.createQuery("SELECT count(*) FROM StudentAdmission", Long.class)
+				.getSingleResult();
+	}
+
 	
 
 }

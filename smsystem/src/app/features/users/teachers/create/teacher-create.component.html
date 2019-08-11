@@ -4,6 +4,22 @@
             <nb-card size="giant" status="primary">
               <nb-card-header>{{ title }}</nb-card-header>
               <nb-card-body>
+                <div class='row'>
+                    <div class='col-md-12'>
+                        <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
+                            <p class="alert-title"><b>Sorry!</b></p>
+                            <ul class="alert-message-list">
+                                <li class="alert-message">{{ showMessage.message }}</li>
+                              </ul>
+                          </nb-alert>
+                          <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
+                            <p class="alert-title"><b>Success!</b></p>
+                            <ul class="alert-message-list">
+                              <li class="alert-message">{{ showMessage.message }}</li>
+                            </ul>
+                          </nb-alert>
+                    </div>
+                </div>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-control-group">
@@ -11,7 +27,7 @@
                               <input
                                   type="text"
                                   nbInput fullWidth
-                                  autocomplete="off"
+                                  autocomplete="new-password"
                                   required
                                   id="teacher-full-name"
                                   formControlName="fullName"
@@ -32,19 +48,16 @@
                       </div>
                       <div class="col-md-6">
                           <div class="form-control-group">
-                              <label for="teacher-fieldOfStudy" class="label">Employment ID</label>
-                              <nb-select
-                                selected="1"
-                                fullWidth
-                                placeholder="Field of Study"
-                                formControlName="fieldOfStudy"
-                                id="teacher-fieldOfStudy">
-                                  <nb-option value="1">Chemistry</nb-option>
-                                  <nb-option value="2">Mathematics</nb-option>
-                                  <nb-option value="3">Kiswahili</nb-option>
-                                  <nb-option value="4">Biology</nb-option>
-                              </nb-select>
-                            </div>
+                            <label for="teacher-employment-code" class="label">Employment Code</label>
+                            <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="off"
+                                required
+                                id="teacher-employment-code"
+                                formControlName="employmentCode"
+                                placeholder="Employment Code">
+                          </div>
                       </div>
                   </div>
                   <div class="form-control-group">
@@ -52,22 +65,32 @@
                     <input
                           type="text"
                           nbInput fullWidth
-                          autocomplete="off"
+                          autocomplete="new-password"
                           required
                           id="teacher-first-name"
                           formControlName="firstName"
                           placeholder="First Name">
+                    <ng-container *ngIf="teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched">
+                      <p class="error-message">
+                        First Name is required!
+                      </p>
+                    </ng-container>
                   </div>
                   <div class="form-control-group">
                     <label for="teacher-last-name" class="label">Last Name</label>
                     <input
                           required
                           type="text"
-                          autocomplete="off"
+                          autocomplete="new-password"
                           nbInput fullWidth
                           id="teacher-last-name"
                           formControlName="lastName"
                           placeholder="Last Name">
+                    <ng-container *ngIf="teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched">
+                      <p class="error-message">
+                        Last Name is required!
+                      </p>
+                    </ng-container>
                   </div>
                   <div class="row">
                       <div class="col-md-6">
