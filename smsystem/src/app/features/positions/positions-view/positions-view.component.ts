@@ -1,6 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+
+import { Position } from 'app/models/positions/position.model';
 
 /**
  * @title Table with pagination
@@ -11,42 +14,43 @@ import {MatTableDataSource} from '@angular/material/table';
   templateUrl: 'positions-view.component.html',
 })
 export class PositionsViewComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  title: string = 'List of Positions';
+
+  displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
+  dataSource = new MatTableDataSource<Position>(ELEMENT_DATA);
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  open(){
+
   }
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+const ELEMENT_DATA:  Position[] = [
+  {id: 1, name: 'Hydrogen', description: '', code: 'H'},
+  {id: 2, name: 'Helium', description: '', code: 'He'},
+  {id: 3, name: 'Lithium', description: '', code: 'Li'},
+  {id: 4, name: 'Beryllium', description: '', code: 'Be'},
+  {id: 5, name: 'Boron', description: '', code: 'B'},
+  {id: 6, name: 'Carbon', description: '', code: 'C'},
+  {id: 7, name: 'Nitrogen', description: '', code: 'N'},
+  {id: 8, name: 'Oxygen', description: '', code: 'O'},
+  {id: 9, name: 'Fluorine', description: '', code: 'F'},
+  {id: 10, name: 'Neon', description: '', code: 'Ne'},
+  {id: 11, name: 'Sodium', description: '', code: 'Na'},
+  {id: 12, name: 'Magnesium', description: '', code: 'Mg'},
+  {id: 13, name: 'Aluminum', description: '', code: 'Al'},
+  {id: 14, name: 'Silicon', description: '', code: 'Si'},
+  {id: 15, name: 'Phosphorus', description: '', code: 'P'},
+  {id: 16, name: 'Sulfur', description: '', code: 'S'},
+  {id: 17, name: 'Chlorine', description: '', code: 'Cl'},
+  {id: 18, name: 'Argon', description: '', code: 'Ar'},
+  {id: 19, name: 'Potassium', description: '', code: 'K'},
+  {id: 20, name: 'Calcium', description: '', code: 'Ca'},
 ];

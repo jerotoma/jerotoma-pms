@@ -7,7 +7,7 @@ import { NbDialogRef, NbDateService } from '@nebular/theme';
 import { Teacher, User } from 'app/models/users';
 import { UserService } from 'app/services/users';
 import { QueryParam , DateValidator, DateFormatter} from 'app/utils';
-import { ShowMessage } from 'app/models/messages/show-message';
+import { ShowMessage } from 'app/models/messages/show-message.model';
 
 @Component({
   selector: 'app-teacher-create',
