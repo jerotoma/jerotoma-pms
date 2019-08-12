@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
-import { appAuthRoutingModule } from './auth-routing.module';
+import { AppAuthRoutingModule } from './auth-routing.module';
 import {
   NbAuthModule,
   NbPasswordAuthStrategy,
@@ -35,15 +35,15 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     CommonModule,
     FormsModule,
     RouterModule,
+    AppAuthRoutingModule,
     NbAlertModule,
     NbInputModule,
     NbButtonModule,
     NbCheckboxModule,
     NbIconModule,
     NbCardModule,
-    appAuthRoutingModule,
-    NbAuthModule.forRoot(),
     NbLayoutModule,
+    NbAuthModule.forRoot(),
   ],
   declarations: [
     // ... here goes our new components
@@ -55,5 +55,5 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ResetPasswordComponent,
   ],
 })
-export class appAuthModule {
+export class AppAuthModule {
 }

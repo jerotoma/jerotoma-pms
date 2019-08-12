@@ -24,14 +24,17 @@ public class Position implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="positions_generator")
-	@SequenceGenerator(name="position_generator", sequenceName = "positions_id_seq", allocationSize=1)
+	@SequenceGenerator(name="positions_generator", sequenceName = "positions_id_seq", allocationSize=1)
 	@Column
 	private Integer id;
 	
+	@Column
 	private String name;
 	
+	@Column
 	private String code;
 	
+	@Column
 	private String description;
 	
 	

@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,16 +142,77 @@ public class RestPositionController {
 		return instance;
 	}
 
+	@PutMapping(value = {"", "/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> editPosition(
+		Authentication auth, 
+		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
-	protected HttpResponseEntity<Object> editPosition() {
+		List<String> requiredFields;
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
 		
-		return null;
+		requiredFields = new ArrayList<>(
+				Arrays.asList(
+						PositionConstant.POSITION_NAME,
+						PositionConstant.POSITION_DESCRIPTION,
+						PositionConstant.POSITION_CODE));
+		
+		Position position = ValidatePositionUtil.validate(params, requiredFields);
+		
+		try {
+			position = positionService.updateObject(position);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+			
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setData(position);
+		return instance;
 	}
 
-
-	protected HttpResponseEntity<Object> deletePosition() {
+	@DeleteMapping(value = {"/{positionId}", "/{positionId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> deletePosition(Authentication auth, @PathVariable("positionId") Integer positionId) {
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
 		
-		return null;
+		Position position;
+		
+		try {
+			position = positionService.findObject(positionId);	
+			if (position == null) {
+				instance.setSuccess(false);
+				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+				return instance;
+			} 
+			boolean isDeleted = positionService.deleteObject(position);
+			instance.setSuccess(isDeleted);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return instance;
 	}
 
 }

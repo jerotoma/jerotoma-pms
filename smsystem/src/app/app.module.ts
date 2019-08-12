@@ -10,7 +10,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor } from './services/interceptors';
-import { appAuthModule } from './auth/auth.module';
+import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {
   NbAuthService,
@@ -35,7 +35,7 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    appAuthModule,
+    AppAuthModule,
     NbEvaIconsModule,
     NbActionsModule,
     ThemeModule.forRoot(),

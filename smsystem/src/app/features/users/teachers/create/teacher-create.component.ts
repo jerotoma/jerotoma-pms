@@ -64,6 +64,7 @@ export class TeacherCreateComponent implements OnInit {
     if (status !== null && status === 200) {
       this.showMessage.success = true;
       this.teacherForm.reset();
+      this.ref.close();
       this.onUserCreationSuccess.emit(this.showMessage.success);
       this.showMessage.error = false;
       this.showMessage.message = resp ? resp.body.message : '';

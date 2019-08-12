@@ -1,10 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+
+import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
+import { PositionCreateComponent } from '../position-create/position-create.component';
 import { Position } from 'app/models/positions/position.model';
-
+import { PositionService } from 'app/services/positions';
+import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
  */
@@ -17,19 +23,58 @@ export class PositionsViewComponent implements OnInit {
   title: string = 'List of Positions';
 
   displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
-  dataSource = new MatTableDataSource<Position>(ELEMENT_DATA);
+  dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>(ELEMENT_DATA);
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
+  constructor(
+    private positionService: PositionService,
+    private dialogService: NbDialogService,
+    ) {
+  }
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-  open(){
+  open() {
+    this.dialogService.open(PositionCreateComponent, {
+      context: {
+        title: 'Add New Position',
+      },
+    }).onClose.subscribe(_data => {
+      this.loadPositions();
+    });
+  }
+  loadPositions() {
+    this.positionService.getPositions(this.getParam())
+      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200) {
+
+        }
+      }, error => {
+
+    });
+  }
+  updateDataSource($event): void{
 
   }
+  getParam(): QueryParam {
+    return {
+      page: 1,
+      pageSize: 10,
+      orderby: 'DESC',
+      status: '',
+      search: '',
+      fieldName: '',
+      userType: 'teacher',
+    };
+  }
+
+
 }
 
 const ELEMENT_DATA:  Position[] = [

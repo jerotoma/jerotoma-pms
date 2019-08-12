@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-components',
+  selector: 'app-users',
   template: `
     <router-outlet></router-outlet>
   `,

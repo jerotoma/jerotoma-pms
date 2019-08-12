@@ -1,5 +1,7 @@
 import { Component, OnDestroy, AfterViewInit, Output, EventEmitter, ElementRef } from '@angular/core';
 
+import { END_POINTS } from 'app/utils';
+
 @Component({
   selector: 'app-tiny-mce',
   template: '',
@@ -16,7 +18,7 @@ export class TinyMCEComponent implements OnDestroy, AfterViewInit {
     tinymce.init({
       target: this.host.nativeElement,
       plugins: ['link', 'paste', 'table'],
-      skin_url: 'assets/skins/lightgray',
+      skin_url: END_POINTS.base + 'assets/skins/lightgray',
       setup: editor => {
         this.editor = editor;
         editor.on('keyup', () => {

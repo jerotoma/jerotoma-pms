@@ -2,14 +2,14 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
 
-import { QueryParam } from './../../../utils';
-import { UserService } from '../../../services/users';
+import { QueryParam } from 'app/utils';
+import { UserService } from 'app/services/users';
 import { TeacherCreateComponent } from './create/teacher-create.component';
-import { Teacher } from './../../../models/users';
+import { Teacher } from 'app/models/users';
 
 
 @Component({
-  selector: 'app-stepper',
+  selector: 'app-teacher',
   templateUrl: 'teachers.component.html',
   styleUrls: ['teachers.component.scss'],
 })
@@ -71,14 +71,15 @@ export class TeachersComponent implements OnInit {
       context: {
         title: 'Add New Teacher',
       },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
     });
   }
-  loadUsers(){
+  loadUsers() {
     this.userService.loadTeachers(this.getParam()).subscribe((result) => {
       if (result.success && result.data) {
           this.teachers = result.data;
       }
-      console.log(result);
     });
   }
 

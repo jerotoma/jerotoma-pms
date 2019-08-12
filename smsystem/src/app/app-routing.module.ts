@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'account',
     loadChildren: () => import('./auth/auth.module')
-      .then(m => m.appAuthModule),
+      .then(m => m.AppAuthModule),
   },
   { path: '**', redirectTo: '' },
 ];
