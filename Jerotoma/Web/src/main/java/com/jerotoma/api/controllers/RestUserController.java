@@ -32,7 +32,7 @@ import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.common.utils.validators.ValidateUserInputUtil;
+import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.common.UserContext;
@@ -167,7 +167,7 @@ public class RestUserController {
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Teacher teacher = teacherService.createObject(
-						ValidateUserInputUtil.validateTeacherInputInfo(params, requiredFields));
+						UserValidator.validateTeacherInputInfo(params, requiredFields));
 				instance.setData(teacher);
 				break;
 			case STUDENT:
@@ -180,7 +180,7 @@ public class RestUserController {
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Student student = studentService.createObject(
-						ValidateUserInputUtil.validateStudentInputInfo(params, requiredFields));
+						UserValidator.validateStudentInputInfo(params, requiredFields));
 				instance.setData(student);				
 				break;
 			case STAFF:
@@ -193,7 +193,7 @@ public class RestUserController {
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				OtherStaff otherStaff = otherStaffService.createObject(
-						ValidateUserInputUtil.validateOtherStaffInputInfo(params, requiredFields));
+						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
 				instance.setData(otherStaff);
 				break;
 			case PARENT:
@@ -206,7 +206,7 @@ public class RestUserController {
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Parent parent = parentService.createObject(
-						ValidateUserInputUtil.validateParentInputInfo(params, requiredFields));
+						UserValidator.validateParentInputInfo(params, requiredFields));
 				instance.setData(parent);
 				break;
 			default:

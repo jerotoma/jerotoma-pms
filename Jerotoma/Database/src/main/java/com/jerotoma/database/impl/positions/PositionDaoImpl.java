@@ -73,7 +73,8 @@ public class PositionDaoImpl implements PositionDao{
 				.getResultList();
 		
 		map.put(PositionConstant.POSITIONS, positions);
-		map.put(PositionConstant.POSITION_COUNTS, pageCount);
+		map.put(PositionConstant.POSITION_COUNTS, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		map.put(SystemConstant.SUCCESS, true);
 		
 		return map;

@@ -9,7 +9,7 @@ import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.utils.CalendarUtil;
 
-public class ValidatePositionUtil {
+public class PositionValidator {
 
 	public static Position validate(Map<String, Object> params, List<String> requiredFields) {
 		Position position = new Position();
@@ -41,7 +41,7 @@ public class ValidatePositionUtil {
 		if (name == null && requiredFields.contains(PositionConstant.POSITION_NAME)) {
 			throw new FieldCanNotBeEmptyException("Position Name can not be empty");
 		}
-		position.setName(code);
+		position.setName(name);
 		
 		if (description == null && requiredFields.contains(PositionConstant.POSITION_DESCRIPTION)) {
 			throw new FieldCanNotBeEmptyException("Position Description can not be empty");

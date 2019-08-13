@@ -10,4 +10,7 @@
 
 export const environment = {
   production: false,
+  END_POINTS: {
+    base: 'http://localhost:8080',
+  },
 };

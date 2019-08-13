@@ -3,6 +3,7 @@ package com.jerotoma.api.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.common.utils.validators.ValidatePositionUtil;
+import com.jerotoma.common.utils.validators.PositionValidator;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.positions.PositionService;
@@ -54,14 +55,14 @@ public class RestPositionController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-		List<Position> positions = new ArrayList<>();
+		Map<String, Object> map = new HashMap<>();
 		
 		if(auth == null) {
 			instance.setSuccess(false);
 			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
 			return instance;
 		}
-		logger.debug("getModelAndView : [model] : {}");
+		logger.debug("getPositions : [model] : {}");
 		
 		page = page == null ? 1 : page;
 		pageSize = pageSize == null ? 12 : pageSize;
@@ -80,14 +81,15 @@ public class RestPositionController {
 		}
 		
 		try {
-			positions = positionService.loadList(queryParam);		
+			map = positionService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(positions);
+		instance.setData(map);
+		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
 
@@ -128,7 +130,7 @@ public class RestPositionController {
 						PositionConstant.POSITION_DESCRIPTION,
 						PositionConstant.POSITION_CODE));
 		
-		Position position = ValidatePositionUtil.validate(params, requiredFields);
+		Position position = PositionValidator.validate(params, requiredFields);
 		
 		try {
 			position = positionService.createObject(position);		
@@ -167,7 +169,7 @@ public class RestPositionController {
 						PositionConstant.POSITION_DESCRIPTION,
 						PositionConstant.POSITION_CODE));
 		
-		Position position = ValidatePositionUtil.validate(params, requiredFields);
+		Position position = PositionValidator.validate(params, requiredFields);
 		
 		try {
 			position = positionService.updateObject(position);		

@@ -12,7 +12,7 @@ import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.CalendarUtil;
 
-public class ValidateUserInputUtil {
+public class UserValidator {
 	
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		

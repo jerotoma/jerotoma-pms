@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
-import { ThemeModule } from 'app/@theme/theme.module';
+import {MatMenuModule} from '@angular/material/menu';
+
 import {
   NbButtonModule,
   NbDialogModule,
@@ -16,25 +18,29 @@ import {
 
 import { PositionsRoutingModule } from './positions-routing.module';
 import { PositionsComponent } from './positions.component';
+import { TinyMCEComponent } from 'app/shared';
 import { PositionsViewComponent } from './positions-view/positions-view.component';
 import { PositionCreateComponent } from './position-create/position-create.component';
+import { PositionDeleteComponent } from './position-delete/position-delete.component';
 
 
 const COMPONENTS = [
   PositionsComponent,
   PositionsViewComponent,
   PositionCreateComponent,
+  PositionDeleteComponent,
+  TinyMCEComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   PositionCreateComponent,
+  PositionDeleteComponent,
 ];
 
 const MODULES = [
   FormsModule,
   ReactiveFormsModule,
   PositionsRoutingModule,
-  ThemeModule,
   NbButtonModule,
   NbWindowModule,
   NbCardModule,
@@ -44,6 +50,7 @@ const MODULES = [
   MatTableModule,
   MatPaginatorModule,
   MatIconModule,
+  MatMenuModule,
   NbDialogModule.forRoot(),
 ];
 

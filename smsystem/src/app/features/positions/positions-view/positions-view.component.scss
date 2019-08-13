@@ -1,3 +1,15 @@
 table {
   width: 100%;
 }
+button {
+  cursor: pointer;
+  margin: 0;
+  border: none;
+}
+
+button:focus {
+  outline: none;
+}
+button:hover {
+  background-color: rgba(0, 0, 0, 0.03);;
+}

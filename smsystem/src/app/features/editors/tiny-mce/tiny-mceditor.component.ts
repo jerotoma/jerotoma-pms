@@ -8,10 +8,10 @@ import { Component } from '@angular/core';
         Tiny MCE
       </nb-card-header>
       <nb-card-body>
-        <app-tiny-mce></app-tiny-mce>
+        <app-mce-editor></app-mce-editor>
       </nb-card-body>
     </nb-card>
   `,
 })
-export class TinyMCEComponent {
+export class TinyMCEditorComponent {
 }

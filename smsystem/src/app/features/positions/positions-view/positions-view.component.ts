@@ -1,13 +1,14 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-
+import { PageEvent } from '@angular/material';
 import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
 import { PositionCreateComponent } from '../position-create/position-create.component';
+import { PositionDeleteComponent } from '../position-delete/position-delete.component';
 import { Position } from 'app/models/positions/position.model';
 import { PositionService } from 'app/services/positions';
 import { QueryParam } from 'app/utils';
@@ -20,10 +21,24 @@ import { QueryParam } from 'app/utils';
   templateUrl: 'positions-view.component.html',
 })
 export class PositionsViewComponent implements OnInit {
-  title: string = 'List of Positions';
 
+  param: QueryParam = {
+    page: 1,
+    pageSize: 10,
+    orderby: 'DESC',
+    status: '',
+    search: '',
+    fieldName: '',
+    userType: 'teacher',
+  };
+
+  title: string = 'List of Positions';
+  position: Position;
+  hidePageSize: boolean = false;
+  totalNumberOfItems: number = 20;
+  pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
-  dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>(ELEMENT_DATA);
+  dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -36,66 +51,63 @@ export class PositionsViewComponent implements OnInit {
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.loadPositions();
   }
 
   open() {
     this.dialogService.open(PositionCreateComponent, {
       context: {
         title: 'Add New Position',
+        action: 'create',
       },
     }).onClose.subscribe(_data => {
       this.loadPositions();
     });
   }
+
   loadPositions() {
-    this.positionService.getPositions(this.getParam())
+    this.positionService.getPositions(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
-        if (status !== null && status === 200) {
-
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.totalNumberOfItems = data.count;
+          this.dataSource = new MatTableDataSource<Position>(data.positions);
         }
       }, error => {
 
     });
   }
-  updateDataSource($event): void{
-
+  edit(position: Position) {
+    this.dialogService.open(PositionCreateComponent, {
+      context: {
+        title: 'Edit Position',
+        action: 'edit',
+        id: position.id.toString(),
+        code: position.code,
+        name: position.name,
+        description: position.description,
+      },
+    }).onClose.subscribe(_data => {
+      this.loadPositions();
+    });
   }
-  getParam(): QueryParam {
-    return {
-      page: 1,
-      pageSize: 10,
-      orderby: 'DESC',
-      status: '',
-      search: '',
-      fieldName: '',
-      userType: 'teacher',
-    };
+  delete(position: Position) {
+    this.dialogService.open(PositionDeleteComponent, {
+      context: {
+        title: 'Delete Position',
+        action: 'delete',
+        positionId: position.id.toString(),
+        name: position.name,
+      },
+    }).onClose.subscribe(_data => {
+      this.loadPositions();
+    });
   }
-
-
+  onPageChange(pageEvent: PageEvent) {
+    this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
+    this.param.pageSize = pageEvent.pageSize;
+    this.loadPositions();
+  }
 }
-
-const ELEMENT_DATA:  Position[] = [
-  {id: 1, name: 'Hydrogen', description: '', code: 'H'},
-  {id: 2, name: 'Helium', description: '', code: 'He'},
-  {id: 3, name: 'Lithium', description: '', code: 'Li'},
-  {id: 4, name: 'Beryllium', description: '', code: 'Be'},
-  {id: 5, name: 'Boron', description: '', code: 'B'},
-  {id: 6, name: 'Carbon', description: '', code: 'C'},
-  {id: 7, name: 'Nitrogen', description: '', code: 'N'},
-  {id: 8, name: 'Oxygen', description: '', code: 'O'},
-  {id: 9, name: 'Fluorine', description: '', code: 'F'},
-  {id: 10, name: 'Neon', description: '', code: 'Ne'},
-  {id: 11, name: 'Sodium', description: '', code: 'Na'},
-  {id: 12, name: 'Magnesium', description: '', code: 'Mg'},
-  {id: 13, name: 'Aluminum', description: '', code: 'Al'},
-  {id: 14, name: 'Silicon', description: '', code: 'Si'},
-  {id: 15, name: 'Phosphorus', description: '', code: 'P'},
-  {id: 16, name: 'Sulfur', description: '', code: 'S'},
-  {id: 17, name: 'Chlorine', description: '', code: 'Cl'},
-  {id: 18, name: 'Argon', description: '', code: 'Ar'},
-  {id: 19, name: 'Potassium', description: '', code: 'K'},
-  {id: 20, name: 'Calcium', description: '', code: 'Ca'},
-];

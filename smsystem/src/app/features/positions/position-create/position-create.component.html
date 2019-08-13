@@ -40,7 +40,13 @@
                 <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="position-description" class="label">Position Description</label>
-                        <app-tiny-mce (editorKeyup)=getDescriptionContent($event) ></app-tiny-mce>
+                        <textarea
+                            nbInput
+                            fullWidth
+                            formControlName="description"
+                            placeholder="">
+                        </textarea>
+                        <!-- <app-mce-editor (editorKeyup)=getDescriptionContent($event) ></app-mce-editor> -->
                       </div>
                 </div>
             </div>
