@@ -6,6 +6,7 @@
     "app-smsystem": {
       "root": "",
       "sourceRoot": "src",
+      "prefix": "app",
       "projectType": "application",
       "architect": {
         "build": {
