@@ -8,10 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.positions.Position;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.TEACHERS )
@@ -34,8 +39,15 @@ public class Teacher extends Person implements Serializable{
 	@Column(name="teacher_code")
 	private String teacherCode;
 	
-	@Column
-	private String position;
+	@OneToOne
+   	@JsonManagedReference
+   	@JoinColumn(name="position_id")
+	private Position position;
+	
+	@OneToOne
+   	@JsonManagedReference
+   	@JoinColumn(name="academic_discipline_id")
+	private AcademicDiscipline academicDiscipline;
 	
 	@Column(name="created_on")
 	private Date createdOn;
@@ -59,11 +71,11 @@ public class Teacher extends Person implements Serializable{
 		this.teacherCode = teacherCode;
 	}
 
-	public String getPosition() {
+	public Position getPosition() {
 		return position;
 	}
 
-	public void setPosition(String position) {
+	public void setPosition(Position position) {
 		this.position = position;
 	}
 
@@ -91,4 +103,11 @@ public class Teacher extends Person implements Serializable{
 		this.userId = userId;
 	}
 
+	public AcademicDiscipline getAcademicDiscipline() {
+		return academicDiscipline;
+	}
+
+	public void setAcademicDiscipline(AcademicDiscipline academicDiscipline) {
+		this.academicDiscipline = academicDiscipline;
+	}
 }

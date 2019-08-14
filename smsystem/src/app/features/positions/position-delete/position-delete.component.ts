@@ -53,6 +53,9 @@ export class PositionDeleteComponent implements OnInit {
   dismiss() {
     this.ref.close();
   }
-
+  onConfirmed() {
+    this.confirmed = true;
+    this.deletePosition();
+  }
 
 }

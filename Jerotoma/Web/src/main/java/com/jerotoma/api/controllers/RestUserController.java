@@ -26,6 +26,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.OtherStaff;
 import com.jerotoma.common.models.users.Parent;
@@ -38,6 +39,7 @@ import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
+import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.OtherStaffService;
 import com.jerotoma.services.users.ParentService;
@@ -55,6 +57,7 @@ public class RestUserController {
 	@Autowired StudentService studentService;
 	@Autowired OtherStaffService otherStaffService;
 	@Autowired ParentService parentService;
+	@Autowired PositionService positionService;
 	AuthUser authUser;
 	
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
@@ -127,6 +130,7 @@ public class RestUserController {
 		
 		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
 		List<String> requiredFields;
+		Integer positionId = null;
 				
 		if(auth == null) {
 			instance.setSuccess(false);
@@ -166,8 +170,28 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				Teacher teacher = teacherService.createObject(
-						UserValidator.validateTeacherInputInfo(params, requiredFields));
+				
+				if(params.containsKey(UserConstant.POSITION)) {
+					positionId = (Integer) params.get(UserConstant.POSITION);
+				}
+				
+				if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
+					throw new FieldCanNotBeEmptyException("Position date can not be empty");
+				}
+				
+				Position position = positionService.findObject(positionId);
+				
+				if (position == null ) {
+					throw new FieldCanNotBeEmptyException("Position is required, and invalid position was provided");
+				}
+				
+				
+				Teacher teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
+				teacher.setPosition(position);
+				
+				teacher = teacherService.createObject(teacher);
+				
+				
 				instance.setData(teacher);
 				break;
 			case STUDENT:

@@ -27,7 +27,6 @@ public class UserValidator {
 		String birthDate = null;
 		String picture = null;
 		String teacherCode = null;		
-		String position = null;
 		Date today = null;
 		
 		
@@ -75,11 +74,7 @@ public class UserValidator {
 		if(params.containsKey(UserConstant.EMPLOYMENT_CODE)) {
 			teacherCode = (String) params.get(UserConstant.EMPLOYMENT_CODE);
 		}
-		
-		if(params.containsKey(UserConstant.POSITION)) {
-			position = (String) params.get(UserConstant.POSITION);
-		}
-		
+				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
 			throw new FieldCanNotBeEmptyException("Age can not be empty");
 		}
@@ -131,10 +126,6 @@ public class UserValidator {
 		}
 		teacher.setPicture(picture);
 		
-		if (position == null && requiredFields.contains(UserConstant.POSITION)) {
-			throw new FieldCanNotBeEmptyException("Position date can not be empty");
-		}
-		teacher.setPosition(position);
 		
 		today = CalendarUtil.getTodaysDate();
 		

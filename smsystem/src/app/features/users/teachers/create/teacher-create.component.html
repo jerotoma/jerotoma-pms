@@ -102,9 +102,10 @@
                                 placeholder="Position"
                                 formControlName="position"
                                 id="teacher-position">
-                                  <nb-option value="1">Head Master</nb-option>
-                                  <nb-option value="2">Head of Health</nb-option>
-                                  <nb-option value="3">Head of Academic</nb-option>
+                                  <nb-option
+                                      *ngFor='let position of positions'
+                                      value="position.id">{{position.name}}
+                                  </nb-option>
                               </nb-select>
                             </div>
                       </div>

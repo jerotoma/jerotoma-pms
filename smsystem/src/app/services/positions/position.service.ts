@@ -20,6 +20,13 @@ export class PositionService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
+  loadPositionList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
+    return this.http.get<any>(
+        `${END_POINTS.positions}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
+        {observe: 'response'})
+      .pipe(retry(3), catchError(this.errorHandler));
+  }
+
   getPositions(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.get<any>(
         `${END_POINTS.positions}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,

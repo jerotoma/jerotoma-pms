@@ -83,8 +83,9 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Positions',
-    icon: 'award-outline',
+    title: 'System Setup',
+    //icon: 'award-outline',
+    icon: 'shuffle-2-outline',
     children: [
       {
         title: 'Positions',

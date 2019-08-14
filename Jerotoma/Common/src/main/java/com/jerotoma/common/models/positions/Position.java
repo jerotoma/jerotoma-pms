@@ -5,13 +5,17 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.users.Teacher;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.POSITIONS)
@@ -37,6 +41,9 @@ public class Position implements Serializable{
 	@Column
 	private String description;
 	
+	@OneToOne(fetch=FetchType.LAZY, mappedBy="position")
+	@JsonBackReference
+	private Teacher teacher;	
 	
 	@Column(name="created_on")
 	private Date createdOn;

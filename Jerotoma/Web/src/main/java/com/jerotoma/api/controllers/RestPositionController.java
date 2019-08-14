@@ -92,6 +92,56 @@ public class RestPositionController {
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
+	
+	
+	@GetMapping(value = {"/list", "/list/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadPositionList(
+			Authentication auth,
+			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize,
+			@RequestParam(value="fieldName", required=false) String fieldName,
+			@RequestParam(value="orderby", required=false) String orderby) {
+		
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+		List<Position> positions = new ArrayList<>();
+		
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		logger.debug("getPositions : [model] : {}");
+		
+		page = page == null ? 1 : page;
+		pageSize = pageSize == null ? 12 : pageSize;
+		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
+
+
+		QueryParam queryParam =  QueryParam.getInstance();
+		queryParam.setPage(page);
+		queryParam.setPageSize(pageSize);
+		queryParam.setFieldName(fieldName);
+		queryParam.setOrderby(orderby);
+				
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
+		
+		try {
+			positions = positionService.loadList(queryParam);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setData(positions);
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
 
 
 	protected HttpResponseEntity<Object> getShowPosition() {

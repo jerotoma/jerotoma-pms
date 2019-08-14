@@ -1,7 +1,11 @@
 <nb-card>
   <nb-card-body>
-      <nb-alert status="success">
-         Are you sure you want to delete <b>{{name}}</b> position
+      <nb-alert outline="danger">
+         Are you sure you want to delete {{name}} position
       </nb-alert>
   </nb-card-body>
+  <nb-card-footer>
+    <button class='push-right' (click)="onConfirmed()" nbButton hero status="danger">Yes</button>
+    <button class='push-right' nbButton hero status="success" (click)="dismiss()">No, Thank you</button>
+  </nb-card-footer>
 </nb-card>

@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
@@ -6,6 +5,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NbDialogRef, NbDateService } from '@nebular/theme';
 import { Teacher, User } from 'app/models/users';
 import { UserService } from 'app/services/users';
+import { Position } from 'app/models/positions/position.model';
+import { PositionService } from 'app/services/positions';
 import { QueryParam , DateValidator, DateFormatter} from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -26,10 +27,12 @@ export class TeacherCreateComponent implements OnInit {
     message: '',
   };
   users: User[] = [];
+  positions: Position[] = [];
 
   listDisplay: string = 'none';
 
   constructor(
+    protected positionService: PositionService,
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
     private formBuilder: FormBuilder,
@@ -38,6 +41,7 @@ export class TeacherCreateComponent implements OnInit {
   ngOnInit() {
     this.loadForm();
     this.onCredentialInputChanges();
+    this.loadPositionList();
   }
 
   dismiss() {
@@ -142,6 +146,28 @@ export class TeacherCreateComponent implements OnInit {
       fieldName: '',
       userType: 'teacher',
     };
+  }
+
+  loadPositionList(){
+    this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const data = resp.body;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.showMessage.success = true;
+        this.showMessage.error = false;
+        this.showMessage.message = data  ? data.message : '';
+        this.positions = data.data;
+      } else {
+        this.showMessage.success = false;
+        this.showMessage.error = true;
+        this.showMessage.message = data  ? data.message : '';
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
   }
 
 }

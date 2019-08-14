@@ -66,6 +66,44 @@ CREATE TABLE IF NOT EXISTS public.user_roles(
         ON DELETE CASCADE   
     );
     
+ /**************************************************************
+ * 															  *
+ * 															  *
+ * 			POSITIONS RELATED TABLES					  		  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.positions(
+    id bigserial NOT NULL,
+    name character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    description text NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+    CONSTRAINT positions_ukey UNIQUE (code),
+   	CONSTRAINT positions_pkey PRIMARY KEY (id)
+    );
+    
+    
+ /**************************************************************
+ * 															  *
+ * 															  *
+ * 			FIELD_OF_STUDIES RELATED TABLES					  	  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.academic_disciplines(
+    id bigserial NOT NULL,
+    name character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    description text NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+    CONSTRAINT field_of_studies_ukey UNIQUE (code),
+   	CONSTRAINT field_of_studies_pkey PRIMARY KEY (id)
+    );
+    
+    
 /**************************************************************
  * 															  *
  * 															  *
@@ -75,13 +113,14 @@ CREATE TABLE IF NOT EXISTS public.user_roles(
 CREATE TABLE IF NOT EXISTS public.teachers(
     id bigserial NOT NULL,
     user_id bigint NOT NULL,
+    position_id bigint NOT NULL,
+    academic_discipline_id bigint NOT NULL,
     teacher_code character varying(255) NOT NULL,
     first_name character varying(255) NOT NULL,
     last_name character varying(255) NOT NULL,
     occupation character varying(255) NOT NULL,
     gender character varying(25) NOT NULL,
-    avatar character varying(255) NOT NULL,
-    position character varying(255) NOT NULL,
+    avatar character varying(255) NOT NULL,    
     birth_date date NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
@@ -90,6 +129,14 @@ CREATE TABLE IF NOT EXISTS public.teachers(
    	CONSTRAINT teacher_code UNIQUE (teacher_code),
     CONSTRAINT users_fkey FOREIGN KEY (user_id)
         REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT positions_fkey FOREIGN KEY (position_id)
+        REFERENCES public.positions(id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+   CONSTRAINT academic_disciplines_fkey FOREIGN KEY (academic_discipline_id)
+        REFERENCES public.academic_disciplines (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE 
     );
@@ -214,24 +261,5 @@ CREATE TABLE IF NOT EXISTS public.student_admissions(
         ON UPDATE CASCADE
         ON DELETE CASCADE
     );
- 
- /**************************************************************
- * 															  *
- * 															  *
- * 			POSITIONS RELATED TABLES					  		  *
- * 															  *
- *************************************************************/
-    
-CREATE TABLE IF NOT EXISTS public.positions(
-    id bigserial NOT NULL,
-    name character varying(255) NOT NULL,
-    code character varying(255) NOT NULL,
-    description text NOT NULL,
-    created_on timestamp with time zone NOT NULL,
-    updated_on timestamp with time zone NOT NULL,
-    CONSTRAINT positions_ukey UNIQUE (code),
-   	CONSTRAINT positions_pkey PRIMARY KEY (id)
-    );
-    
 
     
