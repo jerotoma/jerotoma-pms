@@ -9,13 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.positions.Position;
 
 @Entity
@@ -39,12 +39,12 @@ public class Teacher extends Person implements Serializable{
 	@Column(name="teacher_code")
 	private String teacherCode;
 	
-	@OneToOne
+	@ManyToOne
    	@JsonManagedReference
    	@JoinColumn(name="position_id")
 	private Position position;
 	
-	@OneToOne
+	@ManyToOne
    	@JsonManagedReference
    	@JoinColumn(name="academic_discipline_id")
 	private AcademicDiscipline academicDiscipline;

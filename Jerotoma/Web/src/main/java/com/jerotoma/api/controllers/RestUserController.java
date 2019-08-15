@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
@@ -26,6 +27,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.OtherStaff;
@@ -38,6 +40,7 @@ import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.AuthUserService;
@@ -58,6 +61,7 @@ public class RestUserController {
 	@Autowired OtherStaffService otherStaffService;
 	@Autowired ParentService parentService;
 	@Autowired PositionService positionService;
+	@Autowired AcademicDisciplineService academicDisciplineService;
 	AuthUser authUser;
 	
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
@@ -131,6 +135,7 @@ public class RestUserController {
 		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
 		List<String> requiredFields;
 		Integer positionId = null;
+		Integer academicDisciplineId = null;
 				
 		if(auth == null) {
 			instance.setSuccess(false);
@@ -169,14 +174,15 @@ public class RestUserController {
 								UserConstant.OCCUPATION,
 								UserConstant.TERM,
 								UserConstant.GENDER,
-								UserConstant.POSITION));
+								UserConstant.POSITION,
+								AcademicDisciplineConstant.ACADEMIC_DISCIPLINE));
 				
 				if(params.containsKey(UserConstant.POSITION)) {
 					positionId = (Integer) params.get(UserConstant.POSITION);
 				}
 				
 				if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
-					throw new FieldCanNotBeEmptyException("Position date can not be empty");
+					throw new FieldCanNotBeEmptyException("Position can not be empty");
 				}
 				
 				Position position = positionService.findObject(positionId);
@@ -186,8 +192,24 @@ public class RestUserController {
 				}
 				
 				
+				if(params.containsKey(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
+					academicDisciplineId = (Integer) params.get(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
+				}
+				
+				if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
+					throw new FieldCanNotBeEmptyException("Academic Discipline can not be empty");
+				}
+				
+				AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+				
+				if (academicDiscipline == null ) {
+					throw new FieldCanNotBeEmptyException("Academic Discipline is required, and invalid academic discipline was provided");
+				}
+				
+				
 				Teacher teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				teacher.setPosition(position);
+				teacher.setAcademicDiscipline(academicDiscipline);
 				
 				teacher = teacherService.createObject(teacher);
 				

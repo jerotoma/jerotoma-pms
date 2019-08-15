@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.database.dao.academicdisciplines.AcademicDisciplineDao;
 
 @Service

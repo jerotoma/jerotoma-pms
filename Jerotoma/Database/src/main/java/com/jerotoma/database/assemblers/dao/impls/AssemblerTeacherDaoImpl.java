@@ -20,7 +20,11 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
+import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
+import com.jerotoma.common.viewobjects.PositionVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
+import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
+import com.jerotoma.database.assemblers.dao.AssemblerPositionDao;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
@@ -32,6 +36,8 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	
 	@Autowired DataSource dataSource;
 	@Autowired RoleDao roleDao;	
+	@Autowired AssemblerPositionDao positionDao;
+	@Autowired AssemblerAcademicDisciplineDao academicDisciplineDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -94,7 +100,9 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	public class TeacherResultProcessor implements RowMapper<TeacherVO>{
 		@Override
 		public TeacherVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			TeacherVO teacher = new TeacherVO(rs);			
+			TeacherVO teacher = new TeacherVO(rs);	
+			teacher.setPosition(loadPosition(rs.getInt("position_id")));
+			teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt("academic_discipline_id")));			
 			return teacher;
 		}		
 	}
@@ -105,6 +113,9 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 			TeacherVO teacher = null;
 			if(rs.next()) {
 				teacher = new TeacherVO(rs);
+				teacher.setPosition(loadPosition(rs.getInt("position_id")));
+				teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt("academic_discipline_id")));
+				
 			}
 			return teacher;
 		}				
@@ -122,7 +133,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, user_id, teacher_code, first_name, last_name, occupation, gender, avatar, \"position\", birth_date, created_on, updated_on FROM public.teachers");
+		return new StringBuilder("SELECT id, user_id, teacher_code, first_name, last_name, occupation, gender, avatar, position_id, academic_discipline_id, birth_date, created_on, updated_on FROM public.teachers");
 		
 	}
 
@@ -130,6 +141,14 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	public Long countObject() throws SQLException {
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.teachers");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+	
+	private PositionVO loadPosition(Integer primaryKey) throws SQLException {
+		return this.positionDao.findObject(primaryKey);
+	}
+	
+	private AcademicDisciplineVO loadAcademicDiscipline(Integer primaryKey) throws SQLException {
+		return this.academicDisciplineDao.findObject(primaryKey);
 	}
 
 }

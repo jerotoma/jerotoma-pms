@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.academicdisciplines.AcademicDisciplineDao;
 

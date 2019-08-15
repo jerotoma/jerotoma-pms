@@ -9,8 +9,8 @@
         <th scope="row">{{rowItem.id}}</th>
         <td>{{rowItem.fullName}}</td>
         <td>{{rowItem.gender}}</td>
-        <td>{{rowItem.occupation}}</td>
-        <td>{{rowItem.position}}</td>
+        <td>{{rowItem.academicDiscipline.name}}</td>
+        <td>{{rowItem.position.name}}</td>
         <td>{{rowItem.numberOfCourses}}</td>
         <td>
             <nb-icon icon="star" [options]="{ animation: { type: 'zoom' } }"></nb-icon>

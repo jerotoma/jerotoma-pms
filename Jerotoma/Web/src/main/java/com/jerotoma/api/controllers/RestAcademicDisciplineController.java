@@ -30,7 +30,7 @@ import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.AcademicDisciplineValidator;
 import com.jerotoma.config.auth.common.UserContext;

@@ -104,24 +104,24 @@
                                 id="teacher-position">
                                   <nb-option
                                       *ngFor='let position of positions'
-                                      value="position.id">{{position.name}}
+                                      [value]="position.id">{{position.name}}
                                   </nb-option>
                               </nb-select>
                             </div>
                       </div>
                       <div class="col-md-6">
                           <div class="form-control-group">
-                              <label for="teacher-fieldOfStudy" class="label">Field of Study</label>
+                              <label for="teacher-academicDiscipline" class="label">Field of Study</label>
                               <nb-select
                                 selected="1"
                                 fullWidth
                                 placeholder="Field of Study"
-                                formControlName="fieldOfStudy"
-                                id="teacher-fieldOfStudy">
-                                  <nb-option value="1">Chemistry</nb-option>
-                                  <nb-option value="2">Mathematics</nb-option>
-                                  <nb-option value="3">Kiswahili</nb-option>
-                                  <nb-option value="4">Biology</nb-option>
+                                formControlName="academicDiscipline"
+                                id="teacher-academicDiscipline">
+                                <nb-option
+                                  *ngFor='let academicDiscipline of academicDisciplines'
+                                  [value]="academicDiscipline.id">{{academicDiscipline.name}}
+                              </nb-option>
                               </nb-select>
                             </div>
                       </div>

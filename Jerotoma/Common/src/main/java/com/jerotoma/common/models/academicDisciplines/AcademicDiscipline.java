@@ -1,7 +1,8 @@
-package com.jerotoma.common.models.fieldOfStudies;
+package com.jerotoma.common.models.academicDisciplines;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,7 +29,7 @@ public class AcademicDiscipline implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="academic_disciplines_generator")
-	@SequenceGenerator(name="academic_disciplines_generator", sequenceName = "field_of_studies_id_seq", allocationSize=1)
+	@SequenceGenerator(name="academic_disciplines_generator", sequenceName = "academic_disciplines_id_seq", allocationSize=1)
 	@Column
 	private Integer id;
 	
@@ -41,9 +42,9 @@ public class AcademicDiscipline implements Serializable{
 	@Column
 	private String description;
 	
-	@OneToOne(fetch=FetchType.LAZY, mappedBy="academicDisciplines")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="academicDiscipline")
 	@JsonBackReference
-	private Teacher teacher;	
+	private List<Teacher> teachers;	
 	
 	@Column(name="created_on")
 	private Date createdOn;

@@ -4,10 +4,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akveo/app-admin.git"
+    "url": "git+git@github.com:jerotoma/jerotoma-pms.git"
   },
   "bugs": {
-    "url": "https://github.com/akveo/app-admin/issues"
+    "url": "https://github.com/jerotoma/jerotoma-pms/issues"
   },
   "scripts": {
     "ng": "ng",

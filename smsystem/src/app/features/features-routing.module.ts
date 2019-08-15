@@ -26,9 +26,9 @@ const routes: Routes = [{
         .then(m => m.UsersModule),
     },
     {
-      path: 'positions',
-      loadChildren: () => import('./positions/positions.module')
-        .then(m => m.PositionsModule),
+      path: 'system-setup',
+      loadChildren: () => import('./system-setup/system-setup.module')
+        .then(m => m.SystemSetupModule),
     },
     {
       path: 'account',

@@ -5,8 +5,10 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NbDialogRef, NbDateService } from '@nebular/theme';
 import { Teacher, User } from 'app/models/users';
 import { UserService } from 'app/services/users';
-import { Position } from 'app/models/positions/position.model';
+import { Position } from 'app/models/positions';
+import { AcademicDiscipline } from 'app/models/academic-disciplines';
 import { PositionService } from 'app/services/positions';
+import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter} from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -28,11 +30,12 @@ export class TeacherCreateComponent implements OnInit {
   };
   users: User[] = [];
   positions: Position[] = [];
-
+  academicDisciplines: AcademicDiscipline[] = [];
   listDisplay: string = 'none';
 
   constructor(
     protected positionService: PositionService,
+    protected academicDisciplineService: AcademicDisciplineService,
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
     private formBuilder: FormBuilder,
@@ -42,6 +45,7 @@ export class TeacherCreateComponent implements OnInit {
     this.loadForm();
     this.onCredentialInputChanges();
     this.loadPositionList();
+    this.loadAcademicDisciplineList();
   }
 
   dismiss() {
@@ -54,9 +58,13 @@ export class TeacherCreateComponent implements OnInit {
   }
   onSubmit() {
     const dob = this.teacherForm.get('birthDate');
+    const academicDiscipline = this.teacherForm.get('academicDiscipline');
+    const position = this.teacherForm.get('position');
     if (dob && dob.valid) {
       this.teacherForm.patchValue({
         birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
+        academicDiscipline: parseInt(academicDiscipline.value, 10),
+        position: parseInt(position.value, 10),
       });
     }
     this.teacher = this.teacherForm.value;
@@ -108,7 +116,7 @@ export class TeacherCreateComponent implements OnInit {
       userId: ['', Validators.required],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
-      fieldOfStudy: ['', Validators.required],
+      academicDiscipline: ['', Validators.required],
       fullName: ['', Validators.required],
     });
   }
@@ -148,16 +156,34 @@ export class TeacherCreateComponent implements OnInit {
     };
   }
 
-  loadPositionList(){
+  loadPositionList() {
     this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const data = resp.body;
       const status = resp.status;
       if (status !== null && status === 200) {
-        this.showMessage.success = true;
         this.showMessage.error = false;
-        this.showMessage.message = data  ? data.message : '';
         this.positions = data.data;
+      } else {
+        this.showMessage.success = false;
+        this.showMessage.error = true;
+        this.showMessage.message = data  ? data.message : '';
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
+  }
+
+  loadAcademicDisciplineList() {
+    this.academicDisciplineService.loadAcademicDisciplineList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const data = resp.body;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.showMessage.error = false;
+        this.academicDisciplines = data.data;
       } else {
         this.showMessage.success = false;
         this.showMessage.error = true;

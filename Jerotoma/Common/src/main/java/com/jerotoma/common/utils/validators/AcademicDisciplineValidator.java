@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
-import com.jerotoma.common.models.fieldOfStudies.AcademicDiscipline;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class AcademicDisciplineValidator {

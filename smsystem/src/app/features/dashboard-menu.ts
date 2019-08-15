@@ -83,13 +83,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'SETTINGS',
+    group: true,
+  },
+  {
     title: 'System Setup',
-    //icon: 'award-outline',
     icon: 'shuffle-2-outline',
+    link: '/dashboard/system-setup',
     children: [
       {
         title: 'Positions',
-        link: '/dashboard/positions',
+        link: '/dashboard/system-setup/positions',
+      },
+      {
+        title: 'Academic Disciplines',
+        link: '/dashboard/system-setup/academic-disciplines',
       },
     ],
   },

@@ -2,6 +2,7 @@ package com.jerotoma.common.models.positions;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -41,9 +42,9 @@ public class Position implements Serializable{
 	@Column
 	private String description;
 	
-	@OneToOne(fetch=FetchType.LAZY, mappedBy="position")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="position")
 	@JsonBackReference
-	private Teacher teacher;	
+	private List<Teacher> teachers;	
 	
 	@Column(name="created_on")
 	private Date createdOn;

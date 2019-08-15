@@ -23,7 +23,7 @@ export class TeachersComponent implements OnInit {
     'ID',
     'Full Name',
     'Gender',
-    'Occupation',
+    'Academic Discipline',
     'Position',
     '# Of Courses',
     'Action',

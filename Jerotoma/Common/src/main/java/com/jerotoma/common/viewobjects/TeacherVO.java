@@ -14,7 +14,9 @@ public class TeacherVO extends Person{
 	
 	private String teacherCode;
 	
-	private String position;
+	private PositionVO position;
+	
+	private AcademicDisciplineVO academicDiscipline;
 	
 	private Date createdOn;
 	
@@ -28,7 +30,6 @@ public class TeacherVO extends Person{
 		this.gender = rs.getString(UserConstant.GENDER);
 		this.occupation = rs.getString(UserConstant.OCCUPATION);
 		this.picture = rs.getString(UserConstant.AVATAR);
-		this.position = rs.getString(UserConstant.POSITION);
 		this.teacherCode = rs.getString(UserConstant.TEACHER_CODE);
 		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
@@ -61,14 +62,6 @@ public class TeacherVO extends Person{
 		this.teacherCode = teacherCode;
 	}
 
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
 	public Date getCreatedOn() {
 		return createdOn;
 	}
@@ -83,5 +76,21 @@ public class TeacherVO extends Person{
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public PositionVO getPosition() {
+		return position;
+	}
+
+	public void setPosition(PositionVO position) {
+		this.position = position;
+	}
+
+	public AcademicDisciplineVO getAcademicDiscipline() {
+		return academicDiscipline;
+	}
+
+	public void setAcademicDiscipline(AcademicDisciplineVO academicDiscipline) {
+		this.academicDiscipline = academicDiscipline;
 	}	
 }

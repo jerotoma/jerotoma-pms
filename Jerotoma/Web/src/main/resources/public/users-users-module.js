@@ -267,7 +267,7 @@ module.exports = "<div class=\"lists row\">\n  <div class=\"col-md-12 col-lg-6 c
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xxxl-12\">\n        <form  autocomplete=\"off\" [formGroup]=\"teacherForm\" (ngSubmit)=\"onSubmit()\">\n            <nb-card size=\"giant\" status=\"primary\">\n              <nb-card-header>{{ title }}</nb-card-header>\n              <nb-card-body>\n                <div class='row'>\n                    <div class='col-md-12'>\n                        <nb-alert *ngIf=\"showMessage.error\" outline=\"danger\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Sorry!</b></p>\n                            <ul class=\"alert-message-list\">\n                                <li class=\"alert-message\">{{ showMessage.message }}</li>\n                              </ul>\n                          </nb-alert>\n                          <nb-alert *ngIf=\"showMessage.success\" outline=\"success\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Success!</b></p>\n                            <ul class=\"alert-message-list\">\n                              <li class=\"alert-message\">{{ showMessage.message }}</li>\n                            </ul>\n                          </nb-alert>\n                    </div>\n                </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-full-name\" class=\"label\">Login Credential</label>\n                              <input\n                                  type=\"text\"\n                                  nbInput fullWidth\n                                  autocomplete=\"new-password\"\n                                  required\n                                  id=\"teacher-full-name\"\n                                  formControlName=\"fullName\"\n                                  placeholder=\"Login Credential\">\n                            </div>\n                            <nb-card [ngStyle]=\"{'display': listDisplay}\">\n                              <nb-list>\n                                <nb-list-item *ngFor=\"let user of users\">\n                                  <a href=\"#\" class=\"\" (click)=\"pickUser($event, user)\" >\n                                      <nb-user\n                                          [name]=\"user.firstName + '' + user.lastName\"\n                                          [title]=\"user.username\">\n                                      </nb-user>\n                                  </a>\n                                </nb-list-item>\n                              </nb-list>\n                            </nb-card>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-employment-code\" class=\"label\">Employment Code</label>\n                            <input\n                                type=\"text\"\n                                nbInput fullWidth\n                                autocomplete=\"off\"\n                                required\n                                id=\"teacher-employment-code\"\n                                formControlName=\"employmentCode\"\n                                placeholder=\"Employment Code\">\n                          </div>\n                      </div>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-first-name\" class=\"label\">First Name</label>\n                    <input\n                          type=\"text\"\n                          nbInput fullWidth\n                          autocomplete=\"new-password\"\n                          required\n                          id=\"teacher-first-name\"\n                          formControlName=\"firstName\"\n                          placeholder=\"First Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched\">\n                      <p class=\"error-message\">\n                        First Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-last-name\" class=\"label\">Last Name</label>\n                    <input\n                          required\n                          type=\"text\"\n                          autocomplete=\"new-password\"\n                          nbInput fullWidth\n                          id=\"teacher-last-name\"\n                          formControlName=\"lastName\"\n                          placeholder=\"Last Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched\">\n                      <p class=\"error-message\">\n                        Last Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Position</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Position\"\n                                formControlName=\"position\"\n                                id=\"teacher-position\">\n                                  <nb-option\n                                      *ngFor='let position of positions'\n                                      value=\"position.id\">{{position.name}}\n                                  </nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-fieldOfStudy\" class=\"label\">Field of Study</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Field of Study\"\n                                formControlName=\"fieldOfStudy\"\n                                id=\"teacher-fieldOfStudy\">\n                                  <nb-option value=\"1\">Chemistry</nb-option>\n                                  <nb-option value=\"2\">Mathematics</nb-option>\n                                  <nb-option value=\"3\">Kiswahili</nb-option>\n                                  <nb-option value=\"4\">Biology</nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Gender</label>\n                              <nb-radio-group formControlName=\"gender\">\n                                <nb-radio [value]=\"'male'\">Male</nb-radio>\n                                <nb-radio [value]=\"'female'\">Female</nb-radio>\n                              </nb-radio-group>\n                          </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-birthDate\" class=\"label\">Date of Birth (yyyy/MM/dd)</label>\n                            <input\n                                [nbDatepicker]=\"birthDate\"\n                                nbInput fullWidth\n                                id=\"teacher-birthDate\"\n                                formControlName=\"birthDate\"\n                                placeholder=\"Birth Date\">\n                            <nb-datepicker #birthDate format=\"yyyy/MM/dd\"></nb-datepicker>\n                          </div>\n                      </div>\n                  </div>\n              </nb-card-body>\n              <nb-card-footer>\n                <button class='push-right' [disabled]=\"!teacherForm.valid\" type=\"submit\" nbButton hero status=\"success\">Submit</button>\n                <button class='push-right' nbButton hero status=\"danger\" (click)=\"dismiss()\">Cancel</button>\n              </nb-card-footer>\n            </nb-card>\n        </form>\n    </div>\n</div>\n\n"
+module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xxxl-12\">\n        <form  autocomplete=\"off\" [formGroup]=\"teacherForm\" (ngSubmit)=\"onSubmit()\">\n            <nb-card size=\"giant\" status=\"primary\">\n              <nb-card-header>{{ title }}</nb-card-header>\n              <nb-card-body>\n                <div class='row'>\n                    <div class='col-md-12'>\n                        <nb-alert *ngIf=\"showMessage.error\" outline=\"danger\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Sorry!</b></p>\n                            <ul class=\"alert-message-list\">\n                                <li class=\"alert-message\">{{ showMessage.message }}</li>\n                              </ul>\n                          </nb-alert>\n                          <nb-alert *ngIf=\"showMessage.success\" outline=\"success\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Success!</b></p>\n                            <ul class=\"alert-message-list\">\n                              <li class=\"alert-message\">{{ showMessage.message }}</li>\n                            </ul>\n                          </nb-alert>\n                    </div>\n                </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-full-name\" class=\"label\">Login Credential</label>\n                              <input\n                                  type=\"text\"\n                                  nbInput fullWidth\n                                  autocomplete=\"new-password\"\n                                  required\n                                  id=\"teacher-full-name\"\n                                  formControlName=\"fullName\"\n                                  placeholder=\"Login Credential\">\n                            </div>\n                            <nb-card [ngStyle]=\"{'display': listDisplay}\">\n                              <nb-list>\n                                <nb-list-item *ngFor=\"let user of users\">\n                                  <a href=\"#\" class=\"\" (click)=\"pickUser($event, user)\" >\n                                      <nb-user\n                                          [name]=\"user.firstName + '' + user.lastName\"\n                                          [title]=\"user.username\">\n                                      </nb-user>\n                                  </a>\n                                </nb-list-item>\n                              </nb-list>\n                            </nb-card>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-employment-code\" class=\"label\">Employment Code</label>\n                            <input\n                                type=\"text\"\n                                nbInput fullWidth\n                                autocomplete=\"off\"\n                                required\n                                id=\"teacher-employment-code\"\n                                formControlName=\"employmentCode\"\n                                placeholder=\"Employment Code\">\n                          </div>\n                      </div>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-first-name\" class=\"label\">First Name</label>\n                    <input\n                          type=\"text\"\n                          nbInput fullWidth\n                          autocomplete=\"new-password\"\n                          required\n                          id=\"teacher-first-name\"\n                          formControlName=\"firstName\"\n                          placeholder=\"First Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched\">\n                      <p class=\"error-message\">\n                        First Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-last-name\" class=\"label\">Last Name</label>\n                    <input\n                          required\n                          type=\"text\"\n                          autocomplete=\"new-password\"\n                          nbInput fullWidth\n                          id=\"teacher-last-name\"\n                          formControlName=\"lastName\"\n                          placeholder=\"Last Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched\">\n                      <p class=\"error-message\">\n                        Last Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Position</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Position\"\n                                formControlName=\"position\"\n                                id=\"teacher-position\">\n                                  <nb-option\n                                      *ngFor='let position of positions'\n                                      [value]=\"position.id\">{{position.name}}\n                                  </nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-academicDiscipline\" class=\"label\">Field of Study</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Field of Study\"\n                                formControlName=\"academicDiscipline\"\n                                id=\"teacher-academicDiscipline\">\n                                <nb-option\n                                  *ngFor='let academicDiscipline of academicDisciplines'\n                                  [value]=\"academicDiscipline.id\">{{academicDiscipline.name}}\n                              </nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Gender</label>\n                              <nb-radio-group formControlName=\"gender\">\n                                <nb-radio [value]=\"'male'\">Male</nb-radio>\n                                <nb-radio [value]=\"'female'\">Female</nb-radio>\n                              </nb-radio-group>\n                          </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-birthDate\" class=\"label\">Date of Birth (yyyy/MM/dd)</label>\n                            <input\n                                [nbDatepicker]=\"birthDate\"\n                                nbInput fullWidth\n                                id=\"teacher-birthDate\"\n                                formControlName=\"birthDate\"\n                                placeholder=\"Birth Date\">\n                            <nb-datepicker #birthDate format=\"yyyy/MM/dd\"></nb-datepicker>\n                          </div>\n                      </div>\n                  </div>\n              </nb-card-body>\n              <nb-card-footer>\n                <button class='push-right' [disabled]=\"!teacherForm.valid\" type=\"submit\" nbButton hero status=\"success\">Submit</button>\n                <button class='push-right' nbButton hero status=\"danger\" (click)=\"dismiss()\">Cancel</button>\n              </nb-card-footer>\n            </nb-card>\n        </form>\n    </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -713,7 +713,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
 /* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
 /* harmony import */ var app_services_positions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/services/positions */ "./src/app/services/positions/index.ts");
-/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/utils */ "./src/app/utils/index.ts");
+/* harmony import */ var app_services_academic_disciplines__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/services/academic-disciplines */ "./src/app/services/academic-disciplines/index.ts");
+/* harmony import */ var app_utils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/utils */ "./src/app/utils/index.ts");
+
 
 
 
@@ -722,8 +724,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TeacherCreateComponent = class TeacherCreateComponent {
-    constructor(positionService, dateService, userService, formBuilder, ref) {
+    constructor(positionService, academicDisciplineService, dateService, userService, formBuilder, ref) {
         this.positionService = positionService;
+        this.academicDisciplineService = academicDisciplineService;
         this.dateService = dateService;
         this.userService = userService;
         this.formBuilder = formBuilder;
@@ -736,12 +739,14 @@ let TeacherCreateComponent = class TeacherCreateComponent {
         };
         this.users = [];
         this.positions = [];
+        this.academicDisciplines = [];
         this.listDisplay = 'none';
     }
     ngOnInit() {
         this.loadForm();
         this.onCredentialInputChanges();
         this.loadPositionList();
+        this.loadAcademicDisciplineList();
     }
     dismiss() {
         this.ref.close();
@@ -753,9 +758,13 @@ let TeacherCreateComponent = class TeacherCreateComponent {
     }
     onSubmit() {
         const dob = this.teacherForm.get('birthDate');
+        const academicDiscipline = this.teacherForm.get('academicDiscipline');
+        const position = this.teacherForm.get('position');
         if (dob && dob.valid) {
             this.teacherForm.patchValue({
-                birthDate: Object(app_utils__WEBPACK_IMPORTED_MODULE_6__["DateFormatter"])(dob.value).format('YYYY/MM/DD'),
+                birthDate: Object(app_utils__WEBPACK_IMPORTED_MODULE_7__["DateFormatter"])(dob.value).format('YYYY/MM/DD'),
+                academicDiscipline: parseInt(academicDiscipline.value, 10),
+                position: parseInt(position.value, 10),
             });
         }
         this.teacher = this.teacherForm.value;
@@ -805,9 +814,9 @@ let TeacherCreateComponent = class TeacherCreateComponent {
             gender: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             picture: [''],
             userId: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-            birthDate: ['', Object(app_utils__WEBPACK_IMPORTED_MODULE_6__["DateValidator"])('yyyy/MM/dd')],
+            birthDate: ['', Object(app_utils__WEBPACK_IMPORTED_MODULE_7__["DateValidator"])('yyyy/MM/dd')],
             userType: ['teacher'],
-            fieldOfStudy: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            academicDiscipline: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             fullName: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
         });
     }
@@ -848,10 +857,28 @@ let TeacherCreateComponent = class TeacherCreateComponent {
             const data = resp.body;
             const status = resp.status;
             if (status !== null && status === 200) {
-                this.showMessage.success = true;
                 this.showMessage.error = false;
-                this.showMessage.message = data ? data.message : '';
                 this.positions = data.data;
+            }
+            else {
+                this.showMessage.success = false;
+                this.showMessage.error = true;
+                this.showMessage.message = data ? data.message : '';
+            }
+        }, error => {
+            this.showMessage.error = true;
+            this.showMessage.success = false;
+            this.showMessage.message = error ? error.error.message : '';
+        });
+    }
+    loadAcademicDisciplineList() {
+        this.academicDisciplineService.loadAcademicDisciplineList(this.getParam()).subscribe((result) => {
+            const resp = result;
+            const data = resp.body;
+            const status = resp.status;
+            if (status !== null && status === 200) {
+                this.showMessage.error = false;
+                this.academicDisciplines = data.data;
             }
             else {
                 this.showMessage.success = false;
@@ -867,6 +894,7 @@ let TeacherCreateComponent = class TeacherCreateComponent {
 };
 TeacherCreateComponent.ctorParameters = () => [
     { type: app_services_positions__WEBPACK_IMPORTED_MODULE_5__["PositionService"] },
+    { type: app_services_academic_disciplines__WEBPACK_IMPORTED_MODULE_6__["AcademicDisciplineService"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbDateService"] },
     { type: app_services_users__WEBPACK_IMPORTED_MODULE_4__["UserService"] },
     { type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"] },
@@ -887,6 +915,7 @@ TeacherCreateComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [__webpack_require__(/*! ./teacher-create.component.scss */ "./src/app/features/users/teachers/create/teacher-create.component.scss")]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_positions__WEBPACK_IMPORTED_MODULE_5__["PositionService"],
+        app_services_academic_disciplines__WEBPACK_IMPORTED_MODULE_6__["AcademicDisciplineService"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbDateService"],
         app_services_users__WEBPACK_IMPORTED_MODULE_4__["UserService"],
         _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"],
@@ -940,7 +969,7 @@ let TeachersComponent = class TeachersComponent {
             'ID',
             'Full Name',
             'Gender',
-            'Occupation',
+            'Academic Discipline',
             'Position',
             '# Of Courses',
             'Action',

@@ -18,7 +18,6 @@ import {
 
 import { PositionsRoutingModule } from './positions-routing.module';
 import { PositionsComponent } from './positions.component';
-import { TinyMCEComponent } from 'app/shared';
 import { PositionsViewComponent } from './positions-view/positions-view.component';
 import { PositionCreateComponent } from './position-create/position-create.component';
 import { PositionDeleteComponent } from './position-delete/position-delete.component';
@@ -29,7 +28,6 @@ const COMPONENTS = [
   PositionsViewComponent,
   PositionCreateComponent,
   PositionDeleteComponent,
-  TinyMCEComponent,
 ];
 
 const ENTRY_COMPONENTS = [
