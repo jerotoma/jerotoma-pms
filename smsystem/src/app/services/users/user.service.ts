@@ -26,20 +26,35 @@ export class UserService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
+  loadUser(userId: number, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
+    return this.http.get<any>(
+      `${END_POINTS.users}/${userId}?userType=${userType}`, {observe: 'response'});
+  }
+
   load(param: QueryParam): Observable<User[]> {
     return this.http
       .get<User[]>(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
       .pipe(retry(3), catchError(this.errorHandler));
   }
-  loadTeachers(param: QueryParam): Observable<any> {
+
+  loadUsers(param: QueryParam): Observable<any> {
     return this.http.get<any>(
       `${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}
-        &orderby=${param.orderby}&userType=${param.userType}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+        &orderby=${param.orderby}&userType=${param.userType}`,  {observe: 'response'});
   }
+
   addUser(data: any): Observable<HttpResponse<any> | HttpErrorResponse >  {
     return this.http.post<any>(`${END_POINTS.users}`, data, {observe: 'response'});
   }
+
+  updateUser(data: any): Observable<HttpResponse<any> | HttpErrorResponse >  {
+    return this.http.put<any>(`${END_POINTS.users}`, data, {observe: 'response'});
+  }
+
+  deleteUser(userId: number, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
+    return this.http.delete<any>(`${END_POINTS.users}/${userId}?userType=${userType}`, {observe: 'response'});
+  }
+
   search(param: QueryParam): Observable<any> {
     return this.http
     .get<User[]>(`${END_POINTS.users}/search?searchTerm=${param.search}

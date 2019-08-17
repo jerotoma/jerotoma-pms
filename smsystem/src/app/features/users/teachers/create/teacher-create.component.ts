@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
@@ -9,7 +9,7 @@ import { Position } from 'app/models/positions';
 import { AcademicDiscipline } from 'app/models/academic-disciplines';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
-import { QueryParam , DateValidator, DateFormatter} from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, StringDateFormatter} from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 @Component({
@@ -17,12 +17,16 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   templateUrl: 'teacher-create.component.html',
   styleUrls: ['teacher-create.component.scss'],
 })
-export class TeacherCreateComponent implements OnInit {
+export class TeacherCreateComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Output() onUserCreationSuccess = new EventEmitter();
+  action: string = 'create';
+  position: number;
+  academicDiscipline: number;
 
   teacherForm: FormGroup;
   teacher: Teacher;
+  teacherId: string;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -42,12 +46,16 @@ export class TeacherCreateComponent implements OnInit {
     protected ref: NbDialogRef<TeacherCreateComponent>) {}
 
   ngOnInit() {
-    this.loadForm();
-    this.onCredentialInputChanges();
     this.loadPositionList();
     this.loadAcademicDisciplineList();
+    this.loadForm();
+    this.onCredentialInputChanges();
   }
-
+  ngAfterViewInit() {
+    if (this.action === 'edit') {
+      this.loadTeacher(parseInt(this.teacherId, 10));
+    }
+  }
   dismiss() {
     this.ref.close();
   }
@@ -70,26 +78,52 @@ export class TeacherCreateComponent implements OnInit {
     this.teacher = this.teacherForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
-    this.userService.addUser(this.teacher).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-    const resp = result;
-    const status = resp.status;
-    if (status !== null && status === 200) {
-      this.showMessage.success = true;
-      this.teacherForm.reset();
-      this.ref.close();
-      this.onUserCreationSuccess.emit(this.showMessage.success);
-      this.showMessage.error = false;
-      this.showMessage.message = resp ? resp.body.message : '';
+    if (this.action === 'edit') {
+      this.updateTeacher();
     } else {
-      this.showMessage.success = false;
-      this.showMessage.error = true;
-      this.showMessage.message = resp ? resp.body.message : '';
+      this.userService.addUser(this.teacher).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200) {
+          this.showMessage.success = true;
+          this.teacherForm.reset();
+          this.ref.close();
+          this.onUserCreationSuccess.emit(this.showMessage.success);
+          this.showMessage.error = false;
+          this.showMessage.message = resp ? resp.body.message : '';
+        } else {
+          this.showMessage.success = false;
+          this.showMessage.error = true;
+          this.showMessage.message = resp ? resp.body.message : '';
+        }
+      }, error => {
+        this.showMessage.error = true;
+        this.showMessage.success = false;
+        this.showMessage.message = error ? error.error.message : '';
+      });
     }
-  }, error => {
-    this.showMessage.error = true;
-    this.showMessage.success = false;
-    this.showMessage.message = error ? error.error.message : '';
-  });
+  }
+  updateTeacher() {
+    this.userService.updateUser(this.teacher).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.showMessage.success = true;
+        this.teacherForm.reset();
+        this.ref.close();
+        this.onUserCreationSuccess.emit(this.showMessage.success);
+        this.showMessage.error = false;
+        this.showMessage.message = resp ? resp.body.message : '';
+      } else {
+        this.showMessage.success = false;
+        this.showMessage.error = true;
+        this.showMessage.message = resp ? resp.body.message : '';
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
   }
   search(value: string) {
     const param = this.getParam();
@@ -105,7 +139,7 @@ export class TeacherCreateComponent implements OnInit {
 
   loadForm() {
     this.teacherForm = this.formBuilder.group({
-      id: [''],
+      id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       position: ['', Validators.required],
@@ -113,7 +147,7 @@ export class TeacherCreateComponent implements OnInit {
       employmentCode: [''],
       gender: ['', Validators.required],
       picture: [''],
-      userId: ['', Validators.required],
+      userId: [null, Validators.required],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
       academicDiscipline: ['', Validators.required],
@@ -154,6 +188,37 @@ export class TeacherCreateComponent implements OnInit {
       fieldName: '',
       userType: 'teacher',
     };
+  }
+
+  loadTeacher(teacherId: number) {
+    this.userService.loadUser(teacherId, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.teacher = resp.body.data;
+        this.position = this.teacher.position.id;
+        this.academicDiscipline = this.teacher.academicDiscipline.id;
+        this.teacherForm.patchValue({
+          id: this.teacher.id,
+          firstName: this.teacher.firstName,
+          lastName: this.teacher.lastName,
+          position: this.teacher.position.id ,
+          occupation: this.teacher.occupation,
+          employmentCode: this.teacher.teacherCode,
+          gender: this.teacher.gender,
+          picture: this.teacher.picture,
+          userId: this.teacher.userId,
+          birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
+          userType: 'teacher',
+          academicDiscipline: this.teacher.academicDiscipline.id,
+          fullName: this.teacher.fullName,
+        });
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
   }
 
   loadPositionList() {

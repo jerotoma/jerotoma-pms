@@ -1,10 +1,59 @@
-
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
   <nb-card-header> {{title}} <button class="push-right" nbButton hero status='success' (click)="open()">Add New Teacher</button></nb-card-header>
   <nb-card-body>
-      <app-user-table
-        [columns]='columns'
-        [rows]='teachers'>
-      </app-user-table>
+      <div class="mat-elevation-z0">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <!-- id Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+            <!-- Full Column -->
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+            </ng-container>
+             <!-- Gender Column -->
+            <ng-container matColumnDef="gender">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+              <td mat-cell *matCellDef="let element"> {{element.gender}} </td>
+            </ng-container>
+            <!-- Academic Discipline Column -->
+            <ng-container matColumnDef="academicDiscipline">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Discipline </th>
+              <td mat-cell *matCellDef="let element"> {{element.academicDiscipline.name}} </td>
+            </ng-container>
+            <!-- Academic Discipline Column -->
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Position</th>
+              <td mat-cell *matCellDef="let element"> {{element.position.name}} </td>
+            </ng-container>
+             <!-- action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu" xPosition="before">
+                    <button mat-menu-item (click)="edit(element)"><mat-icon>edit</mat-icon> Edit</button>
+                    <button mat-menu-item (click)="delete(element)"><mat-icon>delete</mat-icon> Delete</button>
+                  </mat-menu>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator
+                [pageSize]='param.pageSize'
+                [length]='totalNumberOfItems'
+                [hidePageSize]='hidePageSize'
+                [pageIndex]=0
+                (page)='onPageChange($event)'
+                [pageSizeOptions]="pageSizeOptions"
+                showFirstLastButtons>
+          </mat-paginator>
+        </div>
   </nb-card-body>
 </nb-card>
+

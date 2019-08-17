@@ -1,5 +1,12 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import {MatTableModule} from '@angular/material/table';
+import {MatSelectModule} from '@angular/material/select';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+
 import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
@@ -23,6 +30,7 @@ import {
 } from '@nebular/theme';
 
 import { TeacherCreateComponent } from './teachers/create/teacher-create.component';
+import { UserDeleteComponent } from './user-delete/user-delete.component';
 import { UserTableComponent } from 'app/shared';
 import { ThemeModule } from 'app/@theme/theme.module';
 import { LayoutRoutingModule } from './users-routing.module';
@@ -41,6 +49,7 @@ const COMPONENTS = [
     UserTableComponent,
     UsersComponent,
     TeacherCreateComponent,
+    UserDeleteComponent,
     ParentsComponent,
     Tab1Component,
     Tab2Component,
@@ -54,6 +63,7 @@ const COMPONENTS = [
 
 const ENTRY_COMPONENTS = [
   TeacherCreateComponent,
+  UserDeleteComponent,
 ];
 
 const MODULES = [
@@ -78,6 +88,11 @@ const MODULES = [
     NbActionsModule,
     LayoutRoutingModule,
     NbIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSelectModule,
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
 ];

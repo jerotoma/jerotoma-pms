@@ -1,5 +1,9 @@
 import * as moment from 'moment';
 
-export function DateFormatter(date: Date, format = 'YYYY/MM/DD'): moment.Moment {
-  return moment(date, format, true);
+export function DateFormatter(date: Date, format: string = 'YYYY/MM/DD', isStrict: boolean = true): moment.Moment {
+  return moment(date, format, isStrict);
+}
+
+export function StringDateFormatter(date: string, format = 'YYYY/MM/DD', isStrict: boolean = true): moment.Moment {
+  return moment(date, format, isStrict);
 }

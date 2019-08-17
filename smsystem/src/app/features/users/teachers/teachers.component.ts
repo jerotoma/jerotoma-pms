@@ -1,12 +1,17 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
+
+import { PageEvent } from '@angular/material';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { TeacherCreateComponent } from './create/teacher-create.component';
+import { UserDeleteComponent } from '../user-delete/user-delete.component';
 import { Teacher } from 'app/models/users';
-
 
 @Component({
   selector: 'app-teacher',
@@ -19,15 +24,24 @@ export class TeachersComponent implements OnInit {
   secondForm: FormGroup;
   thirdForm: FormGroup;
 
-  columns: string[] = [
-    'ID',
-    'Full Name',
-    'Gender',
-    'Academic Discipline',
-    'Position',
-    '# Of Courses',
-    'Action',
-  ];
+  hidePageSize: boolean = false;
+  totalNumberOfItems: number = 20;
+  pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
+  displayedColumns: string[] = ['id', 'fullName', 'gender', 'academicDiscipline', 'position', 'action'];
+  dataSource: MatTableDataSource<Teacher> = new MatTableDataSource<Teacher>();
+
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+
+  param: QueryParam = {
+    page: 1,
+    pageSize: 10,
+    orderby: 'DESC',
+    status: '',
+    search: '',
+    fieldName: '',
+    userType: 'teacher',
+  };
 
   teachers: Array<Teacher> = [];
 
@@ -40,32 +54,8 @@ export class TeachersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstForm = this.fb.group({
-      firstCtrl: ['', Validators.required],
-    });
-
-    this.secondForm = this.fb.group({
-      secondCtrl: ['', Validators.required],
-    });
-
-    this.thirdForm = this.fb.group({
-      thirdCtrl: ['', Validators.required],
-    });
     this.loadUsers();
   }
-
-  onFirstSubmit() {
-    this.firstForm.markAsDirty();
-  }
-
-  onSecondSubmit() {
-    this.secondForm.markAsDirty();
-  }
-
-  onThirdSubmit() {
-    this.thirdForm.markAsDirty();
-  }
-
   open() {
     this.dialogService.open(TeacherCreateComponent, {
       context: {
@@ -75,23 +65,48 @@ export class TeachersComponent implements OnInit {
       this.loadUsers();
     });
   }
-  loadUsers() {
-    this.userService.loadTeachers(this.getParam()).subscribe((result) => {
-      if (result.success && result.data) {
-          this.teachers = result.data;
-      }
+
+  edit(teacher: Teacher) {
+    this.dialogService.open(TeacherCreateComponent, {
+      context: {
+        title: 'Edit Teacher',
+        action: 'edit',
+        teacherId: teacher.id.toString(),
+      },
+    }).onClose.subscribe(_data => {
+      this.loadUsers();
     });
   }
 
-  getParam(): QueryParam {
-    return {
-      page: 1,
-      pageSize: 10,
-      orderby: 'DESC',
-      status: '',
-      search: '',
-      fieldName: '',
-      userType: 'teacher',
-    };
+  delete(teacher: Teacher) {
+    this.dialogService.open(UserDeleteComponent, {
+      context: {
+        title: 'Delete Teacher',
+        action: 'delete',
+        userType: 'teacher',
+        userId: teacher.id.toString(),
+        name: teacher.fullName,
+      },
+    }).onClose.subscribe(_data => {
+      this.loadUsers();
+    });
+  }
+
+  onPageChange(pageEvent: PageEvent) {
+    this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
+    this.param.pageSize = pageEvent.pageSize;
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.userService.loadUsers(this.param).subscribe((result) => {
+      const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.totalNumberOfItems = data.count;
+          this.dataSource = new MatTableDataSource<Teacher>(data.teachers);
+        }
+    });
   }
 }
