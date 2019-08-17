@@ -11,7 +11,12 @@ import com.jerotoma.common.constants.EndPointConstants;
 @RequestMapping(EndPointConstants.DASHBOARD_CONTROLLER.BASE)
 public class DashboardController {
 	
-	@GetMapping(value = {"","/{path:[^\\.]*}"})
+	@GetMapping(value = {"",
+			"/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}"})
 	public String redirect(Authentication auth) {	
 	   return "forward:/";
 	}

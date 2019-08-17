@@ -17,6 +17,7 @@ public class UserValidator {
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
 		Teacher teacher = new Teacher();
+		Integer id = null;
 		String firstName  = null;		
 		String lastName = null;
 		String fullName = null;	
@@ -29,6 +30,9 @@ public class UserValidator {
 		String teacherCode = null;		
 		Date today = null;
 		
+		if(params.containsKey(UserConstant.ID)) {
+			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
+		}
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = params.get(UserConstant.FIRST_NAME).toString();
@@ -125,6 +129,11 @@ public class UserValidator {
 			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
 		}
 		teacher.setPicture(picture);
+		
+		if (id == null && requiredFields.contains(UserConstant.ID)) {
+			throw new FieldCanNotBeEmptyException("Teacher's ID is required");
+		}
+		teacher.setId(id);
 		
 		
 		today = CalendarUtil.getTodaysDate();

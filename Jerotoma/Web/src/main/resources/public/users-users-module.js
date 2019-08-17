@@ -267,7 +267,7 @@ module.exports = "<div class=\"lists row\">\n  <div class=\"col-md-12 col-lg-6 c
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xxxl-12\">\n        <form  autocomplete=\"off\" [formGroup]=\"teacherForm\" (ngSubmit)=\"onSubmit()\">\n            <nb-card size=\"giant\" status=\"primary\">\n              <nb-card-header>{{ title }}</nb-card-header>\n              <nb-card-body>\n                <div class='row'>\n                    <div class='col-md-12'>\n                        <nb-alert *ngIf=\"showMessage.error\" outline=\"danger\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Sorry!</b></p>\n                            <ul class=\"alert-message-list\">\n                                <li class=\"alert-message\">{{ showMessage.message }}</li>\n                              </ul>\n                          </nb-alert>\n                          <nb-alert *ngIf=\"showMessage.success\" outline=\"success\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Success!</b></p>\n                            <ul class=\"alert-message-list\">\n                              <li class=\"alert-message\">{{ showMessage.message }}</li>\n                            </ul>\n                          </nb-alert>\n                    </div>\n                </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-full-name\" class=\"label\">Login Credential</label>\n                              <input\n                                  type=\"text\"\n                                  nbInput fullWidth\n                                  autocomplete=\"new-password\"\n                                  required\n                                  id=\"teacher-full-name\"\n                                  formControlName=\"fullName\"\n                                  placeholder=\"Login Credential\">\n                            </div>\n                            <nb-card [ngStyle]=\"{'display': listDisplay}\">\n                              <nb-list>\n                                <nb-list-item *ngFor=\"let user of users\">\n                                  <a href=\"#\" class=\"\" (click)=\"pickUser($event, user)\" >\n                                      <nb-user\n                                          [name]=\"user.firstName + '' + user.lastName\"\n                                          [title]=\"user.username\">\n                                      </nb-user>\n                                  </a>\n                                </nb-list-item>\n                              </nb-list>\n                            </nb-card>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-employment-code\" class=\"label\">Employment Code</label>\n                            <input\n                                type=\"text\"\n                                nbInput fullWidth\n                                autocomplete=\"off\"\n                                required\n                                id=\"teacher-employment-code\"\n                                formControlName=\"employmentCode\"\n                                placeholder=\"Employment Code\">\n                          </div>\n                      </div>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-first-name\" class=\"label\">First Name</label>\n                    <input\n                          type=\"text\"\n                          nbInput fullWidth\n                          autocomplete=\"new-password\"\n                          required\n                          id=\"teacher-first-name\"\n                          formControlName=\"firstName\"\n                          placeholder=\"First Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched\">\n                      <p class=\"error-message\">\n                        First Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-last-name\" class=\"label\">Last Name</label>\n                    <input\n                          required\n                          type=\"text\"\n                          autocomplete=\"new-password\"\n                          nbInput fullWidth\n                          id=\"teacher-last-name\"\n                          formControlName=\"lastName\"\n                          placeholder=\"Last Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched\">\n                      <p class=\"error-message\">\n                        Last Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Position</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Position\"\n                                formControlName=\"position\"\n                                id=\"teacher-position\">\n                                  <nb-option\n                                      *ngFor='let position of positions'\n                                      [value]=\"position.id\">{{position.name}}\n                                  </nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-academicDiscipline\" class=\"label\">Field of Study</label>\n                              <nb-select\n                                selected=\"1\"\n                                fullWidth\n                                placeholder=\"Field of Study\"\n                                formControlName=\"academicDiscipline\"\n                                id=\"teacher-academicDiscipline\">\n                                <nb-option\n                                  *ngFor='let academicDiscipline of academicDisciplines'\n                                  [value]=\"academicDiscipline.id\">{{academicDiscipline.name}}\n                              </nb-option>\n                              </nb-select>\n                            </div>\n                      </div>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Gender</label>\n                              <nb-radio-group formControlName=\"gender\">\n                                <nb-radio [value]=\"'male'\">Male</nb-radio>\n                                <nb-radio [value]=\"'female'\">Female</nb-radio>\n                              </nb-radio-group>\n                          </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-birthDate\" class=\"label\">Date of Birth (yyyy/MM/dd)</label>\n                            <input\n                                [nbDatepicker]=\"birthDate\"\n                                nbInput fullWidth\n                                id=\"teacher-birthDate\"\n                                formControlName=\"birthDate\"\n                                placeholder=\"Birth Date\">\n                            <nb-datepicker #birthDate format=\"yyyy/MM/dd\"></nb-datepicker>\n                          </div>\n                      </div>\n                  </div>\n              </nb-card-body>\n              <nb-card-footer>\n                <button class='push-right' [disabled]=\"!teacherForm.valid\" type=\"submit\" nbButton hero status=\"success\">Submit</button>\n                <button class='push-right' nbButton hero status=\"danger\" (click)=\"dismiss()\">Cancel</button>\n              </nb-card-footer>\n            </nb-card>\n        </form>\n    </div>\n</div>\n\n"
+module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xxxl-12\">\n        <form  autocomplete=\"off\" [formGroup]=\"teacherForm\" (ngSubmit)=\"onSubmit()\">\n            <nb-card size=\"giant\" status=\"primary\">\n              <nb-card-header>{{ title }}</nb-card-header>\n              <nb-card-body>\n                <div class='row'>\n                    <div class='col-md-12'>\n                        <nb-alert *ngIf=\"showMessage.error\" outline=\"danger\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Sorry!</b></p>\n                            <ul class=\"alert-message-list\">\n                                <li class=\"alert-message\">{{ showMessage.message }}</li>\n                              </ul>\n                          </nb-alert>\n                          <nb-alert *ngIf=\"showMessage.success\" outline=\"success\" role=\"alert\">\n                            <p class=\"alert-title\"><b>Success!</b></p>\n                            <ul class=\"alert-message-list\">\n                              <li class=\"alert-message\">{{ showMessage.message }}</li>\n                            </ul>\n                          </nb-alert>\n                    </div>\n                </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-full-name\" class=\"label\">Login Credential</label>\n                              <input\n                                  type=\"text\"\n                                  nbInput fullWidth\n                                  autocomplete=\"new-password\"\n                                  required\n                                  id=\"teacher-full-name\"\n                                  formControlName=\"fullName\"\n                                  placeholder=\"Login Credential\">\n                            </div>\n                            <nb-card [ngStyle]=\"{'display': listDisplay}\">\n                              <nb-list>\n                                <nb-list-item *ngFor=\"let user of users\">\n                                  <a href=\"#\" class=\"\" (click)=\"pickUser($event, user)\" >\n                                      <nb-user\n                                          [name]=\"user.firstName + '' + user.lastName\"\n                                          [title]=\"user.username\">\n                                      </nb-user>\n                                  </a>\n                                </nb-list-item>\n                              </nb-list>\n                            </nb-card>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-employment-code\" class=\"label\">Employment Code</label>\n                            <input\n                                type=\"text\"\n                                nbInput fullWidth\n                                autocomplete=\"off\"\n                                required\n                                id=\"teacher-employment-code\"\n                                formControlName=\"employmentCode\"\n                                placeholder=\"Employment Code\">\n                          </div>\n                      </div>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-first-name\" class=\"label\">First Name</label>\n                    <input\n                          type=\"text\"\n                          nbInput fullWidth\n                          autocomplete=\"new-password\"\n                          required\n                          id=\"teacher-first-name\"\n                          formControlName=\"firstName\"\n                          placeholder=\"First Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched\">\n                      <p class=\"error-message\">\n                        First Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"form-control-group\">\n                    <label for=\"teacher-last-name\" class=\"label\">Last Name</label>\n                    <input\n                          required\n                          type=\"text\"\n                          autocomplete=\"new-password\"\n                          nbInput fullWidth\n                          id=\"teacher-last-name\"\n                          formControlName=\"lastName\"\n                          placeholder=\"Last Name\">\n                    <ng-container *ngIf=\"teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched\">\n                      <p class=\"error-message\">\n                        Last Name is required!\n                      </p>\n                    </ng-container>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Position</label>\n                              <nb-select\n                                fullWidth\n                                placeholder=\"Position\"\n                                formControlName=\"position\"\n                                id=\"teacher-position\">\n                                <nb-option\n                                    *ngFor='let pos of positions' [value]=\"pos.id\">\n                                    {{pos.name}}\n                                </nb-option>\n                              </nb-select>\n                          </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-academicDiscipline\" class=\"label\">Field of Study</label>\n                              <nb-select\n                                fullWidth\n                                placeholder=\"Field of Study\"\n                                formControlName=\"academicDiscipline\"\n                                id=\"teacher-academicDiscipline\">\n                                <nb-option\n                                    *ngFor='let acad of academicDisciplines'\n                                    [value]=\"acad.id\">\n                                    {{acad.name}}\n                                </nb-option>\n                              </nb-select>\n                          </div>\n                      </div>\n                  </div>\n                  <div class=\"row\">\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                              <label for=\"teacher-position\" class=\"label\">Gender</label>\n                              <nb-radio-group formControlName=\"gender\">\n                                <nb-radio [value]=\"'male'\">Male</nb-radio>\n                                <nb-radio [value]=\"'female'\">Female</nb-radio>\n                              </nb-radio-group>\n                          </div>\n                      </div>\n                      <div class=\"col-md-6\">\n                          <div class=\"form-control-group\">\n                            <label for=\"teacher-birthDate\" class=\"label\">Date of Birth (yyyy/MM/dd)</label>\n                            <input\n                                [nbDatepicker]=\"birthDate\"\n                                nbInput fullWidth\n                                id=\"teacher-birthDate\"\n                                formControlName=\"birthDate\"\n                                placeholder=\"Birth Date\">\n                            <nb-datepicker #birthDate format=\"yyyy/MM/dd\"></nb-datepicker>\n                          </div>\n                      </div>\n                  </div>\n              </nb-card-body>\n              <nb-card-footer>\n                <button class='push-right' [disabled]=\"!teacherForm.valid\" type=\"submit\" nbButton hero status=\"success\">Submit</button>\n                <button class='push-right' nbButton hero status=\"danger\" (click)=\"dismiss()\">Cancel</button>\n              </nb-card-footer>\n            </nb-card>\n        </form>\n    </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -278,7 +278,18 @@ module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xx
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Teacher</button></nb-card-header>\n  <nb-card-body>\n      <app-user-table\n        [columns]='columns'\n        [rows]='teachers'>\n      </app-user-table>\n  </nb-card-body>\n</nb-card>\n"
+module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Teacher</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.id}} </td>\n            </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"academicDiscipline\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Discipline </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.academicDiscipline.name}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"position\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Position</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.position.name}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/index.js!./src/app/features/users/user-delete/user-delete.component.html":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/raw-loader!./src/app/features/users/user-delete/user-delete.component.html ***!
+  \*************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<nb-card>\n  <nb-card-body>\n      <nb-alert outline=\"danger\">\n         Are you sure you want to delete {{name}} position\n      </nb-alert>\n  </nb-card-body>\n  <nb-card-footer>\n    <button class='push-right' (click)=\"onConfirmed()\" nbButton hero status=\"danger\">Yes</button>\n    <button class='push-right' nbButton hero status=\"success\" (click)=\"dismiss()\">No, Thank you</button>\n  </nb-card-footer>\n</nb-card>\n"
 
 /***/ }),
 
@@ -732,6 +743,7 @@ let TeacherCreateComponent = class TeacherCreateComponent {
         this.formBuilder = formBuilder;
         this.ref = ref;
         this.onUserCreationSuccess = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.action = 'create';
         this.showMessage = {
             error: false,
             success: false,
@@ -743,10 +755,15 @@ let TeacherCreateComponent = class TeacherCreateComponent {
         this.listDisplay = 'none';
     }
     ngOnInit() {
-        this.loadForm();
-        this.onCredentialInputChanges();
         this.loadPositionList();
         this.loadAcademicDisciplineList();
+        this.loadForm();
+        this.onCredentialInputChanges();
+    }
+    ngAfterViewInit() {
+        if (this.action === 'edit') {
+            this.loadTeacher(parseInt(this.teacherId, 10));
+        }
     }
     dismiss() {
         this.ref.close();
@@ -770,7 +787,35 @@ let TeacherCreateComponent = class TeacherCreateComponent {
         this.teacher = this.teacherForm.value;
         this.showMessage.success = false;
         this.showMessage.error = false;
-        this.userService.addUser(this.teacher).subscribe((result) => {
+        if (this.action === 'edit') {
+            this.updateTeacher();
+        }
+        else {
+            this.userService.addUser(this.teacher).subscribe((result) => {
+                const resp = result;
+                const status = resp.status;
+                if (status !== null && status === 200) {
+                    this.showMessage.success = true;
+                    this.teacherForm.reset();
+                    this.ref.close();
+                    this.onUserCreationSuccess.emit(this.showMessage.success);
+                    this.showMessage.error = false;
+                    this.showMessage.message = resp ? resp.body.message : '';
+                }
+                else {
+                    this.showMessage.success = false;
+                    this.showMessage.error = true;
+                    this.showMessage.message = resp ? resp.body.message : '';
+                }
+            }, error => {
+                this.showMessage.error = true;
+                this.showMessage.success = false;
+                this.showMessage.message = error ? error.error.message : '';
+            });
+        }
+    }
+    updateTeacher() {
+        this.userService.updateUser(this.teacher).subscribe((result) => {
             const resp = result;
             const status = resp.status;
             if (status !== null && status === 200) {
@@ -805,7 +850,7 @@ let TeacherCreateComponent = class TeacherCreateComponent {
     }
     loadForm() {
         this.teacherForm = this.formBuilder.group({
-            id: [''],
+            id: [null],
             firstName: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             lastName: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             position: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
@@ -813,7 +858,7 @@ let TeacherCreateComponent = class TeacherCreateComponent {
             employmentCode: [''],
             gender: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             picture: [''],
-            userId: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            userId: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
             birthDate: ['', Object(app_utils__WEBPACK_IMPORTED_MODULE_7__["DateValidator"])('yyyy/MM/dd')],
             userType: ['teacher'],
             academicDiscipline: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
@@ -850,6 +895,36 @@ let TeacherCreateComponent = class TeacherCreateComponent {
             fieldName: '',
             userType: 'teacher',
         };
+    }
+    loadTeacher(teacherId) {
+        this.userService.loadUser(teacherId, 'teacher').subscribe((result) => {
+            const resp = result;
+            const status = resp.status;
+            if (status !== null && status === 200) {
+                this.teacher = resp.body.data;
+                this.position = this.teacher.position.id;
+                this.academicDiscipline = this.teacher.academicDiscipline.id;
+                this.teacherForm.patchValue({
+                    id: this.teacher.id,
+                    firstName: this.teacher.firstName,
+                    lastName: this.teacher.lastName,
+                    position: this.teacher.position.id,
+                    occupation: this.teacher.occupation,
+                    employmentCode: this.teacher.teacherCode,
+                    gender: this.teacher.gender,
+                    picture: this.teacher.picture,
+                    userId: this.teacher.userId,
+                    birthDate: Object(app_utils__WEBPACK_IMPORTED_MODULE_7__["DateFormatter"])(this.teacher.birthDate, 'YYYY/MM/DD', false),
+                    userType: 'teacher',
+                    academicDiscipline: this.teacher.academicDiscipline.id,
+                    fullName: this.teacher.fullName,
+                });
+            }
+        }, error => {
+            this.showMessage.error = true;
+            this.showMessage.success = false;
+            this.showMessage.message = error ? error.error.message : '';
+        });
     }
     loadPositionList() {
         this.positionService.loadPositionList(this.getParam()).subscribe((result) => {
@@ -933,7 +1008,7 @@ TeacherCreateComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2ZlYXR1cmVzL3VzZXJzL3RlYWNoZXJzL3RlYWNoZXJzLmNvbXBvbmVudC5zY3NzIn0= */"
+module.exports = "table {\n  width: 100%; }\n\nbutton {\n  cursor: pointer;\n  margin: 0;\n  border: none; }\n\nbutton:focus {\n  outline: none; }\n\nbutton:hover {\n  background-color: rgba(0, 0, 0, 0.03); }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9vbmtvbWFueWEvcHJvamVjdHMvSmVyb3RvbWEvc21zeXN0ZW0vc3JjL2FwcC9mZWF0dXJlcy91c2Vycy90ZWFjaGVycy90ZWFjaGVycy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFdBQVcsRUFBQTs7QUFFYjtFQUNFLGVBQWU7RUFDZixTQUFTO0VBQ1QsWUFBWSxFQUFBOztBQUdkO0VBQ0UsYUFBYSxFQUFBOztBQUVmO0VBQ0UscUNBQXFDLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9mZWF0dXJlcy91c2Vycy90ZWFjaGVycy90ZWFjaGVycy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgd2lkdGg6IDEwMCU7XG59XG5idXR0b24ge1xuICBjdXJzb3I6IHBvaW50ZXI7XG4gIG1hcmdpbjogMDtcbiAgYm9yZGVyOiBub25lO1xufVxuXG5idXR0b246Zm9jdXMge1xuICBvdXRsaW5lOiBub25lO1xufVxuYnV0dG9uOmhvdmVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogcmdiYSgwLCAwLCAwLCAwLjAzKTs7XG59XG4iXX0= */"
 
 /***/ }),
 
@@ -951,8 +1026,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
-/* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
+/* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
+/* harmony import */ var _user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
+
+
+
+
 
 
 
@@ -965,56 +1048,12 @@ let TeachersComponent = class TeachersComponent {
         this.fb = fb;
         this.dialogService = dialogService;
         this.title = 'Teacher\'s List';
-        this.columns = [
-            'ID',
-            'Full Name',
-            'Gender',
-            'Academic Discipline',
-            'Position',
-            '# Of Courses',
-            'Action',
-        ];
-        this.teachers = [];
-    }
-    ngOnInit() {
-        this.firstForm = this.fb.group({
-            firstCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-        });
-        this.secondForm = this.fb.group({
-            secondCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-        });
-        this.thirdForm = this.fb.group({
-            thirdCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
-        });
-        this.loadUsers();
-    }
-    onFirstSubmit() {
-        this.firstForm.markAsDirty();
-    }
-    onSecondSubmit() {
-        this.secondForm.markAsDirty();
-    }
-    onThirdSubmit() {
-        this.thirdForm.markAsDirty();
-    }
-    open() {
-        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__["TeacherCreateComponent"], {
-            context: {
-                title: 'Add New Teacher',
-            },
-        }).onClose.subscribe(data => {
-            this.loadUsers();
-        });
-    }
-    loadUsers() {
-        this.userService.loadTeachers(this.getParam()).subscribe((result) => {
-            if (result.success && result.data) {
-                this.teachers = result.data;
-            }
-        });
-    }
-    getParam() {
-        return {
+        this.hidePageSize = false;
+        this.totalNumberOfItems = 20;
+        this.pageSizeOptions = [10, 20, 30, 50, 70, 100];
+        this.displayedColumns = ['id', 'fullName', 'gender', 'academicDiscipline', 'position', 'action'];
+        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"]();
+        this.param = {
             page: 1,
             pageSize: 10,
             orderby: 'DESC',
@@ -1023,23 +1062,180 @@ let TeachersComponent = class TeachersComponent {
             fieldName: '',
             userType: 'teacher',
         };
+        this.teachers = [];
+    }
+    ngOnInit() {
+        this.loadUsers();
+    }
+    open() {
+        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__["TeacherCreateComponent"], {
+            context: {
+                title: 'Add New Teacher',
+            },
+        }).onClose.subscribe(data => {
+            this.loadUsers();
+        });
+    }
+    edit(teacher) {
+        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__["TeacherCreateComponent"], {
+            context: {
+                title: 'Edit Teacher',
+                action: 'edit',
+                teacherId: teacher.id.toString(),
+            },
+        }).onClose.subscribe(_data => {
+            this.loadUsers();
+        });
+    }
+    delete(teacher) {
+        this.dialogService.open(_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_9__["UserDeleteComponent"], {
+            context: {
+                title: 'Delete Teacher',
+                action: 'delete',
+                userType: 'teacher',
+                userId: teacher.id.toString(),
+                name: teacher.fullName,
+            },
+        }).onClose.subscribe(_data => {
+            this.loadUsers();
+        });
+    }
+    onPageChange(pageEvent) {
+        this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
+        this.param.pageSize = pageEvent.pageSize;
+        this.loadUsers();
+    }
+    loadUsers() {
+        this.userService.loadUsers(this.param).subscribe((result) => {
+            const resp = result;
+            const status = resp.status;
+            if (status !== null && status === 200 && resp.body) {
+                const data = resp.body.data;
+                this.totalNumberOfItems = data.count;
+                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"](data.teachers);
+            }
+        });
     }
 };
 TeachersComponent.ctorParameters = () => [
-    { type: app_services_users__WEBPACK_IMPORTED_MODULE_4__["UserService"] },
+    { type: app_services_users__WEBPACK_IMPORTED_MODULE_7__["UserService"] },
     { type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbDialogService"] }
 ];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__["MatPaginator"], { static: true }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__["MatPaginator"])
+], TeachersComponent.prototype, "paginator", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_5__["MatSort"], { static: true }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__["MatSort"])
+], TeachersComponent.prototype, "sort", void 0);
 TeachersComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-teacher',
         template: __webpack_require__(/*! raw-loader!./teachers.component.html */ "./node_modules/raw-loader/index.js!./src/app/features/users/teachers/teachers.component.html"),
         styles: [__webpack_require__(/*! ./teachers.component.scss */ "./src/app/features/users/teachers/teachers.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_4__["UserService"],
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_7__["UserService"],
         _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_3__["NbDialogService"]])
 ], TeachersComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/features/users/user-delete/user-delete.component.scss":
+/*!***********************************************************************!*\
+  !*** ./src/app/features/users/user-delete/user-delete.component.scss ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2ZlYXR1cmVzL3VzZXJzL3VzZXItZGVsZXRlL3VzZXItZGVsZXRlLmNvbXBvbmVudC5zY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/features/users/user-delete/user-delete.component.ts":
+/*!*********************************************************************!*\
+  !*** ./src/app/features/users/user-delete/user-delete.component.ts ***!
+  \*********************************************************************/
+/*! exports provided: UserDeleteComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserDeleteComponent", function() { return UserDeleteComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
+/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
+
+
+
+
+let UserDeleteComponent = class UserDeleteComponent {
+    constructor(userService, ref) {
+        this.userService = userService;
+        this.ref = ref;
+        this.userId = '0';
+        this.title = '';
+        this.name = '';
+        this.action = '';
+        this.userType = '';
+        this.confirmed = false;
+        this.showMessage = {
+            error: false,
+            success: false,
+            message: '',
+        };
+    }
+    ngOnInit() {
+        this.confirmed = this.action === 'delete';
+    }
+    deleteUser(teacherId) {
+        if (this.confirmed) {
+            this.userService.deleteUser(teacherId, this.userType)
+                .subscribe((result) => {
+                const resp = result;
+                const data = resp.body;
+                const status = resp.status;
+                if (status !== null && status === 200) {
+                    this.dismiss();
+                }
+                else {
+                    this.showMessage.success = false;
+                    this.showMessage.error = true;
+                    this.showMessage.message = data ? data.message : '';
+                }
+            }, error => {
+                this.showMessage.error = true;
+                this.showMessage.success = false;
+                this.showMessage.message = error ? error.error.message : '';
+            });
+        }
+    }
+    dismiss() {
+        this.ref.close();
+    }
+    onConfirmed() {
+        this.confirmed = true;
+        this.deleteUser(parseInt(this.userId, 10));
+    }
+};
+UserDeleteComponent.ctorParameters = () => [
+    { type: app_services_users__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
+    { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogRef"] }
+];
+UserDeleteComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-user-delete',
+        template: __webpack_require__(/*! raw-loader!./user-delete.component.html */ "./node_modules/raw-loader/index.js!./src/app/features/users/user-delete/user-delete.component.html"),
+        styles: [__webpack_require__(/*! ./user-delete.component.scss */ "./src/app/features/users/user-delete/user-delete.component.scss")]
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_3__["UserService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogRef"]])
+], UserDeleteComponent);
 
 
 
@@ -1169,21 +1365,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-/* harmony import */ var _nebular_moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/moment */ "./node_modules/@nebular/moment/fesm2015/index.js");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./teachers/create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
-/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
-/* harmony import */ var app_theme_theme_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/@theme/theme.module */ "./src/app/@theme/theme.module.ts");
-/* harmony import */ var _users_routing_module__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./users-routing.module */ "./src/app/features/users/users-routing.module.ts");
-/* harmony import */ var _users_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./users.component */ "./src/app/features/users/users.component.ts");
-/* harmony import */ var _parents_parents_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./parents/parents.component */ "./src/app/features/users/parents/parents.component.ts");
-/* harmony import */ var _teachers_teachers_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./teachers/teachers.component */ "./src/app/features/users/teachers/teachers.component.ts");
-/* harmony import */ var _students_students_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./students/students.component */ "./src/app/features/users/students/students.component.ts");
-/* harmony import */ var _infinite_list_infinite_list_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./infinite-list/infinite-list.component */ "./src/app/features/users/infinite-list/infinite-list.component.ts");
-/* harmony import */ var _infinite_list_news_post_news_post_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./infinite-list/news-post/news-post.component */ "./src/app/features/users/infinite-list/news-post/news-post.component.ts");
-/* harmony import */ var _infinite_list_news_post_placeholder_news_post_placeholder_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./infinite-list/news-post-placeholder/news-post-placeholder.component */ "./src/app/features/users/infinite-list/news-post-placeholder/news-post-placeholder.component.ts");
-/* harmony import */ var _other_staffs_other_staffs_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./other-staffs/other-staffs.component */ "./src/app/features/users/other-staffs/other-staffs.component.ts");
-/* harmony import */ var _news_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./news.service */ "./src/app/features/users/news.service.ts");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
+/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
+/* harmony import */ var _nebular_moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @nebular/moment */ "./node_modules/@nebular/moment/fesm2015/index.js");
+/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
+/* harmony import */ var _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./teachers/create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
+/* harmony import */ var _user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
+/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
+/* harmony import */ var app_theme_theme_module__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! app/@theme/theme.module */ "./src/app/@theme/theme.module.ts");
+/* harmony import */ var _users_routing_module__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./users-routing.module */ "./src/app/features/users/users-routing.module.ts");
+/* harmony import */ var _users_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./users.component */ "./src/app/features/users/users.component.ts");
+/* harmony import */ var _parents_parents_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./parents/parents.component */ "./src/app/features/users/parents/parents.component.ts");
+/* harmony import */ var _teachers_teachers_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./teachers/teachers.component */ "./src/app/features/users/teachers/teachers.component.ts");
+/* harmony import */ var _students_students_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./students/students.component */ "./src/app/features/users/students/students.component.ts");
+/* harmony import */ var _infinite_list_infinite_list_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./infinite-list/infinite-list.component */ "./src/app/features/users/infinite-list/infinite-list.component.ts");
+/* harmony import */ var _infinite_list_news_post_news_post_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./infinite-list/news-post/news-post.component */ "./src/app/features/users/infinite-list/news-post/news-post.component.ts");
+/* harmony import */ var _infinite_list_news_post_placeholder_news_post_placeholder_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./infinite-list/news-post-placeholder/news-post-placeholder.component */ "./src/app/features/users/infinite-list/news-post-placeholder/news-post-placeholder.component.ts");
+/* harmony import */ var _other_staffs_other_staffs_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./other-staffs/other-staffs.component */ "./src/app/features/users/other-staffs/other-staffs.component.ts");
+/* harmony import */ var _news_service__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./news.service */ "./src/app/features/users/news.service.ts");
+
+
+
+
+
+
 
 
 
@@ -1203,49 +1411,56 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const COMPONENTS = [
-    app_shared__WEBPACK_IMPORTED_MODULE_6__["UserTableComponent"],
-    _users_component__WEBPACK_IMPORTED_MODULE_9__["UsersComponent"],
-    _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__["TeacherCreateComponent"],
-    _parents_parents_component__WEBPACK_IMPORTED_MODULE_10__["ParentsComponent"],
-    _parents_parents_component__WEBPACK_IMPORTED_MODULE_10__["Tab1Component"],
-    _parents_parents_component__WEBPACK_IMPORTED_MODULE_10__["Tab2Component"],
-    _teachers_teachers_component__WEBPACK_IMPORTED_MODULE_11__["TeachersComponent"],
-    _students_students_component__WEBPACK_IMPORTED_MODULE_12__["StudentsComponent"],
-    _infinite_list_news_post_placeholder_news_post_placeholder_component__WEBPACK_IMPORTED_MODULE_15__["NewsPostPlaceholderComponent"],
-    _infinite_list_infinite_list_component__WEBPACK_IMPORTED_MODULE_13__["InfiniteListComponent"],
-    _infinite_list_news_post_news_post_component__WEBPACK_IMPORTED_MODULE_14__["NewsPostComponent"],
-    _other_staffs_other_staffs_component__WEBPACK_IMPORTED_MODULE_16__["OtherStaffsComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_12__["UserTableComponent"],
+    _users_component__WEBPACK_IMPORTED_MODULE_15__["UsersComponent"],
+    _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_10__["TeacherCreateComponent"],
+    _user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_11__["UserDeleteComponent"],
+    _parents_parents_component__WEBPACK_IMPORTED_MODULE_16__["ParentsComponent"],
+    _parents_parents_component__WEBPACK_IMPORTED_MODULE_16__["Tab1Component"],
+    _parents_parents_component__WEBPACK_IMPORTED_MODULE_16__["Tab2Component"],
+    _teachers_teachers_component__WEBPACK_IMPORTED_MODULE_17__["TeachersComponent"],
+    _students_students_component__WEBPACK_IMPORTED_MODULE_18__["StudentsComponent"],
+    _infinite_list_news_post_placeholder_news_post_placeholder_component__WEBPACK_IMPORTED_MODULE_21__["NewsPostPlaceholderComponent"],
+    _infinite_list_infinite_list_component__WEBPACK_IMPORTED_MODULE_19__["InfiniteListComponent"],
+    _infinite_list_news_post_news_post_component__WEBPACK_IMPORTED_MODULE_20__["NewsPostComponent"],
+    _other_staffs_other_staffs_component__WEBPACK_IMPORTED_MODULE_22__["OtherStaffsComponent"],
 ];
 const ENTRY_COMPONENTS = [
-    _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__["TeacherCreateComponent"],
+    _teachers_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_10__["TeacherCreateComponent"],
+    _user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_11__["UserDeleteComponent"],
 ];
 const MODULES = [
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
-    app_theme_theme_module__WEBPACK_IMPORTED_MODULE_7__["ThemeModule"],
-    _nebular_moment__WEBPACK_IMPORTED_MODULE_3__["NbMomentDateModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbTabsetModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbRadioModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbDatepickerModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbAlertModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbRouteTabsetModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbStepperModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbCardModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbCheckboxModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbSelectModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbInputModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbButtonModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbListModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbAccordionModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbUserModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbActionsModule"],
-    _users_routing_module__WEBPACK_IMPORTED_MODULE_8__["LayoutRoutingModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbIconModule"],
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbDialogModule"].forRoot(),
-    _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbWindowModule"].forRoot(),
+    app_theme_theme_module__WEBPACK_IMPORTED_MODULE_13__["ThemeModule"],
+    _nebular_moment__WEBPACK_IMPORTED_MODULE_8__["NbMomentDateModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbTabsetModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbRadioModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbDatepickerModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbAlertModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbRouteTabsetModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbStepperModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbCardModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbCheckboxModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbSelectModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbInputModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbButtonModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbListModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbAccordionModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbUserModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbActionsModule"],
+    _users_routing_module__WEBPACK_IMPORTED_MODULE_14__["LayoutRoutingModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbIconModule"],
+    _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableModule"],
+    _angular_material_paginator__WEBPACK_IMPORTED_MODULE_5__["MatPaginatorModule"],
+    _angular_material_icon__WEBPACK_IMPORTED_MODULE_6__["MatIconModule"],
+    _angular_material_menu__WEBPACK_IMPORTED_MODULE_7__["MatMenuModule"],
+    _angular_material_select__WEBPACK_IMPORTED_MODULE_4__["MatSelectModule"],
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbDialogModule"].forRoot(),
+    _nebular_theme__WEBPACK_IMPORTED_MODULE_9__["NbWindowModule"].forRoot(),
 ];
 const SERVICES = [
-    _news_service__WEBPACK_IMPORTED_MODULE_17__["NewsService"],
+    _news_service__WEBPACK_IMPORTED_MODULE_23__["NewsService"],
 ];
 let UsersModule = class UsersModule {
 };

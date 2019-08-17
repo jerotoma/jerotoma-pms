@@ -10,7 +10,12 @@ import com.jerotoma.common.constants.EndPointConstants;
 @RequestMapping(EndPointConstants.AUTH_CONTROLLER.BASE)
 public class AuthCoontroller {
 	
-	@GetMapping(value = {"","/{path:[^\\.]*}"})
+	@GetMapping(value = {"",
+			"/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}"})
 	public String redirect() {
 	   return "forward:/index.html";
 	}

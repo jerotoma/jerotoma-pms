@@ -263,3 +263,49 @@ CREATE TABLE IF NOT EXISTS public.student_admissions(
     );
 
     
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ADDRESSES RELATED TABLES				  		  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.addresses(
+	    id bigserial NOT NULL,
+	    street text NOT NULL,
+	   	unit character varying(255),
+	   	city character varying(255) NOT NULL,
+	   	country character varying(255) NOT NULL,
+	   	state character varying(255) NOT NULL,
+	   	postal_code character varying(255),
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT addresses_pkey PRIMARY KEY(id)   	
+    );
+
+    
+    /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			TEACHER_ADDRESSES RELATED TABLES				  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.teacher_addresses(
+	    id bigserial NOT NULL,
+	    teacher_id bigint NOT NULL,
+	   	address_id bigint NOT NULL,
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT teacher_addresses_pkey PRIMARY KEY(id),
+	   	CONSTRAINT addresses_fkey FOREIGN KEY (address_id)
+	        REFERENCES public.addresses (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT teachers_fkey FOREIGN KEY (teacher_id)
+	        REFERENCES public.teachers (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+
+    

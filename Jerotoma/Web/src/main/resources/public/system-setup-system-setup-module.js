@@ -29,12 +29,12 @@ const routes = [{
         children: [
             {
                 path: 'positions',
-                loadChildren: () => Promise.all(/*! import() | positions-positions-module */[__webpack_require__.e("default~academic-disciplines-academic-disciplines-module~positions-positions-module"), __webpack_require__.e("common"), __webpack_require__.e("positions-positions-module")]).then(__webpack_require__.bind(null, /*! ./positions/positions.module */ "./src/app/features/system-setup/positions/positions.module.ts"))
+                loadChildren: () => Promise.all(/*! import() | positions-positions-module */[__webpack_require__.e("default~academic-disciplines-academic-disciplines-module~positions-positions-module~users-users-modu~9f61a68b"), __webpack_require__.e("common"), __webpack_require__.e("positions-positions-module")]).then(__webpack_require__.bind(null, /*! ./positions/positions.module */ "./src/app/features/system-setup/positions/positions.module.ts"))
                     .then(m => m.PositionsModule),
             },
             {
                 path: 'academic-disciplines',
-                loadChildren: () => Promise.all(/*! import() | academic-disciplines-academic-disciplines-module */[__webpack_require__.e("default~academic-disciplines-academic-disciplines-module~positions-positions-module"), __webpack_require__.e("common"), __webpack_require__.e("academic-disciplines-academic-disciplines-module")]).then(__webpack_require__.bind(null, /*! ./academic-disciplines/academic-disciplines.module */ "./src/app/features/system-setup/academic-disciplines/academic-disciplines.module.ts"))
+                loadChildren: () => Promise.all(/*! import() | academic-disciplines-academic-disciplines-module */[__webpack_require__.e("default~academic-disciplines-academic-disciplines-module~positions-positions-module~users-users-modu~9f61a68b"), __webpack_require__.e("common"), __webpack_require__.e("academic-disciplines-academic-disciplines-module")]).then(__webpack_require__.bind(null, /*! ./academic-disciplines/academic-disciplines.module */ "./src/app/features/system-setup/academic-disciplines/academic-disciplines.module.ts"))
                     .then(m => m.AcademicDisciplinesModule),
             },
             {

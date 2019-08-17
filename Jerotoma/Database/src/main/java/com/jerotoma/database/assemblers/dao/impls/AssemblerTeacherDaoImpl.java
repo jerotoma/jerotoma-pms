@@ -92,6 +92,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		
 		List<TeacherVO> teachers = this.jdbcTemplate.query(builder.toString(), new TeacherResultProcessor(), paramList);
 		map.put(TeacherConstant.TEACHERS, teachers);
+		map.put(TeacherConstant.TEACHER_COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
@@ -133,7 +134,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, user_id, teacher_code, first_name, last_name, occupation, gender, avatar, position_id, academic_discipline_id, birth_date, created_on, updated_on FROM public.teachers");
+		return new StringBuilder("SELECT id, user_id, teacher_code, first_name, last_name, occupation, gender, avatar, position_id, academic_discipline_id, birth_date, created_on, updated_on FROM public.teachers ");
 		
 	}
 

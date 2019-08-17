@@ -239,7 +239,7 @@ TinyMCEComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*!*********************************!*\
   !*** ./src/app/shared/index.ts ***!
   \*********************************/
-/*! exports provided: TinyMCEComponent, UserTableComponent */
+/*! exports provided: UserTableComponent, TinyMCEComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

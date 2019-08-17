@@ -32,11 +32,6 @@ public abstract class Person {
 	@Column(name = "avatar")
 	protected String picture;
 	
-	/*
-	@OneToMany(mappedBy="address")
-	protected List<Address> addresses; 
-	*/
-	
 	public Person() {
 		
 	}

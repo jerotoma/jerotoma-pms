@@ -6464,7 +6464,7 @@ AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*!****************************************!*\
   !*** ./src/app/services/auth/index.ts ***!
   \****************************************/
-/*! exports provided: TokenService, AuthService, AUTH_CONSTANT */
+/*! exports provided: AUTH_CONSTANT, TokenService, AuthService */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6790,18 +6790,26 @@ let UserService = class UserService {
             .get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}/${userId}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
     }
+    loadUser(userId, userType) {
+        return this.http.get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}/${userId}?userType=${userType}`, { observe: 'response' });
+    }
     load(param) {
         return this.http
             .get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
     }
-    loadTeachers(param) {
+    loadUsers(param) {
         return this.http.get(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}?page=${param.page}&pageSize=${param.pageSize}
-        &orderby=${param.orderby}&userType=${param.userType}`)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["retry"])(3), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+        &orderby=${param.orderby}&userType=${param.userType}`, { observe: 'response' });
     }
     addUser(data) {
         return this.http.post(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}`, data, { observe: 'response' });
+    }
+    updateUser(data) {
+        return this.http.put(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}`, data, { observe: 'response' });
+    }
+    deleteUser(userId, userType) {
+        return this.http.delete(`${_utils__WEBPACK_IMPORTED_MODULE_5__["END_POINTS"].users}/${userId}?userType=${userType}`, { observe: 'response' });
     }
     search(param) {
         return this.http
@@ -6831,17 +6839,21 @@ UserService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 /*!*******************************************************!*\
   !*** ./src/app/utils/calendar-utils/calendar.util.ts ***!
   \*******************************************************/
-/*! exports provided: DateFormatter */
+/*! exports provided: DateFormatter, StringDateFormatter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateFormatter", function() { return DateFormatter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StringDateFormatter", function() { return StringDateFormatter; });
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 
-function DateFormatter(date, format = 'YYYY/MM/DD') {
-    return moment__WEBPACK_IMPORTED_MODULE_0__(date, format, true);
+function DateFormatter(date, format = 'YYYY/MM/DD', isStrict = true) {
+    return moment__WEBPACK_IMPORTED_MODULE_0__(date, format, isStrict);
+}
+function StringDateFormatter(date, format = 'YYYY/MM/DD', isStrict = true) {
+    return moment__WEBPACK_IMPORTED_MODULE_0__(date, format, isStrict);
 }
 
 
@@ -7064,7 +7076,7 @@ function isObjectEmpty(obj) {
 /*!********************************!*\
   !*** ./src/app/utils/index.ts ***!
   \********************************/
-/*! exports provided: END_POINTS, deepExtend, getDeepFromObject, urlBase64Decode, b64decode, b64DecodeUnicode, isObjectEmpty, LocalStorage, DateValidator, DateFormatter */
+/*! exports provided: END_POINTS, deepExtend, getDeepFromObject, urlBase64Decode, b64decode, b64DecodeUnicode, isObjectEmpty, LocalStorage, DateValidator, DateFormatter, StringDateFormatter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7093,6 +7105,8 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony import */ var _calendar_utils_calendar_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./calendar-utils/calendar.util */ "./src/app/utils/calendar-utils/calendar.util.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DateFormatter", function() { return _calendar_utils_calendar_util__WEBPACK_IMPORTED_MODULE_4__["DateFormatter"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "StringDateFormatter", function() { return _calendar_utils_calendar_util__WEBPACK_IMPORTED_MODULE_4__["StringDateFormatter"]; });
 
 
 
