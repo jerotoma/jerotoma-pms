@@ -36,7 +36,7 @@
                             <nb-card [ngStyle]="{'display': listDisplay}">
                               <nb-list>
                                 <nb-list-item *ngFor="let user of users">
-                                  <a href="#" class="" (click)="pickUser($event, user)" >
+                                  <a href="#" class="user-list" (click)="pickUser($event, user)" >
                                       <nb-user
                                           [name]="user.firstName + '' + user.lastName"
                                           [title]="user.username">

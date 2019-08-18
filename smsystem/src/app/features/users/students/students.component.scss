@@ -1,13 +1,15 @@
-@import '../../../@theme/styles/themes';
+table {
+  width: 100%;
+}
+button {
+  cursor: pointer;
+  margin: 0;
+  border: none;
+}
 
-@include nb-install-component() {
-  .list-card {
-    nb-card-header {
-      border-bottom: none;
-    }
-
-    nb-card-body {
-      padding: 0;
-    }
-  }
+button:focus {
+  outline: none;
+}
+button:hover {
+  background-color: rgba(0, 0, 0, 0.03);;
 }
