@@ -97,7 +97,11 @@ const MODULES = [
     MatIconModule,
     MatMenuModule,
     MatSelectModule,
-    NbDialogModule.forRoot(),
+    NbDialogModule.forRoot({
+      closeOnBackdropClick: false,
+      hasScroll: true,
+
+    }),
     NbWindowModule.forRoot(),
 ];
 

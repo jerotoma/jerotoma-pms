@@ -28,7 +28,8 @@ public class UserConstant {
 		TEACHER("teacher"),
 		PARENT("parent"),
 		STAFF("staff"),
-		STUDENT("student");
+		STUDENT("student"),
+		STUDENT_AND_PARENT("studentAndParent");
 		
 		private String type;
 		

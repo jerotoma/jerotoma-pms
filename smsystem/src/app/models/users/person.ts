@@ -7,4 +7,6 @@ export interface Person {
   occupation?: string;
   birthDate: Date;
   picture?: string;
+  createdOn: Date;
+  updatedOn: Date;
 }

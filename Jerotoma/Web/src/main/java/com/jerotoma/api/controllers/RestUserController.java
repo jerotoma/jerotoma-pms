@@ -34,7 +34,7 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.common.models.users.OtherStaff;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
@@ -47,7 +47,7 @@ import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.AuthUserService;
-import com.jerotoma.services.users.OtherStaffService;
+import com.jerotoma.services.users.StaffService;
 import com.jerotoma.services.users.ParentService;
 import com.jerotoma.services.users.StudentService;
 import com.jerotoma.services.users.TeacherService;
@@ -61,7 +61,7 @@ public class RestUserController {
 	@Autowired TeacherService teacherService;
 	@Autowired AssemblerTeacherService assemblerTeacherService;
 	@Autowired StudentService studentService;
-	@Autowired OtherStaffService otherStaffService;
+	@Autowired StaffService otherStaffService;
 	@Autowired ParentService parentService;
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
@@ -218,6 +218,8 @@ public class RestUserController {
 		
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		Parent parent;
+		Student student;
 		try {
 			switch(type) {
 			case TEACHER:
@@ -279,7 +281,7 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				Student student = studentService.createObject(
+				student = studentService.createObject(
 						UserValidator.validateStudentInputInfo(params, requiredFields));
 				instance.setData(student);				
 				break;
@@ -292,7 +294,7 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				OtherStaff otherStaff = otherStaffService.createObject(
+				Staff otherStaff = otherStaffService.createObject(
 						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
 				instance.setData(otherStaff);
 				break;
@@ -305,9 +307,24 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				Parent parent = parentService.createObject(
-						UserValidator.validateParentInputInfo(params, requiredFields));
+				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
 				instance.setData(parent);
+				break;
+			case STUDENT_AND_PARENT:
+				
+				
+				
+				requiredFields =  new ArrayList<>(
+						Arrays.asList(
+								UserConstant.FIRST_NAME, 
+								UserConstant.LAST_NAME,
+								UserConstant.OCCUPATION,
+								UserConstant.TERM,
+								UserConstant.GENDER,
+								UserConstant.POSITION));
+				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
+				student = studentService.createObject(UserValidator.validateStudentInputInfo(params, requiredFields));
+				
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -439,7 +456,7 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				OtherStaff otherStaff = otherStaffService.createObject(
+				Staff otherStaff = otherStaffService.createObject(
 						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
 				instance.setData(otherStaff);
 				break;

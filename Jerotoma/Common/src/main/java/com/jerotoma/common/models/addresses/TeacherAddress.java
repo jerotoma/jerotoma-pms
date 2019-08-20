@@ -26,13 +26,35 @@ public class TeacherAddress {
 	private Integer id;
 	
 	@ManyToOne
-   	@JsonManagedReference
    	@JoinColumn(name="teacher_id")
 	private Teacher teacher;
 	
 	@OneToOne
    	@JsonManagedReference
    	@JoinColumn(name="address_id")
-	private Address address;	
+	private Address address;
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 }

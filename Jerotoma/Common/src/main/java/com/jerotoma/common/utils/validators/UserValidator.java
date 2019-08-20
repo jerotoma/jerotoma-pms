@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
-import com.jerotoma.common.models.users.OtherStaff;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
@@ -368,9 +368,9 @@ public class UserValidator {
 		return parent;
 	}
 
-	public static OtherStaff validateOtherStaffInputInfo(Map<String, Object> params, List<String> requiredFields) {
+	public static Staff validateOtherStaffInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		OtherStaff otherStaff = new OtherStaff();
+		Staff otherStaff = new Staff();
 		String firstName  = null;		
 		String lastName = null;
 		String fullName = null;	

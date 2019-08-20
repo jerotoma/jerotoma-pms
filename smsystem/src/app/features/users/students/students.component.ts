@@ -27,7 +27,7 @@ export class StudentsComponent implements OnInit {
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'fullName', 'gender', 'position', 'action'];
+  displayedColumns: string[] = ['id', 'fullName', 'gender', 'studentNumber', 'createdOn', 'action'];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

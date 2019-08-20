@@ -14,14 +14,26 @@ public abstract class Person {
 	@Column(name = "last_name")
 	protected String lastName;
 	
+	@Column(name="middle_names")
+	protected String middleNames;
+	
 	@Transient
 	protected String fullName;
 	
 	@Transient
 	protected Integer age;
 	
+	@Column(name = "updated_by")
+	protected Integer updatedBy;
+	
 	@Column(name = "gender")
 	protected String gender;
+	
+	@Column(name = "phone_number")
+	protected String phoneNumber;
+	
+	@Column(name = "email_address")
+	protected String emailAddress;
 	
 	@Column(name = "occupation")
 	protected String occupation;
@@ -31,6 +43,12 @@ public abstract class Person {
 	
 	@Column(name = "avatar")
 	protected String picture;
+	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
 	
 	public Person() {
 		
@@ -53,13 +71,22 @@ public abstract class Person {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
+	}	
 	public String getFullName() {
 		return fullName;
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
+		
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
 	public Integer getAge() {
 		return age;
 	}
@@ -72,6 +99,14 @@ public abstract class Person {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	public String getMiddleNames() {
+		return middleNames;
+	}
+
+	public void setMiddleNames(String middleNames) {
+		this.middleNames = middleNames;
+	}
+
 	public String getOccupation() {
 		return occupation;
 	}
@@ -91,5 +126,37 @@ public abstract class Person {
 
 	public void setPicture(String picture) {
 		this.picture = picture;
-	}	
+	}
+	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public String getEmailAddress() {
+		return emailAddress;
+	}
+
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 }

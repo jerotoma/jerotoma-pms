@@ -22,6 +22,8 @@ export class ProfileComponent implements OnInit {
     birthDate: null,
     fullName: '',
     picture: '',
+    createdOn: null,
+    updatedOn: null,
   };
   protected options: {};
 

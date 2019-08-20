@@ -3543,6 +3543,8 @@ let ProfileComponent = class ProfileComponent {
             birthDate: null,
             fullName: '',
             picture: '',
+            createdOn: null,
+            updatedOn: null,
         };
     }
     ngOnInit() {

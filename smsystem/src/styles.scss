@@ -61,7 +61,7 @@ button {
   float: left;
 }
 nb-dialog-container {
-  width:800px;
+  width:1000px;
 }
 
 .form-control-group {
@@ -71,4 +71,8 @@ nb-dialog-container {
 .mat-header-cell {
   font-size: 16px;
   font-weight: 700;
+}
+
+.error-message {
+  color: #ff3d71 !important;
 }

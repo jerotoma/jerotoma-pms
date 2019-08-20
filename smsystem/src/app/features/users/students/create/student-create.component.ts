@@ -3,14 +3,14 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef, NbDateService } from '@nebular/theme';
-import { Student, User } from 'app/models/users';
+import { Student, Parent } from 'app/models/users';
+import { Address } from 'app/models/addresses';
 import { UserService } from 'app/services/users';
-import { Position } from 'app/models/positions';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
+
 
 @Component({
   selector: 'app-student-create',
@@ -21,21 +21,19 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Output() onUserCreationSuccess = new EventEmitter();
   action: string = 'create';
-  position: number;
-  academicDiscipline: number;
 
   studentForm: FormGroup;
   parentForm: FormGroup;
   addressForm: FormGroup;
   student: Student;
+  address: Address;
+  parent: Parent;
   studentId: string;
   showMessage: ShowMessage = {
     error: false,
     success: false,
     message: '',
   };
-  users: User[] = [];
-  positions: Position[] = [];
   listDisplay: string = 'none';
 
   linearMode = true;
@@ -73,21 +71,33 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       });
     }
     this.student = this.studentForm.value;
+    this.parent  = this.parentForm.value;
+    this.address = this.addressForm.value;
+    if (this.studentForm.valid && this.parentForm.valid && this.addressForm.valid){
+      const data = {
+        student: this.studentForm.value,
+        parent: this.parentForm.value,
+        address: this.addressForm.value,
+        userType: 'studentAndParent',
+      }
+      this.postData(data);
+    }
+  }
+
+  postData(data: any) {
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
-      this.updateTeacher();
+      this.updateData(data);
     } else {
-      this.userService.addUser(this.student).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      this.userService.addUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
         if (status !== null && status === 200) {
           this.showMessage.success = true;
-          this.studentForm.reset();
-          this.ref.close();
-          this.onUserCreationSuccess.emit(this.showMessage.success);
           this.showMessage.error = false;
           this.showMessage.message = resp ? resp.body.message : '';
+          this.resetForms()
         } else {
           this.showMessage.success = false;
           this.showMessage.error = true;
@@ -100,8 +110,8 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  updateTeacher() {
-    this.userService.updateUser(this.student).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+  updateData(data: any) {
+    this.userService.updateUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {
@@ -122,16 +132,12 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       this.showMessage.message = error ? error.error.message : '';
     });
   }
-  search(value: string) {
-    const param = this.getParam();
-    param.search = value;
-    this.userService.search(param).subscribe((result) => {
-      this.users = [];
-      if (result && result.success) {
-        this.users = result.data;
-        this.listDisplay = 'block';
-      }
-    });
+
+  resetForms() {
+    this.studentForm.reset();
+    this.parentForm.reset();
+    this.addressForm.reset();
+    this.ref.close();
   }
 
   loadStudentForm() {
@@ -171,29 +177,6 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
-  pickUser(event: any, user: User) {
-    event.preventDefault();
-    const firstName = this.studentForm.get('firstName');
-    const lastName = this.studentForm.get('lastName');
-
-    this.listDisplay = 'none';
-    this.studentForm.patchValue({
-      userId: user.id,
-      fullName: user.firstName + ' ' + user.lastName,
-    });
-
-    if (firstName && !firstName.value) {
-      this.studentForm.patchValue({
-        firstName: user.firstName,
-      });
-    }
-
-    if (lastName && !lastName.value) {
-      this.studentForm.patchValue({
-        lastName: user.lastName,
-      });
-    }
-  }
   getParam(): QueryParam {
     return {
       page: 1,
@@ -202,7 +185,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'student',
+      userType: 'studentAndParent',
     };
   }
 

@@ -9,8 +9,12 @@ public class DatabaseConstant {
 		public static final String STUDENTS = "students";
 		public static final String COURSES = "courses";
 		public static final String ADDRESSES = "addresses";
+		public static final String STUDENT_ADDRESSES = "student_addresses";
 		public static final String TEACHER_ADDRESSES = "teacher_addresses";
-		public static final String OTHER_STAFFS = "other_staffs";
+		public static final String PARENT_ADDRESSES = "parent_addresses";
+		public static final String STAFF_ADDRESSES = "staff_addresses";
+		public static final String STUDENT_PARENTS = "student_parents";
+		public static final String STAFFS = "staffs";
 		public static final String PARENTS = "parents";
 		public static final String STUDENT_ADMISSIONS = "student_admissions";
 	}
