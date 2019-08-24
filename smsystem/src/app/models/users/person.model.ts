@@ -2,7 +2,8 @@ export interface Person {
   firstName?: string;
   lastName?: string;
   fullName?: string;
-  age?: number;
+  phoneNumber?: number;
+  emailAddress?: string;
   gender?: string;
   occupation?: string;
   birthDate: Date;

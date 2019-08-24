@@ -3,11 +3,11 @@ import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import { UserService } from './../../../services/users/user.service';
-import { User } from './../../../models/users/user';
+import { UserService } from 'app/services/users/user.service';
+import { User } from 'app/models/users/user.model';
 
 
-import { LayoutService } from '../../../@core/utils';
+import { LayoutService } from 'app/@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 

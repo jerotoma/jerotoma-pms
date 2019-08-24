@@ -1,14 +1,14 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,23 +29,24 @@ public class Student extends Person implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="students_generator")
 	@SequenceGenerator(name="students_generator", sequenceName = "students_id_seq", allocationSize=1)
 	@Column
-	private Long id;
+	private Integer id;
 	
 	@Column
 	private String position;
 	
-	@Column(name="student_code")
-	private String studentCode;
+	@Column(name="student_number")
+	private Integer studentNumber;
 	
-	@OneToMany(mappedBy="student")
+	@ManyToOne
+    @JoinColumn(name="parent_id", nullable=true)
 	@JsonManagedReference
-	private Set<Parent> parents;
+	private Parent parent;
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -57,11 +58,21 @@ public class Student extends Person implements Serializable{
 		this.position = position;
 	}
 
-	public String getStudentCode() {
-		return studentCode;
+	public Integer getStudentNumber() {
+		return studentNumber;
 	}
 
-	public void setStudentCode(String studentCode) {
-		this.studentCode = studentCode;
+	public void setStudentNumber(Integer studentNumber) {
+		this.studentNumber = studentNumber;
 	}
+
+	public Parent getParent() {
+		return parent;
+	}
+
+	public void setParent(Parent parent) {
+		this.parent = parent;
+	}
+	
+
 }

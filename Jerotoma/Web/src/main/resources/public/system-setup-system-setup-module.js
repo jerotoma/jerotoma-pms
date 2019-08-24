@@ -113,9 +113,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
-/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
-/* harmony import */ var app_features_miscellaneous_miscellaneous_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! app/features/miscellaneous/miscellaneous.module */ "./src/app/features/miscellaneous/miscellaneous.module.ts");
-/* harmony import */ var _system_setup_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./system-setup-routing.module */ "./src/app/features/system-setup/system-setup-routing.module.ts");
+/* harmony import */ var app_features_miscellaneous_miscellaneous_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/features/miscellaneous/miscellaneous.module */ "./src/app/features/miscellaneous/miscellaneous.module.ts");
+/* harmony import */ var _system_setup_routing_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./system-setup-routing.module */ "./src/app/features/system-setup/system-setup-routing.module.ts");
+/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
 /* harmony import */ var _system_setup_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./system-setup.component */ "./src/app/features/system-setup/system-setup.component.ts");
 
 
@@ -126,14 +126,14 @@ __webpack_require__.r(__webpack_exports__);
 
 const COMPONENTS = [
     _system_setup_component__WEBPACK_IMPORTED_MODULE_6__["SystemSetupComponent"],
-    app_shared__WEBPACK_IMPORTED_MODULE_3__["TinyMCEComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_5__["TinyMCEComponent"],
 ];
 const ENTRY_COMPONENTS = [];
 const MODULES = [
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
-    _system_setup_routing_module__WEBPACK_IMPORTED_MODULE_5__["SystemSetupRoutingModule"],
-    app_features_miscellaneous_miscellaneous_module__WEBPACK_IMPORTED_MODULE_4__["MiscellaneousModule"],
+    app_features_miscellaneous_miscellaneous_module__WEBPACK_IMPORTED_MODULE_3__["MiscellaneousModule"],
+    _system_setup_routing_module__WEBPACK_IMPORTED_MODULE_4__["SystemSetupRoutingModule"],
 ];
 const SERVICES = [];
 let SystemSetupModule = class SystemSetupModule {

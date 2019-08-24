@@ -38,7 +38,6 @@ const ENTRY_COMPONENTS = [
 const MODULES = [
   FormsModule,
   ReactiveFormsModule,
-  PositionsRoutingModule,
   MatTableModule,
   MatPaginatorModule,
   MatIconModule,
@@ -50,6 +49,7 @@ const MODULES = [
   NbIconModule,
   NbAlertModule,
   NbDialogModule.forRoot(),
+  PositionsRoutingModule,
 ];
 
 const SERVICES = [

@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { NbDialogRef, NbDateService } from '@nebular/theme';
+import { NbStepperComponent } from '@nebular/theme';
 import { Student, Parent } from 'app/models/users';
-import { Address } from 'app/models/addresses';
+import { Address, AddressWrapper } from 'app/models/addresses';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
@@ -18,8 +18,9 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['student-create.component.scss'],
 })
 export class StudentCreateComponent implements OnInit, AfterViewInit {
-  @Input() title: string;
+  title: string = 'Create New User';
   @Output() onUserCreationSuccess = new EventEmitter();
+  @ViewChild('stepper', {static: true}) stepper: NbStepperComponent;
   action: string = 'create';
 
   studentForm: FormGroup;
@@ -45,15 +46,13 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   constructor(
     protected positionService: PositionService,
     protected academicDisciplineService: AcademicDisciplineService,
-    protected dateService: NbDateService<Date>,
     private userService:  UserService,
     private formBuilder: FormBuilder,
-    protected ref: NbDialogRef<StudentCreateComponent>) {}
+    ) {}
 
   ngOnInit() {
     this.loadStudentForm();
     this.loadParentForm();
-    this.loadAddressForm();
   }
   ngAfterViewInit() {
     if (this.action === 'edit') {
@@ -61,23 +60,30 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     }
   }
   dismiss() {
-    this.ref.close();
+
   }
+
+  onStudentSubmit() {
+    this.title = 'Create New Student';
+  }
+
+  onParentSubmit() {
+    this.title = 'Create New Parent';
+  }
+
+
   onSubmit() {
+    window.console.log(this.studentForm, this.parentForm);
+   if (this.studentForm.valid && this.parentForm.valid ){
     const dob = this.studentForm.get('birthDate');
     if (dob && dob.valid) {
       this.studentForm.patchValue({
         birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
       });
     }
-    this.student = this.studentForm.value;
-    this.parent  = this.parentForm.value;
-    this.address = this.addressForm.value;
-    if (this.studentForm.valid && this.parentForm.valid && this.addressForm.valid){
-      const data = {
+    const data = {
         student: this.studentForm.value,
         parent: this.parentForm.value,
-        address: this.addressForm.value,
         userType: 'studentAndParent',
       }
       this.postData(data);
@@ -97,7 +103,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
           this.showMessage.success = true;
           this.showMessage.error = false;
           this.showMessage.message = resp ? resp.body.message : '';
-          this.resetForms()
+          this.resetForms();
         } else {
           this.showMessage.success = false;
           this.showMessage.error = true;
@@ -117,7 +123,6 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       if (status !== null && status === 200) {
         this.showMessage.success = true;
         this.studentForm.reset();
-        this.ref.close();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -136,8 +141,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.studentForm.reset();
     this.parentForm.reset();
-    this.addressForm.reset();
-    this.ref.close();
+    this.stepper.reset();
   }
 
   loadStudentForm() {
@@ -145,38 +149,32 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      position: [''],
-      occupation: ['student'],
+      middleNames: [''],
+      phoneNumber: ['', Validators.required],
+      emailAddress: [null],
       gender: ['', Validators.required],
       picture: [''],
+      userType: ['student'],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
-      userType: ['student']
+      address: [null, Validators.required],
     });
   }
+
   loadParentForm() {
     this.parentForm = this.formBuilder.group({
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      occupation: ['parent'],
+      middleNames: [''],
+      occupation: [''],
+      phoneNumber: ['', Validators.required],
+      emailAddress: [null],
       gender: ['', Validators.required],
       picture: [''],
-      userType: ['parent']
+      userType: ['parent'],
+      address: [null, Validators.required],
     });
   }
-
-  loadAddressForm() {
-    this.addressForm = this.formBuilder.group({
-      id: [null],
-      street: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      state: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      unit: [null],
-    });
-  }
-
   getParam(): QueryParam {
     return {
       page: 1,
@@ -212,5 +210,24 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       this.showMessage.success = false;
       this.showMessage.message = error ? error.error.message : '';
     });
+  }
+
+  onStudentAddressChange(addressWrapper: AddressWrapper ) {
+    if (!addressWrapper.isValid) {
+      this.studentForm.controls['address'].setErrors({ invalidAddress: true });
+    } else {
+      this.studentForm.controls['address'].setErrors(null);
+      this.studentForm.patchValue({address: addressWrapper.address});
+
+    }
+  }
+
+  onParentAddressChange(addressWrapper: AddressWrapper ) {
+    if (!addressWrapper.isValid) {
+      this.parentForm.controls['address'].setErrors({ invalidAddress: true });
+    } else {
+      this.parentForm.controls['address'].setErrors(null);
+      this.parentForm.patchValue({address: addressWrapper.address});
+    }
   }
 }

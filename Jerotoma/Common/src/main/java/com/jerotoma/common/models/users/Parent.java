@@ -1,14 +1,14 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -28,31 +28,26 @@ public class Parent extends Person implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="parents_generator")
 	@SequenceGenerator(name="parents_generator", sequenceName = "parents_id_seq", allocationSize=1)
 	@Column
-	private Long id;
+	private Integer id;
 	
-	@Column
-	private String position;
-	
-	
-	@ManyToOne
-    @JoinColumn(name="student_id", nullable=true)
+	@OneToMany(mappedBy="parent")
 	@JsonManagedReference
-	private Student student;
+	private Set<Student> students;
 	
-	public Long getId() {
+	
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public String getPosition() {
-		return position;
+	public Set<Student> getStudents() {
+		return students;
 	}
 
-	public void setPosition(String position) {
-		this.position = position;
+	public void setStudents(Set<Student> students) {
+		this.students = students;
 	}
-	
 }

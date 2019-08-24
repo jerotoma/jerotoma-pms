@@ -1,10 +1,7 @@
-import { merge } from 'rxjs';
-import { messages } from './../../features/extra-components/chat/messages';
-import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from 'app/services/auth/auth.service';
-import { UserContext } from 'app/models/users/user-context';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 

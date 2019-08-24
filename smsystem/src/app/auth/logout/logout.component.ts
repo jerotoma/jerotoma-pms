@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, Inject  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {TokenService, AuthService } from 'app/services/auth';
+import {AuthService } from 'app/services/auth';
 
 @Component({
   selector: 'app-logout',
@@ -13,7 +13,6 @@ export class LogoutComponent implements OnInit {
   strategyName: string = 'email';
   errors: string[];
   constructor(
-    private tokenService: TokenService,
     protected service: AuthService,
     protected router: Router) {
 

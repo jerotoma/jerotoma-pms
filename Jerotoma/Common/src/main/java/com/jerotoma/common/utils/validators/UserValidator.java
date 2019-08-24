@@ -7,6 +7,7 @@ import java.util.Map;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
 import com.jerotoma.common.models.users.Staff;
+import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
@@ -23,6 +24,7 @@ public class UserValidator {
 		String fullName = null;	
 		Integer age = null;	
 		Integer userId = null;	
+		Address address = null;
 		String gender = null;
 		String occupation = null;		
 		String birthDate = null;
@@ -80,62 +82,63 @@ public class UserValidator {
 		}
 				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
-			throw new FieldCanNotBeEmptyException("Age can not be empty");
+			throw new FieldCanNotBeEmptyException("Age is required to continue");
 		}
 		teacher.setAge(age);
 		
 		if (userId == null && requiredFields.contains(UserConstant.USER_ID)) {
-			throw new FieldCanNotBeEmptyException("User ID can not be empty");
+			throw new FieldCanNotBeEmptyException("User ID is required to continue");
 		}
 		teacher.setUserId(userId);
 		
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
-			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
+			throw new FieldCanNotBeEmptyException("Birth date is required to continue");
 		}
 		Date cal = CalendarUtil.convertStringToDate(birthDate);
 		teacher.setBirthDate(cal);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
-			throw new FieldCanNotBeEmptyException("First Name can not be empty");
+			throw new FieldCanNotBeEmptyException("First Name is required to continue");
 		}
 		teacher.setFirstName(firstName);
 		
 		if (lastName == null && requiredFields.contains(UserConstant.LAST_NAME)) {
-			throw new FieldCanNotBeEmptyException("Last Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Last Name is required to continue");
 		}
 		teacher.setLastName(lastName);
 		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
-			throw new FieldCanNotBeEmptyException("Full Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Full Name is required to continue");
 		}
 		teacher.setFullName(fullName);
 		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
-			throw new FieldCanNotBeEmptyException("Gender can not be empty");
+			throw new FieldCanNotBeEmptyException("Gender is required to continue");
 		}
 		teacher.setGender(gender);
 		
 		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
+			throw new FieldCanNotBeEmptyException("Occupation is required to continue");
 		}
 		teacher.setOccupation(occupation);
 		
 		if (teacherCode == null && requiredFields.contains(UserConstant.EMPLOYMENT_CODE)) {
-			throw new FieldCanNotBeEmptyException("Teacher Code date can not be empty");
+			throw new FieldCanNotBeEmptyException("Teacher Code is required to continue");
 		}
 		teacher.setTeacherCode(teacherCode);
 		
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
-			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
+			throw new FieldCanNotBeEmptyException("Picture is required to continue");
 		}
 		teacher.setPicture(picture);
 		
 		if (id == null && requiredFields.contains(UserConstant.ID)) {
-			throw new FieldCanNotBeEmptyException("Teacher's ID is required");
+			throw new FieldCanNotBeEmptyException("Teacher's ID is required to continue");
 		}
 		teacher.setId(id);
 		
-		
+		address = AddressValidator.validateAddress(params, requiredFields);
+		teacher.setAddress(address);
 		today = CalendarUtil.getTodaysDate();
 		
 		teacher.setCreatedOn(today);
@@ -155,8 +158,11 @@ public class UserValidator {
 		String occupation = null;		
 		String birthDate = null;
 		String picture = null;
-		String studentCode = null;
-		String position = null;
+		Integer studentNumber = null;
+		String emailAddress = null;
+		String phoneNumber = null;
+		
+		Address address = null;
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
@@ -195,65 +201,75 @@ public class UserValidator {
 			picture = (String) params.get(UserConstant.PICTURE);
 		}
 		
-		if(params.containsKey(UserConstant.STUDENT_CODE)) {
-			studentCode = (String) params.get(UserConstant.STUDENT_CODE);
+		if(params.containsKey(UserConstant.STUDENT_NUMBER)) {
+			studentNumber = (Integer) params.get(UserConstant.STUDENT_NUMBER);
 		}
 		
-		if(params.containsKey(UserConstant.POSITION)) {
-			position = (String) params.get(UserConstant.POSITION);
+		if(params.containsKey(UserConstant.EMAIL_ADDRESS)) {
+			emailAddress = (String) params.get(UserConstant.EMAIL_ADDRESS);
+		}
+		
+		if(params.containsKey(UserConstant.PHONE_NUMBER)) {
+			phoneNumber = (String) params.get(UserConstant.PHONE_NUMBER);
 		}
 		
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
-			throw new FieldCanNotBeEmptyException("Age can not be empty");
+			throw new FieldCanNotBeEmptyException("Age is required to continue");
 		}
 		student.setAge(age);
 		
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
-			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
+			throw new FieldCanNotBeEmptyException("Birth date is required to continue");
 		}
 		Date cal = CalendarUtil.convertStringToDate(birthDate);
 		student.setBirthDate(cal);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
-			throw new FieldCanNotBeEmptyException("First Name can not be empty");
+			throw new FieldCanNotBeEmptyException("First Name is required to continue");
 		}
 		student.setFirstName(firstName);
 		
 		if (lastName == null && requiredFields.contains(UserConstant.LAST_NAME)) {
-			throw new FieldCanNotBeEmptyException("Last Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Last Name is required to continue");
 		}
 		student.setLastName(lastName);
 		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
-			throw new FieldCanNotBeEmptyException("Full Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Full Name is required to continue");
 		}
 		student.setFullName(fullName);
 		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
-			throw new FieldCanNotBeEmptyException("Gender can not be empty");
+			throw new FieldCanNotBeEmptyException("Gender is required to continue");
 		}
 		student.setGender(gender);
 		
 		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
+			throw new FieldCanNotBeEmptyException("Occupation is required to continue");
 		}
 		student.setOccupation(occupation);
 		
-		if (studentCode == null && requiredFields.contains(UserConstant.STUDENT_CODE)) {
-			throw new FieldCanNotBeEmptyException("Student code can not be empty");
+		if (studentNumber == null && requiredFields.contains(UserConstant.STUDENT_NUMBER)) {
+			throw new FieldCanNotBeEmptyException("Student Number is required to continue");
 		}
-		student.setStudentCode(studentCode);		
+		student.setStudentNumber(studentNumber);		
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
-			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
+			throw new FieldCanNotBeEmptyException("Picture is required to continue");
 		}
 		student.setPicture(picture);
 		
-		if (position == null && requiredFields.contains(UserConstant.POSITION)) {
-			throw new FieldCanNotBeEmptyException("Position date can not be empty");
+		if (emailAddress == null && requiredFields.contains(UserConstant.EMAIL_ADDRESS)) {
+			throw new FieldCanNotBeEmptyException("Email Address is required to continue");
 		}
-		student.setPosition(position);
+		student.setEmailAddress(emailAddress);
 		
+		if (phoneNumber == null && requiredFields.contains(UserConstant.PHONE_NUMBER)) {
+			throw new FieldCanNotBeEmptyException("Phone number is required to continue");
+		}
+		student.setPhoneNumber(phoneNumber);
+		address = AddressValidator.validateAddress(params, requiredFields);
+		student.setAddress(address);
 		Date today = CalendarUtil.getTodaysDate();
 		student.setCreatedOn(today);
 		student.setUpdatedOn(today);
@@ -272,7 +288,8 @@ public class UserValidator {
 		String occupation = null;		
 		Date birthDate = null;
 		String picture = null;
-		String position = null;
+		
+		Address address = null;
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
@@ -281,8 +298,7 @@ public class UserValidator {
 		if(params.containsKey(UserConstant.LAST_NAME)) {
 			lastName  = (String) params.get(UserConstant.LAST_NAME);
 		}
-		
-		
+				
 		if(params.containsKey(UserConstant.FULL_NAME)) {
 			fullName  = (String) params.get(UserConstant.FULL_NAME);
 		}
@@ -310,58 +326,50 @@ public class UserValidator {
 		if(params.containsKey(UserConstant.PICTURE)) {
 			picture = (String) params.get(UserConstant.PICTURE);
 		}
-		
-		if(params.containsKey(UserConstant.POSITION)) {
-			position = (String) params.get(UserConstant.POSITION);
-		}
-		
+				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
 			throw new FieldCanNotBeEmptyException("Age can not be empty");
 		}
 		parent.setAge(age);
 		
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
-			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
+			throw new FieldCanNotBeEmptyException("Birth date is required to continue");
 		}
 		parent.setBirthDate(birthDate);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
-			throw new FieldCanNotBeEmptyException("First Name can not be empty");
+			throw new FieldCanNotBeEmptyException("First Name is required to continue");
 		}
 		parent.setFirstName(firstName);
 		
 		if (lastName == null && requiredFields.contains(UserConstant.LAST_NAME)) {
-			throw new FieldCanNotBeEmptyException("Last Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Last Name is required to continue");
 		}
 		parent.setLastName(lastName);
 		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
-			throw new FieldCanNotBeEmptyException("Full Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Full Name is required to continue");
 		}
 		parent.setFullName(fullName);
 		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
-			throw new FieldCanNotBeEmptyException("Gender can not be empty");
+			throw new FieldCanNotBeEmptyException("Gender is required to continue");
 		}
 		parent.setGender(gender);
 		
 		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Occupation date can not be empty");
+			throw new FieldCanNotBeEmptyException("Occupation is required to continue");
 		}
 		parent.setOccupation(occupation);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
-			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
+			throw new FieldCanNotBeEmptyException("Picture is required to continue");
 		}
 		parent.setPicture(picture);
 		
-		if (position == null && requiredFields.contains(UserConstant.POSITION)) {
-			throw new FieldCanNotBeEmptyException("Position date can not be empty");
-		}
-		parent.setPosition(position);
-		
 		Date today = CalendarUtil.getTodaysDate();
-		
+		address = AddressValidator.validateAddress(params, requiredFields);
+		parent.setAddress(address);
 		parent.setCreatedOn(today);
 		parent.setUpdatedOn(today);
 		
@@ -370,7 +378,7 @@ public class UserValidator {
 
 	public static Staff validateOtherStaffInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		Staff otherStaff = new Staff();
+		Staff staff = new Staff();
 		String firstName  = null;		
 		String lastName = null;
 		String fullName = null;	
@@ -380,6 +388,7 @@ public class UserValidator {
 		Date birthDate = null;
 		String picture = null;
 		String position = null;
+		Address address = null;
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
@@ -423,55 +432,58 @@ public class UserValidator {
 		}
 		
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
-			throw new FieldCanNotBeEmptyException("Age can not be empty");
+			throw new FieldCanNotBeEmptyException("Age is required to continue");
 		}
-		otherStaff.setAge(age);
+		staff.setAge(age);
 		
 		if (birthDate == null && requiredFields.contains(UserConstant.BIRTH_DATE)) {
-			throw new FieldCanNotBeEmptyException("Birth date can not be empty");
+			throw new FieldCanNotBeEmptyException("Birth Date is required to continue");
 		}
-		otherStaff.setBirthDate(birthDate);
+		staff.setBirthDate(birthDate);
 		
 		if (firstName == null && requiredFields.contains(UserConstant.FIRST_NAME)) {
-			throw new FieldCanNotBeEmptyException("First Name can not be empty");
+			throw new FieldCanNotBeEmptyException("First Name is required to continue");
 		}
-		otherStaff.setFirstName(firstName);
+		staff.setFirstName(firstName);
 		
 		if (lastName == null && requiredFields.contains(UserConstant.LAST_NAME)) {
-			throw new FieldCanNotBeEmptyException("Last Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Last Name is required to continue");
 		}
-		otherStaff.setLastName(lastName);
+		staff.setLastName(lastName);
 		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
-			throw new FieldCanNotBeEmptyException("Full Name can not be empty");
+			throw new FieldCanNotBeEmptyException("Full Name is required to continue");
 		}
-		otherStaff.setFullName(fullName);
+		staff.setFullName(fullName);
 		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
-			throw new FieldCanNotBeEmptyException("Gender can not be empty");
+			throw new FieldCanNotBeEmptyException("Gender is required to continue");
 		}
-		otherStaff.setGender(gender);
+		staff.setGender(gender);
 		
 		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
-			throw new FieldCanNotBeEmptyException("Ocupation date can not be empty");
+			throw new FieldCanNotBeEmptyException("Ocupation is required to continue");
 		}
-		otherStaff.setOccupation(ocupation);
+		staff.setOccupation(ocupation);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
-			throw new FieldCanNotBeEmptyException("Picture date can not be empty");
+			throw new FieldCanNotBeEmptyException("Picture is required to continue");
 		}
-		otherStaff.setPicture(picture);
+		staff.setPicture(picture);
 		
 		if (position == null && requiredFields.contains(UserConstant.POSITION)) {
-			throw new FieldCanNotBeEmptyException("Position date can not be empty");
+			throw new FieldCanNotBeEmptyException("Position is required to continue");
 		}
-		otherStaff.setPosition(position);
-		
+		staff.setPosition(position);
+		address = AddressValidator.validateAddress(params, requiredFields);
+		staff.setAddress(address);
 		Date today = CalendarUtil.getTodaysDate();
 		
-		otherStaff.setCreatedOn(today);
-		otherStaff.setUpdatedOn(today);
+		staff.setCreatedOn(today);
+		staff.setUpdatedOn(today);
 		
-		return otherStaff;
+		return staff;
 	}
 }
+
+

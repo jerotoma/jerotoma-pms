@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
         private router: Router,
-        private authService: AuthService,
-        private tokenService: TokenService) {
+        private authService: AuthService) {
 
    }
 
@@ -71,7 +70,7 @@ export class LoginComponent implements OnInit {
           this.showMessage.error = false;
           this.showMessage.success = true;
           this.router.navigate(['/dashboard']);
-        }else {
+        } else {
           this.errors.push('Invalid token');
           this.showMessage.error = true;
         }

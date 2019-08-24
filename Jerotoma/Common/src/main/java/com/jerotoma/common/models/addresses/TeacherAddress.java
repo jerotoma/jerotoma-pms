@@ -1,5 +1,7 @@
 package com.jerotoma.common.models.addresses;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,6 +35,12 @@ public class TeacherAddress {
    	@JsonManagedReference
    	@JoinColumn(name="address_id")
 	private Address address;
+	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
 
 	public Integer getId() {
 		return id;
@@ -57,4 +65,20 @@ public class TeacherAddress {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}	
 }

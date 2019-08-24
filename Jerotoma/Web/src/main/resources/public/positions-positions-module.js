@@ -604,7 +604,6 @@ const ENTRY_COMPONENTS = [
 const MODULES = [
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
     _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
-    _positions_routing_module__WEBPACK_IMPORTED_MODULE_8__["PositionsRoutingModule"],
     _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableModule"],
     _angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__["MatPaginatorModule"],
     _angular_material_icon__WEBPACK_IMPORTED_MODULE_5__["MatIconModule"],
@@ -616,6 +615,7 @@ const MODULES = [
     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbIconModule"],
     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbAlertModule"],
     _nebular_theme__WEBPACK_IMPORTED_MODULE_7__["NbDialogModule"].forRoot(),
+    _positions_routing_module__WEBPACK_IMPORTED_MODULE_8__["PositionsRoutingModule"],
 ];
 const SERVICES = [];
 let PositionsModule = class PositionsModule {

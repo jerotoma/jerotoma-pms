@@ -6,8 +6,10 @@ import java.util.Map;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.TransactionRequiredException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.exceptions.JDataAccessException;
@@ -16,6 +18,8 @@ import com.jerotoma.database.dao.users.TeacherAddressDao;
 import com.jerotoma.services.exceptions.ServiceException;
 import com.jerotoma.services.users.TeacherAddressService;
 
+@Transactional
+@Repository
 public class TeacherAddressServiceImpl implements TeacherAddressService {
 	
 	@Autowired TeacherAddressDao teacherDao;

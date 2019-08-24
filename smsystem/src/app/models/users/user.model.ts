@@ -1,4 +1,4 @@
-import { Person } from './person';
+import { Person } from './person.model';
 
 
 export interface User extends Person {

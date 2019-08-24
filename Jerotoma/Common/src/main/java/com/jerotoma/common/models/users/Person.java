@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import com.jerotoma.common.models.addresses.Address;
+
 @MappedSuperclass
 public abstract class Person {
 	@Column(name = "first_name")
@@ -19,6 +21,9 @@ public abstract class Person {
 	
 	@Transient
 	protected String fullName;
+	
+	@Transient
+	protected Address address;
 	
 	@Transient
 	protected Integer age;
@@ -158,5 +163,13 @@ public abstract class Person {
 
 	public void setUpdatedBy(Integer updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 }

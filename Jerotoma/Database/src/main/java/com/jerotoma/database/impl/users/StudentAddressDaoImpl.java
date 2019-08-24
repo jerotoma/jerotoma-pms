@@ -51,19 +51,18 @@ public class StudentAddressDaoImpl implements  StudentAddressDao {
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public StudentAddress updateObject(StudentAddress object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+		return entityManager.merge(object);
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 }

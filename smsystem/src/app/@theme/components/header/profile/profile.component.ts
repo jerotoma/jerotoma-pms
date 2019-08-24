@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'app/services/auth';
 import { UserService } from 'app/services/users/user.service';
-import { User } from 'app/models/users/user';
+import { User } from 'app/models/users/user.model';
 import { getDeepFromObject } from 'app/utils';
 
 @Component({
@@ -16,7 +16,8 @@ export class ProfileComponent implements OnInit {
     username: '',
     firstName: '',
     lastName: '',
-    age: null,
+    phoneNumber: null,
+    emailAddress: '',
     gender: 'female',
     occupation: '',
     birthDate: null,

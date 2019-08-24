@@ -3,6 +3,7 @@ package com.jerotoma.api.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,24 +33,34 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
+import com.jerotoma.common.models.addresses.Address;
+import com.jerotoma.common.models.addresses.ParentAddress;
+import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.AddressService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
+import com.jerotoma.services.assemblers.AssemblerStudentNumberGeneratorService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.AuthUserService;
+import com.jerotoma.services.users.ParentAddressService;
 import com.jerotoma.services.users.StaffService;
+import com.jerotoma.services.users.StudentAddressService;
 import com.jerotoma.services.users.ParentService;
+import com.jerotoma.services.users.StaffAddressService;
 import com.jerotoma.services.users.StudentService;
+import com.jerotoma.services.users.TeacherAddressService;
 import com.jerotoma.services.users.TeacherService;
 
 @RestController
@@ -60,9 +71,15 @@ public class RestUserController {
 	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired TeacherService teacherService;
 	@Autowired AssemblerTeacherService assemblerTeacherService;
+	@Autowired AssemblerStudentNumberGeneratorService studentNumberGenService;
 	@Autowired StudentService studentService;
 	@Autowired StaffService otherStaffService;
 	@Autowired ParentService parentService;
+	@Autowired TeacherAddressService teacherAddressService;
+	@Autowired AddressService addressService;
+	@Autowired StudentAddressService studentAddressService;
+	@Autowired StaffAddressService staffAddressService;
+	@Autowired ParentAddressService parentAddressService;
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
 	AuthUser authUser;
@@ -98,7 +115,7 @@ public class RestUserController {
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
 		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+			throw new UnAuthorizedAccessException("You have no authorization to add new user to the system");
 		}
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
@@ -182,6 +199,7 @@ public class RestUserController {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
@@ -190,10 +208,20 @@ public class RestUserController {
 		List<String> requiredFields;
 		Integer positionId = null;
 		Integer academicDisciplineId = null;
+		
+		Date today = CalendarUtil.getTodaysDate();
+		
+		requiredFields =  new ArrayList<>(Arrays.asList(
+						UserConstant.FIRST_NAME, 
+						UserConstant.LAST_NAME,
+						UserConstant.TERM,
+						UserConstant.GENDER
+						));
 				
 		if(auth == null) {
 			instance.setSuccess(false);
 			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			instance.setHttpStatus(HttpStatus.UNAUTHORIZED);
 			return instance;
 		}
 		
@@ -216,22 +244,18 @@ public class RestUserController {
 			throw new FieldCanNotBeEmptyException("User type can not be empty");
 		}
 		
-		
+		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		
 		Parent parent;
 		Student student;
+				
 		try {
 			switch(type) {
 			case TEACHER:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERM,
-								UserConstant.GENDER,
-								UserConstant.POSITION,
-								AcademicDisciplineConstant.ACADEMIC_DISCIPLINE));
+				requiredFields.add(UserConstant.POSITION);
+				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
+				
 				
 				if(params.containsKey(UserConstant.POSITION)) {
 					positionId = (Integer) params.get(UserConstant.POSITION);
@@ -273,58 +297,61 @@ public class RestUserController {
 				instance.setData(teacher);
 				break;
 			case STUDENT:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERM,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
 				student = studentService.createObject(
 						UserValidator.validateStudentInputInfo(params, requiredFields));
 				instance.setData(student);				
 				break;
 			case STAFF:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERM,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
 				Staff otherStaff = otherStaffService.createObject(
 						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
 				instance.setData(otherStaff);
 				break;
 			case PARENT:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERM,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
 				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
 				instance.setData(parent);
 				break;
 			case STUDENT_AND_PARENT:
 				
+				Map<String, Object> studentParams = (Map<String, Object>) params.get("student");
+				Map<String, Object> parentParams = (Map<String, Object>) params.get("parent");
+				ParentAddress parentAddress = new ParentAddress();
+				StudentAddress studentAddress = new StudentAddress();
+				Address address;
+				
+				parent = UserValidator.validateParentInputInfo(parentParams, requiredFields);
+				
+				requiredFields.add(UserConstant.PHONE_NUMBER);
+				student = UserValidator.validateStudentInputInfo(studentParams, requiredFields);
+				
+				address = parent.getAddress();
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
+				
+				parent.setUpdatedBy(authUser.getId());
+				parent = parentService.createObject(parent);
+				
+				parentAddress.setAddress(address);
+				parentAddress.setParent(parent);
+				parentAddress.setCreatedOn(today);
+				parentAddress.setUpdatedOn(today);
+				parentAddressService.createObject(parentAddress);
 				
 				
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERM,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
-				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
-				student = studentService.createObject(UserValidator.validateStudentInputInfo(params, requiredFields));
+				address = student.getAddress();
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
 				
+				student.setUpdatedBy(authUser.getId());
+				student.setParent(parent);
+				student.setStudentNumber(studentNumberGenService.getNextNumber().intValue());
+				student = studentService.createObject(student);
+				
+				studentAddress.setStudent(student);
+				studentAddress.setAddress(address);
+				studentAddress.setCreatedOn(today);
+				studentAddress.setUpdatedOn(today);
+				studentAddressService.createObject(studentAddress);			
+							
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");

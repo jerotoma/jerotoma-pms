@@ -157,12 +157,11 @@ CREATE TABLE IF NOT EXISTS public.parents(
     first_name character varying(255) NOT NULL,
     last_name character varying(255) NOT NULL,
     middle_names text,
-    phone_number character varying(255) NOT NULL,
+    phone_number character varying(255),
     email_address character varying(255),
     occupation character varying(255) NOT NULL,
     gender character varying(25) NOT NULL,
     avatar character varying(255) NOT NULL,
-    position character varying(255) NOT NULL,
     birth_date timestamp with time zone,
     updated_by bigint NOT NULL,
     created_on timestamp with time zone NOT NULL,
@@ -180,22 +179,22 @@ CREATE TABLE IF NOT EXISTS public.parents(
 CREATE TABLE IF NOT EXISTS public.students(
     id bigserial NOT NULL,
     parent_id bigint NOT NULL,
+    student_number bigint NOT NULL,
     first_name character varying(255) NOT NULL,
     last_name character varying(255) NOT NULL,
     middle_names text,
     email_address character varying(255),
     phone_number character varying(255) NOT NULL,
-    student_code character varying(255) NOT NULL,
-    occupation character varying(255) NOT NULL,
+    occupation character varying(255),
     gender character varying(25) NOT NULL,
     avatar character varying(255) NOT NULL,
-    position character varying(255) NOT NULL,
+    position character varying(255),
     birth_date timestamp with time zone NOT NULL,
     updated_by bigint NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
    	CONSTRAINT students_pkey PRIMARY KEY (id),
-   	CONSTRAINT student_code UNIQUE (student_code),
+   	CONSTRAINT student_number UNIQUE (student_number),
    	CONSTRAINT parents_fkey FOREIGN KEY (parent_id)
         REFERENCES public.parents (id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -326,5 +325,84 @@ CREATE TABLE IF NOT EXISTS public.student_admissions(
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
+ 	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			STUDENT_ADDRESSES RELATED TABLES				  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.student_addresses(
+	    id bigserial NOT NULL,
+	    student_id bigint NOT NULL,
+	   	address_id bigint NOT NULL,
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT student_addresses_pkey PRIMARY KEY(id),
+	   	CONSTRAINT addresses_fkey FOREIGN KEY (address_id)
+	        REFERENCES public.addresses (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT students_fkey FOREIGN KEY (student_id)
+	        REFERENCES public.students (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			STAFF_ADDRESSES RELATED TABLES				      *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.staff_addresses(
+	    id bigserial NOT NULL,
+	    staff_id bigint NOT NULL,
+	   	address_id bigint NOT NULL,
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT staff_addresses_pkey PRIMARY KEY(id),
+	   	CONSTRAINT addresses_fkey FOREIGN KEY (address_id)
+	        REFERENCES public.addresses (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT staffs_fkey FOREIGN KEY (staff_id)
+	        REFERENCES public.staffs (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+	    
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			PARENT_ADDRESSES RELATED TABLES				      *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.parent_addresses(
+	    id bigserial NOT NULL,
+	    parent_id bigint NOT NULL,
+	   	address_id bigint NOT NULL,
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT parent_addresses_pkey PRIMARY KEY(id),
+	   	CONSTRAINT addresses_fkey FOREIGN KEY (address_id)
+	        REFERENCES public.addresses (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT parents_fkey FOREIGN KEY (parent_id)
+	        REFERENCES public.parents (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
 
-    
+	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			STUDENT_SEQUENCE RELATED SEQUENCE				  *
+	 * 															  *
+	 *************************************************************/
+	    
+	 CREATE SEQUENCE IF NOT EXISTS public.seq_student_numbers INCREMENT 1 START 1000 MINVALUE 1 MAXVALUE 2147483647 CACHE 1;

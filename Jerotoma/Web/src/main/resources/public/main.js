@@ -3278,11 +3278,6 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [
     {
-        path: '',
-        redirectTo: 'profile',
-        pathMatch: 'full',
-    },
-    {
         path: 'profile',
         component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_3__["ProfileComponent"],
     },
@@ -3330,8 +3325,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _nebular_auth__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @nebular/auth */ "./node_modules/@nebular/auth/fesm2015/index.js");
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _services_users_user_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../../../services/users/user.service */ "./src/app/services/users/user.service.ts");
-/* harmony import */ var _core_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../@core/utils */ "./src/app/@core/utils/index.ts");
+/* harmony import */ var app_services_users_user_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! app/services/users/user.service */ "./src/app/services/users/user.service.ts");
+/* harmony import */ var app_core_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/@core/utils */ "./src/app/@core/utils/index.ts");
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
 /* harmony import */ var _header_menu__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./header-menu */ "./src/app/@theme/components/header/header-menu.ts");
@@ -3411,14 +3406,14 @@ let HeaderComponent = class HeaderComponent {
     }
 };
 HeaderComponent.ctorParameters = () => [
-    { type: _services_users_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"] },
+    { type: app_services_users_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"] },
     { type: _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbSidebarService"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMenuService"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbThemeService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
-    { type: _core_utils__WEBPACK_IMPORTED_MODULE_6__["LayoutService"] },
+    { type: app_core_utils__WEBPACK_IMPORTED_MODULE_6__["LayoutService"] },
     { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMediaBreakpointsService"] }
 ];
 HeaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -3427,14 +3422,14 @@ HeaderComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./header.component.html */ "./node_modules/raw-loader/index.js!./src/app/@theme/components/header/header.component.html"),
         styles: [__webpack_require__(/*! ./header.component.scss */ "./src/app/@theme/components/header/header.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_services_users_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"],
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"],
         _nebular_auth__WEBPACK_IMPORTED_MODULE_3__["NbAuthService"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbSidebarService"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMenuService"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbThemeService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
         _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-        _core_utils__WEBPACK_IMPORTED_MODULE_6__["LayoutService"],
+        app_core_utils__WEBPACK_IMPORTED_MODULE_6__["LayoutService"],
         _nebular_theme__WEBPACK_IMPORTED_MODULE_4__["NbMediaBreakpointsService"]])
 ], HeaderComponent);
 
@@ -3537,7 +3532,8 @@ let ProfileComponent = class ProfileComponent {
             username: '',
             firstName: '',
             lastName: '',
-            age: null,
+            phoneNumber: null,
+            emailAddress: '',
             gender: 'female',
             occupation: '',
             birthDate: null,
@@ -5930,10 +5926,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let LoginComponent = class LoginComponent {
-    constructor(router, authService, tokenService) {
+    constructor(router, authService) {
         this.router = router;
         this.authService = authService;
-        this.tokenService = tokenService;
         this.user = {
             username: '',
             password: '',
@@ -5996,8 +5991,7 @@ let LoginComponent = class LoginComponent {
 };
 LoginComponent.ctorParameters = () => [
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
-    { type: _services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
-    { type: _services_auth__WEBPACK_IMPORTED_MODULE_3__["TokenService"] }
+    { type: _services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"] }
 ];
 LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6006,8 +6000,7 @@ LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [__webpack_require__(/*! ./login.component.scss */ "./src/app/auth/login/login.component.scss")]
     }),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-        _services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
-        _services_auth__WEBPACK_IMPORTED_MODULE_3__["TokenService"]])
+        _services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"]])
 ], LoginComponent);
 
 
@@ -6044,8 +6037,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let LogoutComponent = class LogoutComponent {
-    constructor(tokenService, service, router) {
-        this.tokenService = tokenService;
+    constructor(service, router) {
         this.service = service;
         this.router = router;
         this.redirectUrl = '/account/login';
@@ -6064,7 +6056,6 @@ let LogoutComponent = class LogoutComponent {
     }
 };
 LogoutComponent.ctorParameters = () => [
-    { type: app_services_auth__WEBPACK_IMPORTED_MODULE_3__["TokenService"] },
     { type: app_services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"] },
     { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
 ];
@@ -6074,8 +6065,7 @@ LogoutComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./logout.component.html */ "./node_modules/raw-loader/index.js!./src/app/auth/logout/logout.component.html"),
         styles: [__webpack_require__(/*! ./logout.component.scss */ "./src/app/auth/logout/logout.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_auth__WEBPACK_IMPORTED_MODULE_3__["TokenService"],
-        app_services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_auth__WEBPACK_IMPORTED_MODULE_3__["AuthService"],
         _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
 ], LogoutComponent);
 

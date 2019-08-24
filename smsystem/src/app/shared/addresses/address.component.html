@@ -1,0 +1,116 @@
+<form [formGroup]="addressForm">
+  <div class="row">
+      <div class="col-md-6">
+          <div class="form-control-group">
+              <label for="address-street" class="label">Street</label>
+              <input
+                    type="text"
+                    nbInput fullWidth
+                    autocomplete="new-password"
+                    required
+                    id="address-street"
+                    [status]="addressForm.controls['street'].invalid && addressForm.controls['street'].touched ? 'danger' : ''"
+                    formControlName="street"
+                    placeholder="Street">
+              <ng-container *ngIf="addressForm.controls['street'].invalid && addressForm.controls['street'].touched">
+                <p class="error-message">
+                  Street is required!
+                </p>
+              </ng-container>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-control-group">
+              <label for="address-unit" class="label">Unit </label>
+              <input
+                    required
+                    type="text"
+                    autocomplete="new-password"
+                    nbInput fullWidth
+                    id="address-unit"
+                    [status]="addressForm.controls['unit'].invalid && addressForm.controls['unit'].touched ? 'danger' : ''"
+                    formControlName="unit"
+                    placeholder="Unit/Apartment/Suite">
+              <ng-container *ngIf="addressForm.controls['unit'].invalid && addressForm.controls['unit'].touched">
+                <p class="error-message">
+                  Unit is required!
+                </p>
+              </ng-container>
+          </div>
+      </div>
+  </div>
+  <div class="form-control-group">
+    <label for="address-city" class="label">City</label>
+    <input
+          required
+          type="text"
+          autocomplete="new-password"
+          nbInput fullWidth
+          id="address-city"
+          [status]="addressForm.controls['city'].invalid && addressForm.controls['city'].touched ? 'danger' : ''"
+          formControlName="city"
+          placeholder="City">
+    <ng-container *ngIf="addressForm.controls['city'].invalid && addressForm.controls['city'].touched">
+      <p class="error-message">
+        City is required!
+      </p>
+    </ng-container>
+  </div>
+  <div class="row">
+      <div class="col-md-6">
+          <div class="form-control-group">
+              <label for="address-state" class="label">State</label>
+              <input
+                    required
+                    type="text"
+                    autocomplete="new-password"
+                    nbInput fullWidth
+                    id="address-state"
+                    [status]="addressForm.controls['state'].invalid && addressForm.controls['state'].touched ? 'danger' : ''"
+                    formControlName="state"
+                    placeholder="State">
+              <ng-container *ngIf="addressForm.controls['state'].invalid && addressForm.controls['state'].touched">
+                <p class="error-message">
+                  State is required!
+                </p>
+              </ng-container>
+          </div>
+      </div>
+      <div class="col-md-6">
+          <div class="form-control-group">
+              <label for="address-state" class="label">Postal Code</label>
+              <input
+                    required
+                    type="text"
+                    autocomplete="new-password"
+                    nbInput fullWidth
+                    id="address-postalCode"
+                    [status]="addressForm.controls['postalCode'].invalid && addressForm.controls['postalCode'].touched ? 'danger' : ''"
+                    formControlName="postalCode"
+                    placeholder="Postal Code">
+              <ng-container *ngIf="addressForm.controls['postalCode'].invalid && addressForm.controls['postalCode'].touched">
+                <p class="error-message">
+                  State is required!
+                </p>
+              </ng-container>
+          </div>
+      </div>
+  </div>
+  <div class="form-control-group">
+    <label for="address-country" class="label">Country</label>
+    <input
+          type="text"
+          nbInput fullWidth
+          autocomplete="new-password"
+          required
+          id="address-country"
+          [status]="addressForm.controls['country'].invalid && addressForm.controls['country'].touched ? 'danger' : ''"
+          formControlName="country"
+          placeholder="Country">
+    <ng-container *ngIf="addressForm.controls['country'].invalid && addressForm.controls['country'].touched">
+      <p class="error-message">
+        Country is required!
+      </p>
+    </ng-container>
+  </div>
+</form>

@@ -1,5 +1,8 @@
 package com.jerotoma.common.models.addresses;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +15,13 @@ import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.ADDRESSES)
-public class Address {
+public class Address implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="addresses_generator")
 	@SequenceGenerator(name="addresses_generator", sequenceName = "addresses_id_seq", allocationSize=1)
@@ -38,7 +46,15 @@ public class Address {
 	@Column
 	private String state;
 	
+	@Column(name="updated_by")
+	private Integer updatedBy;
 	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
+		
 	public String getStreet() {
 		return street;
 	}
@@ -75,7 +91,30 @@ public class Address {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}	
 	
 	
 }

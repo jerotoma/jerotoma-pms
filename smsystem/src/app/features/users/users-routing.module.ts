@@ -1,15 +1,20 @@
+// Modules
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+// Service
+import { AuthGuard } from 'app/services/guards/auth-guard.service';
+
+// Components
 import { UsersComponent } from './users.component';
 import { Tab1Component, Tab2Component, ParentsComponent } from './parents/parents.component';
-import { OtherStaffsComponent } from './other-staffs/other-staffs.component';
+import { StaffsComponent } from './staffs/staffs.component';
 import { InfiniteListComponent } from './infinite-list/infinite-list.component';
-import { StudentsComponent } from './students/students.component';
 import { TeachersComponent } from './teachers/teachers.component';
 
 const routes: Routes = [{
   path: '',
+  canActivateChild: [AuthGuard],
   component: UsersComponent,
   children: [
     {
@@ -18,15 +23,16 @@ const routes: Routes = [{
     },
     {
       path: 'students',
-      component: StudentsComponent,
+      loadChildren: () => import('./students/students.module')
+        .then(m => m.StudentsModule),
     },
     {
       path: 'infinite-list',
       component: InfiniteListComponent,
     },
     {
-      path: 'other-staffs',
-      component: OtherStaffsComponent,
+      path: 'staffs',
+      component: StaffsComponent,
     },
     {
       path: 'parents',
@@ -46,6 +52,11 @@ const routes: Routes = [{
           component: Tab2Component,
         },
       ],
+    },
+    {
+      path: '',
+      redirectTo: 'users',
+      pathMatch: 'full',
     },
   ],
 }];
