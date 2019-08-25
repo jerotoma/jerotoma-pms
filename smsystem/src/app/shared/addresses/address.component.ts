@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import {AddressWrapper } from 'app/models/addresses';
@@ -10,6 +10,8 @@ import {AddressWrapper } from 'app/models/addresses';
   styleUrls: ['address.component.scss'],
 })
 export class AddressComponent implements OnInit {
+
+  @Input() isResetForm: boolean = false;
   @Output() onChanges: EventEmitter<AddressWrapper> = new EventEmitter();
 
   addressForm: FormGroup;

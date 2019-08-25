@@ -93,6 +93,21 @@
                     </ng-container>
                   </div>
                   <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-control-group">
+                          <label for="student-middle-names" class="label">Other Names</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-middle-names"
+                                formControlName="middleNames"
+                                placeholder="Other  Names">
+                        </div>
+                      </div>
+                  </div>
+                  <div class="row">
                       <div class="col-md-6">
                           <div class="form-control-group">
                               <label for="teacher-position" class="label">Position</label>
@@ -148,6 +163,35 @@
                           </div>
                       </div>
                   </div>
+                  <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="student-email-address" class="label">Email Address</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-email-address"
+                                formControlName="emailAddress"
+                                placeholder="Email Address">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="student-phone-number" class="label">Phone Number</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-phone-number"
+                                formControlName="phoneNumber"
+                                placeholder="Emergency Phone Number">
+                        </div>
+                      </div>
+                    </div>
+                    <app-address (onChanges)="onAddressChange($event)" ></app-address>
               </nb-card-body>
               <nb-card-footer>
                 <button class='push-right' [disabled]="!teacherForm.valid" type="submit" nbButton hero status="success">Submit</button>

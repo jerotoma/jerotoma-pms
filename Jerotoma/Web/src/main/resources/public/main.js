@@ -3541,6 +3541,7 @@ let ProfileComponent = class ProfileComponent {
             picture: '',
             createdOn: null,
             updatedOn: null,
+            addressVO: null,
         };
     }
     ngOnInit() {

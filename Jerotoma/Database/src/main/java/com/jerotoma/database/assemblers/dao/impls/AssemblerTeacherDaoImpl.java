@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.common.viewobjects.PositionVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
@@ -102,8 +103,8 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		@Override
 		public TeacherVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 			TeacherVO teacher = new TeacherVO(rs);	
-			teacher.setPosition(loadPosition(rs.getInt("position_id")));
-			teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt("academic_discipline_id")));			
+			teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
+			teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
 			return teacher;
 		}		
 	}
@@ -114,8 +115,8 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 			TeacherVO teacher = null;
 			if(rs.next()) {
 				teacher = new TeacherVO(rs);
-				teacher.setPosition(loadPosition(rs.getInt("position_id")));
-				teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt("academic_discipline_id")));
+				teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
+				teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
 				
 			}
 			return teacher;
@@ -134,7 +135,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, user_id, teacher_code, first_name, last_name, occupation, gender, avatar, position_id, academic_discipline_id, birth_date, created_on, updated_on FROM public.teachers ");
+		return new StringBuilder("SELECT id, user_id AS userId, teacher_code AS teacherCode, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, occupation, gender, avatar, position_id as positionId, academic_discipline_id AS academicDisciplineId, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.teachers ");
 		
 	}
 

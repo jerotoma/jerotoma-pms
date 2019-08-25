@@ -25,6 +25,7 @@ export class ProfileComponent implements OnInit {
     picture: '',
     createdOn: null,
     updatedOn: null,
+    addressVO: null,
   };
   protected options: {};
 

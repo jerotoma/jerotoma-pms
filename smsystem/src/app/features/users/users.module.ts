@@ -31,39 +31,23 @@ import {
 } from '@nebular/theme';
 
 import { UserRoutingModule } from './users-routing.module';
-
-import {
-  Tab1Component,
-  Tab2Component,
-  ParentsComponent,
-} from './parents/parents.component';
-
-import { TeacherCreateComponent } from './teachers/create/teacher-create.component';
 import { UsersComponent } from './users.component';
 
-import { TeachersComponent } from './teachers/teachers.component';
 import { InfiniteListComponent } from './infinite-list/infinite-list.component';
 import { NewsPostComponent } from './infinite-list/news-post/news-post.component';
 import { NewsPostPlaceholderComponent } from './infinite-list/news-post-placeholder/news-post-placeholder.component';
-import { StaffsComponent } from './staffs/staffs.component';
 import { NewsService } from './news.service';
 
 
 const COMPONENTS = [
     UsersComponent,
-    TeacherCreateComponent,
-    ParentsComponent,
-    Tab1Component,
-    Tab2Component,
-    TeachersComponent,
-    NewsPostPlaceholderComponent,
+     NewsPostPlaceholderComponent,
     InfiniteListComponent,
     NewsPostComponent,
-    StaffsComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  TeacherCreateComponent,
+
 ];
 
 const MODULES = [

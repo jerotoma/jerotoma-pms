@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
 import com.jerotoma.common.exceptions.JDataAccessException;
@@ -36,6 +38,7 @@ import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
+import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.Staff;
@@ -51,7 +54,10 @@ import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.AddressService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
-import com.jerotoma.services.assemblers.AssemblerStudentNumberGeneratorService;
+import com.jerotoma.services.assemblers.AssemblerParentService;
+import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
+import com.jerotoma.services.assemblers.AssemblerStaffService;
+import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.ParentAddressService;
@@ -71,7 +77,10 @@ public class RestUserController {
 	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired TeacherService teacherService;
 	@Autowired AssemblerTeacherService assemblerTeacherService;
-	@Autowired AssemblerStudentNumberGeneratorService studentNumberGenService;
+	@Autowired AssemblerStudentService assemblerStudentService;
+	@Autowired AssemblerStaffService assemblerStaffService;
+	@Autowired AssemblerParentService assemblerParentService;
+	@Autowired AssemblerSequenceGeneratorService sequenceGeneratorService;
 	@Autowired StudentService studentService;
 	@Autowired StaffService otherStaffService;
 	@Autowired ParentService parentService;
@@ -125,16 +134,16 @@ public class RestUserController {
 				mapVOs = assemblerTeacherService.loadMapList(queryParam);	
 				break;
 			case STUDENT:
-				
+				mapVOs = assemblerStudentService.loadMapList(queryParam);
 				break;
 			case STAFF:
-				
+				mapVOs = assemblerStaffService.loadMapList(queryParam);
 				break;
 			case PARENT:
-				
+				mapVOs = assemblerParentService.loadMapList(queryParam);
 				break;
 			default:
-				throw new UsernameNotFoundException("User type not found");
+				throw new JDataAccessException("User type not found");
 			}
 		
 		} catch (SQLException e) {
@@ -144,6 +153,7 @@ public class RestUserController {
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(mapVOs);
+		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 		
 	}
@@ -249,6 +259,7 @@ public class RestUserController {
 		
 		Parent parent;
 		Student student;
+		Address address;
 				
 		try {
 			switch(type) {
@@ -290,10 +301,19 @@ public class RestUserController {
 				Teacher teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
+				address = teacher.getAddress();
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
 				
+				teacher.setUpdatedBy(authUser.getId());
 				teacher = teacherService.createObject(teacher);
 				
-				
+				TeacherAddress teacherAddress = new TeacherAddress();
+				teacherAddress.setAddress(address);
+				teacherAddress.setTeacher(teacher);
+				teacherAddress.setCreatedOn(today);
+				teacherAddress.setUpdatedOn(today);
+				teacherAddressService.createObject(teacherAddress);
 				instance.setData(teacher);
 				break;
 			case STUDENT:
@@ -311,13 +331,12 @@ public class RestUserController {
 				instance.setData(parent);
 				break;
 			case STUDENT_AND_PARENT:
-				
-				Map<String, Object> studentParams = (Map<String, Object>) params.get("student");
-				Map<String, Object> parentParams = (Map<String, Object>) params.get("parent");
+				Map<String, Object> mapVO = new HashMap<>();
+				Map<String, Object> studentParams = (Map<String, Object>) params.get(StudentConstant.STUDENT);
+				Map<String, Object> parentParams = (Map<String, Object>) params.get(ParentConstant.PARENT);
 				ParentAddress parentAddress = new ParentAddress();
 				StudentAddress studentAddress = new StudentAddress();
-				Address address;
-				
+			
 				parent = UserValidator.validateParentInputInfo(parentParams, requiredFields);
 				
 				requiredFields.add(UserConstant.PHONE_NUMBER);
@@ -343,15 +362,20 @@ public class RestUserController {
 				
 				student.setUpdatedBy(authUser.getId());
 				student.setParent(parent);
-				student.setStudentNumber(studentNumberGenService.getNextNumber().intValue());
+				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
 				student = studentService.createObject(student);
 				
 				studentAddress.setStudent(student);
 				studentAddress.setAddress(address);
 				studentAddress.setCreatedOn(today);
 				studentAddress.setUpdatedOn(today);
-				studentAddressService.createObject(studentAddress);			
-							
+				studentAddressService.createObject(studentAddress);	
+				
+				mapVO.put(StudentConstant.STUDENT, student);
+				mapVO.put(ParentConstant.PARENT, parent);
+				
+				instance.setData(mapVO);
+				instance.setSuccess(true);							
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -359,9 +383,7 @@ public class RestUserController {
 		
 		} catch (SQLException | JDataAccessException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
-		}	
-			
-		instance.setSuccess(true);
+		}			
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setMessage("User has been created");
 		return instance;

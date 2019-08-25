@@ -13,10 +13,10 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.jerotoma.database.assemblers.AssemblerStudentNumberGeneratorDao;
+import com.jerotoma.database.assemblers.AssemblerSequenceGeneratorDao;
 
 @Repository
-public class AssemblerStudentNumberGeneratorDaoImpl extends JdbcDaoSupport implements AssemblerStudentNumberGeneratorDao {
+public class AssemblerSequenceGeneratorDaoImpl extends JdbcDaoSupport implements AssemblerSequenceGeneratorDao {
 
 	private JdbcTemplate jdbcTemplate;
 	

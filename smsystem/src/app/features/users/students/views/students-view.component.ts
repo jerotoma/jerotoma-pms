@@ -20,6 +20,7 @@ import { Student } from 'app/models/users';
 })
 export class StudentsViewComponent implements OnInit {
   title: string = 'Student\'s List';
+  baseURL: string = '/dashboard/users/students/';
   firstForm: FormGroup;
   secondForm: FormGroup;
   thirdForm: FormGroup;
@@ -27,7 +28,7 @@ export class StudentsViewComponent implements OnInit {
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'fullName', 'gender', 'studentNumber', 'createdOn', 'action'];
+  displayedColumns: string[] = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -56,12 +57,17 @@ export class StudentsViewComponent implements OnInit {
   ngOnInit() {
     this.loadUsers();
   }
+
   open() {
-    this.router.navigate(['/dashboard/users/students/create']);
+    this.router.navigate([this.baseURL + '/create']);
   }
 
   edit(student: Student) {
-    this.router.navigate(['/dashboard/users/students/edit/' + student.id ]);
+    this.router.navigate([this.baseURL + 'edit/' + student.id ]);
+  }
+
+  view(student: Student) {
+    this.router.navigate([this.baseURL + '/' + student.id ]);
   }
 
   delete(student: Student) {

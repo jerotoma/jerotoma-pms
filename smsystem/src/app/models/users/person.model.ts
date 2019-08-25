@@ -1,6 +1,8 @@
+import { Address } from 'app/models/addresses';
 export interface Person {
   firstName?: string;
   lastName?: string;
+  middleNames?: string;
   fullName?: string;
   phoneNumber?: number;
   emailAddress?: string;
@@ -8,6 +10,7 @@ export interface Person {
   occupation?: string;
   birthDate: Date;
   picture?: string;
+  addressVO?: Address;
   createdOn: Date;
   updatedOn: Date;
 }

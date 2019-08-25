@@ -6,6 +6,7 @@ import { NbDialogRef, NbDateService } from '@nebular/theme';
 import { Teacher, User } from 'app/models/users';
 import { UserService } from 'app/services/users';
 import { Position } from 'app/models/positions';
+import { Address, AddressWrapper } from 'app/models/addresses';
 import { AcademicDiscipline } from 'app/models/academic-disciplines';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
@@ -147,11 +148,15 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       employmentCode: [''],
       gender: ['', Validators.required],
       picture: [''],
+      middleNames: [''],
+      phoneNumber: ['', Validators.required],
+      emailAddress: [null],
       userId: [null, Validators.required],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
       academicDiscipline: ['', Validators.required],
       fullName: ['', Validators.required],
+      address: [null, Validators.required],
     });
   }
 
@@ -208,10 +213,14 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
           gender: this.teacher.gender,
           picture: this.teacher.picture,
           userId: this.teacher.userId,
+          middleNames: this.teacher.middleNames,
+          phoneNumber: this.teacher.phoneNumber,
+          emailAddress: this.teacher.emailAddress,
           birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
           userType: 'teacher',
           academicDiscipline: this.teacher.academicDiscipline.id,
           fullName: this.teacher.fullName,
+          address: this.teacher.addressVO,
         });
       }
     }, error => {
@@ -259,6 +268,16 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       this.showMessage.success = false;
       this.showMessage.message = error ? error.error.message : '';
     });
+  }
+
+  onAddressChange(addressWrapper: AddressWrapper ) {
+    if (!addressWrapper.isValid) {
+      this.teacherForm.controls['address'].setErrors({ invalidAddress: true });
+    } else {
+      this.teacherForm.controls['address'].setErrors(null);
+      this.teacherForm.patchValue({address: addressWrapper.address});
+
+    }
   }
 
 }

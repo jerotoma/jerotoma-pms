@@ -18,7 +18,7 @@ module.exports = "<nb-card>\n  <nb-card-header status=\"danger\" >{{ title }}</n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Student</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.id}} </td>\n            </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n            <!-- Registered On Column -->\n            <ng-container matColumnDef=\"studentNumber\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Number</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.studentNumber}} </td>\n            </ng-container>\n            <!-- Registered On Column -->\n            <ng-container matColumnDef=\"createdOn\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered On</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.createdOn}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
+module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Student</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element; let i = index;\"> {{i + 1}} </td>\n            </ng-container>\n             <!-- Student Number On Column -->\n             <ng-container matColumnDef=\"studentNumber\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Number</th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.studentNumber}} </td>\n              </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n\n             <!-- Email Address Column -->\n             <ng-container matColumnDef=\"emailAddress\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.emailAddress}} </td>\n              </ng-container>\n               <!-- Phone Number Column -->\n              <ng-container matColumnDef=\"phoneNumber\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.phoneNumber}} </td>\n              </ng-container>\n            <!-- Registered On Column -->\n            <ng-container matColumnDef=\"createdOn\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered On</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.createdOn}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"view(element)\"><mat-icon>visibility</mat-icon> View</button>\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
 
 /***/ }),
 
@@ -65,7 +65,7 @@ let StudentCreateComponent = class StudentCreateComponent {
         this.academicDisciplineService = academicDisciplineService;
         this.userService = userService;
         this.formBuilder = formBuilder;
-        this.title = 'Create New User';
+        this.title = 'Create New Student';
         this.onUserCreationSuccess = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.action = 'create';
         this.showMessage = {
@@ -522,10 +522,11 @@ let StudentsViewComponent = class StudentsViewComponent {
         this.dialogService = dialogService;
         this.router = router;
         this.title = 'Student\'s List';
+        this.baseURL = '/dashboard/users/students/';
         this.hidePageSize = false;
         this.totalNumberOfItems = 20;
         this.pageSizeOptions = [10, 20, 30, 50, 70, 100];
-        this.displayedColumns = ['id', 'fullName', 'gender', 'studentNumber', 'createdOn', 'action'];
+        this.displayedColumns = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
         this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"]();
         this.param = {
             page: 1,
@@ -542,10 +543,13 @@ let StudentsViewComponent = class StudentsViewComponent {
         this.loadUsers();
     }
     open() {
-        this.router.navigate(['/dashboard/users/students/create']);
+        this.router.navigate([this.baseURL + '/create']);
     }
     edit(student) {
-        this.router.navigate(['/dashboard/users/students/edit/' + student.id]);
+        this.router.navigate([this.baseURL + 'edit/' + student.id]);
+    }
+    view(student) {
+        this.router.navigate([this.baseURL + '/' + student.id]);
     }
     delete(student) {
         this.dialogService.open(app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {

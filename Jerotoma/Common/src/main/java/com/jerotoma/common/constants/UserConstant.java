@@ -16,17 +16,19 @@ public class UserConstant {
 	public static final String AVATAR = "avatar";
 	public static final String FULL_NAME = "fullName";
 	public static final String EMPLOYMENT_CODE = "employmentCode";
-	public static final String TEACHER_CODE = "teacher_code";
+	public static final String TEACHER_CODE = "teacherCode";
 	public static final String POSITION = "position";
-	public static final String STUDENT_NUMBER = "studentCode";
+	public static final String POSITION_ID = "positionId";
+	public static final String ACADEMIC_DISCIPLINE_ID = "academicDisciplineId";
+	public static final String STUDENT_NUMBER = "studentNumber";
 	public static final String USER_ID = "userId";
 	public static final String ID = "id";
-	public static final String UPDATED_ON = "updated_on";
-	public static final String CREATED_ON = "created_on";
+	public static final String UPDATED_ON = "updatedOn";
+	public static final String CREATED_ON = "createdOn";
 	public static final String EMAIL_ADDRESS = "emailAddress";
 	public static final String PHONE_NUMBER = "phoneNumber";
-	
 	public static final String ADDRESS = "address";
+	public static final String MIDDLE_NAMES = "middleNames";
 	
 	public static enum USER_TYPES{
 		TEACHER("teacher"),

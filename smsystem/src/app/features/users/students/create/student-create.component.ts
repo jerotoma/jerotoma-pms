@@ -18,7 +18,7 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['student-create.component.scss'],
 })
 export class StudentCreateComponent implements OnInit, AfterViewInit {
-  title: string = 'Create New User';
+  title: string = 'Create New Student';
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild('stepper', {static: true}) stepper: NbStepperComponent;
   action: string = 'create';

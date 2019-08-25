@@ -2,6 +2,6 @@ package com.jerotoma.database.assemblers;
 
 import java.sql.SQLException;
 
-public interface AssemblerStudentNumberGeneratorDao {
+public interface AssemblerSequenceGeneratorDao {
 	Long getNextNumber() throws SQLException;
 }

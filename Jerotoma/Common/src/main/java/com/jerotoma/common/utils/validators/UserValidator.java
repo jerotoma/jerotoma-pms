@@ -30,7 +30,9 @@ public class UserValidator {
 		String birthDate = null;
 		String picture = null;
 		String teacherCode = null;		
-		Date today = null;
+		Date today = null;		
+		String emailAddress = null;
+		String phoneNumber = null;
 		
 		if(params.containsKey(UserConstant.ID)) {
 			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
@@ -79,6 +81,14 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.EMPLOYMENT_CODE)) {
 			teacherCode = (String) params.get(UserConstant.EMPLOYMENT_CODE);
+		}
+		
+		if(params.containsKey(UserConstant.EMAIL_ADDRESS)) {
+			emailAddress = (String) params.get(UserConstant.EMAIL_ADDRESS);
+		}
+		
+		if(params.containsKey(UserConstant.PHONE_NUMBER)) {
+			phoneNumber = (String) params.get(UserConstant.PHONE_NUMBER);
 		}
 				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
@@ -136,6 +146,16 @@ public class UserValidator {
 			throw new FieldCanNotBeEmptyException("Teacher's ID is required to continue");
 		}
 		teacher.setId(id);
+		
+		if (emailAddress == null && requiredFields.contains(UserConstant.EMAIL_ADDRESS)) {
+			throw new FieldCanNotBeEmptyException("Email Address is required to continue");
+		}
+		teacher.setEmailAddress(emailAddress);
+		
+		if (phoneNumber == null && requiredFields.contains(UserConstant.PHONE_NUMBER)) {
+			throw new FieldCanNotBeEmptyException("Phone number is required to continue");
+		}
+		teacher.setPhoneNumber(phoneNumber);
 		
 		address = AddressValidator.validateAddress(params, requiredFields);
 		teacher.setAddress(address);

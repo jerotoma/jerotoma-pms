@@ -7,7 +7,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 
 // Components
 import { UsersComponent } from './users.component';
-import { Tab1Component, Tab2Component, ParentsComponent } from './parents/parents.component';
+import { ParentsComponent } from './parents/parents.component';
 import { StaffsComponent } from './staffs/staffs.component';
 import { InfiniteListComponent } from './infinite-list/infinite-list.component';
 import { TeachersComponent } from './teachers/teachers.component';
@@ -19,7 +19,8 @@ const routes: Routes = [{
   children: [
     {
       path: 'teachers',
-      component: TeachersComponent,
+      loadChildren: () => import('./teachers/teachers.module')
+        .then(m => m.TeachersModule),
     },
     {
       path: 'students',
@@ -27,31 +28,18 @@ const routes: Routes = [{
         .then(m => m.StudentsModule),
     },
     {
-      path: 'infinite-list',
-      component: InfiniteListComponent,
-    },
-    {
       path: 'staffs',
-      component: StaffsComponent,
+      loadChildren: () => import('./staffs/staffs.module')
+        .then(m => m.StaffsModule),
     },
     {
       path: 'parents',
-      component: ParentsComponent,
-      children: [
-        {
-          path: '',
-          redirectTo: 'tab1',
-          pathMatch: 'full',
-        },
-        {
-          path: 'tab1',
-          component: Tab1Component,
-        },
-        {
-          path: 'tab2',
-          component: Tab2Component,
-        },
-      ],
+      loadChildren: () => import('./parents/parents.module')
+      .then(m => m.ParentsModule),
+    },
+    {
+      path: 'infinite-list',
+      component: InfiniteListComponent,
     },
     {
       path: '',

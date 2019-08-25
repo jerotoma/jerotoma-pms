@@ -1,12 +1,18 @@
 package com.jerotoma.common.models.users;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.addresses.Address;
+import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.viewobjects.AddressVO;
 
 @MappedSuperclass
 public abstract class Person {
@@ -23,7 +29,11 @@ public abstract class Person {
 	protected String fullName;
 	
 	@Transient
+	@JsonIgnore
 	protected Address address;
+	
+	@Transient
+	protected AddressVO addressVO;
 	
 	@Transient
 	protected Integer age;
@@ -50,13 +60,30 @@ public abstract class Person {
 	protected String picture;
 	
 	@Column(name="created_on")
-	private Date createdOn;
+	protected Date createdOn;
 	
 	@Column(name="updated_on")
-	private Date updatedOn;
+	protected Date updatedOn;
 	
 	public Person() {
 		
+	}
+	
+	public Person(ResultSet rs) throws SQLException {
+		
+		this.firstName = rs.getString(UserConstant.FIRST_NAME);
+		this.lastName = rs.getString(UserConstant.LAST_NAME);
+		this.middleNames = rs.getString(UserConstant.MIDDLE_NAMES);
+		this.phoneNumber = rs.getString(UserConstant.PHONE_NUMBER);
+		this.emailAddress = rs.getString(UserConstant.EMAIL_ADDRESS);
+		this.gender = rs.getString(UserConstant.GENDER);
+		this.occupation = rs.getString(UserConstant.OCCUPATION);
+		this.picture = rs.getString(UserConstant.AVATAR);
+		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
+		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
+		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
+		this.fullName = getFullName();
+	
 	}
 	
 	public Person(AuthUser authUser) {
@@ -78,7 +105,10 @@ public abstract class Person {
 		this.lastName = lastName;
 	}	
 	public String getFullName() {
-		return fullName;
+		if (!StringUtility.isEmpty(this.middleNames)) {
+			return 	this.firstName + " " + this.middleNames  + " "  + this.lastName;			
+		}		
+		return this.firstName + " " + this.lastName;
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
@@ -172,4 +202,14 @@ public abstract class Person {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+	public AddressVO getAddressVO() {
+		return addressVO;
+	}
+
+	public void setAddressVO(AddressVO addressVO) {
+		this.addressVO = addressVO;
+	}
+	
+	
 }
