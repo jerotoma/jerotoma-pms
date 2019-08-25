@@ -55,7 +55,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/users/parents',
       },
       {
-        title: 'Other Staffs',
+        title: 'Staffs',
         link: '/dashboard/users/staffs',
       },
     ],
