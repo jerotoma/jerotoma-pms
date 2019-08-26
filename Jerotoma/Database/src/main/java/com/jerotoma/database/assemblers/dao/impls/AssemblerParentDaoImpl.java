@@ -97,21 +97,18 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	public class ParentResultProcessor implements RowMapper<ParentVO>{
 		@Override
 		public ParentVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			ParentVO Parent = new ParentVO(rs);	
-			Parent.setAddressVO(loadAddress(Parent.getId()));	
-			return Parent;
+			return mapParentResult(rs);
 		}		
 	}
 	
 	public class ParentSingleResultProcessor implements ResultSetExtractor<ParentVO>{
 		@Override
 		public ParentVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			ParentVO Parent = null;
+			ParentVO parent = null;
 			if(rs.next()) {
-				Parent = new ParentVO(rs);
-				Parent.setAddressVO(loadAddress(Parent.getId()));					
+				parent = mapParentResult(rs);								
 			}
-			return Parent;
+			return parent;
 		}				
 	}
 	
@@ -139,6 +136,12 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	
 	private AddressVO loadAddress(Integer primaryKey) throws SQLException {
 		return this.addressDao.findAddressByParentId(primaryKey);
+	}
+	
+	public ParentVO mapParentResult(ResultSet rs) throws SQLException {
+		ParentVO parent = new ParentVO(rs);
+		parent.setAddress(loadAddress(parent.getId()));	
+		return parent;
 	}
 
 

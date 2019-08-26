@@ -8,6 +8,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 // Components
 import { ParentsComponent } from './parents.component';
 import { ParentCreateComponent } from './create/parent-create.component';
+import { ParentShowComponent } from './show/parent-show.component';
 import { ParentsViewComponent } from './views/parents-view.component';
 
 // Utilities
@@ -27,8 +28,8 @@ const routes: Routes = [
           component: ParentCreateComponent,
         },
         {
-          path: 'views',
-          component: ParentsViewComponent,
+          path: ':id',
+          component: ParentShowComponent,
         },
     ],
   },

@@ -186,13 +186,13 @@ public class RestUserController {
 				
 				break;
 			case STUDENT:
-				
+				instance.setData(assemblerStudentService.findObject(primaryKey));
 				break;
 			case STAFF:
-				
+				instance.setData(assemblerStaffService.findObject(primaryKey));
 				break;
 			case PARENT:
-				
+				instance.setData(assemblerParentService.findObject(primaryKey));
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");

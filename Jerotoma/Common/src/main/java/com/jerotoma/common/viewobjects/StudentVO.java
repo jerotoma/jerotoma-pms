@@ -4,9 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.models.users.Person;
 
-public class StudentVO extends Person {
+public class StudentVO extends PersonVO {
 	
 	private Integer id;
 	private Integer studentNumber;	

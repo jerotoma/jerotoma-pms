@@ -18,7 +18,7 @@ module.exports = "<div class='row'>\n    <div class=\"col-md-12 col-lg-12 col-xx
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Teacher</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element; let i=index;\"> {{i + 1}} </td>\n            </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n            <!-- Email Address Column -->\n            <ng-container matColumnDef=\"emailAddress\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.emailAddress}} </td>\n            </ng-container>\n              <!-- Phone Number Column -->\n            <ng-container matColumnDef=\"phoneNumber\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.phoneNumber}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"academicDiscipline\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Discipline </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.academicDiscipline.name}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"position\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Position</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.position.name}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
+module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Teacher</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element; let i=index;\"> {{i + 1}} </td>\n            </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n            <!-- Email Address Column -->\n            <ng-container matColumnDef=\"emailAddress\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.emailAddress}} </td>\n            </ng-container>\n              <!-- Phone Number Column -->\n            <ng-container matColumnDef=\"phoneNumber\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.phoneNumber}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"academicDiscipline\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Discipline </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.academicDiscipline.name}} </td>\n            </ng-container>\n            <!-- Academic Discipline Column -->\n            <ng-container matColumnDef=\"position\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Position</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.position.name}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"view(element)\"><mat-icon>visibility</mat-icon>View</button>\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
 
 /***/ }),
 
@@ -250,7 +250,7 @@ let TeacherCreateComponent = class TeacherCreateComponent {
                     userType: 'teacher',
                     academicDiscipline: this.teacher.academicDiscipline.id,
                     fullName: this.teacher.fullName,
-                    address: this.teacher.addressVO,
+                    address: this.teacher.address,
                 });
             }
         }, error => {
@@ -343,6 +343,84 @@ TeacherCreateComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/features/users/teachers/show/teacher-show.component.ts":
+/*!************************************************************************!*\
+  !*** ./src/app/features/users/teachers/show/teacher-show.component.ts ***!
+  \************************************************************************/
+/*! exports provided: TeacherShowComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TeacherShowComponent", function() { return TeacherShowComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/users/user.service */ "./src/app/services/users/user.service.ts");
+
+
+
+
+let TeacherShowComponent = class TeacherShowComponent {
+    constructor(userService, route, router) {
+        this.userService = userService;
+        this.route = route;
+        this.router = router;
+        this.teacher = null;
+        this.showMessage = {
+            error: false,
+            success: false,
+            message: '',
+        };
+    }
+    ngOnInit() {
+        // For one time load
+        let id = this.route.snapshot.paramMap.get('id');
+        this.route.params.subscribe(routeParam => {
+            this.loadTeacherDetails(routeParam.id);
+            window.console.log(routeParam);
+        });
+        this.route.queryParams.subscribe(queryParams => {
+            // do something with the query params
+        });
+    }
+    loadTeacherDetails(teacherId) {
+        this.userService.loadUser(teacherId, 'teacher').subscribe((result) => {
+            const resp = result;
+            const status = resp.status;
+            if (status !== null && status === 200) {
+                this.teacher = resp.body.data;
+            }
+        }, error => {
+            this.showMessage.error = true;
+            this.showMessage.success = false;
+            this.showMessage.message = error ? error.error.message : '';
+        });
+    }
+};
+TeacherShowComponent.ctorParameters = () => [
+    { type: app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+];
+TeacherShowComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-teacher-show',
+        template: `<app-user-details
+              *ngIf='teacher'
+              [userDatail]="teacher"
+              [userType]="'teacher'"
+              ></app-user-details>`,
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+], TeacherShowComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/features/users/teachers/teachers-routing.module.ts":
 /*!********************************************************************!*\
   !*** ./src/app/features/users/teachers/teachers-routing.module.ts ***!
@@ -360,6 +438,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _teachers_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./teachers.component */ "./src/app/features/users/teachers/teachers.component.ts");
 /* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
 /* harmony import */ var _views_teachers_view_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/teachers-view.component */ "./src/app/features/users/teachers/views/teachers-view.component.ts");
+/* harmony import */ var _show_teacher_show_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./show/teacher-show.component */ "./src/app/features/users/teachers/show/teacher-show.component.ts");
 
 // Modules
 
@@ -367,6 +446,7 @@ __webpack_require__.r(__webpack_exports__);
 // Service
 
 // Components
+
 
 
 
@@ -380,6 +460,10 @@ const routes = [
             {
                 path: '',
                 component: _views_teachers_view_component__WEBPACK_IMPORTED_MODULE_6__["TeachersViewComponent"],
+            },
+            {
+                path: ':id',
+                component: _show_teacher_show_component__WEBPACK_IMPORTED_MODULE_7__["TeacherShowComponent"],
             },
             {
                 path: 'create',
@@ -455,6 +539,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _teachers_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./teachers.component */ "./src/app/features/users/teachers/teachers.component.ts");
 /* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
 /* harmony import */ var _views_teachers_view_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./views/teachers-view.component */ "./src/app/features/users/teachers/views/teachers-view.component.ts");
+/* harmony import */ var _show_teacher_show_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./show/teacher-show.component */ "./src/app/features/users/teachers/show/teacher-show.component.ts");
+
 
 
 
@@ -474,6 +560,7 @@ const COMPONENTS = [
     _teachers_component__WEBPACK_IMPORTED_MODULE_12__["TeachersComponent"],
     _views_teachers_view_component__WEBPACK_IMPORTED_MODULE_14__["TeachersViewComponent"],
     _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_13__["TeacherCreateComponent"],
+    _show_teacher_show_component__WEBPACK_IMPORTED_MODULE_15__["TeacherShowComponent"],
 ];
 const ENTRY_COMPONENTS = [
     _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_13__["TeacherCreateComponent"],
@@ -558,12 +645,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
-/* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
-/* harmony import */ var app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/features/users/user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
+/* harmony import */ var _create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../create/teacher-create.component */ "./src/app/features/users/teachers/create/teacher-create.component.ts");
+/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
+
 
 
 
@@ -574,15 +663,17 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TeachersViewComponent = class TeachersViewComponent {
-    constructor(userService, dialogService) {
+    constructor(userService, dialogService, router) {
         this.userService = userService;
         this.dialogService = dialogService;
+        this.router = router;
         this.title = 'Teacher\'s List';
+        this.baseURL = '/dashboard/users/teachers/';
         this.hidePageSize = false;
         this.totalNumberOfItems = 20;
         this.pageSizeOptions = [10, 20, 30, 50, 70, 100];
         this.displayedColumns = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'academicDiscipline', 'position', 'action'];
-        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_5__["MatTableDataSource"]();
+        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"]();
         this.param = {
             page: 1,
             pageSize: 10,
@@ -598,7 +689,7 @@ let TeachersViewComponent = class TeachersViewComponent {
         this.loadUsers();
     }
     open() {
-        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_7__["TeacherCreateComponent"], {
+        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__["TeacherCreateComponent"], {
             context: {
                 title: 'Add New Teacher',
             },
@@ -607,7 +698,7 @@ let TeachersViewComponent = class TeachersViewComponent {
         });
     }
     edit(teacher) {
-        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_7__["TeacherCreateComponent"], {
+        this.dialogService.open(_create_teacher_create_component__WEBPACK_IMPORTED_MODULE_8__["TeacherCreateComponent"], {
             context: {
                 title: 'Edit Teacher',
                 action: 'edit',
@@ -617,8 +708,11 @@ let TeachersViewComponent = class TeachersViewComponent {
             this.loadUsers();
         });
     }
+    view(teacher) {
+        this.router.navigate([this.baseURL + '/' + teacher.id]);
+    }
     delete(teacher) {
-        this.dialogService.open(app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {
+        this.dialogService.open(app_shared__WEBPACK_IMPORTED_MODULE_9__["UserDeleteComponent"], {
             context: {
                 title: 'Delete Teacher',
                 action: 'delete',
@@ -642,22 +736,23 @@ let TeachersViewComponent = class TeachersViewComponent {
             if (status !== null && status === 200 && resp.body) {
                 const data = resp.body.data;
                 this.totalNumberOfItems = data.count;
-                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_5__["MatTableDataSource"](data.teachers);
+                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"](data.teachers);
             }
         });
     }
 };
 TeachersViewComponent.ctorParameters = () => [
-    { type: app_services_users__WEBPACK_IMPORTED_MODULE_6__["UserService"] },
-    { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogService"] }
+    { type: app_services_users__WEBPACK_IMPORTED_MODULE_7__["UserService"] },
+    { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_3__["MatPaginator"], { static: true }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_paginator__WEBPACK_IMPORTED_MODULE_3__["MatPaginator"])
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__["MatPaginator"], { static: true }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_paginator__WEBPACK_IMPORTED_MODULE_4__["MatPaginator"])
 ], TeachersViewComponent.prototype, "paginator", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_4__["MatSort"], { static: true }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_sort__WEBPACK_IMPORTED_MODULE_4__["MatSort"])
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_sort__WEBPACK_IMPORTED_MODULE_5__["MatSort"], { static: true }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__["MatSort"])
 ], TeachersViewComponent.prototype, "sort", void 0);
 TeachersViewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -665,8 +760,9 @@ TeachersViewComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: __webpack_require__(/*! raw-loader!./teachers-view.component.html */ "./node_modules/raw-loader/index.js!./src/app/features/users/teachers/views/teachers-view.component.html"),
         styles: [__webpack_require__(/*! ./teachers-view.component.scss */ "./src/app/features/users/teachers/views/teachers-view.component.scss")]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_6__["UserService"],
-        _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogService"]])
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_7__["UserService"],
+        _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
 ], TeachersViewComponent);
 
 

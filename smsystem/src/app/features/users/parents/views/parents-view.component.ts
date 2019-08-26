@@ -10,8 +10,8 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
-import { UserDeleteComponent } from 'app/features/users/user-delete/user-delete.component';
-import { Student } from 'app/models/users';
+import { UserDeleteComponent } from 'app/shared';
+import { Parent } from 'app/models';
 
 @Component({
   selector: 'app-parent-views',
@@ -20,7 +20,7 @@ import { Student } from 'app/models/users';
 })
 export class ParentsViewComponent implements OnInit {
   title: string = 'Parent\'s List';
-  baseURL: string = '/dashboard/users/students/';
+  baseURL: string = '/dashboard/users/parents/';
   firstForm: FormGroup;
   secondForm: FormGroup;
   thirdForm: FormGroup;
@@ -28,8 +28,8 @@ export class ParentsViewComponent implements OnInit {
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
-  dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
+  displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
+  dataSource: MatTableDataSource<Parent> = new MatTableDataSource<Parent>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -41,10 +41,10 @@ export class ParentsViewComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: 'student',
+    userType: 'parent',
   };
 
-  students: Array<Student> = [];
+  parents: Array<Parent> = [];
 
 
   constructor(
@@ -62,22 +62,22 @@ export class ParentsViewComponent implements OnInit {
     this.router.navigate([this.baseURL + '/create']);
   }
 
-  edit(student: Student) {
-    this.router.navigate([this.baseURL + 'edit/' + student.id ]);
+  edit(parent: Parent) {
+    this.router.navigate([this.baseURL + 'edit/' + parent.id ]);
   }
 
-  view(student: Student) {
-    this.router.navigate([this.baseURL + '/' + student.id ]);
+  view(parent: Parent) {
+    this.router.navigate([this.baseURL + '/' + parent.id ]);
   }
 
-  delete(student: Student) {
+  delete(parent: Parent) {
     this.dialogService.open(UserDeleteComponent, {
       context: {
-        title: 'Delete Student',
+        title: 'Delete Parent',
         action: 'delete',
-        userType: 'student',
-        userId: student.id.toString(),
-        name: student.fullName,
+        userType: 'parent',
+        userId: parent.id.toString(),
+        name: parent.fullName,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
@@ -97,7 +97,7 @@ export class ParentsViewComponent implements OnInit {
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Student>(data.students);
+          this.dataSource = new MatTableDataSource<Parent>(data.parents);
         }
     });
   }

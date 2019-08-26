@@ -4,7 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AUTH_CONSTANT } from './auth-constant';
 import { LocalStorage, isObjectEmpty } from 'app/utils';
-import { Token } from 'app/models/tokens/Token';
+import { Token } from 'app/models/tokens/token';
 
 
 @Injectable({

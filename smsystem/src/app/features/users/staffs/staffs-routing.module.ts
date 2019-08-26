@@ -9,6 +9,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 import { StaffsComponent } from './staffs.component';
 import { StaffCreateComponent } from './create/staff-create.component';
 import { StaffsViewComponent } from './views/staffs-view.component';
+import { StaffShowComponent } from './show/staff-show.component';
 
 // Utilities
 
@@ -27,8 +28,8 @@ const routes: Routes = [
           component: StaffCreateComponent,
         },
         {
-          path: 'views',
-          component: StaffsViewComponent,
+          path: ':id',
+          component: StaffShowComponent,
         },
     ],
   },

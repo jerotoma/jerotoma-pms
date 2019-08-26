@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable, of as observableOf, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { Token } from '../../models/tokens/Token';
+import { Token } from '../../models/tokens/token';
 import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from './token.service';
 import { END_POINTS } from 'app/utils';

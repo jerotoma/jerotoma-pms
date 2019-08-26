@@ -73,7 +73,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
 
 
   onSubmit() {
-    window.console.log(this.studentForm, this.parentForm);
+    // window.console.log(this.studentForm, this.parentForm);
    if (this.studentForm.valid && this.parentForm.valid ){
     const dob = this.studentForm.get('birthDate');
     if (dob && dob.valid) {

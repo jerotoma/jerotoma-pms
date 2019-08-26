@@ -34,11 +34,13 @@ import { StudentsRoutingModule } from './staffs-routing.module';
 import { StaffsComponent } from './staffs.component';
 import { StaffCreateComponent } from './create/staff-create.component';
 import { StaffsViewComponent } from './views/staffs-view.component';
+import { StaffShowComponent } from './show/staff-show.component';
 
 const COMPONENTS = [
     StaffsComponent,
     StaffsViewComponent,
     StaffCreateComponent,
+    StaffShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [

@@ -9,6 +9,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 import { StudentsComponent } from './students.component';
 import { StudentCreateComponent } from './create/student-create.component';
 import { StudentsViewComponent } from './views/students-view.component';
+import { StudentShowComponent } from './show/student-show.component';
 
 // Utilities
 
@@ -27,8 +28,8 @@ const routes: Routes = [
           component: StudentCreateComponent,
         },
         {
-          path: 'views',
-          component: StudentsViewComponent,
+          path: ':id',
+          component: StudentShowComponent,
         },
     ],
   },

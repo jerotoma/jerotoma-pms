@@ -227,17 +227,6 @@ module.exports = "<article>\n  <h2>{{post.title}}</h2>\n  <p>{{post.text}}</p>\n
 
 /***/ }),
 
-/***/ "./node_modules/raw-loader/index.js!./src/app/features/users/user-delete/user-delete.component.html":
-/*!*************************************************************************************************!*\
-  !*** ./node_modules/raw-loader!./src/app/features/users/user-delete/user-delete.component.html ***!
-  \*************************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<nb-card>\n  <nb-card-body>\n      <nb-alert outline=\"danger\">\n         Are you sure you want to delete {{name}} position\n      </nb-alert>\n  </nb-card-body>\n  <nb-card-footer>\n    <button class='push-right' (click)=\"onConfirmed()\" nbButton hero status=\"danger\">Yes</button>\n    <button class='push-right' nbButton hero status=\"success\" (click)=\"dismiss()\">No, Thank you</button>\n  </nb-card-footer>\n</nb-card>\n"
-
-/***/ }),
-
 /***/ "./src/app/features/users/infinite-list/infinite-list.component.scss":
 /*!***************************************************************************!*\
   !*** ./src/app/features/users/infinite-list/infinite-list.component.scss ***!
@@ -432,102 +421,6 @@ NewsService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
     tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
 ], NewsService);
-
-
-
-/***/ }),
-
-/***/ "./src/app/features/users/user-delete/user-delete.component.scss":
-/*!***********************************************************************!*\
-  !*** ./src/app/features/users/user-delete/user-delete.component.scss ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2ZlYXR1cmVzL3VzZXJzL3VzZXItZGVsZXRlL3VzZXItZGVsZXRlLmNvbXBvbmVudC5zY3NzIn0= */"
-
-/***/ }),
-
-/***/ "./src/app/features/users/user-delete/user-delete.component.ts":
-/*!*********************************************************************!*\
-  !*** ./src/app/features/users/user-delete/user-delete.component.ts ***!
-  \*********************************************************************/
-/*! exports provided: UserDeleteComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserDeleteComponent", function() { return UserDeleteComponent; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
-/* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
-
-
-
-
-let UserDeleteComponent = class UserDeleteComponent {
-    constructor(userService, ref) {
-        this.userService = userService;
-        this.ref = ref;
-        this.userId = '0';
-        this.title = '';
-        this.name = '';
-        this.action = '';
-        this.userType = '';
-        this.confirmed = false;
-        this.showMessage = {
-            error: false,
-            success: false,
-            message: '',
-        };
-    }
-    ngOnInit() {
-        this.confirmed = this.action === 'delete';
-    }
-    deleteUser(teacherId) {
-        if (this.confirmed) {
-            this.userService.deleteUser(teacherId, this.userType)
-                .subscribe((result) => {
-                const resp = result;
-                const data = resp.body;
-                const status = resp.status;
-                if (status !== null && status === 200) {
-                    this.dismiss();
-                }
-                else {
-                    this.showMessage.success = false;
-                    this.showMessage.error = true;
-                    this.showMessage.message = data ? data.message : '';
-                }
-            }, error => {
-                this.showMessage.error = true;
-                this.showMessage.success = false;
-                this.showMessage.message = error ? error.error.message : '';
-            });
-        }
-    }
-    dismiss() {
-        this.ref.close();
-    }
-    onConfirmed() {
-        this.confirmed = true;
-        this.deleteUser(parseInt(this.userId, 10));
-    }
-};
-UserDeleteComponent.ctorParameters = () => [
-    { type: app_services_users__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
-    { type: _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogRef"] }
-];
-UserDeleteComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
-        selector: 'app-user-delete',
-        template: __webpack_require__(/*! raw-loader!./user-delete.component.html */ "./node_modules/raw-loader/index.js!./src/app/features/users/user-delete/user-delete.component.html"),
-        styles: [__webpack_require__(/*! ./user-delete.component.scss */ "./src/app/features/users/user-delete/user-delete.component.scss")]
-    }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users__WEBPACK_IMPORTED_MODULE_3__["UserService"],
-        _nebular_theme__WEBPACK_IMPORTED_MODULE_2__["NbDialogRef"]])
-], UserDeleteComponent);
 
 
 
@@ -745,23 +638,6 @@ UsersModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
-/***/ "./src/app/services/users/index.ts":
-/*!*****************************************!*\
-  !*** ./src/app/services/users/index.ts ***!
-  \*****************************************/
-/*! exports provided: UserService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _user_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user.service */ "./src/app/services/users/user.service.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return _user_service__WEBPACK_IMPORTED_MODULE_0__["UserService"]; });
-
-
-
-
-/***/ }),
-
 /***/ "./src/app/shared/shared.module.ts":
 /*!*****************************************!*\
   !*** ./src/app/shared/shared.module.ts ***!
@@ -786,10 +662,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _nebular_theme__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @nebular/theme */ "./node_modules/@nebular/theme/fesm2015/index.js");
 /* harmony import */ var app_theme_theme_module__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! app/@theme/theme.module */ "./src/app/@theme/theme.module.ts");
 /* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
-/* harmony import */ var _addresses_address_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./addresses/address.component */ "./src/app/shared/addresses/address.component.ts");
-/* harmony import */ var app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! app/features/users/user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
-
-
 
 
 
@@ -805,12 +677,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const COMPONENTS = [
-    _addresses_address_component__WEBPACK_IMPORTED_MODULE_14__["AddressComponent"],
-    app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_15__["UserDeleteComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_13__["AddressComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_13__["UserDeleteComponent"],
     app_shared__WEBPACK_IMPORTED_MODULE_13__["UserTableComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_13__["UserDetailsComponent"],
 ];
 const ENTRY_COMPONENTS = [
-    app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_15__["UserDeleteComponent"],
+    app_shared__WEBPACK_IMPORTED_MODULE_13__["UserDeleteComponent"],
 ];
 const MODULES = [
     _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"],

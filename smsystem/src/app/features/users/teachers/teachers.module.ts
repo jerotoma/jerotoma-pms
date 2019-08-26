@@ -34,11 +34,13 @@ import { TeachersRoutingModule } from './teachers-routing.module';
 import { TeachersComponent } from './teachers.component';
 import { TeacherCreateComponent } from './create/teacher-create.component';
 import { TeachersViewComponent } from './views/teachers-view.component';
+import { TeacherShowComponent } from './show/teacher-show.component';
 
 const COMPONENTS = [
     TeachersComponent,
     TeachersViewComponent,
     TeacherCreateComponent,
+    TeacherShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [

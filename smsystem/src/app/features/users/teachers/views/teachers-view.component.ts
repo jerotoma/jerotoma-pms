@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NbDialogService } from '@nebular/theme';
+import { Router } from '@angular/router';
 
 import { PageEvent } from '@angular/material';
 import {MatPaginator} from '@angular/material/paginator';
@@ -9,7 +10,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { TeacherCreateComponent } from '../create/teacher-create.component';
-import { UserDeleteComponent } from 'app/features/users/user-delete/user-delete.component';
+import { UserDeleteComponent } from 'app/shared';
 import { Teacher } from 'app/models/users';
 
 @Component({
@@ -19,7 +20,7 @@ import { Teacher } from 'app/models/users';
 })
 export class TeachersViewComponent implements OnInit {
   title: string = 'Teacher\'s List';
-
+  baseURL: string = '/dashboard/users/teachers/';
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
@@ -45,6 +46,7 @@ export class TeachersViewComponent implements OnInit {
   constructor(
     private userService: UserService,
     private dialogService: NbDialogService,
+    private router: Router,
     ) {
   }
 
@@ -71,6 +73,10 @@ export class TeachersViewComponent implements OnInit {
     }).onClose.subscribe(_data => {
       this.loadUsers();
     });
+  }
+
+  view(teacher: Teacher) {
+    this.router.navigate([this.baseURL + '/' + teacher.id ]);
   }
 
   delete(teacher: Teacher) {

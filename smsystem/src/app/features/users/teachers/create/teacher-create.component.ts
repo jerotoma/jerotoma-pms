@@ -220,7 +220,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
           userType: 'teacher',
           academicDiscipline: this.teacher.academicDiscipline.id,
           fullName: this.teacher.fullName,
-          address: this.teacher.addressVO,
+          address: this.teacher.address,
         });
       }
     }, error => {

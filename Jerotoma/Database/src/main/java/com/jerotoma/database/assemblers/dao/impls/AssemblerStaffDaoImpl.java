@@ -96,7 +96,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 		@Override
 		public StaffVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StaffVO staff = new StaffVO(rs);	
-			staff.setAddressVO(loadAddress(staff.getId()));	
+			staff.setAddress(loadAddress(staff.getId()));	
 			return staff;
 		}		
 	}
@@ -107,7 +107,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 			StaffVO staff = null;
 			if(rs.next()) {
 				staff = new StaffVO(rs);
-				staff.setAddressVO(loadAddress(staff.getId()));					
+				staff.setAddress(loadAddress(staff.getId()));					
 			}
 			return staff;
 		}				

@@ -18,7 +18,7 @@ module.exports = "<nb-card>\n  <nb-card-header status=\"danger\" >{{ title }}</n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Student</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element; let i = index;\"> {{i + 1}} </td>\n            </ng-container>\n             <!-- Student Number On Column -->\n             <ng-container matColumnDef=\"studentNumber\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Number</th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.studentNumber}} </td>\n              </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n\n             <!-- Email Address Column -->\n             <ng-container matColumnDef=\"emailAddress\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.emailAddress}} </td>\n              </ng-container>\n               <!-- Phone Number Column -->\n              <ng-container matColumnDef=\"phoneNumber\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.phoneNumber}} </td>\n              </ng-container>\n            <!-- Registered On Column -->\n            <ng-container matColumnDef=\"createdOn\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered On</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.createdOn}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"view(element)\"><mat-icon>visibility</mat-icon> View</button>\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
+module.exports = "<nb-card class=\"col-md-12 col-lg-12 col-xxxl-12\">\n  <nb-card-header> {{title}} <button class=\"push-right\" nbButton hero status='success' (click)=\"open()\">Add New Parent</button></nb-card-header>\n  <nb-card-body>\n      <div class=\"mat-elevation-z0\">\n          <table mat-table [dataSource]=\"dataSource\" matSort>\n            <!-- id Column -->\n            <ng-container matColumnDef=\"id\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>\n              <td mat-cell *matCellDef=\"let element; let i = index;\"> {{i + 1}} </td>\n            </ng-container>\n            <!-- Full Column -->\n            <ng-container matColumnDef=\"fullName\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.fullName}} </td>\n            </ng-container>\n             <!-- Gender Column -->\n            <ng-container matColumnDef=\"gender\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.gender}} </td>\n            </ng-container>\n\n             <!-- Email Address Column -->\n             <ng-container matColumnDef=\"emailAddress\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email Address </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.emailAddress}} </td>\n              </ng-container>\n               <!-- Phone Number Column -->\n              <ng-container matColumnDef=\"phoneNumber\">\n                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>\n                <td mat-cell *matCellDef=\"let element\"> {{element.phoneNumber}} </td>\n              </ng-container>\n            <!-- Registered On Column -->\n            <ng-container matColumnDef=\"createdOn\">\n              <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered On</th>\n              <td mat-cell *matCellDef=\"let element\"> {{element.createdOn}} </td>\n            </ng-container>\n             <!-- action Column -->\n            <ng-container matColumnDef=\"action\">\n              <th mat-header-cell *matHeaderCellDef>Action</th>\n              <td mat-cell *matCellDef=\"let element\">\n                  <button mat-icon-button [matMenuTriggerFor]=\"menu\">\n                    <mat-icon>more_vert</mat-icon>\n                  </button>\n                  <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n                    <button mat-menu-item (click)=\"view(element)\"><mat-icon>visibility</mat-icon> View</button>\n                    <button mat-menu-item (click)=\"edit(element)\"><mat-icon>edit</mat-icon> Edit</button>\n                    <button mat-menu-item (click)=\"delete(element)\"><mat-icon>delete</mat-icon> Delete</button>\n                  </mat-menu>\n              </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n          </table>\n          <mat-paginator\n                [pageSize]='param.pageSize'\n                [length]='totalNumberOfItems'\n                [hidePageSize]='hidePageSize'\n                [pageIndex]=0\n                (page)='onPageChange($event)'\n                [pageSizeOptions]=\"pageSizeOptions\"\n                showFirstLastButtons>\n          </mat-paginator>\n        </div>\n  </nb-card-body>\n</nb-card>\n\n"
 
 /***/ }),
 
@@ -97,7 +97,7 @@ let ParentCreateComponent = class ParentCreateComponent {
         this.title = 'Create New Parent';
     }
     onSubmit() {
-        window.console.log(this.studentForm, this.parentForm);
+        // window.console.log(this.studentForm, this.parentForm);
         if (this.studentForm.valid && this.parentForm.valid) {
             const dob = this.studentForm.get('birthDate');
             if (dob && dob.valid) {
@@ -298,7 +298,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var app_services_guards_auth_guard_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/guards/auth-guard.service */ "./src/app/services/guards/auth-guard.service.ts");
 /* harmony import */ var _parents_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./parents.component */ "./src/app/features/users/parents/parents.component.ts");
 /* harmony import */ var _create_parent_create_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./create/parent-create.component */ "./src/app/features/users/parents/create/parent-create.component.ts");
-/* harmony import */ var _views_parents_view_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/parents-view.component */ "./src/app/features/users/parents/views/parents-view.component.ts");
+/* harmony import */ var _show_parent_show_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./show/parent-show.component */ "./src/app/features/users/parents/show/parent-show.component.ts");
+/* harmony import */ var _views_parents_view_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/parents-view.component */ "./src/app/features/users/parents/views/parents-view.component.ts");
 
 // Modules
 
@@ -306,6 +307,7 @@ __webpack_require__.r(__webpack_exports__);
 // Service
 
 // Components
+
 
 
 
@@ -318,15 +320,15 @@ const routes = [
         children: [
             {
                 path: '',
-                component: _views_parents_view_component__WEBPACK_IMPORTED_MODULE_6__["ParentsViewComponent"],
+                component: _views_parents_view_component__WEBPACK_IMPORTED_MODULE_7__["ParentsViewComponent"],
             },
             {
                 path: 'create',
                 component: _create_parent_create_component__WEBPACK_IMPORTED_MODULE_5__["ParentCreateComponent"],
             },
             {
-                path: 'views',
-                component: _views_parents_view_component__WEBPACK_IMPORTED_MODULE_6__["ParentsViewComponent"],
+                path: ':id',
+                component: _show_parent_show_component__WEBPACK_IMPORTED_MODULE_6__["ParentShowComponent"],
             },
         ],
     },
@@ -397,7 +399,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _parents_routing_module__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./parents-routing.module */ "./src/app/features/users/parents/parents-routing.module.ts");
 /* harmony import */ var _parents_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./parents.component */ "./src/app/features/users/parents/parents.component.ts");
 /* harmony import */ var _create_parent_create_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./create/parent-create.component */ "./src/app/features/users/parents/create/parent-create.component.ts");
-/* harmony import */ var _views_parents_view_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./views/parents-view.component */ "./src/app/features/users/parents/views/parents-view.component.ts");
+/* harmony import */ var _show_parent_show_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./show/parent-show.component */ "./src/app/features/users/parents/show/parent-show.component.ts");
+/* harmony import */ var _views_parents_view_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./views/parents-view.component */ "./src/app/features/users/parents/views/parents-view.component.ts");
+
 
 
 
@@ -415,8 +419,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const COMPONENTS = [
     _parents_component__WEBPACK_IMPORTED_MODULE_12__["ParentsComponent"],
-    _views_parents_view_component__WEBPACK_IMPORTED_MODULE_14__["ParentsViewComponent"],
+    _views_parents_view_component__WEBPACK_IMPORTED_MODULE_15__["ParentsViewComponent"],
     _create_parent_create_component__WEBPACK_IMPORTED_MODULE_13__["ParentCreateComponent"],
+    _show_parent_show_component__WEBPACK_IMPORTED_MODULE_14__["ParentShowComponent"],
 ];
 const ENTRY_COMPONENTS = [
     _create_parent_create_component__WEBPACK_IMPORTED_MODULE_13__["ParentCreateComponent"],
@@ -477,6 +482,84 @@ ParentsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/features/users/parents/show/parent-show.component.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/features/users/parents/show/parent-show.component.ts ***!
+  \**********************************************************************/
+/*! exports provided: ParentShowComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ParentShowComponent", function() { return ParentShowComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/users/user.service */ "./src/app/services/users/user.service.ts");
+
+
+
+
+let ParentShowComponent = class ParentShowComponent {
+    constructor(userService, route, router) {
+        this.userService = userService;
+        this.route = route;
+        this.router = router;
+        this.parent = null;
+        this.showMessage = {
+            error: false,
+            success: false,
+            message: '',
+        };
+    }
+    ngOnInit() {
+        // For one time load
+        let id = this.route.snapshot.paramMap.get('id');
+        this.route.params.subscribe(routeParam => {
+            this.loadParentDetails(routeParam.id);
+            window.console.log(routeParam);
+        });
+        this.route.queryParams.subscribe(queryParams => {
+            // do something with the query params
+        });
+    }
+    loadParentDetails(parentId) {
+        this.userService.loadUser(parentId, 'parent').subscribe((result) => {
+            const resp = result;
+            const status = resp.status;
+            if (status !== null && status === 200) {
+                this.parent = resp.body.data;
+            }
+        }, error => {
+            this.showMessage.error = true;
+            this.showMessage.success = false;
+            this.showMessage.message = error ? error.error.message : '';
+        });
+    }
+};
+ParentShowComponent.ctorParameters = () => [
+    { type: app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+];
+ParentShowComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-parent-show',
+        template: `<app-user-details
+              *ngIf='parent'
+              [userDatail]="parent"
+              [userType]="'parent'"
+              ></app-user-details>`,
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+], ParentShowComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/features/users/parents/views/parents-view.component.scss":
 /*!**************************************************************************!*\
   !*** ./src/app/features/users/parents/views/parents-view.component.scss ***!
@@ -506,7 +589,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
 /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
 /* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
-/* harmony import */ var app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/features/users/user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
+/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
 
 
 
@@ -522,11 +605,11 @@ let ParentsViewComponent = class ParentsViewComponent {
         this.dialogService = dialogService;
         this.router = router;
         this.title = 'Parent\'s List';
-        this.baseURL = '/dashboard/users/students/';
+        this.baseURL = '/dashboard/users/parents/';
         this.hidePageSize = false;
         this.totalNumberOfItems = 20;
         this.pageSizeOptions = [10, 20, 30, 50, 70, 100];
-        this.displayedColumns = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
+        this.displayedColumns = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
         this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"]();
         this.param = {
             page: 1,
@@ -535,9 +618,9 @@ let ParentsViewComponent = class ParentsViewComponent {
             status: '',
             search: '',
             fieldName: '',
-            userType: 'student',
+            userType: 'parent',
         };
-        this.students = [];
+        this.parents = [];
     }
     ngOnInit() {
         this.loadUsers();
@@ -545,20 +628,20 @@ let ParentsViewComponent = class ParentsViewComponent {
     open() {
         this.router.navigate([this.baseURL + '/create']);
     }
-    edit(student) {
-        this.router.navigate([this.baseURL + 'edit/' + student.id]);
+    edit(parent) {
+        this.router.navigate([this.baseURL + 'edit/' + parent.id]);
     }
-    view(student) {
-        this.router.navigate([this.baseURL + '/' + student.id]);
+    view(parent) {
+        this.router.navigate([this.baseURL + '/' + parent.id]);
     }
-    delete(student) {
-        this.dialogService.open(app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {
+    delete(parent) {
+        this.dialogService.open(app_shared__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {
             context: {
-                title: 'Delete Student',
+                title: 'Delete Parent',
                 action: 'delete',
-                userType: 'student',
-                userId: student.id.toString(),
-                name: student.fullName,
+                userType: 'parent',
+                userId: parent.id.toString(),
+                name: parent.fullName,
             },
         }).onClose.subscribe(_data => {
             this.loadUsers();
@@ -576,7 +659,7 @@ let ParentsViewComponent = class ParentsViewComponent {
             if (status !== null && status === 200 && resp.body) {
                 const data = resp.body.data;
                 this.totalNumberOfItems = data.count;
-                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"](data.students);
+                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_6__["MatTableDataSource"](data.parents);
             }
         });
     }

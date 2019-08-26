@@ -30,9 +30,12 @@ import {
 } from '@nebular/theme';
 import { ThemeModule } from 'app/@theme/theme.module';
 
-import { UserTableComponent } from 'app/shared';
-import { AddressComponent } from './addresses/address.component';
-import { UserDeleteComponent } from 'app/features/users/user-delete/user-delete.component';
+import {
+  UserTableComponent,
+  UserDetailsComponent,
+  AddressComponent,
+  UserDeleteComponent,
+} from 'app/shared';
 
 
 
@@ -40,6 +43,7 @@ const COMPONENTS = [
   AddressComponent,
   UserDeleteComponent,
   UserTableComponent,
+  UserDetailsComponent,
 ];
 
 const ENTRY_COMPONENTS = [

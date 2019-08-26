@@ -10,7 +10,7 @@ export interface Person {
   occupation?: string;
   birthDate: Date;
   picture?: string;
-  addressVO?: Address;
+  address?: Address;
   createdOn: Date;
   updatedOn: Date;
 }

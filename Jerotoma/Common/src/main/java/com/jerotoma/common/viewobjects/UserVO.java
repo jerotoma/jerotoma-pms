@@ -3,9 +3,8 @@ package com.jerotoma.common.viewobjects;
 import java.io.Serializable;
 
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.common.models.users.Person;
 
-public class UserVO extends Person implements Serializable{
+public class UserVO extends PersonVO implements Serializable{
 	
 	private Integer id;	
 	private String picture;

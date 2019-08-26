@@ -282,6 +282,84 @@ StaffCreateComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/features/users/staffs/show/staff-show.component.ts":
+/*!********************************************************************!*\
+  !*** ./src/app/features/users/staffs/show/staff-show.component.ts ***!
+  \********************************************************************/
+/*! exports provided: StaffShowComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StaffShowComponent", function() { return StaffShowComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+/* harmony import */ var app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! app/services/users/user.service */ "./src/app/services/users/user.service.ts");
+
+
+
+
+let StaffShowComponent = class StaffShowComponent {
+    constructor(userService, route, router) {
+        this.userService = userService;
+        this.route = route;
+        this.router = router;
+        this.staff = null;
+        this.showMessage = {
+            error: false,
+            success: false,
+            message: '',
+        };
+    }
+    ngOnInit() {
+        // For one time load
+        let id = this.route.snapshot.paramMap.get('id');
+        this.route.params.subscribe(routeParam => {
+            this.loadStaffDetails(routeParam.id);
+            window.console.log(routeParam);
+        });
+        this.route.queryParams.subscribe(queryParams => {
+            // do something with the query params
+        });
+    }
+    loadStaffDetails(staffId) {
+        this.userService.loadUser(staffId, 'staff').subscribe((result) => {
+            const resp = result;
+            const status = resp.status;
+            if (status !== null && status === 200) {
+                this.staff = resp.body.data;
+            }
+        }, error => {
+            this.showMessage.error = true;
+            this.showMessage.success = false;
+            this.showMessage.message = error ? error.error.message : '';
+        });
+    }
+};
+StaffShowComponent.ctorParameters = () => [
+    { type: app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+];
+StaffShowComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-staff-show',
+        template: `<app-user-details
+              *ngIf='staff'
+              [userDatail]="staff"
+              [userType]="'staff'"
+              ></app-user-details>`,
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [app_services_users_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+        _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+], StaffShowComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/features/users/staffs/staffs-routing.module.ts":
 /*!****************************************************************!*\
   !*** ./src/app/features/users/staffs/staffs-routing.module.ts ***!
@@ -299,6 +377,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _staffs_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./staffs.component */ "./src/app/features/users/staffs/staffs.component.ts");
 /* harmony import */ var _create_staff_create_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./create/staff-create.component */ "./src/app/features/users/staffs/create/staff-create.component.ts");
 /* harmony import */ var _views_staffs_view_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/staffs-view.component */ "./src/app/features/users/staffs/views/staffs-view.component.ts");
+/* harmony import */ var _show_staff_show_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./show/staff-show.component */ "./src/app/features/users/staffs/show/staff-show.component.ts");
 
 // Modules
 
@@ -306,6 +385,7 @@ __webpack_require__.r(__webpack_exports__);
 // Service
 
 // Components
+
 
 
 
@@ -325,8 +405,8 @@ const routes = [
                 component: _create_staff_create_component__WEBPACK_IMPORTED_MODULE_5__["StaffCreateComponent"],
             },
             {
-                path: 'views',
-                component: _views_staffs_view_component__WEBPACK_IMPORTED_MODULE_6__["StaffsViewComponent"],
+                path: ':id',
+                component: _show_staff_show_component__WEBPACK_IMPORTED_MODULE_7__["StaffShowComponent"],
             },
         ],
     },
@@ -398,6 +478,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _staffs_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./staffs.component */ "./src/app/features/users/staffs/staffs.component.ts");
 /* harmony import */ var _create_staff_create_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./create/staff-create.component */ "./src/app/features/users/staffs/create/staff-create.component.ts");
 /* harmony import */ var _views_staffs_view_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./views/staffs-view.component */ "./src/app/features/users/staffs/views/staffs-view.component.ts");
+/* harmony import */ var _show_staff_show_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./show/staff-show.component */ "./src/app/features/users/staffs/show/staff-show.component.ts");
+
 
 
 
@@ -417,6 +499,7 @@ const COMPONENTS = [
     _staffs_component__WEBPACK_IMPORTED_MODULE_12__["StaffsComponent"],
     _views_staffs_view_component__WEBPACK_IMPORTED_MODULE_14__["StaffsViewComponent"],
     _create_staff_create_component__WEBPACK_IMPORTED_MODULE_13__["StaffCreateComponent"],
+    _show_staff_show_component__WEBPACK_IMPORTED_MODULE_15__["StaffShowComponent"],
 ];
 const ENTRY_COMPONENTS = [
     _create_staff_create_component__WEBPACK_IMPORTED_MODULE_13__["StaffCreateComponent"],
@@ -506,7 +589,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/sort */ "./node_modules/@angular/material/esm2015/sort.js");
 /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
 /* harmony import */ var app_services_users__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! app/services/users */ "./src/app/services/users/index.ts");
-/* harmony import */ var app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/features/users/user-delete/user-delete.component */ "./src/app/features/users/user-delete/user-delete.component.ts");
+/* harmony import */ var app_shared__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! app/shared */ "./src/app/shared/index.ts");
 
 
 
@@ -552,7 +635,7 @@ let StaffsViewComponent = class StaffsViewComponent {
         this.router.navigate([this.baseURL + '/' + student.id]);
     }
     delete(student) {
-        this.dialogService.open(app_features_users_user_delete_user_delete_component__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {
+        this.dialogService.open(app_shared__WEBPACK_IMPORTED_MODULE_8__["UserDeleteComponent"], {
             context: {
                 title: 'Delete Student',
                 action: 'delete',

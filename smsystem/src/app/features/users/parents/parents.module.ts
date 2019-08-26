@@ -33,12 +33,14 @@ import { StudentsRoutingModule } from './parents-routing.module';
 
 import { ParentsComponent } from './parents.component';
 import { ParentCreateComponent } from './create/parent-create.component';
+import { ParentShowComponent } from './show/parent-show.component';
 import { ParentsViewComponent } from './views/parents-view.component';
 
 const COMPONENTS = [
     ParentsComponent,
     ParentsViewComponent,
     ParentCreateComponent,
+    ParentShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [

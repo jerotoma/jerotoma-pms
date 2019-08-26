@@ -9,6 +9,8 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 import { TeachersComponent } from './teachers.component';
 import { TeacherCreateComponent } from './create/teacher-create.component';
 import { TeachersViewComponent } from './views/teachers-view.component';
+import { TeacherShowComponent } from './show/teacher-show.component';
+
 
 // Utilities
 
@@ -21,6 +23,10 @@ const routes: Routes = [
         {
           path: '',
           component: TeachersViewComponent ,
+        },
+        {
+          path: ':id',
+          component: TeacherShowComponent ,
         },
         {
           path: 'create',

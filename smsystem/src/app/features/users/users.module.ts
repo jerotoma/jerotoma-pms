@@ -32,7 +32,6 @@ import {
 
 import { UserRoutingModule } from './users-routing.module';
 import { UsersComponent } from './users.component';
-
 import { InfiniteListComponent } from './infinite-list/infinite-list.component';
 import { NewsPostComponent } from './infinite-list/news-post/news-post.component';
 import { NewsPostPlaceholderComponent } from './infinite-list/news-post-placeholder/news-post-placeholder.component';
@@ -41,7 +40,7 @@ import { NewsService } from './news.service';
 
 const COMPONENTS = [
     UsersComponent,
-     NewsPostPlaceholderComponent,
+    NewsPostPlaceholderComponent,
     InfiniteListComponent,
     NewsPostComponent,
 ];

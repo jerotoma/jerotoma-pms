@@ -10,8 +10,8 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
-import { UserDeleteComponent } from 'app/features/users/user-delete/user-delete.component';
-import { Student } from 'app/models/users';
+import { UserDeleteComponent } from 'app/shared';
+import { Student } from 'app/models';
 
 @Component({
   selector: 'app-staffs-view',

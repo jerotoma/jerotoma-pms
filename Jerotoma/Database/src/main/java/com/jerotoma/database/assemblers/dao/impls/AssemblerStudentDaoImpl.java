@@ -99,7 +99,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 		@Override
 		public StudentVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 			StudentVO student = new StudentVO(rs);	
-			student.setAddressVO(loadAddress(student.getId()));	
+			student.setAddress(loadAddress(student.getId()));	
 			return student;
 		}		
 	}
@@ -110,7 +110,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 			StudentVO student = null;
 			if(rs.next()) {
 				student = new StudentVO(rs);
-				student.setAddressVO(loadAddress(student.getId()));					
+				student.setAddress(loadAddress(student.getId()));					
 			}
 			return student;
 		}				

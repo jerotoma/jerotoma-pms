@@ -34,11 +34,13 @@ import { StudentsRoutingModule } from './students-routing.module';
 import { StudentsComponent } from './students.component';
 import { StudentCreateComponent } from './create/student-create.component';
 import { StudentsViewComponent } from './views/students-view.component';
+import { StudentShowComponent } from './show/student-show.component';
 
 const COMPONENTS = [
     StudentsComponent,
     StudentsViewComponent,
     StudentCreateComponent,
+    StudentShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [
