@@ -35,8 +35,8 @@ public class StaffAddressDaoImpl implements StaffAddressDao {
 
 	@Override
 	public StaffAddress createObject(StaffAddress object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+		entityManager.persist(object);
+		return findObject(object.getId());
 	}
 
 	@Override

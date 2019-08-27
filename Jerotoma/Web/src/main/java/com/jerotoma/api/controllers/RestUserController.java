@@ -30,13 +30,14 @@ import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
+import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
+import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
@@ -82,7 +83,7 @@ public class RestUserController {
 	@Autowired AssemblerParentService assemblerParentService;
 	@Autowired AssemblerSequenceGeneratorService sequenceGeneratorService;
 	@Autowired StudentService studentService;
-	@Autowired StaffService otherStaffService;
+	@Autowired StaffService staffService;
 	@Autowired ParentService parentService;
 	@Autowired TeacherAddressService teacherAddressService;
 	@Autowired AddressService addressService;
@@ -214,10 +215,16 @@ public class RestUserController {
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
 		
-		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
 		List<String> requiredFields;
-		Integer positionId = null;
-		Integer academicDisciplineId = null;
+		Staff staff;
+		Parent parent;
+		Teacher teacher;
+		Student student;		
+		Address address;
+		Position position;
+		AcademicDiscipline academicDiscipline;
+		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
+		
 		
 		Date today = CalendarUtil.getTodaysDate();
 		
@@ -246,20 +253,18 @@ public class RestUserController {
 		}
 			
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
-			throw new FieldCanNotBeEmptyException("User type can not be empty");
+			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		String userType = (String) params.get(UserConstant.USER_TYPE);
 		
 		if (userType == null) {
-			throw new FieldCanNotBeEmptyException("User type can not be empty");
+			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		
-		Parent parent;
-		Student student;
-		Address address;
+		
 				
 		try {
 			switch(type) {
@@ -267,38 +272,10 @@ public class RestUserController {
 				requiredFields.add(UserConstant.POSITION);
 				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
 				
+				position = processPosition(params, requiredFields);			
+				academicDiscipline = processAcademicDiscipline(params, requiredFields);
+				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
-				if(params.containsKey(UserConstant.POSITION)) {
-					positionId = (Integer) params.get(UserConstant.POSITION);
-				}
-				
-				if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
-					throw new FieldCanNotBeEmptyException("Position can not be empty");
-				}
-				
-				Position position = positionService.findObject(positionId);
-				
-				if (position == null ) {
-					throw new FieldCanNotBeEmptyException("Position is required, and invalid position was provided");
-				}
-				
-				
-				if(params.containsKey(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-					academicDisciplineId = (Integer) params.get(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
-				}
-				
-				if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-					throw new FieldCanNotBeEmptyException("Academic Discipline can not be empty");
-				}
-				
-				AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
-				
-				if (academicDiscipline == null ) {
-					throw new FieldCanNotBeEmptyException("Academic Discipline is required, and invalid academic discipline was provided");
-				}
-				
-				
-				Teacher teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
 				address = teacher.getAddress();
@@ -322,9 +299,23 @@ public class RestUserController {
 				instance.setData(student);				
 				break;
 			case STAFF:
-				Staff otherStaff = otherStaffService.createObject(
-						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
-				instance.setData(otherStaff);
+				requiredFields.add(UserConstant.POSITION);				
+				position = processPosition(params, requiredFields);	
+				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
+				staff.setPosition(position);
+				staff.setUpdatedBy(authUser.getId());
+				staff = staffService.createObject(staff);
+				address = staff.getAddress();
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address); 
+				
+				StaffAddress staffAddress = new StaffAddress();
+				staffAddress.setAddress(address);
+				staffAddress.setStaff(staff);
+				staffAddress.setCreatedOn(today);
+				staffAddress.setUpdatedOn(today);
+				staffAddressService.createObject(staffAddress);
+				instance.setData(staff);
 				break;
 			case PARENT:
 				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
@@ -389,6 +380,43 @@ public class RestUserController {
 		return instance;
 		
 	}
+
+	private AcademicDiscipline processAcademicDiscipline(Map<String, Object> params, List<String> requiredFields) throws SQLException {
+		Integer academicDisciplineId = null;
+		if(params.containsKey(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
+			academicDisciplineId = (Integer) params.get(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
+		}
+		
+		if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
+			throw new FieldIsRequiredException("Academic Discipline can not be empty");
+		}
+		
+		AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+		
+		if (academicDiscipline == null ) {
+			throw new FieldIsRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
+		}
+		return academicDiscipline;
+	}
+
+	private Position processPosition(Map<String, Object> params, List<String> requiredFields)
+			throws SQLException {
+		Integer positionId = null;
+		if(params.containsKey(UserConstant.POSITION)) {
+			positionId = (Integer) params.get(UserConstant.POSITION);
+		}
+		
+		if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
+			throw new FieldIsRequiredException("Position can not be empty");
+		}
+		
+		Position position = positionService.findObject(positionId);
+		
+		if (position == null ) {
+			throw new FieldIsRequiredException("Position is required, and invalid position was provided");
+		}
+		return position;
+	}
 	
 	@PutMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
@@ -422,12 +450,12 @@ public class RestUserController {
 		}
 			
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
-			throw new FieldCanNotBeEmptyException("User type can not be empty");
+			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		String userType = (String) params.get(UserConstant.USER_TYPE);
 		
 		if (userType == null) {
-			throw new FieldCanNotBeEmptyException("User type can not be empty");
+			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		
 		
@@ -448,13 +476,13 @@ public class RestUserController {
 				}
 				
 				if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
-					throw new FieldCanNotBeEmptyException("Position can not be empty");
+					throw new FieldIsRequiredException("Position can not be empty");
 				}
 				
 				Position position = positionService.findObject(positionId);
 				
 				if (position == null ) {
-					throw new FieldCanNotBeEmptyException("Position is required, and invalid position was provided");
+					throw new FieldIsRequiredException("Position is required, and invalid position was provided");
 				}
 				
 				
@@ -463,13 +491,13 @@ public class RestUserController {
 				}
 				
 				if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-					throw new FieldCanNotBeEmptyException("Academic Discipline can not be empty");
+					throw new FieldIsRequiredException("Academic Discipline can not be empty");
 				}
 				
 				AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
 				
 				if (academicDiscipline == null ) {
-					throw new FieldCanNotBeEmptyException("Academic Discipline is required, and invalid academic discipline was provided");
+					throw new FieldIsRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
 				}
 				
 				
@@ -478,7 +506,7 @@ public class RestUserController {
 				teacher.setAcademicDiscipline(academicDiscipline);
 				
 				if (teacher.getId() == null) {					
-					throw new FieldCanNotBeEmptyException("Teacher's ID is required, and invalid ID was provided");					
+					throw new FieldIsRequiredException("Teacher's ID is required, and invalid ID was provided");					
 				}
 				
 				teacher = teacherService.updateObject(teacher);				
@@ -505,7 +533,7 @@ public class RestUserController {
 								UserConstant.TERM,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
-				Staff otherStaff = otherStaffService.createObject(
+				Staff otherStaff = staffService.createObject(
 						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
 				instance.setData(otherStaff);
 				break;
@@ -560,11 +588,11 @@ public class RestUserController {
 		}
 			
 		if (userType == null) {
-			throw new FieldCanNotBeEmptyException("User type can not be empty");
+			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		
 		if (userId == null) {					
-			throw new FieldCanNotBeEmptyException("Teacher's ID is required, and invalid ID was provided");					
+			throw new FieldIsRequiredException("Teacher's ID is required, and invalid ID was provided");					
 		}
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);

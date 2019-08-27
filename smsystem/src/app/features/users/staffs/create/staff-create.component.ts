@@ -2,15 +2,12 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { NbStepperComponent } from '@nebular/theme';
-import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper } from 'app/models/addresses';
+import { AddressComponent } from 'app/shared';
+import { NbDialogRef } from '@nebular/theme';
+import { Staff, Parent, AddressWrapper, Address, ShowMessage, Position } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
-import { ShowMessage } from 'app/models/messages/show-message.model';
-
 
 @Component({
   selector: 'app-staff-create',
@@ -18,18 +15,22 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['staff-create.component.scss'],
 })
 export class StaffCreateComponent implements OnInit, AfterViewInit {
-  title: string = 'Create New Student';
+  @ViewChild('app-address', {static: true}) appAddress: AddressComponent;
   @Output() onUserCreationSuccess = new EventEmitter();
-  @ViewChild('stepper', {static: true}) stepper: NbStepperComponent;
-  action: string = 'create';
 
-  studentForm: FormGroup;
+  title: string = 'Create New Staff';
+
+  action: string = 'create';
+  position: number;
+  positions: Position[] = [];
+
+  staffForm: FormGroup;
   parentForm: FormGroup;
   addressForm: FormGroup;
-  student: Student;
+  staff: Staff;
   address: Address;
   parent: Parent;
-  studentId: string;
+  staffId: string;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -45,52 +46,39 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
 
   constructor(
     protected positionService: PositionService,
-    protected academicDisciplineService: AcademicDisciplineService,
     private userService:  UserService,
     private formBuilder: FormBuilder,
-    ) {}
+    protected ref: NbDialogRef<StaffCreateComponent>) {}
 
   ngOnInit() {
-    this.loadStudentForm();
-    this.loadParentForm();
+    this.loadPositionList();
+    this.loadStaffForm();
   }
+
   ngAfterViewInit() {
     if (this.action === 'edit') {
-      this.loadTeacher(parseInt(this.studentId, 10));
+      this.loadStaff(parseInt(this.staffId, 10));
     }
   }
+
   dismiss() {
-
+    this.ref.close();
   }
-
-  onStudentSubmit() {
-    this.title = 'Create New Student';
-  }
-
-  onParentSubmit() {
-    this.title = 'Create New Parent';
-  }
-
 
   onSubmit() {
-    window.console.log(this.studentForm, this.parentForm);
-   if (this.studentForm.valid && this.parentForm.valid ){
-    const dob = this.studentForm.get('birthDate');
+    window.console.log(this.staffForm);
+   if (this.staffForm.valid ) {
+    const dob = this.staffForm.get('birthDate');
     if (dob && dob.valid) {
-      this.studentForm.patchValue({
+      this.staffForm.patchValue({
         birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
       });
     }
-    const data = {
-        student: this.studentForm.value,
-        parent: this.parentForm.value,
-        userType: 'studentAndParent',
-      }
-      this.postData(data);
+    this.postData(this.staffForm.value);
     }
   }
 
-  postData(data: any) {
+  postData(data: Staff) {
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
@@ -116,13 +104,14 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  updateData(data: any) {
+
+  updateData(data: Staff) {
     this.userService.updateUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.studentForm.reset();
+        this.staffForm.reset();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -139,42 +128,28 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   resetForms() {
-    this.studentForm.reset();
-    this.parentForm.reset();
-    this.stepper.reset();
+    this.staffForm.reset();
+    this.appAddress.resetForm();
   }
 
-  loadStudentForm() {
-    this.studentForm = this.formBuilder.group({
+  loadStaffForm() {
+    this.staffForm = this.formBuilder.group({
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       middleNames: [''],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
+      position: ['', Validators.required],
+      occupation: ['staff'],
       gender: ['', Validators.required],
       picture: [''],
-      userType: ['student'],
+      userType: ['staff'],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       address: [null, Validators.required],
     });
   }
 
-  loadParentForm() {
-    this.parentForm = this.formBuilder.group({
-      id: [null],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      middleNames: [''],
-      occupation: [''],
-      phoneNumber: ['', Validators.required],
-      emailAddress: [null],
-      gender: ['', Validators.required],
-      picture: [''],
-      userType: ['parent'],
-      address: [null, Validators.required],
-    });
-  }
   getParam(): QueryParam {
     return {
       page: 1,
@@ -183,26 +158,31 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'studentAndParent',
+      userType: 'staff',
     };
   }
 
-  loadTeacher(studentId: number) {
-    this.userService.loadUser(studentId, 'student').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+  loadStaff(staffId: number) {
+    this.userService.loadUser(staffId, 'staff').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {
-        this.student = resp.body.data;
-        this.studentForm.patchValue({
-          id: this.student.id,
-          firstName: this.student.firstName,
-          lastName: this.student.lastName,
-          occupation: this.student.occupation,
-          gender: this.student.gender,
-          picture: this.student.picture,
-          birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
-          userType: 'student',
-          fullName: this.student.fullName,
+        this.staff = resp.body.data;
+        this.staffForm.patchValue({
+          id: this.staff.id,
+          firstName: this.staff.firstName,
+          lastName: this.staff.lastName,
+          middleNames: this.staff.middleNames,
+          occupation: this.staff.occupation,
+          position: this.staff.position.id ,
+          gender: this.staff.gender,
+          phoneNumber: this.staff.phoneNumber,
+          emailAddress: this.staff.emailAddress,
+          picture: this.staff.picture,
+          birthDate: DateFormatter(this.staff.birthDate, 'YYYY/MM/DD', false),
+          userType: 'staff',
+          fullName: this.staff.fullName,
+          address: this.staff.address,
         });
       }
     }, error => {
@@ -212,22 +192,33 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onStudentAddressChange(addressWrapper: AddressWrapper ) {
+  onAddressChange(addressWrapper: AddressWrapper ) {
     if (!addressWrapper.isValid) {
-      this.studentForm.controls['address'].setErrors({ invalidAddress: true });
+      this.staffForm.controls['address'].setErrors({ invalidAddress: true });
     } else {
-      this.studentForm.controls['address'].setErrors(null);
-      this.studentForm.patchValue({address: addressWrapper.address});
+      this.staffForm.controls['address'].setErrors(null);
+      this.staffForm.patchValue({address: addressWrapper.address});
 
     }
   }
 
-  onParentAddressChange(addressWrapper: AddressWrapper ) {
-    if (!addressWrapper.isValid) {
-      this.parentForm.controls['address'].setErrors({ invalidAddress: true });
-    } else {
-      this.parentForm.controls['address'].setErrors(null);
-      this.parentForm.patchValue({address: addressWrapper.address});
-    }
+  loadPositionList() {
+    this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const data = resp.body;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.showMessage.error = false;
+        this.positions = data.data;
+      } else {
+        this.showMessage.success = false;
+        this.showMessage.error = true;
+        this.showMessage.message = data  ? data.message : '';
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
   }
 }

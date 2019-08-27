@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { USER_TYPE } from '../user-type.constant';
 
 @Component({
   selector: 'app-user-details',
@@ -15,10 +15,18 @@ export class UserDetailsComponent implements OnInit {
         }
 
         get isUserTeacher() {
-          return this.userType === 'teacher';
+          return this.userType === USER_TYPE.teacher;
         }
         get isUserStudent() {
-          return this.userType === 'student';
+          return this.userType === USER_TYPE.student;
+        }
+
+        get isUserParent() {
+          return this.userType === USER_TYPE.parent;
+        }
+
+        get isUserStaff() {
+          return this.userType === USER_TYPE.staff;
         }
 
 }

@@ -20,9 +20,12 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.StaffConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.viewobjects.AddressVO;
+import com.jerotoma.common.viewobjects.PositionVO;
 import com.jerotoma.common.viewobjects.StaffVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
+import com.jerotoma.database.assemblers.dao.AssemblerPositionDao;
 import com.jerotoma.database.assemblers.dao.AssemblerStaffDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -33,6 +36,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	
 	@Autowired DataSource dataSource;
 	@Autowired AssemblerAddressDao addressDao;
+	@Autowired AssemblerPositionDao positionDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -95,9 +99,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	public class StaffResultProcessor implements RowMapper<StaffVO>{
 		@Override
 		public StaffVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			StaffVO staff = new StaffVO(rs);	
-			staff.setAddress(loadAddress(staff.getId()));	
-			return staff;
+			return mapStudentResult(rs);
 		}		
 	}
 	
@@ -106,8 +108,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 		public StaffVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			StaffVO staff = null;
 			if(rs.next()) {
-				staff = new StaffVO(rs);
-				staff.setAddress(loadAddress(staff.getId()));					
+				staff = mapStudentResult(rs);
 			}
 			return staff;
 		}				
@@ -125,7 +126,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, occupation, gender, avatar, position, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.staffs ");
+		return new StringBuilder("SELECT id, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, occupation, gender, avatar, position_id AS positionId, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.staffs ");
 		
 	}
 
@@ -139,5 +140,15 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 		return this.addressDao.findAddressByStaffId(primaryKey);
 	}
 	
+	private PositionVO loadPosition(Integer primaryKey) throws SQLException {
+		return this.positionDao.findObject(primaryKey);
+	}
+	
+	public StaffVO mapStudentResult(ResultSet rs) throws SQLException {
+		StaffVO staff = new StaffVO(rs);
+		staff.setAddress(loadAddress(staff.getId()));
+		staff.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
+		return staff;
+	}
 
 }

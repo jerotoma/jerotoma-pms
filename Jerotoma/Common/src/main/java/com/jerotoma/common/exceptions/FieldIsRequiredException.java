@@ -1,13 +1,13 @@
 package com.jerotoma.common.exceptions;
 
-public class FieldCanNotBeEmptyException extends RuntimeException {
+public class FieldIsRequiredException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public FieldCanNotBeEmptyException(String message) {
+	public FieldIsRequiredException(String message) {
 		super(message);
 	}
 

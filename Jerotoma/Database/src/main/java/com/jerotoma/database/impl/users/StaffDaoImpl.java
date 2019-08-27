@@ -35,8 +35,8 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override
 	public Staff createObject(Staff object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+		entityManager.persist(object);
+		return findObject(object.getId());
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override
 	public List<Staff> loadList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -59,8 +59,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override
 	public Staff updateObject(Staff object) throws SQLException {
-		entityManager.merge(object);		
-		return findObject(object.getId().intValue());
+		return entityManager.merge(object);
 	}
 
 	@Override

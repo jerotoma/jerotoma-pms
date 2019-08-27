@@ -15,6 +15,7 @@
                       <p>Home Address</p>
                       <div class="bd-address" *ngIf="userDatail.address">
                           <address>
+                            <strong>Physical Address</strong><br>
                             {{userDatail.address.street}}, {{userDatail.address.unit}}<br>
                             {{userDatail.address.city}}, {{userDatail.address.state}} {{userDatail.address.postalCode}}<br>
                             {{userDatail.address.country}}
@@ -37,8 +38,9 @@
                       <h5 *ngIf="userDatail.fullName"> {{userDatail.fullName}} </h5>
                       <h6 *ngIf="userDatail.occupation">Profession: {{userDatail.occupation}}</h6>
                       <p class="proile-rating" *ngIf="isUserTeacher || isUserStudent">No. of Courses : <span>10</span></p>
+                      <p class="proile-rating" *ngIf="isUserParent">No. of Student : <span>10</span></p>
                       <div class="profile-tab">
-                          <nb-card accent="info">
+                          <nb-card accent="warning">
                               <nb-card-body>
                                 <nb-tabset>
                                   <nb-tab tabTitle="User Details">

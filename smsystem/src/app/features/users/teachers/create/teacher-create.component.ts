@@ -3,15 +3,11 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef, NbDateService } from '@nebular/theme';
-import { Teacher, User } from 'app/models/users';
+import { Teacher, User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
 import { UserService } from 'app/services/users';
-import { Position } from 'app/models/positions';
-import { Address, AddressWrapper } from 'app/models/addresses';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
-import { QueryParam , DateValidator, DateFormatter, StringDateFormatter} from 'app/utils';
-import { ShowMessage } from 'app/models/messages/show-message.model';
+import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
   selector: 'app-teacher-create',

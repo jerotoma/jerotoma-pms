@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS public.teachers(
         REFERENCES public.users (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT positions_fkey FOREIGN KEY (position_id)
+   CONSTRAINT positions_fkey FOREIGN KEY (position_id)
         REFERENCES public.positions(id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
@@ -210,6 +210,7 @@ CREATE TABLE IF NOT EXISTS public.students(
     
 CREATE TABLE IF NOT EXISTS public.staffs(
     id bigserial NOT NULL,
+    position_id bigint NOT NULL,
     first_name character varying(255) NOT NULL,
     last_name character varying(255) NOT NULL,
     middle_names text,
@@ -218,12 +219,16 @@ CREATE TABLE IF NOT EXISTS public.staffs(
     occupation character varying(255) NOT NULL,
     gender character varying(25) NOT NULL,
     avatar character varying(255) NOT NULL,
-    position character varying(255) NOT NULL,
     birth_date timestamp with time zone,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
     updated_by bigint NOT NULL,
-   	CONSTRAINT other_staffs_pkey PRIMARY KEY (id)
+   	CONSTRAINT staffs_pkey PRIMARY KEY (id),
+   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
+        REFERENCES public.positions(id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+   	
     );
 
 /**************************************************************

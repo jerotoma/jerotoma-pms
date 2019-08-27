@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
+import { StaffCreateComponent } from '../create/staff-create.component';
 
 import { PageEvent } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
@@ -10,8 +11,9 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
+import { PositionService } from 'app/services/positions';
 import { UserDeleteComponent } from 'app/shared';
-import { Student } from 'app/models';
+import { Staff, ShowMessage, Position } from 'app/models';
 
 @Component({
   selector: 'app-staffs-view',
@@ -28,8 +30,8 @@ export class StaffsViewComponent implements OnInit {
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
-  dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
+  displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'position', 'createdOn', 'action'];
+  dataSource: MatTableDataSource<Staff> = new MatTableDataSource<Staff>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -41,13 +43,20 @@ export class StaffsViewComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: 'student',
+    userType: 'staff',
   };
 
-  students: Array<Student> = [];
+  showMessage: ShowMessage = {
+    error: false,
+    success: false,
+    message: '',
+  };
+
+  staffs: Array<Staff> = [];
 
 
   constructor(
+    protected positionService: PositionService,
     private userService: UserService,
     private dialogService: NbDialogService,
     private router: Router,
@@ -57,27 +66,39 @@ export class StaffsViewComponent implements OnInit {
   ngOnInit() {
     this.loadUsers();
   }
-
   open() {
-    this.router.navigate([this.baseURL + '/create']);
+    this.dialogService.open(StaffCreateComponent, {
+      context: {
+        title: 'Add New Staff',
+      },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
+    });
   }
 
-  edit(student: Student) {
-    this.router.navigate([this.baseURL + 'edit/' + student.id ]);
+  edit(staff: Staff) {
+    this.dialogService.open(StaffCreateComponent, {
+      context: {
+        title: 'Edit Staff',
+        action: 'edit',
+        staffId: staff.id.toString(),
+      },
+    }).onClose.subscribe(_data => {
+      this.loadUsers();
+    });
+  }
+  view(staff: Staff) {
+    this.router.navigate([this.baseURL + '/' + staff.id ]);
   }
 
-  view(student: Student) {
-    this.router.navigate([this.baseURL + '/' + student.id ]);
-  }
-
-  delete(student: Student) {
+  delete(staff: Staff) {
     this.dialogService.open(UserDeleteComponent, {
       context: {
-        title: 'Delete Student',
+        title: 'Delete Staff',
         action: 'delete',
-        userType: 'student',
-        userId: student.id.toString(),
-        name: student.fullName,
+        userType: 'staff',
+        userId: staff.id.toString(),
+        name: staff.fullName,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
@@ -97,7 +118,7 @@ export class StaffsViewComponent implements OnInit {
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Student>(data.students);
+          this.dataSource = new MatTableDataSource<Staff>(data.staffs);
         }
     });
   }

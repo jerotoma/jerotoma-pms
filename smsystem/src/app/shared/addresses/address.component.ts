@@ -42,4 +42,8 @@ export class AddressComponent implements OnInit {
       this.onChanges.emit(this.addressWrapper);
     });
   }
+
+  resetForm() {
+    this.addressForm.reset();
+  }
 }

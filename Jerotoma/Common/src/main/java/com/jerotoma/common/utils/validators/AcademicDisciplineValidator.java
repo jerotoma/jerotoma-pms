@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
-import com.jerotoma.common.exceptions.FieldCanNotBeEmptyException;
+import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -34,22 +34,22 @@ public class AcademicDisciplineValidator {
 		}
 		
 		if (id == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_ID)) {
-			throw new FieldCanNotBeEmptyException("Academic Discipline ID can not be empty");
+			throw new FieldIsRequiredException("Academic Discipline ID can not be empty");
 		}
 		academicDiscipline.setId(id);
 		
 		if (name == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME)) {
-			throw new FieldCanNotBeEmptyException("Academic Discipline Name can not be empty");
+			throw new FieldIsRequiredException("Academic Discipline Name can not be empty");
 		}
 		academicDiscipline.setName(name);
 		
 		if (description == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION)) {
-			throw new FieldCanNotBeEmptyException("Academic Discipline Description can not be empty");
+			throw new FieldIsRequiredException("Academic Discipline Description can not be empty");
 		}
 		academicDiscipline.setDescription(description);
 		
 		if (code == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE)) {
-			throw new FieldCanNotBeEmptyException("Academic Discipline Code can not be empty");
+			throw new FieldIsRequiredException("Academic Discipline Code can not be empty");
 		}
 		academicDiscipline.setCode(code);
 		

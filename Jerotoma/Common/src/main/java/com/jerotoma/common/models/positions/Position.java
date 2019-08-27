@@ -16,6 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
 
 @Entity
@@ -45,6 +46,10 @@ public class Position implements Serializable{
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="position")
 	@JsonBackReference
 	private List<Teacher> teachers;	
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="position")
+	@JsonBackReference
+	private List<Staff> staffs;	
 	
 	@Column(name="created_on")
 	private Date createdOn;

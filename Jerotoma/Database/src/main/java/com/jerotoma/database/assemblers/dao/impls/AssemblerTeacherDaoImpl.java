@@ -22,9 +22,11 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
+import com.jerotoma.common.viewobjects.AddressVO;
 import com.jerotoma.common.viewobjects.PositionVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
+import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerPositionDao;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
 import com.jerotoma.database.dao.DaoUtil;
@@ -38,6 +40,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	@Autowired DataSource dataSource;
 	@Autowired RoleDao roleDao;	
 	@Autowired AssemblerPositionDao positionDao;
+	@Autowired AssemblerAddressDao addressDao;
 	@Autowired AssemblerAcademicDisciplineDao academicDisciplineDao;
 	Map<String, Object> map;
 	
@@ -102,10 +105,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	public class TeacherResultProcessor implements RowMapper<TeacherVO>{
 		@Override
 		public TeacherVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			TeacherVO teacher = new TeacherVO(rs);	
-			teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
-			teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
-			return teacher;
+			return mapStudentResult(rs);	
 		}		
 	}
 	
@@ -114,10 +114,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		public TeacherVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			TeacherVO teacher = null;
 			if(rs.next()) {
-				teacher = new TeacherVO(rs);
-				teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
-				teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
-				
+				teacher = mapStudentResult(rs);				
 			}
 			return teacher;
 		}				
@@ -151,6 +148,18 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	
 	private AcademicDisciplineVO loadAcademicDiscipline(Integer primaryKey) throws SQLException {
 		return this.academicDisciplineDao.findObject(primaryKey);
+	}
+	
+	private AddressVO loadAddress(Integer primaryKey) throws SQLException {
+		return this.addressDao.findAddressByTeacherId(primaryKey);
+	}
+	
+	public TeacherVO mapStudentResult(ResultSet rs) throws SQLException {
+		TeacherVO teacher = new TeacherVO(rs);
+		teacher.setAddress(loadAddress(teacher.getId()));	
+		teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
+		teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
+		return teacher;
 	}
 
 }

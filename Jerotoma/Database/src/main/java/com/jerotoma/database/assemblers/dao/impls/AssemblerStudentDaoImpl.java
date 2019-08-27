@@ -98,9 +98,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	public class StudentResultProcessor implements RowMapper<StudentVO>{
 		@Override
 		public StudentVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			StudentVO student = new StudentVO(rs);	
-			student.setAddress(loadAddress(student.getId()));	
-			return student;
+			return mapStudentResult(rs);
 		}		
 	}
 	
@@ -109,8 +107,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 		public StudentVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			StudentVO student = null;
 			if(rs.next()) {
-				student = new StudentVO(rs);
-				student.setAddress(loadAddress(student.getId()));					
+				student = mapStudentResult(rs);					
 			}
 			return student;
 		}				
@@ -140,6 +137,12 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	
 	private AddressVO loadAddress(Integer primaryKey) throws SQLException {
 		return this.addressDao.findAddressByStudentId(primaryKey);
+	}
+	
+	public StudentVO mapStudentResult(ResultSet rs) throws SQLException {
+		StudentVO student = new StudentVO(rs);
+		student.setAddress(loadAddress(student.getId()));	
+		return student;
 	}
 	
 }
