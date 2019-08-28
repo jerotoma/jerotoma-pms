@@ -15,7 +15,7 @@ import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
   styleUrls: ['staff-create.component.scss'],
 })
 export class StaffCreateComponent implements OnInit, AfterViewInit {
-  @ViewChild('app-address', {static: true}) appAddress: AddressComponent;
+  @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @Output() onUserCreationSuccess = new EventEmitter();
 
   title: string = 'Create New Staff';

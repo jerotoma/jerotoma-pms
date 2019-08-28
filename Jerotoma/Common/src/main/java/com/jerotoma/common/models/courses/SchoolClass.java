@@ -1,6 +1,5 @@
 package com.jerotoma.common.models.courses;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,30 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
 
+
 @Entity
-@Table(name = DatabaseConstant.TABLES.COURSES)
-public class Course implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;	
-	
+@Table(name = DatabaseConstant.TABLES.SCHOOL_CLASSES)
+public class SchoolClass {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="courses_generator")
-	@SequenceGenerator(name="courses_generator", sequenceName = "courses_id_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="offered_classes_generator")
+	@SequenceGenerator(name="offered_classes_generator", sequenceName = "offered_classes_id_seq", allocationSize=1)
 	@Column
-	private Long id;
-	
-	@Column
-	private String code;
+	private Integer id;
 	
 	@Column
 	private String name;
@@ -44,25 +33,13 @@ public class Course implements Serializable{
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
-	
-	@OneToOne
-	@JoinColumn(name="accademic_year_id")
-	private AcademicYear accademicYear; 
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getName() {
@@ -96,4 +73,8 @@ public class Course implements Serializable{
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+	
+	
+	
+
 }

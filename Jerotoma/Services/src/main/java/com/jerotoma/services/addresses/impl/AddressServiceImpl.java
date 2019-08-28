@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.addresses.Address;
-import com.jerotoma.database.addresses.dao.AddressDao;
+import com.jerotoma.database.dao.addresses.AddressDao;
 import com.jerotoma.services.AddressService;
 
 

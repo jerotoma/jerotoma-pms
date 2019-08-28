@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbStepperComponent } from '@nebular/theme';
+import { AddressComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
 import { Address, AddressWrapper } from 'app/models/addresses';
 import { UserService } from 'app/services/users';
@@ -21,6 +22,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   title: string = 'Create New Student';
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild('stepper', {static: true}) stepper: NbStepperComponent;
+  @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   action: string = 'create';
 
   studentForm: FormGroup;
@@ -141,6 +143,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.studentForm.reset();
     this.parentForm.reset();
+    this.appAddress.resetForm();
     this.stepper.reset();
   }
 

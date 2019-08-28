@@ -10,42 +10,42 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.admissions.StudentAdmission;
-import com.jerotoma.database.dao.admissions.StudentAdmissionDao;
+import com.jerotoma.common.models.admissions.StudentCourseAdmission;
+import com.jerotoma.database.dao.admissions.StudentCourseAdmissionDao;
 
 @Service
 @Transactional
 public class StudentAdmissionServiceImpl implements StudentAdmissionService {
 
-	@Autowired StudentAdmissionDao studentAdmissionDao;
+	@Autowired StudentCourseAdmissionDao studentAdmissionDao;
 	
 	@Override
-	public StudentAdmission findObject(Integer primaryKey) throws SQLException {
+	public StudentCourseAdmission findObject(Integer primaryKey) throws SQLException {
 		return studentAdmissionDao.findObject(primaryKey);
 	}
 
 	@Override
-	public StudentAdmission findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public StudentCourseAdmission findObjectUniqueKey(String uniqueKey) throws SQLException {
 		return studentAdmissionDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
-	public StudentAdmission createObject(StudentAdmission object) throws SQLException {
+	public StudentCourseAdmission createObject(StudentCourseAdmission object) throws SQLException {
 		return studentAdmissionDao.createObject(object);
 	}
 
 	@Override
-	public StudentAdmission updateObject(StudentAdmission object) throws SQLException {
+	public StudentCourseAdmission updateObject(StudentCourseAdmission object) throws SQLException {
 		return studentAdmissionDao.updateObject(object);
 	}
 
 	@Override
-	public Boolean deleteObject(StudentAdmission object) throws SQLException {
+	public Boolean deleteObject(StudentCourseAdmission object) throws SQLException {
 		return studentAdmissionDao.deleteObject(object);
 	}
 
 	@Override
-	public List<StudentAdmission> loadList(QueryParam queryParam) throws SQLException {
+	public List<StudentCourseAdmission> loadList(QueryParam queryParam) throws SQLException {
 		return studentAdmissionDao.loadList(queryParam);
 	}
 

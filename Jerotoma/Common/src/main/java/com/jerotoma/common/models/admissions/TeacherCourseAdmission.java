@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.admissions;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,30 +14,34 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.courses.AcademicYearCourse;
+import com.jerotoma.common.models.users.Teacher;
 
 @Entity
-@Table(name = DatabaseConstant.TABLES.COURSES)
-public class Course implements Serializable{
+@Table(name = DatabaseConstant.TABLES.TEACHER_COURSE_ADMISSIONS)
+public class TeacherCourseAdmission implements Serializable{
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="courses_generator")
-	@SequenceGenerator(name="courses_generator", sequenceName = "courses_id_seq", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="teacher_course_admissions_generator")
+	@SequenceGenerator(name="teacher_course_admissions_generator", sequenceName = "teacher_course_admissions_id_seq", allocationSize=1)
 	@Column
-	private Long id;
-	
-	@Column
+	private Integer id;
+		
+	@Column(name="code")
 	private String code;
 	
-	@Column
-	private String name;
+	@OneToOne
+	@JoinColumn(name="teacher_id")
+	private Teacher teacher;
 	
-	@Column
-	private String description;
+	@OneToOne
+	@JoinColumn(name="academic_year_offered_course_id")
+	private AcademicYearCourse academicYearOfferedCourse;
 	
 	@Column(name="created_on")
 	private Date createdOn;
@@ -45,15 +49,15 @@ public class Course implements Serializable{
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	@OneToOne
-	@JoinColumn(name="accademic_year_id")
-	private AcademicYear accademicYear; 
+	public TeacherCourseAdmission() {
+		
+	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -64,21 +68,13 @@ public class Course implements Serializable{
 	public void setCode(String code) {
 		this.code = code;
 	}
-
-	public String getName() {
-		return name;
+	
+	public Teacher getTeacher() {
+		return teacher;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
 	}
 
 	public Date getCreatedOn() {

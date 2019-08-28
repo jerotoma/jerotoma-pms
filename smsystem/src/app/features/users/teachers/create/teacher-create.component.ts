@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef, NbDateService } from '@nebular/theme';
+import { AddressComponent } from 'app/shared';
 import { Teacher, User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
@@ -17,6 +18,7 @@ import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 export class TeacherCreateComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Output() onUserCreationSuccess = new EventEmitter();
+  @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   action: string = 'create';
   position: number;
   academicDiscipline: number;
@@ -106,8 +108,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.teacherForm.reset();
-        this.ref.close();
+        this.resetForms();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -274,6 +275,12 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       this.teacherForm.patchValue({address: addressWrapper.address});
 
     }
+  }
+
+  resetForms() {
+    this.teacherForm.reset();
+    this.appAddress.resetForm();
+    this.ref.close();
   }
 
 }
