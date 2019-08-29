@@ -4,52 +4,55 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.courses.AcademicYearCourse;
+import com.jerotoma.common.models.academic.AcademicYearCourse;
+import com.jerotoma.database.dao.courses.AcademicYearCourseDao;
 import com.jerotoma.services.courses.AcademicYearCourseService;
 
+@Service
+@Transactional
 public class AcademicYearCourseServiceImpl implements AcademicYearCourseService {
+	
+	@Autowired AcademicYearCourseDao academicYearCourseDao;
 
 	@Override
 	public AcademicYearCourse findObject(Integer primaryKey) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.findObject(primaryKey);
 	}
 
 	@Override
 	public AcademicYearCourse findObjectUniqueKey(String uniqueKey) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
 	public AcademicYearCourse createObject(AcademicYearCourse object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.createObject(object);
 	}
 
 	@Override
 	public AcademicYearCourse updateObject(AcademicYearCourse object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.updateObject(object);
 	}
 
 	@Override
 	public Boolean deleteObject(AcademicYearCourse object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.deleteObject(object);
 	}
 
 	@Override
 	public List<AcademicYearCourse> loadList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.loadList(queryParam);
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return academicYearCourseDao.loadMapList(queryParam);
 	}
 
 }

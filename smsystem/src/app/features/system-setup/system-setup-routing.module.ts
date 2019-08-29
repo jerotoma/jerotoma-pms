@@ -16,6 +16,21 @@ const routes: Routes = [{
         .then(m => m.PositionsModule),
     },
     {
+      path: 'classes',
+      loadChildren: () => import('./school-classes/school-classes.module')
+        .then(m => m.SchoolClassesModule),
+    },
+    {
+      path: 'academic-years',
+      loadChildren: () => import('./academic-years/academic-years.module')
+        .then(m => m.AcademicYearsModule),
+    },
+    {
+      path: 'courses',
+      loadChildren: () => import('./courses/courses.module')
+        .then(m => m.CoursesModule),
+    },
+    {
       path: 'academic-disciplines',
       loadChildren: () => import('./academic-disciplines/academic-disciplines.module')
         .then(m => m.AcademicDisciplinesModule),

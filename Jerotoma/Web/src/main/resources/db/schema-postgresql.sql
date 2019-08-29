@@ -251,38 +251,142 @@ CREATE TABLE IF NOT EXISTS public.courses(
     );
     
     
-/**************************************************************
+ /**************************************************************
  * 															  *
  * 															  *
- * 			COURSE_ADMISSIONS RELATED TABLES				  *
+ * 			COURSES RELATED TABLES					  		  *
  * 															  *
  *************************************************************/
     
-CREATE TABLE IF NOT EXISTS public.student_admissions(
+CREATE TABLE IF NOT EXISTS public.academic_years(
     id bigserial NOT NULL,
-    student_id bigint NOT NULL,
-   	course_id bigint NOT NULL,
-   	teacher_id bigint NOT NULL,
-   	year_of_study character varying(255) NOT NULL,
-   	code character varying(255) NOT NULL,
-   	updated_by bigint NOT NULL,
+    year_of_study character varying(255) NOT NULL,
+    code character varying(255) NOT NULL,
+    description text NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
-   	CONSTRAINT student_admissions_pkey PRIMARY KEY(id),
-   	CONSTRAINT student_admissions_ukey UNIQUE (code),
-   	CONSTRAINT courses_fkey FOREIGN KEY (course_id)
+    CONSTRAINT academic_years_ukey UNIQUE (code),
+   	CONSTRAINT academic_years_pkey PRIMARY KEY (id)
+    );
+
+/**************************************************************
+ * 															  *
+ * 															  *
+ * 			ACADEMIC_YEAR_COURSES RELATED TABLES					  		  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.academic_year_courses(
+    id bigserial NOT NULL,
+    course_id bigint NOT NULL,
+    academic_year_id bigint NOT NULL,
+    updated_by bigint NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+    CONSTRAINT academic_year_courses_pkey PRIMARY KEY(id),
+   	CONSTRAINT academic_years_fkey FOREIGN KEY (academic_year_id)
+        REFERENCES public.academic_years (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,	
+    CONSTRAINT courses_fkey FOREIGN KEY (course_id)
         REFERENCES public.courses (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT students_fkey FOREIGN KEY (student_id)
-        REFERENCES public.students (id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT teachers_fkey FOREIGN KEY (teacher_id)
-        REFERENCES public.teachers (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
     );
+    
+    
+/**************************************************************
+ * 															  *
+ * 															  *
+ * 			TEACHER_COURSE_ADMISSIONS RELATED TABLES		  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.student_course_admissions(
+    id bigserial NOT NULL,
+    student_id bigint NOT NULL,
+   	academic_year_course_id bigint NOT NULL,
+   	updated_by bigint NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+   	CONSTRAINT student_course_admissions_pkey PRIMARY KEY(id),
+   	CONSTRAINT academic_year_courses_fkey FOREIGN KEY (academic_year_course_id)
+        REFERENCES public.academic_year_courses (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,	
+    CONSTRAINT students_fkey FOREIGN KEY (student_id)
+        REFERENCES public.students (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+    );
+    
+ /**************************************************************
+ * 															  *
+ * 															  *
+ * 			SCHOOL_CLASSES RELATED TABLES		  *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.school_classes(
+    id bigserial NOT NULL,
+   	name character varying(255) NOT NULL,
+    description text NOT NULL,
+   	updated_by bigint NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+   	CONSTRAINT school_classes_pkey PRIMARY KEY(id)   	
+    );
+    
+
+/**************************************************************
+ * 															  *
+ * 															  *
+ * 		SCHOOL_CLASS_ACADEMIC_YEAR_COURSES RELATED TABLES     *
+ * 															  *
+ *************************************************************/
+    
+CREATE TABLE IF NOT EXISTS public.school_class_accademic_year_courses(
+    id bigserial NOT NULL,
+    school_class_id bigint NOT NULL,
+   	academic_year_course_id bigint NOT NULL,
+   	updated_by bigint NOT NULL,
+    created_on timestamp with time zone NOT NULL,
+    updated_on timestamp with time zone NOT NULL,
+   	CONSTRAINT school_class_accademic_year_courses_pkey PRIMARY KEY(id),
+   	CONSTRAINT academic_year_courses_fkey FOREIGN KEY (academic_year_course_id)
+        REFERENCES public.academic_year_courses (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,	
+    CONSTRAINT school_classes_fkey FOREIGN KEY (school_class_id)
+        REFERENCES public.school_classes (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+    );  
+    
+    /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			TEACHER_COURSE_ADMISSIONS RELATED TABLES				  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.teacher_course_admissions(
+	    id bigserial NOT NULL,
+	    teacher_id bigint NOT NULL,
+	   	academic_year_course_id bigint NOT NULL,
+	   	updated_by bigint NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT teacher_course_admissions_pkey PRIMARY KEY(id),
+	   	CONSTRAINT academic_year_courses_fkey FOREIGN KEY (academic_year_course_id)
+	        REFERENCES public.academic_year_courses (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	   
+	    CONSTRAINT teachers_fkey FOREIGN KEY (teacher_id)
+	        REFERENCES public.teachers (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
 
     
 	/**************************************************************

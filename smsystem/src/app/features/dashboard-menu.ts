@@ -96,6 +96,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/system-setup/positions',
       },
       {
+        title: 'Courses',
+        link: '/dashboard/system-setup/courses',
+      },
+      {
+        title: 'School Classes',
+        link: '/dashboard/system-setup/classes',
+      },
+      {
+        title: 'School Academic Years',
+        link: '/dashboard/system-setup/academic-years',
+      },
+      {
         title: 'Academic Disciplines',
         link: '/dashboard/system-setup/academic-disciplines',
       },

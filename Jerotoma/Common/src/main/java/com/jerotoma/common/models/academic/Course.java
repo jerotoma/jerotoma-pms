@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.academic;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -28,7 +28,7 @@ public class Course implements Serializable{
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="courses_generator")
 	@SequenceGenerator(name="courses_generator", sequenceName = "courses_id_seq", allocationSize=1)
 	@Column
-	private Long id;
+	private Integer id;
 	
 	@Column
 	private String code;
@@ -49,11 +49,11 @@ public class Course implements Serializable{
 	@JoinColumn(name="accademic_year_id")
 	private AcademicYear accademicYear; 
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

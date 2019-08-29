@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 
@@ -24,8 +24,12 @@ public class SchoolClassAcademicYearCourse {
 	@Column
 	private Integer id;
 	
+	
+	@Column(name="updated_by")
+	private Integer updatedBy;
+	
 	@OneToOne
-	@JoinColumn(name="academic_course_id")
+	@JoinColumn(name="academic_year_course_id")
 	private AcademicYearCourse academicYearCourse; 
 	
 	@Column(name="created_on")
@@ -36,5 +40,54 @@ public class SchoolClassAcademicYearCourse {
 	
 	@OneToOne
 	@JoinColumn(name="school_class_id")
-	private SchoolClass schoolClass; 
+	private SchoolClass schoolClass;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public AcademicYearCourse getAcademicYearCourse() {
+		return academicYearCourse;
+	}
+
+	public void setAcademicYearCourse(AcademicYearCourse academicYearCourse) {
+		this.academicYearCourse = academicYearCourse;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+
+	public SchoolClass getSchoolClass() {
+		return schoolClass;
+	}
+
+	public void setSchoolClass(SchoolClass schoolClass) {
+		this.schoolClass = schoolClass;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
 }

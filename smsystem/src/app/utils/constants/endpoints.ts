@@ -9,5 +9,8 @@ export const END_POINTS = {
   logout: '/api/auth/sign-out',
   positions: '/api/secured/positions',
   academicDisciplines: '/api/secured/academic-disciplines',
+  schoolClasses: '/api/secured/school-classes',
+  courses: '/api/secured/courses',
+  academicYears: '/api/secured/academic-years',
 
 };

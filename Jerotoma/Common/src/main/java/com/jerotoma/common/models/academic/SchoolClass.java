@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 

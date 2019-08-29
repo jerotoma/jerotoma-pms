@@ -1,6 +1,7 @@
 package com.jerotoma.database.dao.courses.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,8 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.courses.Course;
+import com.jerotoma.common.constants.AcademicConstants;
+import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.database.dao.courses.CourseDao;
 
 @Repository
@@ -35,7 +37,7 @@ public class CourseDaoImpl implements CourseDao {
 	@Override
 	public Course createObject(Course object) throws SQLException {
 		entityManager.persist(object);
-		return findObject(object.getId().intValue());
+		return findObject(object.getId());
 	}
 
 	@Override
@@ -51,7 +53,12 @@ public class CourseDaoImpl implements CourseDao {
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		return null;
+		Map<String, Object> map = new HashMap<>();
+		List<Course> courses = entityManager.createQuery("FROM Course", Course.class)				
+				.getResultList();
+		map.put(AcademicConstants.COURSES, courses);
+		
+		return map;
 	}
 
 	@Override
@@ -62,8 +69,8 @@ public class CourseDaoImpl implements CourseDao {
 
 	@Override
 	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManager.createQuery("SELECT count(*) FROM Course", Long.class)				
+				.getSingleResult();
 	}
 
 }

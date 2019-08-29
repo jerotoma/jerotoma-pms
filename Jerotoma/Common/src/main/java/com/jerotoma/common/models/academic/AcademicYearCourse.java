@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 
@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -25,7 +26,7 @@ public class AcademicYearCourse {
 	@Column
 	private Integer id;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="course_id")
 	private Course course; 
 	

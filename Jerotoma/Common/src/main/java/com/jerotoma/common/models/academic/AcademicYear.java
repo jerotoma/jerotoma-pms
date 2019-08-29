@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.courses;
+package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 
@@ -21,6 +21,9 @@ public class AcademicYear {
 	@SequenceGenerator(name="school_study_years_generator", sequenceName = "school_study_years_id_seq", allocationSize=1)
 	@Column
 	private Integer id;
+	
+	@Column
+	private String code;
 	
 	@Column(name="year_of_study")
 	private String yearOfStudy;
