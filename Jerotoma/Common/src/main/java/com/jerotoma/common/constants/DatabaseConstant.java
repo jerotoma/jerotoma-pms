@@ -3,7 +3,7 @@ package com.jerotoma.common.constants;
 public class DatabaseConstant {
 	
 	public static interface TABLES {
-		public static final String ACADEMIC_YEARS = "accademic_years";
+		public static final String ACADEMIC_YEARS = "academic_years";
 		public static final String SCHOOL_CLASSES = "school_classes";
 		public static final String ACADEMIC_DISCIPLINE = "academic_disciplines";
 		public static final String POSITIONS = "positions";

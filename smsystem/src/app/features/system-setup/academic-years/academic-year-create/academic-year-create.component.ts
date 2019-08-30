@@ -3,8 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AcademicDiscipline } from 'app/models/academic-disciplines/academic-discipline.model';
-import { AcademicDisciplineService} from 'app/services/academic-disciplines/academic-discipline.service';
+import { AcademicYear } from 'app/models';
+import { AcademicYearService} from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -22,9 +22,10 @@ export class AcademicYearCreateComponent implements OnInit {
   @Input() code: string = '';
   @Input() id: string = '0';
   @Input() description: string = '';
+  @Input() yearOfStudy: string = '';
 
-  academicDisciplineForm: FormGroup;
-  academicDiscipline: AcademicDiscipline;
+  academicYearForm: FormGroup;
+  academicYear: AcademicYear;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -33,7 +34,7 @@ export class AcademicYearCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private academicDisciplineService:  AcademicDisciplineService,
+    private academicYearService:  AcademicYearService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<AcademicYearCreateComponent>) {}
 
@@ -44,10 +45,11 @@ export class AcademicYearCreateComponent implements OnInit {
     }
   }
   patchPosition() {
-    this.academicDisciplineForm.patchValue({
+    this.academicYearForm.patchValue({
       name: this.name,
       description: this.description,
       code: this.code,
+      yearOfStudy: this.yearOfStudy,
       id: parseInt(this.id, 10),
     });
   }
@@ -56,13 +58,13 @@ export class AcademicYearCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.academicDiscipline = this.academicDisciplineForm.value;
+    this.academicYear = this.academicYearForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
       this.updatePosition();
     } else {
-      this.academicDisciplineService.createAcademicDiscipline(this.academicDiscipline)
+      this.academicYearService.createAcademicYear(this.academicYear)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -71,7 +73,7 @@ export class AcademicYearCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.academicYearForm.reset();
               this.dismiss();
 
             } else {
@@ -89,7 +91,7 @@ export class AcademicYearCreateComponent implements OnInit {
   }
   updatePosition() {
 
-    this.academicDisciplineService.updateAcademicDiscipline(this.academicDiscipline)
+    this.academicYearService.updateAcademicYear(this.academicYear)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -98,7 +100,7 @@ export class AcademicYearCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.academicYearForm.reset();
               this.dismiss();
 
             } else {
@@ -114,18 +116,19 @@ export class AcademicYearCreateComponent implements OnInit {
     }
   getDescriptionContent(description: string) {
    if (description) {
-    this.academicDisciplineForm.patchValue({
+    this.academicYearForm.patchValue({
       description: description,
     });
     }
   }
 
   loadForm() {
-    this.academicDisciplineForm = this.formBuilder.group({
+    this.academicYearForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required],
       code: ['', Validators.required],
       description: [''],
+      yearOfStudy: ['', Validators.required],
     });
   }
 
@@ -137,7 +140,7 @@ export class AcademicYearCreateComponent implements OnInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'academicDiscipline',
+      userType: 'academicYear',
     };
   }
 

@@ -9,8 +9,8 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { AcademicYearCreateComponent } from '../academic-year-create/academic-year-create.component';
 import { AcademicYearDeleteComponent } from '../academic-year-delete/academic-year-delete.component';
-import { AcademicDiscipline } from 'app/models';
-import { AcademicDisciplineService } from 'app/services';
+import { AcademicYear } from 'app/models';
+import { AcademicYearService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
@@ -33,18 +33,18 @@ export class AcademicYearsViewComponent implements OnInit {
   };
 
   title: string = 'List of School Academic Year';
-  academicDiscipline: AcademicDiscipline;
+  academicYear: AcademicYear;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'code', 'yearOfStudy', 'description', 'action'];
   dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private academicDisciplineService: AcademicDisciplineService,
+    private academicYearService: AcademicYearService,
     private dialogService: NbDialogService,
     ) {
   }
@@ -66,40 +66,41 @@ export class AcademicYearsViewComponent implements OnInit {
   }
 
   loadAcademicYears() {
-    this.academicDisciplineService.getAcademicDisciplines(this.param)
+    this.academicYearService.getAcademicYears(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Position>(data.academicDisciplines);
+          this.dataSource = new MatTableDataSource<Position>(data.academicYears);
         }
       }, error => {
 
     });
   }
-  edit(academicDiscipline: AcademicDiscipline) {
+  edit(academicYear: AcademicYear) {
     this.dialogService.open(AcademicYearCreateComponent, {
       context: {
         title: 'Edit School Academic Year',
         action: 'edit',
-        id: academicDiscipline.id.toString(),
-        code: academicDiscipline.code,
-        name: academicDiscipline.name,
-        description: academicDiscipline.description,
+        id: academicYear.id.toString(),
+        code: academicYear.code,
+        name: academicYear.name,
+        yearOfStudy: academicYear.yearOfStudy,
+        description: academicYear.description,
       },
     }).onClose.subscribe(_data => {
       this.loadAcademicYears();
     });
   }
-  delete(academicDiscipline: AcademicDiscipline) {
+  delete(academicYear: AcademicYear) {
     this.dialogService.open(AcademicYearDeleteComponent, {
       context: {
         title: 'Delete School Academic Year',
         action: 'delete',
-        positionId: academicDiscipline.id.toString(),
-        name: academicDiscipline.name,
+        positionId: academicYear.id.toString(),
+        name: academicYear.name,
       },
     }).onClose.subscribe(_data => {
       this.loadAcademicYears();

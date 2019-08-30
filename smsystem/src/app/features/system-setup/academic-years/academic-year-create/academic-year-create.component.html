@@ -1,6 +1,6 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
-      <form  autocomplete="off" [formGroup]="academicDisciplineForm" (ngSubmit)="onSubmit()">
+      <form  autocomplete="off" [formGroup]="academicYearForm" (ngSubmit)="onSubmit()">
           <nb-card size="giant" status="primary">
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
@@ -12,34 +12,49 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-control-group">
-                          <label for="academic-discipline-name" class="label">Academic YearName</label>
+                          <label for="academic-year-name" class="label">Academic Year Name</label>
                           <input
                               type="text"
                               nbInput fullWidth
                               required
-                              id="academic-discipline-name"
+                              id="academic-year-name"
                               formControlName="name"
-                              placeholder="eg. Computer Engineering">
+                              placeholder="eg. Semester one">
                         </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-control-group">
-                        <label for="academic-discipline-code" class="label">Academic Yearcode</label>
+                        <label for="academic-year-code" class="label">Academic Year code</label>
                         <input
                             type="text"
                             nbInput fullWidth
                             autocomplete="off"
                             required
-                            id="academic-discipline-code"
+                            id="academic-year-code"
                             formControlName="code"
                             placeholder="eg.  CN345">
                       </div>
                   </div>
               </div>
               <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                      <label for="academic-year-of-study" class="label">Academic Year Of Study</label>
+                      <input
+                          type="text"
+                          nbInput fullWidth
+                          autocomplete="off"
+                          required
+                          id="academic-year-of-study"
+                          formControlName="yearOfStudy"
+                          placeholder="eg.  2019/2018">
+                    </div>
+                </div>
+            </div>
+              <div class="row">
                 <div class="col-md-12">
                     <div class="form-control-group">
-                        <label for="academic-discipline-description" class="label">Academic YearDescription</label>
+                        <label for="academic-year-description" class="label">Academic YearDescription</label>
                         <textarea
                             nbInput
                             fullWidth
@@ -52,7 +67,7 @@
             </div>
             </nb-card-body>
             <nb-card-footer>
-              <button class='push-right' [disabled]="!academicDisciplineForm.valid" type="submit" nbButton hero status="success">Submit</button>
+              <button class='push-right' [disabled]="!academicYearForm.valid" type="submit" nbButton hero status="success">Submit</button>
               <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
             </nb-card-footer>
           </nb-card>

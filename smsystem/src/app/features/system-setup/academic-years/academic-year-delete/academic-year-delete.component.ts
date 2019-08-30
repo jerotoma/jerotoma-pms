@@ -1,10 +1,10 @@
-import { AcademicDiscipline } from './../../../../models/academic-disciplines/academic-discipline.model';
+
 import { Component, OnInit} from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines/academic-discipline.service';
-import { ShowMessage } from 'app/models/messages/show-message.model';
+import { AcademicYearService } from 'app/services';
+import { ShowMessage } from 'app/models';
 
 @Component({
   selector: 'app-academic-year-delete',
@@ -24,7 +24,7 @@ export class AcademicYearDeleteComponent implements OnInit {
   };
 
   constructor(
-    private academicDisciplineService:  AcademicDisciplineService,
+    private academicYearService:  AcademicYearService,
     protected ref: NbDialogRef<AcademicYearDeleteComponent>) {}
   ngOnInit() {
     this.confirmed = this.action === 'delete';
@@ -32,7 +32,7 @@ export class AcademicYearDeleteComponent implements OnInit {
 
   deleteAcademicYear() {
     if (this.confirmed) {
-    this.academicDisciplineService.deleteAcademicDiscipline(parseInt(this.positionId, 10))
+    this.academicYearService.deleteAcademicYear(parseInt(this.positionId, 10))
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const data = resp.body;

@@ -78,7 +78,7 @@ public class AcademicYearDaoImpl implements AcademicYearDao {
 
 	@Override
 	public Long countObject() throws SQLException {
-		return entityManager.createQuery("SELECT count(*) FROM Course", Long.class)				
+		return entityManager.createQuery("SELECT count(*) FROM AcademicYear", Long.class)				
 				.getSingleResult();
 	}
 
