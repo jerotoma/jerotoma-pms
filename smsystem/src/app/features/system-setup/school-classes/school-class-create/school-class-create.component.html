@@ -1,6 +1,6 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
-      <form  autocomplete="off" [formGroup]="academicDisciplineForm" (ngSubmit)="onSubmit()">
+      <form  autocomplete="off" [formGroup]="schoolClassForm" (ngSubmit)="onSubmit()">
           <nb-card size="giant" status="primary">
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
@@ -12,34 +12,49 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-control-group">
-                          <label for="academic-discipline-name" class="label">Academic Discipline Name</label>
+                          <label for="school-class-name" class="label">School Class Name</label>
                           <input
                               type="text"
                               nbInput fullWidth
                               required
-                              id="academic-discipline-name"
+                              id="school-class-name"
                               formControlName="name"
                               placeholder="eg. Computer Engineering">
                         </div>
                   </div>
                   <div class="col-md-6">
                       <div class="form-control-group">
-                        <label for="academic-discipline-code" class="label">Academic Discipline code</label>
+                        <label for="school-class-code" class="label">School Class code</label>
                         <input
                             type="text"
                             nbInput fullWidth
                             autocomplete="off"
                             required
-                            id="academic-discipline-code"
+                            id="school-class-code"
                             formControlName="code"
                             placeholder="eg.  CN345">
                       </div>
                   </div>
               </div>
               <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="school-class-capacity" class="label">School Class Capacity</label>
+                        <input
+                            type="number"
+                            nbInput fullWidth
+                            autocomplete="off"
+                            required
+                            id="school-class-capacity"
+                            formControlName="capacity"
+                            placeholder="eg.  43">
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
                 <div class="col-md-12">
                     <div class="form-control-group">
-                        <label for="academic-discipline-description" class="label">Academic Discipline Description</label>
+                        <label for="school-class-description" class="label">School Class Description</label>
                         <textarea
                             nbInput
                             fullWidth
@@ -52,7 +67,7 @@
             </div>
             </nb-card-body>
             <nb-card-footer>
-              <button class='push-right' [disabled]="!academicDisciplineForm.valid" type="submit" nbButton hero status="success">Submit</button>
+              <button class='push-right' [disabled]="!schoolClassForm.valid" type="submit" nbButton hero status="success">Submit</button>
               <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
             </nb-card-footer>
           </nb-card>

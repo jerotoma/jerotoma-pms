@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicConstants;
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.AcademicYear;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.courses.AcademicYearDao;
 
 @Repository
@@ -54,10 +56,17 @@ public class AcademicYearDaoImpl implements AcademicYearDao {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<AcademicYear> courses = entityManager.createQuery("FROM AcademicYear", AcademicYear.class)				
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		List<AcademicYear> academicYears = entityManager.createQuery("FROM AcademicYear", AcademicYear.class)		
+				.setMaxResults(limit)
+				.setFirstResult(offset)
 				.getResultList();
-		map.put(AcademicConstants.COURSES, courses);
-		
+		map.put(AcademicConstants.ACADEMIC_YEARS, academicYears);
+		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);		
 		return map;
 	}
 

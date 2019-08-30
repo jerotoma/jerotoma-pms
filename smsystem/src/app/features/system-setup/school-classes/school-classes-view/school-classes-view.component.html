@@ -18,6 +18,11 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
                 <td mat-cell *matCellDef="let element"> {{element.code}} </td>
               </ng-container>
+               <!-- capacity Column -->
+               <ng-container matColumnDef="capacity">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Capacity </th>
+                <td mat-cell *matCellDef="let element"> {{element.capacity}} </td>
+              </ng-container>
               <!-- description Column -->
               <ng-container matColumnDef="description">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>

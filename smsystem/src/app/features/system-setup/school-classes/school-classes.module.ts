@@ -26,8 +26,8 @@ import {  SchoolClassDeleteComponent } from './school-class-delete/school-class-
 const COMPONENTS = [
   SchoolClassesComponent,
   SchoolClassesViewComponent,
-   SchoolClassCreateComponent,
-   SchoolClassDeleteComponent,
+  SchoolClassCreateComponent,
+  SchoolClassDeleteComponent,
 ];
 
 const ENTRY_COMPONENTS = [

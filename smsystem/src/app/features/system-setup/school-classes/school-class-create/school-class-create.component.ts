@@ -3,8 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AcademicDiscipline } from 'app/models/academic-disciplines/academic-discipline.model';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines/academic-discipline.service';
+import { SchoolClass } from 'app/models';
+import { SchoolClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -22,9 +22,10 @@ export class SchoolClassCreateComponent implements OnInit {
   @Input() code: string = '';
   @Input() id: string = '0';
   @Input() description: string = '';
+  @Input() capacity: string = '';
 
-  academicDisciplineForm: FormGroup;
-  academicDiscipline: AcademicDiscipline;
+  schoolClassForm: FormGroup;
+  schoolClass: SchoolClass;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -33,21 +34,22 @@ export class SchoolClassCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private academicDisciplineService:  AcademicDisciplineService,
+    private schoolClassService:  SchoolClassService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<SchoolClassCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
     if (this.action === 'edit') {
-        this.patchPosition();
+        this.patchSchoolClass();
     }
   }
-  patchPosition() {
-    this.academicDisciplineForm.patchValue({
+  patchSchoolClass() {
+    this.schoolClassForm.patchValue({
       name: this.name,
       description: this.description,
       code: this.code,
+      capacity: parseInt(this.capacity, 10),
       id: parseInt(this.id, 10),
     });
   }
@@ -56,13 +58,13 @@ export class SchoolClassCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.academicDiscipline = this.academicDisciplineForm.value;
+    this.schoolClass = this.schoolClassForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
-      this.updatePosition();
+      this.updateSchoolClass();
     } else {
-      this.academicDisciplineService.createAcademicDiscipline(this.academicDiscipline)
+      this.schoolClassService.createSchoolClass(this.schoolClass)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -71,7 +73,7 @@ export class SchoolClassCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.schoolClassForm.reset();
               this.dismiss();
 
             } else {
@@ -87,9 +89,8 @@ export class SchoolClassCreateComponent implements OnInit {
     }
 
   }
-  updatePosition() {
-
-    this.academicDisciplineService.updateAcademicDiscipline(this.academicDiscipline)
+  updateSchoolClass() {
+    this.schoolClassService.updateSchoolClass(this.schoolClass)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -98,7 +99,7 @@ export class SchoolClassCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.schoolClassForm.reset();
               this.dismiss();
 
             } else {
@@ -114,17 +115,18 @@ export class SchoolClassCreateComponent implements OnInit {
     }
   getDescriptionContent(description: string) {
    if (description) {
-    this.academicDisciplineForm.patchValue({
+    this.schoolClassForm.patchValue({
       description: description,
     });
     }
   }
 
   loadForm() {
-    this.academicDisciplineForm = this.formBuilder.group({
+    this.schoolClassForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required],
       code: ['', Validators.required],
+      capacity: ['', Validators.compose([Validators.required])],
       description: [''],
     });
   }
@@ -137,7 +139,7 @@ export class SchoolClassCreateComponent implements OnInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'academicDiscipline',
+      userType: 'schoolClass',
     };
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NbDialogRef } from '@nebular/theme';
-import { PositionService } from 'app/services/positions';
+import { PositionService } from 'app/services';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 @Component({
   selector: 'app-position-delete',

@@ -1,7 +1,25 @@
 package com.jerotoma.common.models;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+import com.jerotoma.common.constants.DatabaseConstant;
+
 public class TermsAndConditions {
-	private Long id;
+	@Id
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_id_seq", 
+			allocationSize=1)
+	@Column
+	private Integer id;
+	
 	private Integer userID;
 	private String termsTitle;
 	private String termsDescription;
@@ -10,11 +28,11 @@ public class TermsAndConditions {
 		
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

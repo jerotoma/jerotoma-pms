@@ -3,8 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AcademicDiscipline } from 'app/models/academic-disciplines/academic-discipline.model';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines/academic-discipline.service';
+import { Course } from 'app/models';
+import { CourseService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -23,8 +23,8 @@ export class CourseCreateComponent implements OnInit {
   @Input() id: string = '0';
   @Input() description: string = '';
 
-  academicDisciplineForm: FormGroup;
-  academicDiscipline: AcademicDiscipline;
+  courseForm: FormGroup;
+  course: Course;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -33,18 +33,18 @@ export class CourseCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private academicDisciplineService:  AcademicDisciplineService,
+    private courseService:  CourseService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
     if (this.action === 'edit') {
-        this.patchPosition();
+        this.patchCourse();
     }
   }
-  patchPosition() {
-    this.academicDisciplineForm.patchValue({
+  patchCourse() {
+    this.courseForm.patchValue({
       name: this.name,
       description: this.description,
       code: this.code,
@@ -56,13 +56,13 @@ export class CourseCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.academicDiscipline = this.academicDisciplineForm.value;
+    this.course = this.courseForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
-      this.updatePosition();
+      this.updateCourse();
     } else {
-      this.academicDisciplineService.createAcademicDiscipline(this.academicDiscipline)
+      this.courseService.createCourse(this.course)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -71,7 +71,7 @@ export class CourseCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.courseForm.reset();
               this.dismiss();
 
             } else {
@@ -87,9 +87,9 @@ export class CourseCreateComponent implements OnInit {
     }
 
   }
-  updatePosition() {
+  updateCourse() {
 
-    this.academicDisciplineService.updateAcademicDiscipline(this.academicDiscipline)
+    this.courseService.updateCourse(this.course)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -98,7 +98,7 @@ export class CourseCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.academicDisciplineForm.reset();
+              this.courseForm.reset();
               this.dismiss();
 
             } else {
@@ -114,14 +114,14 @@ export class CourseCreateComponent implements OnInit {
     }
   getDescriptionContent(description: string) {
    if (description) {
-    this.academicDisciplineForm.patchValue({
+    this.courseForm.patchValue({
       description: description,
     });
     }
   }
 
   loadForm() {
-    this.academicDisciplineForm = this.formBuilder.group({
+    this.courseForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required],
       code: ['', Validators.required],
@@ -137,7 +137,7 @@ export class CourseCreateComponent implements OnInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'academicDiscipline',
+      userType: 'course',
     };
   }
 

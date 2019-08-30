@@ -9,8 +9,8 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { CourseCreateComponent } from '../course-create/course-create.component';
 import { CourseDeleteComponent } from '../course-delete/course-delete.component';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import { Course } from 'app/models';
+import { CourseService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
@@ -32,8 +32,8 @@ export class CoursesViewComponent implements OnInit {
     userType: 'teacher',
   };
 
-  title: string = 'List of Course';
-  academicDiscipline: AcademicDiscipline;
+  title: string = 'List of Courses';
+  course: Course;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
@@ -44,14 +44,14 @@ export class CoursesViewComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private academicDisciplineService: AcademicDisciplineService,
+    private courseService: CourseService,
     private dialogService: NbDialogService,
     ) {
   }
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.loadAcademicDisciplines();
+    this.loadCourses();
   }
 
   open() {
@@ -61,53 +61,53 @@ export class CoursesViewComponent implements OnInit {
         action: 'create',
       },
     }).onClose.subscribe(_data => {
-      this.loadAcademicDisciplines();
+      this.loadCourses();
     });
   }
 
-  loadAcademicDisciplines() {
-    this.academicDisciplineService.getAcademicDisciplines(this.param)
+  loadCourses() {
+    this.courseService.getCourses(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Position>(data.academicDisciplines);
+          this.dataSource = new MatTableDataSource<Position>(data.courses);
         }
       }, error => {
 
     });
   }
-  edit(academicDiscipline: AcademicDiscipline) {
+  edit(course: Course) {
     this.dialogService.open(CourseCreateComponent, {
       context: {
         title: 'Edit Course',
         action: 'edit',
-        id: academicDiscipline.id.toString(),
-        code: academicDiscipline.code,
-        name: academicDiscipline.name,
-        description: academicDiscipline.description,
+        id: course.id.toString(),
+        code: course.code,
+        name: course.name,
+        description: course.description,
       },
     }).onClose.subscribe(_data => {
-      this.loadAcademicDisciplines();
+      this.loadCourses();
     });
   }
-  delete(academicDiscipline: AcademicDiscipline) {
+  delete(course: Course) {
     this.dialogService.open(CourseDeleteComponent, {
       context: {
         title: 'Delete Course',
         action: 'delete',
-        positionId: academicDiscipline.id.toString(),
-        name: academicDiscipline.name,
+        courseId: course.id.toString(),
+        name: course.name,
       },
     }).onClose.subscribe(_data => {
-      this.loadAcademicDisciplines();
+      this.loadCourses();
     });
   }
   onPageChange(pageEvent: PageEvent) {
     this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
     this.param.pageSize = pageEvent.pageSize;
-    this.loadAcademicDisciplines();
+    this.loadCourses();
   }
 }

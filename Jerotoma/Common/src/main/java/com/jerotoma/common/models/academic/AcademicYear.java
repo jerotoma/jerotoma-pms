@@ -17,13 +17,21 @@ import com.jerotoma.common.constants.DatabaseConstant;
 public class AcademicYear {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="school_study_years_generator")
-	@SequenceGenerator(name="school_study_years_generator", sequenceName = "school_study_years_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.ACADEMIC_YEARS + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	
 	@Column
 	private String code;
+	
+	@Column
+	private String name;
 	
 	@Column(name="year_of_study")
 	private String yearOfStudy;
@@ -76,4 +84,22 @@ public class AcademicYear {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 }

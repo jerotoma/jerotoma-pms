@@ -8,8 +8,8 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { SchoolClassCreateComponent } from '../school-class-create/school-class-create.component';
 import { SchoolClassDeleteComponent } from '../school-class-delete/school-class-delete.component';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import { SchoolClass } from 'app/models';
+import { SchoolClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
@@ -32,18 +32,18 @@ export class SchoolClassesViewComponent implements OnInit {
   };
 
   title: string = 'List of Class';
-  academicDiscipline: AcademicDiscipline;
+  schoolClass: SchoolClass;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
-  dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>();
+  displayedColumns: string[] = ['id', 'name', 'code', 'capacity', 'description', 'action'];
+  dataSource: MatTableDataSource<SchoolClass> = new MatTableDataSource<SchoolClass>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private academicDisciplineService: AcademicDisciplineService,
+    private schoolClassService: SchoolClassService,
     private dialogService: NbDialogService,
     ) {
   }
@@ -65,40 +65,41 @@ export class SchoolClassesViewComponent implements OnInit {
   }
 
   loadSchoolClasses() {
-    this.academicDisciplineService.getAcademicDisciplines(this.param)
+    this.schoolClassService.getSchoolClasses(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Position>(data.academicDisciplines);
+          this.dataSource = new MatTableDataSource<SchoolClass>(data.schoolClasses);
         }
       }, error => {
 
     });
   }
-  edit(academicDiscipline: AcademicDiscipline) {
+  edit(schoolClass: SchoolClass) {
     this.dialogService.open(SchoolClassCreateComponent, {
       context: {
         title: 'Edit Class',
         action: 'edit',
-        id: academicDiscipline.id.toString(),
-        code: academicDiscipline.code,
-        name: academicDiscipline.name,
-        description: academicDiscipline.description,
+        id: schoolClass.id.toString(),
+        code: schoolClass.code,
+        name: schoolClass.name,
+        capacity: schoolClass.capacity.toString(),
+        description: schoolClass.description,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();
     });
   }
-  delete(academicDiscipline: AcademicDiscipline) {
+  delete(schoolClass: SchoolClass) {
     this.dialogService.open(SchoolClassDeleteComponent, {
       context: {
         title: 'Delete Class',
         action: 'delete',
-        positionId: academicDiscipline.id.toString(),
-        name: academicDiscipline.name,
+        schoolClassId: schoolClass.id.toString(),
+        name: schoolClass.name,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();

@@ -9,8 +9,8 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { AcademicYearCreateComponent } from '../academic-year-create/academic-year-create.component';
 import { AcademicYearDeleteComponent } from '../academic-year-delete/academic-year-delete.component';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import { AcademicDiscipline } from 'app/models';
+import { AcademicDisciplineService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination

@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import { Position } from 'app/models/positions/position.model';
-import {PositionService } from 'app/services/positions';
+import {PositionService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 

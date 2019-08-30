@@ -29,6 +29,22 @@ public class EndPointConstants {
 	
 	public static final String API_AUTH_LOGIN_URL = "/api/auth/login";
 	
+	
+	public static interface REST_COURSE_CONTROLLER{
+		public static final String BASE =  API_SECURED_ROOT + "/courses";	
+	}
+	
+	public static interface REST_SCHOOL_CLASS_CONTROLLER{
+		public static final String BASE =  API_SECURED_ROOT + "/school-classes";	
+	}
+	
+	public static interface REST_ACADEMIC_YEAR_CONTROLLER{
+		public static final String BASE =  API_SECURED_ROOT + "/academic-years";	
+	}
+	
+	
+	
+	
 	public static interface REST_LOGIN_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/auth/login";		
 	}

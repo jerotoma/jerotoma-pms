@@ -23,7 +23,7 @@ export class SchoolClassService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
-  getSchoolClasss(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
+  getSchoolClasses(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.get<any>(
         `${END_POINTS.schoolClasses}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
         {observe: 'response'})

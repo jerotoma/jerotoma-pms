@@ -262,6 +262,7 @@ CREATE TABLE IF NOT EXISTS public.academic_years(
     id bigserial NOT NULL,
     year_of_study character varying(255) NOT NULL,
     code character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
     description text NOT NULL,
     created_on timestamp with time zone NOT NULL,
     updated_on timestamp with time zone NOT NULL,
@@ -329,7 +330,9 @@ CREATE TABLE IF NOT EXISTS public.student_course_admissions(
     
 CREATE TABLE IF NOT EXISTS public.school_classes(
     id bigserial NOT NULL,
+    code character varying(255) NOT NULL,
    	name character varying(255) NOT NULL,
+   	capacity bigint NOT NULL,
     description text NOT NULL,
    	updated_by bigint NOT NULL,
     created_on timestamp with time zone NOT NULL,

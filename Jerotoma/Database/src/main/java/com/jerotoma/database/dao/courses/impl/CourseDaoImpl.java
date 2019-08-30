@@ -12,8 +12,10 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.AcademicConstants;
+import com.jerotoma.common.constants.CourseConstant;
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.Course;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.courses.CourseDao;
 
 @Repository
@@ -54,9 +56,19 @@ public class CourseDaoImpl implements CourseDao {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<Course> courses = entityManager.createQuery("FROM Course", Course.class)				
+		
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		List<Course> courses = entityManager.createQuery("FROM Course", Course.class)
+				.setMaxResults(limit)
+				.setFirstResult(offset)
 				.getResultList();
-		map.put(AcademicConstants.COURSES, courses);
+		map.put(CourseConstant.COURSES, courses);
+		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
 	}

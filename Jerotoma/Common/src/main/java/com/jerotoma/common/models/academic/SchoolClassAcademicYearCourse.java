@@ -19,8 +19,13 @@ import com.jerotoma.common.constants.DatabaseConstant;
 @Table(name = DatabaseConstant.TABLES.SCHOOL_CLASS_ACADEMIC_YEARS_COURSES)
 public class SchoolClassAcademicYearCourse {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="school_class_accademic_year_courses_generator")
-	@SequenceGenerator(name="school_class_accademic_year_courses_generator", sequenceName = "school_class_accademic_year_courses_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.SCHOOL_CLASS_ACADEMIC_YEARS_COURSES + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.SCHOOL_CLASS_ACADEMIC_YEARS_COURSES + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.SCHOOL_CLASS_ACADEMIC_YEARS_COURSES + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	

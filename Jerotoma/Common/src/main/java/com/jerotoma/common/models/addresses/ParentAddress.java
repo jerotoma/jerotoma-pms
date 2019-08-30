@@ -21,8 +21,13 @@ import com.jerotoma.common.models.users.Parent;
 @Table(name = DatabaseConstant.TABLES.PARENT_ADDRESSES)
 public class ParentAddress {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="parent_addresses_generator")
-	@SequenceGenerator(name="parent_addresses_generator", sequenceName = "parent_addresses_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.PARENT_ADDRESSES + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.PARENT_ADDRESSES + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.PARENT_ADDRESSES + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	

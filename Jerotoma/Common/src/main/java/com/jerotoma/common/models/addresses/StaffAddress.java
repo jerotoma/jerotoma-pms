@@ -21,8 +21,13 @@ import com.jerotoma.common.models.users.Staff;
 @Table(name = DatabaseConstant.TABLES.STAFF_ADDRESSES)
 public class StaffAddress {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="staff_addresses_generator")
-	@SequenceGenerator(name="staff_addresses_generator", sequenceName = "staff_addresses_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.STAFF_ADDRESSES + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.STAFF_ADDRESSES + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.STAFF_ADDRESSES + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	

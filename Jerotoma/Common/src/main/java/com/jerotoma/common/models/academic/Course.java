@@ -25,8 +25,13 @@ public class Course implements Serializable{
 	private static final long serialVersionUID = 1L;	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="courses_generator")
-	@SequenceGenerator(name="courses_generator", sequenceName = "courses_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.COURSES + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.COURSES + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.COURSES + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	
@@ -45,10 +50,6 @@ public class Course implements Serializable{
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	@OneToOne
-	@JoinColumn(name="accademic_year_id")
-	private AcademicYear accademicYear; 
-
 	public Integer getId() {
 		return id;
 	}

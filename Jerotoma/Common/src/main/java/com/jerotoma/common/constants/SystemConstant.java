@@ -2,6 +2,7 @@ package com.jerotoma.common.constants;
 
 public class SystemConstant {
 
+	public static final String SYSTEM_COUNT = "count";
 	public static final String DOC_FILE_PATH = "/resources/";
 	public static final String PACKAGES_TO_SCAN = "com.jerotoma";
 	

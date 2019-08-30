@@ -7,7 +7,7 @@ import { END_POINTS, QueryParam } from 'app/utils';
 @Injectable({
   providedIn: 'root',
 })
-export class CourceService {
+export class CourseService {
   constructor(private http: HttpClient) { }
 
   getCourse(courseId: number): Observable<any> {

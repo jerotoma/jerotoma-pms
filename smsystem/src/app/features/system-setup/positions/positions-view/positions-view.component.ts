@@ -10,7 +10,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { PositionCreateComponent } from '../position-create/position-create.component';
 import { PositionDeleteComponent } from '../position-delete/position-delete.component';
 import { Position } from 'app/models/positions/position.model';
-import { PositionService } from 'app/services/positions';
+import { PositionService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination

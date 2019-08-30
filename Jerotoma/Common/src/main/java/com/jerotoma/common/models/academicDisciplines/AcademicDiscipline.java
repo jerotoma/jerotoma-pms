@@ -28,8 +28,13 @@ public class AcademicDiscipline implements Serializable{
 	private static final long serialVersionUID = 1L;	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="academic_disciplines_generator")
-	@SequenceGenerator(name="academic_disciplines_generator", sequenceName = "academic_disciplines_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.ACADEMIC_DISCIPLINE + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.ACADEMIC_DISCIPLINE + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.ACADEMIC_DISCIPLINE + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	

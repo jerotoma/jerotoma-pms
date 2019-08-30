@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicConstants;
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.SchoolClass;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.courses.SchoolClassDao;
 
 @Repository
@@ -54,10 +56,18 @@ public class SchoolClassDaoImpl implements SchoolClassDao {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<SchoolClass> courses = entityManager.createQuery("FROM SchoolClass", SchoolClass.class)				
-				.getResultList();
-		map.put(AcademicConstants.SCHOOL_CLASSES, courses);
 		
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		List<SchoolClass> schoolClasses = entityManager.createQuery("FROM SchoolClass", SchoolClass.class)				
+				.setMaxResults(limit)
+				.setFirstResult(offset)
+				.getResultList();
+		map.put(AcademicConstants.SCHOOL_CLASSES, schoolClasses);
+		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);		
 		return map;
 	}
 
@@ -69,7 +79,7 @@ public class SchoolClassDaoImpl implements SchoolClassDao {
 
 	@Override
 	public Long countObject() throws SQLException {
-		return entityManager.createQuery("SELECT count(*) FROM Course", Long.class)				
+		return entityManager.createQuery("SELECT count(*) FROM SchoolClass", Long.class)				
 				.getSingleResult();
 	}
 

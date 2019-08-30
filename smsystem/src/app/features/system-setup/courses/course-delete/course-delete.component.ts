@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines/academic-discipline.service';
+import { CourseService } from 'app/services';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 @Component({
@@ -11,7 +11,7 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['course-delete.component.scss'],
 })
 export class CourseDeleteComponent implements OnInit {
-  positionId: string = '0';
+  courseId: string = '0';
   title: string = '';
   action: string = '';
   name: string = '';
@@ -23,15 +23,15 @@ export class CourseDeleteComponent implements OnInit {
   };
 
   constructor(
-    private academicDisciplineService:  AcademicDisciplineService,
+    private courseService:  CourseService,
     protected ref: NbDialogRef<CourseDeleteComponent>) {}
   ngOnInit() {
     this.confirmed = this.action === 'delete';
   }
 
-  deleteAcademicDiscipline() {
+  deleteCourse() {
     if (this.confirmed) {
-    this.academicDisciplineService.deleteAcademicDiscipline(parseInt(this.positionId, 10))
+    this.courseService.deleteCourse(parseInt(this.courseId, 10))
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const data = resp.body;
@@ -57,7 +57,7 @@ export class CourseDeleteComponent implements OnInit {
   }
   onConfirmed() {
     this.confirmed = true;
-    this.deleteAcademicDiscipline();
+    this.deleteCourse();
   }
 
 }

@@ -23,8 +23,13 @@ public class Address implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="addresses_generator")
-	@SequenceGenerator(name="addresses_generator", sequenceName = "addresses_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.ADDRESSES + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.ADDRESSES + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.ADDRESSES + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	
