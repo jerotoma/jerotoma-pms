@@ -3,7 +3,6 @@ package com.jerotoma.api.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,29 +23,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.AcademicYearConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
-import com.jerotoma.common.constants.AcademicYearConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.AcademicYearValidator;
 import com.jerotoma.config.auth.common.UserContext;
-import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.courses.AcademicYearService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE)
-public class RestAcademicYearController {
-	
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-	
+public class RestAcademicYearController extends BaseController {
+		
 	@Autowired AcademicYearService academicYearService;
-	@Autowired IAuthenticationFacade authenticationFacade;
-	
-	
+		
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> getAcademicYears(Authentication auth,
@@ -56,31 +49,9 @@ public class RestAcademicYearController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-		Map<String, Object> map = new HashMap<>();
-		
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		logger.debug("getAcademicYears : "+ EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
-		
-		page = page == null ? 1 : page;
-		pageSize = pageSize == null ? 12 : pageSize;
-		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
-
-
-		QueryParam queryParam = QueryParam.getInstance();
-		queryParam.setPage(page);
-		queryParam.setPageSize(pageSize);
-		queryParam.setFieldName(fieldName);
-		queryParam.setOrderby(orderby);
-				
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
-		}
+		this.securityCheckAdminAccess(auth);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
+		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
 			map = academicYearService.loadMapList(queryParam);		
@@ -102,18 +73,9 @@ public class RestAcademicYearController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+		this.securityCheckAdminAccess(auth);
+		this.logRequestDetail("POST : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 			
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
-		}
-		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
 						AcademicYearConstant.ACADEMIC_YEAR_NAME,

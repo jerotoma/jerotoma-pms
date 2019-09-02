@@ -1,6 +1,5 @@
 package com.jerotoma.common.models.academic;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -15,22 +14,17 @@ import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
 
+
 @Entity
-@Table(name = DatabaseConstant.TABLES.COURSES)
-public class Course implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;	
-	
+@Table(name = DatabaseConstant.TABLES.CLASS_ROOMS)
+public class ClassRoom {
 	@Id
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE, 
-			generator = DatabaseConstant.TABLES.COURSES + "_generator")
+			generator = DatabaseConstant.TABLES.CLASS_ROOMS + "_generator")
 	@SequenceGenerator(
-			name = DatabaseConstant.TABLES.COURSES + "_generator", 
-			sequenceName = DatabaseConstant.TABLES.COURSES + "_id_seq", 
+			name = DatabaseConstant.TABLES.CLASS_ROOMS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.CLASS_ROOMS + "_id_seq", 
 			allocationSize=1)
 	@Column
 	private Integer id;
@@ -42,31 +36,29 @@ public class Course implements Serializable{
 	private String name;
 	
 	@Column
+	private Integer capacity;
+	
+	@Column
 	private String description;
 	
-	@OneToMany(mappedBy = "course")
-	private List<JClass> jclass;
-	
+	@Column(name="updated_by")
+	private Integer updatedBy;
+		
 	@Column(name="created_on")
 	private Date createdOn;
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
+	@OneToMany(mappedBy = "classRoom")
+	private List<ClassRoomResource> classRoomResources;
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getName() {
@@ -99,5 +91,29 @@ public class Course implements Serializable{
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public Integer getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 }

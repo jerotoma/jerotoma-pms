@@ -36,9 +36,9 @@ const routes: Routes = [{
         .then(m => m.HeaderModule),
     },
     {
-      path: 'forms',
-      loadChildren: () => import('./forms/forms.module')
-        .then(m => m.FormsModule),
+      path: 'admissions',
+      loadChildren: () => import('./admissions/admissions.module')
+        .then(m => m.AdmissionsModule),
     },
     {
       path: 'ui-features',

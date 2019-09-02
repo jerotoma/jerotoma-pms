@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.SchoolClassConstant;
+import com.jerotoma.common.constants.ClassRoomConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academic.SchoolClass;
+import com.jerotoma.common.models.academic.ClassRoom;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.SchoolClassValidator;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
-import com.jerotoma.services.courses.SchoolClassService;
+import com.jerotoma.services.courses.ClassRoomService;
 import com.jerotoma.services.users.AuthUserService;
 
 
@@ -46,7 +46,7 @@ public class RestSchoolClassController {
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Autowired SchoolClassService schoolClassService;
+	@Autowired ClassRoomService schoolClassService;
 	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired AuthUserService authUserService;
 	
@@ -120,11 +120,11 @@ public class RestSchoolClassController {
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						SchoolClassConstant.SCHOOL_CLASS_NAME,
-						SchoolClassConstant.SCHOOL_CLASS_DESCRIPTION,
-						SchoolClassConstant.SCHOOL_CLASS_CODE));
+						ClassRoomConstant.CLASS_ROOM_NAME,
+						ClassRoomConstant.CLASS_ROOM_DESCRIPTION,
+						ClassRoomConstant.CLASS_ROOM_CODE));
 		
-		SchoolClass schoolClass = SchoolClassValidator.validate(params, requiredFields);
+		ClassRoom schoolClass = SchoolClassValidator.validate(params, requiredFields);
 		schoolClass.setUpdatedBy(authUser.getId());
 		try {
 			schoolClass = schoolClassService.createObject(schoolClass);		
@@ -165,12 +165,12 @@ public class RestSchoolClassController {
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						SchoolClassConstant.SCHOOL_CLASS_NAME,
-						SchoolClassConstant.SCHOOL_CLASS_DESCRIPTION,
-						SchoolClassConstant.SCHOOL_CLASS_CODE));
+						ClassRoomConstant.CLASS_ROOM_NAME,
+						ClassRoomConstant.CLASS_ROOM_DESCRIPTION,
+						ClassRoomConstant.CLASS_ROOM_CODE));
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		
-		SchoolClass schoolClass = SchoolClassValidator.validate(params, requiredFields);
+		ClassRoom schoolClass = SchoolClassValidator.validate(params, requiredFields);
 		schoolClass.setUpdatedBy(authUser.getId());
 		
 		try {
@@ -200,7 +200,7 @@ public class RestSchoolClassController {
 			throw new UnAuthorizedAccessException("You have no authorization to add new SchoolClass to the system");
 		}
 		
-		SchoolClass schoolClass;
+		ClassRoom schoolClass;
 		
 		try {
 			schoolClass = schoolClassService.findObject(schoolClassId);	

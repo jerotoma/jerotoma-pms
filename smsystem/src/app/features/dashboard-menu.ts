@@ -65,20 +65,22 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'book-open-outline',
     children: [
       {
-        title: 'Form Inputs',
-        link: '/dashboard/forms/inputs',
+        title: 'Teacher Admissions',
+        link: '/dashboard/admissions/teachers',
       },
       {
-        title: 'Form Layouts',
-        link: '/dashboard/forms/layouts',
-      },
-      {
-        title: 'Buttons',
-        link: '/dashboard/forms/buttons',
-      },
-      {
-        title: 'Datepicker',
-        link: '/dashboard/forms/datepicker',
+        title: 'Student Admissions',
+        link: '/dashboard/admissions/students',
+        children: [
+          {
+            title: 'Admitted Students',
+            link: '/dashboard/admissions/students',
+          },
+          {
+            title: 'Admit Student',
+            link: '/dashboard/admissions/students/create',
+          },
+      ],
       },
     ],
   },

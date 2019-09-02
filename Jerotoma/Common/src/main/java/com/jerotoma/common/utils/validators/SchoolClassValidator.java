@@ -4,16 +4,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.jerotoma.common.constants.SchoolClassConstant;
+import com.jerotoma.common.constants.ClassRoomConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
-import com.jerotoma.common.models.academic.SchoolClass;
+import com.jerotoma.common.models.academic.ClassRoom;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class SchoolClassValidator {
 	
-	public static SchoolClass validate(Map<String, Object> params, List<String> requiredFields) {
+	public static ClassRoom validate(Map<String, Object> params, List<String> requiredFields) {
 		
-		SchoolClass schoolClass = new SchoolClass();
+		ClassRoom schoolClass = new ClassRoom();
 		String name  = null;		
 		String description = null;
 		String code = null;	
@@ -21,46 +21,46 @@ public class SchoolClassValidator {
 		Integer capacity = null;	
 		
 		
-		if(params.containsKey(SchoolClassConstant.SCHOOL_CLASS_NAME)) {
-			name  = params.get(SchoolClassConstant.SCHOOL_CLASS_NAME).toString();
+		if(params.containsKey(ClassRoomConstant.CLASS_ROOM_NAME)) {
+			name  = params.get(ClassRoomConstant.CLASS_ROOM_NAME).toString();
 		}
-		if(params.containsKey(SchoolClassConstant.SCHOOL_CLASS_DESCRIPTION)) {
-			description  = params.get(SchoolClassConstant.SCHOOL_CLASS_DESCRIPTION).toString();
-		}
-		
-		if(params.containsKey(SchoolClassConstant.SCHOOL_CLASS_CODE)) {
-			code  = params.get(SchoolClassConstant.SCHOOL_CLASS_CODE).toString();
+		if(params.containsKey(ClassRoomConstant.CLASS_ROOM_DESCRIPTION)) {
+			description  = params.get(ClassRoomConstant.CLASS_ROOM_DESCRIPTION).toString();
 		}
 		
-		if(params.containsKey(SchoolClassConstant.SCHOOL_CLASS_CAPACITY)) {
-			capacity  = (Integer)params.get(SchoolClassConstant.SCHOOL_CLASS_CAPACITY);
+		if(params.containsKey(ClassRoomConstant.CLASS_ROOM_CODE)) {
+			code  = params.get(ClassRoomConstant.CLASS_ROOM_CODE).toString();
 		}
 		
-		if(params.containsKey(SchoolClassConstant.SCHOOL_CLASS_ID)) {
-			id  = (Integer)params.get(SchoolClassConstant.SCHOOL_CLASS_ID);
+		if(params.containsKey(ClassRoomConstant.CLASS_ROOM_CAPACITY)) {
+			capacity  = (Integer)params.get(ClassRoomConstant.CLASS_ROOM_CAPACITY);
 		}
 		
-		if (id == null && requiredFields.contains(SchoolClassConstant.SCHOOL_CLASS_ID)) {
+		if(params.containsKey(ClassRoomConstant.CLASS_ROOM_ID)) {
+			id  = (Integer)params.get(ClassRoomConstant.CLASS_ROOM_ID);
+		}
+		
+		if (id == null && requiredFields.contains(ClassRoomConstant.CLASS_ROOM_ID)) {
 			throw new FieldIsRequiredException("ID is required continue");
 		}
 		schoolClass.setId(id);
 		
-		if (capacity == null && requiredFields.contains(SchoolClassConstant.SCHOOL_CLASS_CAPACITY)) {
+		if (capacity == null && requiredFields.contains(ClassRoomConstant.CLASS_ROOM_CAPACITY)) {
 			throw new FieldIsRequiredException("Capacity is required continue");
 		}
 		schoolClass.setCapacity(capacity);
 		
-		if (name == null && requiredFields.contains(SchoolClassConstant.SCHOOL_CLASS_NAME)) {
+		if (name == null && requiredFields.contains(ClassRoomConstant.CLASS_ROOM_NAME)) {
 			throw new FieldIsRequiredException("Name is required continue");
 		}
 		schoolClass.setName(name);
 		
-		if (description == null && requiredFields.contains(SchoolClassConstant.SCHOOL_CLASS_DESCRIPTION)) {
+		if (description == null && requiredFields.contains(ClassRoomConstant.CLASS_ROOM_DESCRIPTION)) {
 			throw new FieldIsRequiredException("Description is required continue");
 		}
 		schoolClass.setDescription(description);
 		
-		if (code == null && requiredFields.contains(SchoolClassConstant.SCHOOL_CLASS_CODE)) {
+		if (code == null && requiredFields.contains(ClassRoomConstant.CLASS_ROOM_CODE)) {
 			throw new FieldIsRequiredException("Code is required continue");
 		}
 		schoolClass.setCode(code);

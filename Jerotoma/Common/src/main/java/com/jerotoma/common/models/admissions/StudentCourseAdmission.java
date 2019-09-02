@@ -9,13 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.academic.AcademicYearCourse;
 import com.jerotoma.common.models.users.Student;
 
 @Entity
@@ -36,9 +34,6 @@ public class StudentCourseAdmission implements Serializable{
 	@Column(name="code")
 	private String code;
 	
-	@ManyToOne
-	@JoinColumn(name="academic_year_course_id")
-	private AcademicYearCourse academicYearCourse;
 		
 	@OneToOne
 	@JoinColumn(name="student_id")
