@@ -5,5 +5,5 @@ export * from './tokens';
 export * from './positions';
 export * from './messages';
 export * from './courses';
-export * from './school-classes';
+export * from './class-rooms';
 export * from './addresses';

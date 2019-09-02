@@ -19,8 +19,8 @@ import {
 import { ClassRoomsRoutingModule } from './class-rooms-routing.module';
 import { ClassRoomsComponent } from './class-rooms.component';
 import { ClassRoomsViewComponent } from './class-rooms-view/class-rooms-view.component';
-import {  ClassRoomCreateComponent } from './class-room-create/class-room-create.component';
-import {  ClassRoomDeleteComponent } from './class-room-delete/class-room-delete.component';
+import { ClassRoomCreateComponent } from './class-room-create/class-room-create.component';
+import { ClassRoomDeleteComponent } from './class-room-delete/class-room-delete.component';
 
 
 const COMPONENTS = [
@@ -69,4 +69,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class SchoolClassesModule { }
+export class ClassRoomsModule { }

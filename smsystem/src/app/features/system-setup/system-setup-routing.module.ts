@@ -16,7 +16,7 @@ const routes: Routes = [{
         .then(m => m.PositionsModule),
     },
     {
-      path: 'classes',
+      path: 'class-rooms',
       loadChildren: () => import('./class-rooms/class-rooms.module')
         .then(m => m.ClassRoomsModule),
     },

@@ -32,7 +32,7 @@ export class AcademicYearsViewComponent implements OnInit {
     userType: 'teacher',
   };
 
-  title: string = 'List of School Academic Year';
+  title: string = 'List of Academic Years';
   academicYear: AcademicYear;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
@@ -57,7 +57,7 @@ export class AcademicYearsViewComponent implements OnInit {
   open() {
     this.dialogService.open(AcademicYearCreateComponent, {
       context: {
-        title: 'Add New School Academic Year',
+        title: 'Add New Academic Year',
         action: 'create',
       },
     }).onClose.subscribe(_data => {
@@ -82,7 +82,7 @@ export class AcademicYearsViewComponent implements OnInit {
   edit(academicYear: AcademicYear) {
     this.dialogService.open(AcademicYearCreateComponent, {
       context: {
-        title: 'Edit School Academic Year',
+        title: 'Edit Academic Year',
         action: 'edit',
         id: academicYear.id.toString(),
         code: academicYear.code,
@@ -97,7 +97,7 @@ export class AcademicYearsViewComponent implements OnInit {
   delete(academicYear: AcademicYear) {
     this.dialogService.open(AcademicYearDeleteComponent, {
       context: {
-        title: 'Delete School Academic Year',
+        title: 'Delete Academic Year',
         action: 'delete',
         positionId: academicYear.id.toString(),
         name: academicYear.name,

@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { SchoolClass } from 'app/models';
+import { ClassRoom } from 'app/models';
 import { SchoolClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
@@ -25,7 +25,7 @@ export class ClassRoomCreateComponent implements OnInit {
   @Input() capacity: string = '';
 
   schoolClassForm: FormGroup;
-  schoolClass: SchoolClass;
+  classRoom: ClassRoom;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -58,13 +58,13 @@ export class ClassRoomCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.schoolClass = this.schoolClassForm.value;
+    this.classRoom = this.schoolClassForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
       this.updateSchoolClass();
     } else {
-      this.schoolClassService.createSchoolClass(this.schoolClass)
+      this.schoolClassService.createSchoolClass(this.classRoom)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -90,7 +90,7 @@ export class ClassRoomCreateComponent implements OnInit {
 
   }
   updateSchoolClass() {
-    this.schoolClassService.updateSchoolClass(this.schoolClass)
+    this.schoolClassService.updateSchoolClass(this.classRoom)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
