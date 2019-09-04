@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { SchoolClassService } from 'app/services';
+import { ClassRoomService } from 'app/services';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 @Component({
@@ -11,7 +11,7 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['class-room-delete.component.scss'],
 })
 export class ClassRoomDeleteComponent implements OnInit {
-  schoolClassId: string = '0';
+  classRoomId: string = '0';
   title: string = '';
   action: string = '';
   name: string = '';
@@ -23,7 +23,7 @@ export class ClassRoomDeleteComponent implements OnInit {
   };
 
   constructor(
-    private schoolClassService: SchoolClassService,
+    private classRoomService: ClassRoomService,
     protected ref: NbDialogRef<ClassRoomDeleteComponent>) {}
   ngOnInit() {
     this.confirmed = this.action === 'delete';
@@ -31,7 +31,7 @@ export class ClassRoomDeleteComponent implements OnInit {
 
   deleteSchoolClass() {
     if (this.confirmed) {
-    this.schoolClassService.deleteSchoolClass(parseInt(this.schoolClassId, 10)).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+    this.classRoomService.deleteClassRoom(parseInt(this.classRoomId, 10)).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const data = resp.body;
         const status = resp.status;

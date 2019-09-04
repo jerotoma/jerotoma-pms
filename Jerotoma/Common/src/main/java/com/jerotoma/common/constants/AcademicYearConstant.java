@@ -7,5 +7,5 @@ public class AcademicYearConstant {
 	public static final String ACADEMIC_YEAR_ID = "id";
 	public static final String ACADEMIC_YEARS = "academicYears";
 	public static final String ACADEMIC_YEAR = "academicYear";
-	public static final Object ACADEMIC_YEAR_CODE = "code";
+	public static final String ACADEMIC_YEAR_CODE = "code";
 }

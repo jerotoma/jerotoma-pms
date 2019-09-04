@@ -7,5 +7,5 @@ public class ClassRoomConstant {
 	public static final String CLASS_ROOM_ID = "id";
 	public static final String CLASS_ROOMS = "classRooms";
 	public static final String CLASS_ROOM = "classRoom";
-	public static final Object CLASS_ROOM_CAPACITY = "capacity";
+	public static final String CLASS_ROOM_CAPACITY = "capacity";
 }

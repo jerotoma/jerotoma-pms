@@ -144,5 +144,19 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 		student.setAddress(loadAddress(student.getId()));	
 		return student;
 	}
+
+	@Override
+	public List<StudentVO> loadStudentsByJClassID(Integer classId) {
+		String query = "SELECT student_id FROM public.student_classes WHERE class_id = ?";
+		
+		return this.jdbcTemplate.query(query,new Object[] {classId}, new RowMapper<StudentVO>() {
+			@Override
+			public StudentVO mapRow(ResultSet rs, int rowNum) throws SQLException {				
+				return findObject(rs.getInt("student_id"));
+			}
+			
+		});
+		
+	}
 	
 }

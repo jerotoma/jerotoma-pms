@@ -1,5 +1,7 @@
 package com.jerotoma.common.models.academic;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,11 +34,17 @@ public class ClassRoomResource {
 	@Column
 	private String name;
 	
-	@Column(name="number_of_item")
-	private Integer numberOfItem;
+	@Column(name="quantity")
+	private Integer quantity;
 	
 	@Column
 	private String description;
+	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
 	
 	@ManyToOne
 	@JoinColumn(name="class_room_id")
@@ -66,12 +74,13 @@ public class ClassRoomResource {
 		this.name = name;
 	}
 
-	public Integer getNumberOfItem() {
-		return numberOfItem;
+
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setNumberOfItem(Integer numberOfItem) {
-		this.numberOfItem = numberOfItem;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getDescription() {
@@ -88,5 +97,23 @@ public class ClassRoomResource {
 
 	public void setClassRoom(ClassRoom classRoom) {
 		this.classRoom = classRoom;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
 	} 
+	
+	
 }

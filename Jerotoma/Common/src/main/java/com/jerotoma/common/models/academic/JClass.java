@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Teacher;
 
@@ -31,6 +32,9 @@ public class JClass {
 			allocationSize=1)
 	@Column
 	private Integer id;
+	
+	@Column
+	private Integer capacity;
 		
 	@ManyToOne
 	@JoinColumn(name="course_id")
@@ -46,6 +50,7 @@ public class JClass {
 	
 	@ManyToOne
 	@JoinColumn(name="teacher_id")
+	@JsonBackReference
 	private Teacher teacher;
 	
 	@OneToMany(mappedBy = "jClass")
@@ -83,15 +88,7 @@ public class JClass {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-
-	public ClassRoom getSchoolClass() {
-		return classRoom;
-	}
-
-	public void setSchoolClass(ClassRoom schoolClass) {
-		this.classRoom = schoolClass;
-	}
-
+	
 	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
@@ -130,5 +127,82 @@ public class JClass {
 
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
-	}		
+	}
+	
+	public Integer getCapacity() {
+		return capacity;
+	}
+	
+	public void setCapacity(Integer capacity) {
+		this.capacity = capacity;
+	}
+	
+	public static class JClassFields{
+		Integer courseId = null;
+		Integer academicYearId = null;
+		Integer classRoomId = null;
+		Integer teacherId = null;
+		Integer capacity = null;	
+		Integer id = null;
+				
+		public JClassFields(Integer courseId, Integer academicYearId, Integer classRoomId, Integer teacherId,
+				Integer capacity, Integer id) {
+			super();
+			this.courseId = courseId;
+			this.academicYearId = academicYearId;
+			this.classRoomId = classRoomId;
+			this.teacherId = teacherId;
+			this.capacity = capacity;
+			this.id = id;
+		}
+		
+		public Integer getCourseId() {
+			return courseId;
+		}
+		
+		public void setCourseId(Integer courseId) {
+			this.courseId = courseId;
+		}
+		
+		public Integer getAcademicYearId() {
+			return academicYearId;
+		}
+		
+		public void setAcademicYearId(Integer academicYearId) {
+			this.academicYearId = academicYearId;
+		}
+		
+		public Integer getClassRoomId() {
+			return classRoomId;
+		}
+		
+		public void setClassRoomId(Integer classRoomId) {
+			this.classRoomId = classRoomId;
+		}
+		
+		public Integer getTeacherId() {
+			return teacherId;
+		}
+		
+		public void setTeacherId(Integer teacherId) {
+			this.teacherId = teacherId;
+		}
+		
+		public Integer getCapacity() {
+			return capacity;
+		}
+		
+		public void setCapacity(Integer capacity) {
+			this.capacity = capacity;
+		}
+		
+		public Integer getId() {
+			return id;
+		}
+		
+		public void setId(Integer id) {
+			this.id = id;
+		}
+		
+	}
 }

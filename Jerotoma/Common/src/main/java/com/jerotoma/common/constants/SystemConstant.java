@@ -1,6 +1,9 @@
 package com.jerotoma.common.constants;
 
 public class SystemConstant {
+	
+	public static final String UPDATED_ON = "updated_on";
+	public static final String CREATED_ON = "created_on";
 
 	public static final String SYSTEM_COUNT = "count";
 	public static final String DOC_FILE_PATH = "/resources/";

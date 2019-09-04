@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import { ClassRoom } from 'app/models';
-import { SchoolClassService } from 'app/services';
+import { ClassRoomService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -34,7 +34,7 @@ export class ClassRoomCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private schoolClassService:  SchoolClassService,
+    private classRoomService:  ClassRoomService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<ClassRoomCreateComponent>) {}
 
@@ -64,7 +64,7 @@ export class ClassRoomCreateComponent implements OnInit {
     if (this.action === 'edit') {
       this.updateSchoolClass();
     } else {
-      this.schoolClassService.createSchoolClass(this.classRoom)
+      this.classRoomService.createClassRoom(this.classRoom)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -90,7 +90,7 @@ export class ClassRoomCreateComponent implements OnInit {
 
   }
   updateSchoolClass() {
-    this.schoolClassService.updateSchoolClass(this.classRoom)
+    this.classRoomService.updateClassRoom(this.classRoom)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;

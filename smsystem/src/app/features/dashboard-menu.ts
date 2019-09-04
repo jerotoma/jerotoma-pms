@@ -69,8 +69,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/admissions/teachers',
       },
       {
+        title: 'Classes',
+        link: '/dashboard/admissions/classes',
+      },
+      {
         title: 'Student Admissions',
-        link: '/dashboard/admissions/students',
         children: [
           {
             title: 'Admitted Students',

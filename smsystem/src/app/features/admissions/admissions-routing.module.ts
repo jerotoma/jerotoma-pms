@@ -18,6 +18,11 @@ const routes: Routes = [
         loadChildren: () => import('./students/student-admissions.module')
           .then(m => m.StudentAdmissionsModule),
       },
+      {
+        path: 'classes',
+        loadChildren: () => import('./classes/classes.module')
+          .then(m => m.ClassesModule),
+      },
     ],
   },
 ];

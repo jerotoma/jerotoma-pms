@@ -7,5 +7,5 @@ public class ClassRoomResourceConstant {
 	public static final String CLASS_ROOM_RESOURCE_ID = "id";
 	public static final String CLASS_ROOM_RESOURCES = "classRoomResources";
 	public static final String CLASS_ROOM_RESOURCE = "classRoomResource";
-	public static final Object CLASS_ROOM_RESOURCE_QANTITY = "quantity";
+	public static final String CLASS_ROOM_RESOURCE_QANTITY = "quantity";
 }

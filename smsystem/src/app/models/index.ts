@@ -7,3 +7,4 @@ export * from './messages';
 export * from './courses';
 export * from './class-rooms';
 export * from './addresses';
+export * from './classes';

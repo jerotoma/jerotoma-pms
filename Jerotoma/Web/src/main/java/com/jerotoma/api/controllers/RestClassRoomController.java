@@ -41,8 +41,8 @@ import com.jerotoma.services.users.AuthUserService;
 
 
 @RestController
-@RequestMapping(EndPointConstants.REST_SCHOOL_CLASS_CONTROLLER.BASE)
-public class RestSchoolClassController {
+@RequestMapping(EndPointConstants.REST_CLASS_ROOM_CONTROLLER.BASE)
+public class RestClassRoomController {
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	

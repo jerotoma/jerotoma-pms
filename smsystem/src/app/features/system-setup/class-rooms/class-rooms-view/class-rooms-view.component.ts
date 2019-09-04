@@ -9,7 +9,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ClassRoomCreateComponent } from '../class-room-create/class-room-create.component';
 import { ClassRoomDeleteComponent } from '../class-room-delete/class-room-delete.component';
 import { ClassRoom } from 'app/models';
-import { SchoolClassService } from 'app/services';
+import { ClassRoomService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
@@ -43,7 +43,7 @@ export class ClassRoomsViewComponent implements OnInit {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private schoolClassService: SchoolClassService,
+    private classRoomService: ClassRoomService,
     private dialogService: NbDialogService,
     ) {
   }
@@ -65,7 +65,7 @@ export class ClassRoomsViewComponent implements OnInit {
   }
 
   loadSchoolClasses() {
-    this.schoolClassService.getSchoolClasses(this.param)
+    this.classRoomService.getClassRooms(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
@@ -93,13 +93,13 @@ export class ClassRoomsViewComponent implements OnInit {
       this.loadSchoolClasses();
     });
   }
-  delete(schoolClass: ClassRoom) {
+  delete(classRoom: ClassRoom) {
     this.dialogService.open(ClassRoomDeleteComponent, {
       context: {
         title: 'Delete Class',
         action: 'delete',
-        schoolClassId: schoolClass.id.toString(),
-        name: schoolClass.name,
+        classRoomId: classRoom.id.toString(),
+        name: classRoom.name,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();
