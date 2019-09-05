@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.jerotoma.common.constants.JClassConstant;
-import com.jerotoma.common.constants.SystemConstant;
 
 public class JClassVO {
 	

@@ -13,5 +13,6 @@ export const END_POINTS = {
   courses: '/api/secured/courses',
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',
+  studentClasses: '/api/secured/student-classes',
 
 };

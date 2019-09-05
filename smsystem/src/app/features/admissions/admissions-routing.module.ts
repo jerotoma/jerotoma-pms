@@ -15,8 +15,8 @@ const routes: Routes = [
       },
       {
         path: 'students',
-        loadChildren: () => import('./students/student-admissions.module')
-          .then(m => m.StudentAdmissionsModule),
+        loadChildren: () => import('./students/student-course-enrollments.module')
+          .then(m => m.StudentCourseEnrollmentsModule),
       },
       {
         path: 'classes',

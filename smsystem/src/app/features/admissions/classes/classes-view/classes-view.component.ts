@@ -38,7 +38,7 @@ export class ClassesViewComponent implements OnInit {
     hidePageSize: boolean = false;
     totalNumberOfItems: number = 20;
     pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-    displayedColumns: string[] = ['id', 'course', 'courseCode', 'academicYear', 'academicYearTerm', 'capacity', 'teacher', 'action'];
+    displayedColumns: string[] = ['id', 'course', 'courseCode', 'capacity', 'academicYearTerm', 'academicYear', 'teacher', 'action'];
     dataSource: MatTableDataSource<JClassView > = new MatTableDataSource<JClassView >();
 
     constructor(

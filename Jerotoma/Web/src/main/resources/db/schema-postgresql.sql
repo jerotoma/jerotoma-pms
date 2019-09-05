@@ -490,9 +490,15 @@
 	    id bigserial NOT NULL,
 	    class_id bigint NOT NULL,
 	    student_id bigint NOT NULL,
+	    academic_year_id bigint NOT NULL,	    
+	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT class_list_pkey PRIMARY KEY(id),
+	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
+	        REFERENCES public.academic_years (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	   	CONSTRAINT classes_fkey FOREIGN KEY (class_id)
 	        REFERENCES public.classes (id) MATCH SIMPLE
 	        ON UPDATE CASCADE

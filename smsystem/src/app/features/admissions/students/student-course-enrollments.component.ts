@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-student-admissions',
+  selector: 'app-student-course-enrollments',
   template: `
     <router-outlet></router-outlet>
   `,
 })
-export class StudentAdmissionsComponent {
+export class StudentCourseEnrollmentsComponent {
 
 }

@@ -27,19 +27,20 @@ import {
   NbCheckboxModule,
 } from '@nebular/theme';
 
-import { StudentAdmissionsRoutingModule } from './student-admissions-routing.module';
-import { StudentAdmissionsComponent } from './student-admissions.component';
-import { StudentAdmissionsViewComponent } from './student-admissions-view/student-admissions-view.component';
-import { StudentAdmissionCreateComponent } from './student-admission-create/student-admission-create.component';
+import { StudentCourseEnrollmentsRoutingModule } from './student-course-enrollments-routing.module';
+import { StudentCourseEnrollmentsComponent } from './student-course-enrollments.component';
+import { StudentCourseEnrollmentsViewComponent } from './student-course-enrollments-view/student-course-enrollments-view.component';
+import { StudentCourseEnrollmentCreateComponent } from './student-course-enrollment-create/student-course-enrollment-create.component';
 
 
 const COMPONENTS = [
-  StudentAdmissionsComponent,
-  StudentAdmissionsViewComponent,
-  StudentAdmissionCreateComponent,
+  StudentCourseEnrollmentsComponent,
+  StudentCourseEnrollmentsViewComponent,
+  StudentCourseEnrollmentCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
+  StudentCourseEnrollmentCreateComponent,
 
 ];
 
@@ -67,7 +68,7 @@ const MODULES = [
   NbIconModule,
   NbAlertModule,
   NbDialogModule.forRoot(),
-  StudentAdmissionsRoutingModule,
+  StudentCourseEnrollmentsRoutingModule,
 ];
 
 const SERVICES = [
@@ -88,4 +89,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class StudentAdmissionsModule { }
+export class StudentCourseEnrollmentsModule { }

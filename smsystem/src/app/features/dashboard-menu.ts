@@ -65,25 +65,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'book-open-outline',
     children: [
       {
-        title: 'Teacher Admissions',
-        link: '/dashboard/admissions/teachers',
-      },
-      {
         title: 'Classes',
         link: '/dashboard/admissions/classes',
       },
       {
-        title: 'Student Admissions',
-        children: [
-          {
-            title: 'Admitted Students',
-            link: '/dashboard/admissions/students',
-          },
-          {
-            title: 'Admit Student',
-            link: '/dashboard/admissions/students/create',
-          },
-      ],
+        title: 'Admitted Students',
+        link: '/dashboard/admissions/students',
       },
     ],
   },
