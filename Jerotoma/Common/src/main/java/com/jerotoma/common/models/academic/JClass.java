@@ -48,13 +48,15 @@ public class JClass {
 	@JoinColumn(name="class_room_id")
 	private ClassRoom classRoom;
 	
+	@OneToMany(mappedBy="jClass")
+	@JsonBackReference
+	private List<StudentClass> studentClasses;
+	
 	@ManyToOne
 	@JoinColumn(name="teacher_id")
 	@JsonBackReference
 	private Teacher teacher;
 	
-	@OneToMany(mappedBy = "jClass")
-	private List<StudentClass> studentClasses;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -137,6 +139,16 @@ public class JClass {
 		this.capacity = capacity;
 	}
 	
+	public List<StudentClass> getStudentClasses() {
+		return studentClasses;
+	}
+
+	public void setStudentClasses(List<StudentClass> studentClasses) {
+		this.studentClasses = studentClasses;
+	}
+
+
+
 	public static class JClassFields{
 		Integer courseId = null;
 		Integer academicYearId = null;

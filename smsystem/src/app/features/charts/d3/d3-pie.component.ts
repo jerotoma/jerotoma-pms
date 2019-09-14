@@ -4,12 +4,12 @@ import { NbThemeService } from '@nebular/theme';
 @Component({
   selector: 'app-d3-pie',
   template: `
-    <app-charts-pie-chart
+    <ngx-charts-pie-chart
       [scheme]="colorScheme"
       [results]="results"
       [legend]="showLegend"
       [labels]="showLabels">
-    </app-charts-pie-chart>
+    </ngx-charts-pie-chart>
   `,
 })
 export class D3PieComponent implements OnDestroy {

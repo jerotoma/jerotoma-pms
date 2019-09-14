@@ -19,7 +19,13 @@
       	<groupId>com.jerotoma</groupId>
       	<artifactId>jerotoma-common</artifactId>
       	<version>${project.version}</version>     	
-    </dependency>    
+    </dependency>  
+    <!-- https://mvnrepository.com/artifact/javax.interceptor/javax.interceptor-api -->
+	<dependency>
+	    <groupId>javax.interceptor</groupId>
+	    <artifactId>javax.interceptor-api</artifactId>
+	    <version>1.2.2</version>
+	</dependency> 
  </dependencies>
   <build>
 		<finalName>jerotoma-database</finalName>

@@ -1,5 +1,6 @@
 package com.jerotoma.common.utils.validators;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +10,17 @@ import com.jerotoma.common.models.academic.StudentClass;
 
 public class StudentClassValidator {
 	
+	@SuppressWarnings("unchecked")
 	public static StudentClass.Fields validate(Map<String, Object> params, List<String> requiredFields) {
 		
 		
 		Integer academicYearId = null;
-		Integer jClassId = null;
+		List<Integer> jClassIds = null;
 		Integer studentId = null;
 		Integer id = null;	
 		
-		if(params.containsKey(StudentConstant.Class.JCLASS_ID)) {
-			jClassId  = (Integer)params.get(StudentConstant.Class.JCLASS_ID);
+		if(params.containsKey(StudentConstant.Class.JCLASS_IDS)) {
+			jClassIds  = (ArrayList<Integer>)params.get(StudentConstant.Class.JCLASS_IDS);
 		}
 		if(params.containsKey(StudentConstant.Class.STUDENT_ID)) {
 			studentId  = (Integer)params.get(StudentConstant.Class.STUDENT_ID);
@@ -31,7 +33,7 @@ public class StudentClassValidator {
 			id  = (Integer)params.get(StudentConstant.Class.ID);
 		}
 		
-		if (id == null && requiredFields.contains(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
+		if (id == null && requiredFields.contains(StudentConstant.Class.ID)) {
 			throw new FieldIsRequiredException("ID is required to continue");
 		}
 		
@@ -40,7 +42,7 @@ public class StudentClassValidator {
 			throw new FieldIsRequiredException("Student ID is required to continue");
 		}
 		
-		if (jClassId == null && requiredFields.contains(StudentConstant.Class.JCLASS_ID)) {
+		if (jClassIds == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
 			throw new FieldIsRequiredException("Class ID is required to continue");
 		}
 		
@@ -49,6 +51,6 @@ public class StudentClassValidator {
 		}
 		
 		
-		return new StudentClass.Fields(id, studentId, jClassId, academicYearId);
+		return new StudentClass.Fields(id, studentId, jClassIds, academicYearId);
 	}
 }

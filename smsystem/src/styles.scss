@@ -84,3 +84,10 @@ button {
   margin: 0;
   border: none;
 }
+
+.nb-theme-default nb-card {
+  max-height: 90vh !important;
+}
+.nb-theme-default nb-layout .layout .layout-container .content .columns nb-layout-column {
+   padding: 1.25rem 1.25rem 0.25rem;
+}

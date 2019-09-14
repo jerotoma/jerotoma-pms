@@ -39,8 +39,8 @@ public class StudentClassDaoImpl implements StudentClassDao {
 
 	@Override
 	public StudentClass createObject(StudentClass object) throws SQLException {
-			entityManager.persist(object);
-		return findObject(object.getId());
+		entityManager.persist(object); 
+		return findObject(object.getId());			
 	}
 
 	@Override

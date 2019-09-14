@@ -79,7 +79,7 @@ public class RestCourseController {
 		queryParam.setOrderby(orderby);
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Course to the system");
 		}
 		
@@ -111,7 +111,7 @@ public class RestCourseController {
 			return instance;
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Course to the system");
 		}
 		
@@ -156,7 +156,7 @@ public class RestCourseController {
 			return instance;
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Course to the system");
 		}
 		
@@ -191,7 +191,7 @@ public class RestCourseController {
 			return instance;
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Course to the system");
 		}
 		

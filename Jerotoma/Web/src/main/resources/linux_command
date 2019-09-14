@@ -1,0 +1,49 @@
+ keytool -genkey -alias tomcat -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore .keystore -validity 3650 pass: EEwq!wANNQN75+Gw-3$8
+#SECURELY COPY FILE FROM REMOTE SERVER
+scp root@staging.jerotoma.com:/opt/tomcat/logs/catalina.out ./
+scp root@jerotoma.com:/etc/nginx/sites-enabled/blog.jerotoma.com ./
+scp -r root@jerotoma.com:/opt/tomcat/logs .
+
+#SECURELY COPY FILE TO THE REMOTE SERVER
+
+scp jerotoma.war root@staging.jerotoma.com:/opt/tomcat/webapps
+scp Web/target/jerotoma.war root@jerotoma.com:/opt/tomcat/webapps
+scp dist/jerotoma-blog/index.html root@jerotoma.com:/var/www/blog.jerotoma
+
+rm -rf ../jerotoma && mv jerotoma ../
+#RESTART
+
+#Restart Nginx Service
+ sudo systemctl restart nginx
+ 
+ #Restart tomcat Service
+ sudo systemctl restart tomcat
+
+# Copy file to remote server 
+   pass: ut=]2YEvMp]w.&3DBQtr
+   scp popup-image.jpeg root@jerotoma.com:/opt/tomcat/storage/resources/uploads/images
+   scp Web/target/jerotoma.war root@jerotoma.com:/opt/tomcat/webapps
+   scp jerotoma.war root@jerotoma.com:/opt/tomcat/webapps
+   scp -r root@jerotoma.com:/opt/tomcat/logs .
+   ssh root@jerotoma.com "cd /opt/tomcat/webapps && rm -rf jerotoma jerotoma.war ../jerotoma && sudo systemctl restart tomcat"
+   sudo systemctl restart tomcat
+
+#List used port
+    netstat -ano | grep 8443
+    taskkill /F /PID 8443
+
+Stripe emergence backup: ekew-fbzi-ozfc-zmox-evgr
+
+
+# MANAGEMENT HTTP SERVER (ManagementServerProperties)
+management.server.port=8443
+management.server.ssl.key-alias=tomcat
+management.server.ssl.key-store=/Users/Otoman/.keystore
+management.server.ssl.key-store-password=EEwq!wANNQN75+Gw-3$8
+management.server.ssl.key-store-type=PKCS12
+
+
+
+ nano /etc/nginx/sites-available/jerotoma.com
+ 
+ scp dist/jerotoma-blog/index.html root@jerotoma.com:/var/wwww/blog.jerotoma

@@ -57,10 +57,10 @@ public abstract class BaseController {
 	}
 	
 	protected void securityCheckAdminAccess(Authentication auth){		
-		this.securityCheckAccessByRole(auth,RoleConstant.EROLE.ROLE_ADMIN);			
+		this.securityCheckAccessByRole(auth,RoleConstant.USER_ROLES.ROLE_ADMIN);			
 	}
 	
-	protected void securityCheckAccessByRole(Authentication auth, RoleConstant.EROLE role){		
+	protected void securityCheckAccessByRole(Authentication auth, RoleConstant.USER_ROLES role){		
 		if(auth == null) {
 			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
 		}				

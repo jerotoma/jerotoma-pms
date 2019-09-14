@@ -18,11 +18,7 @@
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT users_pkey PRIMARY KEY (id),
-	    CONSTRAINT username UNIQUE (username),
-	    CONSTRAINT roles_fkey FOREIGN KEY (role_id)
-	        REFERENCES public.roles (id) MATCH SIMPLE
-	        ON UPDATE CASCADE
-	        ON DELETE NO ACTION 
+	    CONSTRAINT username UNIQUE (username)
 	    );
 	
 	/**************************************************************

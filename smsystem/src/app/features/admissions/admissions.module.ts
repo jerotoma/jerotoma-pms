@@ -6,6 +6,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
 import {
   NbActionsModule,
   NbButtonModule,
@@ -43,6 +45,7 @@ const MODULES = [
   NbInputModule,
   NbIconModule,
   NbAlertModule,
+  Ng2SmartTableModule,
   NbDialogModule.forRoot(),
   AdmissionsRoutingModule,
 ];

@@ -49,7 +49,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
-                    <warName>jerotoma-mps</warName>
+                    <warName>jerotoma</warName>
                 </configuration>
             </plugin>
             <plugin>

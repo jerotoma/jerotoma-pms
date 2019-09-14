@@ -3,6 +3,7 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import com.jerotoma.common.constants.StudentConstant;
 
@@ -16,7 +17,7 @@ public class StudentClassVO {
 	
 	private AcademicYearVO academicYear;
 	
-	private JClassVO jClass;
+	private List<JClassVO> jClasses;
 	
 	private Integer updatedBy;
 	
@@ -47,13 +48,13 @@ public class StudentClassVO {
 	public void setAcademicYear(AcademicYearVO academicYear) {
 		this.academicYear = academicYear;
 	}
-
-	public JClassVO getjClass() {
-		return jClass;
+	
+	public List<JClassVO> getjClasses() {
+		return jClasses;
 	}
 
-	public void setjClass(JClassVO jClass) {
-		this.jClass = jClass;
+	public void setjClasses(List<JClassVO> jClasses) {
+		this.jClasses = jClasses;
 	}
 
 	public Integer getUpdatedBy() {

@@ -45,6 +45,7 @@ export class TeacherAdmissionsViewComponent {
   onPageChange(pageEvent: PageEvent) {
 
   }
+  open(){}
 
 }
 

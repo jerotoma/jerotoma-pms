@@ -1,4 +1,4 @@
-package com.jerotoma.services.users;
+package com.jerotoma.services.users.impl;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.database.dao.users.ParentDao;
+import com.jerotoma.services.users.ParentService;
 
 @Service
 @Transactional

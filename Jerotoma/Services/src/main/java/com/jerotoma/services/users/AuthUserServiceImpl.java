@@ -65,5 +65,10 @@ public class AuthUserServiceImpl implements AuthUserService {
 		return  authUserDao.search(queryParam);
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		return  authUserDao.countObject();
+	}
+
 
 }

@@ -1,4 +1,4 @@
-package com.jerotoma.services.users;
+package com.jerotoma.services.users.impl;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.database.dao.users.TeacherDao;
 import com.jerotoma.services.exceptions.ServiceException;
+import com.jerotoma.services.users.TeacherService;
 
 @Service
 @Transactional

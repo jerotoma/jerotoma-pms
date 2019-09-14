@@ -124,7 +124,7 @@ public class RestUserController {
 		queryParam.setOrderby(orderby);
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new user to the system");
 		}
 		
@@ -175,7 +175,7 @@ public class RestUserController {
 		}
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 		
@@ -248,7 +248,7 @@ public class RestUserController {
 			throw new UnAuthorizedAccessException("You have to be logged in to continue");
 		}
 		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 			
@@ -445,7 +445,7 @@ public class RestUserController {
 			throw new UnAuthorizedAccessException("You have to be logged in to continue");
 		}
 		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 			
@@ -583,7 +583,7 @@ public class RestUserController {
 			throw new UnAuthorizedAccessException("You have to be logged in to continue");
 		}
 		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 			
@@ -689,7 +689,7 @@ public class RestUserController {
 		queryParam.setSearch(search);
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 		

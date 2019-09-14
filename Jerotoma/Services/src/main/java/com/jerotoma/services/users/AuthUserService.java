@@ -14,4 +14,6 @@ public interface AuthUserService extends UserDetailsService, BaseService<AuthUse
 	public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException;
 
 	public List<AuthUser> search(QueryParam queryParam) throws SQLException;
+	
+	public Long countObject() throws SQLException;
 }

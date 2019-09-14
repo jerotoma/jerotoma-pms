@@ -81,7 +81,7 @@ public class RestStudentClassController extends BaseController {
 	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> loadFieldOfStudyList(
+	public HttpResponseEntity<Object> loadStudentClassList(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
@@ -110,7 +110,7 @@ public class RestStudentClassController extends BaseController {
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createPosition(
+	protected HttpResponseEntity<Object> createStudentClass(
 			Authentication auth, 
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
@@ -122,29 +122,39 @@ public class RestStudentClassController extends BaseController {
 				Arrays.asList(
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ID,
-						StudentConstant.Class.JCLASS_ID
+						StudentConstant.Class.JCLASS_IDS
 						));
-		StudentClass studentClass = new StudentClass();
+				List<StudentClass> studentClasses = new ArrayList<>();
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
-		
+		StudentClassVO studentClassVO;
 		
 		try {
 			
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			JClass jClass = jClassService.findObject(jClassFields.getJclassId());
+			boolean isUpdate = false;
 			
-			studentClass.setJClass(jClass);
-			studentClass.setStudent(student);
-			studentClass.setAcademicYear(academicYear);
-			studentClass.setAcademicYear(academicYear);
-			studentClass.setUpdatedBy(authUser.getId());
-			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-			
-			studentClass = studentClassService.createObject(studentClass);	
-			instance.setData(studentClass);
+			for (Integer classId : jClassFields.getjClassIds()) {
+				StudentClass studentClass;
+				studentClassVO = assemblerStudentClassService.findStudentClassIdByParams(student.getId(), classId);
+				if(studentClassVO == null){
+					studentClass = new StudentClass();
+				} else {
+					studentClass = studentClassService.findObject(studentClassVO.getId());
+					isUpdate = true;
+				}				
+				studentClass.setStudent(student);
+				studentClass.setAcademicYear(academicYear);
+				studentClass.setUpdatedBy(authUser.getId());
+				studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
+				studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
+				JClass jClass = jClassService.findObject(classId);		
+				studentClass.setjClass(jClass);					
+				studentClass = isUpdate ? studentClassService.updateObject(studentClass) :  studentClassService.createObject(studentClass);	
+				studentClasses.add(studentClass);
+			}
+			instance.setData(studentClasses);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -157,7 +167,7 @@ public class RestStudentClassController extends BaseController {
 
 	@PutMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> editPosition(
+	protected HttpResponseEntity<Object> editStudentClass(
 		Authentication auth, 
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
@@ -175,6 +185,9 @@ public class RestStudentClassController extends BaseController {
 		
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass;
+		StudentClassVO studentClassVO;
+		List<StudentClass> studentClasses = new ArrayList<>();
+		
 		
 		try {
 			
@@ -182,18 +195,22 @@ public class RestStudentClassController extends BaseController {
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			JClass jClass = jClassService.findObject(jClassFields.getJclassId());
-			
-			studentClass.setJClass(jClass);
 			studentClass.setStudent(student);
 			studentClass.setAcademicYear(academicYear);
-			studentClass.setAcademicYear(academicYear);
 			studentClass.setUpdatedBy(authUser.getId());
-			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			
-			studentClass = studentClassService.updateObject(studentClass);	
-			instance.setData(studentClass);		
+			
+			for (Integer classId : jClassFields.getjClassIds()) {	
+				studentClassVO = assemblerStudentClassService.findStudentClassIdByParams(student.getId(), classId);
+				JClass jClass = jClassService.findObject(classId);
+				studentClass.setId(studentClassVO.getId());
+				studentClass.setjClass(jClass);			
+				studentClass = studentClassService.updateObject(studentClass);
+				studentClasses.add(studentClass);
+			}
+			instance.setData(studentClasses);
+				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -202,12 +219,29 @@ public class RestStudentClassController extends BaseController {
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		return instance;
 	}
+	
+	@GetMapping(value = {"/{studentId}", "/{studentId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
+		
+		StudentClassVO studentClassVO;
+		try {
+			studentClassVO = assemblerStudentClassService.findStudentClassByStudentId(studentId);
+			instance.setData(studentClassVO);
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return instance;
+	}
 
 	@DeleteMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-			
+	protected HttpResponseEntity<Object> deleteStudentClass(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
 		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
 		

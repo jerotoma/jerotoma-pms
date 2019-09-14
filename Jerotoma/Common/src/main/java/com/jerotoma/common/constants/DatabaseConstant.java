@@ -20,6 +20,7 @@ public class DatabaseConstant {
 		public static final String STUDENT_PARENTS = "student_parents";
 		public static final String STAFFS = "staffs";
 		public static final String PARENTS = "parents";
+		public static final String USER_ROLES = "user_roles";
 		public static final String STUDENT_COURSE_ADMISSIONS = "student_course_admissions";
 		public static final String STUDENT_ACADEMIC_YEARS = "student_academic_years";
 		public static final String ACADEMIC_YEARS_COURSES = "academic_year_courses";

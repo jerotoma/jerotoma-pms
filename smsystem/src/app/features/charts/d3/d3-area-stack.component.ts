@@ -4,7 +4,7 @@ import { NbThemeService } from '@nebular/theme';
 @Component({
   selector: 'app-d3-area-stack',
   template: `
-    <app-charts-area-chart
+    <ngx-charts-area-chart
       [scheme]="colorScheme"
       [results]="multi"
       [xAxis]="showXAxis"
@@ -15,7 +15,7 @@ import { NbThemeService } from '@nebular/theme';
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel"
       [autoScale]="autoScale">
-    </app-charts-area-chart>
+    </ngx-charts-area-chart>
   `,
 })
 export class D3AreaStackComponent implements OnDestroy {

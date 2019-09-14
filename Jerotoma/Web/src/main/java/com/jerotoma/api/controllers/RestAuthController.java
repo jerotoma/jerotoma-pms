@@ -82,7 +82,7 @@ public class RestAuthController {
 		
 		List<Role> roles = new ArrayList<>();
 		Role role = new Role();	
-		role.setName(RoleConstant.EROLE.ROLE_ADMIN.name());
+		role.setName(RoleConstant.USER_ROLES.ROLE_ADMIN.name());
 		role.setDisplayName("ADMIN");
 		roles.add(role);
 		

@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Student;
 
@@ -36,10 +38,12 @@ public class StudentClass {
 	
 	@ManyToOne
 	@JoinColumn(name="student_id")
+	@JsonBackReference
 	private Student student;
 	
 	@ManyToOne
 	@JoinColumn(name="class_id")
+	@JsonBackReference
 	private JClass jClass;
 	
 	@Column(name="updated_by")
@@ -57,30 +61,6 @@ public class StudentClass {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public AcademicYear getAcademicYear() {
-		return academicYear;
-	}
-
-	public void setAcademicYear(AcademicYear academicYear) {
-		this.academicYear = academicYear;
-	}
-
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-
-	public JClass getJClass() {
-		return jClass;
-	}
-
-	public void setJClass(JClass jClass) {
-		this.jClass = jClass;
 	}
 	
 	public Integer getUpdatedBy() {
@@ -106,21 +86,45 @@ public class StudentClass {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+	
+	public AcademicYear getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYear academicYear) {
+		this.academicYear = academicYear;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public JClass getjClass() {
+		return jClass;
+	}
+
+	public void setjClass(JClass jClass) {
+		this.jClass = jClass;
+	}
 
 
 
 	public static class Fields {
 		Integer Id;
 		Integer studentId;
-		Integer jclassId;
+		List<Integer> jClassIds;
 		Integer academicYearId;
 			
 		
-		public Fields(Integer id, Integer studentId, Integer jclassId, Integer academicYearId) {
+		public Fields(Integer id, Integer studentId, List<Integer> jClassIds, Integer academicYearId) {
 			super();
 			Id = id;
 			this.studentId = studentId;
-			this.jclassId = jclassId;
+			this.jClassIds = jClassIds;
 			this.academicYearId = academicYearId;
 		}
 		public Integer getId() {
@@ -135,11 +139,12 @@ public class StudentClass {
 		public void setStudentId(Integer studentId) {
 			this.studentId = studentId;
 		}
-		public Integer getJclassId() {
-			return jclassId;
+		
+		public List<Integer> getjClassIds() {
+			return jClassIds;
 		}
-		public void setJclassId(Integer jclassId) {
-			this.jclassId = jclassId;
+		public void setjClassIds(List<Integer> jClassIds) {
+			this.jClassIds = jClassIds;
 		}
 		public Integer getAcademicYearId() {
 			return academicYearId;

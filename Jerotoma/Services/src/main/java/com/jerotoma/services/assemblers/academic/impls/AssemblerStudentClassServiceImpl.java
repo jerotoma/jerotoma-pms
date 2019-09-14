@@ -43,4 +43,14 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 		return assemblerStudentClassDao.countObject();
 	}
 
+	@Override
+	public StudentClassVO findStudentClassIdByParams(Integer studentId, Integer classId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassByParams(studentId, classId);
+	}
+
+	@Override
+	public StudentClassVO findStudentClassByStudentId(Integer studentId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassByStudentId(studentId);
+	}
+
 }

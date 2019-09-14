@@ -26,7 +26,7 @@ export interface StudentClass {
   id: number;
   student: Student;
   academicYear: AcademicYear;
-  classView: JClassView;
+  jClasses: JClassView[];
   numberOfCourse: number;
 }
 
@@ -34,6 +34,6 @@ export interface StudentClass {
 export interface StudentClassAdmission {
   id: number;
   studentId: number;
-  jClassId: number;
+  classIds: number[];
   academicYearId: number;
 }

@@ -6,19 +6,17 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { NbDialogRef } from '@nebular/theme';
 import { JClassAdmission } from 'app/models';
 import {
+  StudentClassService,
   ClassService,
-  ClassRoomService,
   AcademicYearService,
-  CourseService,
   UserService,
  } from 'app/services';
 import { QueryParam } from 'app/utils';
 import {
   ShowMessage,
-  ClassRoom,
   JClassView,
-  Teacher,
-  Course,
+  StudentClassAdmission,
+  Student,
   AcademicYear,
 } from 'app/models';
 
@@ -32,15 +30,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   @Input() action: string = 'create';
   @Output() onCreationSuccess = new EventEmitter();
 
-  @Input() name: string = '';
-  @Input() code: string = '';
-  @Input() id: string = '0';
-  @Input() description: string = '';
+
+  @Input() studentId: string = '0';
 
   academicYearId: number;
   courseId: number;
-  classRoomId: number;
+  jClassIds: number[] = [];
   teacherId: number;
+  studentClassAdmission: StudentClassAdmission;
 
   param: QueryParam =  {
     page: 1,
@@ -53,12 +50,9 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   };
 
   jClasses: JClassView[];
-  teachers: Teacher[];
-  courses: Course[];
   academicYears: AcademicYear[];
-
-  classForm: FormGroup;
-  classAdmission: JClassAdmission;
+  students: Student[];
+  studentClassForm: FormGroup;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -67,11 +61,10 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private classRoomService: ClassRoomService,
-    private courseService: CourseService,
     private academicYearService: AcademicYearService,
     private userService: UserService,
-    private classService:  ClassService,
+    private classService: ClassService,
+    private studentClassService: StudentClassService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentCourseEnrollmentCreateComponent>) {}
 
@@ -79,15 +72,12 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     this.loadData();
     this.loadForm();
     if (this.action === 'edit') {
-        this.patchClassAdmission();
+        this.patchStudentClass();
     }
   }
-  patchClassAdmission() {
-    this.classForm.patchValue({
-      name: this.name,
-      description: this.description,
-      code: this.code,
-      id: parseInt(this.id, 10),
+  patchStudentClass() {
+    this.studentClassForm.patchValue({
+
     });
   }
   dismiss() {
@@ -95,13 +85,13 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    this.classAdmission = this.classForm.value;
+    this.studentClassAdmission = this.studentClassForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
-      this.updateClass();
+      this.updateStudentClass();
     } else {
-      this.classService.createClass(this.classAdmission)
+      this.studentClassService.createStudentClass(this.studentClassAdmission)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -110,7 +100,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.classForm.reset();
+              this.studentClassForm.reset();
               this.dismiss();
 
             } else {
@@ -126,9 +116,8 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     }
 
   }
-  updateClass() {
-
-    this.classService.updateClass(this.classAdmission)
+  updateStudentClass() {
+    this.studentClassService.updateStudentClass(this.studentClassAdmission)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
             const data = resp.body;
@@ -137,7 +126,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.classForm.reset();
+              this.studentClassForm.reset();
               this.dismiss();
 
             } else {
@@ -150,35 +139,41 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
             this.showMessage.success = false;
             this.showMessage.message = error ? error.error.message : '';
           });
-    }
-    checkedChange(checked: boolean, jClass: JClassView) {
-   if (checked) {
-     window.console.log(jClass);
-    this.classForm.patchValue({
+  }
 
-    });
+  checkedChange(checked: boolean, jClass: JClassView) {
+    if (checked) {
+      this.jClassIds.push(jClass.id);
+    } else {
+      for (let i = 0; i < this.jClassIds.length; i++) {
+        if ( this.jClassIds[i] === jClass.id) {
+          this.jClassIds.splice(i, 1);
+        }
+     }
     }
+    this.studentClassForm.patchValue({
+      jClassIds: this.jClassIds,
+    });
+    window.console.log(this.jClassIds);
   }
 
   loadForm() {
-    this.classForm = this.formBuilder.group({
+    this.studentClassForm = this.formBuilder.group({
       id: [null],
-      capacity: ['', Validators.required],
       academicYearId: ['', Validators.required],
-      courseId: ['', Validators.required],
-      teacherId: ['', Validators.required],
-      classRoomId: ['', Validators.required],
+      jClassIds: [[], Validators.required],
+      studentId: ['', Validators.required],
     });
   }
 
   loadData() {
     this.loadAcademicYears();
     this.loadJClasses();
-    this.loadCourses();
-    this.loadTeachers();
+    this.loadStudents();
   }
 
   loadJClasses() {
+    this.param.userType = 'student';
     this.classService.getClasses(this.param)
     .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
@@ -186,20 +181,6 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       if (status !== null && status === 200 && resp.body) {
         const data = resp.body.data;
         this.jClasses = data.jClasses;
-      }
-    }, error => {
-
-    });
-  }
-
-  loadCourses() {
-    this.courseService.getCourses(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.courses = data.courses;
       }
     }, error => {
 
@@ -218,14 +199,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
 
     });
   }
-  loadTeachers() {
+  loadStudents() {
     this.userService.loadUsers(this.param)
     .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200 && resp.body) {
         const data = resp.body.data;
-        this.teachers = data.teachers;
+        this.students = data.students;
       }
     }, error => {
 

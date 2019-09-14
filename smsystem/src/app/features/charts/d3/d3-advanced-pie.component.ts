@@ -4,10 +4,10 @@ import { NbThemeService } from '@nebular/theme';
 @Component({
   selector: 'app-d3-advanced-pie',
   template: `
-    <app-charts-advanced-pie-chart
+    <ngx-charts-advanced-pie-chart
       [scheme]="colorScheme"
       [results]="single">
-    </app-charts-advanced-pie-chart>
+    </ngx-charts-advanced-pie-chart>
   `,
 })
 export class D3AdvancedPieComponent implements OnDestroy {

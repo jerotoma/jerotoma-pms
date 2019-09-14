@@ -138,6 +138,20 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 		return new StringBuilder("SELECT id, teacher_id AS teacherId, course_id AS courseId, class_room_id AS classRoomId, academic_year_id AS academicYearId, capacity, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.classes ");
 		
 	}
+	
+	@Override
+	public List<JClassVO> loadJClassesByStudentId(Integer studentId) {
+		String query = "SELECT class_id FROM public.student_classes WHERE student_id = ?";
+		
+		return this.jdbcTemplate.query(query,new Object[] {studentId}, new RowMapper<JClassVO>() {
+			@Override
+			public JClassVO mapRow(ResultSet rs, int rowNum) throws SQLException {				
+				return findObject(rs.getInt("class_id"));
+			}
+			
+		});
+		
+	}
 
 	@Override
 	public Long countObject() throws SQLException {

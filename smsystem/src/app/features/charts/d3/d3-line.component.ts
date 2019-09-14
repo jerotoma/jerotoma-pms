@@ -4,7 +4,7 @@ import { NbThemeService } from '@nebular/theme';
 @Component({
   selector: 'app-d3-line',
   template: `
-    <app-charts-line-chart
+    <ngx-charts-line-chart
       [scheme]="colorScheme"
       [results]="multi"
       [xAxis]="showXAxis"
@@ -14,7 +14,7 @@ import { NbThemeService } from '@nebular/theme';
       [showYAxisLabel]="showYAxisLabel"
       [xAxisLabel]="xAxisLabel"
       [yAxisLabel]="yAxisLabel">
-    </app-charts-line-chart>
+    </ngx-charts-line-chart>
   `,
 })
 export class D3LineComponent implements OnDestroy {

@@ -80,8 +80,8 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		
 		map = new HashMap<>();
-		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		StringBuilder builder = getBaseSelectQuery()
+		.append(DaoUtil.getOrderBy(" student_id, " + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -130,32 +130,44 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, student_id AS studentId, class_id AS classId, academic_year_id AS academicYearId, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.student_classes ");
+		return new StringBuilder("SELECT DISTINCT ON (student_id) student_id AS studentId, id, class_id AS jClassId, academic_year_id AS academicYearId, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.student_classes ");
 		
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.student_classes ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(DISTINCT student_id) FROM public.student_classes ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
 	
 	public StudentClassVO mapStudentClassResult(ResultSet rs) throws SQLException {
 		StudentClassVO jClass = new StudentClassVO(rs);
+		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);
 		jClass.setAcademicYear(loadAcademicYear(rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID)));
-		jClass.setjClass(loadJClass(rs.getInt(StudentConstant.Class.JCLASS_ID)));
-		jClass.setStudent(loadStudentsByStudentID(rs.getInt(StudentConstant.Class.STUDENT_ID)));
+		jClass.setjClasses(loadJClasses(studentId));
+		jClass.setStudent(loadStudentsByStudentID(studentId));
 		return jClass;
 	}
 	
-	private JClassVO loadJClass(Integer jClassId) throws SQLException {		
-		return assemblerJClasseDao.findObject(jClassId);
+	
+	private List<JClassVO> loadJClasses(Integer studentId) throws SQLException {
+		return assemblerJClasseDao.loadJClassesByStudentId(studentId);
 	}
 	private StudentVO loadStudentsByStudentID(Integer studentId) throws SQLException {		
 		return assemblerStudentDao.findObject(studentId);
 	}
 	private AcademicYearVO loadAcademicYear(Integer academicYearId) throws SQLException {		
 		return assemblerAcademicYearDao.findObject(academicYearId);
+	}
+	@Override
+	public StudentClassVO findStudentClassByParams(Integer studentId, Integer classId) {
+		String query = getBaseSelectQuery().append("WHERE student_id = ? AND class_id = ? ").toString();
+		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId, classId);
+	}
+	@Override
+	public StudentClassVO findStudentClassByStudentId(Integer studentId) throws SQLException {
+		String query = getBaseSelectQuery().append("WHERE student_id = ? ").toString();
+		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
 	}
 }

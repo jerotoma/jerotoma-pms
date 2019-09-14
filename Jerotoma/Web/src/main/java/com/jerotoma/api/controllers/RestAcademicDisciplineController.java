@@ -153,7 +153,7 @@ public class RestAcademicDisciplineController extends BaseController {
 			return instance;
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 		
@@ -188,7 +188,7 @@ public class RestAcademicDisciplineController extends BaseController {
 			return instance;
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.EROLE.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
 		}
 		

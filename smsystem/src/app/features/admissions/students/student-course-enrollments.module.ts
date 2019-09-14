@@ -5,6 +5,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import {
   NbActionsModule,
@@ -22,6 +23,7 @@ import {
   NbDatepickerModule,
   NbRouteTabsetModule,
   NbStepperModule,
+  NbTreeGridModule,
   NbTabsetModule,
   NbUserModule,
   NbCheckboxModule,
@@ -31,12 +33,13 @@ import { StudentCourseEnrollmentsRoutingModule } from './student-course-enrollme
 import { StudentCourseEnrollmentsComponent } from './student-course-enrollments.component';
 import { StudentCourseEnrollmentsViewComponent } from './student-course-enrollments-view/student-course-enrollments-view.component';
 import { StudentCourseEnrollmentCreateComponent } from './student-course-enrollment-create/student-course-enrollment-create.component';
-
+import { StudentCourseEnrollmentShowComponent } from './student-course-enrollment-show/student-course-enrollment-show.component';
 
 const COMPONENTS = [
   StudentCourseEnrollmentsComponent,
   StudentCourseEnrollmentsViewComponent,
   StudentCourseEnrollmentCreateComponent,
+  StudentCourseEnrollmentShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -67,6 +70,8 @@ const MODULES = [
   NbInputModule,
   NbIconModule,
   NbAlertModule,
+  NbTreeGridModule,
+  Ng2SmartTableModule,
   NbDialogModule.forRoot(),
   StudentCourseEnrollmentsRoutingModule,
 ];

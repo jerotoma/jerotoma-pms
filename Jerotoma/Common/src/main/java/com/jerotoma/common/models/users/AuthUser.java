@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import com.jerotoma.common.models.security.Role;
+import com.jerotoma.common.utils.CalendarUtil;
 
 public class AuthUser extends User {
 	
@@ -35,6 +36,8 @@ public class AuthUser extends User {
 			Collection<Role> roles) {
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, getAuthorities(roles));
 		this.roles = roles;
+		this.createdOn = CalendarUtil.getTodaysDate();
+		this.updatedOn = CalendarUtil.getTodaysDate();
 		
 	}
 	
