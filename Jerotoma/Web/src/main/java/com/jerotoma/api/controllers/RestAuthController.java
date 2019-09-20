@@ -68,7 +68,7 @@ public class RestAuthController {
 		String lastName = (String) params.get(UserConstant.LAST_NAME);
 		String password = (String) params.get(UserConstant.PASSWORD);
 		String confirmPass = (String) params.get(UserConstant.CONFIRM_PASS);
-		Boolean term = (boolean) params.get(UserConstant.TERM);
+		Boolean term = (boolean) params.get(UserConstant.TERMS);
 		Date updatedOn = new Date();
 		Date createdOn = new Date();
 		

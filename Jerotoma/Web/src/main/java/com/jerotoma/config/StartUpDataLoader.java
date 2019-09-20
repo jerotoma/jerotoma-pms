@@ -32,8 +32,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
     
     @Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-    	System.out.println("Start was called!");
-		if (alreadySetup) {
+    	if (alreadySetup) {
             return;
         }
 		logger.debug(event.getApplicationContext().getApplicationName());

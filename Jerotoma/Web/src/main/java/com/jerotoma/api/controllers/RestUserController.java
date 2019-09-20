@@ -231,7 +231,7 @@ public class RestUserController {
 		requiredFields =  new ArrayList<>(Arrays.asList(
 						UserConstant.FIRST_NAME, 
 						UserConstant.LAST_NAME,
-						UserConstant.TERM,
+						UserConstant.TERMS,
 						UserConstant.GENDER
 						));
 				
@@ -517,7 +517,7 @@ public class RestUserController {
 						Arrays.asList(
 								UserConstant.FIRST_NAME, 
 								UserConstant.LAST_NAME,
-								UserConstant.TERM,
+								UserConstant.TERMS,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Student student = studentService.createObject(
@@ -530,7 +530,7 @@ public class RestUserController {
 								UserConstant.FIRST_NAME, 
 								UserConstant.LAST_NAME,
 								UserConstant.OCCUPATION,
-								UserConstant.TERM,
+								UserConstant.TERMS,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Staff otherStaff = staffService.createObject(
@@ -543,7 +543,7 @@ public class RestUserController {
 								UserConstant.FIRST_NAME, 
 								UserConstant.LAST_NAME,
 								UserConstant.OCCUPATION,
-								UserConstant.TERM,
+								UserConstant.TERMS,
 								UserConstant.GENDER,
 								UserConstant.POSITION));
 				Parent parent = parentService.createObject(

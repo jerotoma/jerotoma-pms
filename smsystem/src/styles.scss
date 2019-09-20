@@ -81,7 +81,6 @@ table {
 }
 button {
   cursor: pointer;
-  margin: 0;
   border: none;
 }
 
@@ -90,4 +89,7 @@ button {
 }
 .nb-theme-default nb-layout .layout .layout-container .content .columns nb-layout-column {
    padding: 1.25rem 1.25rem 0.25rem;
+}
+nb-menu {
+  margin-bottom: 6rem !important;
 }

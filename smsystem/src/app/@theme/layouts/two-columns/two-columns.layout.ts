@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
         <app-header></app-header>
       </nb-layout-header>
 
-      <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
+      <nb-sidebar class="menu-sidebar" tag="menu-sidebar" [containerFixed]="true" responsive>
         <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
 
@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
         <ng-content select="router-outlet"></ng-content>
       </nb-layout-column>
 
-      <nb-layout-footer fixed>
+      <nb-layout-footer>
         <app-footer></app-footer>
       </nb-layout-footer>
 

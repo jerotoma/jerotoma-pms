@@ -129,7 +129,7 @@
                 <div class="form-control-group">
                   <button class='push-right' [disabled]="!parentForm.valid" type="submit" nbStepperNext nbButton hero status="success">Create Parent</button>
                 </div>
-               </form>
+              </form>
         </nb-step>
         <nb-step [stepControl]="studentForm" label="Student Details">
           <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onStudentSubmit()">
