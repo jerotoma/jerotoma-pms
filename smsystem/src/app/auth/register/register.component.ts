@@ -43,8 +43,9 @@ export class RegisterComponent implements OnInit {
     this.authService.register(this.user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       this.submitted = false;
       const resp = result;
-      const data = result.body;
+      const data = resp.body;
       if (data.success) {
+        this.registerForm.reset();
         this.showMessage.success = true;
         this.messages.push('User has been created');
       } else {

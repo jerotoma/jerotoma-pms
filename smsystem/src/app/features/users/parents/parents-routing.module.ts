@@ -24,10 +24,6 @@ const routes: Routes = [
           component: ParentsViewComponent,
         },
         {
-          path: 'create',
-          component: ParentCreateComponent,
-        },
-        {
           path: ':id',
           component: ParentShowComponent,
         },

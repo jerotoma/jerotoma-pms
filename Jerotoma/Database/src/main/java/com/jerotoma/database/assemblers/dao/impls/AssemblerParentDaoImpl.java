@@ -144,5 +144,27 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 		return parent;
 	}
 
+	@Override
+	public List<ParentVO> search(QueryParam queryParam) throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery();
+		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new ParentResultProcessor(), paramList);
+	}
+
 
 }

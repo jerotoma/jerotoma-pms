@@ -43,4 +43,9 @@ public class AssemblerParentServiceImpl implements AssemblerParentService {
 		return assemblerParentDao.countObject();
 	}
 
+	@Override
+	public List<ParentVO> search(QueryParam queryParam) throws SQLException {
+		return assemblerParentDao.search(queryParam);
+	}
+
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { NbStepperComponent } from '@nebular/theme';
+import { NbDialogRef} from '@nebular/theme';
 import { AddressComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
 import { Address, AddressWrapper } from 'app/models/addresses';
@@ -21,15 +21,16 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
 export class ParentCreateComponent implements OnInit, AfterViewInit {
   title: string = 'Create New Parent';
   @Output() onUserCreationSuccess = new EventEmitter();
-  @ViewChild('stepper', {static: true}) stepper: NbStepperComponent;
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   action: string = 'create';
 
-  studentForm: FormGroup;
   parentForm: FormGroup;
   addressForm: FormGroup;
   student: Student;
   address: Address;
+  students: Student[] = [];
+  selectedStudents: Student[] = [];
+  studentIds: number[]  = [];
   parent: Parent;
   studentId: string;
   showMessage: ShowMessage = {
@@ -39,60 +40,40 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   };
   listDisplay: string = 'none';
 
-  linearMode = true;
-
-  toggleLinearMode() {
-    this.linearMode = !this.linearMode;
-  }
-
   constructor(
     protected positionService: PositionService,
     protected academicDisciplineService: AcademicDisciplineService,
+    protected ref: NbDialogRef<ParentCreateComponent>,
     private userService:  UserService,
     private formBuilder: FormBuilder,
     ) {}
 
   ngOnInit() {
-    this.loadStudentForm();
     this.loadParentForm();
+    this.onStudentFullInputChanges();
   }
   ngAfterViewInit() {
     if (this.action === 'edit') {
-      this.loadTeacher(parseInt(this.studentId, 10));
+      // this.loadTeacher(parseInt(this.studentId, 10));
     }
   }
   dismiss() {
-
+    this.ref.close();
   }
-
-  onStudentSubmit() {
-    this.title = 'Create New Student';
-  }
-
-  onParentSubmit() {
-    this.title = 'Create New Parent';
-  }
-
-
   onSubmit() {
-    // window.console.log(this.studentForm, this.parentForm);
-   if (this.studentForm.valid && this.parentForm.valid ){
-    const dob = this.studentForm.get('birthDate');
-    if (dob && dob.valid) {
-      this.studentForm.patchValue({
-        birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
-      });
-    }
-    const data = {
-        student: this.studentForm.value,
-        parent: this.parentForm.value,
-        userType: 'studentAndParent',
+    this.studentIds = [];
+    // window.console.log(this.parentForm, this.parentForm);
+   if (this.parentForm.valid ) {
+      this.parent = this.parentForm.value;
+      for (let i = 0; i < this.selectedStudents.length; i++) {
+        this.studentIds.push(this.selectedStudents[i].id);
       }
-      this.postData(data);
+      this.parent.studentIds = this.studentIds;
+      this.postData(this.parent);
     }
   }
 
-  postData(data: any) {
+  postData(data: Parent) {
     this.showMessage.success = false;
     this.showMessage.error = false;
     if (this.action === 'edit') {
@@ -124,7 +105,6 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.studentForm.reset();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -141,28 +121,10 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
 
   resetForms() {
-    this.studentForm.reset();
-    this.parentForm.reset();
+   this.parentForm.reset();
     this.appAddress.resetForm();
-    this.stepper.reset();
+    this.ref.close();
   }
-
-  loadStudentForm() {
-    this.studentForm = this.formBuilder.group({
-      id: [null],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      middleNames: [''],
-      phoneNumber: ['', Validators.required],
-      emailAddress: [null],
-      gender: ['', Validators.required],
-      picture: [''],
-      userType: ['student'],
-      birthDate: ['', DateValidator('yyyy/MM/dd')],
-      address: [null, Validators.required],
-    });
-  }
-
   loadParentForm() {
     this.parentForm = this.formBuilder.group({
       id: [null],
@@ -176,6 +138,8 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       picture: [''],
       userType: ['parent'],
       address: [null, Validators.required],
+      studentIDs: [''],
+      studentFullName: [''],
     });
   }
   getParam(): QueryParam {
@@ -186,51 +150,67 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'studentAndParent',
+      userType: 'parent',
     };
   }
-
-  loadTeacher(studentId: number) {
-    this.userService.loadUser(studentId, 'student').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.student = resp.body.data;
-        this.studentForm.patchValue({
-          id: this.student.id,
-          firstName: this.student.firstName,
-          lastName: this.student.lastName,
-          occupation: this.student.occupation,
-          gender: this.student.gender,
-          picture: this.student.picture,
-          birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
-          userType: 'student',
-          fullName: this.student.fullName,
-        });
-      }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
-    });
-  }
-
-  onStudentAddressChange(addressWrapper: AddressWrapper ) {
-    if (!addressWrapper.isValid) {
-      this.studentForm.controls['address'].setErrors({ invalidAddress: true });
-    } else {
-      this.studentForm.controls['address'].setErrors(null);
-      this.studentForm.patchValue({address: addressWrapper.address});
-
-    }
-  }
-
   onParentAddressChange(addressWrapper: AddressWrapper ) {
     if (!addressWrapper.isValid) {
       this.parentForm.controls['address'].setErrors({ invalidAddress: true });
     } else {
       this.parentForm.controls['address'].setErrors(null);
       this.parentForm.patchValue({address: addressWrapper.address});
+    }
+  }
+  pickUser(event: any, student: Student) {
+    event.preventDefault();
+    this.listDisplay = 'none';
+    let studentFound = false;
+    if (this.selectedStudents.length === 0) {
+      this.selectedStudents.push(student);
+    } else {
+      this.selectedStudents.forEach(p => {
+          if (p.id === student.id) {
+           studentFound = true;
+          }
+      });
+      if (!studentFound) {
+        this.selectedStudents.push(student);
+      }
+    }
+    this.parentForm.patchValue({
+      selectedStudent: this.studentIds,
+      studentFullName: '',
+    });
+  }
+  search(value: string) {
+    const param = this.getParam();
+    param.userType = 'student';
+    param.search = value;
+    this.userService.search(param).subscribe((result) => {
+      this.students = [];
+      if (result && result.success) {
+        this.students = result.data;
+        this.listDisplay = 'block';
+      }
+    });
+  }
+  onStudentFullInputChanges() {
+    this.parentForm.get('studentFullName').valueChanges.subscribe(value => {
+      if (value) {
+        this.search(value);
+      }
+    });
+  }
+
+  selectedParentChanged(event: any, student: Student) {
+    if (!event) {
+      for (let i = 0; i < this.selectedStudents.length; i++) {
+        if (this.selectedStudents[i].id === student.id) {
+          this.selectedStudents.splice(i, 1);
+        }
+     }
+    } else {
+      this.selectedStudents.push(student);
     }
   }
 }

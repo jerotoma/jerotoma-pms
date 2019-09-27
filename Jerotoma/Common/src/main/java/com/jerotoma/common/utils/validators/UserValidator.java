@@ -6,33 +6,41 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
-import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.users.Parent;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class UserValidator {
 	
+	static Integer id = null;
+	static Student student = null;
+	static Staff staff = null;
+	static Teacher teacher = null;
+	static Address address = null;
+	static Parent parent = null;
+	static String firstName  = null;		
+	static String lastName = null;
+	static String fullName = null;	
+	static Integer age = null;		
+	static String gender = null;
+	static String occupation = null;		
+	static String birthDate = null;
+	static String picture = null;
+	static Integer studentNumber = null;
+	static String emailAddress = null;
+	static String phoneNumber = null;
+	static Date today = null;	
+	static List<Integer> parentIDs = null;
+	static List<Integer> studentIDs = null;
+	static Integer userId = null;
+	static String teacherCode = null;
+	
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		Teacher teacher = new Teacher();
-		Integer id = null;
-		String firstName  = null;		
-		String lastName = null;
-		String fullName = null;	
-		Integer age = null;	
-		Integer userId = null;	
-		Address address = null;
-		String gender = null;
-		String occupation = null;		
-		String birthDate = null;
-		String picture = null;
-		String teacherCode = null;		
-		Date today = null;		
-		String emailAddress = null;
-		String phoneNumber = null;
+		teacher = new Teacher();		
 		
 		if(params.containsKey(UserConstant.ID)) {
 			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
@@ -167,23 +175,10 @@ public class UserValidator {
 		return teacher;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Student validateStudentInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		Student student = new Student();
-		String firstName  = null;		
-		String lastName = null;
-		String fullName = null;	
-		Integer age = null;		
-		String gender = null;
-		String occupation = null;		
-		String birthDate = null;
-		String picture = null;
-		Integer studentNumber = null;
-		String emailAddress = null;
-		String phoneNumber = null;
-		
-		Address address = null;
-		
+		student = new Student();
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
 		}
@@ -231,6 +226,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.PHONE_NUMBER)) {
 			phoneNumber = (String) params.get(UserConstant.PHONE_NUMBER);
+		}
+		
+		if(params.containsKey(UserConstant.PARENT_IDS)) {
+			parentIDs = (List<Integer>)params.get(UserConstant.PARENT_IDS);
 		}
 		
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
@@ -288,30 +287,24 @@ public class UserValidator {
 			throw new FieldIsRequiredException("Phone number is required to continue");
 		}
 		student.setPhoneNumber(phoneNumber);
+		
+		if (parentIDs == null && requiredFields.contains(UserConstant.PARENT_IDS)) {
+			throw new FieldIsRequiredException("Parent ID is required to continue");
+		}
+		student.setParentIds(parentIDs);
 		address = AddressValidator.validateAddress(params, requiredFields);
 		student.setAddress(address);
-		Date today = CalendarUtil.getTodaysDate();
+		today = CalendarUtil.getTodaysDate();
 		student.setCreatedOn(today);
 		student.setUpdatedOn(today);
 		
 		return student;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Parent validateParentInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		Parent parent = new Parent();
-		String firstName  = null;		
-		String lastName = null;
-		String fullName = null;	
-		Integer age = null;		
-		String gender = null;
-		String occupation = null;		
-		String birthDate = null;
-		String picture = null;		
-		String emailAddress = null;
-		String phoneNumber = null;
-		
-		Address address = null;
+		parent = new Parent();
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
@@ -355,6 +348,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.PHONE_NUMBER)) {
 			phoneNumber = (String) params.get(UserConstant.PHONE_NUMBER);
+		}
+		
+		if(params.containsKey(UserConstant.STUDENT_IDS)) {
+			studentIDs = (List<Integer>)params.get(UserConstant.STUDENT_IDS);
 		}
 				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
@@ -408,8 +405,13 @@ public class UserValidator {
 		}
 		parent.setPhoneNumber(phoneNumber);
 		
+		if (studentIDs == null && requiredFields.contains(UserConstant.STUDENT_IDS)) {
+			throw new FieldIsRequiredException("Student ID is required to continue");
+		}
+		parent.setStudentIds(studentIDs);
 		
-		Date today = CalendarUtil.getTodaysDate();
+		
+		today = CalendarUtil.getTodaysDate();
 		address = AddressValidator.validateAddress(params, requiredFields);
 		parent.setAddress(address);
 		parent.setCreatedOn(today);
@@ -420,19 +422,7 @@ public class UserValidator {
 
 	public static Staff validateOtherStaffInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
-		Staff staff = new Staff();
-		String firstName  = null;		
-		String lastName = null;
-		String fullName = null;	
-		Integer age = null;		
-		String gender = null;
-		String ocupation = null;		
-		String birthDate = null;
-		String picture = null;
-		Address address = null;		
-		String emailAddress = null;
-		String phoneNumber = null;
-		
+		staff = new Staff();
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
 		}
@@ -455,7 +445,7 @@ public class UserValidator {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.BIRTH_DATE)) {
@@ -463,7 +453,7 @@ public class UserValidator {
 		}
 		
 		if(params.containsKey(UserConstant.OCCUPATION)) {
-			ocupation = (String) params.get(UserConstant.OCCUPATION);
+			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
 		if(params.containsKey(UserConstant.PICTURE)) {
@@ -509,10 +499,10 @@ public class UserValidator {
 		}
 		staff.setGender(gender);
 		
-		if (ocupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
+		if (occupation == null && requiredFields.contains(UserConstant.OCCUPATION)) {
 			throw new FieldIsRequiredException("Ocupation is required to continue");
 		}
-		staff.setOccupation(ocupation);
+		staff.setOccupation(occupation);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
 			throw new FieldIsRequiredException("Picture is required to continue");

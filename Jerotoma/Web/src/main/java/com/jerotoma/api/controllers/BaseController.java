@@ -19,7 +19,7 @@ import com.jerotoma.services.users.AuthUserService;
 
 public abstract class BaseController {
 	
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	protected HttpResponseEntity<Object> instance;
 	
@@ -52,6 +52,21 @@ public abstract class BaseController {
 		queryParam.setFieldName(fieldName);
 		queryParam.setOrderby(orderby);
 		queryParam.setSearch(search);		
+		
+	 return queryParam;
+	}
+	
+	protected QueryParam setParams(Integer page, Integer pageSize, String fieldName, String orderby){		
+		
+		pageSize = pageSize == null ? 12 : pageSize;
+		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
+		fieldName = StringUtility.isEmpty(fieldName) || fieldName.equals("none") || fieldName.equals("undefined") ? "created_on" : fieldName;
+		
+		QueryParam queryParam = QueryParam.getInstance();
+		queryParam.setPage(page);
+		queryParam.setPageSize(pageSize);
+		queryParam.setFieldName(fieldName);
+		queryParam.setOrderby(orderby);				
 		
 	 return queryParam;
 	}

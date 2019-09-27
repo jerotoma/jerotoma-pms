@@ -151,4 +151,27 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 		return staff;
 	}
 
+	@Override
+	public List<StaffVO> search(QueryParam queryParam) throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery();
+		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		//int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new StaffResultProcessor(), paramList);
+	}
+
 }

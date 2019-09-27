@@ -4,3 +4,4 @@ export * from './teachers/teacher.model';
 export * from './students/student.model';
 export * from './parents/parent.model';
 export * from './staffs/staff.model';
+export * from './user-context';

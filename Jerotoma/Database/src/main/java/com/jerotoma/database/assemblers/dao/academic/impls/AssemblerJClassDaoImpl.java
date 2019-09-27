@@ -170,7 +170,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 		return jClass;
 	}
 	
-	private List<StudentVO> loadStudentsByJClassID(Integer classId) {
+	private List<StudentVO> loadStudentsByJClassID(Integer classId) throws SQLException {
 		return assemblerStudentDao.loadStudentsByJClassID(classId);
 	}
 	private TeacherVO loadTeacher(Integer teacherId) throws SQLException {

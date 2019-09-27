@@ -174,7 +174,6 @@
 	
 	CREATE TABLE IF NOT EXISTS public.students(
 	    id bigserial NOT NULL,
-	    parent_id bigint NOT NULL,
 	    student_number bigint NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
@@ -190,12 +189,7 @@
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT students_pkey PRIMARY KEY (id),
-	   	CONSTRAINT student_number UNIQUE (student_number),
-	   	CONSTRAINT parents_fkey FOREIGN KEY (parent_id)
-	        REFERENCES public.parents (id) MATCH SIMPLE
-	        ON UPDATE CASCADE
-	        ON DELETE CASCADE 
-	    );
+	   	CONSTRAINT student_number UNIQUE (student_number));
 
 	/**************************************************************
 	 * 															  *
@@ -225,6 +219,28 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	   	
+	    );
+	    
+	    /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			TEACHER_ADDRESSES RELATED TABLES				  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.student_parents(
+	    id bigserial NOT NULL,
+	    student_id bigint NOT NULL,
+	   	parent_id bigint NOT NULL,
+	   	CONSTRAINT student_parents_pkey PRIMARY KEY(id),
+	   	CONSTRAINT student_fkey FOREIGN KEY (student_id)
+	        REFERENCES public.students (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT parent_fkey FOREIGN KEY (parent_id)
+	        REFERENCES public.parents (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
 	    );
 
 	/**************************************************************

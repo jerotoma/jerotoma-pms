@@ -42,4 +42,9 @@ public class AssemblerStudentServiceImpl  implements AssemblerStudentService{
 		return assemblerStudentDao.countObject();
 	}
 
+	@Override
+	public List<StudentVO> search(QueryParam queryParam)  throws SQLException{
+		return assemblerStudentDao.search(queryParam);
+	}
+
 }

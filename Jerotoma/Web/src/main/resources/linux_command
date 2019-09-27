@@ -10,7 +10,7 @@ scp jerotoma.war root@staging.jerotoma.com:/opt/tomcat/webapps
 scp Web/target/jerotoma.war root@jerotoma.com:/opt/tomcat/webapps
 scp dist/jerotoma-blog/index.html root@jerotoma.com:/var/www/blog.jerotoma
 
-rm -rf ../jerotoma && mv jerotoma ../
+rm -rf /opt/tomcat/jerotoma && mv /opt/tomcat/webapps/jerotoma /opt/tomcat/
 #RESTART
 
 #Restart Nginx Service

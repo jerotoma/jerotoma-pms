@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import {  delay, map, catchError, retry } from 'rxjs/operators';
-import { Data } from '@angular/router';
 
-import { User } from '../../models/users';
-import { END_POINTS, QueryParam } from '../../utils';
+import { User } from 'app/models';
+import { END_POINTS, QueryParam } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -57,8 +56,8 @@ export class UserService {
 
   search(param: QueryParam): Observable<any> {
     return this.http
-    .get<User[]>(`${END_POINTS.users}/search?searchTerm=${param.search}
-            &page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+    .get<any>(`${END_POINTS.users}/search?searchTerm=${param.search}
+            &page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
             .pipe(retry(3), catchError(this.errorHandler));
   }
 

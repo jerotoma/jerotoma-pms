@@ -125,7 +125,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, parent_id AS parentId, student_number AS studentNumber, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number as phoneNumber, occupation, gender, avatar, position, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.students ");
+		return new StringBuilder("SELECT id, student_number AS studentNumber, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number as phoneNumber, occupation, gender, avatar, position, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.students ");
 		
 	}
 
@@ -157,6 +157,28 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 			
 		});
 		
+	}
+
+	@Override
+	public List<StudentVO> search(QueryParam queryParam) throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery();
+		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new StudentResultProcessor(), paramList);
 	}
 	
 }

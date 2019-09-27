@@ -29,6 +29,8 @@ public class UserConstant {
 	public static final String PHONE_NUMBER = "phoneNumber";
 	public static final String ADDRESS = "address";
 	public static final String MIDDLE_NAMES = "middleNames";
+	public static final String PARENT_IDS = "parentIds";
+	public static final String STUDENT_IDS = "studentIds";
 	
 	public static enum USER_TYPES{
 		TEACHER("teacher"),

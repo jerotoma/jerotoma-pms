@@ -8,9 +8,11 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { QueryParam } from 'app/utils';
-import { UserService } from 'app/services/users';
 import { UserDeleteComponent } from 'app/shared';
+import { ParentCreateComponent } from '../create/parent-create.component';
+
+import { QueryParam } from 'app/utils';
+import { UserService } from 'app/services';
 import { Parent } from 'app/models';
 
 @Component({
@@ -59,7 +61,13 @@ export class ParentsViewComponent implements OnInit {
   }
 
   open() {
-    this.router.navigate([this.baseURL + '/create']);
+    this.dialogService.open(ParentCreateComponent, {
+      context: {
+        title: 'Add New Parent',
+      },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
+    });
   }
 
   edit(parent: Parent) {

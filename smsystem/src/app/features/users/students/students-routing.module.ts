@@ -24,10 +24,6 @@ const routes: Routes = [
           component: StudentsViewComponent,
         },
         {
-          path: 'create',
-          component: StudentCreateComponent,
-        },
-        {
           path: ':id',
           component: StudentShowComponent,
         },

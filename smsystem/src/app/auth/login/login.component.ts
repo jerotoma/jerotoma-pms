@@ -1,11 +1,11 @@
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ChangeDetectorRef, Inject  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-
-import { AuthService, TokenService, AUTH_CONSTANT } from './../../services/auth';
-import { UserContext } from 'app/models/users/user-context';
-import { ShowMessage } from 'app/models/messages/show-message.model';
+import { AuthService } from 'app/services';
+import { ShowMessage, UserContext  } from 'app/models';
+import { CheckBoxValidator, MustMatch } from 'app/utils';
 
 @Component({
   selector: 'app-login',
@@ -27,15 +27,17 @@ export class LoginComponent implements OnInit {
   errors: string[] = [];
   submitted: boolean = false;
   rememberMe: boolean = true;
+  loginForm: FormGroup;
 
   constructor(
         private router: Router,
+        private formBuilder: FormBuilder,
         private authService: AuthService) {
 
    }
 
   ngOnInit() {
-
+    this.loadRegisterForm();
   }
 
   login(): void {
@@ -43,11 +45,15 @@ export class LoginComponent implements OnInit {
     this.errors = [];
     this.showMessage.error = false;
     this.showMessage.success = false;
+    this.submitted = true;
+    this.user = this.loginForm.value;
     this.authService.authenticate(this.user)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
+      this.submitted = false;
       const status = resp.status;
       if (status !== null && status === 200) {
+        this.loginForm.reset();
         this.showMessage.success = true;
         this.processLoginResult(resp.body, status);
       } else {
@@ -57,13 +63,9 @@ export class LoginComponent implements OnInit {
     }, error => {
       this.showMessage.error = true;
       this.errors.push(error ? error.error.message : '');
+      window.console.log(this.errors);
     });
   }
-
-  getConfigValue(key: string) {
-
-  }
-
   processLoginResult(data: any, status: number): void {
     if (status !== null && status === 200 && data && data.success) {
         if (this.authService.isAuthenticated()) {
@@ -79,5 +81,31 @@ export class LoginComponent implements OnInit {
       this.showMessage.error = true;
     }
     return;
+  }
+  loadRegisterForm() {
+    this.loginForm = this.formBuilder.group({
+      username: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+        ]),
+      ],
+      password: [
+        '',
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(5),
+        ]),
+      ],
+      rememberMe: [''],
+    });
+
+  }
+
+  checkedChange(checked: boolean) {
+    this.loginForm.patchValue({
+      rememberMe: checked,
+    });
   }
 }

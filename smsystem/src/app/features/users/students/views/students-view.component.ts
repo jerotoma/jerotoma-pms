@@ -7,7 +7,7 @@ import { PageEvent } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { StudentCreateComponent } from '../create/student-create.component';
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { UserDeleteComponent } from 'app/shared';
@@ -59,7 +59,13 @@ export class StudentsViewComponent implements OnInit {
   }
 
   open() {
-    this.router.navigate([this.baseURL + '/create']);
+    this.dialogService.open(StudentCreateComponent, {
+      context: {
+        title: 'Add New Student',
+      },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
+    });
   }
 
   edit(student: Student) {

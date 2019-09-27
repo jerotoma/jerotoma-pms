@@ -1,279 +1,172 @@
-<nb-card>
-  <nb-card-header status="danger" >{{ title }}</nb-card-header>
-  <nb-card-body>
-    <nb-stepper #stepper [linear]="linearMode" >
-        <nb-step [stepControl]="parentForm" label="Parent Details">
-            <form [formGroup]="parentForm" class="step-container" (ngSubmit)="onParentSubmit()">
-                <div class='row'>
-                  <div class='col-md-12'>
-                      <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                          <p class="alert-title"><b>Sorry!</b></p>
-                          <ul class="alert-message-list">
-                              <li class="alert-message">{{ showMessage.message }}</li>
-                            </ul>
-                        </nb-alert>
-                        <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                          <p class="alert-title"><b>Success!</b></p>
-                          <ul class="alert-message-list">
-                            <li class="alert-message">{{ showMessage.message }}</li>
-                          </ul>
-                        </nb-alert>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-control-group">
-                      <label for="parent-first-name" class="label">First Name</label>
-                      <input
-                            type="text"
-                            nbInput fullWidth
-                            autocomplete="new-password"
-                            required
-                            id="parent-first-name"
-                            [status]="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched ? 'danger' : ''"
-                            formControlName="firstName"
-                            placeholder="First Name">
-                      <ng-container *ngIf="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched">
-                        <p class="error-message">
-                          First Name is required!
-                        </p>
-                      </ng-container>
+<div class='row'>
+    <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="parentForm" class="step-container" (ngSubmit)="onSubmit()">
+        <nb-card>
+          <nb-card-header status="danger" >{{ title }}</nb-card-header>
+          <nb-card-body>
+                  <div class='row'>
+                      <div class='col-md-12'>
+                          <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
+                              <p class="alert-title"><b>Sorry!</b></p>
+                              <ul class="alert-message-list">
+                                  <li class="alert-message">{{ showMessage.message }}</li>
+                                </ul>
+                            </nb-alert>
+                            <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
+                              <p class="alert-title"><b>Success!</b></p>
+                              <ul class="alert-message-list">
+                                <li class="alert-message">{{ showMessage.message }}</li>
+                              </ul>
+                            </nb-alert>
+                      </div>
                     </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="student-full-name" class="label">Student Full Name</label>
+                              <input
+                                  type="text"
+                                  nbInput fullWidth
+                                  name="studentFullName"
+                                  autocomplete="new-password"
+                                  id="student-full-name"
+                                  formControlName="studentFullName"
+                                  placeholder="Student Full Name">
+                            </div>
+                            <nb-card [ngStyle]="{'display': listDisplay}">
+                              <nb-list>
+                                <nb-list-item *ngFor="let student of students" (click)="pickUser($event, student)">
+                                      <nb-user
+                                          [name]="student.fullName"
+                                          [title]="student.emailAddress">
+                                      </nb-user>
+                                </nb-list-item>
+                              </nb-list>
+                            </nb-card>
+                            <div class="form-control-group accept-group" *ngIf="selectedStudents">
+                              <nb-checkbox
+                                [checked]="true"
+                                *ngFor="let student of selectedStudents"
+                                (checkedChange)="selectedParentChanged($event, student)">
+                                {{student.fullName}}
+                              </nb-checkbox>
+                            </div>
+                      </div>
                   </div>
-                  <div class="col-md-6">
-                    <div class="form-control-group">
-                      <label for="parent-last-name" class="label">Last Name</label>
-                      <input
-                            required
-                            type="text"
-                            autocomplete="new-password"
-                            nbInput fullWidth
-                            id="parent-last-name"
-                            [status]="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched ? 'danger' : ''"
-                            formControlName="lastName"
-                            placeholder="Last Name">
-                      <ng-container *ngIf="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched">
-                        <p class="error-message">
-                          Last Name is required!
-                        </p>
-                      </ng-container>
-                  </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="form-control-group">
-                      <label for="student-middle-names" class="label">Other Names</label>
-                      <input
-                            type="text"
-                            nbInput fullWidth
-                            autocomplete="new-password"
-                            required
-                            id="student-middle-names"
-                            formControlName="middleNames"
-                            placeholder="Other  Names">
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
                         <div class="form-control-group">
-                            <label for="parent-gender" class="label">Gender</label>
-                            <nb-radio-group formControlName="gender">
-                              <nb-radio [value]="'male'">Male</nb-radio>
-                              <nb-radio [value]="'female'">Female</nb-radio>
-                            </nb-radio-group>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-control-group">
-                          <label for="parent-occupation" class="label">Occupation</label>
+                          <label for="student-first-name" class="label">First Name</label>
                           <input
-                              nbInput fullWidth
-                              id="parent-occupation"
-                              formControlName="occupation"
-                              [status]="parentForm.controls['occupation'].invalid && parentForm.controls['occupation'].touched ? 'danger' : ''"
-                              placeholder="Occupation">
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-first-name"
+                                [status]="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched ? 'danger' : ''"
+                                formControlName="firstName"
+                                placeholder="First Name">
+                          <ng-container *ngIf="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched">
+                            <p class="error-message">
+                              First Name is required!
+                            </p>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="student-last-name" class="label">Last Name</label>
+                          <input
+                                required
+                                type="text"
+                                autocomplete="new-password"
+                                nbInput fullWidth
+                                id="student-last-name"
+                                [status]="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched ? 'danger' : ''"
+                                formControlName="lastName"
+                                placeholder="Last Name">
+                          <ng-container *ngIf="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched">
+                            <p class="error-message">
+                              Last Name is required!
+                            </p>
+                          </ng-container>
+                      </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-control-group">
+                          <label for="student-middle-names" class="label">Other Names</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-middle-names"
+                                formControlName="middleNames"
+                                placeholder="Other  Names">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-control-group">
+                                <label for="student-gender" class="label">Gender</label>
+                                <nb-radio-group formControlName="gender">
+                                  <nb-radio [value]="'male'">Male</nb-radio>
+                                  <nb-radio [value]="'female'">Female</nb-radio>
+                                </nb-radio-group>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-control-group">
+                              <label for="student-occupation" class="label">Occupation</label>
+                              <input
+                                  nbInput fullWidth
+                                  id="student-occupation"
+                                  formControlName="occupation"
+                                  [status]="parentForm.controls['occupation'].invalid && parentForm.controls['occupation'].touched ? 'danger' : ''"
+                                  placeholder="Occupation">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-control-group">
-                      <label for="student-email-address" class="label">Email Address</label>
-                      <input
-                            type="text"
-                            nbInput fullWidth
-                            autocomplete="new-password"
-                            required
-                            id="student-email-address"
-                            formControlName="emailAddress"
-                            placeholder="Email Address">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="student-email-address" class="label">Email Address</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-email-address"
+                                formControlName="emailAddress"
+                                placeholder="Email Address">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="student-phone-number" class="label">Emergency Phone Number</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-phone-number"
+                                formControlName="phoneNumber"
+                                placeholder="Emergency Phone Number">
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-control-group">
-                      <label for="student-phone-number" class="label">Emergency Phone Number</label>
-                      <input
-                            type="text"
-                            nbInput fullWidth
-                            autocomplete="new-password"
-                            required
-                            id="student-phone-number"
-                            formControlName="phoneNumber"
-                            placeholder="Emergency Phone Number">
-                    </div>
-                  </div>
+                    <app-address (onChanges)="onParentAddressChange($event)" ></app-address>
+          </nb-card-body>
+          <nb-card-footer>
+              <div class="form-control-group">
+                  <button class='push-right' [disabled]="!parentForm.valid" type="submit" nbButton hero status="success">Create Parent</button>
+                  <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
                 </div>
-                <app-address (onChanges)="onParentAddressChange($event)" ></app-address>
-                <div class="form-control-group">
-                  <button class='push-right' [disabled]="!parentForm.valid" type="submit" nbStepperNext nbButton hero status="success">Create Parent</button>
-                </div>
-               </form>
-        </nb-step>
-        <nb-step [stepControl]="studentForm" label="Student Details">
-          <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onStudentSubmit()">
-            <div class='row'>
-              <div class='col-md-12'>
-                  <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                      <p class="alert-title"><b>Sorry!</b></p>
-                      <ul class="alert-message-list">
-                          <li class="alert-message">{{ showMessage.message }}</li>
-                        </ul>
-                    </nb-alert>
-                    <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                      <p class="alert-title"><b>Success!</b></p>
-                      <ul class="alert-message-list">
-                        <li class="alert-message">{{ showMessage.message }}</li>
-                      </ul>
-                    </nb-alert>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <label for="student-first-name" class="label">First Name</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        required
-                        id="student-first-name"
-                        [status]="studentForm.controls['firstName'].invalid && studentForm.controls['firstName'].touched ? 'danger' : ''"
-                        formControlName="firstName"
-                        placeholder="First Name">
-                  <ng-container *ngIf="studentForm.controls['firstName'].invalid && studentForm.controls['firstName'].touched">
-                    <p class="error-message">
-                      First Name is required!
-                    </p>
-                  </ng-container>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <label for="student-last-name" class="label">Last Name</label>
-                  <input
-                        required
-                        type="text"
-                        autocomplete="new-password"
-                        nbInput fullWidth
-                        id="student-last-name"
-                        [status]="studentForm.controls['lastName'].invalid && studentForm.controls['lastName'].touched ? 'danger' : ''"
-                        formControlName="lastName"
-                        placeholder="Last Name">
-                  <ng-container *ngIf="studentForm.controls['lastName'].invalid && studentForm.controls['lastName'].touched">
-                    <p class="error-message">
-                      Last Name is required!
-                    </p>
-                  </ng-container>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-control-group">
-                  <label for="student-middle-names" class="label">Other Names</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        required
-                        id="student-middle-names"
-                        formControlName="middleNames"
-                        placeholder="Other  Names">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-control-group">
-                        <label for="student-position" class="label">Gender</label>
-                        <nb-radio-group formControlName="gender">
-                          <nb-radio [value]="'male'">Male</nb-radio>
-                          <nb-radio [value]="'female'">Female</nb-radio>
-                        </nb-radio-group>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-control-group">
-                      <label for="student-birthDate" class="label">Date of Birth (yyyy/MM/dd)</label>
-                      <input
-                          [nbDatepicker]="birthDate"
-                          nbInput fullWidth
-                          id="student-birthDate"
-                          formControlName="birthDate"
-                          [status]="studentForm.controls['birthDate'].invalid && studentForm.controls['birthDate'].touched ? 'danger' : ''"
-                          placeholder="Birth Date">
-                      <ng-container *ngIf="studentForm.controls['birthDate'].invalid && studentForm.controls['birthDate'].touched">
-                        <p class="error-message">
-                          Date of Birth is required!
-                        </p>
-                      </ng-container>
-                      <nb-datepicker #birthDate format="yyyy/MM/dd"></nb-datepicker>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <label for="student-email-address" class="label">Email Address</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        required
-                        id="student-email-address"
-                        formControlName="emailAddress"
-                        placeholder="Email Address">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <label for="student-phone-number" class="label">Emergency Phone Number</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        required
-                        id="student-phone-number"
-                        formControlName="phoneNumber"
-                        placeholder="Emergency Phone Number">
-                </div>
-              </div>
-            </div>
-            <app-address (onChanges)="onStudentAddressChange($event)"></app-address>
-            <div class="form-control-group">
-              <button class='push-right' [disabled]="!studentForm.valid" type="submit"  nbStepperNext nbButton hero status="success">Create Student</button>
-            </div>
-          </form>
-        </nb-step>
-        <nb-step [hidden]="true">
-          <div class="step-container">
-            <h3>Complete Student Registration!</h3>
-            <button class='push-right' nbButton (click)="onSubmit()">Submit</button>
-          </div>
-        </nb-step>
-    </nb-stepper>
-  </nb-card-body>
-</nb-card>
-
+            </nb-card-footer>
+        </nb-card>
+    </form>
+  </div>
+</div>

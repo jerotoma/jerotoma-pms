@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,13 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
-import com.jerotoma.common.constants.ParentConstant;
-import com.jerotoma.common.constants.RoleConstant;
-import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
-import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
@@ -42,40 +40,34 @@ import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Parent;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.CalendarUtil;
-import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.UserVO;
-import com.jerotoma.config.auth.common.UserContext;
-import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.AddressService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
-import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.assemblers.AssemblerParentService;
 import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
+import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.positions.PositionService;
-import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.ParentAddressService;
-import com.jerotoma.services.users.StaffService;
-import com.jerotoma.services.users.StudentAddressService;
 import com.jerotoma.services.users.ParentService;
 import com.jerotoma.services.users.StaffAddressService;
+import com.jerotoma.services.users.StaffService;
+import com.jerotoma.services.users.StudentAddressService;
 import com.jerotoma.services.users.StudentService;
 import com.jerotoma.services.users.TeacherAddressService;
 import com.jerotoma.services.users.TeacherService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_USER_CONTROLLER.BASE)
-public class RestUserController {
+public class RestUserController extends BaseController {
 	
-	@Autowired AuthUserService authUserService;
-	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired TeacherService teacherService;
 	@Autowired AssemblerTeacherService assemblerTeacherService;
 	@Autowired AssemblerStudentService assemblerStudentService;
@@ -103,30 +95,12 @@ public class RestUserController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) throws UsernameNotFoundException, JDataAccessException{
 		
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 		Map<String, Object> mapVOs = new HashMap<>();
 		
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
+		QueryParam queryParam = this.setParams(page, pageSize, fieldName, orderby);
 		
-		page = page == null ? 1 : page;
-		pageSize = pageSize == null ? 12 : pageSize;
-		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
-
-
-		QueryParam queryParam =  QueryParam.getInstance();
-		queryParam.setPage(page);
-		queryParam.setPageSize(pageSize);
-		queryParam.setFieldName(fieldName);
-		queryParam.setOrderby(orderby);
-				
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new user to the system");
-		}
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
@@ -166,18 +140,8 @@ public class RestUserController {
 			@RequestParam(value="userType", required = true) String userType
 			) throws UsernameNotFoundException, JDataAccessException{
 		
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-		
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-				
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + primaryKey);
+		this.securityCheckAdminAccess(auth);
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
@@ -210,7 +174,6 @@ public class RestUserController {
 		
 	}
 	
-	@SuppressWarnings("unchecked")
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
@@ -222,10 +185,9 @@ public class RestUserController {
 		Student student;		
 		Address address;
 		Position position;
+		StudentAddress studentAddress;
+		ParentAddress parentAddress;
 		AcademicDiscipline academicDiscipline;
-		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
-		
-		
 		Date today = CalendarUtil.getTodaysDate();
 		
 		requiredFields =  new ArrayList<>(Arrays.asList(
@@ -235,23 +197,9 @@ public class RestUserController {
 						UserConstant.GENDER
 						));
 				
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			instance.setHttpStatus(HttpStatus.UNAUTHORIZED);
-			return instance;
-		}
-		
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		
-		if (userContext == null) {
-			throw new UnAuthorizedAccessException("You have to be logged in to continue");
-		}
-		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
-			
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
+					
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
@@ -294,9 +242,36 @@ public class RestUserController {
 				instance.setData(teacher);
 				break;
 			case STUDENT:
-				student = studentService.createObject(
-						UserValidator.validateStudentInputInfo(params, requiredFields));
+				studentAddress = new StudentAddress();
+				requiredFields.add(UserConstant.PHONE_NUMBER);
+				
+				student = UserValidator.validateStudentInputInfo(params, requiredFields);
+				
+						
+				address = student.getAddress();
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
+				
+				student.setUpdatedBy(authUser.getId());
+				if (student.getParentIds() != null) {
+					Set<Parent> parents = new HashSet<>();
+					for (Integer parentId: student.getParentIds()) {
+						parent = parentService.findObject(parentId);
+						parents.add(parent);
+					}										
+					student.setParents(parents);
+				}
+				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
+				student = studentService.createObject(student);
+				
+				studentAddress.setStudent(student);
+				studentAddress.setAddress(address);
+				studentAddress.setCreatedOn(today);
+				studentAddress.setUpdatedOn(today);
+				studentAddressService.createObject(studentAddress);	
+				
 				instance.setData(student);				
+				
 				break;
 			case STAFF:
 				requiredFields.add(UserConstant.POSITION);				
@@ -318,24 +293,23 @@ public class RestUserController {
 				instance.setData(staff);
 				break;
 			case PARENT:
-				parent = parentService.createObject(UserValidator.validateParentInputInfo(params, requiredFields));
-				instance.setData(parent);
-				break;
-			case STUDENT_AND_PARENT:
-				Map<String, Object> mapVO = new HashMap<>();
-				Map<String, Object> studentParams = (Map<String, Object>) params.get(StudentConstant.STUDENT);
-				Map<String, Object> parentParams = (Map<String, Object>) params.get(ParentConstant.PARENT);
-				ParentAddress parentAddress = new ParentAddress();
-				StudentAddress studentAddress = new StudentAddress();
-			
-				parent = UserValidator.validateParentInputInfo(parentParams, requiredFields);
 				
-				requiredFields.add(UserConstant.PHONE_NUMBER);
-				student = UserValidator.validateStudentInputInfo(studentParams, requiredFields);
+				parentAddress = new ParentAddress();
+				
+				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				
 				address = parent.getAddress();
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.createObject(address);
+				
+				if (parent.getStudentIds() != null) {
+					Set<Student> students = new HashSet<>();
+					for (Integer studentId: parent.getStudentIds()) {
+						student = studentService.findObject(studentId);
+						students.add(student);
+					}										
+					parent.setStudents(students);
+				}
 				
 				parent.setUpdatedBy(authUser.getId());
 				parent = parentService.createObject(parent);
@@ -344,30 +318,9 @@ public class RestUserController {
 				parentAddress.setParent(parent);
 				parentAddress.setCreatedOn(today);
 				parentAddress.setUpdatedOn(today);
-				parentAddressService.createObject(parentAddress);
-				
-				
-				address = student.getAddress();
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
-				student.setUpdatedBy(authUser.getId());
-				student.setParent(parent);
-				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
-				student = studentService.createObject(student);
-				
-				studentAddress.setStudent(student);
-				studentAddress.setAddress(address);
-				studentAddress.setCreatedOn(today);
-				studentAddress.setUpdatedOn(today);
-				studentAddressService.createObject(studentAddress);	
-				
-				mapVO.put(StudentConstant.STUDENT, student);
-				mapVO.put(ParentConstant.PARENT, parent);
-				
-				instance.setData(mapVO);
-				instance.setSuccess(true);							
-				break;
+				parentAddressService.createObject(parentAddress);				
+				instance.setData(parent);
+				break;			
 			default:
 				throw new UsernameNotFoundException("User type not found");
 			}
@@ -377,6 +330,7 @@ public class RestUserController {
 		}			
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setMessage("User has been created");
+		instance.setSuccess(true);
 		return instance;
 		
 	}
@@ -421,8 +375,6 @@ public class RestUserController {
 	@PutMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> updateUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
-		
-		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
 						UserConstant.ID,
@@ -433,21 +385,8 @@ public class RestUserController {
 		Integer positionId = null;
 		Integer academicDisciplineId = null;
 				
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		
-		if (userContext == null) {
-			throw new UnAuthorizedAccessException("You have to be logged in to continue");
-		}
-		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
 			
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
 			throw new FieldIsRequiredException("User type can not be empty");
@@ -569,23 +508,8 @@ public class RestUserController {
 	@ResponseBody
 	public HttpResponseEntity<Object> deleteUser(Authentication auth, @PathVariable(name="userId", required = true) Integer userId, @RequestParam(value="userType", required=true) String userType) throws JDataAccessException{
 		
-		HttpResponseEntity<Object> instance = HttpResponseEntity.getInstance();
-				
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		
-		if (userContext == null) {
-			throw new UnAuthorizedAccessException("You have to be logged in to continue");
-		}
-		
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userId);
+		this.securityCheckAdminAccess(auth);
 			
 		if (userType == null) {
 			throw new FieldIsRequiredException("User type can not be empty");
@@ -635,15 +559,9 @@ public class RestUserController {
 	public HttpResponseEntity<UserVO> getLoggedUser(Authentication auth) throws UsernameNotFoundException{
 		HttpResponseEntity<UserVO> instance = new HttpResponseEntity<>();
 		
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		
-		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
+		this.securityCheckAdminAccess(auth);
+	
 		try {	
 			authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		} catch (UsernameNotFoundException e) {
@@ -658,56 +576,55 @@ public class RestUserController {
 	
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.SEARCH)
 	@ResponseBody
-	public HttpResponseEntity<List<UserVO>> searchUser(
+	public HttpResponseEntity<Object> searchUser(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="userType", required=false) String userType,
 			@RequestParam(value="page", required=false) Integer page,
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) throws UsernameNotFoundException{
 		
-		HttpResponseEntity<List<UserVO>> instance = new HttpResponseEntity<>();
 		List<AuthUser> users = null;
 		List<UserVO> userVOs = new ArrayList<>();
 		
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
+	
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
+		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
-		page = page == null ? 1 : page;
-		pageSize = pageSize == null ? 12 : pageSize;
-		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
-
-
-		QueryParam queryParam =  QueryParam.getInstance();
-		queryParam.setPage(page);
-		queryParam.setPageSize(pageSize);
-		queryParam.setFieldName(fieldName);
-		queryParam.setOrderby(orderby);
-		queryParam.setSearch(search);
-				
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
-		
-		try {	
-			users = authUserService.search(queryParam);					
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}	
-		
-		if(users != null) {
-			for(AuthUser authUser: users) {
-				userVOs.add(new UserVO(authUser));
+		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		try {
+			switch(type) {
+			case TEACHER:
+				users = authUserService.search(queryParam);	
+				if(users != null) {
+					for(AuthUser authUser: users) {
+						userVOs.add(new UserVO(authUser));
+					}
+				}
+				instance.setData(userVOs);
+				break;
+			case STUDENT:
+				instance.setData(assemblerStudentService.search(queryParam));
+				break;
+			case STAFF:
+				instance.setData(assemblerStaffService.search(queryParam));					
+				break;
+			case PARENT:				
+				instance.setData(assemblerParentService.search(queryParam));
+				break;
+			default:
+				throw new UsernameNotFoundException("User type not found");
 			}
-		}
 		
+		} catch (SQLException | JDataAccessException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(userVOs);
+		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 		
 	}

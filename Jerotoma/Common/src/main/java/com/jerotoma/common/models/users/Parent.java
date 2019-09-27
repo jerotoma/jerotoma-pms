@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -8,9 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
@@ -30,7 +32,10 @@ public class Parent extends Person implements Serializable{
 	@Column
 	private Integer id;
 	
-	@OneToMany(mappedBy="parent")
+	@Transient
+	List<Integer> studentIds;
+	
+	@ManyToMany(mappedBy="parents")
 	@JsonManagedReference
 	private Set<Student> students;
 	
@@ -49,5 +54,13 @@ public class Parent extends Person implements Serializable{
 
 	public void setStudents(Set<Student> students) {
 		this.students = students;
+	}
+
+	public List<Integer> getStudentIds() {
+		return studentIds;
+	}
+
+	public void setStudentIds(List<Integer> studentIds) {
+		this.studentIds = studentIds;
 	}
 }

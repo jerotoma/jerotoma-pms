@@ -42,4 +42,9 @@ public class AssemblerStaffServiceImpl  implements AssemblerStaffService{
 		return assemblerStaffDao.countObject();
 	}
 
+	@Override
+	public List<StaffVO> search(QueryParam queryParam) throws SQLException {
+		return assemblerStaffDao.search(queryParam);
+	}
+
 }

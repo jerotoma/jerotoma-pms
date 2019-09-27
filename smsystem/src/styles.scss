@@ -93,3 +93,7 @@ button {
 nb-menu {
   margin-bottom: 6rem !important;
 }
+.nb-theme-default nb-list-item:hover {
+  cursor: pointer;
+  background-color: #edf1f7;
+}
