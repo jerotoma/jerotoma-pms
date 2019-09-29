@@ -46,7 +46,6 @@ public class RestCourseController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 		Map<String, Object> map = new HashMap<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
