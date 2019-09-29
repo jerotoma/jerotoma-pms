@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.common.viewobjects.AddressVO;
 
 @MappedSuperclass
 public abstract class Person {
@@ -32,8 +31,7 @@ public abstract class Person {
 	@JsonIgnore
 	protected Address address;
 	
-	@Transient
-	protected AddressVO addressVO;
+	
 	
 	@Transient
 	protected Integer age;
@@ -203,13 +201,4 @@ public abstract class Person {
 		this.address = address;
 	}
 
-	public AddressVO getAddressVO() {
-		return addressVO;
-	}
-
-	public void setAddressVO(AddressVO addressVO) {
-		this.addressVO = addressVO;
-	}
-	
-	
 }

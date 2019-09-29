@@ -32,7 +32,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   selectedStudents: Student[] = [];
   studentIds: number[]  = [];
   parent: Parent;
-  studentId: string;
+  parentId: string;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -54,7 +54,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === 'edit') {
-      // this.loadTeacher(parseInt(this.studentId, 10));
+      this.loadParent(parseInt(this.parentId, 10));
     }
   }
   dismiss() {
@@ -104,6 +104,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {
+        this.resetForms();
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
@@ -120,8 +121,39 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
+  loadParent(parentId: number) {
+    this.userService.loadUser(parentId, 'parent').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200) {
+        this.parent = resp.body.data;
+        this.address = this.parent.address,
+        this.parentForm.patchValue({
+          id: this.parent.id,
+          firstName: this.parent.firstName,
+          lastName: this.parent.lastName,
+          occupation: this.parent.occupation,
+          gender: this.parent.gender,
+          picture: this.parent.picture,
+          birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
+          userType: 'parent',
+          fullName: this.parent.fullName,
+          emailAddress: this.parent.emailAddress,
+          middleNames: this.parent.middleNames,
+          phoneNumber: this.parent.phoneNumber,
+          address: this.parent.address,
+        });
+        this.appAddress.patchAddressValue(this.address);
+      }
+    }, error => {
+      this.showMessage.error = true;
+      this.showMessage.success = false;
+      this.showMessage.message = error ? error.error.message : '';
+    });
+  }
+
   resetForms() {
-   this.parentForm.reset();
+    this.parentForm.reset();
     this.appAddress.resetForm();
     this.ref.close();
   }
@@ -130,9 +162,9 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      middleNames: [''],
-      occupation: [''],
-      phoneNumber: ['', Validators.required],
+      middleNames: [null],
+      occupation: [null],
+      phoneNumber: [null, Validators.required],
       emailAddress: [null],
       gender: ['', Validators.required],
       picture: [''],

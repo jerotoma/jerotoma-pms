@@ -66,15 +66,8 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit() {
-    window.console.log(this.staffForm);
    if (this.staffForm.valid ) {
-    const dob = this.staffForm.get('birthDate');
-    if (dob && dob.valid) {
-      this.staffForm.patchValue({
-        birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
-      });
-    }
-    this.postData(this.staffForm.value);
+      this.postData(this.staffForm.value);
     }
   }
 
@@ -111,7 +104,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.staffForm.reset();
+        this.resetForms();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -130,6 +123,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.staffForm.reset();
     this.appAddress.resetForm();
+    this.ref.close();
   }
 
   loadStaffForm() {
@@ -137,7 +131,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      middleNames: [''],
+      middleNames: [null],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
       position: ['', Validators.required],
@@ -184,6 +178,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           fullName: this.staff.fullName,
           address: this.staff.address,
         });
+        this.appAddress.patchAddressValue(this.staff.address);
       }
     }, error => {
       this.showMessage.error = true;

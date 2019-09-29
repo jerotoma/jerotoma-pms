@@ -71,7 +71,7 @@ public class TeacherAddressServiceImpl implements TeacherAddressService {
 	@Override
 	public TeacherAddress updateObject(TeacherAddress object) throws SQLException {
 		try {
-			teacher =  teacherDao.updateObject(object);		
+			teacher =  object.getId() == null ? teacherDao.createObject(object) : teacherDao.updateObject(object);		
 		} catch (ServiceException  e) {
 			throw new JDataAccessException(e.getMessage(), e);		
 		} catch (EntityExistsException e) {
@@ -132,6 +132,17 @@ public class TeacherAddressServiceImpl implements TeacherAddressService {
 	    	new JDataAccessException(e.getMessage(), e);
 	    }
 		return null;
+	}
+
+	@Override
+	public List<TeacherAddress> findObjectByTeacherID(Integer teacherId) throws SQLException {
+		
+		return teacherDao.findObjectByTeacherID(teacherId);
+	}
+
+	@Override
+	public TeacherAddress findObjectByAddressID(Integer addressId) throws SQLException {
+		return teacherDao.findObjectByAddressID(addressId);
 	}
 
 }

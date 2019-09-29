@@ -18,40 +18,40 @@ import com.jerotoma.services.users.StaffAddressService;
 @Transactional
 public class StaffAddressServiceImpl implements StaffAddressService{
 	
-	@Autowired StaffAddressDao otherStaffDao;
+	@Autowired StaffAddressDao staffDao;
 
 	@Override
 	public StaffAddress findObject(Integer primaryKey) throws SQLException {
-		return otherStaffDao.findObject(primaryKey);
+		return staffDao.findObject(primaryKey);
 	}
 
 	@Override
 	public StaffAddress findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return otherStaffDao.findObjectUniqueKey(uniqueKey);
+		return staffDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
 	public StaffAddress createObject(StaffAddress object) throws SQLException {
-		return otherStaffDao.createObject(object);
+		return staffDao.createObject(object);
 	}
 
 	@Override
 	public StaffAddress updateObject(StaffAddress object) throws SQLException {
-		return otherStaffDao.updateObject(object);
+		return object.getId() == null ? staffDao.createObject(object) : staffDao.updateObject(object);
 	}
 
 	@Override
 	public Boolean deleteObject(StaffAddress object) throws SQLException {
-		return otherStaffDao.deleteObject(object);
+		return staffDao.deleteObject(object);
 	}
 
 	@Override
 	public List<StaffAddress> loadList(QueryParam queryParam) throws SQLException {
-		return otherStaffDao.loadList(queryParam);
+		return staffDao.loadList(queryParam);
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		return otherStaffDao.loadMapList(queryParam);
+		return staffDao.loadMapList(queryParam);
 	}
 }

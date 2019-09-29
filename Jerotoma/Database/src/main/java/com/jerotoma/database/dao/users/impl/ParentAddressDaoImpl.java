@@ -57,8 +57,7 @@ public class ParentAddressDaoImpl implements ParentAddressDao {
 
 	@Override
 	public ParentAddress updateObject(ParentAddress object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+		return entityManager.merge(object);
 	}
 
 	@Override

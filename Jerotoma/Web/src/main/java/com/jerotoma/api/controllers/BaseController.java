@@ -1,7 +1,10 @@
 package com.jerotoma.api.controllers;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,8 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
@@ -23,21 +28,37 @@ public abstract class BaseController {
 	
 	protected HttpResponseEntity<Object> instance;
 	
+	protected Date today = CalendarUtil.getTodaysDate();
+	
 	protected Map<String, Object> map;
 	
 	protected UserContext userContext;
+	
+	protected AuthUser authUser;
 	
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
 	
 	public BaseController() {
-		super();
-		this.initialize();
+		super();		
 	}
 	
+	@PostConstruct
 	private void initialize(){
 		instance = new HttpResponseEntity<>();
 		map = new HashMap<>();
+		//
+	}
+	
+	protected void proccessLoggedInUser(Authentication auth) {
+		if(auth == null) {
+			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
+		}				
+		userContext = authenticationFacade.getUserContext(auth);
+		if(userContext == null){
+			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
+		}
+		authUser = authUserService.loadUserByUsername(userContext.getUsername());
 	}
 	
 	protected QueryParam setParams(String search, Integer page, Integer pageSize, String fieldName, String orderby){		

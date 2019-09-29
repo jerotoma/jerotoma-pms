@@ -162,7 +162,10 @@
                 </div>
               </div>
             </div>
-            <app-address (onChanges)="onStudentAddressChange($event)"></app-address>
+            <app-address
+              [address]="studentForm.controls['address'].value"
+              (onChanges)="onStudentAddressChange($event)">
+            </app-address>
         </nb-card-body>
         <nb-card-footer>
             <div class="form-control-group">

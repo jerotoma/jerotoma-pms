@@ -35,7 +35,7 @@ public class ParentDaoImpl implements ParentDao {
 	@Override
 	public Parent createObject(Parent object) throws SQLException {
 		entityManager.persist(object);
-		return findObject(object.getId().intValue());
+		return findObject(object.getId());
 	}
 
 	@Override
@@ -56,14 +56,13 @@ public class ParentDaoImpl implements ParentDao {
 	}
 
 	@Override
-	public Parent updateObject(Parent object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+	public Parent updateObject(Parent object) throws SQLException {		
+		return entityManager.merge(object);
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

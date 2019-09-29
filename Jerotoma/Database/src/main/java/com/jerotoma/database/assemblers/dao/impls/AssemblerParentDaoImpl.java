@@ -124,7 +124,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, occupation, gender, avatar, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.parents ");
+		return new StringBuilder("SELECT pa.id, pa.first_name AS firstName, pa.last_name AS lastName, pa.middle_names AS middleNames, pa.email_address AS emailAddress, pa.phone_number AS phoneNumber, pa.occupation, pa.gender, pa.avatar, pa.birth_date AS birthDate, pa.updated_by AS updatedBy, pa.created_on AS createdOn, pa.updated_on AS updatedOn FROM public.parents pa ");
 		
 	}
 
@@ -147,7 +147,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	@Override
 	public List<ParentVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
-		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
+		queryBuilder.append(" WHERE lower(pa.first_name) like ? OR lower(pa.last_name) like ? OR lower(pa.middle_names) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
 				.append("limit ? offset ?");
@@ -166,5 +166,11 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 		return this.jdbcTemplate.query(queryBuilder.toString(), new ParentResultProcessor(), paramList);
 	}
 
+	
+	@Override
+	public List<ParentVO> findParentsByStudentId(Integer studentId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN student_parents sp ON sp.parent_id = pa.id WHERE sp.student_id = ? ");
+		return this.jdbcTemplate.query(builder.toString(), new ParentResultProcessor(), studentId);
+	}
 
 }

@@ -94,4 +94,14 @@ public class Teacher extends Person implements Serializable{
 	public void setAcademicDiscipline(AcademicDiscipline academicDiscipline) {
 		this.academicDiscipline = academicDiscipline;
 	}
+
+	public Set<TeacherAddress> getTeacherAddresses() {
+		return teacherAddresses;
+	}
+
+	public void setTeacherAddresses(Set<TeacherAddress> teacherAddresses) {
+		this.teacherAddresses = teacherAddresses;
+	}
+	
+	
 }

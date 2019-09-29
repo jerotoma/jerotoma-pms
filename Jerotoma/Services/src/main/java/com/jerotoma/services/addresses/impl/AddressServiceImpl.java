@@ -38,7 +38,7 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public Address updateObject(Address object) throws SQLException {
-		return addressDao.updateObject(object);
+		return object.getId() == null ? addressDao.createObject(object) : addressDao.updateObject(object);
 	}
 
 	@Override

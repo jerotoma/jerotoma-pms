@@ -20,8 +20,18 @@ public static Address validateAddress(Map<String, Object> params, List<String> r
 		String postalCode = null;
 		String country = null;		
 		String city = null;
+		Integer id = null;
 		
 		params = getAddressParams(params);	
+		requiredFields.add(AddressConstant.CITY);
+		requiredFields.add(AddressConstant.COUNTRY);
+		requiredFields.add(AddressConstant.STREET);
+		requiredFields.add(AddressConstant.POSTAL_CODE);
+		requiredFields.add(AddressConstant.STATE);
+		
+		if(params.containsKey(AddressConstant.ID)) {
+			id  = params.get(AddressConstant.ID) != null ? (Integer) params.get(AddressConstant.ID) : null;
+		}
 		
 		if(params.containsKey(AddressConstant.STREET)) {
 			street  = (String) params.get(AddressConstant.STREET);
@@ -77,6 +87,11 @@ public static Address validateAddress(Map<String, Object> params, List<String> r
 			throw new FieldIsRequiredException("City is required to continue");
 		}
 		address.setCity(city);
+		
+		if (id == null && requiredFields.contains(AddressConstant.ID)) {
+			throw new FieldIsRequiredException("Address ID is required to continue");
+		}
+		address.setId(id);
 				
 		Date today = CalendarUtil.getTodaysDate();
 		

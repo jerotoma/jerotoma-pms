@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
@@ -50,6 +52,22 @@ public class Address implements Serializable {
 	
 	@Column
 	private String state;
+	
+	@OneToOne(mappedBy = "address")
+	@JsonBackReference
+	private ParentAddress parentAddress;
+	
+	@OneToOne(mappedBy = "address")
+	@JsonBackReference
+	private StudentAddress studentAddress;
+	
+	@OneToOne(mappedBy = "address")
+	@JsonBackReference
+	private StaffAddress staffAddress;
+	
+	@OneToOne(mappedBy = "address")
+	@JsonBackReference
+	private TeacherAddress teacherAddress;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -119,6 +137,30 @@ public class Address implements Serializable {
 	}
 	public void setUpdatedBy(Integer updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+	public ParentAddress getParentAddress() {
+		return parentAddress;
+	}
+	public void setParentAddress(ParentAddress parentAddress) {
+		this.parentAddress = parentAddress;
+	}
+	public StudentAddress getStudentAddress() {
+		return studentAddress;
+	}
+	public void setStudentAddress(StudentAddress studentAddress) {
+		this.studentAddress = studentAddress;
+	}
+	public StaffAddress getStaffAddress() {
+		return staffAddress;
+	}
+	public void setStaffAddress(StaffAddress staffAddress) {
+		this.staffAddress = staffAddress;
+	}
+	public TeacherAddress getTeacherAddress() {
+		return teacherAddress;
+	}
+	public void setTeacherAddress(TeacherAddress teacherAddress) {
+		this.teacherAddress = teacherAddress;
 	}	
 	
 	

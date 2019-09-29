@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Parent;
 
@@ -33,10 +33,11 @@ public class ParentAddress {
 	
 	@ManyToOne
    	@JoinColumn(name="parent_id")
+	@JsonBackReference
 	private Parent parent;
 	
 	@OneToOne
-   	@JsonManagedReference
+   	@JsonBackReference
    	@JoinColumn(name="address_id")
 	private Address address;
 	

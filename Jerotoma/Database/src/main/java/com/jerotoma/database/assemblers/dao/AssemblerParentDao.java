@@ -9,5 +9,6 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerParentDao extends AssemblerDao<ParentVO> {
 	public List<ParentVO> search(QueryParam queryParam) throws SQLException;
+	public List<ParentVO> findParentsByStudentId(Integer studentId) throws SQLException;
 
 }

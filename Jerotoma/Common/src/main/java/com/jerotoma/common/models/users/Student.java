@@ -57,7 +57,7 @@ public class Student extends Person implements Serializable{
 	
 	@OneToMany(mappedBy ="student")
 	@JsonManagedReference
-	private List<StudentClass> studentClases;
+	private Set<StudentClass> studentClases;
 	
 	
 	public Integer getId() {
@@ -84,11 +84,11 @@ public class Student extends Person implements Serializable{
 		this.studentNumber = studentNumber;
 	}
 
-	public List<StudentClass> getStudentClases() {
+	public Set<StudentClass> getStudentClases() {
 		return studentClases;
 	}
 
-	public void setStudentClases(List<StudentClass> studentClases) {
+	public void setStudentClases(Set<StudentClass> studentClases) {
 		this.studentClases = studentClases;
 	}
 

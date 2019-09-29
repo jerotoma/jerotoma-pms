@@ -10,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.addresses.ParentAddress;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.PARENTS)
@@ -38,6 +40,10 @@ public class Parent extends Person implements Serializable{
 	@ManyToMany(mappedBy="parents")
 	@JsonManagedReference
 	private Set<Student> students;
+	
+	@OneToMany(mappedBy ="parent")
+	@JsonManagedReference
+	private List<ParentAddress> parentAddresses;
 	
 	
 	public Integer getId() {
@@ -62,5 +68,13 @@ public class Parent extends Person implements Serializable{
 
 	public void setStudentIds(List<Integer> studentIds) {
 		this.studentIds = studentIds;
+	}
+
+	public List<ParentAddress> getParentAddresses() {
+		return parentAddresses;
+	}
+
+	public void setParentAddresses(List<ParentAddress> parentAddresses) {
+		this.parentAddresses = parentAddresses;
 	}
 }

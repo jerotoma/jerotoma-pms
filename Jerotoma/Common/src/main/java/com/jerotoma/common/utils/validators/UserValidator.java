@@ -12,6 +12,7 @@ import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.common.utils.StringUtility;
 
 public class UserValidator {
 	
@@ -24,6 +25,7 @@ public class UserValidator {
 	static String firstName  = null;		
 	static String lastName = null;
 	static String fullName = null;	
+	static String middleNames = null;
 	static Integer age = null;		
 	static String gender = null;
 	static String occupation = null;		
@@ -52,6 +54,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.LAST_NAME)) {
 			lastName  = params.get(UserConstant.LAST_NAME).toString();
+		}
+		
+		if(params.containsKey(UserConstant.MIDDLE_NAMES)) {
+			middleNames  = params.get(UserConstant.MIDDLE_NAMES).toString();
 		}
 		
 		
@@ -125,6 +131,11 @@ public class UserValidator {
 		}
 		teacher.setLastName(lastName);
 		
+		if (middleNames == null && requiredFields.contains(UserConstant.MIDDLE_NAMES)) {
+			throw new FieldIsRequiredException("Middle Names are required to continue");
+		}
+		teacher.setMiddleNames(middleNames);
+		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
 			throw new FieldIsRequiredException("Full Name is required to continue");
 		}
@@ -179,6 +190,11 @@ public class UserValidator {
 	public static Student validateStudentInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
 		student = new Student();
+		
+		if(params.containsKey(UserConstant.ID)) {
+			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
+		}
+		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
 		}
@@ -187,6 +203,10 @@ public class UserValidator {
 			lastName  = (String) params.get(UserConstant.LAST_NAME);
 		}
 		
+		if(params.containsKey(UserConstant.MIDDLE_NAMES)) {
+			
+			middleNames  = StringUtility.isEmpty((String)params.get(UserConstant.MIDDLE_NAMES)) ? null : params.get(UserConstant.MIDDLE_NAMES).toString();
+		}
 		
 		if(params.containsKey(UserConstant.FULL_NAME)) {
 			fullName  = (String) params.get(UserConstant.FULL_NAME);
@@ -253,6 +273,11 @@ public class UserValidator {
 		}
 		student.setLastName(lastName);
 		
+		if (middleNames == null && requiredFields.contains(UserConstant.MIDDLE_NAMES)) {
+			throw new FieldIsRequiredException("Middle Names are required to continue");
+		}
+		student.setMiddleNames(middleNames);
+		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
 			throw new FieldIsRequiredException("Full Name is required to continue");
 		}
@@ -291,6 +316,10 @@ public class UserValidator {
 		if (parentIDs == null && requiredFields.contains(UserConstant.PARENT_IDS)) {
 			throw new FieldIsRequiredException("Parent ID is required to continue");
 		}
+		if (id == null && requiredFields.contains(UserConstant.ID)) {
+			throw new FieldIsRequiredException("Student's ID is required to continue");
+		}
+		student.setId(id);
 		student.setParentIds(parentIDs);
 		address = AddressValidator.validateAddress(params, requiredFields);
 		student.setAddress(address);
@@ -306,12 +335,20 @@ public class UserValidator {
 		
 		parent = new Parent();
 		
+		if(params.containsKey(UserConstant.ID)) {
+			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
+		}
+		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
 		}
 		
 		if(params.containsKey(UserConstant.LAST_NAME)) {
 			lastName  = (String) params.get(UserConstant.LAST_NAME);
+		}
+		
+		if(params.containsKey(UserConstant.MIDDLE_NAMES)) {
+			middleNames  = params.get(UserConstant.MIDDLE_NAMES).toString();
 		}
 				
 		if(params.containsKey(UserConstant.FULL_NAME)) {
@@ -375,6 +412,11 @@ public class UserValidator {
 		}
 		parent.setLastName(lastName);
 		
+		if (middleNames == null && requiredFields.contains(UserConstant.MIDDLE_NAMES)) {
+			throw new FieldIsRequiredException("Middle Names are required to continue");
+		}
+		parent.setMiddleNames(middleNames);
+		
 		if (fullName == null && requiredFields.contains(UserConstant.FULL_NAME)) {
 			throw new FieldIsRequiredException("Full Name is required to continue");
 		}
@@ -410,6 +452,10 @@ public class UserValidator {
 		}
 		parent.setStudentIds(studentIDs);
 		
+		if (id == null && requiredFields.contains(UserConstant.ID)) {
+			throw new FieldIsRequiredException("Parent's ID is required to continue");
+		}
+		parent.setId(id);
 		
 		today = CalendarUtil.getTodaysDate();
 		address = AddressValidator.validateAddress(params, requiredFields);
@@ -423,6 +469,11 @@ public class UserValidator {
 	public static Staff validateOtherStaffInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
 		staff = new Staff();
+		
+		if(params.containsKey(UserConstant.ID)) {
+			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
+		}
+		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
 		}
@@ -431,6 +482,9 @@ public class UserValidator {
 			lastName  = (String) params.get(UserConstant.LAST_NAME);
 		}
 		
+		if(params.containsKey(UserConstant.MIDDLE_NAMES)) {
+			middleNames  = params.get(UserConstant.MIDDLE_NAMES).toString();
+		}
 		
 		if(params.containsKey(UserConstant.FULL_NAME)) {
 			fullName  = (String) params.get(UserConstant.FULL_NAME);
@@ -494,6 +548,11 @@ public class UserValidator {
 		}
 		staff.setFullName(fullName);
 		
+		if (middleNames == null && requiredFields.contains(UserConstant.MIDDLE_NAMES)) {
+			throw new FieldIsRequiredException("Middle Names are required to continue");
+		}
+		staff.setMiddleNames(middleNames);
+		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
 			throw new FieldIsRequiredException("Gender is required to continue");
 		}
@@ -518,6 +577,11 @@ public class UserValidator {
 			throw new FieldIsRequiredException("Phone number is required to continue");
 		}
 		staff.setPhoneNumber(phoneNumber);
+		
+		if (id == null && requiredFields.contains(UserConstant.ID)) {
+			throw new FieldIsRequiredException("Staff's ID is required to continue");
+		}
+		staff.setId(id);
 			
 		address = AddressValidator.validateAddress(params, requiredFields);
 		staff.setAddress(address);

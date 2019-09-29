@@ -3,7 +3,6 @@ package com.jerotoma.api.controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +43,6 @@ import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
-import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.AddressService;
@@ -84,8 +82,7 @@ public class RestUserController extends BaseController {
 	@Autowired ParentAddressService parentAddressService;
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
-	AuthUser authUser;
-	
+		
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> getUsers(Authentication auth,
@@ -188,7 +185,7 @@ public class RestUserController extends BaseController {
 		StudentAddress studentAddress;
 		ParentAddress parentAddress;
 		AcademicDiscipline academicDiscipline;
-		Date today = CalendarUtil.getTodaysDate();
+		
 		
 		requiredFields =  new ArrayList<>(Arrays.asList(
 						UserConstant.FIRST_NAME, 
@@ -199,6 +196,7 @@ public class RestUserController extends BaseController {
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
+		this.proccessLoggedInUser(auth);
 					
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
 			throw new FieldIsRequiredException("User type can not be empty");
@@ -208,8 +206,6 @@ public class RestUserController extends BaseController {
 		if (userType == null) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
-		
-		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		
 		
@@ -226,12 +222,13 @@ public class RestUserController extends BaseController {
 				
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
+				teacher.setUpdatedBy(authUser.getId());
 				address = teacher.getAddress();
+				teacher = teacherService.createObject(teacher);
+				
+				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.createObject(address);
-				
-				teacher.setUpdatedBy(authUser.getId());
-				teacher = teacherService.createObject(teacher);
 				
 				TeacherAddress teacherAddress = new TeacherAddress();
 				teacherAddress.setAddress(address);
@@ -246,12 +243,7 @@ public class RestUserController extends BaseController {
 				requiredFields.add(UserConstant.PHONE_NUMBER);
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
-				
-						
-				address = student.getAddress();
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
+								
 				student.setUpdatedBy(authUser.getId());
 				if (student.getParentIds() != null) {
 					Set<Parent> parents = new HashSet<>();
@@ -262,7 +254,11 @@ public class RestUserController extends BaseController {
 					student.setParents(parents);
 				}
 				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
+				address = student.getAddress();
 				student = studentService.createObject(student);
+								
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
 				
 				studentAddress.setStudent(student);
 				studentAddress.setAddress(address);
@@ -279,10 +275,11 @@ public class RestUserController extends BaseController {
 				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
 				staff.setPosition(position);
 				staff.setUpdatedBy(authUser.getId());
-				staff = staffService.createObject(staff);
 				address = staff.getAddress();
+				staff = staffService.createObject(staff);
+							
 				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address); 
+				address = addressService.createObject(address);
 				
 				StaffAddress staffAddress = new StaffAddress();
 				staffAddress.setAddress(address);
@@ -298,10 +295,6 @@ public class RestUserController extends BaseController {
 				
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				
-				address = parent.getAddress();
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
 				if (parent.getStudentIds() != null) {
 					Set<Student> students = new HashSet<>();
 					for (Integer studentId: parent.getStudentIds()) {
@@ -312,7 +305,11 @@ public class RestUserController extends BaseController {
 				}
 				
 				parent.setUpdatedBy(authUser.getId());
+				address = parent.getAddress();
 				parent = parentService.createObject(parent);
+								
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.createObject(address);
 				
 				parentAddress.setAddress(address);
 				parentAddress.setParent(parent);
@@ -378,15 +375,20 @@ public class RestUserController extends BaseController {
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
 						UserConstant.ID,
-						UserConstant.FIRST_NAME,
-						UserConstant.OCCUPATION,
+						UserConstant.FIRST_NAME,						
 						UserConstant.LAST_NAME,
-						UserConstant.GENDER));;
-		Integer positionId = null;
-		Integer academicDisciplineId = null;
+						UserConstant.GENDER));
+		Staff staff;
+		Parent parent;
+		Teacher teacher;
+		Student student;		
+		Address address;
+		Position position;
+		AcademicDiscipline academicDiscipline;
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
+		this.proccessLoggedInUser(auth);
 			
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
 			throw new FieldIsRequiredException("User type can not be empty");
@@ -397,96 +399,103 @@ public class RestUserController extends BaseController {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		
-		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:
-				requiredFields.add(UserConstant.BIRTH_DATE);
+				
 				requiredFields.add(UserConstant.POSITION);
-				requiredFields.add(UserConstant.EMPLOYMENT_CODE);
 				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
 				
+				position = processPosition(params, requiredFields);			
+				academicDiscipline = processAcademicDiscipline(params, requiredFields);
+				
 				requiredFields.add(UserConstant.USER_ID);
+				requiredFields.add(UserConstant.EMPLOYMENT_CODE);
+				requiredFields.add(UserConstant.BIRTH_DATE);
 				
+				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
-				if(params.containsKey(UserConstant.POSITION)) {
-					positionId = (Integer) params.get(UserConstant.POSITION);
+				if (teacher.getId() == null) {
+					throw new FieldIsRequiredException("Teacher ID is required");
 				}
+				teacherService.findObject(teacher.getId());
 				
-				if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
-					throw new FieldIsRequiredException("Position can not be empty");
-				}
-				
-				Position position = positionService.findObject(positionId);
-				
-				if (position == null ) {
-					throw new FieldIsRequiredException("Position is required, and invalid position was provided");
-				}
-				
-				
-				if(params.containsKey(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-					academicDisciplineId = (Integer) params.get(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
-				}
-				
-				if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-					throw new FieldIsRequiredException("Academic Discipline can not be empty");
-				}
-				
-				AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
-				
-				if (academicDiscipline == null ) {
-					throw new FieldIsRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
-				}
-				
-				
-				Teacher teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
+				teacher.setUpdatedBy(authUser.getId());
+				address = teacher.getAddress();
+				teacher = teacherService.updateObject(teacher);
 				
-				if (teacher.getId() == null) {					
-					throw new FieldIsRequiredException("Teacher's ID is required, and invalid ID was provided");					
-				}
-				
-				teacher = teacherService.updateObject(teacher);				
-				instance.setData(teacher);
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.updateObject(address);
+				instance.setData(teacher);				
 				break;
 			case STUDENT:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.TERMS,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
-				Student student = studentService.createObject(
-						UserValidator.validateStudentInputInfo(params, requiredFields));
-				instance.setData(student);				
+				requiredFields.add(UserConstant.PHONE_NUMBER);
+				
+				student = UserValidator.validateStudentInputInfo(params, requiredFields);
+				if (student.getId() == null) {
+					throw new FieldIsRequiredException("Student ID is required");
+				}
+					
+				student.setUpdatedBy(authUser.getId());
+				if (student.getParentIds() != null) {
+					Set<Parent> parents = new HashSet<>();
+					for (Integer parentId: student.getParentIds()) {
+						parent = parentService.findObject(parentId);
+						parents.add(parent);
+					}										
+					student.setParents(parents);
+				}
+				address = student.getAddress();
+				student = studentService.updateObject(student);
+				
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.updateObject(address);				
+				instance.setData(student);								
 				break;
 			case STAFF:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERMS,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
-				Staff otherStaff = staffService.createObject(
-						UserValidator.validateOtherStaffInputInfo(params, requiredFields));
-				instance.setData(otherStaff);
+				requiredFields.add(UserConstant.POSITION);				
+				position = processPosition(params, requiredFields);	
+				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
+				
+				if (staff.getId() == null) {
+					throw new FieldIsRequiredException("Staff ID is required");
+				}
+				
+				staff.setPosition(position);
+				staff.setUpdatedBy(authUser.getId());
+				address = staff.getAddress();
+				staff = staffService.updateObject(staff);
+				
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.updateObject(address); 				
+				instance.setData(staff);				
 				break;
 			case PARENT:
-				requiredFields =  new ArrayList<>(
-						Arrays.asList(
-								UserConstant.FIRST_NAME, 
-								UserConstant.LAST_NAME,
-								UserConstant.OCCUPATION,
-								UserConstant.TERMS,
-								UserConstant.GENDER,
-								UserConstant.POSITION));
-				Parent parent = parentService.createObject(
-						UserValidator.validateParentInputInfo(params, requiredFields));
+				
+				parent = UserValidator.validateParentInputInfo(params, requiredFields);
+				
+				if (parent.getId() == null) {
+					throw new FieldIsRequiredException("Parent ID is required");
+				}
+								
+				if (parent.getStudentIds() != null) {
+					Set<Student> students = new HashSet<>();
+					for (Integer studentId: parent.getStudentIds()) {
+						student = studentService.findObject(studentId);
+						students.add(student);
+					}										
+					parent.setStudents(students);
+				}
+				
+				parent.setUpdatedBy(authUser.getId());
+				address = parent.getAddress();
+				parent = parentService.updateObject(parent);
+				
+				address.setUpdatedBy(authUser.getId());
+				address = addressService.updateObject(address);
 				instance.setData(parent);
 				break;
 			default:
@@ -504,7 +513,7 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@DeleteMapping(value = {EndPointConstants.REST_USER_CONTROLLER.INDEX + "/{userId}", EndPointConstants.REST_USER_CONTROLLER.INDEX+ "/{userId}/"})
+	@DeleteMapping(value = {EndPointConstants.REST_USER_CONTROLLER.INDEX + "{userId}", EndPointConstants.REST_USER_CONTROLLER.INDEX+ "{userId}/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> deleteUser(Authentication auth, @PathVariable(name="userId", required = true) Integer userId, @RequestParam(value="userType", required=true) String userType) throws JDataAccessException{
 		
@@ -528,17 +537,16 @@ public class RestUserController extends BaseController {
 				break;
 			case STUDENT:
 				
-				teacher = teacherService.findObject(userId);							
-				instance.setSuccess(teacherService.deleteObject(teacher));				
+				Student student = studentService.findObject(userId);							
+				instance.setSuccess(studentService.deleteObject(student));				
 				break;
-			case STAFF:
-				
-				teacher = teacherService.findObject(userId);							
-				instance.setSuccess(teacherService.deleteObject(teacher));	
+			case STAFF:				
+				Staff staff = staffService.findObject(userId);							
+				instance.setSuccess(staffService.deleteObject(staff));	
 				break;
 			case PARENT:				
-				teacher = teacherService.findObject(userId);							
-				instance.setSuccess(teacherService.deleteObject(teacher));	
+				Parent parent =  parentService.findObject(userId);							
+				instance.setSuccess(parentService.deleteObject(parent));	
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -561,12 +569,7 @@ public class RestUserController extends BaseController {
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
 		this.securityCheckAdminAccess(auth);
-	
-		try {	
-			authUser = authUserService.loadUserByUsername(userContext.getUsername());
-		} catch (UsernameNotFoundException e) {
-			throw new UsernameNotFoundException(e.getMessage());			
-		}	
+		this.proccessLoggedInUser(auth);
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(new UserVO(authUser));

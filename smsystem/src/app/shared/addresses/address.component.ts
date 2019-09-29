@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import {AddressWrapper } from 'app/models/addresses';
+import {AddressWrapper, Address } from 'app/models';
 
 
 @Component({
@@ -12,6 +12,7 @@ import {AddressWrapper } from 'app/models/addresses';
 export class AddressComponent implements OnInit {
 
   @Input() isResetForm: boolean = false;
+  @Input('address') address: Address = null;
   @Output() onChanges: EventEmitter<AddressWrapper> = new EventEmitter();
 
   addressForm: FormGroup;
@@ -21,6 +22,10 @@ export class AddressComponent implements OnInit {
 
   ngOnInit() {
       this.loadAddressForm();
+      window.console.log(this.address);
+      if (this.address) {
+        this.patchAddressValue(this.address);
+      }
   }
 
   loadAddressForm() {
@@ -45,5 +50,16 @@ export class AddressComponent implements OnInit {
 
   resetForm() {
     this.addressForm.reset();
+  }
+  patchAddressValue(address: Address) {
+    this.addressForm.patchValue({
+      id: address.id,
+      street: address.street,
+      city: address.city,
+      country: address.country,
+      state: address.state,
+      postalCode: address.postalCode,
+      unit: address.unit,
+    });
   }
 }

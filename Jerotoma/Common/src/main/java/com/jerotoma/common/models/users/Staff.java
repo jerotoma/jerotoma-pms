@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,11 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.positions.Position;
 
 @Entity
@@ -36,6 +39,10 @@ public class Staff extends Person implements Serializable{
    	@JoinColumn(name="position_id")
 	private Position position;
 	
+	@OneToMany(mappedBy ="staff")
+	@JsonManagedReference
+	private List<StaffAddress> staffAddresses;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -51,4 +58,12 @@ public class Staff extends Person implements Serializable{
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+
+	public List<StaffAddress> getStaffAddresses() {
+		return staffAddresses;
+	}
+
+	public void setStaffAddresses(List<StaffAddress> staffAddresses) {
+		this.staffAddresses = staffAddresses;
+	}	
 }

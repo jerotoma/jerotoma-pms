@@ -64,16 +64,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     });
   }
   onSubmit() {
-    const dob = this.teacherForm.get('birthDate');
-    const academicDiscipline = this.teacherForm.get('academicDiscipline');
-    const position = this.teacherForm.get('position');
-    if (dob && dob.valid) {
-      this.teacherForm.patchValue({
-        birthDate: DateFormatter(dob.value).format('YYYY/MM/DD'),
-        academicDiscipline: parseInt(academicDiscipline.value, 10),
-        position: parseInt(position.value, 10),
-      });
-    }
     this.teacher = this.teacherForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
@@ -145,7 +135,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       employmentCode: [''],
       gender: ['', Validators.required],
       picture: [''],
-      middleNames: [''],
+      middleNames: [null],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
       userId: [null, Validators.required],
@@ -219,6 +209,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
           fullName: this.teacher.fullName,
           address: this.teacher.address,
         });
+        this.appAddress.patchAddressValue(this.teacher.address);
       }
     }, error => {
       this.showMessage.error = true;

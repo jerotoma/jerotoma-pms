@@ -21,8 +21,10 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AddressVO;
+import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
+import com.jerotoma.database.assemblers.dao.AssemblerParentDao;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
@@ -35,6 +37,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	@Autowired DataSource dataSource;
 	@Autowired RoleDao roleDao;	
 	@Autowired AssemblerAddressDao addressDao;
+	@Autowired AssemblerParentDao parentDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -45,13 +48,13 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public StudentVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE st.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
 	public StudentVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE student_namber= ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE st.student_namber= ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentSingleResultProcessor(), uniqueKey);
 	}
 
@@ -125,7 +128,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, student_number AS studentNumber, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number as phoneNumber, occupation, gender, avatar, position, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.students ");
+		return new StringBuilder("SELECT st.id, st.student_number AS studentNumber, st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress, st.phone_number as phoneNumber, st.occupation, st.gender, st.avatar, st.position, st.birth_date AS birthDate, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn FROM public.students st");
 		
 	}
 
@@ -141,8 +144,13 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	
 	public StudentVO mapStudentResult(ResultSet rs) throws SQLException {
 		StudentVO student = new StudentVO(rs);
-		student.setAddress(loadAddress(student.getId()));	
+		student.setAddress(loadAddress(student.getId()));
+		student.setParents(loadParents(student.getId()));
 		return student;
+	}
+
+	private List<ParentVO> loadParents(Integer studentId) throws SQLException {
+		return parentDao.findParentsByStudentId(studentId);
 	}
 
 	@Override
@@ -162,7 +170,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	@Override
 	public List<StudentVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
-		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
+		queryBuilder.append(" WHERE lower(st.first_name) like ? OR lower(st.last_name) like ? OR lower(st.middle_names) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
 				.append("limit ? offset ?");
@@ -179,6 +187,12 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 				offset
 		};
 		return this.jdbcTemplate.query(queryBuilder.toString(), new StudentResultProcessor(), paramList);
+	}
+
+	@Override
+	public List<StudentVO> findStudentsByParentId(Integer parentId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN student_parents sp ON sp.student_id = st.id WHERE sp.parent_id = ?");
+		return this.jdbcTemplate.query(builder.toString(), new StudentResultProcessor(), parentId);
 	}
 	
 }

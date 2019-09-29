@@ -62,6 +62,7 @@ export class StudentsViewComponent implements OnInit {
     this.dialogService.open(StudentCreateComponent, {
       context: {
         title: 'Add New Student',
+        action: 'create',
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -69,10 +70,21 @@ export class StudentsViewComponent implements OnInit {
   }
 
   edit(student: Student) {
-    this.router.navigate([this.baseURL + 'edit/' + student.id ]);
+    this.dialogService.open(StudentCreateComponent, {
+      context: {
+        title: 'Edit ' + student.fullName + '\'s Details',
+        action: 'edit',
+        studentId: student.id.toString(),
+      },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
+    });
   }
 
   view(student: Student) {
+    this.router.navigate([this.baseURL + '/' + student.id ]);
+  }
+  viewParent(student: Student) {
     this.router.navigate([this.baseURL + '/' + student.id ]);
   }
 

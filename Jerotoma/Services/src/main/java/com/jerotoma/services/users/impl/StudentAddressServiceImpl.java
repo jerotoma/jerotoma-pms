@@ -37,7 +37,7 @@ public class StudentAddressServiceImpl implements StudentAddressService {
 
 	@Override
 	public StudentAddress updateObject(StudentAddress object) throws SQLException {
-		return studentDao.updateObject(object);
+		return object.getId() == null ? studentDao.createObject(object) : studentDao.updateObject(object);
 	}
 
 	@Override

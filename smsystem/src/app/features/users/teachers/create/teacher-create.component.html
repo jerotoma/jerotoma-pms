@@ -35,13 +35,11 @@
                             </div>
                             <nb-card [ngStyle]="{'display': listDisplay}">
                               <nb-list>
-                                <nb-list-item *ngFor="let user of users">
-                                  <a href="#" class="user-list" (click)="pickUser($event, user)" >
-                                      <nb-user
-                                          [name]="user.firstName + '' + user.lastName"
+                                <nb-list-item *ngFor="let user of users" (click)="pickUser($event, user)">
+                                       <nb-user
+                                          [name]="user.fullName"
                                           [title]="user.username">
                                       </nb-user>
-                                  </a>
                                 </nb-list-item>
                               </nb-list>
                             </nb-card>
@@ -152,14 +150,14 @@
                       </div>
                       <div class="col-md-6">
                           <div class="form-control-group">
-                            <label for="teacher-birthDate" class="label">Date of Birth (yyyy/MM/dd)</label>
+                            <label for="teacher-birthDate" class="label">Date of Birth</label>
                             <input
                                 [nbDatepicker]="birthDate"
                                 nbInput fullWidth
                                 id="teacher-birthDate"
                                 formControlName="birthDate"
                                 placeholder="Birth Date">
-                            <nb-datepicker #birthDate format="yyyy/MM/dd"></nb-datepicker>
+                            <nb-datepicker #birthDate></nb-datepicker>
                           </div>
                       </div>
                   </div>
@@ -191,7 +189,9 @@
                         </div>
                       </div>
                     </div>
-                    <app-address (onChanges)="onAddressChange($event)" ></app-address>
+                    <app-address
+                      [address]="teacher?.address ? teacher?.address : null"
+                      (onChanges)="onAddressChange($event)"></app-address>
               </nb-card-body>
               <nb-card-footer>
                 <button class='push-right' [disabled]="!teacherForm.valid" type="submit" nbButton hero status="success">Submit</button>

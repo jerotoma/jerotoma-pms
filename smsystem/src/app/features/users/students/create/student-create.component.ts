@@ -105,7 +105,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.studentForm.reset();
+        this.resetForms();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -132,7 +132,8 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      middleNames: [''],
+      studentNumber: [null],
+      middleNames: [null],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
       gender: ['', Validators.required],
@@ -162,6 +163,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.student = resp.body.data;
+        this.address = this.student.address,
         this.studentForm.patchValue({
           id: this.student.id,
           firstName: this.student.firstName,
@@ -172,7 +174,13 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
           birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
           userType: 'student',
           fullName: this.student.fullName,
+          emailAddress: this.student.emailAddress,
+          middleNames: this.student.middleNames,
+          phoneNumber: this.student.phoneNumber,
+          studentNumber: this.student.studentNumber,
+          address: this.student.address,
         });
+        this.appAddress.patchAddressValue(this.address);
       }
     }, error => {
       this.showMessage.error = true;

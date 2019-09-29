@@ -132,7 +132,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 	public AddressVO findAddressByStudentId(Integer studentId) throws SQLException {
 		StringBuilder builder =  getBaseSelectQuery();
 		builder
-		.append("INNER JOIN public.student_addresses sa ON sa.student_id = a.id ")
+		.append("INNER JOIN public.student_addresses sa ON sa.address_id = a.id ")
 		.append("WHERE sa.student_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new AddressSingleResultProcessor(), studentId);
 	}
@@ -141,7 +141,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 	public AddressVO findAddressByTeacherId(Integer teacherId) throws SQLException {
 		StringBuilder builder =  getBaseSelectQuery();
 		builder
-		.append("INNER JOIN public.teacher_addresses ta ON ta.teacher_id = a.id ")
+		.append("INNER JOIN public.teacher_addresses ta ON ta.address_id = a.id ")
 		.append("WHERE ta.teacher_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new AddressSingleResultProcessor(), teacherId);
 	}
@@ -150,7 +150,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 	public AddressVO findAddressByParentId(Integer parentId) throws SQLException {
 		StringBuilder builder =  getBaseSelectQuery();
 		builder
-		.append("INNER JOIN public.parent_addresses pa ON pa.parent_id = a.id ")
+		.append("INNER JOIN public.parent_addresses pa ON pa.address_id = a.id ")
 		.append("WHERE pa.parent_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new AddressSingleResultProcessor(), parentId);
 	}
@@ -159,7 +159,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 	public AddressVO findAddressByStaffId(Integer staffId) throws SQLException {
 		StringBuilder builder =  getBaseSelectQuery();
 		builder
-		.append("INNER JOIN public.staff_addresses sa ON sa.staff_id = a.id ")
+		.append("INNER JOIN public.staff_addresses sa ON sa.address_id = a.id ")
 		.append("WHERE sa.staff_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new AddressSingleResultProcessor(), staffId);
 	}

@@ -62,5 +62,5 @@ public class TeacherVO extends PersonVO{
 
 	public void setAcademicDiscipline(AcademicDisciplineVO academicDiscipline) {
 		this.academicDiscipline = academicDiscipline;
-	}	
+	}
 }

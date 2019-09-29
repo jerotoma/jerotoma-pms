@@ -37,7 +37,7 @@ public class ParentServiceImpl implements ParentService {
 
 	@Override
 	public Parent updateObject(Parent object) throws SQLException {
-		return parentDao.updateObject(object);
+		return object.getId() == null ? parentDao.createObject(object) : parentDao.updateObject(object);
 	}
 
 	@Override

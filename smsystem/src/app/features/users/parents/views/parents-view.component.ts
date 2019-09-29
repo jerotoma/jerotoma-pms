@@ -64,6 +64,7 @@ export class ParentsViewComponent implements OnInit {
     this.dialogService.open(ParentCreateComponent, {
       context: {
         title: 'Add New Parent',
+        action: 'create',
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -71,7 +72,15 @@ export class ParentsViewComponent implements OnInit {
   }
 
   edit(parent: Parent) {
-    this.router.navigate([this.baseURL + 'edit/' + parent.id ]);
+    this.dialogService.open(ParentCreateComponent, {
+      context: {
+        title: 'Edit ' + parent.fullName + '\'s Details',
+        action: 'edit',
+        parentId: parent.id.toString(),
+      },
+    }).onClose.subscribe(data => {
+      this.loadUsers();
+    });
   }
 
   view(parent: Parent) {

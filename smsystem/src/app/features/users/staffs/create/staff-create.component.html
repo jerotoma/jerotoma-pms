@@ -107,7 +107,7 @@
                                 id="staff-birthDate"
                                 formControlName="birthDate"
                                 placeholder="Birth Date">
-                            <nb-datepicker #birthDate format="yyyy/MM/dd"></nb-datepicker>
+                            <nb-datepicker #birthDate></nb-datepicker>
                           </div>
                       </div>
                   </div>
@@ -139,7 +139,9 @@
                         </div>
                       </div>
                     </div>
-                    <app-address (onChanges)="onAddressChange($event)"></app-address>
+                    <app-address
+                        [address]="staff?.address ? staff?.address  : null"
+                        (onChanges)="onAddressChange($event)"></app-address>
               </nb-card-body>
               <nb-card-footer>
                 <button class='push-right' [disabled]="!staffForm.valid" type="submit" nbButton hero status="success">Submit</button>

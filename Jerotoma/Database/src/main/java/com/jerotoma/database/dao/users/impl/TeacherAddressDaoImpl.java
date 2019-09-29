@@ -90,4 +90,30 @@ public class TeacherAddressDaoImpl implements TeacherAddressDao {
 		return null;
 	}
 
+	@Override
+	public TeacherAddress findObjectByAddressID(Integer addressId) throws SQLException {
+		TeacherAddress teacherAddress = null;
+		try {
+			teacherAddress = entityManager.createQuery("FROM TeacherAddress WHERE address_id := ?", TeacherAddress.class)
+						.setParameter("address_id", addressId)
+						.getSingleResult();	
+		} catch (EntityExistsException  | HibernateException  | JDataAccessException e) {
+			throw new JDataAccessException(e.getMessage(), e);
+		}
+		return teacherAddress;
+	}
+
+	@Override
+	public List<TeacherAddress> findObjectByTeacherID(Integer teacherId) throws SQLException {
+		List<TeacherAddress> teacherAddresses = null;
+		try {
+			teacherAddresses = entityManager.createQuery("FROM TeacherAddress WHERE teacher_id := ?", TeacherAddress.class)
+						.setParameter("teacher_id", teacherId)
+						.getResultList();	
+		} catch (EntityExistsException  | HibernateException  | JDataAccessException e) {
+			throw new JDataAccessException(e.getMessage(), e);
+		}
+		return teacherAddresses;
+	}
+
 }

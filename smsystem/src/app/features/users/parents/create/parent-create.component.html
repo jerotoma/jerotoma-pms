@@ -158,7 +158,9 @@
                         </div>
                       </div>
                     </div>
-                    <app-address (onChanges)="onParentAddressChange($event)" ></app-address>
+                    <app-address
+                        [address]="parent?.address ? parent?.address : null"
+                        (onChanges)="onParentAddressChange($event)"></app-address>
           </nb-card-body>
           <nb-card-footer>
               <div class="form-control-group">

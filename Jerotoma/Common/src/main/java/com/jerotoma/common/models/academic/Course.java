@@ -44,6 +44,9 @@ public class Course implements Serializable{
 	@Column
 	private String description;
 	
+	@Column(name="updated_by")
+	private Integer updatedBy;
+	
 	@OneToMany(mappedBy = "course")
 	private List<JClass> jclass;
 	
@@ -100,4 +103,14 @@ public class Course implements Serializable{
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	
+	
 }
