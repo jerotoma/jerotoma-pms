@@ -207,9 +207,7 @@ public class RestUserController extends BaseController {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
-		
-		
-				
+					
 		try {
 			switch(type) {
 			case TEACHER:
@@ -225,8 +223,7 @@ public class RestUserController extends BaseController {
 				teacher.setUpdatedBy(authUser.getId());
 				address = teacher.getAddress();
 				teacher = teacherService.createObject(teacher);
-				
-				
+								
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.createObject(address);
 				

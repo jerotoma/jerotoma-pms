@@ -35,6 +35,7 @@ export class PositionsViewComponent implements OnInit {
   title: string = 'List of Positions';
   position: Position;
   hidePageSize: boolean = false;
+  isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
@@ -66,10 +67,12 @@ export class PositionsViewComponent implements OnInit {
   }
 
   loadPositions() {
+    this.isLoading = true;
     this.positionService.getPositions(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
+        this.isLoading = false;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;

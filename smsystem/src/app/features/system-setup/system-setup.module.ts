@@ -8,7 +8,6 @@ import { SystemSetupComponent } from './system-setup.component';
 
 const COMPONENTS = [
   SystemSetupComponent,
-
 ];
 
 const ENTRY_COMPONENTS = [

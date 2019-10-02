@@ -73,9 +73,8 @@ public class JClassDaoImpl  implements JClassDao {
 	}
 
 	@Override
-	public JClass updateObject(JClass object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+	public JClass updateObject(JClass object) throws SQLException {		
+		return entityManager.merge(object);
 	}
 
 	@Override

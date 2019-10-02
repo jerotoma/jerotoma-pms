@@ -35,6 +35,7 @@ export class CoursesViewComponent implements OnInit {
   title: string = 'List of Courses';
   course: Course;
   hidePageSize: boolean = false;
+  isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
@@ -66,10 +67,12 @@ export class CoursesViewComponent implements OnInit {
   }
 
   loadCourses() {
+    this.isLoading = true;
     this.courseService.getCourses(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
+        this.isLoading = false;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;

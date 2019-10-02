@@ -8,6 +8,7 @@ import {MatMenuModule} from '@angular/material/menu';
 
 import {
   NbButtonModule,
+  NbSpinnerModule,
   NbDialogModule,
   NbWindowModule,
   NbCardModule,
@@ -39,6 +40,7 @@ const MODULES = [
   SharedModule,
   ClassRoomsRoutingModule,
   NbButtonModule,
+  NbSpinnerModule,
   NbWindowModule,
   NbCardModule,
   NbInputModule,

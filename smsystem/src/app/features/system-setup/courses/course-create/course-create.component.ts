@@ -17,7 +17,6 @@ export class CourseCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Output() onCreationSuccess = new EventEmitter();
-
   @Input() name: string = '';
   @Input() code: string = '';
   @Input() id: string = '0';
@@ -31,6 +30,7 @@ export class CourseCreateComponent implements OnInit {
     message: '',
   };
   listDisplay: string = 'none';
+  isSubmitting: boolean = false;
 
   constructor(
     private courseService:  CourseService,
@@ -56,6 +56,7 @@ export class CourseCreateComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmitting = true;
     this.course = this.courseForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
@@ -67,6 +68,7 @@ export class CourseCreateComponent implements OnInit {
             const resp = result;
             const data = resp.body;
             const status = resp.status;
+            this.isSubmitting = false;
             if (status !== null && status === 200) {
               this.showMessage.success = true;
               this.showMessage.error = false;
@@ -94,6 +96,7 @@ export class CourseCreateComponent implements OnInit {
             const resp = result;
             const data = resp.body;
             const status = resp.status;
+            this.isSubmitting = false;
             if (status !== null && status === 200) {
               this.showMessage.success = true;
               this.showMessage.error = false;

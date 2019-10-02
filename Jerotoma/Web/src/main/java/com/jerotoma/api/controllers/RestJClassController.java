@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.JClassConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
@@ -55,7 +54,7 @@ public class RestJClassController extends BaseController {
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> getFieldOfStudies(
+	public HttpResponseEntity<Object> getJClasses(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
@@ -80,10 +79,30 @@ public class RestJClassController extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"/{classId}", "/{classId}/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> getJClass(Authentication auth, @PathVariable("classId") Integer classId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.securityCheckAdminAccess(auth);
+		
+		try {
+			JClassVO jClassVO = assemblerJClassService.findObject(classId);	
+			instance.setData(jClassVO);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
 	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> loadFieldOfStudyList(
+	public HttpResponseEntity<Object> loadJClassList(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
@@ -112,7 +131,7 @@ public class RestJClassController extends BaseController {
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createPosition(
+	protected HttpResponseEntity<Object> createJClasses(
 			Authentication auth, 
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
@@ -162,19 +181,14 @@ public class RestJClassController extends BaseController {
 
 	@PutMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> editPosition(
+	protected HttpResponseEntity<Object> editJClasses(
 		Authentication auth, 
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);		
-		
-		requiredFields = new ArrayList<>(
-				Arrays.asList(
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE));
+		this.securityCheckAdminAccess(auth);
+		this.proccessLoggedInUser(auth);
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -191,7 +205,6 @@ public class RestJClassController extends BaseController {
 		
 		try {
 			jClass = jClassService.findObject(jClassFields.getId());
-			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Teacher teacher = teacherService.findObject(jClassFields.getTeacherId());
 			Course course = courseService.findObject(jClassFields.getCourseId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
@@ -205,7 +218,7 @@ public class RestJClassController extends BaseController {
 			jClass.setUpdatedBy(authUser.getId());
 			jClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			
-			jClass = jClassService.createObject(jClass);		
+			jClass = jClassService.updateObject(jClass);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -219,8 +232,6 @@ public class RestJClassController extends BaseController {
 	@DeleteMapping(value = {"/{classId}", "/{classId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("classId") Integer classId) {
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-			
 		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
 		

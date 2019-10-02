@@ -9,6 +9,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
+  NbSpinnerModule,
   NbButtonModule,
   NbDialogModule,
   NbWindowModule,
@@ -51,6 +52,7 @@ const MODULES = [
     SharedModule,
     ThemeModule,
     NbMomentDateModule,
+    NbSpinnerModule,
     NbTabsetModule,
     NbRadioModule,
     NbDatepickerModule,

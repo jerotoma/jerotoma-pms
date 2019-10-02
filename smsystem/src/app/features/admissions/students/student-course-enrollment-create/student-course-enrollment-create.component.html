@@ -61,7 +61,11 @@
                 <div class="form-control-group">
                   <nb-card class="list-card" accent="success">
                     <nb-card-header>Check box from the list Scheduled Courses</nb-card-header>
-                    <nb-card-body>
+                    <nb-card-body
+                      [nbSpinner]="isLoading"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      nbSpinnerMessage="Loading Scheduled Courses....">
                       <nb-list>
                         <nb-list-item *ngFor="let jClass of jClasses">
                           <nb-checkbox [id]="'jClass-'+ jClass.id" status="success" (checkedChange)="checkedChange($event, jClass)" [checked]="false">{{jClass.course.name}}</nb-checkbox>
@@ -75,7 +79,7 @@
         </nb-card-body>
         <nb-card-footer>
             <button class='push-right' [disabled]="!studentClassForm.valid" type="submit" nbButton hero status="success">Create Class</button>
-            <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
         </nb-card-footer>
       </nb-card>
   </form>

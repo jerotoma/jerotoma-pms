@@ -1,6 +1,10 @@
 <nb-card class="col-md-12 col-lg-12 col-xxxl-12">
     <nb-card-header> {{title}} <button class="push-right" nbButton hero status='success' (click)="open()">Add New Course</button></nb-card-header>
-    <nb-card-body>
+    <nb-card-body
+        [nbSpinner]="isLoading"
+        nbSpinnerStatus="success"
+        nbSpinnerSize="large"
+        nbSpinnerMessage="Loading courses....">
         <div class="mat-elevation-z0">
             <table mat-table [dataSource]="dataSource" matSort>
               <!-- id Column -->

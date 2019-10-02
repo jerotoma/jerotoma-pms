@@ -11,6 +11,8 @@ import {
   NbButtonModule,
   NbDialogModule,
   NbWindowModule,
+  NbSpinnerModule,
+  NbToastrModule,
   NbCardModule,
   NbInputModule,
   NbIconModule,
@@ -52,6 +54,7 @@ const MODULES = [
   NbAccordionModule,
   NbListModule,
   NbSelectModule,
+  NbSpinnerModule,
   NbRadioModule,
   NbDatepickerModule,
   NbRouteTabsetModule,
@@ -67,6 +70,7 @@ const MODULES = [
   NbIconModule,
   NbAlertModule,
   NbDialogModule.forRoot(),
+  NbToastrModule.forRoot(),
   ClassesRoutingModule,
 ];
 

@@ -22,6 +22,7 @@ export class TeachersViewComponent implements OnInit {
   title: string = 'Teacher\'s List';
   baseURL: string = '/dashboard/users/teachers/';
   hidePageSize: boolean = false;
+  isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'academicDiscipline', 'position', 'action'];
@@ -100,9 +101,11 @@ export class TeachersViewComponent implements OnInit {
   }
 
   loadUsers() {
+    this.isLoading = true;
     this.userService.loadUsers(this.param).subscribe((result) => {
       const resp = result;
         const status = resp.status;
+        this.isLoading = false;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;

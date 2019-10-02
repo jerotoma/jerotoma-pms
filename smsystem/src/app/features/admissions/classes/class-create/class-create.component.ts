@@ -3,7 +3,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { JClassAdmission } from 'app/models';
+import { JClassView, JClassAdmission } from 'app/models';
 import {
   ClassService,
   ClassRoomService,
@@ -39,6 +39,9 @@ export class ClassCreateComponent implements OnInit {
   courseId: number;
   classRoomId: number;
   teacherId: number;
+  capacity: number;
+  isLoading: boolean = false;
+  jClassView: JClassView = null;
 
   param: QueryParam =  {
     page: 1,
@@ -77,19 +80,28 @@ export class ClassCreateComponent implements OnInit {
     this.loadData();
     this.loadForm();
     if (this.action === 'edit') {
-        this.patchClassAdmission();
+      this.loadJClassView(parseInt(this.id, 10));
     }
   }
-  patchClassAdmission() {
+  patchClassAdmission(jClassView: JClassView) {
+    this.capacity = jClassView.capacity;
+    this.academicYearId = jClassView.academicYear.id;
+    this.courseId = jClassView.course.id;
+    this.teacherId = jClassView.teacher.id;
+    this.classRoomId = jClassView.classRoom.id;
     this.classForm.patchValue({
-      name: this.name,
-      description: this.description,
-      code: this.code,
-      id: parseInt(this.id, 10),
+      id: jClassView.id,
+      capacity: jClassView.capacity,
+      academicYearId: jClassView.academicYear.id,
+      courseId: jClassView.course.id,
+      teacherId: jClassView.teacher.id,
+      classRoomId: jClassView.classRoom.id,
     });
   }
-  dismiss() {
-    this.ref.close();
+  dismiss(isClassCreated: boolean) {
+    this.ref.close({
+      isClassCreated: isClassCreated,
+    });
   }
 
   onSubmit() {
@@ -108,8 +120,7 @@ export class ClassCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.classForm.reset();
-              this.dismiss();
+              this.resetForm(true);
 
             } else {
               this.showMessage.success = false;
@@ -125,7 +136,6 @@ export class ClassCreateComponent implements OnInit {
 
   }
   updateClass() {
-
     this.classService.updateClass(this.classAdmission)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
@@ -135,9 +145,7 @@ export class ClassCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
-              this.classForm.reset();
-              this.dismiss();
-
+              this.resetForm(true);
             } else {
               this.showMessage.success = false;
               this.showMessage.error = true;
@@ -149,86 +157,110 @@ export class ClassCreateComponent implements OnInit {
             this.showMessage.message = error ? error.error.message : '';
           });
     }
-  getDescriptionContent(description: string) {
-   if (description) {
-    this.classForm.patchValue({
-      description: description,
-    });
+    loadForm() {
+      this.classForm = this.formBuilder.group({
+        id: [null],
+        capacity: ['', Validators.required],
+        academicYearId: ['', Validators.required],
+        courseId: ['', Validators.required],
+        teacherId: ['', Validators.required],
+        classRoomId: ['', Validators.required],
+      });
     }
-  }
 
-  loadForm() {
-    this.classForm = this.formBuilder.group({
-      id: [null],
-      capacity: ['', Validators.required],
-      academicYearId: ['', Validators.required],
-      courseId: ['', Validators.required],
-      teacherId: ['', Validators.required],
-      classRoomId: ['', Validators.required],
-    });
-  }
+    loadData() {
+      this.loadAcademicYears();
+      this.loadClassRooms();
+      this.loadCourses();
+      this.loadTeachers();
+    }
 
-  loadData() {
-    this.loadAcademicYears();
-    this.loadClassRooms();
-    this.loadCourses();
-    this.loadTeachers();
-  }
+    loadClassRooms() {
+      this.classRoomService.getClassRooms(this.param)
+      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.classRooms = data.classRooms;
+          if (this.jClassView) {
+            this.patchClassAdmission(this.jClassView);
+          }
+        }
+      }, error => {
 
-  loadClassRooms() {
-    this.classRoomService.getClassRooms(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.classRooms = data.classRooms;
-      }
-    }, error => {
+      });
+    }
 
-    });
-  }
+    loadCourses() {
+      this.courseService.getCourses(this.param)
+      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.courses = data.courses;
+          if (this.jClassView) {
+            this.patchClassAdmission(this.jClassView);
+          }
+        }
+      }, error => {
 
-  loadCourses() {
-    this.courseService.getCourses(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.courses = data.courses;
-      }
-    }, error => {
+      });
+    }
+    loadAcademicYears() {
+      this.academicYearService.getAcademicYears(this.param)
+      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.academicYears = data.academicYears;
+          if (this.jClassView) {
+            this.patchClassAdmission(this.jClassView);
+          }
+        }
+      }, error => {
 
-    });
-  }
-  loadAcademicYears() {
-    this.academicYearService.getAcademicYears(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.academicYears = data.academicYears;
-      }
-    }, error => {
+      });
+    }
+    loadTeachers() {
+      this.userService.loadUsers(this.param)
+      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+        const status = resp.status;
+        if (status !== null && status === 200 && resp.body) {
+          const data = resp.body.data;
+          this.teachers = data.teachers;
+          if (this.jClassView) {
+            window.console.log('Teacher: ', this.teachers );
+            this.patchClassAdmission(this.jClassView);
+          }
+        }
+      }, error => {
 
-    });
-  }
-  loadTeachers() {
-    this.userService.loadUsers(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.teachers = data.teachers;
-      }
-    }, error => {
+      });
+    }
+    loadJClassView(jClassViewId: number) {
+      this.isLoading = true;
+      setTimeout( () => {
+        this.classService.getClass(jClassViewId)
+        .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+          const resp = result;
+          const status = resp.status;
+          this.isLoading = false;
+          if (status !== null && status === 200 && resp.body) {
+            this.jClassView = resp.body.data;
+            this.patchClassAdmission(this.jClassView);
+          }
+        }, error => {
 
-    });
-  }
-
-
+        });
+      }, 2000);
+    }
+    resetForm(isClassCreated: boolean) {
+      this.classForm.reset();
+      this.dismiss(isClassCreated);
+    }
 
 }

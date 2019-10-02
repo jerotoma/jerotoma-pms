@@ -3,7 +3,11 @@
         <form [formGroup]="classForm" class="step-container" (ngSubmit)="onSubmit()">
         <nb-card>
           <nb-card-header status="danger" >{{ title }}</nb-card-header>
-          <nb-card-body>
+          <nb-card-body
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="success"
+            nbSpinnerSize="large"
+            nbSpinnerMessage="Loading Classes....">
           <div class='row'>
               <div class='col-md-12'>
                   <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
@@ -110,7 +114,7 @@
           </nb-card-body>
           <nb-card-footer>
               <button class='push-right' [disabled]="!classForm.valid" type="submit" nbButton hero status="success">Create Class</button>
-              <button class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+              <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
           </nb-card-footer>
         </nb-card>
     </form>

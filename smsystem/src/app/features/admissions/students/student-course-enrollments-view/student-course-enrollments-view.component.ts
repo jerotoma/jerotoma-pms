@@ -6,7 +6,7 @@ import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
-import { UserDeleteComponent } from 'app/shared';
+import { DeleteModalComponent } from 'app/shared';
 
 import { StudentCourseEnrollmentCreateComponent } from '../student-course-enrollment-create/student-course-enrollment-create.component';
 
@@ -38,6 +38,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   title: string = 'List of Scheduled Courses';
   studentClasses: StudentClass[] = [];
   hidePageSize: boolean = false;
+  isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'fullName', 'studentNumber', 'numberOfClasses',  'academicYearTerm', 'academicYear', 'action'];
@@ -56,10 +57,12 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   }
 
   loadStudentClasses() {
+    this.isLoading = true;
     this.studentClassService.getStudentClasses(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
+        this.isLoading = false;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.studentClasses = data.studentClasses;
@@ -74,7 +77,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   open() {
     this.dialogService.open(StudentCourseEnrollmentCreateComponent, {
       context: {
-        title: 'Add New Class',
+        title: 'Enroll New Student',
         action: 'create',
       },
     }).onClose.subscribe(_data => {
@@ -85,16 +88,29 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   edit(studentClass: StudentClass) {
     this.dialogService.open(StudentCourseEnrollmentCreateComponent, {
       context: {
-        title: 'Add New Class',
+        title: 'Edit Enrolled Student',
         action: 'edit',
         studentId: studentClass.student.id.toString(),
       },
-    }).onClose.subscribe(_data => {
-      this.loadStudentClasses();
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+
+      }
     });
   }
 
   delete(studentClass: StudentClass) {
+    this.dialogService.open(DeleteModalComponent, {
+      context: {
+        title: 'Delete Class',
+        action: 'delete',
+        id: studentClass.id.toString(),
+      },
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+        this.loadStudentClasses();
+      }
+    });
   }
 
   view(studentClass: StudentClass) {
@@ -102,7 +118,17 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   }
 
   onPageChange(pageEvent: PageEvent) {
-
+      this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
+      this.param.pageSize = pageEvent.pageSize;
+      this.loadStudentClasses();
   }
-
+  deleteEnrolledStudent(studentClassId: number) {
+    this.studentClassService.deleteStudentClass(studentClassId).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200 ) {
+        this.loadStudentClasses();
+      }
+    });
+  }
 }

@@ -10,9 +10,9 @@ import { END_POINTS, QueryParam } from 'app/utils';
 export class ClassService {
   constructor(private http: HttpClient) { }
 
-  getClass(classId: number): Observable<any> {
+  getClass(classId: number): Observable<HttpResponse<any> | HttpErrorResponse>  {
     return this.http
-      .get<any>(`${END_POINTS.classes}/${classId}`)
+      .get<any>(`${END_POINTS.classes}/${classId}`,{observe: 'response'})
       .pipe(retry(3), catchError(this.errorHandler));
   }
 

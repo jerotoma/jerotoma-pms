@@ -37,6 +37,8 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   courseId: number;
   jClassIds: number[] = [];
   teacherId: number;
+  isLoading: boolean = false;
+  confirmed: boolean = false;
   studentClassAdmission: StudentClassAdmission;
 
   param: QueryParam =  {
@@ -81,10 +83,13 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     });
   }
   dismiss() {
-    this.ref.close();
+    this.ref.close({
+      confirmed: this.confirmed,
+    });
   }
 
   onSubmit() {
+    this.confirmed = false;
     this.studentClassAdmission = this.studentClassForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
@@ -98,6 +103,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
             const status = resp.status;
             if (status !== null && status === 200) {
               this.showMessage.success = true;
+              this.confirmed = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
               this.studentClassForm.reset();
@@ -126,6 +132,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
               this.showMessage.success = true;
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
+              this.confirmed = true;
               this.studentClassForm.reset();
               this.dismiss();
 
@@ -173,11 +180,13 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   }
 
   loadJClasses() {
+    this.isLoading = true;
     this.param.userType = 'student';
     this.classService.getClasses(this.param)
     .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
+      this.isLoading = false;
       if (status !== null && status === 200 && resp.body) {
         const data = resp.body.data;
         this.jClasses = data.jClasses;

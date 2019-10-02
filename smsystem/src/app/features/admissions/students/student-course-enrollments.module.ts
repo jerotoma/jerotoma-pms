@@ -10,6 +10,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {
   NbActionsModule,
   NbButtonModule,
+  NbSpinnerModule,
   NbDialogModule,
   NbWindowModule,
   NbCardModule,
@@ -53,6 +54,7 @@ const MODULES = [
   MatPaginatorModule,
   MatIconModule,
   NbActionsModule,
+  NbSpinnerModule,
   NbAccordionModule,
   NbListModule,
   NbSelectModule,

@@ -10,6 +10,7 @@ import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
   NbButtonModule,
+  NbSpinnerModule,
   NbDialogModule,
   NbWindowModule,
   NbCardModule,
@@ -51,6 +52,7 @@ const MODULES = [
     SharedModule,
     ThemeModule,
     NbMomentDateModule,
+    NbSpinnerModule,
     NbTabsetModule,
     NbRadioModule,
     NbDatepickerModule,

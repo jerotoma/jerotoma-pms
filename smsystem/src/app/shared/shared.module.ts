@@ -34,6 +34,7 @@ import {
   UserTableComponent,
   UserDetailsComponent,
   AddressComponent,
+  DeleteModalComponent,
   UserDeleteComponent,
 } from 'app/shared';
 
@@ -41,6 +42,7 @@ import {
 
 const COMPONENTS = [
   AddressComponent,
+  DeleteModalComponent,
   UserDeleteComponent,
   UserTableComponent,
   UserDetailsComponent,
@@ -48,6 +50,7 @@ const COMPONENTS = [
 
 const ENTRY_COMPONENTS = [
   UserDeleteComponent,
+  DeleteModalComponent,
 ];
 
 const MODULES = [
