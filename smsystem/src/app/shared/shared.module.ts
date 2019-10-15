@@ -8,6 +8,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { NbMomentDateModule } from '@nebular/moment';
+import { FileUploadModule } from 'ng2-file-upload';
 import {
   NbAccordionModule,
   NbButtonModule,
@@ -31,6 +32,7 @@ import {
 import { ThemeModule } from 'app/@theme/theme.module';
 
 import {
+  UploadsComponent,
   UserTableComponent,
   UserDetailsComponent,
   AddressComponent,
@@ -46,17 +48,20 @@ const COMPONENTS = [
   UserDeleteComponent,
   UserTableComponent,
   UserDetailsComponent,
+  UploadsComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   UserDeleteComponent,
   DeleteModalComponent,
+  UploadsComponent,
 ];
 
 const MODULES = [
   RouterModule ,
   FormsModule,
   ReactiveFormsModule,
+  FileUploadModule,
   ThemeModule,
   NbMomentDateModule,
   NbTabsetModule,

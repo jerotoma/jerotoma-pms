@@ -33,7 +33,7 @@ public class ClassRoomResourceDaoImpl implements ClassRoomResourceDao {
 
 	@Override
 	public ClassRoomResource findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String  query = "FROM ClassRoomResource WHERE code = ? ";
+		String  query = "FROM ClassRoomResource WHERE code =:code ";
 		
 		return entityManager.createQuery(query, ClassRoomResource.class)
 				.setParameter("code", uniqueKey)

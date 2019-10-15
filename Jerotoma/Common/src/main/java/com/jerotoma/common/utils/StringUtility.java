@@ -3,6 +3,7 @@ package com.jerotoma.common.utils;
 import org.apache.commons.lang3.StringUtils;
 
 public class StringUtility {
+	
 	public static boolean isEmpty(String s) {
 		return StringUtils.isEmpty(s);
 	}

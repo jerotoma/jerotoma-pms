@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import {
   NbMediaBreakpointsService,
   NbMenuService,
-  NbSidebarService,
   NbThemeService,
  } from '@nebular/theme';
 
@@ -12,6 +11,10 @@ import { Subject } from 'rxjs';
 
 import { THEMES } from '../header-menu';
 
+import {SystemConfig } from 'app/models';
+import {SystemConfigService } from 'app/services';
+import { APP_CONSTANTS } from 'app/utils';
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -19,17 +22,17 @@ import { THEMES } from '../header-menu';
 })
 export class SettingsComponent implements OnInit {
   themes = THEMES;
+  systemTheme: string = APP_CONSTANTS.currentTheme;
   private destroy$: Subject<void> = new Subject<void>();
   currentTheme = 'default';
   userPictureOnly: boolean = false;
   user: any;
+  systemConfig: SystemConfig = null;
 
   constructor(
-    private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private systemConfigService: SystemConfigService,
     private breakpointService: NbMediaBreakpointsService) {
 
     }
@@ -51,14 +54,41 @@ export class SettingsComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+    this.loadCurrentTheme();
   }
 
   changeTheme(themeName: string) {
-    this.themeService.changeTheme(themeName);
+    this.systemConfig = {
+      id: this.systemConfig.id,
+      name: this.systemTheme,
+      value: themeName,
+    };
+    this.systemConfigService.updateSystemConfig(this.systemConfig)
+    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const content = resp.body;
+      if (content.success) {
+          this.systemConfig = content.data;
+          this.currentTheme =  this.systemConfig.value;
+          this.themeService.changeTheme(this.currentTheme);
+      }
+    }, error => {
+
+    });
   }
   navigateHome() {
     this.menuService.navigateHome();
     return false;
   }
 
+  loadCurrentTheme() {
+    this.systemConfigService.getSystemConfigByKey(this.systemTheme)
+    .subscribe((result: any) => {
+      if (result.success) {
+        this.systemConfig = result.data;
+        this.currentTheme =  this.systemConfig.value;
+        this.themeService.changeTheme(this.currentTheme);
+      }
+    });
+  }
 }

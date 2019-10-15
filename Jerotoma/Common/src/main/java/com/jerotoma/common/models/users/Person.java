@@ -31,8 +31,6 @@ public abstract class Person {
 	@JsonIgnore
 	protected Address address;
 	
-	
-	
 	@Transient
 	protected Integer age;
 	

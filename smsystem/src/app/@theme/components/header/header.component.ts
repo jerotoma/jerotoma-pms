@@ -3,14 +3,14 @@ import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import { UserService } from 'app/services/users/user.service';
-import { User } from 'app/models/users/user.model';
+import {User, SystemConfig } from 'app/models';
+import {UserService, SystemConfigService } from 'app/services';
 
 
 import { LayoutService } from 'app/@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-
+import { APP_CONSTANTS } from 'app/utils';
 import { USER_DROPDOWN_ITEMS, THEMES } from './header-menu';
 
 @Component({
@@ -25,18 +25,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user: User;
   themes = THEMES;
   currentTheme = 'default';
+  systemTheme: string = APP_CONSTANTS.currentTheme;
   userMenu = USER_DROPDOWN_ITEMS;
+  systemConfig: SystemConfig = null;
 
   constructor(
-              private userService: UserService,
-              private authService: NbAuthService,
-              private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              private themeService: NbThemeService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+    private userService: UserService,
+    private authService: NbAuthService,
+    private sidebarService: NbSidebarService,
+    private menuService: NbMenuService,
+    private themeService: NbThemeService,
+    private systemConfigService: SystemConfigService,
+    private layoutService: LayoutService,
+    private breakpointService: NbMediaBreakpointsService) {
   }
 
   ngOnInit() {
@@ -60,6 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.menuService.onItemClick().subscribe(( event ) => {
         this.onItemSelection(event.item.title);
       });
+      this.loadCurrentTheme();
   }
 
   loadCurrentUser() {
@@ -97,5 +99,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
+  }
+
+  loadCurrentTheme() {
+    this.systemConfigService.getSystemConfigByKey(this.systemTheme)
+    .subscribe((result: any) => {
+      if (result.success) {
+        this.systemConfig = result.data;
+        this.currentTheme =  this.systemConfig.value;
+        this.themeService.changeTheme(this.currentTheme);
+      }
+    });
   }
 }

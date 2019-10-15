@@ -13,10 +13,13 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.constants.SystemConfigConstant;
+import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.UserRole;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.services.configs.SystemConfigService;
 import com.jerotoma.services.roles.RoleService;
 import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.UserRoleService;
@@ -28,6 +31,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
     @Autowired AuthUserService userService;
     @Autowired RoleService roleService;
     @Autowired UserRoleService userRoleService;
+    @Autowired SystemConfigService systemConfigService;
     
     
     @Override
@@ -36,7 +40,8 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
             return;
         }
 		logger.debug(event.getApplicationContext().getApplicationName());
-        addDefaultAccountsIfNotExists();            
+        addDefaultAccountsIfNotExists(); 
+        addDefaultAppTheme();
         alreadySetup = true;
 		if(!logger.isDebugEnabled()) {
         	
@@ -76,7 +81,23 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			userRoleService.createObject(uRole);
 			logger.info("User has been created!");
 		} catch (SQLException e) {			
-			e.printStackTrace();
+			throw new RuntimeException(e.getMessage(), e); 
+		}
+		
+	}
+	
+	private void addDefaultAppTheme() {
+		SystemConfig systemConfig = new SystemConfig(); 
+		systemConfig.setName(SystemConfigConstant.THEME.CURRENT_THEME);
+		systemConfig.setValue("default");
+		try {
+			Long count = systemConfigService.countObject();
+			if (count != null && count != 0) {
+				return;
+			}
+			systemConfigService.createObject(systemConfig);
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage(), e); 
 		}
 		
 	}

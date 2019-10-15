@@ -65,7 +65,7 @@
 	 /**************************************************************
 	 * 															  *
 	 * 															  *
-	 * 			POSITIONS RELATED TABLES					  		  *
+	 * 			POSITIONS RELATED TABLES					  	  *
 	 * 															  *
 	 *************************************************************/
 	    
@@ -520,3 +520,81 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
+	    
+	    
+	    /**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			MENUS RELATED TABLES				  *
+		 * 															  *
+		 *************************************************************/
+		
+		  -- Tables for menus
+		
+		CREATE TABLE IF NOT EXISTS menus(
+		  id 			bigserial PRIMARY KEY,
+		  user_id   	bigint NOT NULL,
+		  menu_key   	text NOT NULL UNIQUE,
+		  title 		character varying(255)  NOT NULL,
+		  menu_type			character varying(255)  NOT NULL,
+		  active		boolean NOT NULL DEFAULT false,
+		  created_on timestamp with time zone NOT NULL,
+		  updated_on timestamp with time zone NOT NULL,
+		  CONSTRAINT users_fkey FOREIGN KEY (user_id)
+		        REFERENCES public.users (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);	
+		
+		CREATE TABLE IF NOT EXISTS menu_items(
+		  id 			bigserial PRIMARY KEY,
+		  menu_id   	bigint NOT NULL,
+		  menu_item_key   	text NOT NULL UNIQUE,
+		  link			   	text,
+		  title 		character varying(255)  NOT NULL,
+		  active		boolean NOT NULL DEFAULT false,
+		  created_on timestamp with time zone NOT NULL,
+		  updated_on timestamp with time zone NOT NULL,
+		  CONSTRAINT menus_fkey FOREIGN KEY (menu_id)
+		        REFERENCES public.menus (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);
+		
+		 
+	    /**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			MEDIA RELATED TABLES				  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for media
+		
+		CREATE TABLE IF NOT EXISTS public.media(
+		    id bigserial PRIMARY KEY,
+		    user_id bigint,
+		    title character varying(255),
+		    description text,
+		    src text NOT NULL,
+		    size bigint,
+		    type character varying(255) NOT NULL,
+		    absolute_path text NOT NULL,
+		    CONSTRAINT user_fkey FOREIGN KEY (user_id)
+		        REFERENCES public.users (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);
+
+		/**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			SYSTEM CONFIG RELATED TABLES				  	  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for systemconfig
+		
+		CREATE TABLE IF NOT EXISTS public.system_configs(
+		    id BIGSERIAL PRIMARY KEY,
+		    name VARCHAR(255) UNIQUE NOT NULL,
+		    value character varying(255)
+		);

@@ -8,3 +8,5 @@ export * from './interceptors';
 export * from './guards';
 export * from './courses';
 export * from './auth';
+export * from './uploads';
+export * from './system-configs';

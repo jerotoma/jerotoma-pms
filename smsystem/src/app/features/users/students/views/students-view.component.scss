@@ -3,12 +3,13 @@ table {
 }
 button {
   cursor: pointer;
-  margin: 0;
+  margin-left: 1px;
   border: none;
 }
 
 button:focus {
   outline: none;
+  box-shadow: none;
 }
 button:hover {
   background-color: rgba(0, 0, 0, 0.03);;

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
-import { NbDialogService } from '@nebular/theme';
+import { NbDialogService, NbMenuService } from '@nebular/theme';
 
 import { PageEvent } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
@@ -10,7 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { StudentCreateComponent } from '../create/student-create.component';
 import { QueryParam } from 'app/utils';
 import { UserService } from 'app/services/users';
-import { UserDeleteComponent } from 'app/shared';
+import { UserDeleteComponent, UploadsComponent } from 'app/shared';
 import { Student } from 'app/models/users';
 
 @Component({
@@ -35,6 +35,15 @@ export class StudentsViewComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
+  items: any = [
+    {
+      title: 'Import Excel',
+    },
+    {
+      title: 'Upload Excel',
+    },
+  ];
+
   param: QueryParam = {
     page: 1,
     pageSize: 10,
@@ -51,12 +60,38 @@ export class StudentsViewComponent implements OnInit {
   constructor(
     private userService: UserService,
     private dialogService: NbDialogService,
+    private menuService: NbMenuService,
     private router: Router,
     ) {
   }
 
   ngOnInit() {
     this.loadUsers();
+    this.menuService.onItemClick().subscribe(( event ) => {
+      this.onItemSelection(event.item.title);
+    });
+  }
+
+  onItemSelection( title ) {
+    if ( title === 'Import Excel' ) {
+      this.dialogService.open(UploadsComponent, {
+        context: {
+          title: 'Import files',
+          action: 'create',
+        },
+      }).onClose.subscribe(data => {
+        this.loadUsers();
+      });
+    } else if ( title === 'Upload Excel' ) {
+      this.dialogService.open(UploadsComponent, {
+        context: {
+          title: 'Add New Student',
+          action: 'create',
+        },
+      }).onClose.subscribe(data => {
+        this.loadUsers();
+      });
+    }
   }
 
   open() {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ public abstract class BaseController {
 	
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
+	@Autowired ServletContext context;
 	
 	public BaseController() {
 		super();		
