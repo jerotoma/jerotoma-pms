@@ -9,18 +9,16 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { THEMES } from '../header-menu';
-
 import {SystemConfig } from 'app/models';
 import {SystemConfigService } from 'app/services';
-import { APP_CONSTANTS } from 'app/utils';
+import { THEMES, APP_CONSTANTS } from 'app/utils';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
+  selector: 'app-preferences',
+  templateUrl: './preferences.component.html',
+  styleUrls: ['./preferences.component.scss'],
 })
-export class SettingsComponent implements OnInit {
+export class PreferencesComponent implements OnInit {
   themes = THEMES;
   systemTheme: string = APP_CONSTANTS.currentTheme;
   private destroy$: Subject<void> = new Subject<void>();

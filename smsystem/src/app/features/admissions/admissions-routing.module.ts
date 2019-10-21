@@ -9,11 +9,6 @@ const routes: Routes = [
     component: AdmissionsComponent,
     children: [
       {
-        path: 'teachers',
-        loadChildren: () => import('./teachers/teacher-admissions.module')
-          .then(m => m.TeacherAdmissionsModule),
-      },
-      {
         path: 'students',
         loadChildren: () => import('./students/student-course-enrollments.module')
           .then(m => m.StudentCourseEnrollmentsModule),

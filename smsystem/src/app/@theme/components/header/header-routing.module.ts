@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { ProfileComponent } from './profile/profile.component';
-import { SettingsComponent } from './settings/settings.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 
 const routes: Routes = [
@@ -11,8 +11,8 @@ const routes: Routes = [
     component: ProfileComponent,
   },
   {
-    path: 'settings',
-    component: SettingsComponent,
+    path: 'preferences',
+    component: PreferencesComponent,
   },
 ];
 

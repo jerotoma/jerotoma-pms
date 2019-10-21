@@ -171,6 +171,51 @@ public class RestUserController extends BaseController {
 		
 	}
 	
+	@PostMapping(value= {"/loggedIn","/loggedIn/", })
+	@ResponseBody
+	public HttpResponseEntity<Object> loadUserByUsername(Authentication auth, @RequestBody Map<String, String> map) throws UsernameNotFoundException, JDataAccessException{
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/loggedIn");
+		this.securityCheckAdminAccess(auth);
+		
+		String username = map.get("username");
+		String userType = map.get("userType");
+		
+		if (!userContext.getUsername().equals(username.trim())) {
+			throw new UsernameNotFoundException("User type not found");		
+		}
+		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+		
+		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		try {
+			switch(type) {
+			case TEACHER:
+				instance.setData(assemblerTeacherService.findObjectUniqueKey(String.valueOf(authUser.getId())));	
+				break;
+			case STUDENT:
+				instance.setData(assemblerStudentService.findObjectUniqueKey(username));
+				break;
+			case STAFF:
+				instance.setData(assemblerStaffService.findObjectUniqueKey(username));
+				break;
+			case PARENT:
+				instance.setData(assemblerParentService.findObjectUniqueKey(username));
+				break;
+			default:
+				throw new UsernameNotFoundException("User type not found");
+			}
+		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+		
+	}
+	
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{

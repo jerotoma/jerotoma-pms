@@ -596,5 +596,25 @@
 		CREATE TABLE IF NOT EXISTS public.system_configs(
 		    id BIGSERIAL PRIMARY KEY,
 		    name VARCHAR(255) UNIQUE NOT NULL,
-		    value character varying(255)
+		    value TEXT
 		);
+		
+		/**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			USER PREFERENCES RELATED TABLES				  	  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for user_preferences
+		
+		CREATE TABLE IF NOT EXISTS public.user_preferences(
+		    id BIGSERIAL PRIMARY KEY,
+		    user_id BIGINT NOT NULL,
+		    name VARCHAR(255) UNIQUE NOT NULL,		    
+		    value TEXT,
+		    CONSTRAINT user_fkey FOREIGN KEY (user_id)
+		        REFERENCES public.users (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);
+

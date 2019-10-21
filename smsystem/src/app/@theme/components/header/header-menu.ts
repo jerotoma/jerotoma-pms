@@ -7,8 +7,8 @@ export const USER_DROPDOWN_ITEMS: NbMenuItem[] = [
     icon: 'person-outline',
    },
    {
-    title: 'Settings',
-    link: '/dashboard/account/settings',
+    title: 'My Preferences',
+    link: '/dashboard/account/preferences',
     icon: 'settings-2-outline',
    },
    {
@@ -16,23 +16,4 @@ export const USER_DROPDOWN_ITEMS: NbMenuItem[] = [
      link: '/account/logout',
      icon: 'log-out-outline',
    },
-];
-
-export const THEMES: any[] = [
-  {
-    value: 'default',
-    name: 'Light',
-  },
-  {
-    value: 'dark',
-    name: 'Dark',
-  },
-  {
-    value: 'cosmic',
-    name: 'Cosmic',
-  },
-  {
-    value: 'corporate',
-    name: 'Corporate',
-  },
 ];

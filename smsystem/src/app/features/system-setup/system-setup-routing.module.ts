@@ -11,6 +11,11 @@ const routes: Routes = [{
   component: SystemSetupComponent,
   children: [
     {
+      path: 'appearances',
+      loadChildren: () => import('./appearances/appearances.module')
+        .then(m => m.AppearancesModule),
+    },
+    {
       path: 'positions',
       loadChildren: () => import('./positions/positions.module')
         .then(m => m.PositionsModule),

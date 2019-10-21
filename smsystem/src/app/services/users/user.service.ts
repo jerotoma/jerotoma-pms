@@ -30,6 +30,11 @@ export class UserService {
       `${END_POINTS.users}/${userId}?userType=${userType}`, {observe: 'response'});
   }
 
+  loadUserByUsername(username: string, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
+    return this.http.post<any>(
+      `${END_POINTS.users}/loggedIn`, {username: username, userType: userType}, {observe: 'response'});
+  }
+
   load(param: QueryParam): Observable<User[]> {
     return this.http
       .get<User[]>(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)

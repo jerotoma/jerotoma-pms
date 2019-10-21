@@ -1,9 +1,11 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from 'app/services/auth';
 import { UserService } from 'app/services/users/user.service';
-import { User } from 'app/models/users/user.model';
+import { User, Token } from 'app/models';
 import { getDeepFromObject } from 'app/utils';
+
 
 @Component({
   selector: 'app-profile',
@@ -11,22 +13,7 @@ import { getDeepFromObject } from 'app/utils';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  public user: User = {
-    id: null,
-    username: '',
-    firstName: '',
-    lastName: '',
-    phoneNumber: null,
-    emailAddress: '',
-    gender: 'female',
-    occupation: '',
-    birthDate: null,
-    fullName: '',
-    picture: '',
-    createdOn: null,
-    updatedOn: null,
-    address: null,
-  };
+  public user: User = null;
   protected options: {};
 
   constructor(
@@ -40,13 +27,23 @@ export class ProfileComponent implements OnInit {
 
   loadCurrentUser() {
     if (this.authService.isAuthenticated()) {
-      this.userService.getCurrentUser().subscribe((result: any) => {
-        this.user = result.data;
+      this.authService.getToken().subscribe((token: Token) => {
+        window.console.log(token);
+        this.loadUser(token.sub);
       });
     }
   }
-  getConfigValue(key: string): any {
-    return getDeepFromObject(this.options, key);
-  };
-
+  loadUser(username: string) {
+    if (username) {
+      this.userService.loadUserByUsername(username, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        const resp = result;
+       const status = resp.status;
+        if (status !== null && status === 200) {
+          this.user = resp.body.data;
+        }
+      }, error => {
+        window.console.log(error);
+      });
+    }
+  }
 }

@@ -10,8 +10,8 @@ import {UserService, SystemConfigService } from 'app/services';
 import { LayoutService } from 'app/@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { APP_CONSTANTS } from 'app/utils';
-import { USER_DROPDOWN_ITEMS, THEMES } from './header-menu';
+import { APP_CONSTANTS, THEMES } from 'app/utils';
+import { USER_DROPDOWN_ITEMS } from './header-menu';
 
 @Component({
   selector: 'app-header',
@@ -74,10 +74,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onItemSelection( title ) {
     if ( title === 'Log out' ) {
       // Do something on Log out
-      console.log('Log out Clicked ');
+      window.console.log('Log out Clicked');
     } else if ( title === 'Profile' ) {
       // Do something on Profile
-      console.log('Profile Clicked ');
+      window.console.log('Profile Clicked');
     }
   }
   ngOnDestroy() {

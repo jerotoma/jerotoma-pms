@@ -1,0 +1,171 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form  autocomplete="off" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <nb-card size="giant">
+            <nb-card-body>
+              <div class='row'>
+                  <div class='col-md-12'>
+                      <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
+                          <p class="alert-title"><b>Sorry!</b></p>
+                          <ul class="alert-message-list">
+                              <li class="alert-message">{{ showMessage.message }}</li>
+                            </ul>
+                        </nb-alert>
+                        <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
+                          <p class="alert-title"><b>Success!</b></p>
+                          <ul class="alert-message-list">
+                            <li class="alert-message">{{ showMessage.message }}</li>
+                          </ul>
+                        </nb-alert>
+                  </div>
+              </div>
+
+                <div class="form-control-group">
+                  <label for="user-first-name" class="label">First Name</label>
+                  <input
+                        type="text"
+                        nbInput fullWidth
+                        autocomplete="new-password"
+                        required
+                        id="user-first-name"
+                        formControlName="firstName"
+                        placeholder="First Name">
+                  <ng-container *ngIf="userForm.controls['firstName'].invalid && userForm.controls['firstName'].touched">
+                    <p class="error-message">
+                      First Name is required!
+                    </p>
+                  </ng-container>
+                </div>
+                <div class="form-control-group">
+                  <label for="user-last-name" class="label">Last Name</label>
+                  <input
+                        required
+                        type="text"
+                        autocomplete="new-password"
+                        nbInput fullWidth
+                        id="user-last-name"
+                        formControlName="lastName"
+                        placeholder="Last Name">
+                  <ng-container *ngIf="userForm.controls['lastName'].invalid && userForm.controls['lastName'].touched">
+                    <p class="error-message">
+                      Last Name is required!
+                    </p>
+                  </ng-container>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-control-group">
+                        <label for="student-middle-names" class="label">Other Names</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="student-middle-names"
+                              formControlName="middleNames"
+                              placeholder="Other  Names">
+                      </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-control-group">
+                            <label for="user-position" class="label">Position</label>
+                            <nb-select
+                              fullWidth
+                              placeholder="Position"
+                              formControlName="position"
+                              id="user-position">
+                              <nb-option
+                                  *ngFor='let pos of positions' [value]="pos.id">
+                                  {{pos.name}}
+                              </nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control-group">
+                            <label for="user-academicDiscipline" class="label">Field of Study</label>
+                            <nb-select
+                              fullWidth
+                              placeholder="Field of Study"
+                              formControlName="academicDiscipline"
+                              id="user-academicDiscipline">
+                              <nb-option
+                                  *ngFor='let acad of academicDisciplines'
+                                  [value]="acad.id">
+                                  {{acad.name}}
+                              </nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-control-group">
+                            <label for="user-position" class="label">Gender</label>
+                            <nb-radio-group formControlName="gender">
+                              <nb-radio
+                                [value]="'male'"
+                                [checked]="userForm.controls['gender'].value === 'male'"
+                                >Male</nb-radio>
+                              <nb-radio
+                                [checked]="userForm.controls['gender'].value === 'female'"
+                                [value]="'female'"
+                              >Female</nb-radio>
+                            </nb-radio-group>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control-group">
+                          <label for="user-birthDate" class="label">Date of Birth</label>
+                          <input
+                              [nbDatepicker]="birthDate"
+                              nbInput fullWidth
+                              id="user-birthDate"
+                              formControlName="birthDate"
+                              placeholder="Birth Date">
+                          <nb-datepicker #birthDate></nb-datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="student-email-address" class="label">Email Address</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="student-email-address"
+                              formControlName="emailAddress"
+                              placeholder="Email Address">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="student-phone-number" class="label">Phone Number</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="student-phone-number"
+                              formControlName="phoneNumber"
+                              placeholder="Emergency Phone Number">
+                      </div>
+                    </div>
+                  </div>
+                  <app-address
+                    [address]="user?.address ? user?.address : null"
+                    (onChanges)="onAddressChange($event)"></app-address>
+            </nb-card-body>
+            <nb-card-footer>
+              <button class='push-right' [disabled]="!userForm.valid" type="submit" nbButton hero status="success">Submit</button>
+            </nb-card-footer>
+          </nb-card>
+      </form>
+  </div>
+</div>
+

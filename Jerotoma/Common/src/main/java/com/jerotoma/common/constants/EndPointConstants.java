@@ -79,6 +79,10 @@ public class EndPointConstants {
 		public static final String CURRENT_USER = "/currentUser";
 	}
 	
+	public static interface REST_USER_PREFERENCE_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/user-preferences";
+	}
+	
 	public static interface REST_AUTH_CONTROLLER {
 		public static final String BASE = API_APP_AUTH;
 		public static final String REGISTER = "/register";		

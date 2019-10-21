@@ -175,6 +175,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/dashboard/system-setup',
     children: [
       {
+        title: 'Appearances',
+        link: '/dashboard/system-setup/appearances',
+      },
+      {
         title: 'Positions',
         link: '/dashboard/system-setup/positions',
       },

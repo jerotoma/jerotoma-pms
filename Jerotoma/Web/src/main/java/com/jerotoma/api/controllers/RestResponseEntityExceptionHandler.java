@@ -51,7 +51,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		bodyOfResponse.setStatusCode(String.valueOf(httpStatus.value()));
 		bodyOfResponse.setHttpStatus(httpStatus);
 		
-		if (message.contains(stringPattern)) {
+		if (message != null && message.contains(stringPattern)) {
 			message = "The username you are trying to register with exists";
 		}
 		
@@ -60,6 +60,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 			message.replace("username", name);
 		}
 		bodyOfResponse.setMessage(message);
+		ex.printStackTrace();
 		return super.handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), httpStatus, request);
     }
 }

@@ -17,6 +17,7 @@ public class DatabaseConstant {
 		public static final String TEACHER_ADDRESSES = "teacher_addresses";
 		public static final String PARENT_ADDRESSES = "parent_addresses";
 		public static final String SYSTEM_CONFIGS = "system_configs";
+		public static final String USER_PREFERENCES = "user_preferences";
 		
 		public static final String STAFF_ADDRESSES = "staff_addresses";
 		public static final String STUDENT_PARENTS = "student_parents";
