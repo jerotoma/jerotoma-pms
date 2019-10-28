@@ -36,7 +36,6 @@ export class PreferencesComponent implements OnInit {
     }
 
   ngOnInit() {
-
     this.currentTheme = this.themeService.currentTheme;
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
