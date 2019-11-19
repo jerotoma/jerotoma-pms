@@ -9,8 +9,8 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import {SystemConfig } from 'app/models';
-import {SystemConfigService } from 'app/services';
+import { SystemConfig, UserPreference } from 'app/models';
+import { UserPreferenceService } from 'app/services';
 import { THEMES, APP_CONSTANTS } from 'app/utils';
 
 @Component({
@@ -26,11 +26,12 @@ export class PreferencesComponent implements OnInit {
   userPictureOnly: boolean = false;
   user: any;
   systemConfig: SystemConfig = null;
+  userPreference: UserPreference = null;
 
   constructor(
     private menuService: NbMenuService,
     private themeService: NbThemeService,
-    private systemConfigService: SystemConfigService,
+    private userPreferenceService: UserPreferenceService,
     private breakpointService: NbMediaBreakpointsService) {
 
     }
@@ -55,18 +56,19 @@ export class PreferencesComponent implements OnInit {
   }
 
   changeTheme(themeName: string) {
-    this.systemConfig = {
+    this.userPreference = {
       id: this.systemConfig.id,
+      userId: 0,
       name: this.systemTheme,
       value: themeName,
     };
-    this.systemConfigService.updateSystemConfig(this.systemConfig)
+    this.userPreferenceService.updateSystemConfig(this.userPreference)
     .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const content = resp.body;
       if (content.success) {
-          this.systemConfig = content.data;
-          this.currentTheme =  this.systemConfig.value;
+          this.userPreference = content.data;
+          this.currentTheme =  this.userPreference.value;
           this.themeService.changeTheme(this.currentTheme);
       }
     }, error => {
@@ -79,7 +81,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   loadCurrentTheme() {
-    this.systemConfigService.getSystemConfigByKey(this.systemTheme)
+    this.userPreferenceService.getSystemConfigByKey(this.systemTheme)
     .subscribe((result: any) => {
       if (result.success) {
         this.systemConfig = result.data;
