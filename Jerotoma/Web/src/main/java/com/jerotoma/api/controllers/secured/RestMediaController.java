@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.utils.FileUpload;

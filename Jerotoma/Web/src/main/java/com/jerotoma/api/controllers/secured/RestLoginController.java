@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +25,7 @@ public class RestLoginController {
 	@ResponseBody
 	public HttpResponseEntity<AuthUser> getIndexLogin(){
 		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();
-		String username = "otomang@hotmail.com";
-		AuthUser authUser = authUserService.loadUserByUsername(username);		
-		instance.setSuccess(true);
-		instance.setStatusCode("200");
-		instance.setData(authUser);
+		
 		return instance;
 		
 	}

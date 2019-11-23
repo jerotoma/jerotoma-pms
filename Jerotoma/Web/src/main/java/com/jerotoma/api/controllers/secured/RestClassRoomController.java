@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

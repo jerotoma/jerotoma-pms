@@ -9,6 +9,7 @@ public class EndPointConstants {
 	public static final String ERROR_URL = "/error";
 	public static final String API_ROOT = "/api";
 	public static final String API_SECURED_ROOT = API_ROOT + "/secured";
+	public static final String API_PUBLIC_ROOT = API_ROOT + "/public";
 	
 	public static final String API_PUB_URL =  API_ROOT + "/pub";
 	public static final String API_REFRESH_TOKEN_URL =  API_ROOT + "/auth/token";
@@ -66,6 +67,10 @@ public class EndPointConstants {
 	
 	public static interface  REST_SYSTEM_CONFIG_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/system-configs";		
+	}
+	
+	public static interface  REST_PUB_SYSTEM_CONFIG_CONTROLLER {
+		public static final String BASE =  API_PUBLIC_ROOT + "/system-configs";		
 	}
 	
 	public static interface  REST_ACADEMIC_DISCIPLINE_CONTROLLER {
@@ -130,7 +135,8 @@ public class EndPointConstants {
 			 APP_AUTH_SIGNUP_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_AUTH_FORGOT_PASSWORD_URL + SLASH_DOUBLE_ASTERIK,
 			 APP_RESOURCES_URL + SLASH_DOUBLE_ASTERIK,
-			 APP_ASSETS_URL + SLASH_DOUBLE_ASTERIK					
+			 APP_ASSETS_URL + SLASH_DOUBLE_ASTERIK,
+			 API_PUBLIC_ROOT + SLASH_DOUBLE_ASTERIK
 	        );
 	
 	public static String loadAPIPermittedAppEndpoints() {
@@ -143,7 +149,8 @@ public class EndPointConstants {
 	}
 	
 	public static final List<String> PERMITTED_API_APP_ENDPOINTS = Arrays.asList(
-			API_APP_AUTH + SLASH_DOUBLE_ASTERIK						
+			API_APP_AUTH + SLASH_DOUBLE_ASTERIK,
+			API_PUBLIC_ROOT + SLASH_DOUBLE_ASTERIK						
 	        );
 	
 }

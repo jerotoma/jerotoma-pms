@@ -1,9 +1,10 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +23,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
+import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
 import com.jerotoma.common.models.security.Role;
@@ -54,6 +55,7 @@ public class RestAuthController {
     @Autowired private JwtTokenFactory tokenFactory;
     @Autowired private AuthUserService userService;
     @Autowired private TokenVerifier tokenVerifier;
+    @Autowired private ObjectMapper mapper;
     @Autowired @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor;
    
 	AuthUser authUser;
@@ -106,7 +108,7 @@ public class RestAuthController {
     
     @RequestMapping(value="/refresh-token", method=RequestMethod.POST, produces={ MediaType.APPLICATION_JSON_VALUE })
     public void refreshToken(@RequestBody Map<String, String> params, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-    	
+    	Map<String, Object> tokenMap = new HashMap<>();
     	if(!params.containsKey(SecurityConstant.REFRESH_TOKEN_KEY)) {
     		throw new InvalidJwtTokenException("Invalid Token");
     	}
@@ -119,7 +121,11 @@ public class RestAuthController {
     			
     	String tokenPayload = cookieService.findCookieValue(request, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN);
     	if (StringUtility.isEmpty(tokenPayload)) {
-        	throw new InsufficientAuthenticationException("Token can not be null");
+    		cookieService.deleteCookie(request, response, SecurityConstant.JWT_COOKIE_AUTH_REFRESH_TOKEN);
+    		tokenMap.put("message", "Invalid Token was provided");   
+    		tokenMap.put("success", false);   
+            mapper.writeValue(response.getWriter(), tokenMap);
+        	return;
         }
     	   	
     	String token = tokenExtractor.extract(SecurityConstant.HEADER_PREFIX + tokenPayload);

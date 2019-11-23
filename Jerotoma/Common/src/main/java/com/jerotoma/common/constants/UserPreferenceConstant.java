@@ -10,6 +10,8 @@ public class UserPreferenceConstant {
 	
 	public static interface THEME {
 		public static final String CURRENT_THEME = "system.config.userpreference.current_theme";
+		public static final String CURRENT_USER_THEME = "currentUserTheme";
+		public static final String CURRENT_USER_THEME_ID = "currentUserThemeID";
 	}
 
 	

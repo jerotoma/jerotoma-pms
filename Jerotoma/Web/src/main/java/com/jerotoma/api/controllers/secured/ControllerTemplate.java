@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 

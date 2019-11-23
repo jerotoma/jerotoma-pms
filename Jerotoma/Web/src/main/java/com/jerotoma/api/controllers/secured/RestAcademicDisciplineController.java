@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,24 +20,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
-import com.jerotoma.common.constants.SystemConfigConstant;
+import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
+import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.config.SystemConfig;
-import com.jerotoma.common.utils.validators.SystemConfigValidator;
-import com.jerotoma.services.configs.SystemConfigService;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
+import com.jerotoma.common.utils.validators.AcademicDisciplineValidator;
+import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
+
 
 @RestController
-@RequestMapping(EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE)
-public class RestSystemConfigController extends BaseController {
+@RequestMapping(EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE)
+public class RestAcademicDisciplineController extends BaseController {
 	
-	@Autowired SystemConfigService systemConfigService;;
+	@Autowired AcademicDisciplineService academicDisciplineService;;
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> getSystemConfigs(
+	public HttpResponseEntity<Object> getFieldOfStudies(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
@@ -45,12 +50,12 @@ public class RestSystemConfigController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = systemConfigService.loadMapList(queryParam);		
+			map = academicDisciplineService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -65,7 +70,7 @@ public class RestSystemConfigController extends BaseController {
 	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> loadSystemConfigList(
+	public HttpResponseEntity<Object> loadFieldOfStudyList(
 			Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
@@ -73,74 +78,42 @@ public class RestSystemConfigController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		List<SystemConfig> systemConfigs = new ArrayList<>();
+		List<AcademicDiscipline> academicDisciplines = new ArrayList<>();
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE + "/list");
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/list");
 		this.securityCheckAdminAccess(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			systemConfigs = systemConfigService.loadList(queryParam);		
+			academicDisciplines = academicDisciplineService.loadList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
 		super.instance.setSuccess(true);
 		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(systemConfigs);
+		super.instance.setData(academicDisciplines);
 		super.instance.setHttpStatus(HttpStatus.OK);
 		return super.instance;
 	}
 
-	
-	@GetMapping(value = {"/{id}", "/{id}/"})
-	@ResponseBody
-	public HttpResponseEntity<Object> getSystemConfig(Authentication auth, @PathVariable("id") Integer systemConfigId) throws JDataAccessException {
-	
-		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+
+	protected HttpResponseEntity<Object> getShowPosition() {
 		
-		SystemConfig systemConfig = null;
-		
-		try {
-			systemConfig = systemConfigService.findObject(systemConfigId);		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}
-			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
-	}
-	
-	@GetMapping(value = {"/keys", "/keys/"})
-	@ResponseBody
-	public HttpResponseEntity<Object> getSystemConfigByKey(Authentication auth, @RequestParam(required = true, value="key") String systemConfigKey) throws JDataAccessException {
-	
-		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
-		
-		SystemConfig systemConfig = null;
-		
-		try {
-			systemConfig = systemConfigService.findObjectUniqueKey(systemConfigKey);		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}
-			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
+		return null;
 	}
 
 
-	
+	protected HttpResponseEntity<Object> updatePosition() {
+		
+		return null;
+	}
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createSystemConfig(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException {
+	protected HttpResponseEntity<Object> createPosition(
+			Authentication auth, 
+			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
@@ -148,71 +121,88 @@ public class RestSystemConfigController extends BaseController {
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						SystemConfigConstant.NAME,
-						SystemConfigConstant.VALUE));
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME,
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION,
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE));
 		
-		SystemConfig systemConfig = SystemConfigValidator.validate(params, requiredFields);
+		AcademicDiscipline fieldOfStudy = AcademicDisciplineValidator.validate(params, requiredFields);
 		
 		try {
-			systemConfig = systemConfigService.createObject(systemConfig);		
+			fieldOfStudy = academicDisciplineService.createObject(fieldOfStudy);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
+		instance.setData(fieldOfStudy);
 		return instance;
 	}
 
 	@PutMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> updateSystemConfig(
+	protected HttpResponseEntity<Object> editPosition(
 		Authentication auth, 
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
 		List<String> requiredFields;
-		this.logRequestDetail("PUT : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
-		
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						SystemConfigConstant.NAME,
-						SystemConfigConstant.VALUE));
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME,
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION,
+						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE));
 		
-		SystemConfig systemConfig = SystemConfigValidator.validate(params, requiredFields);
+		AcademicDiscipline fieldOfStudy = AcademicDisciplineValidator.validate(params, requiredFields);
 		
 		try {
-			systemConfig = systemConfigService.updateObject(systemConfig);		
+			fieldOfStudy = academicDisciplineService.updateObject(fieldOfStudy);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
+		instance.setData(fieldOfStudy);
 		return instance;
 	}
 
-	@DeleteMapping(value = {"/{id}", "/{id}/"})
+	@DeleteMapping(value = {"/{fieldOfStudyId}", "/{fieldOfStudyId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("id") Integer systemConfigId) {
+	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("fieldOfStudyId") Integer fieldOfStudyId) {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		if(auth == null) {
+			instance.setSuccess(false);
+			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+			return instance;
+		}
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+		}
 		
-		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE );
-		this.securityCheckAdminAccess(auth);
-		
-		SystemConfig systemConfig = null; 
+		AcademicDiscipline fieldOfStudy;
 		
 		try {
-			systemConfig = systemConfigService.findObject(systemConfigId);	
-			if (systemConfig == null) {
+			fieldOfStudy = academicDisciplineService.findObject(fieldOfStudyId);	
+			if (fieldOfStudy == null) {
 				instance.setSuccess(false);
 				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 				return instance;
 			} 
-			boolean isDeleted = systemConfigService.deleteObject(systemConfig);
+			boolean isDeleted = academicDisciplineService.deleteObject(fieldOfStudy);
 			instance.setSuccess(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

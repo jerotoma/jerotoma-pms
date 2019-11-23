@@ -9,8 +9,8 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { SystemConfig, UserPreference } from 'app/models';
-import { UserPreferenceService } from 'app/services';
+import { SystemConfig, UserPreference, SystemSetting } from 'app/models';
+import { UserPreferenceService, AuthService} from 'app/services';
 import { THEMES, APP_CONSTANTS } from 'app/utils';
 
 @Component({
@@ -27,9 +27,11 @@ export class PreferencesComponent implements OnInit {
   user: any;
   systemConfig: SystemConfig = null;
   userPreference: UserPreference = null;
+  systemSetting: SystemSetting = null;
 
   constructor(
     private menuService: NbMenuService,
+    private authService: AuthService,
     private themeService: NbThemeService,
     private userPreferenceService: UserPreferenceService,
     private breakpointService: NbMediaBreakpointsService) {
@@ -52,12 +54,16 @@ export class PreferencesComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
-    this.loadCurrentTheme();
+      this.authService.isAuthenticated().subscribe(isAuthenticated => {
+          if (isAuthenticated) {
+            this.loadCurrentTheme();
+          }
+      });
   }
 
   changeTheme(themeName: string) {
     this.userPreference = {
-      id: this.systemConfig.id,
+      id:  this.systemSetting ? this.systemSetting.currentThemeID : null,
       userId: 0,
       name: this.systemTheme,
       value: themeName,
@@ -84,8 +90,8 @@ export class PreferencesComponent implements OnInit {
     this.userPreferenceService.getSystemConfigByKey(this.systemTheme)
     .subscribe((result: any) => {
       if (result.success) {
-        this.systemConfig = result.data;
-        this.currentTheme =  this.systemConfig.value;
+        this.systemSetting = result.data;
+        this.currentTheme =  this.systemSetting.currentTheme;
         this.themeService.changeTheme(this.currentTheme);
       }
     });

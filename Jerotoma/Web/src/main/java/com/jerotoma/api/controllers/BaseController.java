@@ -39,7 +39,7 @@ public abstract class BaseController {
 	
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
-	@Autowired ServletContext context;
+	@Autowired protected ServletContext context;
 	
 	public BaseController() {
 		super();		

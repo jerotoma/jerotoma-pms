@@ -7,7 +7,7 @@ export const USER_DROPDOWN_ITEMS: NbMenuItem[] = [
     icon: 'person-outline',
    },
    {
-    title: 'My Preferences',
+    title: 'Preferences',
     link: '/dashboard/account/preferences',
     icon: 'settings-2-outline',
    },

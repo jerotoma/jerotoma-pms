@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;

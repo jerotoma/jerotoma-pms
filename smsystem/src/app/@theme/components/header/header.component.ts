@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import {User, SystemConfig } from 'app/models';
+import {User, SystemConfig, SystemSetting } from 'app/models';
 import {UserService, SystemConfigService } from 'app/services';
 
 
@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   systemTheme: string = APP_CONSTANTS.currentTheme;
   userMenu = USER_DROPDOWN_ITEMS;
   systemConfig: SystemConfig = null;
+  systemSetting: SystemSetting = null;
 
   constructor(
     private userService: UserService,
@@ -105,8 +106,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.systemConfigService.getSystemConfigByKey(this.systemTheme)
     .subscribe((result: any) => {
       if (result.success) {
-        this.systemConfig = result.data;
-        this.currentTheme =  this.systemConfig.value;
+        this.systemSetting = result.data;
+        this.currentTheme =  this.systemSetting.currentTheme;
         this.themeService.changeTheme(this.currentTheme);
       }
     });

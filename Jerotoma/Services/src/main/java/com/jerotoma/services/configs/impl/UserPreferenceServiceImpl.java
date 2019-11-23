@@ -28,7 +28,6 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
 
 	@Override
 	public UserPreference findObjectUniqueKey(String uniqueKey) throws SQLException {
-
 		return systemPreferenceDao.findObjectUniqueKey(uniqueKey);
 	}
 

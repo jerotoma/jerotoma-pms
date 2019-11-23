@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers;
+package com.jerotoma.api.controllers.secured;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,41 +20,40 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.AcademicDisciplineConstant;
+import com.jerotoma.common.constants.AcademicYearConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
-import com.jerotoma.common.utils.validators.AcademicDisciplineValidator;
+import com.jerotoma.common.models.academic.AcademicYear;
+import com.jerotoma.common.utils.validators.AcademicYearValidator;
 import com.jerotoma.config.auth.common.UserContext;
-import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
-
+import com.jerotoma.services.courses.AcademicYearService;
 
 @RestController
-@RequestMapping(EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE)
-public class RestAcademicDisciplineController extends BaseController {
-	
-	@Autowired AcademicDisciplineService academicDisciplineService;;
+@RequestMapping(EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE)
+public class RestAcademicYearController extends BaseController {
+		
+	@Autowired AcademicYearService academicYearService;
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> getFieldOfStudies(
-			Authentication auth,
+	protected HttpResponseEntity<Object> getAcademicYears(Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = academicDisciplineService.loadMapList(queryParam);		
+			map = academicYearService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -65,82 +64,46 @@ public class RestAcademicDisciplineController extends BaseController {
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
-	
-	
-	@GetMapping(value = {"/list", "/list/"})
-	@ResponseBody
-	public HttpResponseEntity<Object> loadFieldOfStudyList(
-			Authentication auth,
-			@RequestParam(value="searchTerm", required=false) String search,
-			@RequestParam(value="page", required=false) Integer page,
-			@RequestParam(value="pageSize", required=false) Integer pageSize,
-			@RequestParam(value="fieldName", required=false) String fieldName,
-			@RequestParam(value="orderby", required=false) String orderby) {
-		
-		List<AcademicDiscipline> academicDisciplines = new ArrayList<>();
-		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
-		
-		try {
-			academicDisciplines = academicDisciplineService.loadList(queryParam);		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}	
-				
-		super.instance.setSuccess(true);
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(academicDisciplines);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
-	}
-
-
-	protected HttpResponseEntity<Object> getShowPosition() {
-		
-		return null;
-	}
-
-
-	protected HttpResponseEntity<Object> updatePosition() {
-		
-		return null;
-	}
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createPosition(
+	protected HttpResponseEntity<Object> createAcademicYear(
 			Authentication auth, 
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		this.logRequestDetail("POST : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
-		
+		this.logRequestDetail("POST : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
+			
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE));
+						AcademicYearConstant.ACADEMIC_YEAR_NAME,
+						AcademicYearConstant.ACADEMIC_YEAR_DESCRIPTION,
+						AcademicYearConstant.ACADEMIC_YEAR_OF_STUDY));
 		
-		AcademicDiscipline fieldOfStudy = AcademicDisciplineValidator.validate(params, requiredFields);
+		AcademicYear academicYear = AcademicYearValidator.validate(params, requiredFields);
 		
 		try {
-			fieldOfStudy = academicDisciplineService.createObject(fieldOfStudy);		
+			academicYear = academicYearService.createObject(academicYear);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(fieldOfStudy);
+		instance.setData(academicYear);
 		return instance;
 	}
 
+	protected HttpResponseEntity<Object> showAcademicYear() {
+		
+		return null;
+	}
+
+
 	@PutMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> editPosition(
+	protected HttpResponseEntity<Object> editAcademicYear(
 		Authentication auth, 
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
@@ -154,32 +117,32 @@ public class RestAcademicDisciplineController extends BaseController {
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
 		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
 		}
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_NAME,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_DESCRIPTION,
-						AcademicDisciplineConstant.ACADEMIC_DISCIPLINE_CODE));
+						AcademicYearConstant.ACADEMIC_YEAR_NAME,
+						AcademicYearConstant.ACADEMIC_YEAR_DESCRIPTION,
+						AcademicYearConstant.ACADEMIC_YEAR_OF_STUDY));
 		
-		AcademicDiscipline fieldOfStudy = AcademicDisciplineValidator.validate(params, requiredFields);
+		AcademicYear academicYear = AcademicYearValidator.validate(params, requiredFields);
 		
 		try {
-			fieldOfStudy = academicDisciplineService.updateObject(fieldOfStudy);		
+			academicYear = academicYearService.updateObject(academicYear);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(fieldOfStudy);
+		instance.setData(academicYear);
 		return instance;
 	}
 
-	@DeleteMapping(value = {"/{fieldOfStudyId}", "/{fieldOfStudyId}/"})
+	@DeleteMapping(value = {"/{academicYearId}", "/{academicYearId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("fieldOfStudyId") Integer fieldOfStudyId) {
+	protected HttpResponseEntity<Object> deleteAcademicYear(Authentication auth, @PathVariable("academicYearId") Integer academicYearId) {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 			
 		if(auth == null) {
@@ -189,19 +152,19 @@ public class RestAcademicDisciplineController extends BaseController {
 		}
 		UserContext userContext = authenticationFacade.getUserContext(auth);
 		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
+			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
 		}
 		
-		AcademicDiscipline fieldOfStudy;
+		AcademicYear academicYear;
 		
 		try {
-			fieldOfStudy = academicDisciplineService.findObject(fieldOfStudyId);	
-			if (fieldOfStudy == null) {
+			academicYear = academicYearService.findObject(academicYearId);	
+			if (academicYear == null) {
 				instance.setSuccess(false);
 				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 				return instance;
 			} 
-			boolean isDeleted = academicDisciplineService.deleteObject(fieldOfStudy);
+			boolean isDeleted = academicYearService.deleteObject(academicYear);
 			instance.setSuccess(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

@@ -14,19 +14,19 @@ export class SystemConfigService {
   getSystemConfig(systemConfigId: number): Observable<any> {
     return this.http
       .get<any>(`${END_POINTS.systemConfigs}/${systemConfigId}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .pipe(catchError(this.errorHandler));
   }
   getSystemConfigByKey(systemConfigKey: string): Observable<any> {
     return this.http
-      .get<any>(`${END_POINTS.systemConfigs}/keys/?key=${systemConfigKey}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .get<any>(`${END_POINTS.pubSystemConfigs}/keys/?key=${systemConfigKey}`)
+      .pipe(catchError(this.errorHandler));
   }
 
   loadSystemConfigList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.get<any>(
         `${END_POINTS.systemConfigs}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
         {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+      .pipe(catchError(this.errorHandler));
   }
 
   getSystemConfigs(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {

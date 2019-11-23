@@ -16,6 +16,8 @@ export const END_POINTS = {
   studentClasses: '/api/secured/student-classes',
   uploads: '/api/secured/uploads',
   systemConfigs: '/api/secured/system-configs',
+  pubSystemConfigs: '/api/public/system-configs',
   userPreferences: '/api/secured/user-preferences',
+  pubUserPreferences: '/api/public/user-preferences',
 
 };
