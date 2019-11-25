@@ -610,7 +610,7 @@
 		CREATE TABLE IF NOT EXISTS public.user_preferences(
 		    id BIGSERIAL PRIMARY KEY,
 		    user_id BIGINT NOT NULL,
-		    name VARCHAR(255) UNIQUE NOT NULL,		    
+		    name VARCHAR(255) NOT NULL,	    
 		    value TEXT,
 		    CONSTRAINT user_fkey FOREIGN KEY (user_id)
 		        REFERENCES public.users (id) MATCH SIMPLE

@@ -131,7 +131,6 @@ public class RestUserPreferenceController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE + "/keys");
 		this.securityCheckAdminAccess(auth);
 		this.proccessLoggedInUser(auth);
-		
 		UserPreference userPreference = null;
 		
 		try {
@@ -192,6 +191,7 @@ public class RestUserPreferenceController extends BaseController {
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE);
 		this.securityCheckAdminAccess(auth);
+		this.proccessLoggedInUser(auth);
 		
 		
 		requiredFields = new ArrayList<>(
@@ -199,12 +199,23 @@ public class RestUserPreferenceController extends BaseController {
 						UserPreferenceConstant.NAME,
 						UserPreferenceConstant.VALUE));
 		
-		UserPreference userPreference = UserPreferenceValidator.validate(params, requiredFields);
+		UserPreference userPreference = UserPreferenceValidator.validate(params, requiredFields);		
 		userPreference.setUserId(authUser.getId());
 		
 		try {
-			userPreference = userPreferenceService.updateObject(userPreference);		
-		} catch (SQLException e) {
+			UserPreference preference = userPreferenceService.findUserPreferenceByKeyAndUserID(authUser.getId(), userPreference.getName());
+			preference.setValue(userPreference.getValue());
+			userPreference = userPreferenceService.updateObject(preference);		
+		} catch (SQLException | EmptyResultDataAccessException e) {
+			if (e instanceof EmptyResultDataAccessException) {
+				try {
+					userPreference = userPreferenceService.createObject(userPreference);
+				} catch (SQLException ee) {
+					throw new JDataAccessException(ee.getMessage(), ee);
+				}
+			} else {
+				throw new JDataAccessException(e.getMessage(), e);
+			}
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			

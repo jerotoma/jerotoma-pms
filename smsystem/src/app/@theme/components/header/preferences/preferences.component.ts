@@ -9,8 +9,8 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { SystemConfig, UserPreference, SystemSetting } from 'app/models';
-import { UserPreferenceService, AuthService} from 'app/services';
+import { SystemConfig, UserPreference, SystemSetting, Theme } from 'app/models';
+import { UserPreferenceService, AuthService, ThemeService} from 'app/services';
 import { THEMES, APP_CONSTANTS } from 'app/utils';
 
 @Component({
@@ -20,9 +20,10 @@ import { THEMES, APP_CONSTANTS } from 'app/utils';
 })
 export class PreferencesComponent implements OnInit {
   themes = THEMES;
-  systemTheme: string = APP_CONSTANTS.currentTheme;
+  userPreferenceTheme: string = APP_CONSTANTS.userPreferenceTheme;
   private destroy$: Subject<void> = new Subject<void>();
   currentTheme = 'default';
+  mTheme: Theme = null;
   userPictureOnly: boolean = false;
   user: any;
   systemConfig: SystemConfig = null;
@@ -32,6 +33,7 @@ export class PreferencesComponent implements OnInit {
   constructor(
     private menuService: NbMenuService,
     private authService: AuthService,
+    private mThemeService: ThemeService,
     private themeService: NbThemeService,
     private userPreferenceService: UserPreferenceService,
     private breakpointService: NbMediaBreakpointsService) {
@@ -47,25 +49,22 @@ export class PreferencesComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+      this.loadCurrentTheme();
 
-    this.themeService.onThemeChange()
+   /* this.themeService.onThemeChange()
       .pipe(
         map(({ name }) => name),
         takeUntil(this.destroy$),
       )
-      .subscribe(themeName => this.currentTheme = themeName);
-      this.authService.isAuthenticated().subscribe(isAuthenticated => {
-          if (isAuthenticated) {
-            this.loadCurrentTheme();
-          }
-      });
+      .subscribe(themeName => this.currentTheme = themeName); */
+
   }
 
   changeTheme(themeName: string) {
     this.userPreference = {
-      id:  this.systemSetting ? this.systemSetting.currentThemeID : null,
+      id:  this.userPreference ? this.userPreference.id : null,
       userId: 0,
-      name: this.systemTheme,
+      name: this.userPreferenceTheme,
       value: themeName,
     };
     this.userPreferenceService.updateSystemConfig(this.userPreference)
@@ -87,12 +86,17 @@ export class PreferencesComponent implements OnInit {
   }
 
   loadCurrentTheme() {
-    this.userPreferenceService.getSystemConfigByKey(this.systemTheme)
+    this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
       if (result.success) {
-        this.systemSetting = result.data;
-        this.currentTheme =  this.systemSetting.currentTheme;
-        this.themeService.changeTheme(this.currentTheme);
+        this.mTheme = result.data;
+        this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
+        if (this.mTheme.overrideUserTheme) {
+           this.themeService.changeTheme(this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme);
+        } else {
+          this.themeService.changeTheme(this.currentTheme );
+        }
+
       }
     });
   }

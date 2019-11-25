@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import {User, SystemConfig, SystemSetting } from 'app/models';
-import {UserService, SystemConfigService } from 'app/services';
+import {User, SystemConfig, SystemSetting, Theme } from 'app/models';
+import {UserService, SystemConfigService, ThemeService } from 'app/services';
 
 
 import { LayoutService } from 'app/@core/utils';
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userPictureOnly: boolean = false;
   user: User;
   themes = THEMES;
+  mTheme: Theme = null;
   currentTheme = 'default';
   systemTheme: string = APP_CONSTANTS.currentTheme;
   userMenu = USER_DROPDOWN_ITEMS;
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: NbAuthService,
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
+    private mThemeService: ThemeService,
     private themeService: NbThemeService,
     private systemConfigService: SystemConfigService,
     private layoutService: LayoutService,
@@ -52,14 +54,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
 
-    this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
-
-      this.menuService.onItemClick().subscribe(( event ) => {
+    this.menuService.onItemClick().subscribe(( event ) => {
         this.onItemSelection(event.item.title);
       });
       this.loadCurrentTheme();
@@ -103,11 +98,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   loadCurrentTheme() {
-    this.systemConfigService.getSystemConfigByKey(this.systemTheme)
+    this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
       if (result.success) {
-        this.systemSetting = result.data;
-        this.currentTheme =  this.systemSetting.currentTheme;
+        this.mTheme = result.data;
+        if (this.mTheme.overrideUserTheme) {
+          this.currentTheme =  this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme;
+        } else {
+          this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
+        }
         this.themeService.changeTheme(this.currentTheme);
       }
     });

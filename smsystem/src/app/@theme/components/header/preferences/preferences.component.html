@@ -6,7 +6,7 @@
           <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="inputEmail" class="label">Change Appearance</label>
+                  <label for="inputEmail" class="label">Change Theme</label>
                   <nb-select fullWidth [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
                     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
                   </nb-select>

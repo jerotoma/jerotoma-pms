@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SystemConfigConstant;
+import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
@@ -87,19 +89,46 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 	
 	private void addDefaultAppTheme() {
-		SystemConfig systemConfig = new SystemConfig(); 
-		systemConfig.setName(SystemConfigConstant.THEME.CURRENT_THEME);
-		systemConfig.setValue("default");
+		SystemConfig defaultTheme = new SystemConfig(); 
+		defaultTheme.setName(SystemConfigConstant.THEME.CURRENT_THEME);
+		defaultTheme.setValue("default");
+		
+		SystemConfig overrideUserTheme = new SystemConfig(); 
+		overrideUserTheme.setName(SystemConfigConstant.THEME.OVERRIDE_USER_THEME);
+		overrideUserTheme.setValue("false");
+		
 		try {
-			Long count = systemConfigService.countObject();
-			if (count != null && count != 0) {
+			SystemConfig systemConfig = getSystemTheme(defaultTheme.getName());
+			if (systemConfig != null) {
 				return;
-			}
-			systemConfigService.createObject(systemConfig);
+			} 
+			systemConfigService.createObject(defaultTheme);
+			
+			systemConfig = getSystemTheme(overrideUserTheme.getName());
+			if (systemConfig != null) {
+				return;
+			} 
+			systemConfigService.createObject(overrideUserTheme);
+			
+			
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage(), e); 
 		}
+	}
+	
+	private SystemConfig getSystemTheme(String systemConfigKey) {
+		SystemConfig systemConfig = null;
 		
+		try {
+			systemConfig = systemConfigService.findObjectUniqueKey(systemConfigKey);		
+		} catch (SQLException | EmptyResultDataAccessException e) {
+			if (e instanceof EmptyResultDataAccessException) {
+				systemConfig = null ; 
+			} else {
+				throw new JDataAccessException(e.getMessage(), e);
+			}			
+		}
+		return systemConfig;
 	}
 
 }

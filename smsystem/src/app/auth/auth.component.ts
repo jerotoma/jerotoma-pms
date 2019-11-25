@@ -9,8 +9,8 @@ import {
 } from '@nebular/auth';
 
 import { APP_CONSTANTS } from 'app/utils';
-import {SystemConfig, SystemSetting } from 'app/models';
-import {SystemConfigService } from 'app/services';
+import {SystemConfig, SystemSetting, Theme } from 'app/models';
+import {ThemeService } from 'app/services';
 
 @Component({
   selector: 'app-auth',
@@ -24,11 +24,12 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
   systemTheme: string = APP_CONSTANTS.currentTheme;
   systemConfig: SystemConfig = null;
   systemSetting: SystemSetting = null;
+  mTheme: Theme = null;
 
   constructor(
       protected auth: NbAuthService,
       private themeService: NbThemeService,
-      private systemConfigService: SystemConfigService,
+      private mThemeService: ThemeService,
       protected location: Location) {
         super(auth, location);
   }
@@ -38,13 +39,17 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
   }
 
   loadCurrentTheme() {
-    this.systemConfigService.getSystemConfigByKey(this.systemTheme)
+    this.mThemeService.getCurrentSystemTheme()
     .subscribe((result: any) => {
       if (result.success) {
-        this.systemSetting = result.data;
-        this.currentTheme =  this.systemSetting.currentTheme;
+        this.mTheme = result.data;
+        if (this.mTheme.overrideUserTheme) {
+          this.currentTheme =  this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme;
+        } else {
+          this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
+        }
         this.themeService.changeTheme(this.currentTheme);
-      }
+       }
     });
   }
 }

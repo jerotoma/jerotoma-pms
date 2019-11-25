@@ -60,8 +60,8 @@ public class UserPreferenceDaoImpl implements UserPreferenceDao{
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<UserPreference> systemConfigs = entityManager.createQuery("FROM UserPreference", UserPreference.class).getResultList();		
-		map.put(SystemConfigConstant.SYSTEM_CONFINGS, systemConfigs);
+		List<UserPreference> userPreferences = entityManager.createQuery("FROM UserPreference", UserPreference.class).getResultList();		
+		map.put(SystemConfigConstant.SYSTEM_CONFINGS, userPreferences);
 		
 		return map;
 	}

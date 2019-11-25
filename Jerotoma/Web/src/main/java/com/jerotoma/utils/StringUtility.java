@@ -17,4 +17,11 @@ public class StringUtility {
 	public static boolean isNumeric(String object) {
 		return StringUtils.isNumeric(object);
 	}
+
+	public static boolean booleanValueOf(String value) {		
+		if (isEmpty(value)) {
+			return false;
+		}		
+		return Boolean.valueOf(value);
+	}
 }

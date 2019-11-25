@@ -73,6 +73,14 @@ public class EndPointConstants {
 		public static final String BASE =  API_PUBLIC_ROOT + "/system-configs";		
 	}
 	
+	public static interface  REST_PUB_THEME_CONTROLLER {
+		public static final String BASE =  API_PUBLIC_ROOT + "/themes";		
+	}
+	
+	public static interface  REST_THEME_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/themes";		
+	}
+	
 	public static interface  REST_ACADEMIC_DISCIPLINE_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/academic-disciplines";		
 	}
