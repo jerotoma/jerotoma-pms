@@ -9,7 +9,7 @@ import {
 } from '@nebular/auth';
 
 import { APP_CONSTANTS } from 'app/utils';
-import {SystemConfig, SystemSetting, Theme } from 'app/models';
+import {SystemConfig, SystemSetting, Theme , UserPreference} from 'app/models';
 import {ThemeService } from 'app/services';
 
 @Component({
@@ -25,6 +25,8 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
   systemConfig: SystemConfig = null;
   systemSetting: SystemSetting = null;
   mTheme: Theme = null;
+  overrideSystemConfig: SystemConfig = null;
+  userPreference: UserPreference = null;
 
   constructor(
       protected auth: NbAuthService,
@@ -43,13 +45,12 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
     .subscribe((result: any) => {
       if (result.success) {
         this.mTheme = result.data;
-        if (this.mTheme.overrideUserTheme) {
-          this.currentTheme =  this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme;
-        } else {
-          this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
+        this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
+        if (this.systemConfig) {
+          this.currentTheme =  this.systemConfig.value;
+          this.themeService.changeTheme(this.currentTheme);
         }
-        this.themeService.changeTheme(this.currentTheme);
-       }
+      }
     });
   }
 }

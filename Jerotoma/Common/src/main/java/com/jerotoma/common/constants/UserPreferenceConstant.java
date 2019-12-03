@@ -8,10 +8,42 @@ public class UserPreferenceConstant {
 	public static final String ID = "id";
 	public static final String USER_ID = "user_id";
 	
-	public static interface THEME {
-		public static final String CURRENT_THEME = "system.config.userpreference.current_theme";
-		public static final String CURRENT_USER_THEME = "currentUserTheme";
-		public static final String CURRENT_USER_THEME_ID = "currentUserThemeID";
+	public static enum THEME_CONFIG {
+		CURRENT_USER_THEME("currentUserTheme", "system.config.userpreference.current_theme");
+		
+		String name;
+		String dbName;
+		
+		THEME_CONFIG(String name, String dbName) {
+			this.name = name;
+			this.dbName = dbName;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getDbName() {
+			return dbName;
+		}
+	}
+
+	public static THEME_CONFIG getThemeConfigByDbName(String dbName) {
+		for (THEME_CONFIG themConfig: THEME_CONFIG.values()) {
+			if (themConfig.getDbName().equals(dbName)) {
+				return themConfig;
+			}
+		}
+		return null;
+	}
+	
+	public static THEME_CONFIG getThemeConfigByName(String name) {
+		for (THEME_CONFIG themConfig: THEME_CONFIG.values()) {
+			if (themConfig.getName().equals(name)) {
+				return themConfig;
+			}
+		}
+		return null;
 	}
 
 	

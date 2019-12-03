@@ -1,16 +1,15 @@
 package com.jerotoma.common.viewobjects;
 
 import java.sql.ResultSet;
-import java.util.List;
 import java.util.Map;
 
-import com.jerotoma.common.models.config.UserPreference;
+import com.jerotoma.common.models.config.SystemConfig;
 
 public class AppSetttingVO {
 	
-	private Map<String, Object> systemConfigs;
+	private Map<String, SystemConfig> mapSystemConfigs;
 	
-	private List<UserPreferenceVO> userPreferences;
+	private Map<String, UserPreferenceVO> mapUserPreferences;
 	
 	public AppSetttingVO(){}
 
@@ -18,16 +17,19 @@ public class AppSetttingVO {
 		
 	}
 	
-	public Map<String, Object> getSystemConfigs() {
-		return systemConfigs;
+	public Map<String, SystemConfig> getMapSystemConfigs() {
+		return mapSystemConfigs;
 	}
 
-	public void setSystemConfigs(Map<String, Object> systemConfigs) {
-		this.systemConfigs = systemConfigs;
+	public void setMapSystemConfigs(Map<String, SystemConfig> systemConfigs) {
+		this.mapSystemConfigs = systemConfigs;
 	}
 
-	public void setUserPreferences(List<UserPreferenceVO> userPreferences) {
-		this.userPreferences = userPreferences;
-		
+	public void setMapUserPreferences(Map<String, UserPreferenceVO> userPreferences) {
+		this.mapUserPreferences = userPreferences;		
 	}
+
+	public Map<String, UserPreferenceVO> getMapUserPreferences() {
+		return mapUserPreferences;
+	}	
 }

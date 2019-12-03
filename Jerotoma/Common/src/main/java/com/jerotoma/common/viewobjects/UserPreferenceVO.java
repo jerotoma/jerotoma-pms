@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.jerotoma.common.constants.UserPreferenceConstant;
+import com.jerotoma.common.models.config.UserPreference;
 
 public class UserPreferenceVO {
 	
@@ -15,7 +16,7 @@ public class UserPreferenceVO {
 	
 	private TeacherVO user;
 	
-	UserPreferenceVO(){
+	public UserPreferenceVO(){
 		
 	}
 	
@@ -24,6 +25,12 @@ public class UserPreferenceVO {
 		this.name = rs.getString(UserPreferenceConstant.NAME);
 		this.value = rs.getString(UserPreferenceConstant.VALUE);
 		this.id = rs.getInt(UserPreferenceConstant.ID);
+	}
+	
+	public UserPreferenceVO(UserPreference preference) {		
+		this.name = preference.getName();
+		this.value = preference.getValue();
+		this.id = preference.getId();
 	}
 
 	public Integer getId() {

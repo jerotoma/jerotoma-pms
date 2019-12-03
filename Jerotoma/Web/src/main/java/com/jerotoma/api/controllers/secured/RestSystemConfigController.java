@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -139,18 +140,16 @@ public class RestSystemConfigController extends BaseController {
 		}
 		
 		try {
-			userPreference = userPreferenceService.findUserPreferenceByKeyAndUserID(authUser.getId(), UserPreferenceConstant.THEME.CURRENT_THEME);
+			userPreference = userPreferenceService.findUserPreferenceByKeyAndUserID(authUser.getId(), UserPreferenceConstant.THEME_CONFIG.CURRENT_USER_THEME.getDbName());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 			
-		map.put(SystemConfigConstant.CURRENT_THEME_ID, systemConfig.getId());
-		map.put(SystemConfigConstant.CURRENT_THEME, systemConfig.getValue());
+		map.put(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getName(), systemConfig);
 		
 		if (userPreference != null) {
-			map.put(UserPreferenceConstant.THEME.CURRENT_USER_THEME_ID, userPreference.getId());
-			map.put(UserPreferenceConstant.THEME.CURRENT_USER_THEME, userPreference.getValue());
+			map.put(UserPreferenceConstant.THEME_CONFIG.CURRENT_USER_THEME.getName(), userPreference);
 		}
 		
 		instance.setSuccess(true);
@@ -208,8 +207,19 @@ public class RestSystemConfigController extends BaseController {
 		SystemConfig systemConfig = SystemConfigValidator.validate(params, requiredFields);
 		
 		try {
+			SystemConfig dbSystemConfig  = systemConfigService.findObjectUniqueKey(systemConfig.getName());
+			systemConfig.setId(dbSystemConfig.getId());
 			systemConfig = systemConfigService.updateObject(systemConfig);		
-		} catch (SQLException e) {
+		} catch (SQLException | EmptyResultDataAccessException e) {
+			if (e instanceof EmptyResultDataAccessException) {
+				try {
+					systemConfig = systemConfigService.createObject(systemConfig);	
+				} catch (SQLException ee) {
+					throw new JDataAccessException(ee.getMessage(), ee);
+				}
+			} else {
+				throw new JDataAccessException(e.getMessage(), e);
+			}
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			

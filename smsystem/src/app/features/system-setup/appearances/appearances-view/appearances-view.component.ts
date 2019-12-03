@@ -9,7 +9,7 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import {SystemConfig, Theme } from 'app/models';
+import {SystemConfig, Theme, UserPreference } from 'app/models';
 import {SystemConfigService, ThemeService } from 'app/services';
 import { THEMES, APP_CONSTANTS } from 'app/utils';
 
@@ -28,6 +28,8 @@ export class AppearancesViewComponent implements OnInit {
   user: any;
   overrideUserTheme: boolean = false;
   systemConfig: SystemConfig = null;
+  overrideSystemConfig: SystemConfig = null;
+  userPreference: UserPreference = null;
 
   constructor(
     private menuService: NbMenuService,
@@ -43,16 +45,16 @@ export class AppearancesViewComponent implements OnInit {
   }
   overrideUserThemeCheckedChange(isOverrideUserTheme: any) {
     const systemConfig = {
-      id: this.mTheme.overrideUserThemeID,
+      id: this.overrideSystemConfig ? this.overrideSystemConfig.id : null,
       name: APP_CONSTANTS.overrideUserTheme,
       value: isOverrideUserTheme,
     };
     this.updateSystemConfigChange(systemConfig);
   }
   changeTheme(themeName: string) {
-    const systemConfig = {
-      id: this.mTheme.systemThemeID,
-      name: this.systemTheme,
+   const systemConfig = {
+      id: this.systemConfig ? this.systemConfig.id : null,
+      name: this.systemConfig ? this.systemConfig.name : APP_CONSTANTS.currentTheme,
       value: themeName,
     };
     this.updateSystemConfigChange(systemConfig);
@@ -67,11 +69,15 @@ export class AppearancesViewComponent implements OnInit {
     .subscribe((result: any) => {
       if (result.success) {
         this.mTheme = result.data;
-        this.currentTheme =  this.mTheme.systemTheme;
-        if (this.mTheme.overrideUserTheme) {
+        this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
+        this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
+        this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
+        this.currentTheme =  this.systemConfig.value;
+        this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
+        if (this.overrideSystemConfig &&  this.overrideUserTheme) {
           this.themeService.changeTheme(this.currentTheme);
         } else {
-          this.themeService.changeTheme(this.mTheme.userTheme);
+          this.themeService.changeTheme(this.userPreference.value);
         }
       }
     });

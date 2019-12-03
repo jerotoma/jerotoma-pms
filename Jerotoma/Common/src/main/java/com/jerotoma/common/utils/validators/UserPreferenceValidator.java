@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.UserPreferenceConstant;
+import com.jerotoma.common.constants.UserPreferenceConstant.THEME_CONFIG;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.models.config.UserPreference;
 
@@ -36,7 +37,9 @@ public class UserPreferenceValidator {
 		if (name == null && requiredFields.contains(UserPreferenceConstant.NAME)) {
 			throw new FieldIsRequiredException("Name is required to continue");
 		}
-		systemConfig.setName(name);
+		
+		THEME_CONFIG themeConfig = UserPreferenceConstant.getThemeConfigByName(name);
+		systemConfig.setName(themeConfig != null ? themeConfig.getDbName() : name);
 		
 		if (value == null && requiredFields.contains(UserPreferenceConstant.VALUE)) {
 			throw new FieldIsRequiredException("Value is required to continue");

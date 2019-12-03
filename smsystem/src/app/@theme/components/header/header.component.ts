@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
-import {User, SystemConfig, SystemSetting, Theme } from 'app/models';
+import {User, SystemConfig, UserPreference, Theme } from 'app/models';
 import {UserService, SystemConfigService, ThemeService } from 'app/services';
 
 
@@ -29,7 +29,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   systemTheme: string = APP_CONSTANTS.currentTheme;
   userMenu = USER_DROPDOWN_ITEMS;
   systemConfig: SystemConfig = null;
-  systemSetting: SystemSetting = null;
+  overrideSystemConfig: SystemConfig = null;
+  userPreference: UserPreference = null;
 
   constructor(
     private userService: UserService,
@@ -102,12 +103,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     .subscribe((result: any) => {
       if (result.success) {
         this.mTheme = result.data;
-        if (this.mTheme.overrideUserTheme) {
-          this.currentTheme =  this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme;
+        this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
+        this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
+        this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
+        this.currentTheme =  this.systemConfig.value;
+        if (this.overrideSystemConfig) {
+          this.themeService.changeTheme( this.currentTheme);
         } else {
-          this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
+          this.themeService.changeTheme(this.userPreference.value);
         }
-        this.themeService.changeTheme(this.currentTheme);
       }
     });
   }

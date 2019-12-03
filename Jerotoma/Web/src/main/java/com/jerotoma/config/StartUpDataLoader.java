@@ -90,27 +90,23 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 	
 	private void addDefaultAppTheme() {
 		SystemConfig defaultTheme = new SystemConfig(); 
-		defaultTheme.setName(SystemConfigConstant.THEME.CURRENT_THEME);
+		defaultTheme.setName(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getDbName());
 		defaultTheme.setValue("default");
 		
 		SystemConfig overrideUserTheme = new SystemConfig(); 
-		overrideUserTheme.setName(SystemConfigConstant.THEME.OVERRIDE_USER_THEME);
+		overrideUserTheme.setName(SystemConfigConstant.THEME_CONFIG.OVERRIDE_USER_THEME.getDbName());
 		overrideUserTheme.setValue("false");
 		
 		try {
 			SystemConfig systemConfig = getSystemTheme(defaultTheme.getName());
-			if (systemConfig != null) {
-				return;
+			if (systemConfig == null) {
+				systemConfigService.createObject(defaultTheme);
 			} 
-			systemConfigService.createObject(defaultTheme);
-			
+						
 			systemConfig = getSystemTheme(overrideUserTheme.getName());
-			if (systemConfig != null) {
-				return;
-			} 
-			systemConfigService.createObject(overrideUserTheme);
-			
-			
+			if (systemConfig == null) {
+				systemConfigService.createObject(overrideUserTheme);
+			} 		
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage(), e); 
 		}

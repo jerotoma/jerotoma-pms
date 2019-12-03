@@ -27,8 +27,8 @@ export class PreferencesComponent implements OnInit {
   userPictureOnly: boolean = false;
   user: any;
   systemConfig: SystemConfig = null;
+  overrideSystemConfig: SystemConfig = null;
   userPreference: UserPreference = null;
-  systemSetting: SystemSetting = null;
 
   constructor(
     private menuService: NbMenuService,
@@ -64,7 +64,7 @@ export class PreferencesComponent implements OnInit {
     this.userPreference = {
       id:  this.userPreference ? this.userPreference.id : null,
       userId: 0,
-      name: this.userPreferenceTheme,
+      name:  this.userPreference ? this.userPreference.name : this.userPreferenceTheme,
       value: themeName,
     };
     this.userPreferenceService.updateSystemConfig(this.userPreference)
@@ -90,13 +90,15 @@ export class PreferencesComponent implements OnInit {
     .subscribe((result: any) => {
       if (result.success) {
         this.mTheme = result.data;
-        this.currentTheme =  this.mTheme.userTheme ? this.mTheme.userTheme : this.mTheme.systemTheme;
-        if (this.mTheme.overrideUserTheme) {
-           this.themeService.changeTheme(this.mTheme.systemTheme ? this.mTheme.systemTheme : this.mTheme.userTheme);
+        this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
+        this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
+        this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
+        this.currentTheme =  this.userPreference ? this.userPreference.value : this.systemConfig.value;
+        if (this.overrideSystemConfig && this.overrideSystemConfig.value) {
+            this.themeService.changeTheme(this.systemConfig.value);
         } else {
-          this.themeService.changeTheme(this.currentTheme );
+          this.themeService.changeTheme(this.userPreference.value);
         }
-
       }
     });
   }

@@ -1,8 +1,5 @@
 package com.jerotoma.common.models.config;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +9,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.constants.UserPreferenceConstant;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.USER_PREFERENCES)

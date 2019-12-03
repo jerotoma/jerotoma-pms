@@ -39,7 +39,9 @@ public class AppSettingAssemblerDaoImpl extends JdbcDaoSupport implements AppSet
 	@Autowired UserPreferenceDao userPreferenceDao;
 	@Autowired AssemblerTeacherDao assemblerTeacherDao;	
 	
-	Map<String, Object> map;
+	private Map<String, SystemConfig> systemConfigs;
+	
+	private Map<String, UserPreferenceVO> mapUserPreferences;
 	
 	@PostConstruct
 	private void initialize() {
@@ -123,11 +125,11 @@ public class AppSettingAssemblerDaoImpl extends JdbcDaoSupport implements AppSet
 
 	public AppSetttingVO mapAppSetttingVOResult(ResultSet rs) throws SQLException {
 		AppSetttingVO appSetting = new AppSetttingVO();
-		map = new HashMap<>();
+		systemConfigs = new HashMap<>();
 		
-		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME.CURRENT_THEME);
-		map.put(SystemConfigConstant.CURRENT_THEME, systemConfig.getValue());
-		appSetting.setSystemConfigs(map);
+		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getDbName());
+		systemConfigs.put(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getName(), systemConfig);
+		appSetting.setMapSystemConfigs(systemConfigs);
 		
 		
 		
@@ -136,11 +138,11 @@ public class AppSettingAssemblerDaoImpl extends JdbcDaoSupport implements AppSet
 	
 	public AppSetttingVO mapAppSetttingVOResult(ResultSet rs, Integer userID) throws SQLException {
 		AppSetttingVO appSetting = new AppSetttingVO();
-		map = new HashMap<>();
+		systemConfigs = new HashMap<>();
 		
-		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME.CURRENT_THEME);
-		map.put(SystemConfigConstant.CURRENT_THEME, systemConfig.getValue());
-		appSetting.setSystemConfigs(map);
+		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getDbName());
+		systemConfigs.put(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getName(), systemConfig);
+		appSetting.setMapSystemConfigs(systemConfigs);
 		
 		
 		
@@ -158,15 +160,20 @@ public class AppSettingAssemblerDaoImpl extends JdbcDaoSupport implements AppSet
 	@Override
 	public AppSetttingVO findObjectByUserID(Integer userID) throws SQLException {
 		AppSetttingVO appSetting = new AppSetttingVO();
-		map = new HashMap<>();	
+		mapUserPreferences = new HashMap<>();	
 		
 		StringBuilder builder = getBaseSelectQuery().append(" WHERE user_id = ? ");		
 		List<UserPreferenceVO> userPreferences =  this.jdbcTemplate.query(builder.toString(), new UserReferenceResultProcessor(), userID);
+		for (UserPreferenceVO preference: userPreferences) {
+			UserPreferenceConstant.THEME_CONFIG themeConfig = UserPreferenceConstant.getThemeConfigByDbName(preference.getName());
+			mapUserPreferences.put(themeConfig.getName(), preference);
+		}
+		appSetting.setMapUserPreferences(mapUserPreferences);
 		
-		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME.CURRENT_THEME);
-		map.put(SystemConfigConstant.CURRENT_THEME, systemConfig.getValue());
-		appSetting.setSystemConfigs(map);
-		appSetting.setUserPreferences(userPreferences);
+		SystemConfig systemConfig  = systemConfigDao.findObjectUniqueKey(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getDbName());
+		systemConfigs.put(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getName(), systemConfig);
+		appSetting.setMapSystemConfigs(systemConfigs);
+		
 		
 		return appSetting;
 	}
