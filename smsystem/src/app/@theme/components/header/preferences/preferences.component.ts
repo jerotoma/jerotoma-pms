@@ -25,6 +25,7 @@ export class PreferencesComponent implements OnInit {
   currentTheme = 'default';
   mTheme: Theme = null;
   userPictureOnly: boolean = false;
+  overrideUserTheme: boolean = false;
   user: any;
   systemConfig: SystemConfig = null;
   overrideSystemConfig: SystemConfig = null;
@@ -94,10 +95,13 @@ export class PreferencesComponent implements OnInit {
         this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
         this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
         this.currentTheme =  this.userPreference ? this.userPreference.value : this.systemConfig.value;
-        if (this.overrideSystemConfig && this.overrideSystemConfig.value) {
+        if (this.overrideSystemConfig) {
+          this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
+        }
+        if (this.overrideUserTheme) {
             this.themeService.changeTheme(this.systemConfig.value);
         } else {
-          this.themeService.changeTheme(this.userPreference.value);
+          this.themeService.changeTheme(this.currentTheme);
         }
       }
     });

@@ -73,8 +73,10 @@ export class AppearancesViewComponent implements OnInit {
         this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
         this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
         this.currentTheme =  this.systemConfig.value;
-        this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
-        if (this.overrideSystemConfig &&  this.overrideUserTheme) {
+        if (this.overrideSystemConfig) {
+          this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
+        }
+        if (this.overrideUserTheme) {
           this.themeService.changeTheme(this.currentTheme);
         } else {
           this.themeService.changeTheme(this.userPreference.value);

@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
+  overrideUserTheme: boolean = false;
   user: User;
   themes = THEMES;
   mTheme: Theme = null;
@@ -106,9 +107,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
         this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
         this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
-        this.currentTheme =  this.systemConfig.value;
         if (this.overrideSystemConfig) {
-          this.themeService.changeTheme( this.currentTheme);
+          this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
+        }
+        if (this.overrideUserTheme) {
+          this.themeService.changeTheme(this.currentTheme);
         } else {
           this.themeService.changeTheme(this.userPreference.value);
         }

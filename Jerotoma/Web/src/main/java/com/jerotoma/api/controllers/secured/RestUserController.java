@@ -671,9 +671,6 @@ public class RestUserController extends BaseController {
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
-		
+		return instance;		
 	}
-	
-
 }

@@ -87,15 +87,15 @@
                         <div class="form-control-group">
                             <label for="user-academicDiscipline" class="label">Field of Study</label>
                             <nb-select
-                              fullWidth
-                              placeholder="Field of Study"
-                              formControlName="academicDiscipline"
-                              id="user-academicDiscipline">
-                              <nb-option
-                                  *ngFor='let acad of academicDisciplines'
-                                  [value]="acad.id">
-                                  {{acad.name}}
-                              </nb-option>
+                                fullWidth
+                                placeholder="Field of Study"
+                                formControlName="academicDiscipline"
+                                id="user-academicDiscipline">
+                                <nb-option
+                                    *ngFor='let acad of academicDisciplines'
+                                    [value]="acad.id">
+                                    {{acad.name}}
+                                </nb-option>
                             </nb-select>
                         </div>
                     </div>

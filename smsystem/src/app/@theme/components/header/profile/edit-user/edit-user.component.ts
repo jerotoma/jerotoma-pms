@@ -47,7 +47,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
     this.loadPositionList();
     this.loadAcademicDisciplineList();
     this.loadForm();
-    this.loadUser();
+    // this.loadUser();
   }
   ngAfterViewInit() {
     if (this.user) {
@@ -62,6 +62,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
   updateUser(user: User) {
     this.userService.updateUser(user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
+      window.console.log(resp);
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
