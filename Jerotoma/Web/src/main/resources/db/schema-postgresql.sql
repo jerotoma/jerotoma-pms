@@ -1,3 +1,56 @@
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ADD TABLE COLUMN RELATED TABLES					  *
+	 * 															  *
+	 *************************************************************/
+	
+	--RUN THIS SCRIPTS MUNUALLY
+	
+	/** 
+	CREATE OR REPLACE function add_table_column_if_not_exists(tableName regclass, columnName  text, dataType regtype)
+	RETURNS bool AS 
+	$BODY$ 
+		BEGIN 
+		  	IF EXISTS (SELECT 1 FROM pg_attribute WHERE  attrelid = tableName AND attname = columnName AND NOT attisdropped) THEN		  	
+		  		RETURN FALSE;
+		  	ELSE
+		  		EXECUTE format('ALTER TABLE %s ADD COLUMN %I %s', tableName, columnName, dataType);
+		      	RETURN TRUE;
+		   	END IF;	   
+		END;
+	$BODY$ 
+	LANGUAGE plpgsql; 
+	**/
+	
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ADD TABLE COLUMN RELATED TABLES					  *
+	 * 															  *
+	 *************************************************************/
+	
+	--RUN THIS SCRIPTS MUNUALLY
+	
+	/**
+	CREATE OR REPLACE function rename_table_column_if_exists(tableName regclass, currentColumnName  TEXT, newColumnName TEXT)
+	RETURNS bool AS 
+	$BODY$ 
+		BEGIN 
+		  IF NOT EXISTS 
+		  	(SELECT 1 FROM pg_attribute WHERE  attrelid = tableName AND attname = currentColumnName AND NOT attisdropped) 
+		  THEN
+		     RETURN FALSE;
+		  ELSE
+		     EXECUTE 'ALTER TABLE ' || tableName || ' RENAME COLUMN ' || currentColumnName || ' TO ' || newColumnName;
+		     RETURN TRUE;
+		  END IF;
+		END;
+	$BODY$ 
+	LANGUAGE plpgsql;  
+	*/
+		
+
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -111,7 +164,7 @@
 	    user_id bigint NOT NULL,
 	    position_id bigint NOT NULL,
 	    academic_discipline_id bigint NOT NULL,
-	    teacher_code character varying(255) NOT NULL,
+	    user_code character varying(255) NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
 	    middle_names text,
@@ -140,6 +193,8 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE 
 	    );
+	    
+	SELECT rename_table_column_if_exists('teachers'::regclass, 'teacher_code', 'user_code');
 	
 	/**************************************************************
 	 * 															  *
@@ -164,6 +219,8 @@
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT parents_pkey PRIMARY KEY (id)
 	   	);
+	   	
+	   	SELECT add_table_column_if_not_exists('public.parents', 'user_code', 'character varying(255)');
 	 
 	/**************************************************************
 	 * 															  *
@@ -190,6 +247,9 @@
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT students_pkey PRIMARY KEY (id),
 	   	CONSTRAINT student_number UNIQUE (student_number));
+	   	
+	   	
+	   	SELECT add_table_column_if_not_exists('public.students', 'user_code', 'character varying(255)');
 
 	/**************************************************************
 	 * 															  *
@@ -221,7 +281,9 @@
 	   	
 	    );
 	    
-	    /**************************************************************
+	    SELECT add_table_column_if_not_exists('public.staffs', 'user_code', 'character varying(255)');
+	    
+	/**************************************************************
 	 * 															  *
 	 * 															  *
 	 * 			TEACHER_ADDRESSES RELATED TABLES				  *

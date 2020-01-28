@@ -18,6 +18,8 @@ public abstract class PersonVO {
 	
 	protected String fullName;
 	
+	protected String userCode;
+	
 	protected AddressVO address;
 	
 	protected Integer age;
@@ -57,6 +59,7 @@ public abstract class PersonVO {
 		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
+		this.userCode = rs.getString(UserConstant.USER_CODE);
 		this.fullName = getFullName();
 	
 	}
@@ -186,5 +189,13 @@ public abstract class PersonVO {
 
 	public void setAddress(AddressVO address) {
 		this.address = address;
+	}
+	
+	public String getUserCode() {
+		return userCode;
+	}
+
+	public void setUserCode(String teacherCode) {
+		this.userCode = teacherCode;
 	}
 }

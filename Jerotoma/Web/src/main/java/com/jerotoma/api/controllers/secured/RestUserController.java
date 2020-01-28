@@ -454,7 +454,7 @@ public class RestUserController extends BaseController {
 				academicDiscipline = processAcademicDiscipline(params, requiredFields);
 				
 				requiredFields.add(UserConstant.USER_ID);
-				requiredFields.add(UserConstant.EMPLOYMENT_CODE);
+				requiredFields.add(UserConstant.USER_CODE);
 				requiredFields.add(UserConstant.BIRTH_DATE);
 				
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);

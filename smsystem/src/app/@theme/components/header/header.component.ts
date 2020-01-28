@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     }
   }
-  onItemSelection( title ) {
+  onItemSelection(title: string) {
     if ( title === 'Log out' ) {
       // Do something on Log out
       window.console.log('Log out Clicked');

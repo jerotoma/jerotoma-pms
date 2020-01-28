@@ -9,9 +9,7 @@ public class TeacherVO extends PersonVO{
 	private Integer id;
 	
 	private Integer userId;
-	
-	private String teacherCode;
-	
+		
 	private PositionVO position;
 	
 	private AcademicDisciplineVO academicDiscipline;
@@ -19,9 +17,7 @@ public class TeacherVO extends PersonVO{
 	public TeacherVO(ResultSet rs) throws SQLException {
 		super(rs);
 		this.id = rs.getInt(UserConstant.ID);
-		this.userId = rs.getInt(UserConstant.USER_ID);
-		this.teacherCode = rs.getString(UserConstant.TEACHER_CODE);
-		
+		this.userId = rs.getInt(UserConstant.USER_ID);		
 	}
 
 	public Integer getId() {
@@ -40,13 +36,6 @@ public class TeacherVO extends PersonVO{
 		this.userId = userId;
 	}
 
-	public String getTeacherCode() {
-		return teacherCode;
-	}
-
-	public void setTeacherCode(String teacherCode) {
-		this.teacherCode = teacherCode;
-	}
 
 	public PositionVO getPosition() {
 		return position;

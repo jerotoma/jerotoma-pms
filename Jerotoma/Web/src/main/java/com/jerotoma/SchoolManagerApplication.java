@@ -16,7 +16,7 @@ public class SchoolManagerApplication extends SpringBootServletInitializer {
 	private static Class<SchoolManagerApplication> applicationClass = SchoolManagerApplication.class;
 		
 	public static void main(String[] args) {
-		SpringApplication.run(SchoolManagerApplication.class, args);
+		SpringApplication.run(applicationClass, args);
 	}	
 	
 	@Bean

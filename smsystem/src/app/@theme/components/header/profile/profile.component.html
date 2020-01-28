@@ -10,6 +10,7 @@
       </nb-tab>
       <nb-tab tabTitle="Edit User Details" tabIcon="edit-outline">
           <app-edit-user
+            #snackMessage
             *ngIf="user"
             [user]="user"
         ></app-edit-user>

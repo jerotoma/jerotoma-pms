@@ -35,7 +35,6 @@ export class ProfileComponent implements OnInit {
     if (username) {
       this.userService.loadUserByUsername(username, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
-        window.console.log(resp.body.data);
         const status = resp.status;
           if (status !== null && status === 200) {
             this.user = resp.body.data;

@@ -128,7 +128,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT st.id, st.student_number AS studentNumber, st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress, st.phone_number as phoneNumber, st.occupation, st.gender, st.avatar, st.position, st.birth_date AS birthDate, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn FROM public.students st ");
+		return new StringBuilder("SELECT st.id, st.student_number AS studentNumber, st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress, st.phone_number as phoneNumber, st.user_code AS userCode, st.occupation, st.gender, st.avatar, st.position, st.birth_date AS birthDate, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn FROM public.students st ");
 		
 	}
 

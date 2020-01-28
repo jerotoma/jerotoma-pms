@@ -41,10 +41,7 @@ public class Teacher extends Person implements Serializable{
 	@OneToMany(mappedBy="teacher")
 	@JsonManagedReference
 	private Set<TeacherAddress> teacherAddresses;
-	
-	@Column(name="teacher_code")
-	private String teacherCode;
-	
+		
 	@ManyToOne
    	@JsonManagedReference
    	@JoinColumn(name="position_id")
@@ -61,14 +58,6 @@ public class Teacher extends Person implements Serializable{
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getTeacherCode() {
-		return teacherCode;
-	}
-
-	public void setTeacherCode(String teacherCode) {
-		this.teacherCode = teacherCode;
 	}
 
 	public Position getPosition() {

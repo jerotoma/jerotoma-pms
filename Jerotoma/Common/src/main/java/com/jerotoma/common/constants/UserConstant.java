@@ -31,6 +31,7 @@ public class UserConstant {
 	public static final String MIDDLE_NAMES = "middleNames";
 	public static final String PARENT_IDS = "parentIds";
 	public static final String STUDENT_IDS = "studentIds";
+	public static final String USER_CODE = "userCode";
 	
 	public static enum USER_TYPES{
 		TEACHER("teacher"),

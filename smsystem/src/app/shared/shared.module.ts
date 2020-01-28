@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import {MatTableModule} from '@angular/material/table';
-import {MatSelectModule} from '@angular/material/select';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatIconModule} from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { NbMomentDateModule } from '@nebular/moment';
 import { FileUploadModule } from 'ng2-file-upload';
 import {
@@ -38,8 +39,8 @@ import {
   AddressComponent,
   DeleteModalComponent,
   UserDeleteComponent,
+  SnackbarComponent,
 } from 'app/shared';
-
 
 
 const COMPONENTS = [
@@ -49,12 +50,14 @@ const COMPONENTS = [
   UserTableComponent,
   UserDetailsComponent,
   UploadsComponent,
+  SnackbarComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   UserDeleteComponent,
   DeleteModalComponent,
   UploadsComponent,
+  SnackbarComponent,
 ];
 
 const MODULES = [
@@ -85,6 +88,7 @@ const MODULES = [
   MatIconModule,
   MatMenuModule,
   MatSelectModule,
+  MatSnackBarModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
@@ -118,6 +122,12 @@ const SERVICES = [
   ],
   providers: [
    ...SERVICES,
+   {
+     provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+     useValue: {
+       duration: 6500,
+      },
+    },
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,

@@ -2,8 +2,10 @@ import { Component, OnInit, Input, Output, ViewChild, EventEmitter, AfterViewIni
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
+import { MatSnackBar } from '@angular/material';
+
 import { NbDateService } from '@nebular/theme';
-import { AddressComponent } from 'app/shared';
+import { AddressComponent, SnackbarComponent } from 'app/shared';
 import { User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
@@ -15,7 +17,7 @@ import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss'],
 })
-export class EditUserComponent implements OnInit, AfterViewInit {
+export class EditUserComponent implements OnInit {
   @Input('userType') userType: string = 'teacher';
   @Input('user') user: User = null;
   @Output() onUserCreationSuccess = new EventEmitter();
@@ -41,19 +43,19 @@ export class EditUserComponent implements OnInit, AfterViewInit {
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
     private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+
     ) {}
 
   ngOnInit() {
     this.loadPositionList();
     this.loadAcademicDisciplineList();
     this.loadForm();
-    // this.loadUser();
-  }
-  ngAfterViewInit() {
     if (this.user) {
-      this.loadUser();
+      this.loadUser(this.user);
     }
   }
+
   onSubmit() {
     this.showMessage.success = false;
     this.showMessage.error = false;
@@ -62,11 +64,10 @@ export class EditUserComponent implements OnInit, AfterViewInit {
   updateUser(user: User) {
     this.userService.updateUser(user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
-      window.console.log(resp);
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.resetForms();
+        this.openSnackBar('Updated Successfully', 'success');
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
@@ -81,6 +82,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
       this.showMessage.message = error ? error.error.message : '';
     });
   }
+
   loadForm() {
     this.userForm = this.formBuilder.group({
       id: [null],
@@ -88,7 +90,7 @@ export class EditUserComponent implements OnInit, AfterViewInit {
       lastName: ['', Validators.required],
       position: ['', Validators.required],
       occupation: ['User'],
-      employmentCode: [''],
+      userCode: [''],
       gender: ['', Validators.required],
       picture: [''],
       middleNames: [null],
@@ -103,30 +105,30 @@ export class EditUserComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadUser() {
-    this.position = this.user.position.id;
-    this.academicDiscipline = this.user.academicDiscipline.id;
+  loadUser(user: User) {
+    this.position = user.position.id;
+    this.academicDiscipline = user.academicDiscipline.id;
     this.userForm.patchValue({
-      id: this.user.id,
-      firstName: this.user.firstName,
-      lastName: this.user.lastName,
-      position: this.user.position.id ,
-      occupation: this.user.occupation,
-      employmentCode: this.user.userCode,
-      gender: this.user.gender,
-      picture: this.user.picture,
-      userId: this.user.userId,
-      middleNames: this.user.middleNames,
-      phoneNumber: this.user.phoneNumber,
-      emailAddress: this.user.emailAddress,
-      birthDate: DateFormatter(this.user.birthDate, 'YYYY/MM/DD', false),
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      position: user.position.id ,
+      occupation: user.occupation,
+      userCode: user.userCode,
+      gender: user.gender,
+      picture: user.picture,
+      userId: user.userId,
+      middleNames: user.middleNames,
+      phoneNumber: user.phoneNumber,
+      emailAddress: user.emailAddress,
+      birthDate: DateFormatter(user.birthDate, 'YYYY/MM/DD', false),
       userType: 'teacher',
-      academicDiscipline: this.user.academicDiscipline.id,
-      fullName: this.user.fullName,
-      address: this.user.address,
+      academicDiscipline: user.academicDiscipline.id,
+      fullName: user.fullName,
+      address: user.address,
     });
     if (this.appAddress) {
-      this.appAddress.patchAddressValue(this.user.address);
+      this.appAddress.patchAddressValue(user.address);
     }
   }
 
@@ -190,9 +192,15 @@ export class EditUserComponent implements OnInit, AfterViewInit {
       userType: 'parent',
     };
   }
-  resetForms() {
-    this.userForm.reset();
-    this.appAddress.resetForm();
-  }
 
+  openSnackBar(message: string, panelClass: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        message: message,
+      },
+      horizontalPosition: 'left',
+      panelClass: panelClass,
+      duration: 50000,
+    });
+  }
 }

@@ -38,7 +38,7 @@ public class UserValidator {
 	static List<Integer> parentIDs = null;
 	static List<Integer> studentIDs = null;
 	static Integer userId = null;
-	static String teacherCode = null;
+	static String userCode = null;
 	
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
@@ -93,8 +93,8 @@ public class UserValidator {
 			picture = (String) params.get(UserConstant.PICTURE);
 		}
 		
-		if(params.containsKey(UserConstant.EMPLOYMENT_CODE)) {
-			teacherCode = (String) params.get(UserConstant.EMPLOYMENT_CODE);
+		if(params.containsKey(UserConstant.USER_CODE)) {
+			userCode = (String) params.get(UserConstant.USER_CODE);
 		}
 		
 		if(params.containsKey(UserConstant.EMAIL_ADDRESS)) {
@@ -151,10 +151,10 @@ public class UserValidator {
 		}
 		teacher.setOccupation(occupation);
 		
-		if (teacherCode == null && requiredFields.contains(UserConstant.EMPLOYMENT_CODE)) {
-			throw new FieldIsRequiredException("Teacher Code is required to continue");
+		if (userCode == null && requiredFields.contains(UserConstant.USER_CODE)) {
+			throw new FieldIsRequiredException("User Code is required to continue");
 		}
-		teacher.setTeacherCode(teacherCode);
+		teacher.setUserCode(userCode);
 		
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
 			throw new FieldIsRequiredException("Picture is required to continue");

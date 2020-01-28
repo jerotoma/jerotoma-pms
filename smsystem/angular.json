@@ -170,7 +170,7 @@
       }
     }
   },
-  "defaultProject": "smsystem",
+  "defaultProject": "app-smsystem",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
