@@ -67,19 +67,21 @@ export class EditUserComponent implements OnInit {
       const status = resp.status;
       if (status !== null && status === 200) {
         this.showMessage.success = true;
-        this.openSnackBar('Updated Successfully', 'success');
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
         this.showMessage.message = resp ? resp.body.message : '';
+        this.openSnackBar(this.showMessage.message, 'success');
       } else {
         this.showMessage.success = false;
         this.showMessage.error = true;
         this.showMessage.message = resp ? resp.body.message : '';
+        this.openSnackBar(this.showMessage.message , 'danger');
       }
     }, error => {
       this.showMessage.error = true;
       this.showMessage.success = false;
       this.showMessage.message = error ? error.error.message : '';
+      this.openSnackBar(this.showMessage.message , 'danger');
     });
   }
 
@@ -198,7 +200,7 @@ export class EditUserComponent implements OnInit {
       data: {
         message: message,
       },
-      horizontalPosition: 'left',
+      horizontalPosition: 'start',
       panelClass: panelClass,
       duration: 50000,
     });

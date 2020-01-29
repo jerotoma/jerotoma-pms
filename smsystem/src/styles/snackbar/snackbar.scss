@@ -1,0 +1,33 @@
+@import '../colors/color-variables.scss';
+
+.mat-snack-bar-container {
+  color: rgba($white-color,.9);
+  background: $secondary-color;
+  box-shadow: 0 3px 5px -1px rgba($black-color,.2), 0 6px 10px 0 rgba($black-color,.14), 0 1px 18px 0 rgba($black-color,.12);
+}
+
+.mat-snack-bar-container.primary {
+  background: $primary-color;
+}
+
+.mat-snack-bar-container.secondary {
+  background: $secondary-color;
+}
+
+.mat-snack-bar-container.success {
+  background: $success-color;
+}
+.mat-snack-bar-container.info {
+  background: $info-color;
+}
+.mat-snack-bar-container.warning {
+  background: $warning-color;
+}
+.mat-snack-bar-container.danger {
+  background: $danger-color;
+}
+.mat-snack-bar-container .flex {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}

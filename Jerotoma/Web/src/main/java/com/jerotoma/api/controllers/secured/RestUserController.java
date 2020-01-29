@@ -551,7 +551,7 @@ public class RestUserController extends BaseController {
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setMessage("User has been created");
+		instance.setMessage("User has been updated");
 		return instance;
 		
 	}

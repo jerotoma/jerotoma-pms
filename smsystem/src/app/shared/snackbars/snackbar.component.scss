@@ -1,16 +1,2 @@
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-.mat-snack-bar-container {
-  color: #ffffff;
-  background-color: #00d68f;
-}
 
-.mat-snack-bar-container.success {
-  color: hotpink;
-}
-
-.mat-snack-bar-container .flex {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}

@@ -2,14 +2,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
+import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { NbMomentDateModule } from '@nebular/moment';
+
 import { FileUploadModule } from 'ng2-file-upload';
+import { ThemeModule } from 'app/@theme/theme.module';
+import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
   NbButtonModule,
@@ -30,7 +34,6 @@ import {
   NbCheckboxModule,
   NbAlertModule,
 } from '@nebular/theme';
-import { ThemeModule } from 'app/@theme/theme.module';
 
 import {
   UploadsComponent,
@@ -89,6 +92,7 @@ const MODULES = [
   MatMenuModule,
   MatSelectModule,
   MatSnackBarModule,
+  MatButtonModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
