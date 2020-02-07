@@ -1,8 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
 import {
   MatButtonModule,
   MatTableModule,
@@ -15,9 +12,6 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material';
 
-import { FileUploadModule } from 'ng2-file-upload';
-import { ThemeModule } from 'app/@theme/theme.module';
-import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
   NbButtonModule,
@@ -39,39 +33,33 @@ import {
   NbAlertModule,
 } from '@nebular/theme';
 
-import { SharedCommonModule, } from './common';
 import {
-  UploadsComponent,
-  UserTableComponent,
-  UserDetailsComponent,
-  AddressComponent,
-  DeleteModalComponent,
-  UserDeleteComponent,
+  SnackbarComponent,
+  ErrorDialogComponent,
 } from 'app/shared';
 
 
 const COMPONENTS = [
-  AddressComponent,
-  DeleteModalComponent,
-  UserDeleteComponent,
-  UserTableComponent,
-  UserDetailsComponent,
-  UploadsComponent,
+  SnackbarComponent,
+  ErrorDialogComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  UserDeleteComponent,
-  DeleteModalComponent,
-  UploadsComponent,
+  SnackbarComponent,
+  ErrorDialogComponent,
 ];
 
 const MODULES = [
-  RouterModule ,
-  FormsModule,
-  ReactiveFormsModule,
-  FileUploadModule,
-  ThemeModule,
-  NbMomentDateModule,
+  CommonModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatIconModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatButtonModule,
+  NbDialogModule,
+  NbWindowModule,
   NbTabsetModule,
   NbRadioModule,
   NbDatepickerModule,
@@ -88,31 +76,20 @@ const MODULES = [
   NbUserModule,
   NbActionsModule,
   NbIconModule,
-  MatTableModule,
-  MatPaginatorModule,
-  MatIconModule,
-  MatMenuModule,
-  MatSelectModule,
-  MatSnackBarModule,
-  MatButtonModule,
-  SharedCommonModule,
-  NbDialogModule.forRoot({
-    closeOnBackdropClick: false,
-    hasScroll: false,
-
-  }),
-  NbWindowModule.forRoot(),
 ];
 
 const EXPORT_MODULES = [
-  FormsModule,
-  ReactiveFormsModule,
-  CommonModule,
-  RouterModule,
+
 ];
 
 const SERVICES = [
   MatDialog,
+  {
+    provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+    useValue: {
+      duration: 6500,
+     },
+   },
 ];
 
 
@@ -129,15 +106,9 @@ const SERVICES = [
   ],
   providers: [
    ...SERVICES,
-   {
-     provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-     useValue: {
-       duration: 6500,
-      },
-    },
   ],
   entryComponents: [
     ...ENTRY_COMPONENTS,
   ],
 })
-export class SharedModule { }
+export class SharedCommonModule { }

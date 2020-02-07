@@ -142,7 +142,7 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof JwtExpiredTokenException) {
-			status = HttpStatus.UNAUTHORIZED;
+			status = HttpStatus.UNAUTHORIZED;			
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
@@ -157,7 +157,7 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof BadCredentialsException) {
-			status = HttpStatus.METHOD_NOT_ALLOWED;
+			status = HttpStatus.UNAUTHORIZED;
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}

@@ -6,9 +6,13 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+import {  MatDialogModule, MatDialog } from '@angular/material';
+
+import { SharedCommonModule } from 'app/shared/common';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor, HttpResponseErrorInterceptor, DialogService } from './services';
+import { AuthInterceptor, HttpResponseErrorInterceptor, ErrorDialogService } from './services';
 import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {
@@ -26,6 +30,26 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 
+
+
+const SERVICES = [
+  JwtHelperService,
+  NbAuthService,
+  NbTokenService,
+  ErrorDialogService,
+  MatDialog,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpResponseErrorInterceptor,
+    multi: true,
+  },
+];
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -36,6 +60,8 @@ import {
     AppAuthModule,
     NbEvaIconsModule,
     NbActionsModule,
+    MatDialogModule,
+    SharedCommonModule,
     ThemeModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
@@ -49,20 +75,7 @@ import {
     CoreModule.forRoot(),
   ],
   providers: [
-    JwtHelperService,
-    NbAuthService,
-    NbTokenService,
-    DialogService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpResponseErrorInterceptor,
-      multi: true,
-    },
+    ...SERVICES,
   ],
   bootstrap: [AppComponent],
 })

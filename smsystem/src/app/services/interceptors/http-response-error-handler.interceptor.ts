@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
 import { AuthService } from 'app/services/auth';
-import { DialogService } from 'app/services/modals';
+import { ErrorDialogService } from 'app/services/modals';
 import { HTTP_STATUS_CODES } from 'app/utils';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
-    private dialogService: DialogService,
+    private errorDialogService: ErrorDialogService,
     protected router: Router) {
 
   }
@@ -44,7 +44,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
                 this.logErrorResponse(HTTP_STATUS_CODES.CODE_400.message);
                 break;
               case HTTP_STATUS_CODES.CODE_401.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_401.message);
+                this.errorDialogService.openDialog(err.error.message);
                 break;
               case HTTP_STATUS_CODES.CODE_402.id:
                 this.logErrorResponse(HTTP_STATUS_CODES.CODE_402.message);
@@ -57,7 +57,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
                 break;
               case HTTP_STATUS_CODES.CODE_405.id:
                 this.logErrorResponse(HTTP_STATUS_CODES.CODE_405.message);
-                this.dialogService.popup(this.router.url);
+                this.errorDialogService.popup(this.router.url, err.error.message);
                 break;
                 default:
                   this.logErrorResponse(HTTP_STATUS_CODES.CODE_404.message);
