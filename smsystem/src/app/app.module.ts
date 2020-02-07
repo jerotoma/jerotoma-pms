@@ -6,10 +6,9 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor } from './services/interceptors';
+import { AuthInterceptor, HttpResponseErrorInterceptor, DialogService } from './services';
 import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {
@@ -25,7 +24,6 @@ import {
   NbToastrModule,
   NbActionsModule,
   NbWindowModule,
-
 } from '@nebular/theme';
 
 @NgModule({
@@ -54,9 +52,15 @@ import {
     JwtHelperService,
     NbAuthService,
     NbTokenService,
+    DialogService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpResponseErrorInterceptor,
       multi: true,
     },
   ],

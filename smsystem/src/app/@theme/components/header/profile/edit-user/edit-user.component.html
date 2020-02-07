@@ -72,8 +72,9 @@
                         <div class="form-control-group">
                             <label for="user-position" class="label">Position</label>
                             <nb-select
-                              fullWidth
-                              placeholder="Position"
+                              [selected]="position"
+                              [fullWidth]="true"
+                              [placeholder]="'Position'"
                               formControlName="position"
                               id="user-position">
                               <nb-option
@@ -87,10 +88,11 @@
                         <div class="form-control-group">
                             <label for="user-academicDiscipline" class="label">Field of Study</label>
                             <nb-select
-                                fullWidth
-                                placeholder="Field of Study"
-                                formControlName="academicDiscipline"
-                                id="user-academicDiscipline">
+                              [selected]="position"
+                              [fullWidth]="true"
+                              [placeholder]="'Field of Study'"
+                              formControlName="academicDiscipline"
+                              id="user-academicDiscipline">
                                 <nb-option
                                     *ngFor='let acad of academicDisciplines'
                                     [value]="acad.id">

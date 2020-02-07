@@ -33,14 +33,8 @@ export class ProfileComponent implements OnInit {
 
   loadUser(username: string) {
     if (username) {
-      this.userService.loadUserByUsername(username, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-          if (status !== null && status === 200) {
-            this.user = resp.body.data;
-          }
-      }, error => {
-        window.console.log(error);
+      this.userService.loadUserByUsername(username, 'teacher').subscribe((user: User) => {
+        this.user = user;
       });
     }
   }

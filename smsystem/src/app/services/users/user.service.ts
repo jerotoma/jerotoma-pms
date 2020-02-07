@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import {  delay, map, catchError, retry } from 'rxjs/operators';
+import { map, catchError, retry } from 'rxjs/operators';
 
-import { User } from 'app/models';
+import { User, ResponseWrapper } from 'app/models';
 import { END_POINTS, QueryParam } from 'app/utils';
 
 @Injectable({
@@ -13,26 +13,28 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getCurrentUser(): Observable<any> {
+  getCurrentUser(): Observable<User> {
     return this.http
-      .get<any>(`${END_POINTS.users}/currentUser`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .get(`${END_POINTS.users}/currentUser`).
+      pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   getUser(userId: number): Observable<User> {
     return this.http
-      .get<User>(`${END_POINTS.users}/${userId}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .get(`${END_POINTS.users}/${userId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUser(userId: number, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-      `${END_POINTS.users}/${userId}?userType=${userType}`, {observe: 'response'});
+  loadUser(userId: number, userType: string): Observable<User> {
+    return this.http
+    .get(`${END_POINTS.users}/${userId}?userType=${userType}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUserByUsername(username: string, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(
-      `${END_POINTS.users}/loggedIn`, {username: username, userType: userType}, {observe: 'response'});
+  loadUserByUsername(username: string, userType: string): Observable<User> {
+    return this.http
+    .post(`${END_POINTS.users}/loggedIn`, {username: username, userType: userType})
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   load(param: QueryParam): Observable<User[]> {

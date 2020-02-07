@@ -8,9 +8,9 @@ export interface Person {
   emailAddress?: string;
   gender?: string;
   occupation?: string;
-  birthDate: Date;
+  birthDate?: Date;
   picture?: string;
   address?: Address;
-  createdOn: Date;
-  updatedOn: Date;
+  createdOn?: Date;
+  updatedOn?: Date;
 }

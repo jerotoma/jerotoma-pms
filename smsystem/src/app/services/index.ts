@@ -9,4 +9,5 @@ export * from './guards';
 export * from './courses';
 export * from './auth';
 export * from './uploads';
+export * from './modals';
 export * from './system-configs';
