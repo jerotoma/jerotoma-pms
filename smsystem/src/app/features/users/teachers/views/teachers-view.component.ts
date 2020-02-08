@@ -102,15 +102,12 @@ export class TeachersViewComponent implements OnInit {
 
   loadUsers() {
     this.isLoading = true;
-    this.userService.loadUsers(this.param).subscribe((result) => {
-      const resp = result;
-        const status = resp.status;
-        this.isLoading = false;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Teacher>(data.teachers);
-        }
+    this.userService.loadUsers(this.param).subscribe((result: any) => {
+      this.isLoading = false;
+      if (result) {
+        this.totalNumberOfItems = result.count;
+        this.dataSource = new MatTableDataSource<Teacher>(result.teachers);
+      }
     });
   }
 }

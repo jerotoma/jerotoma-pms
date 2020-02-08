@@ -12,7 +12,7 @@ import { SharedCommonModule } from 'app/shared/common';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor, HttpResponseErrorInterceptor, ErrorDialogService } from './services';
+import { AuthInterceptor, HttpResponseErrorInterceptor, ModalService } from './services';
 import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import {
@@ -36,7 +36,7 @@ const SERVICES = [
   JwtHelperService,
   NbAuthService,
   NbTokenService,
-  ErrorDialogService,
+  ModalService,
   MatDialog,
   {
     provide: HTTP_INTERCEPTORS,

@@ -115,13 +115,10 @@ export class StaffsViewComponent implements OnInit {
   loadUsers() {
     this.isLoading = true;
     this.userService.loadUsers(this.param).subscribe((result) => {
-      const resp = result;
-      const status = resp.status;
       this.isLoading = false;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.totalNumberOfItems = data.count;
-        this.dataSource = new MatTableDataSource<Staff>(data.staffs);
+      if (result) {
+        this.totalNumberOfItems = result.count;
+        this.dataSource = new MatTableDataSource<Staff>(result.staffs);
       }
     });
   }

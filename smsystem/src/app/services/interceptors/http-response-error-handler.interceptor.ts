@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
 import { AuthService } from 'app/services/auth';
-import { ErrorDialogService } from 'app/services/modals';
+import { ModalService } from 'app/services/modals';
 import { HTTP_STATUS_CODES } from 'app/utils';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
 
   constructor(
     private authService: AuthService,
-    private errorDialogService: ErrorDialogService,
+    private errorDialogService: ModalService,
     protected router: Router) {
 
   }
@@ -33,53 +33,41 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
       tap(event => {
         if (event instanceof HttpResponse) {
           if (event.body && event.status === HTTP_STATUS_CODES.CODE_200.id) {
-            this.logSuccessResponse(HTTP_STATUS_CODES.CODE_200.message);
+            this.errorDialogService.logSuccessResponse(HTTP_STATUS_CODES.CODE_200.message);
           }
         }
       }),
       catchError((err: HttpEvent<any>) => {
         if (err instanceof HttpErrorResponse) {
-            switch (err.status) {
+          switch (err.status) {
               case HTTP_STATUS_CODES.CODE_400.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_400.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
               case HTTP_STATUS_CODES.CODE_401.id:
-                this.errorDialogService.openDialog(err.error.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
               case HTTP_STATUS_CODES.CODE_402.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_402.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
               case HTTP_STATUS_CODES.CODE_403.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_403.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
               case HTTP_STATUS_CODES.CODE_404.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_404.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
               case HTTP_STATUS_CODES.CODE_405.id:
-                this.logErrorResponse(HTTP_STATUS_CODES.CODE_405.message);
-                this.errorDialogService.popup(this.router.url, err.error.message);
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
                 default:
-                  this.logErrorResponse(HTTP_STATUS_CODES.CODE_404.message);
                 break;
-
             }
         } else { // Non Http Error Response
-          this.logErrorResponse('Non HttpErrorResponse caught in Http error handler');
+          this.errorDialogService.openSnackBar('Non HttpErrorResponse caught in Http error handler', 'danger');
         }
         return of(err);
       }),
     );
 
   }
-  private logErrorResponse(errorMessage: any) {
-    window.console.error(this, errorMessage);
-  }
-
-  private logSuccessResponse(message: any) {
-    window.console.log(this, message);
-  }
-
-
 
 }

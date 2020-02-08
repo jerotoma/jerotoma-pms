@@ -70,47 +70,14 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     if (this.action === 'edit') {
       this.updateTeacher();
     } else {
-      this.userService.addUser(this.teacher).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.showMessage.success = true;
-          this.teacherForm.reset();
-          this.ref.close();
-          this.onUserCreationSuccess.emit(this.showMessage.success);
-          this.showMessage.error = false;
-          this.showMessage.message = resp ? resp.body.message : '';
-        } else {
-          this.showMessage.success = false;
-          this.showMessage.error = true;
-          this.showMessage.message = resp ? resp.body.message : '';
-        }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
+      this.userService.addUser(this.teacher).subscribe((teacher: Teacher) => {
+       this.teacher = teacher;
       });
     }
   }
   updateTeacher() {
-    this.userService.updateUser(this.teacher).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.showMessage.success = true;
-        this.resetForms();
-        this.onUserCreationSuccess.emit(this.showMessage.success);
-        this.showMessage.error = false;
-        this.showMessage.message = resp ? resp.body.message : '';
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = resp ? resp.body.message : '';
-      }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
+    this.userService.updateUser(this.teacher).subscribe((teacher: Teacher) => {
+      this.teacher = teacher;
     });
   }
   search(value: string) {
@@ -183,11 +150,9 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadTeacher(teacherId: number) {
-    this.userService.loadUser(teacherId, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.teacher = resp.body.data;
+    this.userService.loadUser(teacherId, 'teacher').subscribe((teacher: Teacher) => {
+       if (teacher) {
+        this.teacher = teacher;
         this.position = this.teacher.position.id;
         this.academicDiscipline = this.teacher.academicDiscipline.id;
         this.teacherForm.patchValue({
@@ -211,10 +176,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
         });
         this.appAddress.patchAddressValue(this.teacher.address);
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 

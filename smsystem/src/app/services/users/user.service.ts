@@ -37,38 +37,36 @@ export class UserService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  load(param: QueryParam): Observable<User[]> {
+  load(param: QueryParam): Observable<any> {
     return this.http
-      .get<User[]>(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .get(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadUsers(param: QueryParam): Observable<any> {
-    return this.http.get<any>(
-      `${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}
-        &orderby=${param.orderby}&userType=${param.userType}`,  {observe: 'response'});
+    return this.http
+      .get(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  addUser(data: any): Observable<HttpResponse<any> | HttpErrorResponse >  {
-    return this.http.post<any>(`${END_POINTS.users}`, data, {observe: 'response'});
+  addUser(data: any): Observable<User>  {
+    return this.http.post(`${END_POINTS.users}`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateUser(data: any): Observable<HttpResponse<any> | HttpErrorResponse >  {
-    return this.http.put<any>(`${END_POINTS.users}`, data, {observe: 'response'});
+  updateUser(data: any): Observable<User>  {
+    return this.http.put(`${END_POINTS.users}`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  deleteUser(userId: number, userType: string): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.delete<any>(`${END_POINTS.users}/${userId}?userType=${userType}`, {observe: 'response'});
+  deleteUser(userId: number, userType: string): Observable<User> {
+    return this.http.delete(`${END_POINTS.users}/${userId}?userType=${userType}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   search(param: QueryParam): Observable<any> {
     return this.http
-    .get<any>(`${END_POINTS.users}/search?searchTerm=${param.search}
-            &page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
-            .pipe(retry(3), catchError(this.errorHandler));
-  }
-
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.message || 'Server error');
+    .get(`${END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }

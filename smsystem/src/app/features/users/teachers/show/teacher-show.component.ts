@@ -43,16 +43,10 @@ export class TeacherShowComponent implements OnInit {
   }
 
   loadTeacherDetails(teacherId: number) {
-      this.userService.loadUser(teacherId, 'teacher').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.teacher = resp.body.data;
+      this.userService.loadUser(teacherId, 'teacher').subscribe((teacher: Teacher ) => {
+        if (this.teacher) {
+          this.teacher = teacher;
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
   }
 

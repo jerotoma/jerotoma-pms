@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.authService.isAuthenticatedOrRefresh()) {
       this.userService.getCurrentUser().subscribe((user: User) => {
         this.user = user;
-        console.log(user);
+        // console.log(user);
       });
     }
   }

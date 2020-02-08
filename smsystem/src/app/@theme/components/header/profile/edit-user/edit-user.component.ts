@@ -1,15 +1,17 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { MatSnackBar } from '@angular/material';
-
 import { NbDateService } from '@nebular/theme';
-import { AddressComponent, SnackbarComponent } from 'app/shared';
+import { AddressComponent } from 'app/shared';
 import { User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
-import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services/positions';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import {
+  UserService,
+  PositionService,
+  AcademicDisciplineService,
+  ModalService,
+} from 'app/services';
+
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
@@ -42,9 +44,8 @@ export class EditUserComponent implements OnInit {
     protected academicDisciplineService: AcademicDisciplineService,
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
+    private modalService: ModalService,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-
     ) {}
 
   ngOnInit() {
@@ -61,27 +62,14 @@ export class EditUserComponent implements OnInit {
     this.showMessage.error = false;
     this.updateUser(this.userForm.value);
   }
-  updateUser(user: User) {
-    this.userService.updateUser(user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
+  updateUser(data: User) {
+    this.userService.updateUser(data).subscribe((user: User) => {
+      if (user) {
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
-        this.showMessage.message = resp ? resp.body.message : '';
-        this.openSnackBar(this.showMessage.message, 'success');
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = resp ? resp.body.message : '';
-        this.openSnackBar(this.showMessage.message , 'danger');
+        this.openSnackBar('User has been updated', 'success');
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
-      this.openSnackBar(this.showMessage.message , 'danger');
     });
   }
 
@@ -196,13 +184,6 @@ export class EditUserComponent implements OnInit {
   }
 
   openSnackBar(message: string, panelClass: string) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message: message,
-      },
-      horizontalPosition: 'start',
-      panelClass: panelClass,
-      duration: 50000,
-    });
+    this.modalService.openSnackBar(message, panelClass);
   }
 }

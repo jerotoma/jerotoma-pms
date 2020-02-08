@@ -49,7 +49,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
         	 ajaxRequestProcessor(response, exception);        	
         }else {
            	 setDefaultFailureUrl(EndPointConstants.APP_AUTH_LOGIN_URL);              
-	         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, processErrorMessage(exception, locale, false).get("errorMessage"));
+	         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, processErrorMessage(exception).get(SystemConstant.MESSAGE));
 	         super.onAuthenticationFailure(request, response, exception);
         }
      
@@ -65,23 +65,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
    		return;
 	}
    
-   private Map<String, Object> processErrorMessage(final AuthenticationException exception, final Locale locale, boolean isAjax) {
-		Map<String, Object> mapError = new HashMap<>();
-		String errorMessage = messages.getMessage("message.badCredentials", null, locale);
-	       
-		if(!isAjax && locale != null) {
-			if (exception.getMessage().equalsIgnoreCase("User is disabled")) {
-			    errorMessage = messages.getMessage("auth.message.disabled", null, locale);
-			} else if (exception.getMessage().equalsIgnoreCase("User account has expired")) {
-			    errorMessage = messages.getMessage("auth.message.expired", null, locale);
-			} else if (exception.getMessage().equalsIgnoreCase("blocked")) {
-			    errorMessage = messages.getMessage("auth.message.blocked", null, locale);
-			}else {
-				 errorMessage = exception.getMessage();
-			}			
-			mapError.put("errorMessage", errorMessage);
-			
-		} 
-	  return mapError;
+   private Map<String, Object> processErrorMessage(final AuthenticationException exception) {		
+	  return HttpStatusAndMessageProcessor.getStatusAndMessage(exception);
 	}
 }

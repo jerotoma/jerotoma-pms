@@ -1,3 +1,4 @@
+import { User } from './../../../../models/users/user.model';
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -43,16 +44,10 @@ export class StudentShowComponent implements OnInit {
   }
 
   loadStudentDetails(studentId: number) {
-      this.userService.loadUser(studentId, 'student').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.student = resp.body.data;
+      this.userService.loadUser(studentId, 'student').subscribe((user: Student) => {
+       if (user) {
+          this.student = user;
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
   }
 

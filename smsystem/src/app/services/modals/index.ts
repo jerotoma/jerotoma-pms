@@ -1,1 +1,1 @@
-export * from './error-dialog.service';
+export * from './modal.service';

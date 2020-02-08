@@ -35,18 +35,18 @@ import {
 
 import {
   SnackbarComponent,
-  ErrorDialogComponent,
+  DialogComponent,
 } from 'app/shared';
 
 
 const COMPONENTS = [
   SnackbarComponent,
-  ErrorDialogComponent,
+  DialogComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   SnackbarComponent,
-  ErrorDialogComponent,
+  DialogComponent,
 ];
 
 const MODULES = [

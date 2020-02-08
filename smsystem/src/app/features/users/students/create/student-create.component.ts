@@ -80,44 +80,22 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
 
   postData(data: Student) {
-      this.userService.addUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
+      this.userService.addUser(data).subscribe((result: Student) => {
+        if (result) {
           this.showMessage.success = true;
           this.showMessage.error = false;
-          this.showMessage.message = resp ? resp.body.message : '';
           this.resetForms();
-        } else {
-          this.showMessage.success = false;
-          this.showMessage.error = true;
-          this.showMessage.message = resp ? resp.body.message : '';
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
   }
   updateData(data: Student) {
-      this.userService.updateUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
+      this.userService.updateUser(data).subscribe((student: Student) => {
+      if (student) {
         this.showMessage.success = true;
         this.resetForms();
         this.onUserCreationSuccess.emit(this.showMessage.success);
         this.showMessage.error = false;
-        this.showMessage.message = resp ? resp.body.message : '';
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = resp ? resp.body.message : '';
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
@@ -158,11 +136,9 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadStudent(studentId: number) {
-    this.userService.loadUser(studentId, 'student').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.student = resp.body.data;
+    this.userService.loadUser(studentId, 'student').subscribe((student: Student) => {
+       if (student) {
+        this.student = student;
         this.address = this.student.address,
         this.studentForm.patchValue({
           id: this.student.id,

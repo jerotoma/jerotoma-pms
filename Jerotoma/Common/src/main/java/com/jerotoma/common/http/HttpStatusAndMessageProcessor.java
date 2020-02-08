@@ -152,7 +152,7 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof UsernameNotFoundException) {
-			status = HttpStatus.OK;
+			status = HttpStatus.NOT_FOUND;
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}

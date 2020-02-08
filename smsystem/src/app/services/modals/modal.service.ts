@@ -1,28 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 
-import { SnackbarComponent } from 'app/shared/snackbars';
-import { ErrorDialogComponent } from 'app/shared/error-dialog';
+import { DialogComponent, SnackbarComponent } from 'app/shared/modals';
 
 @Injectable()
-export class ErrorDialogService {
+export class ModalService {
 
     public isDialogOpen: Boolean = false;
 
     constructor(
       public dialog: MatDialog,
-      private modalService: NbDialogService,
+      private mDialogService: NbDialogService,
       private snackBar: MatSnackBar,
       private router: Router) { }
 
-      openDialog(data): any {
+      openDialog(data: any): any {
         if (this.isDialogOpen) {
             return false;
         }
         this.isDialogOpen = true;
-        const dialogRef = this.dialog.open(ErrorDialogComponent, {
+        const dialogRef = this.dialog.open(DialogComponent, {
             width: '300px',
             data: data,
         });
@@ -40,7 +39,8 @@ export class ErrorDialogService {
         data: {
           message: message,
         },
-        horizontalPosition: 'center',
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
         panelClass: panelClass,
         duration: 50000,
       });
@@ -51,11 +51,11 @@ export class ErrorDialogService {
       this.router.navigate([this.router.url + '?error=' + error]);
     }
 
-    private logErrorResponse(errorMessage: any) {
+   logErrorResponse(errorMessage: any) {
       window.console.error(this, errorMessage);
     }
 
-    private logSuccessResponse(message: any) {
+   logSuccessResponse(message: any) {
       window.console.log(this, message);
     }
 }
