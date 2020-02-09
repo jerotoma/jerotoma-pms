@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, Data } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
@@ -40,7 +39,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private mThemeService: ThemeService,
     private themeService: NbThemeService,
-    private systemConfigService: SystemConfigService,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService) {
   }
@@ -73,10 +71,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onItemSelection(title: string) {
     if ( title === 'Log out' ) {
       // Do something on Log out
-      window.console.log('Log out Clicked');
+      // window.console.log('Log out Clicked');
     } else if ( title === 'Profile' ) {
       // Do something on Profile
-      window.console.log('Profile Clicked');
+      // window.console.log('Profile Clicked');
     }
   }
   ngOnDestroy() {

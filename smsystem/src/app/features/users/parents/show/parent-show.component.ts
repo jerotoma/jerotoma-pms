@@ -32,10 +32,10 @@ export class ParentShowComponent implements OnInit {
 
   ngOnInit() {
     // For one time load
-    let id = this.route.snapshot.paramMap.get('id');
+    // let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
         this.loadParentDetails(routeParam.id);
-       window.console.log(routeParam);
+       // window.console.log(routeParam);
     });
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
@@ -43,16 +43,10 @@ export class ParentShowComponent implements OnInit {
   }
 
   loadParentDetails(parentId: number) {
-      this.userService.loadUser(parentId, 'parent').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.parent = resp.body.data;
+      this.userService.loadUser(parentId, 'parent').subscribe((parent: Parent) => {
+        if (parent) {
+          this.parent = parent;
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
   }
 

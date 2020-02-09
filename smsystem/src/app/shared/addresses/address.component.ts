@@ -22,7 +22,6 @@ export class AddressComponent implements OnInit {
 
   ngOnInit() {
       this.loadAddressForm();
-      window.console.log(this.address);
       if (this.address) {
         this.patchAddressValue(this.address);
       }

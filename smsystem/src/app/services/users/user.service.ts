@@ -64,7 +64,7 @@ export class UserService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  search(param: QueryParam): Observable<any> {
+  search(param: QueryParam): Observable<User[]> {
     return this.http
     .get(`${END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));

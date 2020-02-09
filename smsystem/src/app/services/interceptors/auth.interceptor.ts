@@ -13,9 +13,10 @@ import { catchError, switchMap, take, filter} from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import {
   AuthService,
-  TokenService,
   AUTH_CONSTANT,
 } from '../auth';
+
+import { HTTP_STATUS_CODES } from 'app/utils';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -37,7 +38,8 @@ export class AuthInterceptor implements HttpInterceptor {
     this.token = this.authService.getAccessToken();
     const url = req.url;
     return next.handle(this.addHeaders(req, this.token)).pipe(catchError( error => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
+      if (error instanceof HttpErrorResponse && error.status === HTTP_STATUS_CODES.CODE_401.id) {
+        window.console.log(error);
         return this.handle401Error(req, next);
       }
       return throwError(error);

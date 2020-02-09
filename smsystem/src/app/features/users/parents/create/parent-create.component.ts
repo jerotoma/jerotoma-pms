@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef} from '@nebular/theme';
 import { AddressComponent } from 'app/shared';
@@ -9,7 +8,7 @@ import { Address, AddressWrapper } from 'app/models/addresses';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
-import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
+import { QueryParam , DateFormatter } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 
@@ -79,54 +78,29 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     if (this.action === 'edit') {
       this.updateData(data);
     } else {
-      this.userService.addUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
+      this.userService.addUser(data).subscribe((parent: Parent ) => {
+        if (parent) {
           this.showMessage.success = true;
           this.showMessage.error = false;
-          this.showMessage.message = resp ? resp.body.message : '';
           this.resetForms();
-        } else {
-          this.showMessage.success = false;
-          this.showMessage.error = true;
-          this.showMessage.message = resp ? resp.body.message : '';
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
     }
   }
   updateData(data: any) {
-    this.userService.updateUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
+    this.userService.updateUser(data).subscribe((parent: Parent) => {
+      if (parent) {
         this.resetForms();
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
-        this.showMessage.error = false;
-        this.showMessage.message = resp ? resp.body.message : '';
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = resp ? resp.body.message : '';
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
   loadParent(parentId: number) {
-    this.userService.loadUser(parentId, 'parent').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.parent = resp.body.data;
+    this.userService.loadUser(parentId, 'parent').subscribe((parent: Parent) => {
+      if (parent) {
+        this.parent = parent;
         this.address = this.parent.address,
         this.parentForm.patchValue({
           id: this.parent.id,
@@ -145,10 +119,6 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
         });
         this.appAddress.patchAddressValue(this.address);
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
@@ -218,10 +188,10 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     const param = this.getParam();
     param.userType = 'student';
     param.search = value;
-    this.userService.search(param).subscribe((result) => {
+    this.userService.search(param).subscribe((students: Student[]) => {
       this.students = [];
-      if (result && result.success) {
-        this.students = result.data;
+      if (students) {
+        this.students = students;
         this.listDisplay = 'block';
       }
     });

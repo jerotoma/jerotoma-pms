@@ -11,7 +11,7 @@ export class UserDetailsComponent implements OnInit {
         @Input('userType') userType: string = 'teacher';
 
         ngOnInit() {
-          window.console.log(this.userDatail);
+         // window.console.log(this.userDatail);
         }
 
         get isUserTeacher() {

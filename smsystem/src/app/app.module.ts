@@ -42,8 +42,6 @@ const SERVICES = [
   NbTokenService,
   ModalService,
   MatDialog,
-  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: HttpResponseErrorInterceptor, multi: true },
 ];
 
 @NgModule({
@@ -72,6 +70,8 @@ const SERVICES = [
   ],
   providers: [
     ...SERVICES,
+    { provide: HTTP_INTERCEPTORS, useClass: HttpResponseErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

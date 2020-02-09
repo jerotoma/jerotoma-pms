@@ -8,7 +8,7 @@ import {
   HttpErrorResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
 import { AuthService } from 'app/services/auth';
 import { ModalService } from 'app/services/modals';
@@ -64,7 +64,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
         } else { // Non Http Error Response
           this.errorDialogService.openSnackBar('Non HttpErrorResponse caught in Http error handler', 'danger');
         }
-        return of(err);
+        return throwError(err);
       }),
     );
 

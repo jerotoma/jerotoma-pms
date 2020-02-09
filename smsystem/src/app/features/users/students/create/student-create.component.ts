@@ -208,10 +208,10 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   search(value: string) {
     const param = this.getParam();
     param.search = value;
-    this.userService.search(param).subscribe((result) => {
+    this.userService.search(param).subscribe((users: Parent[]) => {
       this.parents = [];
-      if (result && result.success) {
-        this.parents = result.data;
+      if (users) {
+        this.parents = users;
         this.listDisplay = 'block';
       }
     });
