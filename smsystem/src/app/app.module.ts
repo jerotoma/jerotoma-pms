@@ -4,17 +4,21 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
-import { JwtHelperService } from '@auth0/angular-jwt';
-
-import {  MatDialogModule, MatDialog } from '@angular/material';
-
-import { SharedCommonModule } from 'app/shared/common';
-
-import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthInterceptor, HttpResponseErrorInterceptor, ModalService } from './services';
+import {  MatDialogModule, MatDialog } from '@angular/material';
 import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
+
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { SharedCommonModule } from 'app/shared/common';
+import { AppComponent } from './app.component';
+
+import {
+  AuthInterceptor,
+  HttpResponseErrorInterceptor,
+  ModalService,
+} from './services';
+
 import {
   NbAuthService,
   NbTokenService,
@@ -38,16 +42,8 @@ const SERVICES = [
   NbTokenService,
   ModalService,
   MatDialog,
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true,
-  },
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpResponseErrorInterceptor,
-    multi: true,
-  },
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: HttpResponseErrorInterceptor, multi: true },
 ];
 
 @NgModule({
