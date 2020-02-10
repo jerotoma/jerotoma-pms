@@ -52,7 +52,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		bodyOfResponse.setHttpStatus(httpStatus);
 		
 		if (message != null && message.contains(stringPattern)) {
-			message = "The username you are trying to register with exists";
+			message = "You are trying to register with the existing username";
 		}
 		
 		if(map.containsKey(SystemConstant.CONSTRAINT_NAME)) {

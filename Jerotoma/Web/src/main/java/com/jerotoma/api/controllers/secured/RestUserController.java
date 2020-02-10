@@ -28,6 +28,7 @@ import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
@@ -224,6 +225,7 @@ public class RestUserController extends BaseController {
 		List<String> requiredFields;
 		Staff staff;
 		Parent parent;
+		AuthUser newUser;
 		Teacher teacher;
 		Student student;		
 		Address address;
@@ -264,6 +266,8 @@ public class RestUserController extends BaseController {
 				academicDiscipline = processAcademicDiscipline(params, requiredFields);
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
+				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
+				teacher.setUserId(newUser.getId());
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
 				teacher.setUpdatedBy(authUser.getId());
@@ -296,6 +300,10 @@ public class RestUserController extends BaseController {
 					}										
 					student.setParents(parents);
 				}
+				
+				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_STUDENT);
+				
+				student.setUserId(newUser.getId());
 				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
 				address = student.getAddress();
 				student = studentService.createObject(student);
@@ -319,6 +327,9 @@ public class RestUserController extends BaseController {
 				staff.setPosition(position);
 				staff.setUpdatedBy(authUser.getId());
 				address = staff.getAddress();
+				
+				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_STAFF);
+				staff.setUserId(newUser.getId());
 				staff = staffService.createObject(staff);
 							
 				address.setUpdatedBy(authUser.getId());
@@ -346,7 +357,8 @@ public class RestUserController extends BaseController {
 					}										
 					parent.setStudents(students);
 				}
-				
+				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_PARENT);
+				parent.setUserId(newUser.getId());
 				parent.setUpdatedBy(authUser.getId());
 				address = parent.getAddress();
 				parent = parentService.createObject(parent);
@@ -418,6 +430,7 @@ public class RestUserController extends BaseController {
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
 						UserConstant.ID,
+						UserConstant.USER_ID,
 						UserConstant.FIRST_NAME,						
 						UserConstant.LAST_NAME,
 						UserConstant.GENDER));
@@ -445,15 +458,13 @@ public class RestUserController extends BaseController {
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
-			case TEACHER:
-				
+			case TEACHER:				
 				requiredFields.add(UserConstant.POSITION);
 				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
 				
 				position = processPosition(params, requiredFields);			
 				academicDiscipline = processAcademicDiscipline(params, requiredFields);
 				
-				requiredFields.add(UserConstant.USER_ID);
 				requiredFields.add(UserConstant.USER_CODE);
 				requiredFields.add(UserConstant.BIRTH_DATE);
 				
@@ -672,5 +683,5 @@ public class RestUserController extends BaseController {
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;		
-	}
+	}	
 }

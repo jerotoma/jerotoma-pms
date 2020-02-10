@@ -152,12 +152,12 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof UsernameNotFoundException) {
-			status = HttpStatus.NOT_FOUND;
+			status = HttpStatus.FORBIDDEN;
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof BadCredentialsException) {
-			status = HttpStatus.UNAUTHORIZED;
+			status = HttpStatus.FORBIDDEN;
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}

@@ -53,7 +53,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		RoleConstant.USER_ROLES userRole = RoleConstant.USER_ROLES.ROLE_ADMIN;
 		AuthUser authUser;
 		String username = "john@jerotoma.com";
-		String password = "Doe";
+		String password = "Doe12345";
 		Boolean enabled = true; 
 		Boolean accountNonExpired = true;
 		Boolean credentialsNonExpired = true; 
@@ -79,8 +79,8 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			authUser.setFirstName("John");
 			authUser.setLastName("Doe");
 			authUser = userService.createObject(authUser);
-			UserRole uRole = new UserRole(null, authUser.getId(), roleR.getId());			
-			userRoleService.createObject(uRole);
+			UserRole mRole = new UserRole(null, authUser.getId(), roleR.getId());			
+			userRoleService.createObject(mRole);
 			logger.info("User has been created!");
 		} catch (SQLException e) {			
 			throw new RuntimeException(e.getMessage(), e); 

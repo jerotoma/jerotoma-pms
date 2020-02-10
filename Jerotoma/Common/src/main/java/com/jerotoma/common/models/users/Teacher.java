@@ -35,9 +35,6 @@ public class Teacher extends Person implements Serializable{
 	@Column
 	private Integer id;
 	
-	@Column(name="user_id")
-	private Integer userId;
-	
 	@OneToMany(mappedBy="teacher")
 	@JsonManagedReference
 	private Set<TeacherAddress> teacherAddresses;
@@ -67,15 +64,7 @@ public class Teacher extends Person implements Serializable{
 	public void setPosition(Position position) {
 		this.position = position;
 	}
-	
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
+		
 	public AcademicDiscipline getAcademicDiscipline() {
 		return academicDiscipline;
 	}

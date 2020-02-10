@@ -2,10 +2,7 @@ package com.jerotoma.api.controllers.secured;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -27,12 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SecurityConstant;
-import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
-import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
-import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.UserContext;
@@ -64,43 +58,9 @@ public class RestAuthController {
 	@ResponseBody
 	public HttpResponseEntity<AuthUser> postCreate(@RequestBody Map<String, Object> params) throws SQLException{
 		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();
-		
-		String username = (String) params.get(UserConstant.USER_NAME);
-		String firstName = (String) params.get(UserConstant.FIRST_NAME);
-		String lastName = (String) params.get(UserConstant.LAST_NAME);
-		String password = (String) params.get(UserConstant.PASSWORD);
-		String confirmPass = (String) params.get(UserConstant.CONFIRM_PASS);
-		Boolean term = (boolean) params.get(UserConstant.TERMS);
-		Date updatedOn = new Date();
-		Date createdOn = new Date();
-		
-		if(!term) {
-			throw new RuntimeException("You have to accept terms and conditions");
-		}
-		
-		if(!password.trim().equals(confirmPass.trim())) {
-			throw new RuntimeException("Password not confirmed");
-		}
-		
-		List<Role> roles = new ArrayList<>();
-		Role role = new Role();	
-		role.setName(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName());
-		role.setDisplayName(RoleConstant.USER_ROLES.ROLE_ADMIN.getDisplayName());
-		roles.add(role);
-		
-		authUser = new AuthUser(username, password, true, true, true, true, roles);
-		authUser.setCreatedOn(createdOn);
-		authUser.setFirstName(firstName);
-		authUser.setLastName(lastName);		
-		authUser.setUpdatedOn(updatedOn);
-		try {
-			authUser = authUserService.createObject(authUser);
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage());			
-		}	
 		instance.setSuccess(true);
 		instance.setStatusCode("200");
-		instance.setData(authUser);
+		instance.setData(authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_USER));
 		return instance;
 		
 	}

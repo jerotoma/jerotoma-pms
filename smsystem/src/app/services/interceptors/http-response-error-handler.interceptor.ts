@@ -43,9 +43,6 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
               case HTTP_STATUS_CODES.CODE_400.id:
                 this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
-              case HTTP_STATUS_CODES.CODE_401.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
               case HTTP_STATUS_CODES.CODE_402.id:
                 this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
@@ -59,10 +56,9 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
                 this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
                 default:
+                this.errorDialogService.openSnackBar(err.error.message, 'danger');
                 break;
             }
-        } else { // Non Http Error Response
-          this.errorDialogService.openSnackBar('Non HttpErrorResponse caught in Http error handler', 'danger');
         }
         return throwError(err);
       }),

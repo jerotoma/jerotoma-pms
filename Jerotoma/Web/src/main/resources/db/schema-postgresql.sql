@@ -179,16 +179,16 @@
 	    updated_by bigint NOT NULL,
 	   	CONSTRAINT teachers_pkey PRIMARY KEY (id),
 	   	CONSTRAINT user_id UNIQUE (user_id), 
-	   	CONSTRAINT teacher_code UNIQUE (teacher_code),
+	   	CONSTRAINT user_code UNIQUE (user_code),
 	    CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
-	   CONSTRAINT positions_fkey FOREIGN KEY (position_id)
+	   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
 	        REFERENCES public.positions(id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
-	   CONSTRAINT academic_disciplines_fkey FOREIGN KEY (academic_discipline_id)
+	   	CONSTRAINT academic_disciplines_fkey FOREIGN KEY (academic_discipline_id)
 	        REFERENCES public.academic_disciplines (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE 
@@ -205,6 +205,7 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.parents(
 	    id bigserial NOT NULL,
+	    user_id bigint NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
 	    middle_names text,
@@ -217,6 +218,10 @@
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT users_fkey FOREIGN KEY (user_id)
+	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	   	CONSTRAINT parents_pkey PRIMARY KEY (id)
 	   	);
 	   	
@@ -231,6 +236,7 @@
 	
 	CREATE TABLE IF NOT EXISTS public.students(
 	    id bigserial NOT NULL,
+	    user_id bigint NOT NULL,
 	    student_number bigint NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
@@ -246,7 +252,12 @@
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT students_pkey PRIMARY KEY (id),
-	   	CONSTRAINT student_number UNIQUE (student_number));
+	   	CONSTRAINT student_number UNIQUE (student_number),
+	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
+	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	   	);
 	   	
 	   	
 	   	SELECT add_table_column_if_not_exists('public.students', 'user_code', 'character varying(255)');
@@ -260,6 +271,7 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.staffs(
 	    id bigserial NOT NULL,
+	    user_id bigint NOT NULL,
 	    position_id bigint NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
@@ -274,6 +286,10 @@
 	    updated_on timestamp with time zone NOT NULL,
 	    updated_by bigint NOT NULL,
 	   	CONSTRAINT staffs_pkey PRIMARY KEY (id),
+	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
+	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
 	        REFERENCES public.positions(id) MATCH SIMPLE
 	        ON UPDATE CASCADE

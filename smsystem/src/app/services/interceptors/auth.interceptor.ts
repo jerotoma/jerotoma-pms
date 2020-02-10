@@ -39,8 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
     const url = req.url;
     return next.handle(this.addHeaders(req, this.token)).pipe(catchError( error => {
       if (error instanceof HttpErrorResponse && error.status === HTTP_STATUS_CODES.CODE_401.id) {
-        window.console.log(error);
-        return this.handle401Error(req, next);
+         return this.handle401Error(req, next);
       }
       return throwError(error);
     }));

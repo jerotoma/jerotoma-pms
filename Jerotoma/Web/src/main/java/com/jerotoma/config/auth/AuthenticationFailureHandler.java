@@ -1,8 +1,6 @@
 package com.jerotoma.config.auth;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -42,7 +40,7 @@ public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailure
     		final HttpServletResponse response, final AuthenticationException exception) 
     				throws IOException, ServletException {
         
-    	final Locale locale = localeResolver.resolveLocale(request);
+    	// final Locale locale = localeResolver.resolveLocale(request);
     	setUseForward(true);
         if(WebUtil.isAjax(request)) {
         	 setDefaultFailureUrl(EndPointConstants.API_AUTH_LOGIN_URL);

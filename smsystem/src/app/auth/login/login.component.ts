@@ -60,10 +60,6 @@ export class LoginComponent implements OnInit {
         this.showMessage.error = true;
         this.errors.push(resp.error ? resp.error.message : resp.message);
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.errors.push(error ? error.error.message : '');
-      window.console.log(this.errors);
     });
   }
   processLoginResult(data: any, status: number): void {

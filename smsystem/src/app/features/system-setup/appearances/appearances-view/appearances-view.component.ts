@@ -79,7 +79,7 @@ export class AppearancesViewComponent implements OnInit {
         if (this.overrideUserTheme) {
           this.themeService.changeTheme(this.currentTheme);
         } else {
-          this.themeService.changeTheme(this.userPreference.value);
+          this.themeService.changeTheme(this.userPreference.value ? this.userPreference.value  : this.systemConfig.value );
         }
       }
     });

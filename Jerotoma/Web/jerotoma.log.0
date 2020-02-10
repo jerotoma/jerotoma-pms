@@ -1,0 +1,4 @@
+[2020-02-09 22:41:53.748] - 49578 INFO [restartedMain] --- org.apache.catalina.core.StandardService: Starting service [Tomcat]
+[2020-02-09 22:41:53.750] - 49578 INFO [restartedMain] --- org.apache.catalina.core.StandardEngine: Starting Servlet engine: [Apache Tomcat/9.0.16]
+[2020-02-09 22:41:53.769] - 49578 INFO [restartedMain] --- org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]: Initializing Spring embedded WebApplicationContext
+[2020-02-09 22:41:58.033] - 49578 INFO [http-nio-8080-exec-1] --- org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]: Initializing Spring DispatcherServlet 'dispatcherServlet'

@@ -15,6 +15,10 @@ import com.jerotoma.common.utils.StringUtility;
 
 @MappedSuperclass
 public abstract class Person {
+	
+	@Column(name = "user_id")
+	private Integer userId;
+	
 	@Column(name = "first_name")
 	protected String firstName;
 	
@@ -210,4 +214,13 @@ public abstract class Person {
 	public void setUserCode(String userCode) {
 		this.userCode = userCode;
 	}
+	
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 }
