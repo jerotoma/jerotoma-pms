@@ -73,21 +73,22 @@
                         </div>
                       </div>
                       <div class="col-md-6">
-                          <div class="form-control-group">
-                              <label for="staff-position" class="label">Position</label>
-                              <nb-select
-                                fullWidth
-                                placeholder="Position"
-                                formControlName="position"
-                                id="staff-position">
-                                <nb-option
-                                    *ngFor='let pos of positions' [value]="pos.id">
-                                    {{pos.name}}
-                                </nb-option>
-                              </nb-select>
-                          </div>
+                        <div class="form-control-group">
+                          <label for="student-phone-number" class="label">Phone Number</label>
+                          <input
+                                type="text"
+                                nbInput fullWidth
+                                autocomplete="new-password"
+                                required
+                                id="student-phone-number"
+                                formControlName="phoneNumber"
+                                placeholder="Emergency Phone Number">
+                        </div>
                       </div>
                   </div>
+                  <app-user-login-input
+                    [userLoginInput]="userLoginInput">
+                  </app-user-login-input>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-control-group">
@@ -112,36 +113,26 @@
                       </div>
                   </div>
                   <div class="row">
-                      <div class="col-md-6">
+                    <div class="col-md-6">
                         <div class="form-control-group">
-                          <label for="student-email-address" class="label">Email Address</label>
-                          <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-email-address"
-                                formControlName="emailAddress"
-                                placeholder="Email Address">
+                            <label for="staff-position" class="label">Position</label>
+                            <nb-select
+                              fullWidth
+                              placeholder="Position"
+                              formControlName="position"
+                              id="staff-position">
+                              <nb-option
+                                  *ngFor='let pos of positions' [value]="pos.id">
+                                  {{pos.name}}
+                              </nb-option>
+                            </nb-select>
                         </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-control-group">
-                          <label for="student-phone-number" class="label">Phone Number</label>
-                          <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-phone-number"
-                                formControlName="phoneNumber"
-                                placeholder="Emergency Phone Number">
-                        </div>
-                      </div>
                     </div>
-                    <app-address
-                        [address]="staff?.address ? staff?.address  : null"
-                        (onChanges)="onAddressChange($event)"></app-address>
+                  </div>
+                  <app-address
+                      [address]="staff?.address ? staff?.address : null"
+                      (onChanges)="onAddressChange($event)">
+                  </app-address>
               </nb-card-body>
               <nb-card-footer>
                 <button class='push-right' [disabled]="!staffForm.valid" type="submit" nbButton hero status="success">Submit</button>

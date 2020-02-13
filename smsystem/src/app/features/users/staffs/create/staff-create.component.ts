@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { AddressComponent } from 'app/shared';
+import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { NbDialogRef } from '@nebular/theme';
-import { Staff, Parent, AddressWrapper, Address, ShowMessage, Position } from 'app/models';
+import { Staff, Parent, AddressWrapper, Address, UserLoginInput, ShowMessage, Position } from 'app/models';
 import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services/positions';
+import { PositionService } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
@@ -16,6 +16,7 @@ import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 })
 export class StaffCreateComponent implements OnInit, AfterViewInit {
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
+  @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   @Output() onUserCreationSuccess = new EventEmitter();
 
   title: string = 'Create New Staff';
@@ -29,6 +30,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   addressForm: FormGroup;
   staff: Staff;
   address: Address;
+  userLoginInput: UserLoginInput;
   parent: Parent;
   staffId: string;
   showMessage: ShowMessage = {
@@ -123,6 +125,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.staffForm.reset();
     this.appAddress.resetForm();
+    this.appPassword.resetForm();
     this.ref.close();
   }
 
@@ -141,6 +144,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       userType: ['staff'],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       address: [null, Validators.required],
+      password: [null, Validators.required],
     });
   }
 

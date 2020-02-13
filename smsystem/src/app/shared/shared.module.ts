@@ -46,8 +46,10 @@ import {
   UserDetailsComponent,
   AddressComponent,
   DeleteModalComponent,
+  UserLoginInputComponent,
   UserDeleteComponent,
 } from 'app/shared';
+
 
 
 const COMPONENTS = [
@@ -57,12 +59,14 @@ const COMPONENTS = [
   UserTableComponent,
   UserDetailsComponent,
   UploadsComponent,
+  UserLoginInputComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   UserDeleteComponent,
   DeleteModalComponent,
   UploadsComponent,
+  UserLoginInputComponent,
 ];
 
 const MODULES = [
@@ -122,6 +126,7 @@ const SERVICES = [
   ],
   declarations: [
     ...COMPONENTS,
+    UserLoginInputComponent,
   ],
   exports: [
     ...EXPORT_MODULES,

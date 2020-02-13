@@ -5,4 +5,5 @@ export * from './modals';
 export * from './tables';
 export * from './editors';
 export * from './addresses';
+export * from './user-logins';
 
