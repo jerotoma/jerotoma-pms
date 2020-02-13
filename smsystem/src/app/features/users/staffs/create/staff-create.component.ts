@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { NbDialogRef } from '@nebular/theme';
-import { Staff, Parent, AddressWrapper, Address, UserLoginInput, ShowMessage, Position } from 'app/models';
+import { Staff, Parent, AddressWrapper, Address, UserLoginInput, UserLoginInputWrapper, ShowMessage, Position } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
@@ -199,6 +199,13 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       this.staffForm.patchValue({address: addressWrapper.address});
 
     }
+  }
+
+  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
+    if (userLoginInputWrapper.isValid) {
+       window.console.log(userLoginInputWrapper);
+    }
+
   }
 
   loadPositionList() {
