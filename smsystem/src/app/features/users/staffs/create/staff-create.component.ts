@@ -137,6 +137,9 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       middleNames: [null],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       position: ['', Validators.required],
       occupation: ['staff'],
       gender: ['', Validators.required],
@@ -144,7 +147,6 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       userType: ['staff'],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       address: [null, Validators.required],
-      password: [null, Validators.required],
     });
   }
 
@@ -175,7 +177,9 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           position: this.staff.position.id ,
           gender: this.staff.gender,
           phoneNumber: this.staff.phoneNumber,
-          emailAddress: this.staff.emailAddress,
+          username: this.userLoginInput.email,
+          password: this.userLoginInput.password,
+          confirmPassword: this.userLoginInput.confirmPassword,
           picture: this.staff.picture,
           birthDate: DateFormatter(this.staff.birthDate, 'YYYY/MM/DD', false),
           userType: 'staff',
@@ -203,9 +207,14 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
 
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.isValid) {
-       window.console.log(userLoginInputWrapper);
+        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.staffForm.patchValue({
+          username: this.userLoginInput.email,
+          password: this.userLoginInput.password,
+          confirmPassword: this.userLoginInput.confirmPassword,
+        });
+        window.console.log(userLoginInputWrapper);
     }
-
   }
 
   loadPositionList() {

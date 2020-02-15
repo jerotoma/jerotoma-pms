@@ -1,0 +1,28 @@
+<form  autocomplete="off" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-12">
+          <div class="form-control-group">
+              <label for="user-search-key" class="label">Login Credential</label>
+              <input
+                  type="text"
+                  name="searchKey"
+                  nbInput fullWidth
+                  autocomplete="new-password"
+                    required
+                  id="user-search-key"
+                  formControlName="searchKey"
+                  placeholder="Login Credential">
+            </div>
+            <nb-card [ngStyle]="{'display': listDisplay}">
+              <nb-list>
+                <nb-list-item *ngFor="let user of users" (click)="pickUser($event, user)">
+                      <nb-user
+                          [name]="user.fullName"
+                          [title]="user.username">
+                      </nb-user>
+                </nb-list-item>
+              </nb-list>
+            </nb-card>
+      </div>
+    </div>
+</form>

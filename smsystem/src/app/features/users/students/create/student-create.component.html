@@ -107,6 +107,10 @@
                 </div>
               </div>
             </div>
+            <app-user-login-input
+              [userLoginInput]="userLoginInput"
+              (onChanges)="onUserLoginInputChange($event)">
+            </app-user-login-input>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">

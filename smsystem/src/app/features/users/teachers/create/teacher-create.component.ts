@@ -3,11 +3,20 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef, NbDateService } from '@nebular/theme';
-import { AddressComponent } from 'app/shared';
-import { Teacher, User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
-import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services/positions';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import { AddressComponent, UserLoginInputComponent } from 'app/shared';
+
+import {
+  Teacher,
+  User,
+  Position,
+  AddressWrapper,
+  AcademicDiscipline,
+  ShowMessage,
+  UserLoginInput,
+  UserLoginInputWrapper,
+} from 'app/models';
+
+import { PositionService , UserService, AcademicDisciplineService } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
@@ -19,11 +28,13 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
+  @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   action: string = 'create';
   position: number;
   academicDiscipline: number;
 
   teacherForm: FormGroup;
+  userLoginInput: UserLoginInput;
   teacher: Teacher;
   teacherId: string;
   showMessage: ShowMessage = {
@@ -48,7 +59,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     this.loadPositionList();
     this.loadAcademicDisciplineList();
     this.loadForm();
-    this.onCredentialInputChanges();
   }
   ngAfterViewInit() {
     if (this.action === 'edit') {
@@ -58,11 +68,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   dismiss() {
     this.ref.close();
   }
-  onCredentialInputChanges() {
-    this.teacherForm.get('fullName').valueChanges.subscribe(value => {
-      this.search(value);
-    });
-  }
+
   onSubmit() {
     this.teacher = this.teacherForm.value;
     this.showMessage.success = false;
@@ -80,17 +86,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       this.teacher = teacher;
     });
   }
-  search(value: string) {
-    const param = this.getParam();
-    param.search = value;
-    this.userService.search(param).subscribe((users: User[]) => {
-      this.users = [];
-      if (users) {
-        this.users = users;
-        this.listDisplay = 'block';
-      }
-    });
-  }
+
 
   loadForm() {
     this.teacherForm = this.formBuilder.group({
@@ -113,30 +109,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       address: [null, Validators.required],
     });
   }
-
-  pickUser(event: any, user: User) {
-    event.preventDefault();
-    const firstName = this.teacherForm.get('firstName');
-    const lastName = this.teacherForm.get('lastName');
-
-    this.listDisplay = 'none';
-    this.teacherForm.patchValue({
-      userId: user.id,
-      fullName: user.firstName + ' ' + user.lastName,
-    });
-
-    if (firstName && !firstName.value) {
-      this.teacherForm.patchValue({
-        firstName: user.firstName,
-      });
-    }
-
-    if (lastName && !lastName.value) {
-      this.teacherForm.patchValue({
-        lastName: user.lastName,
-      });
-    }
-  }
   getParam(): QueryParam {
     return {
       page: 1,
@@ -149,32 +121,19 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     };
   }
 
+  onUserSelected(teacher: Teacher) {
+    this.teacher = teacher;
+    window.console.log(teacher);
+    this.updateUseInput();
+  }
+
   loadTeacher(teacherId: number) {
     this.userService.loadUser(teacherId, 'teacher').subscribe((teacher: Teacher) => {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;
         this.academicDiscipline = this.teacher.academicDiscipline.id;
-        this.teacherForm.patchValue({
-          id: this.teacher.id,
-          firstName: this.teacher.firstName,
-          lastName: this.teacher.lastName,
-          position: this.teacher.position.id ,
-          occupation: this.teacher.occupation,
-          employmentCode: this.teacher.teacherCode,
-          gender: this.teacher.gender,
-          picture: this.teacher.picture,
-          userId: this.teacher.userId,
-          middleNames: this.teacher.middleNames,
-          phoneNumber: this.teacher.phoneNumber,
-          emailAddress: this.teacher.emailAddress,
-          birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
-          userType: 'teacher',
-          academicDiscipline: this.teacher.academicDiscipline.id,
-          fullName: this.teacher.fullName,
-          address: this.teacher.address,
-        });
-        this.appAddress.patchAddressValue(this.teacher.address);
+        this.updateUseInput();
       }
     });
   }
@@ -228,11 +187,49 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
     }
   }
+  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
+    if (userLoginInputWrapper.isValid) {
+        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.teacherForm.patchValue({
+          username: this.userLoginInput.email,
+          password: this.userLoginInput.password,
+          confirmPassword: this.userLoginInput.confirmPassword,
+        });
+        window.console.log(userLoginInputWrapper);
+    }
 
+  }
   resetForms() {
     this.teacherForm.reset();
     this.appAddress.resetForm();
+    this.appPassword.resetForm();
     this.ref.close();
+  }
+
+  updateUseInput() {
+    this.teacherForm.patchValue({
+      id: this.teacher.id,
+      firstName: this.teacher.firstName,
+      lastName: this.teacher.lastName,
+      position: this.teacher.position ? this.teacher.position.id : null,
+      occupation: this.teacher.occupation,
+      employmentCode: this.teacher.teacherCode,
+      gender: this.teacher.gender,
+      picture: this.teacher.picture,
+      userId: this.teacher.userId,
+      middleNames: this.teacher.middleNames,
+      phoneNumber: this.teacher.phoneNumber,
+      emailAddress: this.teacher.emailAddress,
+      birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
+      userType: 'teacher',
+      academicDiscipline: this.teacher.academicDiscipline ? this.teacher.academicDiscipline.id : null,
+      fullName: this.teacher.fullName,
+      address: this.teacher.address ? this.teacher.address : null,
+    });
+
+    if (this.teacher.address) {
+      this.appAddress.patchAddressValue(this.teacher.address);
+    }
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { UserLoginInput, UserLoginInputWrapper } from 'app/models';
+import { CheckBoxValidator, MustMatch } from 'app/utils';
 
 @Component({
   selector: 'app-user-login-input',
@@ -29,17 +30,42 @@ export class UserLoginInputComponent implements OnInit {
 
 loadPasswordForm() {
   this.userLoginInputForm = this.formBuilder.group({
-    password: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
-    email: ['', Validators.required],
     canUserLogin: [false, Validators.required],
+    email: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.email,
+      ]),
+    ],
+    password: [
+      '',
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(5),
+      ]),
+    ],
+    confirmPassword: [
+      '',
+      Validators.required,
+    ],
+  },
+  {
+    validator: [
+      MustMatch('password', 'confirmPassword'),
+      CheckBoxValidator('canUserLogin'),
+    ],
   });
   this.processFormChange();
 }
 
 processFormChange() {
   this.userLoginInputForm.valueChanges.subscribe(value => {
-    this.userLoginInputWrapper = { userLoginInput: value, isValid: this.userLoginInputForm.valid, canUserLogin: this.canUserLogin};
+    this.userLoginInputWrapper = {
+      userLoginInput: value,
+      isValid: this.userLoginInputForm.valid,
+      canUserLogin: this.canUserLogin,
+    };
     this.onChanges.emit(this.userLoginInputWrapper);
   });
 }
@@ -57,10 +83,17 @@ patchPasswordValue(userLoginInput: UserLoginInput) {
 }
 
 checkedChange(checked: boolean) {
+  this.canUserLogin = checked;
   this.userLoginInputForm.patchValue({
     canUserLogin: checked,
   });
-  this.canUserLogin = checked;
+
+  if (!checked) {
+    this.userLoginInputForm.patchValue({
+      password: '',
+      confirmPassword: '',
+    });
+  }
 }
 
 }

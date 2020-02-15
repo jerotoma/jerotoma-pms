@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
-import { NbDialogRef, NbDateService } from '@nebular/theme';
-import { AddressComponent } from 'app/shared';
+import { NbDialogRef } from '@nebular/theme';
+import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper } from 'app/models/addresses';
+import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
@@ -22,11 +21,13 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   title: string = 'Create New Student';
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
+  @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   action: string = 'create';
 
   studentForm: FormGroup;
   parentForm: FormGroup;
   addressForm: FormGroup;
+  userLoginInput: UserLoginInput;
   student: Student;
   address: Address;
   parent: Parent;
@@ -102,6 +103,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.studentForm.reset();
     this.appAddress.resetForm();
+    this.appPassword.resetForm();
     this.dismiss();
   }
 
@@ -182,6 +184,19 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       this.parentForm.controls['address'].setErrors(null);
       this.parentForm.patchValue({address: addressWrapper.address});
     }
+  }
+
+  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
+    if (userLoginInputWrapper.isValid) {
+        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.studentForm.patchValue({
+          username: this.userLoginInput.email,
+          password: this.userLoginInput.password,
+          confirmPassword: this.userLoginInput.confirmPassword,
+        });
+        window.console.log(userLoginInputWrapper);
+    }
+
   }
 
   pickUser(event: any, parent: Parent) {

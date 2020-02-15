@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef} from '@nebular/theme';
-import { AddressComponent } from 'app/shared';
-import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper } from 'app/models/addresses';
+import { AddressComponent, UserLoginInputComponent } from 'app/shared';
+import { Student, Address, AddressWrapper, Parent, UserLoginInput, UserLoginInputWrapper  } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
@@ -21,12 +20,14 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   title: string = 'Create New Parent';
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
+  @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   action: string = 'create';
 
   parentForm: FormGroup;
   addressForm: FormGroup;
   student: Student;
   address: Address;
+  userLoginInput: UserLoginInput;
   students: Student[] = [];
   selectedStudents: Student[] = [];
   studentIds: number[]  = [];
@@ -125,6 +126,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.parentForm.reset();
     this.appAddress.resetForm();
+    this.appPassword.resetForm();
     this.ref.close();
   }
   loadParentForm() {
@@ -163,6 +165,19 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       this.parentForm.patchValue({address: addressWrapper.address});
     }
   }
+  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
+    if (userLoginInputWrapper.isValid) {
+        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.parentForm.patchValue({
+          username: this.userLoginInput.email,
+          password: this.userLoginInput.password,
+          confirmPassword: this.userLoginInput.confirmPassword,
+        });
+        window.console.log(userLoginInputWrapper);
+    }
+
+  }
+
   pickUser(event: any, student: Student) {
     event.preventDefault();
     this.listDisplay = 'none';

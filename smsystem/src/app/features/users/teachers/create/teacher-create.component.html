@@ -4,46 +4,13 @@
             <nb-card size="giant" status="primary">
               <nb-card-header>{{ title }}</nb-card-header>
               <nb-card-body>
-                <div class='row'>
-                    <div class='col-md-12'>
-                        <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                            <p class="alert-title"><b>Sorry!</b></p>
-                            <ul class="alert-message-list">
-                                <li class="alert-message">{{ showMessage.message }}</li>
-                              </ul>
-                          </nb-alert>
-                          <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                            <p class="alert-title"><b>Success!</b></p>
-                            <ul class="alert-message-list">
-                              <li class="alert-message">{{ showMessage.message }}</li>
-                            </ul>
-                          </nb-alert>
-                    </div>
-                </div>
-                  <div class="row">
-                      <div class="col-md-6">
-                          <div class="form-control-group">
-                              <label for="teacher-full-name" class="label">Login Credential</label>
-                              <input
-                                  type="text"
-                                  nbInput fullWidth
-                                  autocomplete="new-password"
-                                  required
-                                  id="teacher-full-name"
-                                  formControlName="fullName"
-                                  placeholder="Login Credential">
-                            </div>
-                            <nb-card [ngStyle]="{'display': listDisplay}">
-                              <nb-list>
-                                <nb-list-item *ngFor="let user of users" (click)="pickUser($event, user)">
-                                       <nb-user
-                                          [name]="user.fullName"
-                                          [title]="user.username">
-                                      </nb-user>
-                                </nb-list-item>
-                              </nb-list>
-                            </nb-card>
-                      </div>
+                   <div class="row">
+                     <div class="col-md-6">
+                        <app-search-user
+                          [userType]="'teacher'"
+                          (onUserSelected) = "onUserSelected($event)"
+                        ></app-search-user>
+                     </div>
                       <div class="col-md-6">
                           <div class="form-control-group">
                             <label for="teacher-employment-code" class="label">Employment Code</label>
@@ -105,6 +72,10 @@
                         </div>
                       </div>
                   </div>
+                  <app-user-login-input
+                    [userLoginInput]="userLoginInput"
+                    (onChanges)="onUserLoginInputChange($event)">
+                  </app-user-login-input>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-control-group">
