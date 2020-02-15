@@ -238,7 +238,9 @@ public class RestUserController extends BaseController {
 		requiredFields =  new ArrayList<>(Arrays.asList(
 						UserConstant.FIRST_NAME, 
 						UserConstant.LAST_NAME,
-						UserConstant.TERMS,
+						UserConstant.USERNAME,
+						UserConstant.ADDRESS,
+						UserConstant.BIRTH_DATE,
 						UserConstant.GENDER
 						));
 				
@@ -266,14 +268,17 @@ public class RestUserController extends BaseController {
 				academicDiscipline = processAcademicDiscipline(params, requiredFields);
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
-				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
+				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
+				newUser = authUserService.createUserLoginAccount(newUser);
+								
 				teacher.setUserId(newUser.getId());
 				teacher.setPosition(position);
 				teacher.setAcademicDiscipline(academicDiscipline);
 				teacher.setUpdatedBy(authUser.getId());
-				address = teacher.getAddress();
-				teacher = teacherService.createObject(teacher);
-								
+				address = teacher.getAddress();				
+				
+				teacher = teacherService.createObject(teacher);	
+				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.createObject(address);
 				
@@ -290,6 +295,8 @@ public class RestUserController extends BaseController {
 				requiredFields.add(UserConstant.PHONE_NUMBER);
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
+				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				
+				newUser = authUserService.createUserLoginAccount(newUser);	
 								
 				student.setUpdatedBy(authUser.getId());
 				if (student.getParentIds() != null) {
@@ -300,9 +307,6 @@ public class RestUserController extends BaseController {
 					}										
 					student.setParents(parents);
 				}
-				
-				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_STUDENT);
-				
 				student.setUserId(newUser.getId());
 				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
 				address = student.getAddress();
@@ -328,7 +332,9 @@ public class RestUserController extends BaseController {
 				staff.setUpdatedBy(authUser.getId());
 				address = staff.getAddress();
 				
-				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_STAFF);
+				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STAFF);				
+				newUser = authUserService.createUserLoginAccount(newUser);	
+				
 				staff.setUserId(newUser.getId());
 				staff = staffService.createObject(staff);
 							
@@ -346,18 +352,11 @@ public class RestUserController extends BaseController {
 			case PARENT:
 				
 				parentAddress = new ParentAddress();
-				
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				
-				if (parent.getStudentIds() != null) {
-					Set<Student> students = new HashSet<>();
-					for (Integer studentId: parent.getStudentIds()) {
-						student = studentService.findObject(studentId);
-						students.add(student);
-					}										
-					parent.setStudents(students);
-				}
-				newUser = authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_PARENT);
+				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_PARENT);				
+				newUser = authUserService.createUserLoginAccount(newUser);
+				
 				parent.setUserId(newUser.getId());
 				parent.setUpdatedBy(authUser.getId());
 				address = parent.getAddress();

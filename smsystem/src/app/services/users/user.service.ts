@@ -49,14 +49,14 @@ export class UserService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  addUser(data: any): Observable<User>  {
+  addUser(data: any): Observable<ResponseWrapper>  {
     return this.http.post(`${END_POINTS.users}`, data)
-    .pipe(map((resp: ResponseWrapper) => resp.data));
+    .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  updateUser(data: any): Observable<User>  {
+  updateUser(data: any): Observable<ResponseWrapper>  {
     return this.http.put(`${END_POINTS.users}`, data)
-    .pipe(map((resp: ResponseWrapper) => resp.data));
+    .pipe(map((resp: ResponseWrapper) => resp));
   }
 
   deleteUser(userId: number, userType: string): Observable<User> {

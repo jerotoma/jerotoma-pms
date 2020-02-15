@@ -91,4 +91,10 @@ public class AcademicDisciplineDaoImpl implements AcademicDisciplineDao{
 		return entityManager.createQuery("SELECT count(*) FROM AcademicDiscipline ", Long.class)
 				.getSingleResult();
 	}
+
+	@Override
+	public List<AcademicDiscipline> loadList() throws SQLException {
+		return entityManager.createQuery("FROM AcademicDiscipline ", AcademicDiscipline.class)
+				.getResultList();
+	}
 }

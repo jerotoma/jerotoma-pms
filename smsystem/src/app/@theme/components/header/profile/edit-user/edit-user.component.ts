@@ -1,10 +1,16 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDateService } from '@nebular/theme';
 import { AddressComponent } from 'app/shared';
-import { User, Position, AddressWrapper, AcademicDiscipline, ShowMessage  } from 'app/models';
+import {
+  User,
+  Position,
+  AddressWrapper,
+  AcademicDiscipline,
+  ShowMessage,
+  ResponseWrapper,
+} from 'app/models';
 import {
   UserService,
   PositionService,
@@ -63,7 +69,7 @@ export class EditUserComponent implements OnInit {
     this.updateUser(this.userForm.value);
   }
   updateUser(data: User) {
-    this.userService.updateUser(data).subscribe((user: User) => {
+    this.userService.updateUser(data).subscribe((user: ResponseWrapper) => {
       if (user) {
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);

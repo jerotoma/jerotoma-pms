@@ -35,7 +35,7 @@ export class TeacherShowComponent implements OnInit {
     let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
         this.loadTeacherDetails(routeParam.id);
-       window.console.log(routeParam);
+       // window.console.log(routeParam);
     });
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params

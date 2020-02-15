@@ -71,21 +71,15 @@ public class RestAcademicDisciplineController extends BaseController {
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> loadFieldOfStudyList(
-			Authentication auth,
-			@RequestParam(value="searchTerm", required=false) String search,
-			@RequestParam(value="page", required=false) Integer page,
-			@RequestParam(value="pageSize", required=false) Integer pageSize,
-			@RequestParam(value="fieldName", required=false) String fieldName,
-			@RequestParam(value="orderby", required=false) String orderby) {
+			Authentication auth) {
 		
 		List<AcademicDiscipline> academicDisciplines = new ArrayList<>();
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/list");
 		this.securityCheckAdminAccess(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			academicDisciplines = academicDisciplineService.loadList(queryParam);		
+			academicDisciplines = academicDisciplineService.loadList();
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

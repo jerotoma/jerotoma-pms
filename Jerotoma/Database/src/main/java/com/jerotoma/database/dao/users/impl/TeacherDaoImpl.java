@@ -46,7 +46,7 @@ public class TeacherDaoImpl implements TeacherDao {
 
 	@Override
 	public Teacher createObject(Teacher object) {
-		entityManager.persist(object);			
+		entityManager.persist(object); 			
 		return findObject(object.getId().intValue());
 	}
 
@@ -77,12 +77,7 @@ public class TeacherDaoImpl implements TeacherDao {
 
 	@Override
 	public Teacher updateObject(Teacher object) {
-		try {
-			entityManager.merge(object);		
-		} catch (EntityExistsException  | HibernateException | JDataAccessException e) {
-			throw new JDataAccessException(e.getMessage(), e);
-		}		
-		return findObject(object.getId().intValue());
+		return entityManager.merge(object);
 	}
 
 	@Override

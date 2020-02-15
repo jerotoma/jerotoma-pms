@@ -20,7 +20,7 @@ export class AcademicDisciplineService {
   }
 
   loadAcademicDisciplineList(): Observable<AcademicDiscipline[]> {
-    return this.http.get(`${END_POINTS.academicDisciplines}`)
+    return this.http.get(`${END_POINTS.academicDisciplines}/list`)
       .pipe(map((resp: ResponseWrapper) => resp.data ));
   }
 

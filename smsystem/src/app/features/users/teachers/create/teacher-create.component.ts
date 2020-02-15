@@ -14,9 +14,10 @@ import {
   ShowMessage,
   UserLoginInput,
   UserLoginInputWrapper,
+  ResponseWrapper,
 } from 'app/models';
 
-import { PositionService , UserService, AcademicDisciplineService } from 'app/services';
+import { PositionService , UserService, AcademicDisciplineService, ModalService } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
@@ -52,6 +53,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     protected academicDisciplineService: AcademicDisciplineService,
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
+    private modalService: ModalService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<TeacherCreateComponent>) {}
 
@@ -76,14 +78,20 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     if (this.action === 'edit') {
       this.updateTeacher();
     } else {
-      this.userService.addUser(this.teacher).subscribe((teacher: Teacher) => {
-       this.teacher = teacher;
+      this.userService.addUser(this.teacher).subscribe((resp: ResponseWrapper) => {
+        if (resp && resp.success) {
+          this.modalService.openSnackBar('Student has been updated', 'success');
+          this.resetForms();
+        }
       });
     }
   }
   updateTeacher() {
-    this.userService.updateUser(this.teacher).subscribe((teacher: Teacher) => {
-      this.teacher = teacher;
+    this.userService.updateUser(this.teacher).subscribe((resp: ResponseWrapper) => {
+      if (resp && resp.success) {
+        this.modalService.openSnackBar('Student has been updated', 'success');
+        this.resetForms();
+      }
     });
   }
 
@@ -103,7 +111,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       username: [null],
       password: [null],
       confirmPassword: [null],
-      userId: [null, Validators.required],
+      userId: [null],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
       academicDiscipline: ['', Validators.required],
@@ -190,11 +198,11 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.teacherForm.patchValue({
-      id: this.teacher.id,
+      id: null,
       firstName: this.teacher.firstName,
       lastName: this.teacher.lastName,
       position: this.teacher.position ? this.teacher.position.id : null,
-      occupation: this.teacher.occupation,
+      occupation: this.teacher.occupation ? this.teacher.occupation : 'Teacher',
       userCode: this.teacher.userCode,
       gender: this.teacher.gender,
       picture: this.teacher.picture,

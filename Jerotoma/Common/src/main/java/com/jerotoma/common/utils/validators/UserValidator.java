@@ -73,11 +73,11 @@ public class UserValidator {
 			userId = (Integer) params.get(UserConstant.USER_ID);	
 		}
 		
-		if(params.containsKey(UserConstant.GENDER)) {
+		if(params.containsKey(UserConstant.GENDER) && params.get(UserConstant.GENDER) != null) {
 			gender  = params.get(UserConstant.GENDER).toString();
 		}
 		
-		if(params.containsKey(UserConstant.OCCUPATION)) {
+		if(params.containsKey(UserConstant.OCCUPATION) && params.get(UserConstant.OCCUPATION) != null) {
 			occupation = params.get(UserConstant.OCCUPATION).toString();
 		}
 		

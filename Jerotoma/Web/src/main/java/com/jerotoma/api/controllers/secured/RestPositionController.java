@@ -96,13 +96,7 @@ public class RestPositionController {
 	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
-	public HttpResponseEntity<Object> loadPositionList(
-			Authentication auth,
-			@RequestParam(value="searchTerm", required=false) String search,
-			@RequestParam(value="page", required=false) Integer page,
-			@RequestParam(value="pageSize", required=false) Integer pageSize,
-			@RequestParam(value="fieldName", required=false) String fieldName,
-			@RequestParam(value="orderby", required=false) String orderby) {
+	public HttpResponseEntity<Object> loadPositionList(Authentication auth) {
 		
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 		List<Position> positions = new ArrayList<>();
@@ -114,16 +108,6 @@ public class RestPositionController {
 		}
 		logger.debug("getPositions : [model] : {}");
 		
-		page = page == null ? 1 : page;
-		pageSize = pageSize == null ? 12 : pageSize;
-		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
-
-
-		QueryParam queryParam =  QueryParam.getInstance();
-		queryParam.setPage(page);
-		queryParam.setPageSize(pageSize);
-		queryParam.setFieldName(fieldName);
-		queryParam.setOrderby(orderby);
 				
 		UserContext userContext = authenticationFacade.getUserContext(auth);
 		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
@@ -131,7 +115,7 @@ public class RestPositionController {
 		}
 		
 		try {
-			positions = positionService.loadList(queryParam);		
+			positions = positionService.loadList();		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

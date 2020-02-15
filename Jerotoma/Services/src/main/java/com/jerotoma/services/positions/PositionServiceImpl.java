@@ -54,4 +54,9 @@ public class PositionServiceImpl implements PositionService{
 		return positionDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public List<Position> loadList() throws SQLException {
+		return positionDao.loadList();
+	}
+
 }

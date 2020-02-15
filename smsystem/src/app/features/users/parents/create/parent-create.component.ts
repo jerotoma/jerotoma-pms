@@ -3,10 +3,16 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef} from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
-import { Student, Address, AddressWrapper, Parent, UserLoginInput, UserLoginInputWrapper  } from 'app/models';
-import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services/positions';
-import { AcademicDisciplineService } from 'app/services/academic-disciplines';
+import {
+  Student,
+  Address,
+  AddressWrapper,
+  Parent,
+  UserLoginInput,
+  UserLoginInputWrapper,
+  ResponseWrapper,
+} from 'app/models';
+import { AcademicDisciplineService, ModalService , PositionService, UserService} from 'app/services';
 import { QueryParam , DateFormatter } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -45,6 +51,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     protected academicDisciplineService: AcademicDisciplineService,
     protected ref: NbDialogRef<ParentCreateComponent>,
     private userService:  UserService,
+    private modalService: ModalService,
     private formBuilder: FormBuilder,
     ) {}
 
@@ -79,19 +86,19 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     if (this.action === 'edit') {
       this.updateData(data);
     } else {
-      this.userService.addUser(data).subscribe((parent: Parent ) => {
-        if (parent) {
-          this.showMessage.success = true;
-          this.showMessage.error = false;
+      this.userService.addUser(data).subscribe((resp: ResponseWrapper ) => {
+        if (resp && resp.success) {
+          this.modalService.openSnackBar('New Parent has been created', 'success');
           this.resetForms();
         }
       });
     }
   }
   updateData(data: any) {
-    this.userService.updateUser(data).subscribe((parent: Parent) => {
-      if (parent) {
+    this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
+      if (resp && resp.success) {
         this.resetForms();
+        this.modalService.openSnackBar('Parent has been updated', 'success');
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
       }
@@ -217,11 +224,11 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.parentForm.patchValue({
-      id: this.parent.id,
+      id: null,
       firstName: this.parent.firstName,
       lastName: this.parent.lastName,
       position: this.parent.position ? this.parent.position.id : null,
-      occupation: this.parent.occupation,
+      occupation: this.parent.occupation ? this.parent.occupation : 'Parent',
       employmentCode: this.parent.userCode,
       gender: this.parent.gender,
       picture: this.parent.picture,

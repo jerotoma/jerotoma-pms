@@ -50,7 +50,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
         }
 	}
 	protected void addDefaultAccountsIfNotExists() {
-		RoleConstant.USER_ROLES userRole = RoleConstant.USER_ROLES.ROLE_ADMIN;
+		RoleConstant.USER_ROLES adminRole = RoleConstant.USER_ROLES.ROLE_ADMIN;
 		AuthUser authUser;
 		String username = "john@jerotoma.com";
 		String password = "Doe12345";
@@ -58,20 +58,16 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		Boolean accountNonExpired = true;
 		Boolean credentialsNonExpired = true; 
 		Boolean accountNonLocked = true;
-		Role role = new Role();
-		role.setUpdatedOn(CalendarUtil.getTodaysDate());
-		role.setCreatedOn(CalendarUtil.getTodaysDate());
-		role.setName(userRole.getRoleName());
-		role.setDisplayName(userRole.getDisplayName());
+		
 		try {
+			createRoles();
 			Long count = userService.countObject();
 			if (count != null && count != 0) {
 				return;
-			}
-			
-			Role roleR = roleService.findObjectUniqueKey(role.getName());
+			}			
+			Role roleR = roleService.findObjectUniqueKey(adminRole.getRoleName());
 			if (roleR == null) {
-				roleR = roleService.createObject(role);
+				roleR = roleService.createObject(roleR);
 			}
 			
 			Collection<Role> roles = new ArrayList<>(Arrays.asList(roleR));
@@ -86,6 +82,19 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			throw new RuntimeException(e.getMessage(), e); 
 		}
 		
+	}
+	private void createRoles() throws SQLException {
+		for (RoleConstant.USER_ROLES userRole : RoleConstant.USER_ROLES.values()) {
+			Role role = new Role();
+			role.setUpdatedOn(CalendarUtil.getTodaysDate());
+			role.setCreatedOn(CalendarUtil.getTodaysDate());
+			role.setName(userRole.getRoleName());
+			role.setDisplayName(userRole.getDisplayName());
+			Role roleR = roleService.findObjectUniqueKey(role.getName());
+			if (roleR == null) {
+				roleR = roleService.createObject(role);
+			}
+		}
 	}
 	
 	private void addDefaultAppTheme() {

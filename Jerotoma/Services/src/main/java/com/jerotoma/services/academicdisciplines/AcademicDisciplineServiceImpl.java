@@ -54,4 +54,9 @@ public class AcademicDisciplineServiceImpl implements AcademicDisciplineService{
 		return academicDisciplineDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public List<AcademicDiscipline> loadList() throws SQLException {		
+		return academicDisciplineDao.loadList();
+	}
+
 }

@@ -147,7 +147,7 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof DuplicateKeyException) {
-			status = HttpStatus.OK;	
+			status = HttpStatus.INTERNAL_SERVER_ERROR;	
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}

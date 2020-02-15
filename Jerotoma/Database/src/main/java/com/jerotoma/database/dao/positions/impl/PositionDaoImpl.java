@@ -58,6 +58,11 @@ public class PositionDaoImpl implements PositionDao{
 				.setMaxResults(limit)
 				.getResultList();
 	}
+	
+	@Override
+	public List<Position> loadList() throws SQLException {
+		return entityManager.createQuery("FROM Position ", Position.class).getResultList();
+	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {

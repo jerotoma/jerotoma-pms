@@ -4,9 +4,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper } from 'app/models';
-import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services/positions';
+import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper } from 'app/models';
+import { PositionService, UserService, ModalService } from 'app/services';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
@@ -48,6 +47,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     protected academicDisciplineService: AcademicDisciplineService,
     protected ref: NbDialogRef<StudentCreateComponent>,
     private userService:  UserService,
+    private modalService: ModalService,
     private formBuilder: FormBuilder,
     ) {}
 
@@ -81,22 +81,19 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
 
   postData(data: Student) {
-      this.userService.addUser(data).subscribe((result: Student) => {
-        if (result) {
-          this.showMessage.success = true;
-          this.showMessage.error = false;
+      this.userService.addUser(data).subscribe((resp: ResponseWrapper) => {
+        if (resp && resp.success) {
+          this.modalService.openSnackBar('New Student has been created', 'success');
           this.resetForms();
         }
       });
   }
   updateData(data: Student) {
-      this.userService.updateUser(data).subscribe((student: Student) => {
-      if (student) {
-        this.showMessage.success = true;
-        this.resetForms();
-        this.onUserCreationSuccess.emit(this.showMessage.success);
-        this.showMessage.error = false;
-      }
+      this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
+        if (resp && resp.success) {
+          this.modalService.openSnackBar('Student has been updated', 'success');
+          this.resetForms();
+        }
     });
   }
 
@@ -236,11 +233,11 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.studentForm.patchValue({
-      id: this.student.id,
+      id: null,
       firstName: this.student.firstName,
       lastName: this.student.lastName,
       position: this.student.position ? this.student.position.id : null,
-      occupation: this.student.occupation,
+      occupation: this.student.occupation ? this.student.occupation : 'Student',
       employmentCode: this.student.userCode,
       gender: this.student.gender,
       picture: this.student.picture,

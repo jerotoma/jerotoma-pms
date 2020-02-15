@@ -21,7 +21,7 @@ export class PositionService {
 
   loadPositionList(): Observable<Position[]> {
     return this.http.get<any>(
-        `${END_POINTS.positions}`)
+        `${END_POINTS.positions}/list`)
         .pipe(map((resp: ResponseWrapper) => resp.data ));
   }
 

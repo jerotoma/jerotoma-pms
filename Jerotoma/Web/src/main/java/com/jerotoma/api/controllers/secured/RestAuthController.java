@@ -60,7 +60,7 @@ public class RestAuthController {
 		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();
 		instance.setSuccess(true);
 		instance.setStatusCode("200");
-		instance.setData(authUserService.preUserCreation(params, RoleConstant.USER_ROLES.ROLE_USER));
+		instance.setData(authUserService.createUserLoginAccount(AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_USER)));
 		return instance;
 		
 	}
