@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse, HttpEvent } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { Position, ResponseWrapper } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,11 +19,10 @@ export class PositionService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
-  loadPositionList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
+  loadPositionList(): Observable<Position[]> {
     return this.http.get<any>(
-        `${END_POINTS.positions}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+        `${END_POINTS.positions}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data ));
   }
 
   getPositions(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {

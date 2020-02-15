@@ -4,73 +4,79 @@
             <nb-card size="giant" status="primary">
               <nb-card-header>{{ title }}</nb-card-header>
               <nb-card-body>
-                   <div class="row">
+                  <div class="row">
                      <div class="col-md-6">
                         <app-search-user
                           [userType]="'teacher'"
                           (onUserSelected) = "onUserSelected($event)"
                         ></app-search-user>
                      </div>
-                      <div class="col-md-6">
-                          <div class="form-control-group">
-                            <label for="teacher-employment-code" class="label">Employment Code</label>
-                            <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="off"
-                                required
-                                id="teacher-employment-code"
-                                formControlName="employmentCode"
-                                placeholder="Employment Code">
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-control-group">
-                    <label for="teacher-first-name" class="label">First Name</label>
-                    <input
-                          type="text"
-                          nbInput fullWidth
-                          autocomplete="new-password"
-                          required
-                          id="teacher-first-name"
-                          formControlName="firstName"
-                          placeholder="First Name">
-                    <ng-container *ngIf="teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched">
-                      <p class="error-message">
-                        First Name is required!
-                      </p>
-                    </ng-container>
-                  </div>
-                  <div class="form-control-group">
-                    <label for="teacher-last-name" class="label">Last Name</label>
-                    <input
-                          required
-                          type="text"
-                          autocomplete="new-password"
-                          nbInput fullWidth
-                          id="teacher-last-name"
-                          formControlName="lastName"
-                          placeholder="Last Name">
-                    <ng-container *ngIf="teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched">
-                      <p class="error-message">
-                        Last Name is required!
-                      </p>
-                    </ng-container>
                   </div>
                   <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-control-group">
-                          <label for="student-middle-names" class="label">Other Names</label>
-                          <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-middle-names"
-                                formControlName="middleNames"
-                                placeholder="Other  Names">
-                        </div>
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="teacher-first-name" class="label">First Name</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="teacher-first-name"
+                              formControlName="firstName"
+                              placeholder="First Name">
+                        <ng-container *ngIf="teacherForm.controls['firstName'].invalid && teacherForm.controls['firstName'].touched">
+                          <p class="error-message">
+                            First Name is required!
+                          </p>
+                        </ng-container>
                       </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="teacher-last-name" class="label">Last Name</label>
+                        <input
+                              required
+                              type="text"
+                              autocomplete="new-password"
+                              nbInput fullWidth
+                              id="teacher-last-name"
+                              formControlName="lastName"
+                              placeholder="Last Name">
+                        <ng-container *ngIf="teacherForm.controls['lastName'].invalid && teacherForm.controls['lastName'].touched">
+                          <p class="error-message">
+                            Last Name is required!
+                          </p>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="teacher-middle-names" class="label">Other Names</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="teacher-middle-names"
+                              formControlName="middleNames"
+                              placeholder="Other  Names">
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="teacher-phone-number" class="label">Phone Number</label>
+                        <input
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="new-password"
+                              required
+                              id="teacher-phone-number"
+                              formControlName="phoneNumber"
+                              placeholder="Phone Number">
+                      </div>
+                    </div>
                   </div>
                   <app-user-login-input
                     [userLoginInput]="userLoginInput"
@@ -135,29 +141,19 @@
                   <div class="row">
                       <div class="col-md-6">
                         <div class="form-control-group">
-                          <label for="student-email-address" class="label">Email Address</label>
+                          <label for="user-code" class="label">Employment Code</label>
                           <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-email-address"
-                                formControlName="emailAddress"
-                                placeholder="Email Address">
+                              type="text"
+                              nbInput fullWidth
+                              autocomplete="off"
+                              required
+                              id="user-code"
+                              formControlName="userCode"
+                              placeholder="Employment Code">
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="form-control-group">
-                          <label for="student-phone-number" class="label">Phone Number</label>
-                          <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-phone-number"
-                                formControlName="phoneNumber"
-                                placeholder="Emergency Phone Number">
-                        </div>
+
                       </div>
                     </div>
                     <app-address

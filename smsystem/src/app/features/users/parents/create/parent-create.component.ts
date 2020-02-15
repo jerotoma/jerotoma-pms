@@ -102,23 +102,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     this.userService.loadUser(parentId, 'parent').subscribe((parent: Parent) => {
       if (parent) {
         this.parent = parent;
-        this.address = this.parent.address,
-        this.parentForm.patchValue({
-          id: this.parent.id,
-          firstName: this.parent.firstName,
-          lastName: this.parent.lastName,
-          occupation: this.parent.occupation,
-          gender: this.parent.gender,
-          picture: this.parent.picture,
-          birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
-          userType: 'parent',
-          fullName: this.parent.fullName,
-          emailAddress: this.parent.emailAddress,
-          middleNames: this.parent.middleNames,
-          phoneNumber: this.parent.phoneNumber,
-          address: this.parent.address,
-        });
-        this.appAddress.patchAddressValue(this.address);
+        this.updateUseInput();
       }
     });
   }
@@ -228,6 +212,32 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
      }
     } else {
       this.selectedStudents.push(student);
+    }
+  }
+
+  updateUseInput() {
+    this.parentForm.patchValue({
+      id: this.parent.id,
+      firstName: this.parent.firstName,
+      lastName: this.parent.lastName,
+      position: this.parent.position ? this.parent.position.id : null,
+      occupation: this.parent.occupation,
+      employmentCode: this.parent.userCode,
+      gender: this.parent.gender,
+      picture: this.parent.picture,
+      userId: this.parent.userId,
+      middleNames: this.parent.middleNames,
+      phoneNumber: this.parent.phoneNumber,
+      emailAddress: this.parent.username,
+      birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
+      userType: 'parent',
+      academicDiscipline: this.parent.academicDiscipline ? this.parent.academicDiscipline.id : null,
+      fullName: this.parent.fullName,
+      address: this.parent.address ? this.parent.address : null,
+    });
+
+    if (this.parent.address) {
+      this.appAddress.patchAddressValue(this.parent.address);
     }
   }
 }

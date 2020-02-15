@@ -98,67 +98,23 @@ export class EditUserComponent implements OnInit {
   loadUser(user: User) {
     this.position = user.position.id;
     this.academicDiscipline = user.academicDiscipline.id;
-    this.userForm.patchValue({
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      position: user.position.id ,
-      occupation: user.occupation,
-      userCode: user.userCode,
-      gender: user.gender,
-      picture: user.picture,
-      userId: user.userId,
-      middleNames: user.middleNames,
-      phoneNumber: user.phoneNumber,
-      emailAddress: user.emailAddress,
-      birthDate: DateFormatter(user.birthDate, 'YYYY/MM/DD', false),
-      userType: 'teacher',
-      academicDiscipline: user.academicDiscipline.id,
-      fullName: user.fullName,
-      address: user.address,
-    });
-    if (this.appAddress) {
-      this.appAddress.patchAddressValue(user.address);
-    }
+    this.updateUserInput(user);
   }
 
   loadPositionList() {
-    this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const data = resp.body;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.showMessage.error = false;
-        this.positions = data.data;
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = data  ? data.message : '';
+    this.positionService.loadPositionList().subscribe((positions: Position[]) => {
+      if (positions) {
+        this.positions = positions;
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
   loadAcademicDisciplineList() {
-    this.academicDisciplineService.loadAcademicDisciplineList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const data = resp.body;
-      const status = resp.status;
-      if (status !== null && status === 200) {
+    this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
+      if (academicDisciplines) {
         this.showMessage.error = false;
-        this.academicDisciplines = data.data;
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = data  ? data.message : '';
+        this.academicDisciplines = academicDisciplines;
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
@@ -185,5 +141,30 @@ export class EditUserComponent implements OnInit {
 
   openSnackBar(message: string, panelClass: string) {
     this.modalService.openSnackBar(message, panelClass);
+  }
+
+  updateUserInput(user: User) {
+    this.userForm.patchValue({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      position: user.position.id ,
+      occupation: user.occupation,
+      userCode: user.userCode,
+      gender: user.gender,
+      picture: user.picture,
+      userId: user.userId,
+      middleNames: user.middleNames,
+      phoneNumber: user.phoneNumber,
+      emailAddress: user.username,
+      birthDate: DateFormatter(user.birthDate, 'YYYY/MM/DD', false),
+      userType: 'teacher',
+      academicDiscipline: user.academicDiscipline.id,
+      fullName: user.fullName,
+      address: user.address,
+    });
+    if (this.appAddress) {
+      this.appAddress.patchAddressValue(user.address);
+    }
   }
 }

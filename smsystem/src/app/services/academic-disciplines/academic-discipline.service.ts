@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { AcademicDiscipline, ResponseWrapper } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,17 +13,15 @@ export class AcademicDisciplineService {
 
   constructor(private http: HttpClient) { }
 
-  getAcademicDiscipline(academicDisciplineId: number): Observable<any> {
+  getAcademicDiscipline(academicDisciplineId: number): Observable<AcademicDiscipline> {
     return this.http
-      .get<any>(`${END_POINTS.academicDisciplines}/${academicDisciplineId}`)
-      .pipe(retry(3), catchError(this.errorHandler));
+      .get(`${END_POINTS.academicDisciplines}/${academicDisciplineId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data ));
   }
 
-  loadAcademicDisciplineList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.academicDisciplines}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  loadAcademicDisciplineList(): Observable<AcademicDiscipline[]> {
+    return this.http.get(`${END_POINTS.academicDisciplines}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data ));
   }
 
   getAcademicDisciplines(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {

@@ -28,7 +28,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   @Input() title: string;
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
-  @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
+  @ViewChild(UserLoginInputComponent, {static: false}) appUserLoginInput: UserLoginInputComponent;
   action: string = 'create';
   position: number;
   academicDiscipline: number;
@@ -95,12 +95,14 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       lastName: ['', Validators.required],
       position: ['', Validators.required],
       occupation: ['Teacher'],
-      employmentCode: [''],
+      userCode: [''],
       gender: ['', Validators.required],
       picture: [''],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      emailAddress: [null],
+      username: [null],
+      password: [null],
+      confirmPassword: [null],
       userId: [null, Validators.required],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
@@ -123,7 +125,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   onUserSelected(teacher: Teacher) {
     this.teacher = teacher;
-    window.console.log(teacher);
+    this.appUserLoginInput.patchPasswordValue({email: teacher.username, password: '', confirmPassword: ''});
     this.updateUseInput();
   }
 
@@ -139,42 +141,19 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadPositionList() {
-    this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const data = resp.body;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.showMessage.error = false;
-        this.positions = data.data;
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = data  ? data.message : '';
+    this.positionService.loadPositionList().subscribe((positions: Position[]) => {
+      if (positions) {
+        this.positions = positions;
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
   loadAcademicDisciplineList() {
-    this.academicDisciplineService.loadAcademicDisciplineList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const data = resp.body;
-      const status = resp.status;
-      if (status !== null && status === 200) {
+    this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
+      if (academicDisciplines) {
         this.showMessage.error = false;
-        this.academicDisciplines = data.data;
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = data  ? data.message : '';
+        this.academicDisciplines = academicDisciplines;
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 
@@ -195,14 +174,17 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
           password: this.userLoginInput.password,
           confirmPassword: this.userLoginInput.confirmPassword,
         });
+        this.teacherForm.controls['username'].setErrors(null);
         window.console.log(userLoginInputWrapper);
+    } else {
+      this.teacherForm.controls['username'].setErrors({ invalidUsername: true });
     }
 
   }
   resetForms() {
     this.teacherForm.reset();
     this.appAddress.resetForm();
-    this.appPassword.resetForm();
+    this.appUserLoginInput.resetForm();
     this.ref.close();
   }
 
@@ -213,13 +195,13 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       lastName: this.teacher.lastName,
       position: this.teacher.position ? this.teacher.position.id : null,
       occupation: this.teacher.occupation,
-      employmentCode: this.teacher.teacherCode,
+      userCode: this.teacher.userCode,
       gender: this.teacher.gender,
       picture: this.teacher.picture,
       userId: this.teacher.userId,
       middleNames: this.teacher.middleNames,
       phoneNumber: this.teacher.phoneNumber,
-      emailAddress: this.teacher.emailAddress,
+      emailAddress: this.teacher.username,
       birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
       userType: 'teacher',
       academicDiscipline: this.teacher.academicDiscipline ? this.teacher.academicDiscipline.id : null,

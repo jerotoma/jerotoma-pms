@@ -1,15 +1,8 @@
 
-import { Person } from '../person.model';
-import { Position } from 'app/models/positions';
-import { AcademicDiscipline } from 'app/models/academic-disciplines';
+import { User } from '../user.model';
 
-
-
-export interface Teacher extends Person {
+export interface Teacher extends User {
   id: number;
   userId: number;
   teacherCode: string;
-  numberOfCourses: Number;
-  position: Position;
-  academicDiscipline: AcademicDiscipline;
 }

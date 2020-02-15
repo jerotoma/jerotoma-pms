@@ -141,24 +141,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     this.userService.loadUser(studentId, 'student').subscribe((student: Student) => {
        if (student) {
         this.student = student;
-        this.address = this.student.address,
-        this.studentForm.patchValue({
-          id: this.student.id,
-          firstName: this.student.firstName,
-          lastName: this.student.lastName,
-          occupation: this.student.occupation,
-          gender: this.student.gender,
-          picture: this.student.picture,
-          birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
-          userType: 'student',
-          fullName: this.student.fullName,
-          emailAddress: this.student.emailAddress,
-          middleNames: this.student.middleNames,
-          phoneNumber: this.student.phoneNumber,
-          studentNumber: this.student.studentNumber,
-          address: this.student.address,
-        });
-        this.appAddress.patchAddressValue(this.address);
+        this.updateUseInput();
       }
     }, error => {
       this.showMessage.error = true;
@@ -248,6 +231,32 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
      }
     } else {
       this.selectedParents.push(parent);
+    }
+  }
+
+  updateUseInput() {
+    this.studentForm.patchValue({
+      id: this.student.id,
+      firstName: this.student.firstName,
+      lastName: this.student.lastName,
+      position: this.student.position ? this.student.position.id : null,
+      occupation: this.student.occupation,
+      employmentCode: this.student.userCode,
+      gender: this.student.gender,
+      picture: this.student.picture,
+      userId: this.student.userId,
+      middleNames: this.student.middleNames,
+      phoneNumber: this.student.phoneNumber,
+      emailAddress: this.student.username,
+      birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
+      userType: 'student',
+      academicDiscipline: this.student.academicDiscipline ? this.student.academicDiscipline.id : null,
+      fullName: this.student.fullName,
+      address: this.student.address ? this.student.address : null,
+    });
+
+    if (this.student.address) {
+      this.appAddress.patchAddressValue(this.student.address);
     }
   }
 }

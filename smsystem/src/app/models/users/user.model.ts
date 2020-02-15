@@ -6,6 +6,8 @@ export interface User extends Person {
   id?: number;
   userId?: number;
   username?: string;
+  password?: string;
+  confirmPassword?: string;
   userCode?: string;
   userType?: string;
   numberOfCourses?: Number;

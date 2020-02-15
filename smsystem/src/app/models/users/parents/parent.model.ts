@@ -1,6 +1,6 @@
-import { Person } from '../person.model';
+import { User } from '../user.model';
 
-export interface Parent extends Person {
+export interface Parent extends User {
     id: number;
     title?: string;
     studentIds: number[];

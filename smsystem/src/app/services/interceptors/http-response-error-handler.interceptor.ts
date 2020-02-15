@@ -33,7 +33,7 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
       tap(event => {
         if (event instanceof HttpResponse) {
           if (event.body && event.status === HTTP_STATUS_CODES.CODE_200.id) {
-            this.errorDialogService.logSuccessResponse(HTTP_STATUS_CODES.CODE_200.message);
+            // this.errorDialogService.logSuccessResponse(HTTP_STATUS_CODES.CODE_200.message);
           }
         }
       }),

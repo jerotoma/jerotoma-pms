@@ -218,22 +218,10 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadPositionList() {
-    this.positionService.loadPositionList(this.getParam()).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const data = resp.body;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.showMessage.error = false;
-        this.positions = data.data;
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = data  ? data.message : '';
+    this.positionService.loadPositionList().subscribe((positions: Position[]) => {
+      if (positions) {
+        this.positions = positions;
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 }

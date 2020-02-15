@@ -1,8 +1,6 @@
 import { Position } from 'app/models';
-import { Person } from '../person.model';
+import { User } from '../user.model';
 
-export interface Staff extends Person {
+export interface Staff extends User {
     title?: string;
-    id?: number;
-    position?: Position;
-}
+  }
