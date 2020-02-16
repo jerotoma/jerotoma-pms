@@ -63,7 +63,7 @@ public class RestStudentClassController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -93,7 +93,7 @@ public class RestStudentClassController extends BaseController {
 		List<StudentClassVO> studentClasses = new ArrayList<>();
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -117,7 +117,7 @@ public class RestStudentClassController extends BaseController {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -174,7 +174,7 @@ public class RestStudentClassController extends BaseController {
 	
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);		
+		this.securityCheckAccessByRoles(auth);		
 				
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -225,7 +225,7 @@ public class RestStudentClassController extends BaseController {
 	@ResponseBody
 	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		StudentClassVO studentClassVO;
 		try {
@@ -244,7 +244,7 @@ public class RestStudentClassController extends BaseController {
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteStudentClass(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
 		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		StudentClass studentClass;
 		

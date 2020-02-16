@@ -40,7 +40,7 @@ public class RestThemeController  extends BaseController {
 	public HttpResponseEntity<Object> loadThemeConfigs(Authentication auth) throws JDataAccessException {
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_THEME_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		SystemConfig currentTheme = getSystemTheme(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getDbName());

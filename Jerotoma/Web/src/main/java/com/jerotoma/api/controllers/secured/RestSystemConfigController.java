@@ -53,7 +53,7 @@ public class RestSystemConfigController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -83,7 +83,7 @@ public class RestSystemConfigController extends BaseController {
 		List<SystemConfig> systemConfigs = new ArrayList<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -105,7 +105,7 @@ public class RestSystemConfigController extends BaseController {
 	public HttpResponseEntity<Object> getSystemConfig(Authentication auth, @PathVariable("id") Integer systemConfigId) throws JDataAccessException {
 	
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		SystemConfig systemConfig = null;
 		
@@ -128,7 +128,7 @@ public class RestSystemConfigController extends BaseController {
 		Map<String, Object> map = new HashMap<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		SystemConfig systemConfig = null;
 		UserPreference userPreference = null;
@@ -167,7 +167,7 @@ public class RestSystemConfigController extends BaseController {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -196,7 +196,7 @@ public class RestSystemConfigController extends BaseController {
 	
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		
 		requiredFields = new ArrayList<>(
@@ -235,7 +235,7 @@ public class RestSystemConfigController extends BaseController {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 		
 		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE );
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		SystemConfig systemConfig = null; 
 		

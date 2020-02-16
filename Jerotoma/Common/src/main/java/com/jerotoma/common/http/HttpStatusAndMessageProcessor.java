@@ -32,6 +32,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.exceptions.JwtExpiredTokenException;
+import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 
 public class HttpStatusAndMessageProcessor {
 	
@@ -157,6 +158,11 @@ public class HttpStatusAndMessageProcessor {
 			map.put(SystemConstant.MESSAGE, ex.getMessage());
 		}
 		else if (ex instanceof BadCredentialsException) {
+			status = HttpStatus.FORBIDDEN;
+			map.put(SystemConstant.HTTP_STATUS, status);
+			map.put(SystemConstant.MESSAGE, ex.getMessage());
+		}
+		else if (ex instanceof UnAuthorizedAccessException) {
 			status = HttpStatus.FORBIDDEN;
 			map.put(SystemConstant.HTTP_STATUS, status);
 			map.put(SystemConstant.MESSAGE, ex.getMessage());

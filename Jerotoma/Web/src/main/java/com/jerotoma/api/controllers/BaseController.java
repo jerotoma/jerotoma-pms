@@ -1,5 +1,6 @@
 package com.jerotoma.api.controllers;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,17 +11,20 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.roles.RoleService;
 import com.jerotoma.services.users.AuthUserService;
 
 public abstract class BaseController {
@@ -40,6 +44,7 @@ public abstract class BaseController {
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
 	@Autowired protected ServletContext context;
+	@Autowired protected RoleService roleService;
 	
 	public BaseController() {
 		super();		
@@ -94,18 +99,35 @@ public abstract class BaseController {
 	 return queryParam;
 	}
 	
-	protected void securityCheckAdminAccess(Authentication auth){		
-		this.securityCheckAccessByRole(auth,RoleConstant.USER_ROLES.ROLE_ADMIN);			
-	}
-	
-	protected void securityCheckAccessByRole(Authentication auth, RoleConstant.USER_ROLES role){		
+	protected void securityCheckAccessByRoles(Authentication auth){
 		if(auth == null) {
-			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
+			throw new UnAuthorizedAccessException("You have no authorization to access this resource");
 		}				
 		userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(role.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new AcademicYear to the system");
-		}		
+		boolean hasRole = false;
+		for (Role role : roleService.loadList()) {
+			if (userContext.getCurrentAuthorities().contains(role.getName())) {
+				hasRole = true;
+				break;
+			}			
+		}
+		if(!hasRole) {
+			throw new UnAuthorizedAccessException("You have no authorization to access this resource");
+		}
+	}
+	
+	protected void securityCheckAdminAccess(Authentication auth) {			
+		userContext = authenticationFacade.getUserContext(auth);
+		Role role = null;
+		try {
+			role = roleService.findObjectUniqueKey(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName());
+		} catch (SQLException e) {
+			new NotFoundException("Role not found");
+		}
+		if (!userContext.getCurrentAuthorities().contains(role.getName())) {
+			throw new UnAuthorizedAccessException("You have no authorization to access this resource");
+		}
+				
 	}
 	
 	protected void logRequestDetail(String msg) {

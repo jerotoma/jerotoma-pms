@@ -9,8 +9,8 @@ import {
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { SystemConfig, UserPreference, SystemSetting, Theme } from 'app/models';
-import { UserPreferenceService, AuthService, ThemeService} from 'app/services';
+import { SystemConfig, UserPreference } from 'app/models';
+import { UserPreferenceService, ThemeService} from 'app/services';
 import { THEMES, APP_CONSTANTS } from 'app/utils';
 
 @Component({
@@ -23,17 +23,13 @@ export class PreferencesComponent implements OnInit {
   userPreferenceTheme: string = APP_CONSTANTS.userPreferenceTheme;
   private destroy$: Subject<void> = new Subject<void>();
   currentTheme = 'default';
-  mTheme: Theme = null;
   userPictureOnly: boolean = false;
-  overrideUserTheme: boolean = false;
   user: any;
-  systemConfig: SystemConfig = null;
   overrideSystemConfig: SystemConfig = null;
   userPreference: UserPreference = null;
 
   constructor(
     private menuService: NbMenuService,
-    private authService: AuthService,
     private mThemeService: ThemeService,
     private themeService: NbThemeService,
     private userPreferenceService: UserPreferenceService,
@@ -42,6 +38,7 @@ export class PreferencesComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.loadCurrentTheme();
     this.currentTheme = this.themeService.currentTheme;
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -50,15 +47,6 @@ export class PreferencesComponent implements OnInit {
         takeUntil(this.destroy$),
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-      this.loadCurrentTheme();
-
-   /* this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName); */
-
   }
 
   changeTheme(themeName: string) {
@@ -73,9 +61,7 @@ export class PreferencesComponent implements OnInit {
       const resp = result;
       const content = resp.body;
       if (content.success) {
-          this.userPreference = content.data;
-          this.currentTheme =  this.userPreference.value;
-          this.themeService.changeTheme(this.currentTheme);
+          this.loadCurrentTheme();
       }
     }, error => {
 
@@ -90,19 +76,7 @@ export class PreferencesComponent implements OnInit {
     this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
       if (result.success) {
-        this.mTheme = result.data;
-        this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
-        this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
-        this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
-        this.currentTheme =  this.userPreference ? this.userPreference.value : this.systemConfig.value;
-        if (this.overrideSystemConfig) {
-          this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
-        }
-        if (this.overrideUserTheme) {
-            this.themeService.changeTheme(this.systemConfig.value);
-        } else {
-          this.themeService.changeTheme(this.currentTheme);
-        }
+        window.console.log('Theme successfully loaded');
       }
     });
   }

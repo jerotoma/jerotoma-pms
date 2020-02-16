@@ -51,7 +51,7 @@ public class RestAcademicDisciplineController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -76,7 +76,7 @@ public class RestAcademicDisciplineController extends BaseController {
 		List<AcademicDiscipline> academicDisciplines = new ArrayList<>();
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		try {
 			academicDisciplines = academicDisciplineService.loadList();
@@ -111,7 +111,7 @@ public class RestAcademicDisciplineController extends BaseController {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(

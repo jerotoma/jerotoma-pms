@@ -64,7 +64,7 @@ public class RestJClassController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -85,7 +85,7 @@ public class RestJClassController extends BaseController {
 	public HttpResponseEntity<Object> getJClass(Authentication auth, @PathVariable("classId") Integer classId) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		try {
 			JClassVO jClassVO = assemblerJClassService.findObject(classId);	
@@ -114,7 +114,7 @@ public class RestJClassController extends BaseController {
 		List<JClassVO> jClasses = new ArrayList<>();
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -138,7 +138,7 @@ public class RestJClassController extends BaseController {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -188,7 +188,7 @@ public class RestJClassController extends BaseController {
 	
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		requiredFields = new ArrayList<>(
@@ -234,7 +234,7 @@ public class RestJClassController extends BaseController {
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("classId") Integer classId) {
 		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_JCLASS_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		JClass jClass;
 		

@@ -97,7 +97,7 @@ public class RestUserController extends BaseController {
 		Map<String, Object> mapVOs = new HashMap<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(page, pageSize, fieldName, orderby);
 		
 		
@@ -140,7 +140,7 @@ public class RestUserController extends BaseController {
 			) throws UsernameNotFoundException, JDataAccessException{
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + primaryKey);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
@@ -178,7 +178,7 @@ public class RestUserController extends BaseController {
 	public HttpResponseEntity<Object> loadUserByUsername(Authentication auth, @RequestBody Map<String, String> map) throws UsernameNotFoundException, JDataAccessException{
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/loggedIn");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		
 		String username = map.get("username");
 		String userType = map.get("userType");
@@ -245,7 +245,7 @@ public class RestUserController extends BaseController {
 						));
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 					
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
@@ -442,7 +442,7 @@ public class RestUserController extends BaseController {
 		AcademicDiscipline academicDiscipline;
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 			
 		if(!params.containsKey(UserConstant.USER_TYPE)) {
@@ -571,7 +571,7 @@ public class RestUserController extends BaseController {
 	public HttpResponseEntity<Object> deleteUser(Authentication auth, @PathVariable(name="userId", required = true) Integer userId, @RequestParam(value="userType", required=true) String userType) throws JDataAccessException{
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userId);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 			
 		if (userType == null) {
 			throw new FieldIsRequiredException("User type can not be empty");
@@ -621,7 +621,7 @@ public class RestUserController extends BaseController {
 		HttpResponseEntity<UserVO> instance = new HttpResponseEntity<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
@@ -646,7 +646,7 @@ public class RestUserController extends BaseController {
 		
 	
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);

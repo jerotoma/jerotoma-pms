@@ -44,7 +44,7 @@ export class UserPreferenceService {
   }
 
   updateSystemConfig(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.put<any>(`${END_POINTS.userPreferences}`, data, {observe: 'response'});
+    return this.http.put(`${END_POINTS.userPreferences}`, data, {observe: 'response'});
   }
 
   errorHandler(error: HttpErrorResponse) {

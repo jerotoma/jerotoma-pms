@@ -51,4 +51,9 @@ public class RoleServiceImpl  implements RoleService {
 		return roleDao.updateObject(object);
 	}
 
+	@Override
+	public List<Role> loadList() {		
+		return roleDao.loadList();
+	}
+
 }

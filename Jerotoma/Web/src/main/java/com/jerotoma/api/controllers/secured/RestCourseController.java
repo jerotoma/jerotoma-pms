@@ -50,7 +50,7 @@ public class RestCourseController extends BaseController {
 		Map<String, Object> map = new HashMap<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
@@ -74,7 +74,7 @@ public class RestCourseController extends BaseController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		this.logRequestDetail("POST : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		List<String> requiredFields = new ArrayList<>(
@@ -111,7 +111,7 @@ public class RestCourseController extends BaseController {
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		this.logRequestDetail("PUT : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 	
 		List<String> requiredFields = new ArrayList<>(
@@ -143,7 +143,7 @@ public class RestCourseController extends BaseController {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 			
 		this.logRequestDetail("DELETE : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE + "/" + courseId);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		Course course;

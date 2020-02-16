@@ -48,7 +48,7 @@ public class RestUserPreferenceController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -78,7 +78,7 @@ public class RestUserPreferenceController extends BaseController {
 		List<UserPreference> userPreferences = new ArrayList<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE + "/list");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
@@ -103,7 +103,7 @@ public class RestUserPreferenceController extends BaseController {
 	public HttpResponseEntity<Object> getUserPreference(Authentication auth, @PathVariable("id") Integer userPreferenceId) throws JDataAccessException {
 	
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE + "/" + userPreferenceId);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		UserPreference userPreference = null;
@@ -129,7 +129,7 @@ public class RestUserPreferenceController extends BaseController {
 	public HttpResponseEntity<Object> getUserPreferenceByKey(Authentication auth, @RequestParam(required = true, value="key") String userPreferenceKey) throws JDataAccessException {
 	
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE + "/keys");
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		UserPreference userPreference = null;
 		
@@ -159,7 +159,7 @@ public class RestUserPreferenceController extends BaseController {
 		
 		List<String> requiredFields;
 		this.logRequestDetail("POST : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		requiredFields = new ArrayList<>(
@@ -190,7 +190,7 @@ public class RestUserPreferenceController extends BaseController {
 	
 		List<String> requiredFields;
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		
@@ -231,7 +231,7 @@ public class RestUserPreferenceController extends BaseController {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 		
 		this.logRequestDetail("DELETE : " + EndPointConstants.REST_USER_PREFERENCE_CONTROLLER.BASE + "/" + userPreferenceId);
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
 		UserPreference userPreference = null; 

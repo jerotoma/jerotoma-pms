@@ -137,4 +137,9 @@ public class RoleDaoImpl extends JdbcDaoSupport implements RoleDao {
 		return null;
 	}
 
+	@Override
+	public List<Role> loadList() {		
+		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new RoleResultProcessor());
+	}
+
 }

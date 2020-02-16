@@ -19,6 +19,7 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.JwtExpiredTokenException;
+import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.http.HttpStatusAndMessageProcessor;
 
@@ -33,6 +34,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		IllegalStateException.class, 
 		RuntimeException.class,
 		BadCredentialsException.class,
+		UnAuthorizedAccessException.class,
 		SQLException.class,
 		JwtExpiredTokenException.class,
 		UsernameNotFoundException.class,

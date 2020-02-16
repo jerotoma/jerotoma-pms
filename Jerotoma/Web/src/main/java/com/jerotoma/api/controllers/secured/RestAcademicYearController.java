@@ -48,7 +48,7 @@ public class RestAcademicYearController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
@@ -72,7 +72,7 @@ public class RestAcademicYearController extends BaseController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		this.securityCheckAdminAccess(auth);
+		this.securityCheckAccessByRoles(auth);
 		this.logRequestDetail("POST : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 			
 		requiredFields = new ArrayList<>(
