@@ -47,7 +47,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 
 	@Override
 	public StaffVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE sta.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StaffSingleResultProcessor(), primaryKey);
 	}
 
@@ -77,7 +77,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "sta"))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -126,7 +126,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, user_code AS userCode, occupation, gender, avatar, position_id AS positionId, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.staffs ");
+		return new StringBuilder("SELECT sta.id, u.username, sta.user_id, sta.first_name AS firstName, sta.last_name AS lastName, sta.middle_names AS middleNames, sta.email_address AS emailAddress, sta.phone_number AS phoneNumber, sta.user_code AS userCode, sta.occupation, sta.gender, sta.avatar, sta.position_id AS positionId, sta.birth_date AS birthDate, sta.updated_by AS updatedBy, sta.created_on AS createdOn, sta.updated_on AS updatedOn FROM public.staffs sta INNER JOIN users u ON u.id = user_id");
 		
 	}
 
@@ -154,8 +154,8 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	@Override
 	public List<StaffVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
-		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(middle_names) like ? ")
-				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		queryBuilder.append(" WHERE lower(sta.first_name) like ? OR lower(sta.last_name) like ? OR lower(sta.middle_names) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "sta"))
 				.append(" ")
 				.append("limit ? offset ?");
 		

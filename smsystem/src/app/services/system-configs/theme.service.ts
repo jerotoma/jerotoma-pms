@@ -17,6 +17,7 @@ export class ThemeService {
   themes = THEMES;
   userPreferenceTheme: string = APP_CONSTANTS.userPreferenceTheme;
   currentTheme = 'default';
+  defaultTheme = 'default';
   mTheme: Theme = null;
   userPictureOnly: boolean = false;
   overrideUserTheme: boolean = false;
@@ -35,12 +36,12 @@ export class ThemeService {
         if (resp.success) {
           this.mTheme = resp.data;
           this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
-          if (this.systemConfig) {
+          if (this.systemConfig && this.systemConfig.value) {
             this.currentTheme =  this.systemConfig.value;
             this.themeService.changeTheme(this.currentTheme);
           }
         }
-        return resp.success;
+        return { currentTheme: this.currentTheme };
       }));
   }
   getUserAndSystemThemes(): Observable<any> {
@@ -48,20 +49,22 @@ export class ThemeService {
       .pipe(map( (resp: ResponseWrapper ) => {
         if (resp.success) {
           this.mTheme = resp.data;
-           this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
+          this.overrideUserTheme  = false;
+          this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
           this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
           this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
           this.currentTheme =  this.userPreference && this.userPreference.value ? this.userPreference.value : this.systemConfig.value;
-          if (this.overrideSystemConfig) {
+          if (this.overrideSystemConfig && this.overrideSystemConfig.value) {
             this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
           }
           if (this.overrideUserTheme) {
-              this.themeService.changeTheme(this.systemConfig && this.systemConfig.value ? this.systemConfig.value : 'default');
+            this.currentTheme  = this.systemConfig && this.systemConfig.value ? this.systemConfig.value : this.defaultTheme;
+              this.themeService.changeTheme(this.currentTheme );
           } else {
             this.themeService.changeTheme(this.currentTheme);
           }
         }
-        return resp.success;
+        return { currentTheme: this.currentTheme };
       }));
   }
 

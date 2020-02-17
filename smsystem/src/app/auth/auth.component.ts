@@ -43,9 +43,9 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
   loadCurrentTheme() {
     this.mThemeService.getCurrentSystemTheme()
     .subscribe((result: any) => {
-      if (result.success) {
-        window.console.log('Theme successfully loaded');
-      }
+      if (result.currentTheme) {
+          this.currentTheme = result.currentTheme;
+       }
     });
   }
 }

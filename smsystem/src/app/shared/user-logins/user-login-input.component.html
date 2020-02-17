@@ -23,6 +23,7 @@
       <div class="col-md-6">
         <div class="form-control-group can-login">
           <nb-checkbox
+            *ngIf="showCheckBox"
             (checkedChange)="checkedChange($event)"
             formControlName="canUserLogin"
             [status]="userLoginInputForm.controls['canUserLogin'].invalid && userLoginInputForm.controls['canUserLogin'].touched ? 'danger' : ''">

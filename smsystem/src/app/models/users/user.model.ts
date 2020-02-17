@@ -10,7 +10,6 @@ export interface User extends Person {
   confirmPassword?: string;
   userCode?: string;
   userType?: string;
-  numberOfCourses?: Number;
   position?: Position;
   academicDiscipline?: AcademicDiscipline;
 }

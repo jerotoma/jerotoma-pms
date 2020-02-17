@@ -80,7 +80,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     } else {
       this.userService.addUser(this.teacher).subscribe((resp: ResponseWrapper) => {
         if (resp && resp.success) {
-          this.modalService.openSnackBar('Student has been updated', 'success');
+          this.modalService.openSnackBar('New Teacher has been added', 'success');
           this.resetForms();
         }
       });
@@ -89,7 +89,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   updateTeacher() {
     this.userService.updateUser(this.teacher).subscribe((resp: ResponseWrapper) => {
       if (resp && resp.success) {
-        this.modalService.openSnackBar('Student has been updated', 'success');
+        this.modalService.openSnackBar('Teacher has been updated', 'success');
         this.resetForms();
       }
     });
@@ -108,14 +108,13 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       picture: [''],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      username: [null],
-      password: [null],
-      confirmPassword: [null],
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
       userId: [null],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
       academicDiscipline: ['', Validators.required],
-      fullName: ['', Validators.required],
       address: [null, Validators.required],
     });
   }
@@ -171,7 +170,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     } else {
       this.teacherForm.controls['address'].setErrors(null);
       this.teacherForm.patchValue({address: addressWrapper.address});
-
     }
   }
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
@@ -187,7 +185,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     } else {
       this.teacherForm.controls['username'].setErrors({ invalidUsername: true });
     }
-
   }
   resetForms() {
     this.teacherForm.reset();
@@ -213,7 +210,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
       userType: 'teacher',
       academicDiscipline: this.teacher.academicDiscipline ? this.teacher.academicDiscipline.id : null,
-      fullName: this.teacher.fullName,
       address: this.teacher.address ? this.teacher.address : null,
     });
 

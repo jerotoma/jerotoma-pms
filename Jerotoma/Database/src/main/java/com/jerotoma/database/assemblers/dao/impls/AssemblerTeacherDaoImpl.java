@@ -52,20 +52,20 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public TeacherVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE t.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new TeacherSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
 	public TeacherVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE user_id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE t.user_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new TeacherSingleResultProcessor(), Integer.valueOf(uniqueKey));
 	}
 
 	@Override
 	public List<TeacherVO> loadList(QueryParam queryParam) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "t"))
 				.append(" ")
 				.append("limit ? offset ?");
 
@@ -83,7 +83,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "t"))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -132,7 +132,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, user_id AS userId, user_code AS userCode, first_name AS firstName, last_name AS lastName, middle_names AS middleNames, email_address AS emailAddress, phone_number AS phoneNumber, occupation, gender, avatar, position_id as positionId, academic_discipline_id AS academicDisciplineId, birth_date AS birthDate, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.teachers ");
+		return new StringBuilder("SELECT t.id,  u.username, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, t.last_name AS lastName, t.middle_names AS middleNames, t.email_address AS emailAddress, t.phone_number AS phoneNumber, t.occupation, t.gender, t.avatar, t.position_id as positionId, t.academic_discipline_id AS academicDisciplineId, t.birth_date AS birthDate, t.updated_by AS updatedBy, t.created_on AS createdOn, t.updated_on AS updatedOn FROM public.teachers t INNER JOIN users u ON u.id = user_id ");
 		
 	}
 

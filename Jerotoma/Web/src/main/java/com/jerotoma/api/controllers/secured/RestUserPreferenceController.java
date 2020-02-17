@@ -203,19 +203,8 @@ public class RestUserPreferenceController extends BaseController {
 		userPreference.setUserId(authUser.getId());
 		
 		try {
-			UserPreference preference = userPreferenceService.findUserPreferenceByKeyAndUserID(authUser.getId(), userPreference.getName());
-			preference.setValue(userPreference.getValue());
-			userPreference = userPreferenceService.updateObject(preference);		
-		} catch (SQLException | EmptyResultDataAccessException e) {
-			if (e instanceof EmptyResultDataAccessException) {
-				try {
-					userPreference = userPreferenceService.createObject(userPreference);
-				} catch (SQLException ee) {
-					throw new JDataAccessException(ee.getMessage(), ee);
-				}
-			} else {
-				throw new JDataAccessException(e.getMessage(), e);
-			}
+			userPreference = userPreferenceService.updateObject(userPreference);		
+		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			

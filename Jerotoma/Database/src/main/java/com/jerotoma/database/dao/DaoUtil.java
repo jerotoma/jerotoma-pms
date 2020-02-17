@@ -41,6 +41,15 @@ public class DaoUtil {
 		return " ORDER BY " + fieldName + " " + orderby;
 	}
     
+    public static String getOrderBy(String fieldName, String orderby, String prefix) {
+    	
+    	fieldName = !StringUtility.isEmpty(fieldName) ? fieldName : "created_on";
+    	orderby = !StringUtility.isEmpty(orderby) ? orderby : "DESC";    	
+    	prefix = !StringUtility.isEmpty(prefix) ? prefix + "." : "" ;
+    	
+		return " ORDER BY " + prefix + fieldName + " " + orderby;
+	}
+    
     public static int getPageSize(Integer pageSize, Long countResults) {
     	
     	if(pageSize == null ) {

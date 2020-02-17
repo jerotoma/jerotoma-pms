@@ -3,70 +3,77 @@
       <form  autocomplete="off" [formGroup]="userForm" (ngSubmit)="onSubmit()">
           <nb-card size="giant">
             <nb-card-body>
-              <div class='row'>
-                  <div class='col-md-12'>
-                      <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                          <p class="alert-title"><b>Sorry!</b></p>
-                          <ul class="alert-message-list">
-                              <li class="alert-message">{{ showMessage.message }}</li>
-                            </ul>
-                        </nb-alert>
-                        <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                          <p class="alert-title"><b>Success!</b></p>
-                          <ul class="alert-message-list">
-                            <li class="alert-message">{{ showMessage.message }}</li>
-                          </ul>
-                        </nb-alert>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-control-group">
+                    <label for="teacher-first-name" class="label">First Name</label>
+                    <input
+                          type="text"
+                          nbInput fullWidth
+                          autocomplete="new-password"
+                          required
+                          id="teacher-first-name"
+                          formControlName="firstName"
+                          placeholder="First Name">
+                    <ng-container *ngIf="userForm.controls['firstName'].invalid && userForm.controls['firstName'].touched">
+                      <p class="error-message">
+                        First Name is required!
+                      </p>
+                    </ng-container>
                   </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-control-group">
+                    <label for="teacher-last-name" class="label">Last Name</label>
+                    <input
+                          required
+                          type="text"
+                          autocomplete="new-password"
+                          nbInput fullWidth
+                          id="teacher-last-name"
+                          formControlName="lastName"
+                          placeholder="Last Name">
+                    <ng-container *ngIf="userForm.controls['lastName'].invalid && userForm.controls['lastName'].touched">
+                      <p class="error-message">
+                        Last Name is required!
+                      </p>
+                    </ng-container>
+                  </div>
+                </div>
               </div>
-
-                <div class="form-control-group">
-                  <label for="user-first-name" class="label">First Name</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        required
-                        id="user-first-name"
-                        formControlName="firstName"
-                        placeholder="First Name">
-                  <ng-container *ngIf="userForm.controls['firstName'].invalid && userForm.controls['firstName'].touched">
-                    <p class="error-message">
-                      First Name is required!
-                    </p>
-                  </ng-container>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-control-group">
+                    <label for="teacher-middle-names" class="label">Other Names</label>
+                    <input
+                          type="text"
+                          nbInput fullWidth
+                          autocomplete="new-password"
+                          required
+                          id="teacher-middle-names"
+                          formControlName="middleNames"
+                          placeholder="Other  Names">
+                  </div>
                 </div>
-                <div class="form-control-group">
-                  <label for="user-last-name" class="label">Last Name</label>
-                  <input
-                        required
-                        type="text"
-                        autocomplete="new-password"
-                        nbInput fullWidth
-                        id="user-last-name"
-                        formControlName="lastName"
-                        placeholder="Last Name">
-                  <ng-container *ngIf="userForm.controls['lastName'].invalid && userForm.controls['lastName'].touched">
-                    <p class="error-message">
-                      Last Name is required!
-                    </p>
-                  </ng-container>
+                <div class="col-md-6">
+                  <div class="form-control-group">
+                    <label for="teacher-phone-number" class="label">Phone Number</label>
+                    <input
+                          type="text"
+                          nbInput fullWidth
+                          autocomplete="new-password"
+                          required
+                          id="teacher-phone-number"
+                          formControlName="phoneNumber"
+                          placeholder="Phone Number">
+                  </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-control-group">
-                        <label for="student-middle-names" class="label">Other Names</label>
-                        <input
-                              type="text"
-                              nbInput fullWidth
-                              autocomplete="new-password"
-                              required
-                              id="student-middle-names"
-                              formControlName="middleNames"
-                              placeholder="Other  Names">
-                      </div>
-                    </div>
-                </div>
+              </div>
+              <app-user-login-input
+                [showCheckBox]="false"
+                [userLoginInput]="userLoginInput"
+                (onChanges)="onUserLoginInputChange($event)">
+              </app-user-login-input>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-control-group">
@@ -129,34 +136,6 @@
                               placeholder="Birth Date">
                           <nb-datepicker #birthDate></nb-datepicker>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-control-group">
-                        <label for="student-email-address" class="label">Email Address</label>
-                        <input
-                              type="text"
-                              nbInput fullWidth
-                              autocomplete="new-password"
-                              required
-                              id="student-email-address"
-                              formControlName="emailAddress"
-                              placeholder="Email Address">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-control-group">
-                        <label for="student-phone-number" class="label">Phone Number</label>
-                        <input
-                              type="text"
-                              nbInput fullWidth
-                              autocomplete="new-password"
-                              required
-                              id="student-phone-number"
-                              formControlName="phoneNumber"
-                              placeholder="Emergency Phone Number">
-                      </div>
                     </div>
                   </div>
                   <app-address

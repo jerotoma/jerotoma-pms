@@ -10,6 +10,8 @@ import {
   AcademicDiscipline,
   ShowMessage,
   ResponseWrapper,
+  UserLoginInput,
+  UserLoginInputWrapper,
 } from 'app/models';
 import {
   UserService,
@@ -33,6 +35,7 @@ export class EditUserComponent implements OnInit {
   action: string = 'edit';
   position: number;
   academicDiscipline: number;
+  userLoginInput: UserLoginInput;
 
   userForm: FormGroup;
   showMessage: ShowMessage = {
@@ -115,6 +118,19 @@ export class EditUserComponent implements OnInit {
     });
   }
 
+  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
+    if (userLoginInputWrapper && userLoginInputWrapper.userLoginInput &&  userLoginInputWrapper.userLoginInput.email) {
+        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.userForm.patchValue({
+          emailAddress: this.userLoginInput.email,
+        });
+        this.userForm.controls['emailAddress'].setErrors(null);
+    } else {
+      this.userForm.controls['emailAddress'].setErrors({ invalidUsername: true });
+    }
+
+  }
+
   loadAcademicDisciplineList() {
     this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
       if (academicDisciplines) {
@@ -172,5 +188,10 @@ export class EditUserComponent implements OnInit {
     if (this.appAddress) {
       this.appAddress.patchAddressValue(user.address);
     }
+   this.userLoginInput = {
+     email: user.username,
+     password: '',
+     confirmPassword: '',
+   };
   }
 }

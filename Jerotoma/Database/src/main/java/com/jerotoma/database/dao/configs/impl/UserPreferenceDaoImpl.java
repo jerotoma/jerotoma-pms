@@ -43,7 +43,8 @@ public class UserPreferenceDaoImpl implements UserPreferenceDao{
 
 	@Override
 	public UserPreference updateObject(UserPreference object) throws SQLException {
-		return entityManager.merge(object);
+		entityManager.merge(object);
+		return findObject(object.getId());
 	}
 
 	@Override
@@ -86,5 +87,14 @@ public class UserPreferenceDaoImpl implements UserPreferenceDao{
 				.setParameter("userID", userId)
 				.setParameter("key", key)
 				.getSingleResult();
+	}
+
+	@Override
+	public boolean doesUserPreferenceExist(Integer userId, String key) {		
+		Long count = entityManager.createQuery("SELECT COUNT(*) AS count FROM UserPreference WHERE user_id =:userID AND name =:key", Long.class)
+				.setParameter("userID", userId)
+				.setParameter("key", key)
+				.getSingleResult();
+		return count > 0;
 	}
 }

@@ -10,6 +10,8 @@ import com.jerotoma.common.utils.StringUtility;
 
 public abstract class PersonVO {
 	
+	private Integer id;
+	
 	protected String firstName;
 	
 	protected String lastName;
@@ -17,6 +19,10 @@ public abstract class PersonVO {
 	protected String middleNames;
 	
 	protected String fullName;
+	
+	protected String username;
+	
+	protected Integer userId;
 	
 	protected String userCode;
 	
@@ -47,12 +53,14 @@ public abstract class PersonVO {
 	}
 	
 	public PersonVO(ResultSet rs) throws SQLException {
-		
+		this.id = rs.getInt(UserConstant.ID);
 		this.firstName = rs.getString(UserConstant.FIRST_NAME);
 		this.lastName = rs.getString(UserConstant.LAST_NAME);
 		this.middleNames = rs.getString(UserConstant.MIDDLE_NAMES);
 		this.phoneNumber = rs.getString(UserConstant.PHONE_NUMBER);
-		this.emailAddress = rs.getString(UserConstant.EMAIL_ADDRESS);
+		this.emailAddress = rs.getString(UserConstant.USERNAME);
+		this.userId = rs.getInt(UserConstant.USER_ID);
+		this.username = rs.getString(UserConstant.USERNAME);
 		this.gender = rs.getString(UserConstant.GENDER);
 		this.occupation = rs.getString(UserConstant.OCCUPATION);
 		this.picture = rs.getString(UserConstant.AVATAR);
@@ -198,4 +206,28 @@ public abstract class PersonVO {
 	public void setUserCode(String teacherCode) {
 		this.userCode = teacherCode;
 	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}	
 }

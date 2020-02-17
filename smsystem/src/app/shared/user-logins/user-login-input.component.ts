@@ -7,12 +7,13 @@ import { CheckBoxValidator, MustMatch } from 'app/utils';
 @Component({
   selector: 'app-user-login-input',
   templateUrl: './user-login-input.component.html',
-  styleUrls: ['./user-login-input.component.scss']
+  styleUrls: ['./user-login-input.component.scss'],
 })
 export class UserLoginInputComponent implements OnInit {
 
   @Input() isResetForm: boolean = false;
   @Input('userLoginInput') userLoginInput: UserLoginInput;
+  @Input('showCheckBox') showCheckBox: boolean = true;
   @Output() onChanges: EventEmitter<UserLoginInputWrapper> = new EventEmitter();
 
   canUserLogin: boolean = false;

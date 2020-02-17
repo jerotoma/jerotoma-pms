@@ -3,39 +3,15 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.jerotoma.common.constants.UserConstant;
-
-public class TeacherVO extends PersonVO{
-	private Integer id;
-	
-	private Integer userId;
+public class TeacherVO extends PersonVO {
 		
 	private PositionVO position;
 	
 	private AcademicDisciplineVO academicDiscipline;
 	
 	public TeacherVO(ResultSet rs) throws SQLException {
-		super(rs);
-		this.id = rs.getInt(UserConstant.ID);
-		this.userId = rs.getInt(UserConstant.USER_ID);		
+		super(rs);						
 	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
 
 	public PositionVO getPosition() {
 		return position;

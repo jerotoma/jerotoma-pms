@@ -38,7 +38,12 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
 
 	@Override
 	public UserPreference updateObject(UserPreference object) throws SQLException {
-		return systemPreferenceDao.updateObject(object);
+		if(!doesUserPreferenceExist(object.getUserId(), object.getName())) {
+			createObject(object);
+		}	
+		UserPreference userPreference = findUserPreferenceByKeyAndUserID(object.getUserId(), object.getName());
+		userPreference.setValue(object.getValue());
+		return systemPreferenceDao.updateObject(userPreference);
 	}
 
 	@Override
@@ -69,6 +74,11 @@ public class UserPreferenceServiceImpl implements UserPreferenceService {
 	@Override
 	public UserPreference findUserPreferenceByKeyAndUserID(Integer userId, String key) throws SQLException {
 		return systemPreferenceDao.findUserPreferenceByKeyAndUserID(userId, key);
+	}
+
+	@Override
+	public boolean doesUserPreferenceExist(Integer userId, String key) {		
+		return systemPreferenceDao.doesUserPreferenceExist(userId, key);
 	}
 
 }

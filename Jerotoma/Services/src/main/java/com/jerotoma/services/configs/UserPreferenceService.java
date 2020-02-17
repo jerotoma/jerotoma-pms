@@ -10,4 +10,5 @@ public interface UserPreferenceService extends BaseService<UserPreference> {
 	public Long countObject() throws SQLException;
 	public List<UserPreference> findUserPreferencesByUserID(Integer userId) throws SQLException;
 	public UserPreference findUserPreferenceByKeyAndUserID(Integer userId, String key) throws SQLException;
+	public boolean doesUserPreferenceExist(Integer userId, String key);
 }

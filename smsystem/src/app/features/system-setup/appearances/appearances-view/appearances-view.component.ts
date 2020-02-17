@@ -67,9 +67,9 @@ export class AppearancesViewComponent implements OnInit {
   loadCurrentTheme() {
     this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
-      if (result.success) {
-        window.console.log('Theme successfully loaded');
-      }
+      if (result.currentTheme) {
+        this.currentTheme = result.currentTheme;
+       }
     });
   }
 
