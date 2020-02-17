@@ -14,6 +14,8 @@ public abstract class PersonVO {
 	
 	protected String firstName;
 	
+	protected String userType;
+	
 	protected String lastName;
 	
 	protected String middleNames;
@@ -52,7 +54,7 @@ public abstract class PersonVO {
 		
 	}
 	
-	public PersonVO(ResultSet rs) throws SQLException {
+	public PersonVO(ResultSet rs, String userType) throws SQLException {
 		this.id = rs.getInt(UserConstant.ID);
 		this.firstName = rs.getString(UserConstant.FIRST_NAME);
 		this.lastName = rs.getString(UserConstant.LAST_NAME);
@@ -68,6 +70,7 @@ public abstract class PersonVO {
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
 		this.userCode = rs.getString(UserConstant.USER_CODE);
+		this.userType = userType;
 		this.fullName = getFullName();
 	
 	}
@@ -229,5 +232,13 @@ public abstract class PersonVO {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}	
 }

@@ -38,7 +38,7 @@
                           <nb-list-item *ngFor="let parent of parents" (click)="pickUser($event, parent)">
                                 <nb-user
                                     [name]="parent.fullName"
-                                    [title]="parent.emailAddress">
+                                    [title]="parent.username">
                                 </nb-user>
                           </nb-list-item>
                         </nb-list>
@@ -143,18 +143,6 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-control-group">
-                  <label for="student-email-address" class="label">Email Address</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        id="student-email-address"
-                        formControlName="emailAddress"
-                        placeholder="Email Address">
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-control-group">
                   <label for="student-phone-number" class="label">Emergency Phone Number</label>
                   <input
                         type="text"
@@ -164,6 +152,8 @@
                         formControlName="phoneNumber"
                         placeholder="Emergency Phone Number">
                 </div>
+              </div>
+              <div class="col-md-6">
               </div>
             </div>
             <app-address

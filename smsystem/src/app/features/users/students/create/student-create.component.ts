@@ -24,7 +24,6 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   action: string = 'create';
 
   studentForm: FormGroup;
-  parentForm: FormGroup;
   addressForm: FormGroup;
   userLoginInput: UserLoginInput;
   student: Student;
@@ -112,7 +111,9 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       studentNumber: [null],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      emailAddress: [null],
+      username: [null],
+      password: [null],
+      confirmPassword: [null],
       gender: ['', Validators.required],
       picture: [''],
       userType: ['student'],
@@ -135,7 +136,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadStudent(studentId: number) {
-    this.userService.loadUser(studentId, 'student').subscribe((student: Student) => {
+    this.userService.loadUser(studentId, 'students').subscribe((student: Student) => {
        if (student) {
         this.student = student;
         this.updateUseInput();
@@ -156,16 +157,6 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
     }
   }
-
-  onParentAddressChange(addressWrapper: AddressWrapper ) {
-    if (!addressWrapper.isValid) {
-      this.parentForm.controls['address'].setErrors({ invalidAddress: true });
-    } else {
-      this.parentForm.controls['address'].setErrors(null);
-      this.parentForm.patchValue({address: addressWrapper.address});
-    }
-  }
-
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.isValid) {
         this.userLoginInput = userLoginInputWrapper.userLoginInput;
@@ -174,9 +165,11 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
           password: this.userLoginInput.password,
           confirmPassword: this.userLoginInput.confirmPassword,
         });
+        this.studentForm.controls['username'].setErrors(null);
         window.console.log(userLoginInputWrapper);
+    } else {
+      this.studentForm.controls['username'].setErrors({ invalidUsername: true });
     }
-
   }
 
   pickUser(event: any, parent: Parent) {
@@ -233,7 +226,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.studentForm.patchValue({
-      id: null,
+      id: this.student.id,
       firstName: this.student.firstName,
       lastName: this.student.lastName,
       position: this.student.position ? this.student.position.id : null,

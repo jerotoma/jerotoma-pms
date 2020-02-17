@@ -64,7 +64,7 @@ export class ThemeService {
             this.themeService.changeTheme(this.currentTheme);
           }
         }
-        return { currentTheme: this.currentTheme };
+        return { currentTheme: this.currentTheme};
       }));
   }
 

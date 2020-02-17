@@ -1,5 +1,9 @@
 package com.jerotoma.common.constants;
 
+import java.util.Collection;
+
+import com.jerotoma.common.models.security.Role;
+
 public class UserConstant {
 	
 	public static final String FIRST_NAME = "firstName";
@@ -34,11 +38,17 @@ public class UserConstant {
 	public static final String USER_CODE = "userCode";
 	
 	public static enum USER_TYPES{
+		ADMIN("admin"),
 		TEACHER("teacher"),
+		TEACHERS("teachers"),
 		PARENT("parent"),
+		PARENTS("parents"),
 		STAFF("staff"),
+		STAFFS("staffs"),
 		STUDENT("student"),
-		STUDENT_AND_PARENT("studentAndParent");
+		STUDENTS("students"),
+		STUDENT_AND_PARENT("studentAndParent"),
+		USER("user");
 		
 		private String type;
 		
@@ -62,5 +72,35 @@ public class UserConstant {
 			}
 		}
 		return null;
+	}
+
+
+
+	public static USER_TYPES processUserType(Role role) {
+		if (RoleConstant.USER_ROLES.ROLE_PARENT.getRoleName().equals(role.getName())) {
+			return USER_TYPES.PARENT;
+		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
+			return USER_TYPES.TEACHER;
+		} else if (RoleConstant.USER_ROLES.ROLE_STUDENT.getRoleName().equals(role.getName())) {
+			return USER_TYPES.STUDENT;
+		} else if (RoleConstant.USER_ROLES.ROLE_STAFF.getRoleName().equals(role.getName())) {
+			return USER_TYPES.STAFF;
+		} else if (RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName().equals(role.getName())) {
+			return USER_TYPES.ADMIN;
+		} else if (RoleConstant.USER_ROLES.ROLE_USER.getRoleName().equals(role.getName())) {
+			return USER_TYPES.USER;
+		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
+			return USER_TYPES.TEACHER;
+		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
+			return USER_TYPES.TEACHER;
+		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
+			return USER_TYPES.TEACHER;
+		}		
+		return null;
+	}
+
+	public static USER_TYPES processUserTypeByRole(Collection<Role> roles) {
+		Role role = roles.stream().findFirst().get();
+		return processUserType(role);
 	}
 }

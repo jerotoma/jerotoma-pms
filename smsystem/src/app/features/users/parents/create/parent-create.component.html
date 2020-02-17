@@ -22,7 +22,7 @@
                                 <nb-list-item *ngFor="let student of students" (click)="pickUser($event, student)">
                                       <nb-user
                                           [name]="student.fullName"
-                                          [title]="student.emailAddress">
+                                          [title]="student.username">
                                       </nb-user>
                                 </nb-list-item>
                               </nb-list>
@@ -93,6 +93,7 @@
                       </div>
                     </div>
                     <app-user-login-input
+                      *ngIf="action === 'create'"
                       [userLoginInput]="userLoginInput"
                       (onChanges)="onUserLoginInputChange($event)">
                     </app-user-login-input>
@@ -121,19 +122,6 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-control-group">
-                          <label for="student-email-address" class="label">Email Address</label>
-                          <input
-                                type="text"
-                                nbInput fullWidth
-                                autocomplete="new-password"
-                                required
-                                id="student-email-address"
-                                formControlName="emailAddress"
-                                placeholder="Email Address">
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-control-group">
                           <label for="student-phone-number" class="label">Emergency Phone Number</label>
                           <input
                                 type="text"
@@ -144,6 +132,9 @@
                                 formControlName="phoneNumber"
                                 placeholder="Emergency Phone Number">
                         </div>
+                      </div>
+                      <div class="col-md-6">
+
                       </div>
                     </div>
                     <app-address

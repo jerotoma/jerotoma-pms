@@ -33,7 +33,7 @@ export class ProfileComponent implements OnInit {
 
   loadUser(username: string) {
     if (username) {
-      this.userService.loadUserByUsername(username, 'teacher').subscribe((user: User) => {
+      this.userService.loadUserDetails(username).subscribe((user: User) => {
         this.user = user;
       });
     }

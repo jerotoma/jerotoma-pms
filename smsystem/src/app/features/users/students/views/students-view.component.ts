@@ -147,8 +147,7 @@ export class StudentsViewComponent implements OnInit {
   loadUsers() {
     this.isLoading = true;
     this.userService.loadUsers(this.param).subscribe((result: any) => {
-      console.log(result);
-        this.isLoading = false;
+          this.isLoading = false;
         if (result) {
           this.totalNumberOfItems = result.count;
           this.dataSource = new MatTableDataSource<Student>(result.students);

@@ -163,7 +163,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadStaff(staffId: number) {
-    this.userService.loadUser(staffId, 'staff').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+    this.userService.loadUser(staffId, 'staffs').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {

@@ -14,7 +14,7 @@ public class StudentVO extends PersonVO {
 	private List<ParentVO> parents;
 	
 	public StudentVO(ResultSet rs) throws SQLException {
-		super(rs);
+		super(rs, UserConstant.USER_TYPES.STUDENT.getType());
 		this.id = rs.getInt(UserConstant.ID);
 		this.studentNumber = rs.getInt(UserConstant.STUDENT_NUMBER);		
 	}

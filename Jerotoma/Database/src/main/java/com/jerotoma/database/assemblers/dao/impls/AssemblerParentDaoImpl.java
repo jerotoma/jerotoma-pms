@@ -22,6 +22,7 @@ import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AddressVO;
 import com.jerotoma.common.viewobjects.ParentVO;
+import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerParentDao;
 import com.jerotoma.database.dao.DaoUtil;
@@ -35,6 +36,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	@Autowired DataSource dataSource;
 	@Autowired RoleDao roleDao;	
 	@Autowired AssemblerAddressDao addressDao;
+	//AssemblerStudentDao assemblerStudentDao = new AssemblerStudentDaoImpl();
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -45,7 +47,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 
 	@Override
 	public ParentVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE pa.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new ParentSingleResultProcessor(), primaryKey);
 	}
 
@@ -124,7 +126,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT pa.id, u.username, pa.user_id, pa.first_name AS firstName, pa.last_name AS lastName, pa.middle_names AS middleNames, pa.email_address AS emailAddress, pa.phone_number AS phoneNumber, pa.user_code AS userCode, pa.occupation, pa.gender, pa.avatar, pa.birth_date AS birthDate, pa.updated_by AS updatedBy, pa.created_on AS createdOn, pa.updated_on AS updatedOn FROM public.parents pa INNER JOIN users u ON u.id = pa.user_id");
+		return new StringBuilder("SELECT pa.id, u.username, pa.user_id AS userId, pa.first_name AS firstName, pa.last_name AS lastName, pa.middle_names AS middleNames, pa.email_address AS emailAddress, pa.phone_number AS phoneNumber, pa.user_code AS userCode, pa.occupation, pa.gender, pa.avatar, pa.birth_date AS birthDate, pa.updated_by AS updatedBy, pa.created_on AS createdOn, pa.updated_on AS updatedOn FROM public.parents pa INNER JOIN users u ON u.id = pa.user_id ");
 		
 	}
 
@@ -140,15 +142,20 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	
 	public ParentVO mapParentResult(ResultSet rs) throws SQLException {
 		ParentVO parent = new ParentVO(rs);
-		parent.setAddress(loadAddress(parent.getId()));	
+		parent.setAddress(loadAddress(parent.getId()));
+		parent.setStudents(loadStudentsByParentId(parent.getId()));
 		return parent;
+	}
+
+	private List<StudentVO> loadStudentsByParentId(Integer parentId) throws SQLException {		
+		return null; //assemblerStudentDao.findStudentsByParentId(parentId);
 	}
 
 	@Override
 	public List<ParentVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
 		queryBuilder.append(" WHERE lower(pa.first_name) like ? OR lower(pa.last_name) like ? OR lower(pa.middle_names) like ? ")
-				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "pa"))
 				.append(" ")
 				.append("limit ? offset ?");
 		

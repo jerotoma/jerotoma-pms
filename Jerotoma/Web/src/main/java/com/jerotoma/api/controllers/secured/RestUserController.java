@@ -3,6 +3,7 @@ package com.jerotoma.api.controllers.secured;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -132,29 +133,33 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@GetMapping(value= {"/{userId}","/{userId}/", })
+	@GetMapping(value= {"/{userType}/{userId}","/{userId}/", })
 	@ResponseBody
 	public HttpResponseEntity<Object> getUser(Authentication auth,
 			@PathVariable(value="userId", required = true) Integer primaryKey,
-			@RequestParam(value="userType", required = true) String userType
+			@PathVariable(value="userType", required = true) String userType
 			) throws UsernameNotFoundException, JDataAccessException{
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + primaryKey);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userType + "/" + primaryKey);
 		this.securityCheckAccessByRoles(auth);
 		
 		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
+			case TEACHERS:
 			case TEACHER:
 				instance.setData(assemblerTeacherService.findObject(primaryKey));
 				
 				break;
+			case STUDENTS:
 			case STUDENT:
 				instance.setData(assemblerStudentService.findObject(primaryKey));
 				break;
 			case STAFF:
+			case STAFFS:
 				instance.setData(assemblerStaffService.findObject(primaryKey));
 				break;
+			case PARENTS:
 			case PARENT:
 				instance.setData(assemblerParentService.findObject(primaryKey));
 				break;
@@ -173,22 +178,20 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@PostMapping(value= {"/loggedIn","/loggedIn/", })
+	@PostMapping(value= {"/profile","/profile/", })
 	@ResponseBody
 	public HttpResponseEntity<Object> loadUserByUsername(Authentication auth, @RequestBody Map<String, String> map) throws UsernameNotFoundException, JDataAccessException{
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/loggedIn");
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/profile");
 		this.securityCheckAccessByRoles(auth);
 		
 		String username = map.get("username");
-		String userType = map.get("userType");
 		
 		if (!userContext.getUsername().equals(username.trim())) {
 			throw new UsernameNotFoundException("User type not found");		
 		}
-		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
-		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());		
+		UserConstant.USER_TYPES type = UserConstant.processUserTypeByRole(authUser.getRoles());
 		try {
 			switch(type) {
 			case TEACHER:
@@ -491,18 +494,30 @@ public class RestUserController extends BaseController {
 				if (student.getId() == null) {
 					throw new FieldIsRequiredException("Student ID is required");
 				}
-					
-				student.setUpdatedBy(authUser.getId());
-				if (student.getParentIds() != null) {
+				Student mStudent = studentService.findObject(student.getId());	
+				mStudent.setFirstName(student.getFirstName());
+				mStudent.setLastName(student.getLastName());
+				mStudent.setMiddleNames(student.getMiddleNames());
+				mStudent.setFullName(student.getFullName());
+				mStudent.setAge(student.getAge());
+				mStudent.setBirthDate(student.getBirthDate());
+				mStudent.setGender(student.getGender());
+				mStudent.setOccupation(student.getOccupation());
+				mStudent.setParentIds(student.getParentIds());
+				mStudent.setUpdatedOn(new Date());
+				mStudent.setUpdatedBy(authUser.getId());
+				mStudent.setAddress(student.getAddress());
+				address = mStudent.getAddress();
+				
+				if (mStudent.getParentIds() != null) {
 					Set<Parent> parents = new HashSet<>();
-					for (Integer parentId: student.getParentIds()) {
+					for (Integer parentId: mStudent.getParentIds()) {
 						parent = parentService.findObject(parentId);
 						parents.add(parent);
 					}										
-					student.setParents(parents);
+					mStudent.setParents(parents);
 				}
-				address = student.getAddress();
-				student = studentService.updateObject(student);
+				student = studentService.updateObject(mStudent);
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);				

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { NbDialogRef} from '@nebular/theme';
+import { NbDialogRef } from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import {
   Student,
@@ -106,7 +106,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadParent(parentId: number) {
-    this.userService.loadUser(parentId, 'parent').subscribe((parent: Parent) => {
+    this.userService.loadUser(parentId, 'parents').subscribe((parent: Parent) => {
       if (parent) {
         this.parent = parent;
         this.updateUseInput();
@@ -128,8 +128,11 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       middleNames: [null],
       occupation: [null],
       phoneNumber: [null, Validators.required],
-      emailAddress: [null],
+      username: [null],
+      password: [null],
+      confirmPassword: [null],
       gender: ['', Validators.required],
+      userId: [null],
       picture: [''],
       userType: ['parent'],
       address: [null, Validators.required],
@@ -164,9 +167,11 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
           password: this.userLoginInput.password,
           confirmPassword: this.userLoginInput.confirmPassword,
         });
+        this.parentForm.controls['username'].setErrors(null);
         window.console.log(userLoginInputWrapper);
+    } else {
+      this.parentForm.controls['username'].setErrors({ invalidUsername: true });
     }
-
   }
 
   pickUser(event: any, student: Student) {
@@ -186,7 +191,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       }
     }
     this.parentForm.patchValue({
-      selectedStudent: this.studentIds,
+      studentIds: this.studentIds,
       studentFullName: '',
     });
   }
@@ -224,7 +229,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.parentForm.patchValue({
-      id: null,
+      id: this.parent.id,
       firstName: this.parent.firstName,
       lastName: this.parent.lastName,
       position: this.parent.position ? this.parent.position.id : null,

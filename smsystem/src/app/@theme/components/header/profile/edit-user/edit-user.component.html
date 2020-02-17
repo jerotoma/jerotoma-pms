@@ -6,13 +6,13 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-control-group">
-                    <label for="teacher-first-name" class="label">First Name</label>
+                    <label for="user-first-name" class="label">First Name</label>
                     <input
                           type="text"
                           nbInput fullWidth
                           autocomplete="new-password"
                           required
-                          id="teacher-first-name"
+                          id="user-first-name"
                           formControlName="firstName"
                           placeholder="First Name">
                     <ng-container *ngIf="userForm.controls['firstName'].invalid && userForm.controls['firstName'].touched">
@@ -24,13 +24,13 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-control-group">
-                    <label for="teacher-last-name" class="label">Last Name</label>
+                    <label for="user-last-name" class="label">Last Name</label>
                     <input
                           required
                           type="text"
                           autocomplete="new-password"
                           nbInput fullWidth
-                          id="teacher-last-name"
+                          id="user-last-name"
                           formControlName="lastName"
                           placeholder="Last Name">
                     <ng-container *ngIf="userForm.controls['lastName'].invalid && userForm.controls['lastName'].touched">
@@ -44,70 +44,65 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-control-group">
-                    <label for="teacher-middle-names" class="label">Other Names</label>
+                    <label for="user-middle-names" class="label">Other Names</label>
                     <input
                           type="text"
                           nbInput fullWidth
                           autocomplete="new-password"
                           required
-                          id="teacher-middle-names"
+                          id="user-middle-names"
                           formControlName="middleNames"
                           placeholder="Other  Names">
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-control-group">
-                    <label for="teacher-phone-number" class="label">Phone Number</label>
+                    <label for="user-phone-number" class="label">Phone Number</label>
                     <input
                           type="text"
                           nbInput fullWidth
                           autocomplete="new-password"
                           required
-                          id="teacher-phone-number"
+                          id="user-phone-number"
                           formControlName="phoneNumber"
                           placeholder="Phone Number">
                   </div>
                 </div>
               </div>
-              <app-user-login-input
-                [showCheckBox]="false"
-                [userLoginInput]="userLoginInput"
-                (onChanges)="onUserLoginInputChange($event)">
-              </app-user-login-input>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-control-group">
-                            <label for="user-position" class="label">Position</label>
-                            <nb-select
-                              [selected]="position"
-                              [fullWidth]="true"
-                              [placeholder]="'Position'"
-                              formControlName="position"
-                              id="user-position">
+              <div class="row" *ngIf="user.userType !== 'student'">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                          <label for="user-position" class="label">Position</label>
+                          <nb-select
+                            [selected]="position"
+                            [fullWidth]="true"
+                            [placeholder]="'Position'"
+                            formControlName="position"
+                            id="user-position">
+                            <nb-option
+                                *ngFor='let pos of positions' [value]="pos.id">
+                                {{pos.name}}
+                            </nb-option>
+                          </nb-select>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                          <label for="user-academicDiscipline" class="label">Field of Study</label>
+                          <nb-select
+                            [selected]="position"
+                            [fullWidth]="true"
+                            [placeholder]="'Field of Study'"
+                            formControlName="academicDiscipline"
+                            id="user-academicDiscipline">
                               <nb-option
-                                  *ngFor='let pos of positions' [value]="pos.id">
-                                  {{pos.name}}
+                                  *ngFor='let acad of academicDisciplines'
+                                  [value]="acad.id">
+                                  {{acad.name}}
                               </nb-option>
-                            </nb-select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-control-group">
-                            <label for="user-academicDiscipline" class="label">Field of Study</label>
-                            <nb-select
-                              [selected]="position"
-                              [fullWidth]="true"
-                              [placeholder]="'Field of Study'"
-                              formControlName="academicDiscipline"
-                              id="user-academicDiscipline">
-                                <nb-option
-                                    *ngFor='let acad of academicDisciplines'
-                                    [value]="acad.id">
-                                    {{acad.name}}
-                                </nb-option>
-                            </nb-select>
-                        </div>
-                    </div>
+                          </nb-select>
+                      </div>
+                  </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">

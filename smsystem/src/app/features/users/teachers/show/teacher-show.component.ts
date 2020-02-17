@@ -43,8 +43,8 @@ export class TeacherShowComponent implements OnInit {
   }
 
   loadTeacherDetails(teacherId: number) {
-      this.userService.loadUser(teacherId, 'teacher').subscribe((teacher: Teacher ) => {
-        if (this.teacher) {
+      this.userService.loadUser(teacherId, 'teachers').subscribe((teacher: Teacher ) => {
+        if (teacher) {
           this.teacher = teacher;
         }
       });

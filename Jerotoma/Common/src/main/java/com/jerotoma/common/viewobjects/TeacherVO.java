@@ -3,6 +3,8 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.jerotoma.common.constants.UserConstant;
+
 public class TeacherVO extends PersonVO {
 		
 	private PositionVO position;
@@ -10,7 +12,7 @@ public class TeacherVO extends PersonVO {
 	private AcademicDisciplineVO academicDiscipline;
 	
 	public TeacherVO(ResultSet rs) throws SQLException {
-		super(rs);						
+		super(rs, UserConstant.USER_TYPES.TEACHER.getType());						
 	}
 
 	public PositionVO getPosition() {

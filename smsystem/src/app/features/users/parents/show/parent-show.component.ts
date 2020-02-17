@@ -43,7 +43,7 @@ export class ParentShowComponent implements OnInit {
   }
 
   loadParentDetails(parentId: number) {
-      this.userService.loadUser(parentId, 'parent').subscribe((parent: Parent) => {
+      this.userService.loadUser(parentId, 'parents').subscribe((parent: Parent) => {
         if (parent) {
           this.parent = parent;
         }

@@ -27,13 +27,13 @@ export class UserService {
 
   loadUser(userId: number, userType: string): Observable<User> {
     return this.http
-    .get(`${END_POINTS.users}/${userId}?userType=${userType}`)
+    .get(`${END_POINTS.users}/${userType}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUserByUsername(username: string, userType: string): Observable<User> {
+  loadUserDetails(username: string): Observable<User> {
     return this.http
-    .post(`${END_POINTS.users}/loggedIn`, {username: username, userType: userType})
+    .post(`${END_POINTS.users}/profile`, {username: username})
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

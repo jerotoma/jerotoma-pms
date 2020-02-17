@@ -212,6 +212,10 @@ public class UserValidator {
 			fullName  = (String) params.get(UserConstant.FULL_NAME);
 		}
 		
+		if(params.containsKey(UserConstant.USER_ID)) {
+			userId = (Integer) params.get(UserConstant.USER_ID);	
+		}
+		
 		if(params.containsKey(UserConstant.AGE)) {
 			age = (Integer) params.get(UserConstant.AGE);	
 		}
@@ -283,6 +287,11 @@ public class UserValidator {
 		}
 		student.setFullName(fullName);
 		
+		if (userId == null && requiredFields.contains(UserConstant.USER_ID)) {
+			throw new FieldIsRequiredException("User ID is required to continue");
+		}
+		student.setUserId(userId);
+		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
 			throw new FieldIsRequiredException("Gender is required to continue");
 		}
@@ -341,6 +350,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.FIRST_NAME)) {
 			firstName  = (String) params.get(UserConstant.FIRST_NAME);
+		}
+		
+		if(params.containsKey(UserConstant.USER_ID)) {
+			userId = (Integer) params.get(UserConstant.USER_ID);	
 		}
 		
 		if(params.containsKey(UserConstant.LAST_NAME)) {
@@ -422,6 +435,11 @@ public class UserValidator {
 		}
 		parent.setFullName(fullName);
 		
+		if (userId == null && requiredFields.contains(UserConstant.USER_ID)) {
+			throw new FieldIsRequiredException("User ID is required to continue");
+		}
+		parent.setUserId(userId);
+		
 		if (gender == null && requiredFields.contains(UserConstant.GENDER)) {
 			throw new FieldIsRequiredException("Gender is required to continue");
 		}
@@ -490,6 +508,10 @@ public class UserValidator {
 			fullName  = (String) params.get(UserConstant.FULL_NAME);
 		}
 		
+		if(params.containsKey(UserConstant.USER_ID)) {
+			userId = (Integer) params.get(UserConstant.USER_ID);	
+		}
+		
 		if(params.containsKey(UserConstant.AGE)) {
 			age = (Integer) params.get(UserConstant.AGE);	
 		}
@@ -547,6 +569,11 @@ public class UserValidator {
 			throw new FieldIsRequiredException("Full Name is required to continue");
 		}
 		staff.setFullName(fullName);
+		
+		if (userId == null && requiredFields.contains(UserConstant.USER_ID)) {
+			throw new FieldIsRequiredException("User ID is required to continue");
+		}
+		staff.setUserId(userId);
 		
 		if (middleNames == null && requiredFields.contains(UserConstant.MIDDLE_NAMES)) {
 			throw new FieldIsRequiredException("Middle Names are required to continue");

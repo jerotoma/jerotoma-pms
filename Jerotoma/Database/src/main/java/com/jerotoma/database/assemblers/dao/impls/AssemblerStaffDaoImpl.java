@@ -126,7 +126,7 @@ public class AssemblerStaffDaoImpl extends JdbcDaoSupport implements AssemblerSt
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT sta.id, u.username, sta.user_id, sta.first_name AS firstName, sta.last_name AS lastName, sta.middle_names AS middleNames, sta.email_address AS emailAddress, sta.phone_number AS phoneNumber, sta.user_code AS userCode, sta.occupation, sta.gender, sta.avatar, sta.position_id AS positionId, sta.birth_date AS birthDate, sta.updated_by AS updatedBy, sta.created_on AS createdOn, sta.updated_on AS updatedOn FROM public.staffs sta INNER JOIN users u ON u.id = user_id");
+		return new StringBuilder("SELECT sta.id, u.username, sta.user_id AS userId, sta.first_name AS firstName, sta.last_name AS lastName, sta.middle_names AS middleNames, sta.email_address AS emailAddress, sta.phone_number AS phoneNumber, sta.user_code AS userCode, sta.occupation, sta.gender, sta.avatar, sta.position_id AS positionId, sta.birth_date AS birthDate, sta.updated_by AS updatedBy, sta.created_on AS createdOn, sta.updated_on AS updatedOn FROM public.staffs sta INNER JOIN users u ON u.id = user_id ");
 		
 	}
 

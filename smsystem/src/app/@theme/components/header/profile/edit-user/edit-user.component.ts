@@ -87,26 +87,24 @@ export class EditUserComponent implements OnInit {
       id: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      position: ['', Validators.required],
-      occupation: ['User'],
+      position: [''],
+      occupation: [''],
       userCode: [''],
       gender: ['', Validators.required],
       picture: [''],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      emailAddress: [null],
       userId: [null, Validators.required],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
-      userType: ['teacher'],
-      academicDiscipline: ['', Validators.required],
-      fullName: ['', Validators.required],
+      userType: [null],
+      academicDiscipline: [''],
       address: [null, Validators.required],
     });
   }
 
   loadUser(user: User) {
-    this.position = user.position.id;
-    this.academicDiscipline = user.academicDiscipline.id;
+    this.position = user.position ? user.position.id : null;
+    this.academicDiscipline = user.academicDiscipline ? user.academicDiscipline.id : null;
     this.updateUserInput(user);
   }
 
@@ -117,20 +115,6 @@ export class EditUserComponent implements OnInit {
       }
     });
   }
-
-  onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
-    if (userLoginInputWrapper && userLoginInputWrapper.userLoginInput &&  userLoginInputWrapper.userLoginInput.email) {
-        this.userLoginInput = userLoginInputWrapper.userLoginInput;
-        this.userForm.patchValue({
-          emailAddress: this.userLoginInput.email,
-        });
-        this.userForm.controls['emailAddress'].setErrors(null);
-    } else {
-      this.userForm.controls['emailAddress'].setErrors({ invalidUsername: true });
-    }
-
-  }
-
   loadAcademicDisciplineList() {
     this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
       if (academicDisciplines) {
@@ -170,7 +154,7 @@ export class EditUserComponent implements OnInit {
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
-      position: user.position.id ,
+      position: user.position ? user.position.id : null ,
       occupation: user.occupation,
       userCode: user.userCode,
       gender: user.gender,
@@ -178,11 +162,9 @@ export class EditUserComponent implements OnInit {
       userId: user.userId,
       middleNames: user.middleNames,
       phoneNumber: user.phoneNumber,
-      emailAddress: user.username,
       birthDate: DateFormatter(user.birthDate, 'YYYY/MM/DD', false),
-      userType: 'teacher',
-      academicDiscipline: user.academicDiscipline.id,
-      fullName: user.fullName,
+      userType: user.userType,
+      academicDiscipline: user.academicDiscipline ? user.academicDiscipline.id : null,
       address: user.address,
     });
     if (this.appAddress) {

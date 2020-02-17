@@ -108,9 +108,9 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       picture: [''],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      username: [null],
+      password: [null],
+      confirmPassword: [null],
       userId: [null],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
@@ -137,7 +137,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadTeacher(teacherId: number) {
-    this.userService.loadUser(teacherId, 'teacher').subscribe((teacher: Teacher) => {
+    this.userService.loadUser(teacherId, 'teachers').subscribe((teacher: Teacher) => {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;
@@ -195,7 +195,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   updateUseInput() {
     this.teacherForm.patchValue({
-      id: null,
+      id: this.teacher.id,
       firstName: this.teacher.firstName,
       lastName: this.teacher.lastName,
       position: this.teacher.position ? this.teacher.position.id : null,

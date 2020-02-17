@@ -54,7 +54,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public StudentVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE st.student_namber= ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE u.username = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentSingleResultProcessor(), uniqueKey);
 	}
 
@@ -128,7 +128,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT st.id, u.username, st.user_id, st.student_number AS studentNumber, st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress, st.phone_number as phoneNumber, st.user_code AS userCode, st.occupation, st.gender, st.avatar, st.position, st.birth_date AS birthDate, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn FROM public.students st INNER JOIN users u ON u.id = st.user_id");
+		return new StringBuilder("SELECT st.id, u.username, st.user_id AS userId, st.student_number AS studentNumber, st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress, st.phone_number as phoneNumber, st.user_code AS userCode, st.occupation, st.gender, st.avatar, st.position, st.birth_date AS birthDate, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn FROM public.students st INNER JOIN users u ON u.id = st.user_id ");
 		
 	}
 
@@ -171,7 +171,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	public List<StudentVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
 		queryBuilder.append(" WHERE lower(st.first_name) like ? OR lower(st.last_name) like ? OR lower(st.middle_names) like ? ")
-				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "st"))
 				.append(" ")
 				.append("limit ? offset ?");
 		
@@ -192,7 +192,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	@Override
 	public List<StudentVO> findStudentsByParentId(Integer parentId) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN student_parents sp ON sp.student_id = st.id WHERE sp.parent_id = ?");
-		return this.jdbcTemplate.query(builder.toString(), new StudentResultProcessor(), parentId);
+		return getJdbcTemplate().query(builder.toString(), new StudentResultProcessor(), parentId);
 	}
 	
 }

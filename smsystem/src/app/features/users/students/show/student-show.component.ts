@@ -1,6 +1,4 @@
-import { User } from './../../../../models/users/user.model';
 import { Component, OnInit, Input } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from 'app/services/users/user.service';
@@ -33,10 +31,9 @@ export class StudentShowComponent implements OnInit {
 
   ngOnInit() {
     // For one time load
-    let id = this.route.snapshot.paramMap.get('id');
+    // let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
         this.loadStudentDetails(routeParam.id);
-       window.console.log(routeParam);
     });
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
@@ -44,7 +41,7 @@ export class StudentShowComponent implements OnInit {
   }
 
   loadStudentDetails(studentId: number) {
-      this.userService.loadUser(studentId, 'student').subscribe((user: Student) => {
+      this.userService.loadUser(studentId, 'students').subscribe((user: Student) => {
        if (user) {
           this.student = user;
         }
