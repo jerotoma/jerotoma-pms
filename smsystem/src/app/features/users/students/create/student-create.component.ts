@@ -121,6 +121,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       address: [null, Validators.required],
       parentFullName: [''],
       selectedParents: [''],
+      userId: [null],
     });
   }
   getParam(): QueryParam {

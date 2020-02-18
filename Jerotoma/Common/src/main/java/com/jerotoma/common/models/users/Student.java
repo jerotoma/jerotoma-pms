@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,12 +49,12 @@ public class Student extends Person implements Serializable{
 	private Integer studentNumber;
 	
 	@ManyToMany
-    @JoinTable(name = "student_parents",
-        joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    )
+    @JoinTable(
+    	name = DatabaseConstant.TABLES.STUDENT_PARENTS,
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "parent_id"))
 	@JsonBackReference
-	private Set<Parent> parents;
+	private Set<Parent> parents = new HashSet<>();
 	
 	@OneToMany(mappedBy ="student")
 	@JsonManagedReference

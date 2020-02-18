@@ -133,34 +133,30 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@GetMapping(value= {"/{userType}/{userId}","/{userId}/", })
+	@GetMapping(value= {"/{userTypeByPath}/{userId}","/{userId}/", })
 	@ResponseBody
 	public HttpResponseEntity<Object> getUser(Authentication auth,
 			@PathVariable(value="userId", required = true) Integer primaryKey,
-			@PathVariable(value="userType", required = true) String userType
+			@PathVariable(value="userTypeByPath", required = true) String userTypeByPath
 			) throws UsernameNotFoundException, JDataAccessException{
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userType + "/" + primaryKey);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userTypeByPath + "/" + primaryKey);
 		this.securityCheckAccessByRoles(auth);
 		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.userTypeByPath type = UserConstant.processUserTypeByPath(userTypeByPath);
 		try {
 			switch(type) {
 			case TEACHERS:
-			case TEACHER:
 				instance.setData(assemblerTeacherService.findObject(primaryKey));
 				
 				break;
 			case STUDENTS:
-			case STUDENT:
 				instance.setData(assemblerStudentService.findObject(primaryKey));
 				break;
-			case STAFF:
 			case STAFFS:
 				instance.setData(assemblerStaffService.findObject(primaryKey));
 				break;
 			case PARENTS:
-			case PARENT:
 				instance.setData(assemblerParentService.findObject(primaryKey));
 				break;
 			default:
@@ -548,23 +544,35 @@ public class RestUserController extends BaseController {
 				if (parent.getId() == null) {
 					throw new FieldIsRequiredException("Parent ID is required");
 				}
+				
+				Parent mParent = parentService.findObject(parent.getId());	
+				mParent.setFirstName(parent.getFirstName());
+				mParent.setLastName(parent.getLastName());
+				mParent.setMiddleNames(parent.getMiddleNames());
+				mParent.setFullName(parent.getFullName());
+				mParent.setAge(parent.getAge());
+				mParent.setBirthDate(parent.getBirthDate());
+				mParent.setGender(parent.getGender());
+				mParent.setOccupation(parent.getOccupation());
+				mParent.setStudentIds(parent.getStudentIds());
+				mParent.setUpdatedOn(new Date());
+				mParent.setUpdatedBy(authUser.getId());
+				mParent.setAddress(parent.getAddress());
+				address = mParent.getAddress();
 								
-				if (parent.getStudentIds() != null) {
+				if (mParent.getStudentIds() != null) {
 					Set<Student> students = new HashSet<>();
-					for (Integer studentId: parent.getStudentIds()) {
+					for (Integer studentId: mParent.getStudentIds()) {
 						student = studentService.findObject(studentId);
 						students.add(student);
 					}										
-					parent.setStudents(students);
-				}
-				
-				parent.setUpdatedBy(authUser.getId());
-				address = parent.getAddress();
-				parent = parentService.updateObject(parent);
+					mParent.setStudents(students);
+				}				
+				mParent = parentService.updateObject(mParent);
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);
-				instance.setData(parent);
+				instance.setData(mParent);
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");

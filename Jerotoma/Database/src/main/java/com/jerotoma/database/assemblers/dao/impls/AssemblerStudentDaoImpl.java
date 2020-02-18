@@ -35,15 +35,19 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
-	@Autowired RoleDao roleDao;	
+	@Autowired RoleDao roleDao;		
 	@Autowired AssemblerAddressDao addressDao;
+	
 	@Autowired AssemblerParentDao parentDao;
+	
 	Map<String, Object> map;
 	
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
 		this.jdbcTemplate = getJdbcTemplate();
+		this.parentDao.setAssemblerStudentDao(this);
+		
 	}
 
 	@Override
@@ -193,6 +197,11 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	public List<StudentVO> findStudentsByParentId(Integer parentId) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN student_parents sp ON sp.student_id = st.id WHERE sp.parent_id = ?");
 		return getJdbcTemplate().query(builder.toString(), new StudentResultProcessor(), parentId);
+	}
+
+	@Override
+	public List<ParentVO> loadParentsByStudentId(Integer studentId) throws SQLException {
+		return parentDao.findParentsByStudentId(studentId);
 	}
 	
 }

@@ -73,6 +73,35 @@ public class UserConstant {
 		}
 		return null;
 	}
+	
+	
+	public static enum userTypeByPath{
+		ADMIN("admin"),
+		TEACHERS("teachers"),
+		PARENTS("parents"),
+		STAFFS("staffs"),
+		STUDENTS("students"),
+		USERS("users");
+		
+		private String type;
+		
+		userTypeByPath(String type){
+			this.type = type;
+		}
+		
+		public String getType(){
+			return type;
+		}
+	}
+
+	public static userTypeByPath processUserTypeByPath(String type) {
+		for (userTypeByPath ut : userTypeByPath.values()) {
+			if(ut.type.equals(type)) {
+				return ut;
+			}
+		}
+		return null;
+	}
 
 
 

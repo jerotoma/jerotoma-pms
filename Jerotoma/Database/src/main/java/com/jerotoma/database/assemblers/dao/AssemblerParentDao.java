@@ -5,10 +5,13 @@ import java.util.List;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.viewobjects.ParentVO;
+import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerParentDao extends AssemblerDao<ParentVO> {
 	public List<ParentVO> search(QueryParam queryParam) throws SQLException;
 	public List<ParentVO> findParentsByStudentId(Integer studentId) throws SQLException;
+	public List<StudentVO> loadStudentsByParentId(Integer parentId) throws SQLException;
+	public void setAssemblerStudentDao(AssemblerStudentDao assemblerStudentDao);
 
 }

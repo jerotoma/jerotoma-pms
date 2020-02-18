@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
@@ -45,6 +46,11 @@ public class AssemblerStudentServiceImpl  implements AssemblerStudentService{
 	@Override
 	public List<StudentVO> search(QueryParam queryParam)  throws SQLException{
 		return assemblerStudentDao.search(queryParam);
+	}
+
+	@Override
+	public List<ParentVO> loadParentsByStudentId(Integer studentId) throws SQLException {
+		return assemblerStudentDao.loadParentsByStudentId(studentId);
 	}
 
 }

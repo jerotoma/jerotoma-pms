@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class Parent extends Person implements Serializable{
 	
 	@ManyToMany(mappedBy="parents")
 	@JsonManagedReference
-	private Set<Student> students;
+	private Set<Student> students = new HashSet<>();;
 	
 	@OneToMany(mappedBy ="parent")
 	@JsonManagedReference

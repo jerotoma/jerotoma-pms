@@ -148,7 +148,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public AddressVO findAddressByParentId(Integer parentId) throws SQLException {
-		StringBuilder builder =  getBaseSelectQuery();
+		StringBuilder builder = getBaseSelectQuery();
 		builder
 		.append("INNER JOIN public.parent_addresses pa ON pa.address_id = a.id ")
 		.append("WHERE pa.parent_id = ?");
@@ -157,7 +157,7 @@ public class AssemblerAddressDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public AddressVO findAddressByStaffId(Integer staffId) throws SQLException {
-		StringBuilder builder =  getBaseSelectQuery();
+		StringBuilder builder = getBaseSelectQuery();
 		builder
 		.append("INNER JOIN public.staff_addresses sa ON sa.address_id = a.id ")
 		.append("WHERE sa.staff_id = ?");

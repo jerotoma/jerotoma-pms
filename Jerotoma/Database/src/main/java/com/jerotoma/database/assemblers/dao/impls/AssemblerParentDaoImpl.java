@@ -25,6 +25,7 @@ import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerParentDao;
+import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 
@@ -32,13 +33,17 @@ import com.jerotoma.database.dao.roles.RoleDao;
 public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerParentDao {
 	
 	private JdbcTemplate jdbcTemplate;
+	private AssemblerStudentDao assemblerStudentDao;
+	private Map<String, Object> map;
 	
 	@Autowired DataSource dataSource;
 	@Autowired RoleDao roleDao;	
-	@Autowired AssemblerAddressDao addressDao;
-	//AssemblerStudentDao assemblerStudentDao = new AssemblerStudentDaoImpl();
-	Map<String, Object> map;
-	
+	@Autowired AssemblerAddressDao addressDao;	
+			
+	public void setAssemblerStudentDao(AssemblerStudentDao assemblerStudentDao) {
+		this.assemblerStudentDao = assemblerStudentDao;
+	}
+
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
@@ -143,12 +148,12 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	public ParentVO mapParentResult(ResultSet rs) throws SQLException {
 		ParentVO parent = new ParentVO(rs);
 		parent.setAddress(loadAddress(parent.getId()));
-		parent.setStudents(loadStudentsByParentId(parent.getId()));
 		return parent;
 	}
 
-	private List<StudentVO> loadStudentsByParentId(Integer parentId) throws SQLException {		
-		return null; //assemblerStudentDao.findStudentsByParentId(parentId);
+	@Override
+	public List<StudentVO> loadStudentsByParentId(Integer parentId) throws SQLException {		
+		return assemblerStudentDao.findStudentsByParentId(parentId);
 	}
 
 	@Override
