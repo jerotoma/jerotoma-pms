@@ -324,6 +324,7 @@ public class RestUserController extends BaseController {
 				
 				break;
 			case STAFF:
+				requiredFields.remove(UserConstant.BIRTH_DATE);
 				requiredFields.add(UserConstant.POSITION);				
 				position = processPosition(params, requiredFields);	
 				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
@@ -349,7 +350,7 @@ public class RestUserController extends BaseController {
 				instance.setData(staff);
 				break;
 			case PARENT:
-				
+				requiredFields.remove(UserConstant.BIRTH_DATE);
 				parentAddress = new ParentAddress();
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				

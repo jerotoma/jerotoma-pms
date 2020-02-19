@@ -4,10 +4,23 @@
           <nb-card size="giant" status="primary">
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
-              <div class='row'>
-                  <div class='col-md-12'>
-
-                  </div>
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                        <label for="class-academicYear" class="label">Course Academic Year</label>
+                        <nb-select
+                          fullWidth
+                          placeholder="Course Academic Year"
+                          formControlName="academicYearId"
+                          id="class-academicYear">
+                          <nb-option
+                              *ngFor='let acad of academicYears'
+                              [value]="acad.id">
+                              {{acad.name}} - {{acad.yearOfStudy}}
+                          </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
               </div>
               <div class="row">
                   <div class="col-md-6">

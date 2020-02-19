@@ -130,6 +130,4 @@ private JdbcTemplate jdbcTemplate;
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.academic_years ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
-
-
 }

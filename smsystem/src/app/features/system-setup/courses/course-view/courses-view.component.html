@@ -22,6 +22,11 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
                 <td mat-cell *matCellDef="let element"> {{element.code}} </td>
               </ng-container>
+               <!-- academicYear Column -->
+               <ng-container matColumnDef="academicYear">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Year </th>
+                <td mat-cell *matCellDef="let element"> {{element.academicYear.name}} - {{element.academicYear.yearOfStudy}} </td>
+              </ng-container>
               <!-- description Column -->
               <ng-container matColumnDef="description">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>

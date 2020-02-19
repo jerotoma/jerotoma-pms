@@ -27,8 +27,10 @@ import com.jerotoma.common.constants.CourseConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.utils.validators.CourseValidator;
+import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.CourseService;
 
 
@@ -37,6 +39,7 @@ import com.jerotoma.services.courses.CourseService;
 public class RestCourseController extends BaseController {
 	
 	@Autowired CourseService courseService;
+	@Autowired AcademicYearService academicYearService;
 		
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
@@ -81,13 +84,17 @@ public class RestCourseController extends BaseController {
 				Arrays.asList(
 						CourseConstant.COURSE_NAME,
 						CourseConstant.COURSE_DESCRIPTION,
-						CourseConstant.COURSE_CODE));
+						CourseConstant.COURSE_CODE,
+						CourseConstant.ACADEMIC_YEAR_ID));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
 		
 		try {
+			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
+			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());
-			course = courseService.createObject(course);		
+			course = courseService.createObject(course);
+			course.setAcademicYearId(academicYear.getId());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -119,14 +126,18 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_NAME,
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_ID,
+						CourseConstant.ACADEMIC_YEAR_ID,
 						CourseConstant.COURSE_CODE));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
 				
 		try {
+			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
+			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());
 			course.setUpdatedOn(today);
-			course = courseService.updateObject(course);		
+			course = courseService.updateObject(course);	
+			course.setAcademicYearId(academicYear.getId());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}

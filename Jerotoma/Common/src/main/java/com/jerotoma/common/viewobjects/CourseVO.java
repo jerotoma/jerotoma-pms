@@ -11,11 +11,15 @@ public class CourseVO {
 	
 	private Integer id;
 	
+	private Integer academicYearId;
+	
 	private String code;
 	
 	private String name;
 	
 	private String description;
+	
+	private AcademicYearVO academicYear;
 	
 	private Date createdOn;
 	
@@ -26,6 +30,7 @@ public class CourseVO {
 		this.name = rs.getString(CourseConstant.COURSE_NAME);
 		this.description = rs.getString(CourseConstant.COURSE_DESCRIPTION); 
 		this.id = rs.getInt(CourseConstant.COURSE_ID);
+		this.academicYearId = rs.getInt(CourseConstant.ACADEMIC_YEAR_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);
 		
@@ -79,7 +84,26 @@ public class CourseVO {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-	
-	
 
+
+	public AcademicYearVO getAcademicYear() {
+		return academicYear;
+	}
+
+
+	public void setAcademicYear(AcademicYearVO academicYear) {
+		this.academicYear = academicYear;
+	}
+
+
+	public Integer getAcademicYearId() {		
+		return academicYearId;
+	}
+
+
+	public void setAcademicYearId(Integer academicYearId) {
+		this.academicYearId = academicYearId;
+	}
+	
+	
 }

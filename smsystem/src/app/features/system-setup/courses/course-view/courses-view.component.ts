@@ -91,6 +91,7 @@ export class CoursesViewComponent implements OnInit {
         code: course.code,
         name: course.name,
         description: course.description,
+        academicYearId: course.academicYear.id.toString(),
       },
     }).onClose.subscribe(_data => {
       this.loadCourses();

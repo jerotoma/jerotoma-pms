@@ -20,7 +20,9 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CourseConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -32,6 +34,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
+	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -95,7 +98,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		@Override
 		public CourseVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 			CourseVO course = new CourseVO(rs);
-					
+			course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
 			return course;
 		}		
 	}
@@ -105,7 +108,8 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		public CourseVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			CourseVO course = null;
 			if(rs.next()) {
-				course = new CourseVO(rs);			
+				course = new CourseVO(rs);
+				course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
 			}
 			return course;
 		}				
@@ -123,7 +127,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, code, name, description, created_on, updated_on FROM public.courses ");
+		return new StringBuilder("SELECT id, code, name, description, academic_year_id AS academicYearId, created_on, updated_on FROM public.courses ");
 		
 	}
 
@@ -131,6 +135,10 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	public Long countObject() throws SQLException {
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.courses ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+	
+	public AcademicYearVO findAcademicYearByCourseId(Integer academicYearId) throws SQLException {
+		return assemblerAcademicYearDao.findObject(academicYearId);
 	}
 
 }

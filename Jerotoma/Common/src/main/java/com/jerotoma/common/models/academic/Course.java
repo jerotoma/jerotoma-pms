@@ -9,9 +9,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.jerotoma.common.constants.DatabaseConstant;
 
@@ -35,6 +38,9 @@ public class Course implements Serializable{
 	@Column
 	private Integer id;
 	
+	@Transient
+	private Integer academicYearId;
+	
 	@Column
 	private String code;
 	
@@ -43,6 +49,10 @@ public class Course implements Serializable{
 	
 	@Column
 	private String description;
+	
+	@ManyToOne
+	@JoinColumn(name="academic_year_id")
+	private AcademicYear academicYear;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -110,6 +120,22 @@ public class Course implements Serializable{
 
 	public void setUpdatedBy(Integer updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	public Integer getAcademicYearId() {
+		return academicYearId;
+	}
+
+	public void setAcademicYearId(Integer academicYearId) {
+		this.academicYearId = academicYearId;
+	}
+
+	public AcademicYear getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYear academicYear) {
+		this.academicYear = academicYear;
 	}
 	
 	

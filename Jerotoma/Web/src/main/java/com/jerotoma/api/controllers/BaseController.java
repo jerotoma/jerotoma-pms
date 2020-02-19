@@ -46,9 +46,7 @@ public abstract class BaseController {
 	@Autowired protected ServletContext context;
 	@Autowired protected RoleService roleService;
 	
-	public BaseController() {
-		super();		
-	}
+	public BaseController() {}
 	
 	@PostConstruct
 	private void initialize(){

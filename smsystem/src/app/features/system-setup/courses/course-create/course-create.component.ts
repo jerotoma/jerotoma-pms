@@ -3,8 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Course } from 'app/models';
-import { CourseService } from 'app/services';
+import { Course, AcademicYear } from 'app/models';
+import { CourseService, AcademicYearService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -17,13 +17,16 @@ export class CourseCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Output() onCreationSuccess = new EventEmitter();
-  @Input() name: string = '';
-  @Input() code: string = '';
-  @Input() id: string = '0';
-  @Input() description: string = '';
+  @Input() name: string;
+  @Input() code: string;
+  @Input() id: string;
+  @Input() academicYearId: string;
+  @Input() description: string;
 
   courseForm: FormGroup;
   course: Course;
+  academicYear: AcademicYear;
+  academicYears: AcademicYear[];
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -35,10 +38,12 @@ export class CourseCreateComponent implements OnInit {
   constructor(
     private courseService:  CourseService,
     private formBuilder: FormBuilder,
+    private academicYearService: AcademicYearService,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
+    this.loadAcademicYears();
     if (this.action === 'edit') {
         this.patchCourse();
     }
@@ -49,6 +54,7 @@ export class CourseCreateComponent implements OnInit {
       description: this.description,
       code: this.code,
       id: parseInt(this.id, 10),
+      academicYearId: this.academicYearId,
     });
   }
   dismiss() {
@@ -90,7 +96,6 @@ export class CourseCreateComponent implements OnInit {
 
   }
   updateCourse() {
-
     this.courseService.updateCourse(this.course)
           .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
             const resp = result;
@@ -123,12 +128,28 @@ export class CourseCreateComponent implements OnInit {
     }
   }
 
+  loadAcademicYears() {
+    this.academicYearService.getAcademicYears(this.getParam())
+    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      const resp = result;
+      const status = resp.status;
+      if (status !== null && status === 200 && resp.body) {
+        const data = resp.body.data;
+        this.academicYears = data.academicYears;
+        this.patchCourse();
+      }
+    }, error => {
+
+    });
+  }
+
   loadForm() {
     this.courseForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required],
       code: ['', Validators.required],
       description: [''],
+      academicYearId: ['', Validators.required],
     });
   }
 

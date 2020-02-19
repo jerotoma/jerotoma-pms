@@ -320,31 +320,11 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
-
-	/**************************************************************
-	 * 															  *
-	 * 															  *
-	 * 			COURSES RELATED TABLES					  		  *
-	 * 															  *
-	 *************************************************************/
 	    
-	CREATE TABLE IF NOT EXISTS public.courses(
-	    id bigserial NOT NULL,
-	    name character varying(255) NOT NULL,
-	    code character varying(255) NOT NULL,
-	    description text NOT NULL,
-	    updated_by bigint NOT NULL,
-	    created_on timestamp with time zone NOT NULL,
-	    updated_on timestamp with time zone NOT NULL,
-	    CONSTRAINT courses_ukey UNIQUE (code),
-	   	CONSTRAINT courses_pkey PRIMARY KEY (id)
-	    );
-    
-    
 	 /**************************************************************
 	 * 															  *
 	 * 															  *
-	 * 			COURSES RELATED TABLES					  		  *
+	 * 			ACADEMIC_YEARS RELATED TABLES					  *
 	 * 															  *
 	 *************************************************************/
 	    
@@ -359,7 +339,31 @@
 	    CONSTRAINT academic_years_ukey UNIQUE (code),
 	   	CONSTRAINT academic_years_pkey PRIMARY KEY (id)
 	    );
-    
+
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			COURSES RELATED TABLES					  		  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.courses(
+	    id bigserial NOT NULL,
+	    academic_year_id bigint NOT NULL,
+	    name character varying(255) NOT NULL,
+	    code character varying(255) NOT NULL,
+	    description text NOT NULL,
+	    updated_by bigint NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT courses_ukey UNIQUE (code),
+	   	CONSTRAINT courses_pkey PRIMARY KEY (id),
+	   	CONSTRAINT academic_years_fkey FOREIGN KEY (academic_year_id)
+	        REFERENCES public.academic_years (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+        
 	/**************************************************************
 	 * 															  *
 	 * 															  *
