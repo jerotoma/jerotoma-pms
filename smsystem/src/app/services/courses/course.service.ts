@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { ResponseWrapper, Course } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +16,11 @@ export class CourseService {
     return this.http
       .get<any>(`${END_POINTS.courses}/${courseId}`)
       .pipe(retry(3), catchError(this.errorHandler));
+  }
+
+  getCoursesByAcademicYearId(academicYearId: number): Observable<Course[]> {
+    return this.http.get(`${END_POINTS.courses}/academicYears/${academicYearId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadCourseList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {

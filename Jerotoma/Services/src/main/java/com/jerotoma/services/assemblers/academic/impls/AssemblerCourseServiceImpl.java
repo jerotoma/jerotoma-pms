@@ -42,4 +42,14 @@ public class AssemblerCourseServiceImpl implements  AssemblerCourseService {
 		return assemblerCourseDao.countObject();
 	}
 
+	@Override
+	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException {
+		return assemblerCourseDao.findCoursesByAcademicYearId(academicYearId);
+	}
+
+	@Override
+	public List<CourseVO> findCoursesByAcademicDisciplineId(Integer academicDisciplineId) throws SQLException {
+		return assemblerCourseDao.findCoursesByAcademicDisciplineId(academicDisciplineId);
+	}
+
 }

@@ -166,12 +166,15 @@ export class ClassCreateComponent implements OnInit {
         teacherId: ['', Validators.required],
         classRoomId: ['', Validators.required],
       });
+
+      this.classForm.controls['academicYearId'].valueChanges.subscribe((academicYearId: number) => {
+        this.loadCourses(academicYearId);
+      });
     }
 
     loadData() {
       this.loadAcademicYears();
       this.loadClassRooms();
-      this.loadCourses();
       this.loadTeachers();
     }
 
@@ -192,20 +195,17 @@ export class ClassCreateComponent implements OnInit {
       });
     }
 
-    loadCourses() {
-      this.courseService.getCourses(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.courses = data.courses;
+    loadCourses(academicYearId: number) {
+      this.courseService.getCoursesByAcademicYearId(academicYearId)
+      .subscribe((courses: Course[] ) => {
+        if (courses) {
+          this.classForm.controls['courseId'].setValue(null);
+          this.courses = courses;
           if (this.jClassView) {
             this.patchClassAdmission(this.jClassView);
           }
+          this.classForm.updateValueAndValidity();
         }
-      }, error => {
-
       });
     }
     loadAcademicYears() {
@@ -233,7 +233,6 @@ export class ClassCreateComponent implements OnInit {
           const data = resp.body.data;
           this.teachers = data.teachers;
           if (this.jClassView) {
-            window.console.log('Teacher: ', this.teachers );
             this.patchClassAdmission(this.jClassView);
           }
         }

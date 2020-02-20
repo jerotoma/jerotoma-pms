@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,11 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Course;
+import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.utils.validators.CourseValidator;
+import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
+import com.jerotoma.services.assemblers.academic.AssemblerCourseService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.CourseService;
 
@@ -39,6 +45,8 @@ import com.jerotoma.services.courses.CourseService;
 public class RestCourseController extends BaseController {
 	
 	@Autowired CourseService courseService;
+	@Autowired AssemblerCourseService assemblerCourseService;
+	@Autowired AcademicDisciplineService academicDisciplineService;
 	@Autowired AcademicYearService academicYearService;
 		
 	@GetMapping(value = {"", "/"})
@@ -58,7 +66,7 @@ public class RestCourseController extends BaseController {
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = courseService.loadMapList(queryParam);		
+			map = assemblerCourseService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -66,6 +74,30 @@ public class RestCourseController extends BaseController {
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(map);
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
+	@GetMapping(value = {"/academicYears/{academicYearId}"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getCoursesByAcademicYear(Authentication auth,
+			@PathVariable(value="academicYearId", required=true)Integer academicYearId) {
+		
+		List<CourseVO> courses = new ArrayList<>();
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		try {
+			courses = assemblerCourseService.findCoursesByAcademicYearId(academicYearId);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setData(courses);
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
@@ -85,11 +117,18 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_NAME,
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_CODE,
+						CourseConstant.ACADEMIC_DISCIPLINE_IDS,
 						CourseConstant.ACADEMIC_YEAR_ID));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
-		
+		Set<AcademicDiscipline> academicDisciplines = new HashSet<>();
 		try {
+			 for (Integer academicDisciplineId: course.getAcademicDisciplineIds()) {
+				 AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+				 academicDisciplines.add(academicDiscipline);
+			 }
+			 course.setAcademicDisciplines(academicDisciplines);
+			
 			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
 			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());
@@ -127,11 +166,18 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_ID,
 						CourseConstant.ACADEMIC_YEAR_ID,
+						CourseConstant.ACADEMIC_DISCIPLINE_IDS,
 						CourseConstant.COURSE_CODE));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
-				
+		Set<AcademicDiscipline> academicDisciplines = new HashSet<>();
 		try {
+			 for (Integer academicDisciplineId: course.getAcademicDisciplineIds()) {
+				 AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+				 academicDisciplines.add(academicDiscipline);
+			 }
+			 course.setAcademicDisciplines(academicDisciplines);
+			
 			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
 			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());

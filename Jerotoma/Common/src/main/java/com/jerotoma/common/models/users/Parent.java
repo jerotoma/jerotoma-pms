@@ -40,7 +40,7 @@ public class Parent extends Person implements Serializable{
 	
 	@ManyToMany(mappedBy="parents")
 	@JsonManagedReference
-	private Set<Student> students = new HashSet<>();;
+	private Set<Student> students = new HashSet<>();
 	
 	@OneToMany(mappedBy ="parent")
 	@JsonManagedReference

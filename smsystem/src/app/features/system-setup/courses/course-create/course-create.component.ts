@@ -3,8 +3,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Course, AcademicYear } from 'app/models';
-import { CourseService, AcademicYearService } from 'app/services';
+import { Course, AcademicYear, AcademicDiscipline } from 'app/models';
+import { CourseService, AcademicYearService, AcademicDisciplineService } from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -27,6 +27,7 @@ export class CourseCreateComponent implements OnInit {
   course: Course;
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
+  academicDisciplines: AcademicDiscipline[] = [];
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -39,6 +40,7 @@ export class CourseCreateComponent implements OnInit {
     private courseService:  CourseService,
     private formBuilder: FormBuilder,
     private academicYearService: AcademicYearService,
+    protected academicDisciplineService: AcademicDisciplineService,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
@@ -126,6 +128,15 @@ export class CourseCreateComponent implements OnInit {
       description: description,
     });
     }
+  }
+
+  loadAcademicDisciplineList() {
+    this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
+      if (academicDisciplines) {
+        this.showMessage.error = false;
+        this.academicDisciplines = academicDisciplines;
+      }
+    });
   }
 
   loadAcademicYears() {

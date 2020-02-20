@@ -19,9 +19,12 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CourseConstant;
+import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.dao.DaoUtil;
@@ -35,6 +38,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	@Autowired DataSource dataSource;
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
+	@Autowired AssemblerAcademicDisciplineDao assemblerAcademicDisciplineDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -97,10 +101,15 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	public class CourseResultProcessor implements RowMapper<CourseVO>{
 		@Override
 		public CourseVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			CourseVO course = new CourseVO(rs);
-			course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
-			return course;
+			return mapCourse(rs);
 		}		
+	}
+	
+	private CourseVO mapCourse(ResultSet rs) throws SQLException {
+		CourseVO course = new CourseVO(rs);
+		course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
+		course.setAcademicDisciplines(findAcademicDisciplinesByCourseId(course.getId()));
+		return course;
 	}
 	
 	public class CourseSingleResultProcessor implements ResultSetExtractor<CourseVO>{
@@ -108,8 +117,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		public CourseVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			CourseVO course = null;
 			if(rs.next()) {
-				course = new CourseVO(rs);
-				course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
+				return mapCourse(rs);
 			}
 			return course;
 		}				
@@ -119,16 +127,15 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		@Override
 		public Long extractData(ResultSet rs) throws SQLException, DataAccessException {
 			Long l = null;
-			if(rs.next()) {
-			 l = rs.getLong(1);
-			}
+			if (rs.next()) {
+				l = rs.getLong(1);
+			 }
 			return l;
 		}				
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, code, name, description, academic_year_id AS academicYearId, created_on, updated_on FROM public.courses ");
-		
+		return new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c ");		
 	}
 
 	@Override
@@ -141,4 +148,20 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		return assemblerAcademicYearDao.findObject(academicYearId);
 	}
 
+	@Override
+	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException {		
+		String query = getBaseSelectQuery().append("WHERE academic_year_id = ? ").toString();
+		return this.jdbcTemplate.query(query, new CourseResultProcessor(), academicYearId);		
+	}
+
+	@Override
+	public List<CourseVO> findCoursesByAcademicDisciplineId(Integer academicDisciplineId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES).append(" cad ON cad.course_id = c.id  where cad.academic_discipline_id = ? ");
+		return getJdbcTemplate().query(builder.toString(), new CourseResultProcessor(), academicDisciplineId);
+	}
+	
+	private List<AcademicDisciplineVO> findAcademicDisciplinesByCourseId(Integer courseId) throws SQLException {
+		return assemblerAcademicDisciplineDao.findAcademicDisciplinesByCourseId(courseId);
+	}
+	
 }

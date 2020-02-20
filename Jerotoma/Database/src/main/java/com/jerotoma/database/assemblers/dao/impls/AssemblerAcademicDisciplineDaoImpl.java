@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
+import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
@@ -121,14 +122,19 @@ public class AssemblerAcademicDisciplineDaoImpl extends JdbcDaoSupport implement
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, code, name, description, created_on, updated_on FROM public.academic_disciplines ");
-		
+		return new StringBuilder("SELECT ad.id, ad.code, ad.name, ad.description, ad.created_on, ad.updated_on FROM public.academic_disciplines ad ");		
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.academic_disciplines ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+
+	@Override
+	public List<AcademicDisciplineVO> findAcademicDisciplinesByCourseId(Integer courseId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES).append(" cad ON cad.course_id = ad.id  where cad.course_id = ? ");
+		return getJdbcTemplate().query(builder.toString(), new AcademicDisciplineResultProcessor(), courseId);	
 	}
 	
 }

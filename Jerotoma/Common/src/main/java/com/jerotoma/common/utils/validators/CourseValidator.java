@@ -11,6 +11,7 @@ import com.jerotoma.common.utils.CalendarUtil;
 
 public class CourseValidator {
 
+	@SuppressWarnings("unchecked")
 	public static Course validate(Map<String, Object> params, List<String> requiredFields) {
 		
 		Course course = new Course();
@@ -18,7 +19,8 @@ public class CourseValidator {
 		String description = null;
 		String code = null;	
 		Integer id = null;	
-		Integer academicYearId = null;	
+		Integer academicYearId = null;
+		List<Integer> academicDisciplineIds = null;
 		
 		
 		if(params.containsKey(CourseConstant.COURSE_NAME)) {
@@ -37,6 +39,10 @@ public class CourseValidator {
 		
 		if(params.containsKey(CourseConstant.ACADEMIC_YEAR_ID)) {
 			academicYearId  = (Integer)params.get(CourseConstant.ACADEMIC_YEAR_ID);
+		}
+		
+		if(params.containsKey(CourseConstant.ACADEMIC_DISCIPLINE_IDS)) {
+			academicDisciplineIds = (List<Integer>)params.get(CourseConstant.ACADEMIC_DISCIPLINE_IDS);
 		}
 		
 		if (id == null && requiredFields.contains(CourseConstant.COURSE_ID)) {
@@ -65,7 +71,10 @@ public class CourseValidator {
 		}
 		course.setCode(code);
 		
-		
+		if (academicDisciplineIds == null && requiredFields.contains(CourseConstant.ACADEMIC_DISCIPLINE_IDS)) {
+			throw new FieldIsRequiredException("Academic Descipline is required to continue");
+		}
+		course.setAcademicDisciplineIds(academicDisciplineIds);		
 		
 		Date today = CalendarUtil.getTodaysDate();		
 		course.setCreatedOn(today);

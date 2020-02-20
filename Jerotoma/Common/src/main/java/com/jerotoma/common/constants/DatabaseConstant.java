@@ -29,6 +29,7 @@ public class DatabaseConstant {
 		public static final String ACADEMIC_YEARS_COURSES = "academic_year_courses";
 		public static final String TEACHER_COURSE_ADMISSIONS = "teacher_course_admissions";
 		public static final String CLASSES = "classes";
+		public static final String COURSE_ACADEMIC_DISCIPLINES = "course_academic_disciplines";
 	}
 	
 	

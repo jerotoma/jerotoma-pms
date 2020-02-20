@@ -9,4 +9,5 @@ public class CourseConstant {
 	public static final String COURSES = "courses";
 	public static final String COURSE = "course";
 	public static final String ACADEMIC_YEAR_ID = "academicYearId";
+	public static final String ACADEMIC_DISCIPLINE_IDS = "academicDisciplineIds";
 }

@@ -3,6 +3,7 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import com.jerotoma.common.constants.CourseConstant;
 import com.jerotoma.common.constants.SystemConstant;
@@ -21,6 +22,8 @@ public class CourseVO {
 	
 	private AcademicYearVO academicYear;
 	
+	private List<AcademicDisciplineVO> academicDisciplines;
+	
 	private Date createdOn;
 	
 	private Date updatedOn;
@@ -32,11 +35,9 @@ public class CourseVO {
 		this.id = rs.getInt(CourseConstant.COURSE_ID);
 		this.academicYearId = rs.getInt(CourseConstant.ACADEMIC_YEAR_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
-		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);
-		
+		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);		
 	}
-
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -85,25 +86,27 @@ public class CourseVO {
 		this.updatedOn = updatedOn;
 	}
 
-
 	public AcademicYearVO getAcademicYear() {
 		return academicYear;
 	}
-
 
 	public void setAcademicYear(AcademicYearVO academicYear) {
 		this.academicYear = academicYear;
 	}
 
-
 	public Integer getAcademicYearId() {		
 		return academicYearId;
 	}
 
-
 	public void setAcademicYearId(Integer academicYearId) {
 		this.academicYearId = academicYearId;
 	}
-	
-	
+
+	public List<AcademicDisciplineVO> getAcademicDisciplines() {
+		return academicDisciplines;
+	}
+
+	public void setAcademicDisciplines(List<AcademicDisciplineVO> academicDisciplines) {
+		this.academicDisciplines = academicDisciplines;
+	}	
 }

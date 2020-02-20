@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { PageEvent } from '@angular/material';
@@ -38,8 +37,8 @@ export class CoursesViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'name', 'code', 'description', 'action'];
-  dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>();
+  displayedColumns: string[] = ['id', 'name', 'code', 'academicYear', 'description', 'action'];
+  dataSource: MatTableDataSource<Course> = new MatTableDataSource<Course>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -76,7 +75,7 @@ export class CoursesViewComponent implements OnInit {
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<Position>(data.courses);
+          this.dataSource = new MatTableDataSource<Course>(data.courses);
         }
       }, error => {
 
