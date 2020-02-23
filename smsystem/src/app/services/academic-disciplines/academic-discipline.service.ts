@@ -10,8 +10,18 @@ import { AcademicDiscipline, ResponseWrapper } from 'app/models';
   providedIn: 'root',
 })
 export class AcademicDisciplineService {
-
+  academicDisciplineIds: number[] = [];
   constructor(private http: HttpClient) { }
+
+  getAcademicDisciplineIds(academicDisciplines: AcademicDiscipline[]) {
+      this.academicDisciplineIds = [];
+      if (academicDisciplines) {
+        academicDisciplines.forEach((academicDiscipline: AcademicDiscipline) => {
+          this.academicDisciplineIds.push(academicDiscipline.id);
+        });
+      }
+   return this.academicDisciplineIds;
+  }
 
   getAcademicDiscipline(academicDisciplineId: number): Observable<AcademicDiscipline> {
     return this.http

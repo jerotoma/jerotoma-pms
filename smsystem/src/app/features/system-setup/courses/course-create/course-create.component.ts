@@ -4,7 +4,12 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import { Course, AcademicYear, AcademicDiscipline } from 'app/models';
-import { CourseService, AcademicYearService, AcademicDisciplineService } from 'app/services';
+import {
+  CourseService,
+  AcademicYearService,
+  AcademicDisciplineService,
+  ModalService,
+} from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -17,17 +22,15 @@ export class CourseCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Output() onCreationSuccess = new EventEmitter();
-  @Input() name: string;
-  @Input() code: string;
   @Input() id: string;
-  @Input() academicYearId: string;
-  @Input() description: string;
+
 
   courseForm: FormGroup;
   course: Course;
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
   academicDisciplines: AcademicDiscipline[] = [];
+  selectedAcademicDisciplines: number[] = [];
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -41,22 +44,25 @@ export class CourseCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private academicYearService: AcademicYearService,
     protected academicDisciplineService: AcademicDisciplineService,
+    private modalService: ModalService,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
     this.loadAcademicYears();
+    this.loadAcademicDisciplineList();
     if (this.action === 'edit') {
-        this.patchCourse();
+        this.loadCourse();
     }
   }
   patchCourse() {
     this.courseForm.patchValue({
-      name: this.name,
-      description: this.description,
-      code: this.code,
-      id: parseInt(this.id, 10),
-      academicYearId: this.academicYearId,
+      name: this.course.name,
+      description: this.course.description,
+      code: this.course.code,
+      id: this.course.id,
+      academicYearId: this.course.academicYear.id,
+      academicDisciplineIds: this.academicDisciplineService.getAcademicDisciplineIds(this.course.academicDisciplines),
     });
   }
   dismiss() {
@@ -72,55 +78,23 @@ export class CourseCreateComponent implements OnInit {
       this.updateCourse();
     } else {
       this.courseService.createCourse(this.course)
-          .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-            const resp = result;
-            const data = resp.body;
-            const status = resp.status;
-            this.isSubmitting = false;
-            if (status !== null && status === 200) {
-              this.showMessage.success = true;
-              this.showMessage.error = false;
-              this.showMessage.message = data  ? data.message : '';
-              this.courseForm.reset();
-              this.dismiss();
-
-            } else {
-              this.showMessage.success = false;
-              this.showMessage.error = true;
-              this.showMessage.message = data  ? data.message : '';
-            }
-          }, error => {
-            this.showMessage.error = true;
-            this.showMessage.success = false;
-            this.showMessage.message = error ? error.error.message : '';
+          .subscribe((course: Course ) => {
+              if (course) {
+                this.course = course;
+                this.modalService.openSnackBar('Course ' + course.name + ' has been created', 'success');
+              }
           });
     }
 
   }
   updateCourse() {
     this.courseService.updateCourse(this.course)
-          .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-            const resp = result;
-            const data = resp.body;
-            const status = resp.status;
-            this.isSubmitting = false;
-            if (status !== null && status === 200) {
-              this.showMessage.success = true;
-              this.showMessage.error = false;
-              this.showMessage.message = data  ? data.message : '';
-              this.courseForm.reset();
-              this.dismiss();
-
-            } else {
-              this.showMessage.success = false;
-              this.showMessage.error = true;
-              this.showMessage.message = data  ? data.message : '';
-            }
-          }, error => {
-            this.showMessage.error = true;
-            this.showMessage.success = false;
-            this.showMessage.message = error ? error.error.message : '';
-          });
+        .subscribe((course: Course ) => {
+          if (course) {
+            this.course = course;
+            this.modalService.openSnackBar('Course ' + course.name + ' has been updated', 'success');
+          }
+      });
     }
   getDescriptionContent(description: string) {
    if (description) {
@@ -161,6 +135,38 @@ export class CourseCreateComponent implements OnInit {
       code: ['', Validators.required],
       description: [''],
       academicYearId: ['', Validators.required],
+      academicDisciplineIds: [null, Validators.required],
+    });
+  }
+  onCheckboxChanged(event: boolean, academicDiscipline: AcademicDiscipline) {
+      if (!event) {
+        for (let i = 0; i < this.selectedAcademicDisciplines.length; i++) {
+          if (this.selectedAcademicDisciplines[i] === academicDiscipline.id) {
+            this.selectedAcademicDisciplines.splice(i, 1);
+          }
+       }
+      } else {
+        this.selectedAcademicDisciplines.push(academicDiscipline.id);
+      }
+      this.courseForm.patchValue({
+        academicDisciplineIds: this.selectedAcademicDisciplines,
+      });
+  }
+
+  isChecked(academicDiscipline: AcademicDiscipline) {
+    if (this.course && this.course.academicDisciplines && this.course.academicDisciplines.length > 0) {
+      return this.course.academicDisciplines.find(acad => acad.id === academicDiscipline.id) !== null;
+    }
+    return false;
+  }
+
+  loadCourse() {
+    this.courseService.getCourse(parseInt(this.id, 10)).subscribe((course: Course) => {
+      if (course) {
+        this.course = course;
+        this.selectedAcademicDisciplines = this.academicDisciplineService.getAcademicDisciplineIds(course.academicDisciplines);
+        this.patchCourse();
+      }
     });
   }
 

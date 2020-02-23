@@ -376,8 +376,6 @@
 	    id bigserial NOT NULL,
 	    course_id bigint NOT NULL,
 	   	academic_discipline_id bigint NOT NULL,
-	   	created_on timestamp with time zone NOT NULL,
-	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT course_academic_disciplines_pkey PRIMARY KEY(id),
 	   	CONSTRAINT courses_fkey FOREIGN KEY (course_id)
 	        REFERENCES public.courses (id) MATCH SIMPLE

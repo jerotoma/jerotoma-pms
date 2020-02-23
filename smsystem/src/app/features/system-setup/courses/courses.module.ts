@@ -17,6 +17,8 @@ import {
   NbIconModule,
   NbAlertModule,
   NbSelectModule,
+  NbCheckboxModule,
+  NbListModule,
 } from '@nebular/theme';
 
 import { CoursesRoutingModule } from './courses-routing.module';
@@ -47,6 +49,8 @@ const MODULES = [
   NbCardModule,
   NbInputModule,
   NbSelectModule,
+  NbCheckboxModule,
+  NbListModule,
   NbIconModule,
   NbAlertModule,
   MatTableModule,

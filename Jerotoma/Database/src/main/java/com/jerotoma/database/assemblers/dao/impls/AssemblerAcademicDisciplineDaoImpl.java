@@ -93,20 +93,18 @@ public class AssemblerAcademicDisciplineDaoImpl extends JdbcDaoSupport implement
 	public class AcademicDisciplineResultProcessor implements RowMapper<AcademicDisciplineVO>{
 		@Override
 		public AcademicDisciplineVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			AcademicDisciplineVO teacher = new AcademicDisciplineVO(rs);
-					
-			return teacher;
+			return new AcademicDisciplineVO(rs);
 		}		
 	}
 	
 	public class AcademicDisciplineSingleResultProcessor implements ResultSetExtractor<AcademicDisciplineVO>{
 		@Override
 		public AcademicDisciplineVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			AcademicDisciplineVO teacher = null;
+			AcademicDisciplineVO academicDiscipline = null;
 			if(rs.next()) {
-				teacher = new AcademicDisciplineVO(rs);			
+				academicDiscipline = new AcademicDisciplineVO(rs);			
 			}
-			return teacher;
+			return academicDiscipline;
 		}				
 	}
 	
@@ -133,8 +131,8 @@ public class AssemblerAcademicDisciplineDaoImpl extends JdbcDaoSupport implement
 
 	@Override
 	public List<AcademicDisciplineVO> findAcademicDisciplinesByCourseId(Integer courseId) throws SQLException {
-		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES).append(" cad ON cad.course_id = ad.id  where cad.course_id = ? ");
-		return getJdbcTemplate().query(builder.toString(), new AcademicDisciplineResultProcessor(), courseId);	
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES).append(" cad ON cad.academic_discipline_id = ad.id  where cad.course_id = ? ");
+		return this.jdbcTemplate.query(builder.toString(), new AcademicDisciplineResultProcessor(), courseId);	
 	}
 	
 }

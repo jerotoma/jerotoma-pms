@@ -78,6 +78,27 @@ public class RestCourseController extends BaseController {
 		return instance;
 	}
 	
+	
+	@GetMapping(value = {"/{courseId}", "/{courseId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getCourse(Authentication auth, @PathVariable("courseId") Integer courseId) {
+	
+		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		try {
+			instance.setData(assemblerCourseService.findObject(courseId));		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
 	@GetMapping(value = {"/academicYears/{academicYearId}"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> getCoursesByAcademicYear(Authentication auth,

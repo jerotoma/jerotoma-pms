@@ -8,7 +8,7 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { CourseCreateComponent } from '../course-create/course-create.component';
 import { CourseDeleteComponent } from '../course-delete/course-delete.component';
-import { Course } from 'app/models';
+import { Course, ResponseWrapper } from 'app/models';
 import { CourseService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
@@ -68,18 +68,13 @@ export class CoursesViewComponent implements OnInit {
   loadCourses() {
     this.isLoading = true;
     this.courseService.getCourses(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        this.isLoading = false;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
+      .subscribe((resp: ResponseWrapper) => {
+        if (resp) {
+          const data = resp.data;
           this.totalNumberOfItems = data.count;
           this.dataSource = new MatTableDataSource<Course>(data.courses);
         }
-      }, error => {
-
-    });
+      });
   }
   edit(course: Course) {
     this.dialogService.open(CourseCreateComponent, {
@@ -87,10 +82,6 @@ export class CoursesViewComponent implements OnInit {
         title: 'Edit Course',
         action: 'edit',
         id: course.id.toString(),
-        code: course.code,
-        name: course.name,
-        description: course.description,
-        academicYearId: course.academicYear.id.toString(),
       },
     }).onClose.subscribe(_data => {
       this.loadCourses();
