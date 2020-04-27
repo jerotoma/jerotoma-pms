@@ -7,7 +7,7 @@ import { Student, Parent } from 'app/models/users';
 import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper } from 'app/models';
 import { PositionService, UserService, ModalService } from 'app/services';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
-import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, USER_TYPE } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 
@@ -116,7 +116,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       confirmPassword: [null],
       gender: ['', Validators.required],
       picture: [''],
-      userType: ['student'],
+      userType: [USER_TYPE.student],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       address: [null, Validators.required],
       parentFullName: [''],
@@ -132,12 +132,12 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'parent',
+      userType: USER_TYPE.student,
     };
   }
 
   loadStudent(studentId: number) {
-    this.userService.loadUser(studentId, 'students').subscribe((student: Student) => {
+    this.userService.loadUser(studentId, USER_TYPE.student).subscribe((student: Student) => {
        if (student) {
         this.student = student;
         this.updateUseInput();
@@ -240,7 +240,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       phoneNumber: this.student.phoneNumber,
       emailAddress: this.student.username,
       birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
-      userType: 'student',
+      userType: USER_TYPE.student,
       academicDiscipline: this.student.academicDiscipline ? this.student.academicDiscipline.id : null,
       fullName: this.student.fullName,
       address: this.student.address ? this.student.address : null,

@@ -1,1 +1,3 @@
 /target/
+/.sts4-cache
+/src/main/.DS_Store

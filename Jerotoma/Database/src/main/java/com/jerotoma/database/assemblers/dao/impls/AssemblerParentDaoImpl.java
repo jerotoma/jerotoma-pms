@@ -57,8 +57,9 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	}
 
 	@Override
-	public ParentVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		throw new RuntimeException("findObjectUniqueKey has not been implemented yet");
+	public ParentVO findObjectUniqueKey(String uniqueKey) throws SQLException {		
+		String query = getBaseSelectQuery().append("WHERE u.username = ? ").toString();
+		return this.jdbcTemplate.query(query, new ParentSingleResultProcessor(), uniqueKey);
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	@Override
 	public List<ParentVO> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery();
-		queryBuilder.append(" WHERE lower(pa.first_name) like ? OR lower(pa.last_name) like ? OR lower(pa.middle_names) like ? ")
+		queryBuilder.append(" WHERE LOWER(pa.first_name) like ? OR LOWER(pa.last_name) like ? OR LOWER(pa.middle_names) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "pa"))
 				.append(" ")
 				.append("limit ? offset ?");

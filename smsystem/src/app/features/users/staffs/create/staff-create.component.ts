@@ -7,7 +7,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { Staff, Parent, AddressWrapper, Address, UserLoginInput, UserLoginInputWrapper, ShowMessage, Position } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services';
-import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-staff-create',
@@ -158,12 +158,12 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'staff',
+      userType: USER_TYPE.staff,
     };
   }
 
   loadStaff(staffId: number) {
-    this.userService.loadUser(staffId, 'staffs').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+    this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       const resp = result;
       const status = resp.status;
       if (status !== null && status === 200) {
@@ -182,7 +182,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           confirmPassword: this.userLoginInput.confirmPassword,
           picture: this.staff.picture,
           birthDate: DateFormatter(this.staff.birthDate, 'YYYY/MM/DD', false),
-          userType: 'staff',
+          userType: USER_TYPE.staff,
           fullName: this.staff.fullName,
           address: this.staff.address,
         });

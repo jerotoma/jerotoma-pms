@@ -58,7 +58,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser createObject(AuthUser object) throws SQLException {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();//PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		
 		if(object != null && doesRoleExists(object.getRoles())){
 			KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -80,14 +80,12 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		        }, keyHolder);
 		 
 			for(Role role : object.getRoles()) {
-				Role r = roleDao.findObjectUniqueKey(role.getName());
-				
+				Role r = roleDao.findObjectUniqueKey(role.getName());				
 				this.jdbcTemplate.update(commonRoleUserInsertQuery().toString(), r.getId(), keyHolder.getKey().intValue());			
 			}
 			return findObject(keyHolder.getKey().intValue());
 		}
-		return null;
-		
+		return null;		
 	}
 
 	private boolean doesRoleExists(Collection<Role> roles) throws SQLException {
@@ -189,15 +187,16 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	private Collection<Role> loadAuthorities(Integer userId) {
-		StringBuilder builder = new StringBuilder("SELECT r.id, r.name, r.display_name, r.created_on, r.updated_on FROM public.roles r ")
+		StringBuilder builder = new StringBuilder()
+				.append("SELECT r.id, r.name, r.display_name, r.created_on, r.updated_on FROM public.roles r ")
 				.append("INNER JOIN public.user_roles ur ON ur.role_id = r.id ")
 				.append("WHERE ur.user_id = ?");
 		return this.jdbcTemplate.query(builder.toString(), new RowMapper<Role>() {
-				@Override
-				public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
-					return new Role(rs);
-				}
-			}, userId);
+			@Override
+			public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new Role(rs);
+			}
+		}, userId);
 	}
 	
 	private StringBuilder commonSelectQuery(boolean removePassword) {		
@@ -221,14 +220,14 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public AuthUser updateObject(AuthUser object) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<AuthUser> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = commonSelectQuery(true);
-		queryBuilder.append(" WHERE lower(first_name) like ? OR lower(last_name) like ? OR lower(username) like ? ")
+		queryBuilder.append(" WHERE LOWER(first_name) like ? OR LOWER(last_name) like ? OR LOWER(username) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
 				.append("limit ? offset ?");

@@ -133,7 +133,7 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@GetMapping(value= {"/{userTypeByPath}/{userId}","/{userId}/", })
+	@GetMapping(value= {"/{userTypeByPath}/{userId}","/{userTypeByPath}/{userId}/", })
 	@ResponseBody
 	public HttpResponseEntity<Object> getUser(Authentication auth,
 			@PathVariable(value="userId", required = true) Integer primaryKey,

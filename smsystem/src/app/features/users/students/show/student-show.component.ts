@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from 'app/services/users/user.service';
 import { Student, ShowMessage  } from 'app/models';
-
+import { USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-student-show',
@@ -41,7 +41,7 @@ export class StudentShowComponent implements OnInit {
   }
 
   loadStudentDetails(studentId: number) {
-      this.userService.loadUser(studentId, 'students').subscribe((user: Student) => {
+      this.userService.loadUser(studentId, USER_TYPE.student).subscribe((user: Student) => {
        if (user) {
           this.student = user;
         }

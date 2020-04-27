@@ -5,6 +5,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from 'app/services/users/user.service';
 import { Staff, ShowMessage  } from 'app/models';
 
+import { USER_TYPE } from 'app/utils';
+
 
 @Component({
   selector: 'app-staff-show',
@@ -32,10 +34,9 @@ export class StaffShowComponent implements OnInit {
 
   ngOnInit() {
     // For one time load
-    let id = this.route.snapshot.paramMap.get('id');
+    // let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
-        this.loadStaffDetails(routeParam.id);
-       window.console.log(routeParam);
+      this.loadStaffDetails(routeParam.id);
     });
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
@@ -43,17 +44,9 @@ export class StaffShowComponent implements OnInit {
   }
 
   loadStaffDetails(staffId: number) {
-      this.userService.loadUser(staffId, 'staffs').subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.staff = resp.body.data;
-        }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
-      });
+      this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((staff: Staff) => {
+          this.staff = staff;
+        });
   }
 
 }

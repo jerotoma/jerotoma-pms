@@ -1,2 +1,5 @@
 /target/
 /src/main/resources/public/
+/.sts4-cache
+/src/main/.DS_Store
+

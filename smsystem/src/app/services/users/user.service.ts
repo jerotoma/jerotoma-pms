@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError, retry } from 'rxjs/operators';
 
 import { User, ResponseWrapper } from 'app/models';
-import { END_POINTS, QueryParam } from 'app/utils';
+import { END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +26,20 @@ export class UserService {
   }
 
   loadUser(userId: number, userType: string): Observable<User> {
+    switch (userType) {
+        case USER_TYPE.parent:
+          userType = 'parents';
+        break;
+        case USER_TYPE.staff:
+          userType = 'staffs';
+        break;
+        case USER_TYPE.teacher:
+          userType = 'teachers';
+        break;
+        case USER_TYPE.student:
+          userType = 'students';
+        break;
+    }
     return this.http
     .get(`${END_POINTS.users}/${userType}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));

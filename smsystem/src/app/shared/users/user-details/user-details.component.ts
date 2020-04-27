@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { USER_TYPE } from '../user-type.constant';
+import { USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-user-details',
@@ -11,7 +11,7 @@ export class UserDetailsComponent implements OnInit {
         @Input('userType') userType: string = 'teacher';
 
         ngOnInit() {
-         window.console.log(this.userDatail);
+         // window.console.log(this.userDatail);
         }
 
         get isUserTeacher() {
