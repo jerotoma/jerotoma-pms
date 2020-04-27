@@ -10,162 +10,193 @@
                           Change Photo
                           <input type="file" name="file"/>
                       </div>
-                  </div>
-                  <div class="profile-address">
-                      <p>Home Address</p>
-                      <div class="bd-address" *ngIf="userDatail.address">
-                          <address>
-                            <strong>Physical Address</strong><br>
-                            {{userDatail.address.street}}, {{userDatail.address.unit}}<br>
-                            {{userDatail.address.city}}, {{userDatail.address.state}} {{userDatail.address.postalCode}}<br>
-                            {{userDatail.address.country}}
-                          </address>
-                          <address *ngIf="userDatail.emailAddress">
-                            <strong>Email Address</strong><br>
-                            <a href="mailto:#">{{userDatail.emailAddress}}</a>
-                          </address>
+                      <div class="profile-head">
+                          <h5 *ngIf="userDatail.fullName"> {{userDatail.fullName}} </h5>
+                          <h6 *ngIf="userDatail.occupation">Profession: {{userDatail.occupation}}</h6>
+                          <p class="proile-rating" *ngIf="isUserTeacher">Number of Courses Assigned : <span>10</span></p>
+                          <p class="proile-rating" *ngIf="isUserStudent">Number of Courses Registered : <span>10</span></p>
+                          <p class="proile-rating" *ngIf="isUserParent">Number of Children Registered : <span>10</span></p>
                       </div>
-                      <p>Classes</p>
-                      <a href="">Web Designer</a><br/>
-                      <a href="">Web Developer</a><br/>
-                      <a href="">WordPress</a><br/>
-                      <a href="">WooCommerce</a><br/>
-                      <a href="">PHP, .Net</a><br/>
                   </div>
               </div>
               <div class="col-md-8">
-                  <div class="profile-head">
-                      <h5 *ngIf="userDatail.fullName"> {{userDatail.fullName}} </h5>
-                      <h6 *ngIf="userDatail.occupation">Profession: {{userDatail.occupation}}</h6>
-                      <p class="proile-rating" *ngIf="isUserTeacher || isUserStudent">No. of Courses : <span>10</span></p>
-                      <p class="proile-rating" *ngIf="isUserParent">No. of Student : <span>10</span></p>
-                      <div class="profile-tab">
-                          <nb-card accent="warning">
-                              <nb-card-body>
-                                <nb-tabset>
-                                  <nb-tab tabTitle="User Details">
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>User ID:</label>
-                                          </div>
-                                          <div class="col-md-6" *ngIf="userDatail.id">
-                                              <p>{{userDatail.id}}</p>
-                                          </div>
+                  <div class="profile-address">
+                    <address *ngIf="userDatail.emailAddress">
+                      <strong>Email Address</strong><br>
+                      <a href="mailto:#">{{userDatail.emailAddress}}</a>
+                    </address>
+                    <div class="bd-address" *ngIf="userDatail.address">
+                        <address>
+                          <strong>Physical Address</strong><br>
+                          {{userDatail.address.street}}, {{userDatail.address.unit}}<br>
+                          {{userDatail.address.city}}, {{userDatail.address.state}} {{userDatail.address.postalCode}}<br>
+                          {{userDatail.address.country}}
+                        </address>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                  <div class="profile-tab">
+                    <nb-card accent="warning">
+                        <nb-card-body>
+                          <nb-tabset>
+                            <nb-tab tabTitle="User Details">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                      <div class="table-responsive">
+                                        <table class="table table-striped table-hover">
+                                            <tbody>
+                                              <tr>
+                                                <th class="user-details">Full Name: </th>
+                                                <td><span *ngIf="userDatail.fullName">{{userDatail.fullName}}</span></td>
+                                              </tr>
+                                              <tr>
+                                                <th class="user-details">User ID: </th>
+                                                <td><span *ngIf="userDatail.id">{{userDatail.id}}</span></td>
+                                              </tr>
+                                              <tr *ngIf="userDatail.studentNumber">
+                                                <th class="user-details">Student Number: </th>
+                                                <td><span>{{userDatail.studentNumber}}</span></td>
+                                              </tr>
+
+                                              <tr *ngIf="userDatail.birthDate">
+                                                <th class="user-details">Date of Birth: </th><td><span>{{userDatail.birthDate | date:'longDate'}}</span></td>
+                                              </tr>
+                                              <tr>
+                                                <th class="user-details">Email Address: </th>
+                                                <td><span *ngIf="userDatail.emailAddress">{{userDatail.emailAddress}}</span></td>
+                                              </tr>
+                                              <tr>
+                                                <th class="user-details">Phone Number: </th>
+                                                <td><span *ngIf="userDatail.phoneNumber">{{userDatail.phoneNumber}}</span></td>
+                                              </tr>
+                                              <tr *ngIf="userDatail.occupation">
+                                                <th class="user-details">Profession: </th>
+                                                <td><span *ngIf="userDatail.occupation"> {{userDatail.occupation}}</span></td>
+                                              </tr>
+                                              <tr>
+                                                <th class="user-details">Registered On: </th>
+                                                <td><span *ngIf="userDatail.createdOn"> {{userDatail.createdOn | date:'longDate'}}</span></td>
+                                              </tr>
+                                              <tr>
+                                                <th class="user-details">Updated On: </th>
+                                                <td><span *ngIf="userDatail.updatedOn"> {{userDatail.updatedOn | date: 'MMMM d, y' }}</span></td>
+                                              </tr>
+                                            </tbody>
+                                        </table>
                                       </div>
-                                      <div class="row" *ngIf="userDatail.studentNumber">
-                                          <div class="col-md-6">
-                                              <label>Student Number:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p> {{userDatail.studentNumber}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Full Name:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p *ngIf="userDatail.fullName"> {{userDatail.fullName}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row" *ngIf="userDatail.birthDate">
-                                          <div class="col-md-6">
-                                              <label>Date of Birth:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p *ngIf="userDatail.birthDate"> {{userDatail.birthDate | date:'longDate'}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Email Address:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p *ngIf="userDatail.emailAddress"> {{userDatail.emailAddress}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Phone Number:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p *ngIf="userDatail.phoneNumber"> {{userDatail.phoneNumber}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row" *ngIf="userDatail.occupation">
-                                          <div class="col-md-6">
-                                              <label>Profession:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p> {{userDatail.occupation}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row" *ngIf="userDatail.createdOn">
-                                          <div class="col-md-6">
-                                              <label>Registered On:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p> {{userDatail.createdOn | date:'longDate'}}</p>
-                                          </div>
-                                      </div>
-                                      <div class="row" *ngIf="userDatail.updatedOn">
-                                          <div class="col-md-6">
-                                              <label>Updated On:</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p> {{userDatail.updatedOn | date: 'MMMM d, y' }}</p>
-                                          </div>
-                                      </div>
-                                  </nb-tab>
-                                  <nb-tab tabTitle="Address Details">
-                                      <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Experience</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>Expert</p>
-                                        </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Hourly Rate</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>10$/hr</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Total Projects</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>230</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>English Level</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>Expert</p>
-                                          </div>
-                                      </div>
-                                      <div class="row">
-                                          <div class="col-md-6">
-                                              <label>Availability</label>
-                                          </div>
-                                          <div class="col-md-6">
-                                              <p>6 months</p>
-                                          </div>
-                                      </div>
-                                  </nb-tab>
-                                  <nb-tab tabTitle="Disabled Tab" disabled>
-                                  </nb-tab>
-                                </nb-tabset>
-                              </nb-card-body>
-                          </nb-card>
-                      </div>
-                  </div>
+                                    </div>
+                                </div>
+                            </nb-tab>
+                            <nb-tab
+                              *ngIf="isUserStudent || isUserParent"
+                              [tabTitle]="isUserStudent ? 'Parents' : 'Children'">
+                              <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="table-responsive"  *ngIf="isUserStudent && userDatail.parents">
+                                      <table
+                                        *ngFor="let user of userDatail.parents"
+                                        class="table table-striped table-hover">
+                                          <tbody>
+                                            <tr>
+                                              <th class="user-details">Full Name: </th>
+                                              <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
+                                            </tr>
+                                            <tr>
+                                              <th class="user-details">Email Address: </th>
+                                              <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
+                                            </tr>
+                                            <tr *ngIf="user.studentNumber">
+                                              <th class="user-details">Student Number: </th>
+                                              <td><span>{{user.studentNumber}}</span></td>
+                                            </tr>
+
+                                            <tr *ngIf="user.birthDate">
+                                              <th class="user-details">Date of Birth: </th><td><span>{{user.birthDate | date:'longDate'}}</span></td>
+                                            </tr>
+                                            <tr>
+                                              <th class="user-details">Phone Number: </th>
+                                              <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                            </tr>
+                                          </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="table-responsive"  *ngIf="isUserParent && userDatail.students">
+                                      <table *ngFor="let user of userDatail.students" class="table table-striped table-hover">
+                                          <tbody>
+                                            <tr>
+                                              <th class="user-details">Full Name: </th>
+                                              <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
+                                            </tr>
+                                            <tr>
+                                              <th class="user-details">Email Address: </th>
+                                              <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
+                                            </tr>
+                                            <tr *ngIf="user.studentNumber">
+                                              <th class="user-details">Student Number: </th>
+                                              <td><span>{{user.studentNumber}}</span></td>
+                                            </tr>
+                                            <tr *ngIf="user.birthDate">
+                                              <th class="user-details">Date of Birth: </th><td><span>{{user.birthDate | date:'longDate'}}</span></td>
+                                            </tr>
+                                            <tr>
+                                              <th class="user-details">Phone Number: </th>
+                                              <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                            </tr>
+                                          </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                              </div>
+                            </nb-tab>
+                            <nb-tab *ngIf="isUserTeacher || isUserStudent" tabTitle="My Courses">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                      <label>Experience</label>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <p>Expert</p>
+                                  </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Hourly Rate</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>10$/hr</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Total Projects</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>230</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>English Level</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>Expert</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Availability</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>6 months</p>
+                                    </div>
+                                </div>
+                            </nb-tab>
+                          </nb-tabset>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
               </div>
             </div>
         </div>
