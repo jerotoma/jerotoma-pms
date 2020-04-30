@@ -116,15 +116,10 @@ public class RestPositionController extends BaseController {
 		List<String> requiredFields;
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 			
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new Teacher to the system");
-		}
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		this.securityCheckAdminAccess(auth, "create position");
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(

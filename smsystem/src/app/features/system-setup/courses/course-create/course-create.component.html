@@ -89,8 +89,11 @@
                   type="submit"
                   nbButton hero
                   status="success"
-                  [nbSpinner]="isSubmitting" nbSpinnerStatus="success" nbSpinnerSize="large" nbSpinnerMessage="Creating course......">
-                    Create Course
+                  [nbSpinner]="isSubmitting"
+                  nbSpinnerStatus="success"
+                  nbSpinnerSize="large"
+                  [nbSpinnerMessage]="action == 'create' ? 'Creating course......' :'Saving the changes......'">
+                    {{action == 'create' ? 'Create Course' : 'Save Changes'}}
               </button>
               <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
             </nb-card-footer>

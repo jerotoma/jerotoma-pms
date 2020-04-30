@@ -166,10 +166,17 @@ export class ClassCreateComponent implements OnInit {
         teacherId: ['', Validators.required],
         classRoomId: ['', Validators.required],
       });
+      this.onChanges();
+    }
 
-      this.classForm.controls['academicYearId'].valueChanges.subscribe((academicYearId: number) => {
-        this.loadCourses(academicYearId);
-      });
+    onChanges(): void {
+        this.classForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
+          this.loadCourses(academicYearId);
+        });
+
+        this.classForm.get('courseId').valueChanges.subscribe((courseId: number) => {
+          this.loadTeachersByCourseID(courseId);
+        });
     }
 
     loadData() {
@@ -199,7 +206,7 @@ export class ClassCreateComponent implements OnInit {
       this.courseService.getCoursesByAcademicYearId(academicYearId)
       .subscribe((courses: Course[] ) => {
         if (courses) {
-          this.classForm.controls['courseId'].setValue(null);
+          // this.classForm.controls['courseId'].reset();
           this.courses = courses;
           if (this.jClassView) {
             this.patchClassAdmission(this.jClassView);
@@ -238,6 +245,11 @@ export class ClassCreateComponent implements OnInit {
         }
       }, error => {
 
+      });
+    }
+    loadTeachersByCourseID(courseId: number) {
+      this.userService.loadTeachersByCourseID(courseId).subscribe((teachers: Teacher[]) => {
+        this.teachers = teachers;
       });
     }
     loadJClassView(jClassViewId: number) {

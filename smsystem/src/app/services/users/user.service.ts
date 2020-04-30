@@ -83,4 +83,10 @@ export class UserService {
     .get(`${END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  loadTeachersByCourseID(courseID: number): Observable<User[]> {
+    return this.http
+    .get(`${END_POINTS.users}/teachers/courses/${courseID}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 }

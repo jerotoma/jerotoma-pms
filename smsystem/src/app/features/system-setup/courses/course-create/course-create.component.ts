@@ -79,9 +79,11 @@ export class CourseCreateComponent implements OnInit {
     } else {
       this.courseService.createCourse(this.course)
           .subscribe((course: Course ) => {
+            this.isSubmitting = false;
               if (course) {
                 this.course = course;
                 this.modalService.openSnackBar('Course ' + course.name + ' has been created', 'success');
+                this.dismiss();
               }
           });
     }
@@ -90,9 +92,11 @@ export class CourseCreateComponent implements OnInit {
   updateCourse() {
     this.courseService.updateCourse(this.course)
         .subscribe((course: Course ) => {
+          this.isSubmitting = false;
           if (course) {
             this.course = course;
             this.modalService.openSnackBar('Course ' + course.name + ' has been updated', 'success');
+            this.dismiss();
           }
       });
     }

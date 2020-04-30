@@ -42,4 +42,14 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 		return assemblerTeacherDao.countObject();
 	}
 
+	@Override
+	public List<TeacherVO> loadTeachersByCourseID(Integer courseID) throws SQLException {		
+		return assemblerTeacherDao.loadTeachersByCourseID(courseID);
+	}
+
+	@Override
+	public List<TeacherVO> loadTeachersByAcademicDisciplineID(Integer academicDisciplineID) throws SQLException {
+		return assemblerTeacherDao.loadTeachersByAcademicDisciplineID(academicDisciplineID);
+	}
+
 }

@@ -1,6 +1,5 @@
 package com.jerotoma.api.controllers;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,6 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
 
 import com.jerotoma.common.QueryParam;
@@ -114,18 +112,11 @@ public abstract class BaseController {
 		}
 	}
 	
-	protected void securityCheckAdminAccess(Authentication auth) {			
-		userContext = authenticationFacade.getUserContext(auth);
-		Role role = null;
-		try {
-			role = roleService.findObjectUniqueKey(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName());
-		} catch (SQLException e) {
-			new NotFoundException("Role not found");
-		}
-		if (!userContext.getCurrentAuthorities().contains(role.getName())) {
-			throw new UnAuthorizedAccessException("You have no authorization to access this resource");
-		}
-				
+	protected void securityCheckAdminAccess(Authentication auth, String action) {			
+		UserContext userContext = authenticationFacade.getUserContext(auth);
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
+			throw new UnAuthorizedAccessException("You have no authorization to " + action + " to the system");
+		}				
 	}
 	
 	protected void logRequestDetail(String msg) {

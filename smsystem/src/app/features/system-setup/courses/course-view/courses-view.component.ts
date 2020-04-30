@@ -69,6 +69,7 @@ export class CoursesViewComponent implements OnInit {
     this.isLoading = true;
     this.courseService.getCourses(this.param)
       .subscribe((resp: ResponseWrapper) => {
+        this.isLoading = false;
         if (resp) {
           const data = resp.data;
           this.totalNumberOfItems = data.count;

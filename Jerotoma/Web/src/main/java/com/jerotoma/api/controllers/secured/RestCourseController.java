@@ -133,6 +133,8 @@ public class RestCourseController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
+		this.securityCheckAdminAccess(auth, "create course");
+		
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
 						CourseConstant.COURSE_NAME,

@@ -147,8 +147,7 @@ public class RestUserController extends BaseController {
 		try {
 			switch(type) {
 			case TEACHERS:
-				instance.setData(assemblerTeacherService.findObject(primaryKey));
-				
+				instance.setData(assemblerTeacherService.findObject(primaryKey));				
 				break;
 			case STUDENTS:
 				instance.setData(assemblerStudentService.findObject(primaryKey));
@@ -707,4 +706,21 @@ public class RestUserController extends BaseController {
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;		
 	}	
+	
+	
+	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.INDEX + "/teachers/courses/{courseId}")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadTeachersByCourseID( Authentication auth, @PathVariable(value="courseId", required=false) Integer courseID) {
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		try {
+			instance.setData(assemblerTeacherService.loadTeachersByCourseID(courseID));
+		} catch (SQLException | JDataAccessException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
 }

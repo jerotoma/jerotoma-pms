@@ -6,18 +6,16 @@ import java.util.Date;
 public class CalendarUtil {
 	
 	public static final String ISO_8601_DATE_TIME_WITH_TZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	public static final String ISO_8601_DATE_TIME_WITHOUT_TZ_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 	public static final String ISO_8601_DATE_FORMAT = "yyyy-MM-dd";
 	public static final String ISO_8601_DATE_WITH_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
 	
-	public static Date convertStringToDate(String strDate){	
-		
-		Date date = null;
-		
+	public static Date convertStringToDate(String strDate){			
+		Date date = null;		
 		if (StringUtility.isEmpty(strDate)) {
 			return date;
-		}
-		
+		}		
 		if (strDate.contains("T") && strDate.contains("Z")) {
 			date = convertToDate(ISO_8601_DATE_TIME_WITH_TZ_FORMAT, strDate);
 		} else if (strDate.contains("T")) {
