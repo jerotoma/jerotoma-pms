@@ -9,7 +9,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ClassCreateComponent } from '../class-create/class-create.component';
 import { DeleteModalComponent } from 'app/shared';
 
-import { JClassView} from 'app/models';
+import { JClassView, ResponseWrapper} from 'app/models';
 import { ClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
@@ -56,18 +56,13 @@ export class ClassesViewComponent implements OnInit {
     loadClasses() {
       this.isLoading = true;
       this.classService.getClasses(this.param)
-        .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+        .subscribe((result: ResponseWrapper ) => {
           const resp = result;
-          const status = resp.status;
           this.isLoading = false;
-          if (status !== null && status === 200 && resp.body) {
-            const data = resp.body.data;
+          const data = resp.data;
             this.totalNumberOfItems = data.count;
             this.dataSource = new MatTableDataSource<JClassView>(data.jClasses);
-          }
-        }, error => {
-
-      });
+        });
     }
 
     open() {
@@ -116,10 +111,8 @@ export class ClassesViewComponent implements OnInit {
     }
 
     deleteClass(classId: number) {
-      this.classService.deleteClass(classId).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200 ) {
+      this.classService.deleteClass(classId).subscribe((result: boolean) => {
+        if (result) {
           this.loadClasses();
         }
       });

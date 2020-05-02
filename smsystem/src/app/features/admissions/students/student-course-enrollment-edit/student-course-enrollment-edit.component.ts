@@ -1,17 +1,15 @@
 
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {  ThemePalette } from '@angular/material/typings';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { JClassAdmission } from 'app/models';
 import {
   StudentClassService,
   ClassService,
   AcademicYearService,
-  UserService,
  } from 'app/services';
-import { QueryParam, USER_TYPE } from 'app/utils';
 import {
   ShowMessage,
   JClassView,
@@ -19,21 +17,23 @@ import {
   Student,
   AcademicYear,
   StudentClass,
+  JClassAdmission,
   ResponseWrapper,
 } from 'app/models';
+import { QueryParam, USER_TYPE } from 'app/utils';
 
 @Component({
-  selector: 'app-student-course-enrollment-create',
-  styleUrls: ['./student-course-enrollment-create.component.scss'],
-  templateUrl: './student-course-enrollment-create.component.html',
+  selector: 'app-student-course-enrollment-edit',
+  styleUrls: ['./student-course-enrollment-edit.component.scss'],
+  templateUrl: './student-course-enrollment-edit.component.html',
 })
-export class StudentCourseEnrollmentCreateComponent implements OnInit {
+export class StudentCourseEnrollmentEditComponent implements OnInit {
   @Input() title: string;
-  @Input() action: string = 'create';
   @Input() studentId: string = '0';
   @Output() onCreationSuccess = new EventEmitter();
 
   userType: string = USER_TYPE.student;
+  checkboxColor: ThemePalette = 'warn';
 
   academicYearId: number;
   courseId: number;
@@ -51,9 +51,10 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType:  this.userType,
+    userType: this.userType,
   };
 
+  registeredJClasses: JClassView[];
   jClasses: JClassView[];
   academicYears: AcademicYear[];
   student: Student;
@@ -71,14 +72,12 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     private classService: ClassService,
     private studentClassService: StudentClassService,
     private formBuilder: FormBuilder,
-    protected ref: NbDialogRef<StudentCourseEnrollmentCreateComponent>) {}
+    protected ref: NbDialogRef<StudentCourseEnrollmentEditComponent>) {}
 
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    if (this.action === 'edit') {
-        this.loadStudents(parseInt(this.studentId, 10));
-    }
+    this.loadStudents(parseInt(this.studentId, 10));
   }
 
   dismiss() {
@@ -90,20 +89,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   onSubmit() {
     this.confirmed = false;
     this.studentClassAdmission = this.studentClassForm.value;
-    this.showMessage.success = false;
-    this.showMessage.error = false;
-    if (this.action === 'edit') {
-      this.updateStudentClass();
-    } else {
-      this.studentClassService.createStudentClass(this.studentClassAdmission)
-          .subscribe((result: StudentClassAdmission) => {
-            const resp = result;
-            this.confirmed = true;
-            this.studentClassForm.reset();
-            this.dismiss();
-          });
-    }
-
+    this.updateStudentClass();
   }
   updateStudentClass() {
     this.studentClassService.updateStudentClass(this.studentClassAdmission)
@@ -114,7 +100,18 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
               this.dismiss();
           });
   }
-
+  removeJClass(event: any, jClass: JClassView, isRemoveJClass: boolean) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (isRemoveJClass) {
+      this.checkedChange(false, jClass);
+      for (let i = 0; i < this.registeredJClasses.length; i++) {
+        if ( this.registeredJClasses[i].id === jClass.id) {
+          this.registeredJClasses.splice(i, 1);
+        }
+     }
+    }
+  }
   checkedChange(checked: boolean, jClass: JClassView) {
     if (checked) {
       this.jClassIds.push(jClass.id);
@@ -129,15 +126,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       jClassIds: this.jClassIds,
     });
   }
-
   loadForm() {
     this.studentClassForm = this.formBuilder.group({
       id: [null],
       academicYearId: ['', Validators.required],
       jClassIds: [[], Validators.required],
       studentId: ['', Validators.required],
+      fullName: ['', Validators.required],
     });
-    //this.onChanges();
   }
 
   onChanges() {
@@ -152,9 +148,21 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       }
     });
   }
-
+  findJClassesByAcademicYear() {
+    if (this.academicYear) {
+      this.loadUnregisteredJClassesByStudent(this.academicYear.id, this.student.id);
+    }
+  }
   loadData() {
     this.loadAcademicYears();
+  }
+
+  loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
+    this.isLoading = true;
+    this.classService.loadUnregisteredJClassesByStudent(academicYearId, studentId).subscribe((jClassViews: JClassView[]) => {
+      this.jClasses = jClassViews;
+      this.isLoading = false;
+    });
   }
 
   loadJClassesByAcademicYear(academicYearId: number) {
@@ -181,13 +189,13 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     this.studentClassService.getStudentClass(studentId).subscribe((studentClass: StudentClass) => {
       this.student = studentClass.student;
       this.academicYear = studentClass.academicYear;
-      this.loadJClassesByAcademicYear(studentClass.academicYear.id);
-      this.jClasses = studentClass.jClasses;
+      this.registeredJClasses = studentClass.jClasses;
       this.studentClassForm.patchValue({
         id: studentClass.id,
         studentId: this.student.id,
         academicYearId: this.academicYear.id,
-        jClassIds: this.pushJClasses(this.jClasses),
+        fullName: this.student.fullName,
+        jClassIds: this.pushJClasses(this.registeredJClasses),
       });
     });
   }
@@ -204,5 +212,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       jClassesIds.push(jClass.id);
     });
     return jClassesIds;
+  }
+
+  removeItemFromArray(jClasses: JClassView[], jClass: JClassView) {
+    for (let i = 0; i < this.jClasses.length; i++) {
+      if ( this.jClasses[i].id === jClass.id) {
+        this.jClasses.splice(i, 1);
+      }
+   }
+   return jClasses;
   }
 }

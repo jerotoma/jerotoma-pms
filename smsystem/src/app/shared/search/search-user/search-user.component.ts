@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { User } from 'app/models';
-import { QueryParam } from 'app/utils';
+import { QueryParam, USER_TYPE } from 'app/utils';
 
 import { UserService } from 'app/services';
 
@@ -13,11 +13,14 @@ import { UserService } from 'app/services';
 })
 export class SearchUserComponent implements OnInit {
 
-  @Input('userType') userType: string =  'teacher';
+  @Input('userType') userType: string =  USER_TYPE.teacher;
+  @Input('user') user: User  = null;
+  @Input('title') title: string = 'Login Cridentials';
   @Output() onUserSelected: EventEmitter<User> = new EventEmitter();
 
   userForm: FormGroup;
   listDisplay: string = 'none';
+
   users: User[] = [];
 
   constructor(
@@ -28,6 +31,7 @@ export class SearchUserComponent implements OnInit {
   ngOnInit() {
     this.loadForm();
     this.onSearchInputChanges();
+    this.onChanges();
   }
 
   loadForm() {
@@ -37,15 +41,26 @@ export class SearchUserComponent implements OnInit {
   }
   onSearchInputChanges() {
     this.userForm.get('searchKey').valueChanges.subscribe(value => {
-      this.search(value);
+      if (value) {
+        this.search(value);
+      }
     });
+  }
+
+  onChanges() {
+    if (this.user) {
+      this.userForm.patchValue({
+        searchKey: this.user.fullName,
+      });
+    }
   }
 
   pickUser(event: any, user: User) {
     event.preventDefault();
     if (user) {
+      this.user = user;
       this.listDisplay = 'none';
-      this.onUserSelected.emit(user);
+      this.onUserSelected.emit(this.user);
       this.userForm.patchValue({
          searchKey: user.fullName,
       });

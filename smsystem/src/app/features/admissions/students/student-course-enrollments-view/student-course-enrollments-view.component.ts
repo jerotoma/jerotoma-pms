@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { PageEvent } from '@angular/material';
 import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
@@ -9,8 +8,9 @@ import {MatTableDataSource} from '@angular/material/table';
 import { DeleteModalComponent } from 'app/shared';
 
 import { StudentCourseEnrollmentCreateComponent } from '../student-course-enrollment-create/student-course-enrollment-create.component';
+import { StudentCourseEnrollmentEditComponent } from '../student-course-enrollment-edit/student-course-enrollment-edit.component';
 
-import { StudentClass } from 'app/models';
+import { StudentClass, ResponseWrapper } from 'app/models';
 import { StudentClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
@@ -59,12 +59,11 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   loadStudentClasses() {
     this.isLoading = true;
     this.studentClassService.getStudentClasses(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
+      .subscribe((result: ResponseWrapper) => {
         const resp = result;
-        const status = resp.status;
         this.isLoading = false;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
+        if (resp) {
+          const data = resp.data;
           this.studentClasses = data.studentClasses;
           this.totalNumberOfItems = data.count;
           this.dataSource = new MatTableDataSource<StudentClass>(data.studentClasses);
@@ -86,10 +85,9 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   }
 
   edit(studentClass: StudentClass) {
-    this.dialogService.open(StudentCourseEnrollmentCreateComponent, {
+    this.dialogService.open(StudentCourseEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
-        action: 'edit',
         studentId: studentClass.student.id.toString(),
       },
     }).onClose.subscribe(result => {
@@ -123,10 +121,8 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
       this.loadStudentClasses();
   }
   deleteEnrolledStudent(studentClassId: number) {
-    this.studentClassService.deleteStudentClass(studentClassId).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 ) {
+    this.studentClassService.deleteStudentClass(studentClassId).subscribe((result: boolean ) => {
+      if (result) {
         this.loadStudentClasses();
       }
     });

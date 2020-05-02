@@ -135,8 +135,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, teacher_id AS teacherId, course_id AS courseId, class_room_id AS classRoomId, academic_year_id AS academicYearId, capacity, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.classes ");
-		
+		return new StringBuilder("SELECT c.id, c.teacher_id AS teacherId, c.course_id AS courseId, c.class_room_id AS classRoomId, c.academic_year_id AS academicYearId, c.capacity, c.updated_by AS updatedBy, c.created_on AS createdOn, c.updated_on AS updatedOn FROM public.classes c ");		
 	}
 	
 	@Override
@@ -184,5 +183,19 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	private AcademicYearVO loadAcademicYear(Integer academicYearId) throws SQLException {		
 		return assemblerAcademicYearDao.findObject(academicYearId);
+	}
+	
+	@Override
+	public List<JClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE academic_year_id = ? ");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId);
+	}
+	@Override
+	public List<JClassVO> loadUnregisteredJClassesByStudent(Integer academicYearId, Integer studentId)
+			throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery()
+				.append(" INNER JOIN student_classes sc ON sc.class_id <> c.id ")
+				.append( " WHERE c.academic_year_id = ? AND sc.student_id = ? ");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, studentId);
 	}
 }

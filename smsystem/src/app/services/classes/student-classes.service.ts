@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { ResponseWrapper, StudentClassAdmission, StudentClass } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,35 +12,25 @@ import { END_POINTS, QueryParam } from 'app/utils';
 export class StudentClassService {
   constructor(private http: HttpClient) { }
 
-  getStudentClass(classId: number): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http
-      .get<any>(`${END_POINTS.studentClasses}/${classId}`, {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  getStudentClass(classId: number): Observable<StudentClass> {
+    return this.http.get(`${END_POINTS.studentClasses}/${classId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
-
-  loadStudentClassList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
+  getStudentClasses(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get<any>(
-        `${END_POINTS.studentClasses}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+        `${END_POINTS.studentClasses}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp));
+  }
+  createStudentClass(data?: any): Observable<StudentClassAdmission> {
+    return this.http.post(`${END_POINTS.studentClasses}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  getStudentClasses(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.studentClasses}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
-  }
-  createStudentClass(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(`${END_POINTS.studentClasses}`, data, {observe: 'response'});
+  deleteStudentClass(classId: number): Observable<boolean> {
+    return this.http.delete<any>(`${END_POINTS.studentClasses}/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  deleteStudentClass(classId: number): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.delete<any>(`${END_POINTS.studentClasses}/${classId}`, {observe: 'response'});
-  }
-
-  updateStudentClass(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.put<any>(`${END_POINTS.studentClasses}`, data, {observe: 'response'});
+  updateStudentClass(data?: any): Observable<StudentClassAdmission> {
+    return this.http.put<any>(`${END_POINTS.studentClasses}`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   errorHandler(error: HttpErrorResponse) {

@@ -186,12 +186,8 @@ public class RestStudentClassController extends BaseController {
 		
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass;
-		StudentClassVO studentClassVO;
-		List<StudentClass> studentClasses = new ArrayList<>();
-		
-		
-		try {
-			
+		List<StudentClass> studentClasses = new ArrayList<>();		
+		try {			
 			studentClass = studentClassService.findObject(jClassFields.getId());	
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
@@ -199,13 +195,9 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setStudent(student);
 			studentClass.setAcademicYear(academicYear);
 			studentClass.setUpdatedBy(authUser.getId());
-			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-			
-			
-			for (Integer classId : jClassFields.getjClassIds()) {	
-				studentClassVO = assemblerStudentClassService.findStudentClassIdByParams(student.getId(), classId);
-				JClass jClass = jClassService.findObject(classId);
-				studentClass.setId(studentClassVO.getId());
+			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());		
+			for (Integer classId : jClassFields.getjClassIds()) {					
+				JClass jClass = jClassService.findObject(classId);				
 				studentClass.setjClass(jClass);			
 				studentClass = studentClassService.updateObject(studentClass);
 				studentClasses.add(studentClass);

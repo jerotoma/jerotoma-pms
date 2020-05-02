@@ -100,6 +100,46 @@ public class RestJClassController extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"academic-years/{academicYearId}", "/academic-years/{academicYearId}/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadJClassesByAcademicYear(Authentication auth, @PathVariable("academicYearId") Integer academicYearId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			instance.setData(assemblerJClassService.loadJClassesByAcademicYear(academicYearId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
+	@GetMapping(value = {"academic-years/{academicYearId}/students/{studentId}/unregistered", "/academic-years/{academicYearId}/students/{studentId}/unregistered"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadUnregisteredJClassesByStudent(
+			Authentication auth, 
+			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("studentId") Integer studentId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			instance.setData(assemblerJClassService.loadUnregisteredJClassesByStudent(academicYearId, studentId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
 	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody

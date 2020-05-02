@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { ResponseWrapper, JClassView } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,35 +12,41 @@ import { END_POINTS, QueryParam } from 'app/utils';
 export class ClassService {
   constructor(private http: HttpClient) { }
 
-  getClass(classId: number): Observable<HttpResponse<any> | HttpErrorResponse>  {
-    return this.http
-      .get<any>(`${END_POINTS.classes}/${classId}`,{observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  getClass(classId: number): Observable<JClassView>  {
+    return this.http.get(`${END_POINTS.classes}/${classId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadClassList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.classes}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  loadClassList(param: QueryParam): Observable<ResponseWrapper> {
+    return this.http.get(`${END_POINTS.classes}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp));
+  }
+  loadJClassesByAcademicYear(academicYearId: number): Observable<JClassView[]> {
+    return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  getClasses(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.classes}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  getClasses(param: QueryParam): Observable<ResponseWrapper>  {
+    return this.http.get(`${END_POINTS.classes}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp));
   }
-  createClass(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(`${END_POINTS.classes}`, data, {observe: 'response'});
-  }
-
-  deleteClass(classId: number): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.delete<any>(`${END_POINTS.classes}/${classId}`, {observe: 'response'});
+  createClass(data?: any): Observable<JClassView> {
+    return this.http.post<any>(`${END_POINTS.classes}`, data)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateClass(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.put<any>(`${END_POINTS.classes}`, data, {observe: 'response'});
+  deleteClass(classId: number): Observable<boolean> {
+    return this.http.delete<any>(`${END_POINTS.classes}/${classId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  updateClass(data?: any): Observable<boolean> {
+    return this.http.put(`${END_POINTS.classes}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
+    return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}/unregistered`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   errorHandler(error: HttpErrorResponse) {

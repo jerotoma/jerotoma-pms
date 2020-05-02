@@ -206,7 +206,6 @@ export class ClassCreateComponent implements OnInit {
       this.courseService.getCoursesByAcademicYearId(academicYearId)
       .subscribe((courses: Course[] ) => {
         if (courses) {
-          // this.classForm.controls['courseId'].reset();
           this.courses = courses;
           if (this.jClassView) {
             this.patchClassAdmission(this.jClassView);

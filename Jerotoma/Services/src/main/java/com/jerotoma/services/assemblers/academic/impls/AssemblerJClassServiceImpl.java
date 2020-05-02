@@ -42,4 +42,16 @@ public class AssemblerJClassServiceImpl  implements AssemblerJClassService {
 		return assemblerJClassDao.countObject();
 	}
 
+	@Override
+	public List<JClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
+		return assemblerJClassDao.loadJClassesByAcademicYear(academicYearId);
+	}
+
+	@Override
+	public List<JClassVO> loadUnregisteredJClassesByStudent(Integer academicYearId, Integer studentId)
+			throws SQLException {
+		
+		return assemblerJClassDao.loadUnregisteredJClassesByStudent(academicYearId, studentId);
+	}
+
 }

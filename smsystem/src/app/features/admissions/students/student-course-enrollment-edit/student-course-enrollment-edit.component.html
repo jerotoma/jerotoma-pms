@@ -1,0 +1,113 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="studentClassForm" class="step-container" (ngSubmit)="onSubmit()">
+      <nb-card>
+        <nb-card-header status="danger" >{{ title }}</nb-card-header>
+        <nb-card-body>
+        <div class='row'>
+            <div class='col-md-6'>
+              <div class="form-control-group" *ngIf="student && student.fullName">
+                <label for="student-full-name" class="label">Full Name</label>
+                <p>{{student.fullName}}</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-control-group">
+                      <label for="class-academicYear" class="label">Class Academic Year</label>
+                      <nb-select
+                        fullWidth
+                        placeholder="Class Academic Year"
+                        formControlName="academicYearId"
+                        id="class-academicYear">
+                        <nb-option
+                            *ngFor='let acad of academicYears'
+                            [value]="acad.id">
+                            {{acad.name}} - {{acad.yearOfStudy}}
+                        </nb-option>
+                      </nb-select>
+                  </div>
+              </div>
+          </div>
+          <div class="lists row">
+            <div class="col-md-12">
+                <div class="form-control-group">
+                  <nb-card class="list-card" accent="success" *ngIf="registeredJClasses">
+                    <nb-card-header>List of Registered courses for {{academicYear.name}} - {{academicYear.yearOfStudy}} </nb-card-header>
+                    <nb-card-body
+                      [nbSpinner]="isLoading"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      nbSpinnerMessage="Loading Scheduled Courses....">
+                      <nb-list>
+                        <nb-list-item *ngFor="let jClass of registeredJClasses">
+                          <a href="#" (click)="removeJClass($event, jClass, false)">{{jClass.course.name}} <span class='push-right' (click)="removeJClass($event, jClass, true)"><nb-icon icon="close-outline"></nb-icon></span></a>
+                        </nb-list-item>
+                      </nb-list>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                <button
+                  class='push-right'
+                  type="button"
+                  (click)="findJClassesByAcademicYear()"
+                  nbButton hero
+                  status="success">
+                  Add More Course
+              </button>
+            </div>
+          </div>
+          <div class="lists row">
+            <div class="col-md-12">
+                <div class="form-control-group">
+                  <nb-card class="list-card" accent="success" *ngIf="jClasses">
+                    <nb-card-header>Add more courses from a list of available courses for {{academicYear.name}} - {{academicYear.yearOfStudy}} </nb-card-header>
+                    <nb-card-body
+                      [nbSpinner]="isLoading"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      nbSpinnerMessage="Loading Scheduled Courses....">
+                      <nb-list>
+                        <nb-list-item *ngFor="let jClass of jClasses">
+                          <nb-checkbox
+                          [id]="'jClass-'+ jClass.id"
+                          status="success"
+                          (checkedChange)="checkedChange($event, jClass)"
+                          >{{jClass.course.name}}
+                        </nb-checkbox>
+                        </nb-list-item>
+                      </nb-list>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
+            </div>
+          </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button
+              class='push-right'
+              [disabled]="!studentClassForm.valid"
+              type="submit"
+              nbButton hero
+              status="success">
+              Create Class
+            </button>
+            <button
+              type='button'
+              class='push-right'
+              nbButton hero
+              status="danger"
+              (click)="dismiss()">
+              Cancel
+            </button>
+        </nb-card-footer>
+      </nb-card>
+  </form>
+</div>
+</div>
+
