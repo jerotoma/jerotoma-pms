@@ -114,7 +114,7 @@ public abstract class BaseController {
 	
 	protected void securityCheckAdminAccess(Authentication auth, String action) {			
 		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
+		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName())){
 			throw new UnAuthorizedAccessException("You have no authorization to " + action + " to the system");
 		}				
 	}

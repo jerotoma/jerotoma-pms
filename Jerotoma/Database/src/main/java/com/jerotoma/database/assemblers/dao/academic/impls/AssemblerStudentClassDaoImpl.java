@@ -51,7 +51,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	@Override
 	public StudentClassVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE sc.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), primaryKey);
 	}
 
@@ -81,7 +81,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery()
-		.append(DaoUtil.getOrderBy(" student_id, " + queryParam.getFieldName(), queryParam.getOrderby()))
+		.append(DaoUtil.getOrderBy(" sc.student_id, " + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -130,7 +130,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT DISTINCT ON (student_id) student_id AS studentId, id, class_id AS jClassId, academic_year_id AS academicYearId, updated_by AS updatedBy, created_on AS createdOn, updated_on AS updatedOn FROM public.student_classes ");
+		return new StringBuilder("SELECT sc.id, sc.student_id AS studentId, sc.academic_year_id AS academicYearId, sc.updated_by AS updatedBy, sc.created_on AS createdOn, sc.updated_on AS updatedOn FROM public.student_classes sc ");
 		
 	}
 
@@ -145,7 +145,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		StudentClassVO jClass = new StudentClassVO(rs);
 		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);
 		jClass.setAcademicYear(loadAcademicYear(rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID)));
-		jClass.setjClasses(loadJClasses(studentId));
+		jClass.setJClasses(loadJClasses(studentId));
 		jClass.setStudent(loadStudentsByStudentID(studentId));
 		return jClass;
 	}
@@ -162,12 +162,14 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	@Override
 	public StudentClassVO findStudentClassByParams(Integer studentId, Integer classId) {
-		String query = getBaseSelectQuery().append("WHERE student_id = ? AND class_id = ? ").toString();
+		String query = getBaseSelectQuery()
+				.append("INNER JOIN public.student_registered_classes src ON src.student_class_id = sc.id")
+				.append("WHERE sc.student_id = ? AND src.class_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId, classId);
 	}
 	@Override
 	public StudentClassVO findStudentClassByStudentId(Integer studentId) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE student_id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE sc.student_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
 	}
 }

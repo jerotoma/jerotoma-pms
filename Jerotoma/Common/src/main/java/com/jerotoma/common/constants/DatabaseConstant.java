@@ -6,6 +6,7 @@ public class DatabaseConstant {
 		public static final String ACADEMIC_YEARS = "academic_years";
 		public static final String CLASS_ROOMS = "class_rooms";
 		public static final String STUDENT_CLASSES = "student_classes";
+		public static final String STUDENT_REGISTERED_CLASSES = "student_registered_classes";
 		public static final String CLASS_ROOM_RESOURCES = "class_room_resources";
 		public static final String ACADEMIC_DISCIPLINE = "academic_disciplines";
 		public static final String POSITIONS = "positions";

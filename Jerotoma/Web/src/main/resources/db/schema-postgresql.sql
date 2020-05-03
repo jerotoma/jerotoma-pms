@@ -605,7 +605,6 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.student_classes(
 	    id bigserial NOT NULL,
-	    class_id bigint NOT NULL,
 	    student_id bigint NOT NULL,
 	    academic_year_id bigint NOT NULL,	    
 	   	updated_by bigint NOT NULL,
@@ -615,13 +614,23 @@
 	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,
+	        ON DELETE CASCADE,	   	
+	    CONSTRAINT student_fkey FOREIGN KEY (student_id)
+	        REFERENCES public.students (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+	    
+	CREATE TABLE IF NOT EXISTS public.student_registered_classes(	    
+	    class_id bigint NOT NULL,
+	    student_class_id bigint NOT NULL,	    
+	   	CONSTRAINT class_pkey PRIMARY KEY(class_id, student_class_id),	   
 	   	CONSTRAINT classes_fkey FOREIGN KEY (class_id)
 	        REFERENCES public.classes (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
-	    CONSTRAINT student_fkey FOREIGN KEY (student_id)
-	        REFERENCES public.students (id) MATCH SIMPLE
+	    CONSTRAINT student_classes_fkey FOREIGN KEY (student_class_id)
+	        REFERENCES public.student_classes (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );

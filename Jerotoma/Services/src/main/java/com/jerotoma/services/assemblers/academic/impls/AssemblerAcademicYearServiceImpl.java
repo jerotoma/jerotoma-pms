@@ -43,4 +43,10 @@ public class AssemblerAcademicYearServiceImpl implements AssemblerAcademicYearSe
 		return assemblerAcademicYearDao.countObject();
 	}
 
+	@Override
+	public List<AcademicYearVO> loadAllList() throws SQLException {
+		
+		return assemblerAcademicYearDao.loadAllList();
+	}
+
 }

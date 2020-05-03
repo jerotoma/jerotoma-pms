@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { catchError, retry, map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+
+import { AcademicYear, ResponseWrapper } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,11 +25,10 @@ export class AcademicYearService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
-  getAcademicYears(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.academicYears}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  getAcademicYears(param: QueryParam): Observable<AcademicYear[]> {
+    return this.http.get(
+        `${END_POINTS.academicYears}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
   }
   createAcademicYear(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.post<any>(`${END_POINTS.academicYears}`, data, {observe: 'response'});

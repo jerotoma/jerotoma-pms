@@ -130,7 +130,7 @@ public class RestJClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerJClassService.loadUnregisteredJClassesByStudent(academicYearId, studentId));
+			instance.setData(assemblerJClassService.loadStudentUnregisteredJClassesByAcademicYear(academicYearId, studentId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

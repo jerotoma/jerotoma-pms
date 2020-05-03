@@ -53,7 +53,10 @@ public class StudentClassVO {
 		return jClasses;
 	}
 
-	public void setjClasses(List<JClassVO> jClasses) {
+	public void setJClasses(List<JClassVO> jClasses) {
+		if (jClasses != null) {
+			this.numberOfClasses = jClasses.size();
+		}
 		this.jClasses = jClasses;
 	}
 

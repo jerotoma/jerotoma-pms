@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
-import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicYearConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
@@ -31,6 +29,7 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.utils.validators.AcademicYearValidator;
 import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.courses.AcademicYearService;
 
 @RestController
@@ -38,29 +37,23 @@ import com.jerotoma.services.courses.AcademicYearService;
 public class RestAcademicYearController extends BaseController {
 		
 	@Autowired AcademicYearService academicYearService;
+	@Autowired AssemblerAcademicYearService assemblercademicYearService;
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> getAcademicYears(Authentication auth,
-			@RequestParam(value="searchTerm", required=false) String search,
-			@RequestParam(value="page", required=false) Integer page,
-			@RequestParam(value="pageSize", required=false) Integer pageSize,
-			@RequestParam(value="fieldName", required=false) String fieldName,
-			@RequestParam(value="orderby", required=false) String orderby) {
+	protected HttpResponseEntity<Object> getAcademicYears(Authentication auth) {
 		
 		this.securityCheckAccessByRoles(auth);
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = academicYearService.loadMapList(queryParam);		
+			instance.setData(assemblercademicYearService.loadAllList());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
 		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}

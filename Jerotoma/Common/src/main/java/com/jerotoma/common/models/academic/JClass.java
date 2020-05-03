@@ -1,7 +1,8 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -48,9 +49,9 @@ public class JClass {
 	@JoinColumn(name="class_room_id")
 	private ClassRoom classRoom;
 	
-	@OneToMany(mappedBy="jClass")
+	@ManyToMany(mappedBy="jClasses")
 	@JsonBackReference
-	private List<StudentClass> studentClasses;
+	private Set<StudentClass> studentClasses = new HashSet<>();
 	
 	@ManyToOne
 	@JoinColumn(name="teacher_id")
@@ -139,16 +140,8 @@ public class JClass {
 		this.capacity = capacity;
 	}
 	
-	public List<StudentClass> getStudentClasses() {
-		return studentClasses;
-	}
-
-	public void setStudentClasses(List<StudentClass> studentClasses) {
-		this.studentClasses = studentClasses;
-	}
-
-
-
+	
+	
 	public static class JClassFields{
 		Integer courseId = null;
 		Integer academicYearId = null;

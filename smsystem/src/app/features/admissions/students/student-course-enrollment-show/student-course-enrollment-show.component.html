@@ -1,163 +1,53 @@
-<nb-card status="primary">
-  <nb-card-header>Student Clases Detail</nb-card-header>
-<nb-card-body>
-  <div class="container profile" *ngIf="student">
-      <div class="row">
-          <div class="col-md-4">
-              <div class="profile-img">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
-                  <div class="file btn btn-lg btn-primary">
-                      Change Photo
-                      <input type="file" name="file"/>
-                  </div>
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="studentClassForm" class="step-container">
+        <nb-card status="primary">
+          <nb-card-header>Student Clases Detail</nb-card-header>
+          <nb-card-body>
+            <div class='row'>
+              <div class='col-md-6'>
+                <div class="form-control-group" *ngIf="student && student.fullName">
+                  <label for="student-full-name" class="label">Full Name</label>
+                  <p>{{student.fullName}}</p>
+                </div>
               </div>
-          </div>
-          <div class="col-md-8">
-              <div class="profile-head">
-                  <h5 *ngIf="student.fullName"> {{student.fullName}} </h5>
-                  <h6 *ngIf="student.occupation">Profession: {{student.occupation}}</h6>
-                  <p class="proile-rating">No. of Courses : <span>{{studentClass.jClasses.length}}</span></p>
-                  <div class="profile-tab">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>User ID:</label>
-                        </div>
-                        <div class="col-md-8" *ngIf="student.id">
-                            <p>{{student.id}}</p>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="student.studentNumber">
-                        <div class="col-md-4">
-                            <label>Student Number:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p> {{student.studentNumber}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Full Name:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p *ngIf="student.fullName"> {{student.fullName}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Email Address:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p *ngIf="student.emailAddress"> {{student.emailAddress}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <label>Phone Number:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p *ngIf="student.phoneNumber"> {{student.phoneNumber}}</p>
-                        </div>
-                    </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="profile-head">
-                    <div class="profile-tab">
-                        <nb-card accent="warning">
-                            <nb-card-body>
-                              <nb-tabset>
-                                <nb-tab tabTitle="Current Year Classes">
-                                    <div class="lists row">
-                                        <div class="col-md-12">
-                                          <nb-card class="list-card">
-                                            <nb-card-body>
-                                              <nb-list>
-                                                  <nb-list-item>
-                                                      <div class="row">
-                                                          <div class="col-md-4">
-                                                              <label>Course</label>
-                                                          </div>
-                                                          <div class="col-md-4">
-                                                              <label><div class="col-md-8">
-                                                              <label>Teacher</label>
-                                                          </div></label>
-                                                          </div>
-                                                          <div class="col-md-4">
-                                                              <label>Class Room</label>
-                                                          </div>
-                                                      </div>
-                                                  </nb-list-item>
-                                                  <nb-list-item *ngFor="let jClass of studentClass.jClasses">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <p> {{ jClass.course.name }}</p>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <p> {{ jClass.teacher.fullName }}</p>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <p> {{ jClass.classRoom.name}}</p>
-                                                        </div>
-                                                    </div>
-                                                  </nb-list-item>
-                                              </nb-list>
-                                            </nb-card-body>
-                                          </nb-card>
-                                        </div>
-                                      </div>
-                                </nb-tab>
-                                <nb-tab tabTitle="Past Years Classes">
-                                    <div class="row">
-                                      <div class="col-md-6">
-                                          <label>Experience</label>
-                                      </div>
-                                      <div class="col-md-6">
-                                          <p>Expert</p>
-                                      </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Hourly Rate</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>10$/hr</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Total Projects</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>230</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>English Level</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>Expert</p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label>Availability</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>6 months</p>
-                                        </div>
-                                    </div>
-                                </nb-tab>
-                              </nb-tabset>
-                            </nb-card-body>
-                        </nb-card>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                        <label for="class-academicYear" class="label">Class Academic Year</label>
+                        <nb-select
+                          fullWidth
+                          placeholder="Class Academic Year"
+                          formControlName="academicYearId"
+                          id="class-academicYear">
+                          <nb-option
+                              *ngFor='let acad of academicYears'
+                              [value]="acad.id">
+                              {{acad.name}} - {{acad.yearOfStudy}}
+                          </nb-option>
+                        </nb-select>
                     </div>
                 </div>
             </div>
-          </div>
-      </div>
-</nb-card-body>
-</nb-card>
+            <div class="lists row">
+              <div class="col-md-12">
+                  <div class="form-control-group">
+                    <nb-card class="list-card" accent="success" *ngIf="jClasses">
+                      <nb-card-body>
+                        <h5>List of Registered courses for {{academicYear.name}} - {{academicYear.yearOfStudy}}</h5>
+                        <nb-list>
+                          <nb-list-item *ngFor="let jClass of jClasses">
+                            <a href="#" (click)="preventDefaultJClass($event)">{{jClass.course.name}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></a>
+                          </nb-list-item>
+                        </nb-list>
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </form>
+  </div>
+</div>

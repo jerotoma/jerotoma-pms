@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.academic.JClass;
 import com.jerotoma.common.models.academic.StudentClass;
 
 

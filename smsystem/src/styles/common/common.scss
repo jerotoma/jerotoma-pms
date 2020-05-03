@@ -101,3 +101,8 @@ nb-sidebar > div > div > nb-menu {
 .mt-1 {
   margin-top: 1.5rem;
 }
+
+button,
+.nb-theme-default [nbButton].appearance-hero {
+  text-transform: none;
+}

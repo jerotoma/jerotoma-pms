@@ -2,6 +2,7 @@ package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -41,10 +44,14 @@ public class StudentClass {
 	@JsonBackReference
 	private Student student;
 	
-	@ManyToOne
+	
+	@ManyToMany
+	@JoinTable(
+    	name = DatabaseConstant.TABLES.STUDENT_REGISTERED_CLASSES,
+        joinColumns = @JoinColumn(name = "student_class_id"),
+        inverseJoinColumns = @JoinColumn(name = "class_id"))
 	@JoinColumn(name="class_id")
-	@JsonBackReference
-	private JClass jClass;
+	private Set<JClass> jClasses;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -102,16 +109,14 @@ public class StudentClass {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-
-	public JClass getjClass() {
-		return jClass;
+	
+	public Set<JClass> getJClasses() {
+		return jClasses;
 	}
 
-	public void setjClass(JClass jClass) {
-		this.jClass = jClass;
+	public void setJClasses(Set<JClass> jClasses) {
+		this.jClasses = jClasses;
 	}
-
-
 
 	public static class Fields {
 		Integer Id;

@@ -20,10 +20,11 @@ import {
   JClassAdmission,
   ResponseWrapper,
 } from 'app/models';
-import { QueryParam, USER_TYPE } from 'app/utils';
+import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
 @Component({
   selector: 'app-student-course-enrollment-edit',
+  animations: OPEN_CLOSE_ANIMATION,
   styleUrls: ['./student-course-enrollment-edit.component.scss'],
   templateUrl: './student-course-enrollment-edit.component.html',
 })
@@ -41,6 +42,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   teacherId: number;
   isLoading: boolean = false;
   confirmed: boolean = false;
+  isAddMore: boolean = false;
   academicYear: AcademicYear;
   studentClassAdmission: StudentClassAdmission;
 
@@ -77,7 +79,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    this.loadStudents(parseInt(this.studentId, 10));
+    this.loadStudentClasses(parseInt(this.studentId, 10));
   }
 
   dismiss() {
@@ -148,7 +150,8 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
       }
     });
   }
-  findJClassesByAcademicYear() {
+  addMoreCourses() {
+    this.isAddMore = true;
     if (this.academicYear) {
       this.loadUnregisteredJClassesByStudent(this.academicYear.id, this.student.id);
     }
@@ -172,30 +175,28 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
       this.isLoading = false;
     });
   }
+
   loadAcademicYears() {
     this.academicYearService.getAcademicYears(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.academicYears = data.academicYears;
+    .subscribe((academicYears: AcademicYear[]) => {
+      if (academicYears) {
+        this.academicYears = academicYears;
       }
-    }, error => {
-
     });
   }
-  loadStudents(studentId: number) {
+
+  loadStudentClasses(studentId: number) {
     this.studentClassService.getStudentClass(studentId).subscribe((studentClass: StudentClass) => {
       this.student = studentClass.student;
       this.academicYear = studentClass.academicYear;
       this.registeredJClasses = studentClass.jClasses;
+      this.jClassIds =  this.pushJClasses(this.registeredJClasses),
       this.studentClassForm.patchValue({
         id: studentClass.id,
         studentId: this.student.id,
         academicYearId: this.academicYear.id,
         fullName: this.student.fullName,
-        jClassIds: this.pushJClasses(this.registeredJClasses),
+        jClassIds: this.jClassIds,
       });
     });
   }

@@ -76,9 +76,6 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    if (this.action === 'edit') {
-        this.loadStudents(parseInt(this.studentId, 10));
-    }
   }
 
   dismiss() {
@@ -92,27 +89,13 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     this.studentClassAdmission = this.studentClassForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
-    if (this.action === 'edit') {
-      this.updateStudentClass();
-    } else {
-      this.studentClassService.createStudentClass(this.studentClassAdmission)
-          .subscribe((result: StudentClassAdmission) => {
-            const resp = result;
-            this.confirmed = true;
-            this.studentClassForm.reset();
-            this.dismiss();
-          });
-    }
-
-  }
-  updateStudentClass() {
-    this.studentClassService.updateStudentClass(this.studentClassAdmission)
-          .subscribe((result: StudentClassAdmission) => {
-            const resp = result;
-              this.confirmed = true;
-              this.studentClassForm.reset();
-              this.dismiss();
-          });
+    this.studentClassService.createStudentClass(this.studentClassAdmission)
+    .subscribe((result: StudentClassAdmission) => {
+      const resp = result;
+      this.confirmed = true;
+      this.studentClassForm.reset();
+      this.dismiss();
+    });
   }
 
   checkedChange(checked: boolean, jClass: JClassView) {
@@ -137,7 +120,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       jClassIds: [[], Validators.required],
       studentId: ['', Validators.required],
     });
-    //this.onChanges();
+    this.onChanges();
   }
 
   onChanges() {

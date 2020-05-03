@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { StudentClass, Student } from 'app/models';
-import { StudentClassService } from 'app/services';
+import { StudentClass, Student, AcademicYear, StudentClassAdmission, JClassView } from 'app/models';
+import { StudentClassService, AcademicYearService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
 @Component({
@@ -25,14 +25,28 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
   title: string = 'List of Scheduled Courses';
   studentClass: StudentClass;
   student: Student;
+  academicYearId: number;
+  courseId: number;
+  jClassIds: number[] = [];
+  teacherId: number;
+  isLoading: boolean = false;
+  studentClassForm: FormGroup;
+  academicYear: AcademicYear;
+  studentClassAdmission: StudentClassAdmission;
+  jClasses: JClassView[];
+  academicYears: AcademicYear[];
 
   constructor(
+    private academicYearService: AcademicYearService,
     private studentClassService: StudentClassService,
     private route: ActivatedRoute,
     private router: Router,
+    private formBuilder: FormBuilder,
     ) {
   }
   ngOnInit() {
+    this.loadForm();
+    this.loadAcademicYears();
     // For one time load
     // let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
@@ -45,21 +59,40 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
 
   loadStudentClass(studentId: number) {
     this.studentClassService.getStudentClass(studentId)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        window.console.log(result);
-        const status = resp.status;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.studentClass = data;
+      .subscribe((studentClass: StudentClass ) => {
+        if (studentClass) {
+          this.studentClass = studentClass;
           this.student = this.studentClass.student;
-
-
+          this.jClasses = this.studentClass.jClasses;
+          this.academicYear = this.studentClass.academicYear;
+          this.studentClassForm.patchValue({
+              academicYearId: studentClass.academicYear.id,
+          });
         }
-      }, error => {
+      });
+  }
 
+  preventDefaultJClass(event: any) {
+    event.preventDefault();
+  }
+
+  loadForm() {
+    this.studentClassForm = this.formBuilder.group({
+      id: [null],
+      academicYearId: ['', Validators.required],
+      jClassIds: [[], Validators.required],
+      studentId: ['', Validators.required],
+      fullName: ['', Validators.required],
     });
   }
 
+  loadAcademicYears() {
+    this.academicYearService.getAcademicYears(this.param)
+    .subscribe((academicYears: AcademicYear[] ) => {
+      if (academicYears) {
+        this.academicYears = academicYears;
+      }
+    });
+  }
 
 }

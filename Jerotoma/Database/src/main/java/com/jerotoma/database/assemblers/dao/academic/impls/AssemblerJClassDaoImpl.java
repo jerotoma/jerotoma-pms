@@ -56,7 +56,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	@Override
 	public JClassVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE c.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new JClassSingleResultProcessor(), primaryKey);
 	}
 
@@ -139,8 +139,8 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	
 	@Override
-	public List<JClassVO> loadJClassesByStudentId(Integer studentId) {
-		String query = "SELECT class_id FROM public.student_classes WHERE student_id = ?";
+	public List<JClassVO> loadJClassesByStudentId(Integer studentId) {		
+		String query = "SELECT src.class_id FROM public.student_classes sc INNER JOIN public.student_registered_classes src ON src.student_class_id = sc.id  WHERE sc.student_id = ?";
 		
 		return this.jdbcTemplate.query(query,new Object[] {studentId}, new RowMapper<JClassVO>() {
 			@Override
@@ -187,15 +187,19 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	
 	@Override
 	public List<JClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
-		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE academic_year_id = ? ");
+		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE c.academic_year_id = ? ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId);
 	}
 	@Override
-	public List<JClassVO> loadUnregisteredJClassesByStudent(Integer academicYearId, Integer studentId)
+	public List<JClassVO> loadStudentUnregisteredJClassesByAcademicYear(Integer academicYearId, Integer studentId)
 			throws SQLException {
-		StringBuilder queryBuilder = getBaseSelectQuery()
-				.append(" INNER JOIN student_classes sc ON sc.class_id <> c.id ")
-				.append( " WHERE c.academic_year_id = ? AND sc.student_id = ? ");
-		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, studentId);
+		StringBuilder queryBuilder = getBaseSelectQuery()				
+				.append(" WHERE c.academic_year_id = ? AND c.course_id NOT IN( ")
+					.append(" SELECT course_id FROM public.classes cc ")
+						.append(" INNER JOIN student_registered_classes srcc ON srcc.class_id = cc.id ")
+						.append(" INNER JOIN student_classes scc ON scc.id = srcc.student_class_id")
+					.append(" WHERE cc.academic_year_id = ? AND scc.student_id = ? ")
+				.append(")");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, academicYearId, studentId);
 	}
 }

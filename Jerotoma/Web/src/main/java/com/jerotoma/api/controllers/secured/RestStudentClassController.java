@@ -3,8 +3,10 @@ package com.jerotoma.api.controllers.secured;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -125,37 +127,28 @@ public class RestStudentClassController extends BaseController {
 						StudentConstant.Class.STUDENT_ID,
 						StudentConstant.Class.JCLASS_IDS
 						));
-				List<StudentClass> studentClasses = new ArrayList<>();
+		Set<JClass> jClasses = new HashSet<>();
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
-		StudentClassVO studentClassVO;
-		
+		StudentClass studentClass = new StudentClass();		
 		try {
 			
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
-			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			boolean isUpdate = false;
+			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());	
 			
-			for (Integer classId : jClassFields.getjClassIds()) {
-				StudentClass studentClass;
-				studentClassVO = assemblerStudentClassService.findStudentClassIdByParams(student.getId(), classId);
-				if(studentClassVO == null){
-					studentClass = new StudentClass();
-				} else {
-					studentClass = studentClassService.findObject(studentClassVO.getId());
-					isUpdate = true;
-				}				
-				studentClass.setStudent(student);
-				studentClass.setAcademicYear(academicYear);
-				studentClass.setUpdatedBy(authUser.getId());
-				studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-				studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-				JClass jClass = jClassService.findObject(classId);		
-				studentClass.setjClass(jClass);					
-				studentClass = isUpdate ? studentClassService.updateObject(studentClass) :  studentClassService.createObject(studentClass);	
-				studentClasses.add(studentClass);
+			studentClass.setStudent(student);
+			studentClass.setAcademicYear(academicYear);
+			studentClass.setUpdatedBy(authUser.getId());
+			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
+			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
+			
+			for (Integer classId : jClassFields.getjClassIds()) {		
+				JClass jClass = jClassService.findObject(classId);						
+				jClasses.add(jClass);
 			}
-			instance.setData(studentClasses);
+			studentClass.setJClasses(jClasses);			
+			studentClass = studentClassService.createObject(studentClass);			
+			instance.setData(studentClass);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -186,7 +179,7 @@ public class RestStudentClassController extends BaseController {
 		
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass;
-		List<StudentClass> studentClasses = new ArrayList<>();		
+		Set<JClass> jClasses = new HashSet<>();		
 		try {			
 			studentClass = studentClassService.findObject(jClassFields.getId());	
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
@@ -197,12 +190,12 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setUpdatedBy(authUser.getId());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());		
 			for (Integer classId : jClassFields.getjClassIds()) {					
-				JClass jClass = jClassService.findObject(classId);				
-				studentClass.setjClass(jClass);			
-				studentClass = studentClassService.updateObject(studentClass);
-				studentClasses.add(studentClass);
+				JClass jClass = jClassService.findObject(classId);		
+				jClasses.add(jClass);
 			}
-			instance.setData(studentClasses);
+			studentClass.setJClasses(jClasses);			
+			studentClass = studentClassService.updateObject(studentClass);
+			instance.setData(studentClass);
 				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			

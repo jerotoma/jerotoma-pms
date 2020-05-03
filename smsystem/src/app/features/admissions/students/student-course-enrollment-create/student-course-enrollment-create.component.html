@@ -2,7 +2,7 @@
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="studentClassForm" class="step-container" (ngSubmit)="onSubmit()">
       <nb-card>
-        <nb-card-header status="danger" >{{ title }}</nb-card-header>
+        <nb-card-header status="danger">{{ title }}</nb-card-header>
         <nb-card-body>
         <div class='row'>
             <div class='col-md-6'>
@@ -58,8 +58,10 @@
           </div>
         </nb-card-body>
         <nb-card-footer>
+          <div class="form-control-group">
             <button class='push-right' [disabled]="!studentClassForm.valid" type="submit" nbButton hero status="success">Create Class</button>
             <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+          </div>
         </nb-card-footer>
       </nb-card>
   </form>
