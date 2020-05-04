@@ -10,5 +10,6 @@ public interface AssemblerJClassService  extends AssemblerService<JClassVO> {
 
 	public List<JClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException;
 	public List<JClassVO> loadStudentUnregisteredJClassesByAcademicYear(Integer academicYearId, Integer studentId) throws SQLException;
+	public List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException;
 
 }

@@ -119,16 +119,11 @@ export class CourseCreateComponent implements OnInit {
 
   loadAcademicYears() {
     this.academicYearService.getAcademicYears(this.getParam())
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.academicYears = data.academicYears;
+    .subscribe((academicYears: AcademicYear[] ) => {
+      if (academicYears) {
+        this.academicYears = academicYears;
         this.patchCourse();
       }
-    }, error => {
-
     });
   }
 

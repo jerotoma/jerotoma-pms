@@ -149,15 +149,10 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   }
   loadAcademicYears() {
     this.academicYearService.getAcademicYears(this.param)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200 && resp.body) {
-        const data = resp.body.data;
-        this.academicYears = data.academicYears;
+    .subscribe((academicYears: AcademicYear[]) => {
+      if (academicYears) {
+        this.academicYears = academicYears;
       }
-    }, error => {
-
     });
   }
   loadStudents(studentId: number) {
@@ -171,7 +166,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
         studentId: this.student.id,
         academicYearId: this.academicYear.id,
         jClassIds: this.pushJClasses(this.jClasses),
-      });
+      }, {emitEvent: false});
     });
   }
   patchStudent(student: Student) {

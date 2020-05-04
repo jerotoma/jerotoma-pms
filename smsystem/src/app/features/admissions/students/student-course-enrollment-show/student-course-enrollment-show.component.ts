@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { StudentClass, Student, AcademicYear, StudentClassAdmission, JClassView } from 'app/models';
-import { StudentClassService, AcademicYearService } from 'app/services';
+import { StudentClassService, AcademicYearService, ClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
 @Component({
@@ -38,6 +38,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
 
   constructor(
     private academicYearService: AcademicYearService,
+    private classService: ClassService,
     private studentClassService: StudentClassService,
     private route: ActivatedRoute,
     private router: Router,
@@ -67,7 +68,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
           this.academicYear = this.studentClass.academicYear;
           this.studentClassForm.patchValue({
               academicYearId: studentClass.academicYear.id,
-          });
+          }, {emitEvent: false});
         }
       });
   }
@@ -84,6 +85,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
       studentId: ['', Validators.required],
       fullName: ['', Validators.required],
     });
+    this.onChanges();
   }
 
   loadAcademicYears() {
@@ -92,6 +94,29 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
       if (academicYears) {
         this.academicYears = academicYears;
       }
+    });
+  }
+
+  onChanges() {
+    this.studentClassForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
+      if (academicYearId != null) {
+        this.academicYears.forEach(academicYear => {
+          if (academicYear.id === academicYearId) {
+            this.academicYear = academicYear;
+          }
+        });
+        if (this.academicYear) {
+          this.loadStudentJClassesByAcademicYear(this.academicYear.id, this.student.id);
+        }
+      }
+    });
+  }
+
+  loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
+    this.isLoading = true;
+    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: JClassView[]) => {
+      this.jClasses = jClassViews;
+      this.isLoading = false;
     });
   }
 

@@ -8,22 +8,6 @@
             nbSpinnerStatus="success"
             nbSpinnerSize="large"
             nbSpinnerMessage="Loading Classes....">
-          <div class='row'>
-              <div class='col-md-12'>
-                  <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                      <p class="alert-title"><b>Sorry!</b></p>
-                      <ul class="alert-message-list">
-                          <li class="alert-message">{{ showMessage.message }}</li>
-                        </ul>
-                    </nb-alert>
-                    <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                      <p class="alert-title"><b>Success!</b></p>
-                      <ul class="alert-message-list">
-                        <li class="alert-message">{{ showMessage.message }}</li>
-                      </ul>
-                    </nb-alert>
-              </div>
-            </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">

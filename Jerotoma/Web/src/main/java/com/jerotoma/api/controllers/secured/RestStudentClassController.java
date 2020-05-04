@@ -206,15 +206,15 @@ public class RestStudentClassController extends BaseController {
 		return instance;
 	}
 	
-	@GetMapping(value = {"/{studentId}", "/{studentId}/"})
+	@GetMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
+	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		StudentClassVO studentClassVO;
 		try {
-			studentClassVO = assemblerStudentClassService.findStudentClassByStudentId(studentId);
+			studentClassVO = assemblerStudentClassService.findObject(studentClassId);
 			instance.setData(studentClassVO);
 			instance.setSuccess(true);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));

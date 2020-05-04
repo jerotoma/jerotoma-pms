@@ -141,6 +141,28 @@ public class RestJClassController extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"academic-years/{academicYearId}/students/{studentId}", "/academic-years/{academicYearId}/students/{studentId}"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadStudentJClassesByAcademicYear(
+			Authentication auth, 
+			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("studentId") Integer studentId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			instance.setData(assemblerJClassService.loadStudentJClassesByAcademicYear(studentId, academicYearId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> loadJClassList(

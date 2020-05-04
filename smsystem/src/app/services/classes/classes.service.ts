@@ -40,12 +40,17 @@ export class ClassService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateClass(data?: any): Observable<boolean> {
+  updateClass(data?: any): Observable<JClassView> {
     return this.http.put(`${END_POINTS.classes}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
     return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}/unregistered`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
+    return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

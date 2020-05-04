@@ -54,4 +54,10 @@ public class AssemblerJClassServiceImpl  implements AssemblerJClassService {
 		return assemblerJClassDao.loadStudentUnregisteredJClassesByAcademicYear(academicYearId, studentId);
 	}
 
+	@Override
+	public List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId)
+			throws SQLException {
+		return assemblerJClassDao.loadStudentJClassesByAcademicYear(studentId, academicYearId);
+	}
+
 }

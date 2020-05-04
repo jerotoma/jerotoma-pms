@@ -4,7 +4,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import { AcademicYear } from 'app/models';
-import { AcademicYearService} from 'app/services';
+import { AcademicYearService, ModalService} from 'app/services';
 import { QueryParam } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -36,6 +36,7 @@ export class AcademicYearCreateComponent implements OnInit {
   constructor(
     private academicYearService:  AcademicYearService,
     private formBuilder: FormBuilder,
+    private modalService: ModalService,
     protected ref: NbDialogRef<AcademicYearCreateComponent>) {}
 
   ngOnInit() {
@@ -74,6 +75,7 @@ export class AcademicYearCreateComponent implements OnInit {
               this.showMessage.error = false;
               this.showMessage.message = data  ? data.message : '';
               this.academicYearForm.reset();
+              this.modalService.openSnackBar(this.academicYear.name + ' - ' + this.academicYear.yearOfStudy + ' has been created', 'success');
               this.dismiss();
 
             } else {

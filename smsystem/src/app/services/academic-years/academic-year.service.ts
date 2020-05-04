@@ -10,7 +10,7 @@ import { AcademicYear, ResponseWrapper } from 'app/models';
   providedIn: 'root',
 })
 export class AcademicYearService {
-  constructor(private http: HttpClient) { }
+   constructor(private http: HttpClient) { }
 
   getAcademicYear(academicYearId: number): Observable<any> {
     return this.http
@@ -18,11 +18,10 @@ export class AcademicYearService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
-  loadAcademicYearList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.academicYears}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  loadAcademicYearPaginated(param: QueryParam): Observable<ResponseWrapper> {
+    return this.http.get(
+        `${END_POINTS.academicYears}/paginated?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp));
   }
 
   getAcademicYears(param: QueryParam): Observable<AcademicYear[]> {

@@ -144,16 +144,17 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	public StudentClassVO mapStudentClassResult(ResultSet rs) throws SQLException {
 		StudentClassVO jClass = new StudentClassVO(rs);
 		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);
-		jClass.setAcademicYear(loadAcademicYear(rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID)));
-		jClass.setJClasses(loadJClasses(studentId));
+		int academicYearId = rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID);
+		jClass.setAcademicYear(loadAcademicYear(academicYearId));
+		jClass.setJClasses(loadStudentJClassesByAcademicYear(studentId, academicYearId));
 		jClass.setStudent(loadStudentsByStudentID(studentId));
 		return jClass;
+	}	
+	
+	private List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException {
+		return assemblerJClasseDao.loadStudentJClassesByAcademicYear(studentId, academicYearId);
 	}
 	
-	
-	private List<JClassVO> loadJClasses(Integer studentId) throws SQLException {
-		return assemblerJClasseDao.loadJClassesByStudentId(studentId);
-	}
 	private StudentVO loadStudentsByStudentID(Integer studentId) throws SQLException {		
 		return assemblerStudentDao.findObject(studentId);
 	}

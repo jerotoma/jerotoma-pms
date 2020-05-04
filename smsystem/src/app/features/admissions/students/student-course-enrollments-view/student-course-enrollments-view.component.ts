@@ -112,7 +112,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   }
 
   view(studentClass: StudentClass) {
-    this.router.navigate([this.baseURL + '/' + studentClass.student.id ]);
+    this.router.navigate([this.baseURL + '/' + studentClass.id ]);
   }
 
   onPageChange(pageEvent: PageEvent) {

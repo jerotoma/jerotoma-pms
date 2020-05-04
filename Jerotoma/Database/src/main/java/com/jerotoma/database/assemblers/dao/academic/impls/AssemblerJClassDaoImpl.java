@@ -202,4 +202,13 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 				.append(")");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, academicYearId, studentId);
 	}
+	@Override
+	public List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId)
+			throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery()
+			.append(" INNER JOIN student_registered_classes src ON src.class_id = c.id ")
+			.append(" INNER JOIN student_classes sc ON sc.id = src.student_class_id")
+			.append(" WHERE c.academic_year_id = ? AND sc.student_id = ? ");				
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, studentId);
+	}
 }

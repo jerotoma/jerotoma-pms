@@ -9,7 +9,7 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { AcademicYearCreateComponent } from '../academic-year-create/academic-year-create.component';
 import { AcademicYearDeleteComponent } from '../academic-year-delete/academic-year-delete.component';
-import { AcademicYear } from 'app/models';
+import { AcademicYear, ResponseWrapper } from 'app/models';
 import { AcademicYearService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
@@ -34,6 +34,7 @@ export class AcademicYearsViewComponent implements OnInit {
 
   title: string = 'List of Academic Years';
   academicYear: AcademicYear;
+  count: number = 0;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
@@ -66,18 +67,13 @@ export class AcademicYearsViewComponent implements OnInit {
   }
 
   loadAcademicYears() {
-    this.academicYearService.getAcademicYears(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
+    this.academicYearService.loadAcademicYearPaginated(this.param).subscribe((resp: ResponseWrapper ) => {
+        if (resp) {
+          const data = resp.data;
           this.totalNumberOfItems = data.count;
           this.dataSource = new MatTableDataSource<Position>(data.academicYears);
         }
-      }, error => {
-
-    });
+      });
   }
   edit(academicYear: AcademicYear) {
     this.dialogService.open(AcademicYearCreateComponent, {
