@@ -87,6 +87,9 @@ export class ClassCreateComponent implements OnInit {
   }
 
   patchClassAdmission(jClassView: JClassView) {
+    if (!jClassView) {
+      return;
+    }
     this.capacity = jClassView.capacity;
     this.academicYearId = jClassView.academicYear.id;
     this.courseId = jClassView.course.id;
@@ -118,7 +121,6 @@ export class ClassCreateComponent implements OnInit {
             if (result) {
               this.modalService.openSnackBar('New class has been created', 'success');
               this.resetForm(true);
-
             }
           });
     }
@@ -129,36 +131,37 @@ export class ClassCreateComponent implements OnInit {
         if (result) {
           this.modalService.openSnackBar('Class has been updated', 'success');
           this.resetForm(true);
-
         }
       });
     }
     loadForm() {
       this.classForm = this.formBuilder.group({
         id: [null],
-        capacity: ['', Validators.required],
-        academicYearId: ['', Validators.required],
-        courseId: ['', Validators.required],
-        teacherId: ['', Validators.required],
-        classRoomId: ['', Validators.required],
+        capacity: [null, Validators.required],
+        academicYearId: [null, Validators.required],
+        courseId: [null, Validators.required],
+        teacherId: [null, Validators.required],
+        classRoomId: [null, Validators.required],
       });
       this.onChanges();
     }
 
     onChanges(): void {
         this.classForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-          this.loadCourses(academicYearId);
+          if (academicYearId) {
+            this.loadCourses(academicYearId);
+          }
         });
-
         this.classForm.get('courseId').valueChanges.subscribe((courseId: number) => {
-          this.loadTeachersByCourseID(courseId);
+          if (courseId) {
+            this.loadTeachersByCourseID(courseId);
+          }
         });
     }
 
     loadData() {
       this.loadAcademicYears();
       this.loadClassRooms();
-      this.loadTeachers();
     }
 
     loadClassRooms() {
@@ -169,9 +172,7 @@ export class ClassCreateComponent implements OnInit {
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
           this.classRooms = data.classRooms;
-          if (this.jClassView) {
-            this.patchClassAdmission(this.jClassView);
-          }
+          this.patchClassAdmission(this.jClassView);
         }
       }, error => {
 
@@ -183,9 +184,7 @@ export class ClassCreateComponent implements OnInit {
       .subscribe((courses: Course[] ) => {
         if (courses) {
           this.courses = courses;
-          if (this.jClassView) {
-            this.patchClassAdmission(this.jClassView);
-          }
+          this.patchClassAdmission(this.jClassView);
         }
       });
     }
@@ -200,43 +199,27 @@ export class ClassCreateComponent implements OnInit {
           }
         });
     }
-    loadTeachers() {
-      this.userService.loadUsers(this.param)
-      .subscribe((result: any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.teachers = data.teachers;
-          if (this.jClassView) {
-            this.patchClassAdmission(this.jClassView);
-          }
-        }
-      }, error => {
 
-      });
-    }
     loadTeachersByCourseID(courseId: number) {
       this.userService.loadTeachersByCourseID(courseId).subscribe((teachers: Teacher[]) => {
         this.teachers = teachers;
+        if (this.jClassView) {
+          setTimeout(() => {this.patchClassAdmission(this.jClassView); }, 100);
+        }
       });
     }
     loadJClassView(jClassViewId: number) {
       this.isLoading = true;
-      setTimeout( () => {
-        this.classService.getClass(jClassViewId)
+      this.classService.getClass(jClassViewId)
         .subscribe((jClass: JClassView) => {
           this.isLoading = false;
           if (jClass) {
             this.jClassView = jClass;
             this.loadCourses(jClass.academicYear.id);
             this.loadTeachersByCourseID(jClass.course.id);
-            this.patchClassAdmission(this.jClassView);
+            this.patchClassAdmission(jClass);
           }
-        }, error => {
-
         });
-      }, 2000);
     }
     resetForm(isClassCreated: boolean) {
       this.classForm.reset();

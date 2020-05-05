@@ -1,0 +1,55 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="studentClassForm" class="step-container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                        <label for="class-academicYear" class="label">Class Academic Year</label>
+                        <nb-select
+                          fullWidth
+                          placeholder="Class Academic Year"
+                          formControlName="academicYearId"
+                          id="class-academicYear">
+                          <nb-option
+                              *ngFor='let acad of academicYears'
+                              [value]="acad.id">
+                              {{acad.name}} - {{acad.yearOfStudy}}
+                          </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="lists row">
+              <div class="col-md-12">
+                  <div class="form-control-group">
+                    <nb-card class="list-card" accent="success" *ngIf="jClasses">
+                      <nb-card-body>
+                        <h5>List of courses for {{academicYear.name}} - {{academicYear.yearOfStudy}}</h5>
+                        <nb-list>
+                          <nb-list-item>
+                              <div class="row">
+                                  <div class="col-md-5">Course Name</div>
+                                  <div class="col-md-1">Code</div>
+                                  <div class="col-md-3">Teacher</div>
+                                  <div class="col-md-3">Class Room</div>
+                              </div>
+                          </nb-list-item>
+                          <nb-list-item *ngFor="let jClass of jClasses">
+                            <a href="#" (click)="preventDefaultJClass($event)">
+                                <div class="row">
+                                  <div class="col-md-5">{{jClass.course.name}}</div>
+                                  <div class="col-md-1">{{jClass.course.code}}</div>
+                                  <div class="col-md-3">{{jClass.teacher.fullName}}</div>
+                                  <div class="col-md-3">{{jClass.classRoom.name}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                                </div>
+                            </a>
+                          </nb-list-item>
+                        </nb-list>
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+              </div>
+            </div>
+      </form>
+  </div>
+</div>

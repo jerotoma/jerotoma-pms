@@ -97,7 +97,7 @@
             </div>
           </nb-card-body>
           <nb-card-footer>
-              <button class='push-right' [disabled]="!classForm.valid" type="submit" nbButton hero status="success">Create Class</button>
+              <button class='push-right' [disabled]="!classForm.valid" type="submit" nbButton hero status="success"> {{action == 'create' ? 'Create Class' : 'Save Changes'}}</button>
               <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss(false)">Cancel</button>
           </nb-card-footer>
         </nb-card>

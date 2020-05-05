@@ -4,12 +4,10 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { JClassAdmission } from 'app/models';
 import {
   StudentClassService,
   ClassService,
   AcademicYearService,
-  UserService,
  } from 'app/services';
 import { QueryParam, USER_TYPE } from 'app/utils';
 import {
@@ -155,8 +153,8 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       }
     });
   }
-  loadStudents(studentId: number) {
-    this.studentClassService.getStudentClass(studentId).subscribe((studentClass: StudentClass) => {
+  loadStudentClass(studentClassId: number) {
+    this.studentClassService.getStudentClass(studentClassId).subscribe((studentClass: StudentClass) => {
       this.student = studentClass.student;
       this.academicYear = studentClass.academicYear;
       this.loadJClassesByAcademicYear(studentClass.academicYear.id);

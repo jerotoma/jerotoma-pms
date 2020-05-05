@@ -44,6 +44,7 @@ import {
   UploadsComponent,
   UserTableComponent,
   UserDetailsComponent,
+  MyCourseComponent,
   AddressComponent,
   DeleteModalComponent,
   UserLoginInputComponent,
@@ -55,6 +56,7 @@ const COMPONENTS = [
   AddressComponent,
   DeleteModalComponent,
   UserDeleteComponent,
+  MyCourseComponent,
   UserTableComponent,
   UserDetailsComponent,
   UploadsComponent,
@@ -68,6 +70,7 @@ const ENTRY_COMPONENTS = [
   UploadsComponent,
   SearchUserComponent,
   UserLoginInputComponent,
+  MyCourseComponent,
 ];
 
 const MODULES = [
@@ -127,6 +130,7 @@ const SERVICES = [
   ],
   declarations: [
     ...COMPONENTS,
+    MyCourseComponent,
   ],
   exports: [
     ...EXPORT_MODULES,

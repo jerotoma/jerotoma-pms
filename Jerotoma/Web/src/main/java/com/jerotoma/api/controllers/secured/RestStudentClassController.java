@@ -206,9 +206,25 @@ public class RestStudentClassController extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"students/{studentId}", "/students/{studentId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		try {
+			instance.setData(assemblerStudentClassService.findStudentClassesByStudentId(studentId));
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return instance;
+	}
+	
 	@GetMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> loadStudentClassByStudentId(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
+	protected HttpResponseEntity<Object> loadStudentClassByStudentClassId(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		

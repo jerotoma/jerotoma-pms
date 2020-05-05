@@ -49,8 +49,8 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 	}
 
 	@Override
-	public StudentClassVO findStudentClassByStudentId(Integer studentId) throws SQLException {
-		return assemblerStudentClassDao.findStudentClassByStudentId(studentId);
+	public List<StudentClassVO> findStudentClassesByStudentId(Integer studentId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassesByStudentId(studentId);
 	}
 
 }

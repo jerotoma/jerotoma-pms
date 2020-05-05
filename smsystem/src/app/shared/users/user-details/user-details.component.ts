@@ -8,7 +8,7 @@ import { USER_TYPE } from 'app/utils';
 })
 export class UserDetailsComponent implements OnInit {
         @Input('userDatail') userDatail: any = {};
-        @Input('userType') userType: string = 'teacher';
+        @Input('userType') userType: string = USER_TYPE.teacher;
 
         ngOnInit() {
          // window.console.log(this.userDatail);

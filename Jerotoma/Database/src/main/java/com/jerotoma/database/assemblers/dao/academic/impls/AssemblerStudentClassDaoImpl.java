@@ -169,8 +169,8 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId, classId);
 	}
 	@Override
-	public StudentClassVO findStudentClassByStudentId(Integer studentId) throws SQLException {
+	public List<StudentClassVO> findStudentClassesByStudentId(Integer studentId) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE sc.student_id = ? ").toString();
-		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
+		return this.jdbcTemplate.query(query, new StudentClassResultProcessor(), studentId);
 	}
 }

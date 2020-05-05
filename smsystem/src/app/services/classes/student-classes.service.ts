@@ -21,6 +21,12 @@ export class StudentClassService {
         `${END_POINTS.studentClasses}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
+
+  getStudentClassesByStudentId(studentId: number): Observable<StudentClass[]> {
+    return this.http.get(`${END_POINTS.studentClasses}/students/${studentId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   createStudentClass(data?: any): Observable<StudentClassAdmission> {
     return this.http.post(`${END_POINTS.studentClasses}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
