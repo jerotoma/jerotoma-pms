@@ -104,6 +104,7 @@
 	    role_id bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL DEFAULT 'now()',
 	    updated_on timestamp with time zone NOT NULL DEFAULT 'now()',
+	    UNIQUE(user_id, role_id),
 	    CONSTRAINT user_roles_pkey PRIMARY KEY (id),
 	    CONSTRAINT roles_fkey FOREIGN KEY (role_id)
 	        REFERENCES public.roles (id) MATCH SIMPLE
