@@ -46,6 +46,11 @@ const routes: Routes = [{
         .then(m => m.MiscellaneousModule),
     },
     {
+      path: 'securities',
+      loadChildren: () => import('./securities/securities.module')
+        .then(m => m.SecuritiesModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

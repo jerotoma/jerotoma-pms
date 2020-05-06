@@ -34,8 +34,6 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 
-
-
 const SERVICES = [
   JwtHelperService,
   NbAuthService,

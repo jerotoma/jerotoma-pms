@@ -5,6 +5,7 @@ import { ThemeModule } from 'app/@theme/theme.module';
 import { FeaturesComponent } from './features.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ECommerceModule } from './resources/e-commerce.module';
+import { SecuritiesModule} from './securities/securities.module';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 
@@ -16,6 +17,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
     DashboardModule,
     ECommerceModule,
     MiscellaneousModule,
+    SecuritiesModule,
   ],
   declarations: [
     FeaturesComponent,

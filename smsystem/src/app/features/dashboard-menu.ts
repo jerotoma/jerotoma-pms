@@ -12,7 +12,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: 'School Resources',
+    title: 'Resources',
     icon: 'monitor-outline',
     link: '/dashboard/resources',
   },
@@ -62,7 +62,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Students',
-    icon: 'keypad-outline',
+    icon: 'calendar-outline',
     link: '/dashboard/ui-features',
     children: [
       {
@@ -85,7 +85,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Teachers',
-    icon: 'message-circle-outline',
+    icon: 'calendar-outline',
     children: [
       {
         title: 'Calendar',
@@ -141,27 +141,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Roles & Permission',
-    icon: 'browser-outline',
+    icon: 'shield-outline',
     children: [
       {
-        title: 'Dialog',
-        link: '/dashboard/modal-overlays/dialog',
+        title: 'Roles',
+        link: '/dashboard/securities/roles',
       },
       {
-        title: 'Window',
-        link: '/dashboard/modal-overlays/window',
-      },
-      {
-        title: 'Popover',
-        link: '/dashboard/modal-overlays/popover',
-      },
-      {
-        title: 'Toastr',
-        link: '/dashboard/modal-overlays/toastr',
-      },
-      {
-        title: 'Tooltip',
-        link: '/dashboard/modal-overlays/tooltip',
+        title: 'Permissions',
+        link: '/dashboard/securities/permissions',
       },
     ],
   },
