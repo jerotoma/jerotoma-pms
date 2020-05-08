@@ -7,10 +7,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 
 // Components
 import { UsersComponent } from './users.component';
-import { ParentsComponent } from './parents/parents.component';
-import { StaffsComponent } from './staffs/staffs.component';
-import { InfiniteListComponent } from './infinite-list/infinite-list.component';
-import { TeachersComponent } from './teachers/teachers.component';
+import { InfiniteListComponent } from '../backups/infinite-list/infinite-list.component';
 
 const routes: Routes = [{
   path: '',

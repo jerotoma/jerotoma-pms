@@ -4,10 +4,10 @@ public class DatabaseConstant {
 	
 	public static interface TABLES {
 		public static final String ACADEMIC_YEARS = "academic_years";
-		public static final String CLASS_ROOMS = "class_rooms";
+		public static final String ROOMS = "rooms";
 		public static final String STUDENT_CLASSES = "student_classes";
 		public static final String STUDENT_REGISTERED_CLASSES = "student_registered_classes";
-		public static final String CLASS_ROOM_RESOURCES = "class_room_resources";
+		public static final String ROOM_RESOURCES = "room_resources";
 		public static final String ACADEMIC_DISCIPLINE = "academic_disciplines";
 		public static final String POSITIONS = "positions";
 		public static final String TEACHERS = "teachers";
@@ -31,6 +31,9 @@ public class DatabaseConstant {
 		public static final String TEACHER_COURSE_ADMISSIONS = "teacher_course_admissions";
 		public static final String CLASSES = "classes";
 		public static final String COURSE_ACADEMIC_DISCIPLINES = "course_academic_disciplines";
+		
+		public static final String MEETING_TIMES = "meeting_times";
+		public static final String DEPARTMENTS = "departments";
 	}
 	
 	

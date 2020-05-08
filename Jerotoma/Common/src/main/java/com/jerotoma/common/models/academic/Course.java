@@ -75,7 +75,7 @@ public class Course implements Serializable{
 	private Integer updatedBy;
 	
 	@OneToMany(mappedBy = "course")
-	private List<JClass> jclass;
+	private List<Class> jclass;
 	
 	@Column(name="created_on")
 	private Date createdOn;

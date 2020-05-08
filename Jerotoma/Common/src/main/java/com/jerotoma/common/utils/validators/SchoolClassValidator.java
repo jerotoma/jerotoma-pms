@@ -6,14 +6,14 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.ClassRoomConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
-import com.jerotoma.common.models.academic.ClassRoom;
+import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class SchoolClassValidator {
 	
-	public static ClassRoom validate(Map<String, Object> params, List<String> requiredFields) {
+	public static Room validate(Map<String, Object> params, List<String> requiredFields) {
 		
-		ClassRoom schoolClass = new ClassRoom();
+		Room schoolClass = new Room();
 		String name  = null;		
 		String description = null;
 		String code = null;	

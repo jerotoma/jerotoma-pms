@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.ClassRoomConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.viewobjects.ClassRoomVO;
+import com.jerotoma.common.viewobjects.RoomVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerClassRoomDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -41,19 +41,19 @@ private JdbcTemplate jdbcTemplate;
 	}
 
 	@Override
-	public ClassRoomVO findObject(Integer primaryKey) throws SQLException {
+	public RoomVO findObject(Integer primaryKey) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
 		return this.jdbcTemplate.query(query, new ClassRoomSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
-	public ClassRoomVO findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public RoomVO findObjectUniqueKey(String uniqueKey) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE code = ? ").toString();
 		return this.jdbcTemplate.query(query, new ClassRoomSingleResultProcessor(), uniqueKey);
 	}
 
 	@Override
-	public List<ClassRoomVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<RoomVO> loadList(QueryParam queryParam) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
 				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
@@ -84,28 +84,28 @@ private JdbcTemplate jdbcTemplate;
 		
 		Object[] paramList = new Object[] {limit, offset};
 		
-		List<ClassRoomVO> classRooms = this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor(), paramList);
+		List<RoomVO> classRooms = this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor(), paramList);
 		map.put(ClassRoomConstant.CLASS_ROOMS, classRooms);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
 	}
 	
-	public class ClassRoomResultProcessor implements RowMapper<ClassRoomVO>{
+	public class ClassRoomResultProcessor implements RowMapper<RoomVO>{
 		@Override
-		public ClassRoomVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			ClassRoomVO classRoom = new ClassRoomVO(rs);
+		public RoomVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+			RoomVO classRoom = new RoomVO(rs);
 					
 			return classRoom;
 		}		
 	}
 	
-	public class ClassRoomSingleResultProcessor implements ResultSetExtractor<ClassRoomVO>{
+	public class ClassRoomSingleResultProcessor implements ResultSetExtractor<RoomVO>{
 		@Override
-		public ClassRoomVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			ClassRoomVO classRoom = null;
+		public RoomVO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			RoomVO classRoom = null;
 			if(rs.next()) {
-				classRoom = new ClassRoomVO(rs);			
+				classRoom = new RoomVO(rs);			
 			}
 			return classRoom;
 		}				

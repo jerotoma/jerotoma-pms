@@ -22,6 +22,8 @@ public class CourseVO {
 	
 	private AcademicYearVO academicYear;
 	
+	private DepartmentVO department;
+	
 	private List<AcademicDisciplineVO> academicDisciplines;
 	
 	private Date createdOn;
@@ -108,5 +110,13 @@ public class CourseVO {
 
 	public void setAcademicDisciplines(List<AcademicDisciplineVO> academicDisciplines) {
 		this.academicDisciplines = academicDisciplines;
+	}
+
+	public DepartmentVO getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(DepartmentVO department) {
+		this.department = department;
 	}	
 }

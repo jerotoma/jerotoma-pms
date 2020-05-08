@@ -47,12 +47,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'book-open-outline',
     children: [
       {
-        title: 'Teachers & Classes',
-        link: '/dashboard/admissions/classes',
-      },
-      {
         title: 'Students',
         link: '/dashboard/admissions/students',
+      },
+      {
+        title: 'Teachers & Classes',
+        link: '/dashboard/admissions/classes',
       },
     ],
   },

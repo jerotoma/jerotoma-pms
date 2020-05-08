@@ -519,11 +519,11 @@
 	 /**************************************************************
 	 * 															  *
 	 * 															  *
-	 * 			CLASS_ROOMS RELATED TABLES		  				  *
+	 * 			ROOMS RELATED TABLES		  				  *
 	 * 															  *
 	 *************************************************************/
 	    
-	CREATE TABLE IF NOT EXISTS public.class_rooms (
+	CREATE TABLE IF NOT EXISTS public.rooms (
 	    id bigserial NOT NULL,
 	    room_type character varying(255),
 	    code character varying(255),
@@ -540,24 +540,40 @@
 	/***************************************************************
 	 * 															  	*
 	 * 															  	*
-	 * 			CLASS_ROOM_RESOURCES RELATED TABLES		  			*
+	 * 			ROOM_RESOURCES RELATED TABLES		  			*
 	 * 															  	*
 	 ****************************************************************/
 	    
-	CREATE TABLE IF NOT EXISTS public.class_room_resources (
+	CREATE TABLE IF NOT EXISTS public.room_resources (
 	    id bigserial NOT NULL,
-	    class_room_id bigint NOT NULL,
+	    room_id bigint NOT NULL,
 	    name character varying(255) NOT NULL,
 	   	quantity bigint NOT NULL DEFAULT 1,
 	   	description text NOT NULL,
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	   	CONSTRAINT class_room_resources_pkey PRIMARY KEY(id),
-	   	CONSTRAINT class_rooms_fkey FOREIGN KEY (class_room_id)
-	        REFERENCES public.class_rooms (id) MATCH SIMPLE
+	   	CONSTRAINT room_resources_pkey PRIMARY KEY(id),
+	   	CONSTRAINT rooms_fkey FOREIGN KEY (room_id)
+	        REFERENCES public.rooms (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
+	    );
+	    
+	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			MEETING_TIMES RELATED TABLES		  			  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.meeting_times (
+	    id bigserial NOT NULL,
+	    time character varying(255),
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT meeting_times_pkey PRIMARY KEY(id)   	
 	    );
 	
 	
@@ -575,6 +591,7 @@
 	    class_room_id bigint NOT NULL,
 	   	academic_year_id bigint NOT NULL,
 	   	capacity bigint NOT NULL,
+	   	meeting_time_id bigint NOT NULL,
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
@@ -582,6 +599,10 @@
 	   	CONSTRAINT classes_pkey PRIMARY KEY(id),	   	
 	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	
+	   CONSTRAINT meeting_times_fkey FOREIGN KEY (meeting_time_id)
+	        REFERENCES public.meeting_times (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,	
 	   	CONSTRAINT teacher_fkey FOREIGN KEY (teacher_id)

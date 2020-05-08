@@ -28,11 +28,11 @@ import com.jerotoma.common.constants.ClassRoomConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academic.ClassRoom;
+import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.utils.validators.SchoolClassValidator;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
-import com.jerotoma.services.courses.ClassRoomService;
+import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.users.AuthUserService;
 
 
@@ -42,7 +42,7 @@ public class RestClassRoomController  extends BaseController {
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Autowired ClassRoomService schoolClassService;
+	@Autowired RoomService schoolClassService;
 	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired AuthUserService authUserService;
 	
@@ -88,7 +88,7 @@ public class RestClassRoomController  extends BaseController {
 						ClassRoomConstant.CLASS_ROOM_DESCRIPTION,
 						ClassRoomConstant.CLASS_ROOM_CODE));
 		
-		ClassRoom schoolClass = SchoolClassValidator.validate(params, requiredFields);
+		Room schoolClass = SchoolClassValidator.validate(params, requiredFields);
 		schoolClass.setUpdatedBy(authUser.getId());
 		
 		try {
@@ -123,7 +123,7 @@ public class RestClassRoomController  extends BaseController {
 						ClassRoomConstant.CLASS_ROOM_CODE));
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		
-		ClassRoom schoolClass = SchoolClassValidator.validate(params, requiredFields);
+		Room schoolClass = SchoolClassValidator.validate(params, requiredFields);
 		schoolClass.setUpdatedBy(authUser.getId());
 		
 		try {
@@ -144,7 +144,7 @@ public class RestClassRoomController  extends BaseController {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 			
 		this.securityCheckAccessByRoles(auth);		
-		ClassRoom schoolClass;
+		Room schoolClass;
 		
 		try {
 			schoolClass = schoolClassService.findObject(schoolClassId);	

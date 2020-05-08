@@ -21,7 +21,7 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
-import com.jerotoma.common.viewobjects.JClassVO;
+import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.StudentClassVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
@@ -151,7 +151,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		return jClass;
 	}	
 	
-	private List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException {
+	private List<ClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException {
 		return assemblerJClasseDao.loadStudentJClassesByAcademicYear(studentId, academicYearId);
 	}
 	

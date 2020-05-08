@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.viewobjects.ClassRoomVO;
+import com.jerotoma.common.viewobjects.RoomVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerClassRoomDao;
 import com.jerotoma.services.assemblers.academic.AssemblerClassRoomService;
 
@@ -18,17 +18,17 @@ public class AssemblerClassRoomServiceImpl implements AssemblerClassRoomService 
 	@Autowired AssemblerClassRoomDao assemblerClassRoomDao;
 	
 	@Override
-	public ClassRoomVO findObject(Integer primaryKey) throws SQLException {
+	public RoomVO findObject(Integer primaryKey) throws SQLException {
 		return assemblerClassRoomDao.findObject(primaryKey);
 	}
 
 	@Override
-	public ClassRoomVO findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public RoomVO findObjectUniqueKey(String uniqueKey) throws SQLException {
 		return assemblerClassRoomDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
-	public List<ClassRoomVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<RoomVO> loadList(QueryParam queryParam) throws SQLException {
 		return assemblerClassRoomDao.loadList(queryParam);
 	}
 

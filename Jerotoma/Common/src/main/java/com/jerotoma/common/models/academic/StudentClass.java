@@ -51,7 +51,7 @@ public class StudentClass {
         joinColumns = @JoinColumn(name = "student_class_id"),
         inverseJoinColumns = @JoinColumn(name = "class_id"))
 	@JoinColumn(name="class_id")
-	private Set<JClass> jClasses;
+	private Set<Class> jClasses;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -110,11 +110,11 @@ public class StudentClass {
 		this.student = student;
 	}
 	
-	public Set<JClass> getJClasses() {
+	public Set<Class> getJClasses() {
 		return jClasses;
 	}
 
-	public void setJClasses(Set<JClass> jClasses) {
+	public void setJClasses(Set<Class> jClasses) {
 		this.jClasses = jClasses;
 	}
 

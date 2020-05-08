@@ -29,7 +29,7 @@ import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.common.models.academic.JClass;
+import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.StudentClass;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.Student;
@@ -39,7 +39,7 @@ import com.jerotoma.common.viewobjects.StudentClassVO;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.CourseService;
-import com.jerotoma.services.courses.JClassService;
+import com.jerotoma.services.courses.ClassService;
 import com.jerotoma.services.courses.StudentClassService;
 import com.jerotoma.services.users.StudentService;
 
@@ -51,7 +51,7 @@ public class RestStudentClassController extends BaseController {
 	@Autowired AssemblerStudentClassService assemblerStudentClassService;
 	@Autowired AcademicYearService academicYearService;
 	@Autowired CourseService courseService;
-	@Autowired JClassService jClassService;
+	@Autowired ClassService jClassService;
 	@Autowired StudentService studentService;
 	
 	@GetMapping(value = {"", "/"})
@@ -127,7 +127,7 @@ public class RestStudentClassController extends BaseController {
 						StudentConstant.Class.STUDENT_ID,
 						StudentConstant.Class.JCLASS_IDS
 						));
-		Set<JClass> jClasses = new HashSet<>();
+		Set<Class> jClasses = new HashSet<>();
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass = new StudentClass();		
 		try {
@@ -143,7 +143,7 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			
 			for (Integer classId : jClassFields.getjClassIds()) {		
-				JClass jClass = jClassService.findObject(classId);						
+				Class jClass = jClassService.findObject(classId);						
 				jClasses.add(jClass);
 			}
 			studentClass.setJClasses(jClasses);			
@@ -179,7 +179,7 @@ public class RestStudentClassController extends BaseController {
 		
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass;
-		Set<JClass> jClasses = new HashSet<>();		
+		Set<Class> jClasses = new HashSet<>();		
 		try {			
 			studentClass = studentClassService.findObject(jClassFields.getId());	
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
@@ -190,7 +190,7 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setUpdatedBy(authUser.getId());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());		
 			for (Integer classId : jClassFields.getjClassIds()) {					
-				JClass jClass = jClassService.findObject(classId);		
+				Class jClass = jClassService.findObject(classId);		
 				jClasses.add(jClass);
 			}
 			studentClass.setJClasses(jClasses);			

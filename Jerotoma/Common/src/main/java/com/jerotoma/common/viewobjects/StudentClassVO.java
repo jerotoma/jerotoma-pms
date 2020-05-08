@@ -17,7 +17,7 @@ public class StudentClassVO {
 	
 	private AcademicYearVO academicYear;
 	
-	private List<JClassVO> jClasses;
+	private List<ClassVO> jClasses;
 	
 	private Integer updatedBy;
 	
@@ -49,11 +49,11 @@ public class StudentClassVO {
 		this.academicYear = academicYear;
 	}
 	
-	public List<JClassVO> getjClasses() {
+	public List<ClassVO> getjClasses() {
 		return jClasses;
 	}
 
-	public void setJClasses(List<JClassVO> jClasses) {
+	public void setJClasses(List<ClassVO> jClasses) {
 		if (jClasses != null) {
 			this.numberOfClasses = jClasses.size();
 		}

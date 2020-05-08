@@ -8,27 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.viewobjects.JClassVO;
+import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
-import com.jerotoma.services.assemblers.academic.AssemblerJClassService;
+import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 
 @Service
-public class AssemblerJClassServiceImpl  implements AssemblerJClassService {
+public class AssemblerJClassServiceImpl  implements AssemblerClassService {
 	
 	@Autowired AssemblerJClassDao assemblerJClassDao;
 	
 	@Override
-	public JClassVO findObject(Integer primaryKey) throws SQLException {
+	public ClassVO findObject(Integer primaryKey) throws SQLException {
 		return assemblerJClassDao.findObject(primaryKey);
 	}
 
 	@Override
-	public JClassVO findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public ClassVO findObjectUniqueKey(String uniqueKey) throws SQLException {
 		return assemblerJClassDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
-	public List<JClassVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<ClassVO> loadList(QueryParam queryParam) throws SQLException {
 		return assemblerJClassDao.loadList(queryParam);
 	}
 
@@ -43,19 +43,19 @@ public class AssemblerJClassServiceImpl  implements AssemblerJClassService {
 	}
 
 	@Override
-	public List<JClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
+	public List<ClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
 		return assemblerJClassDao.loadJClassesByAcademicYear(academicYearId);
 	}
 
 	@Override
-	public List<JClassVO> loadStudentUnregisteredJClassesByAcademicYear(Integer academicYearId, Integer studentId)
+	public List<ClassVO> loadStudentUnregisteredJClassesByAcademicYear(Integer academicYearId, Integer studentId)
 			throws SQLException {
 		
 		return assemblerJClassDao.loadStudentUnregisteredJClassesByAcademicYear(academicYearId, studentId);
 	}
 
 	@Override
-	public List<JClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId)
+	public List<ClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId)
 			throws SQLException {
 		return assemblerJClassDao.loadStudentJClassesByAcademicYear(studentId, academicYearId);
 	}
