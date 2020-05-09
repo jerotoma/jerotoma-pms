@@ -31,11 +31,12 @@ export class DepartmentDeleteComponent implements OnInit {
 
   deleteDepartment() {
     if (this.confirmed) {
-    this.departmentService.deleteDepartment(parseInt(this.departmentId, 10))
-      .subscribe((result: any ) => {
-        if (result) {
-         this.modalService.openSnackBar('Department has been deleted', 'success');
-        }
+      this.departmentService.deleteDepartment(parseInt(this.departmentId, 10))
+        .subscribe((result: any ) => {
+          if (result) {
+            this.dismiss();
+            this.modalService.openSnackBar('Department has been deleted', 'success');
+          }
       });
     }
   }

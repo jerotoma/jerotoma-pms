@@ -66,19 +66,18 @@
             <div class="row">
               <div class="col-md-6">
                   <div class="form-control-group">
-                      <label for="teacher-academicDiscipline" class="label">Field of Study</label>
-                      <nb-list>
-                        <nb-list-item
-                          *ngFor="let acad of academicDisciplines"
-                          [id]="'teacher-academicDiscipline-' + acad.id">
-                            <nb-checkbox
-                              [checked]="isChecked(acad)"
-                              (checkedChange)="onCheckboxChanged($event, acad)"
-                              status="primary">
-                              {{acad.name}}
-                            </nb-checkbox>
-                        </nb-list-item>
-                      </nb-list>
+                      <label for="course-department" class="label">Department</label>
+                      <nb-select
+                          fullWidth
+                          placeholder="Department"
+                          formControlName="departmentId"
+                          id="course-department">
+                          <nb-option
+                              *ngFor='let department of departments'
+                              [value]="department.id">
+                              {{department.name}}
+                          </nb-option>
+                        </nb-select>
                   </div>
                 </div>
             </div>

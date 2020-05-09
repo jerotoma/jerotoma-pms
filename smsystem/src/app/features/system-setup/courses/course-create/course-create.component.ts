@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Course, AcademicYear, AcademicDiscipline } from 'app/models';
+import { Course, AcademicYear, Department } from 'app/models';
 import {
   CourseService,
   AcademicYearService,
-  AcademicDisciplineService,
+  DepartmentService,
   ModalService,
 } from 'app/services';
 import { QueryParam } from 'app/utils';
@@ -29,7 +28,7 @@ export class CourseCreateComponent implements OnInit {
   course: Course;
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
-  academicDisciplines: AcademicDiscipline[] = [];
+  departments: Department[] = [];
   selectedAcademicDisciplines: number[] = [];
   showMessage: ShowMessage = {
     error: false,
@@ -43,14 +42,14 @@ export class CourseCreateComponent implements OnInit {
     private courseService:  CourseService,
     private formBuilder: FormBuilder,
     private academicYearService: AcademicYearService,
-    protected academicDisciplineService: AcademicDisciplineService,
+    protected departmentService: DepartmentService,
     private modalService: ModalService,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
     this.loadAcademicYears();
-    this.loadAcademicDisciplineList();
+    this.loadDepartmentList();
     if (this.action === 'edit') {
         this.loadCourse();
     }
@@ -62,7 +61,7 @@ export class CourseCreateComponent implements OnInit {
       code: this.course.code,
       id: this.course.id,
       academicYearId: this.course.academicYear.id,
-      academicDisciplineIds: this.academicDisciplineService.getAcademicDisciplineIds(this.course.academicDisciplines),
+      departmentId: this.course.department.id,
     });
   }
   dismiss() {
@@ -108,11 +107,11 @@ export class CourseCreateComponent implements OnInit {
     }
   }
 
-  loadAcademicDisciplineList() {
-    this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
-      if (academicDisciplines) {
+  loadDepartmentList() {
+    this.departmentService.loadDepartmentList().subscribe((departments: Department[] ) => {
+      if (departments) {
         this.showMessage.error = false;
-        this.academicDisciplines = academicDisciplines;
+        this.departments = departments;
       }
     });
   }
@@ -137,33 +136,10 @@ export class CourseCreateComponent implements OnInit {
       academicDisciplineIds: [null, Validators.required],
     });
   }
-  onCheckboxChanged(event: boolean, academicDiscipline: AcademicDiscipline) {
-      if (!event) {
-        for (let i = 0; i < this.selectedAcademicDisciplines.length; i++) {
-          if (this.selectedAcademicDisciplines[i] === academicDiscipline.id) {
-            this.selectedAcademicDisciplines.splice(i, 1);
-          }
-       }
-      } else {
-        this.selectedAcademicDisciplines.push(academicDiscipline.id);
-      }
-      this.courseForm.patchValue({
-        academicDisciplineIds: this.selectedAcademicDisciplines,
-      });
-  }
-
-  isChecked(academicDiscipline: AcademicDiscipline) {
-    if (this.course && this.course.academicDisciplines && this.course.academicDisciplines.length > 0) {
-      return this.course.academicDisciplines.find(acad => acad.id === academicDiscipline.id) !== null;
-    }
-    return false;
-  }
-
   loadCourse() {
     this.courseService.getCourse(parseInt(this.id, 10)).subscribe((course: Course) => {
       if (course) {
         this.course = course;
-        this.selectedAcademicDisciplines = this.academicDisciplineService.getAcademicDisciplineIds(course.academicDisciplines);
         this.patchCourse();
       }
     });

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
@@ -17,7 +18,7 @@ import com.jerotoma.services.assemblers.academic.DepartmentService;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 	
-	DepartmentDao departmentDao;
+	@Autowired DepartmentDao departmentDao;
 
 	@Override
 	public Department findObject(Integer primaryKey) throws SQLException {

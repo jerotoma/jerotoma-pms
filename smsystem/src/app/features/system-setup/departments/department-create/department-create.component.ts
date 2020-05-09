@@ -54,19 +54,19 @@ export class DepartmentCreateComponent implements OnInit {
   onSubmit() {
     this.isSubmitting = true;
     this.department = this.departmentForm.value;
-       if (this.action === 'edit') {
-      this.updateDepartment();
-    } else {
-      this.departmentService.createDepartment(this.department)
-          .subscribe((department: Department ) => {
-            this.isSubmitting = false;
-              if (department) {
-                this.department = department;
-                this.modalService.openSnackBar('Department ' + department.name + ' has been created', 'success');
-                this.dismiss();
-              }
-          });
-    }
+        if (this.action === 'edit') {
+            this.updateDepartment();
+        } else {
+          this.departmentService.createDepartment(this.department)
+              .subscribe((department: Department ) => {
+                this.isSubmitting = false;
+                  if (department) {
+                    this.department = department;
+                    this.modalService.openSnackBar('Department ' + department.name + ' has been created', 'success');
+                    this.dismiss();
+                  }
+              });
+        }
 
   }
   updateDepartment() {
@@ -82,16 +82,16 @@ export class DepartmentCreateComponent implements OnInit {
     }
   getDescriptionContent(description: string) {
    if (description) {
-    this.departmentForm.patchValue({
-      description: description,
-    });
+      this.departmentForm.patchValue({
+        description: description,
+      });
     }
   }
 
   loadForm() {
     this.departmentForm = this.formBuilder.group({
       id: [null],
-      name: ['', Validators.required]
+      name: ['', Validators.required ],
     });
   }
 
@@ -115,5 +115,4 @@ export class DepartmentCreateComponent implements OnInit {
       userType: 'department',
     };
   }
-
 }

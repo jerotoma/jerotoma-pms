@@ -71,7 +71,7 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		builder.append(DaoUtil.getOrderBy( "d." + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -96,7 +96,7 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT d.id, d.name, d.created_on, d.updated_on FROM ").append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ");		
+		return new StringBuilder("SELECT d.id, d.name, d.created_on AS createdOn, d.updated_on AS updatedOn FROM ").append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ");		
 	}
 	
 	public class DepartmentResultProcessor implements RowMapper<DepartmentVO>{

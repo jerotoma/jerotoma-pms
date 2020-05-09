@@ -1,4 +1,4 @@
-import { AcademicYear, AcademicDiscipline } from 'app/models';
+import { AcademicYear, AcademicDiscipline, Department } from 'app/models';
 
 export interface Course {
   id: number;
@@ -7,5 +7,5 @@ export interface Course {
   description: string;
   academicYear?: AcademicYear;
   academicDisciplines: AcademicDiscipline[];
-
+  department: Department;
 }

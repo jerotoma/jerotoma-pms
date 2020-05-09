@@ -19,8 +19,8 @@ export class DepartmentService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadDepartmentList(param: QueryParam): Observable<Department[]> {
-    return this.http.get(`${END_POINTS.departments}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+  loadDepartmentList(): Observable<Department[]> {
+    return this.http.get(`${END_POINTS.departments}/list`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
