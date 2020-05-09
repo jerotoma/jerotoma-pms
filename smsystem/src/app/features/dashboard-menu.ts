@@ -175,6 +175,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/system-setup/courses',
       },
       {
+        title: 'Departments',
+        link: '/dashboard/system-setup/departments',
+      },
+      {
         title: 'Rooms',
         link: '/dashboard/system-setup/rooms',
       },

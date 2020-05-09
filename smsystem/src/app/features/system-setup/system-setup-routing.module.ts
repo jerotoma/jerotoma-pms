@@ -36,6 +36,11 @@ const routes: Routes = [{
         .then(m => m.CoursesModule),
     },
     {
+      path: 'departments',
+      loadChildren: () => import('./departments/departments.module')
+        .then(m => m.DepartmentsModule),
+    },
+    {
       path: 'academic-disciplines',
       loadChildren: () => import('./academic-disciplines/academic-disciplines.module')
         .then(m => m.AcademicDisciplinesModule),

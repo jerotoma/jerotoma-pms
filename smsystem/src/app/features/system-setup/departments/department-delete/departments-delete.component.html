@@ -1,0 +1,11 @@
+<nb-card>
+  <nb-card-body>
+      <nb-alert outline="danger">
+         Are you sure you want to delete {{name}} course
+      </nb-alert>
+  </nb-card-body>
+  <nb-card-footer>
+    <button type='button'  class='push-right' (click)="onConfirmed()" nbButton hero status="danger">Yes</button>
+    <button  type='button'  class='push-right' nbButton hero status="success" (click)="dismiss()">No, Thank you</button>
+  </nb-card-footer>
+</nb-card>

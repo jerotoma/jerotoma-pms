@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
@@ -14,7 +15,7 @@ import com.jerotoma.services.assemblers.academic.AssemblerDepartmentService;
 @Service
 public class AssemblerDepartmentServiceImpl implements AssemblerDepartmentService {
 	
-	AssemblerDepartmentDao assemblerDepartmentDao;
+	@Autowired AssemblerDepartmentDao assemblerDepartmentDao;
 
 	@Override
 	public DepartmentVO findObject(Integer primaryKey) throws SQLException {		
