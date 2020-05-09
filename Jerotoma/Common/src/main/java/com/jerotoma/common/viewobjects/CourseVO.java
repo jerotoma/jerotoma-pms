@@ -14,6 +14,8 @@ public class CourseVO {
 	
 	private Integer academicYearId;
 	
+	private Integer departmentId;
+	
 	private String code;
 	
 	private String name;
@@ -36,6 +38,7 @@ public class CourseVO {
 		this.description = rs.getString(CourseConstant.COURSE_DESCRIPTION); 
 		this.id = rs.getInt(CourseConstant.COURSE_ID);
 		this.academicYearId = rs.getInt(CourseConstant.ACADEMIC_YEAR_ID);
+		this.departmentId = rs.getInt(CourseConstant.DEPARTMENT_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);		
 	}
@@ -98,6 +101,14 @@ public class CourseVO {
 
 	public Integer getAcademicYearId() {		
 		return academicYearId;
+	}
+
+	public Integer getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	public void setAcademicYearId(Integer academicYearId) {

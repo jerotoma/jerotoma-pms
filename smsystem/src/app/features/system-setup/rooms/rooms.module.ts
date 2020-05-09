@@ -17,28 +17,28 @@ import {
   NbAlertModule,
 } from '@nebular/theme';
 
-import { ClassRoomsRoutingModule } from './class-rooms-routing.module';
-import { ClassRoomsComponent } from './class-rooms.component';
-import { ClassRoomsViewComponent } from './class-rooms-view/class-rooms-view.component';
-import { ClassRoomCreateComponent } from './class-room-create/class-room-create.component';
-import { ClassRoomDeleteComponent } from './class-room-delete/class-room-delete.component';
+import { RoomsRoutingModule } from './rooms-routing.module';
+import { RoomsComponent } from './rooms.component';
+import { RoomsViewComponent } from './rooms-view/rooms-view.component';
+import { RoomCreateComponent } from './room-create/room-create.component';
+import { RoomDeleteComponent } from './room-delete/room-delete.component';
 
 
 const COMPONENTS = [
-  ClassRoomsComponent,
-  ClassRoomsViewComponent,
-  ClassRoomCreateComponent,
-  ClassRoomDeleteComponent,
+  RoomsComponent,
+  RoomsViewComponent,
+  RoomCreateComponent,
+  RoomDeleteComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  ClassRoomCreateComponent,
-  ClassRoomDeleteComponent,
+  RoomCreateComponent,
+  RoomDeleteComponent,
 ];
 
 const MODULES = [
   SharedModule,
-  ClassRoomsRoutingModule,
+  RoomsRoutingModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
@@ -71,4 +71,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class ClassRoomsModule { }
+export class RoomsModule { }

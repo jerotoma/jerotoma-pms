@@ -9,7 +9,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ClassCreateComponent } from '../class-create/class-create.component';
 import { DeleteModalComponent } from 'app/shared';
 
-import { JClassView, ResponseWrapper} from 'app/models';
+import { ClassView, ResponseWrapper} from 'app/models';
 import { ClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
@@ -41,7 +41,7 @@ export class ClassesViewComponent implements OnInit {
     totalNumberOfItems: number = 20;
     pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
     displayedColumns: string[] = ['id', 'course', 'courseCode', 'capacity', 'academicYearTerm', 'academicYear', 'teacher', 'action'];
-    dataSource: MatTableDataSource<JClassView > = new MatTableDataSource<JClassView >();
+    dataSource: MatTableDataSource<ClassView > = new MatTableDataSource<ClassView >();
 
     constructor(
       private classService: ClassService,
@@ -61,7 +61,7 @@ export class ClassesViewComponent implements OnInit {
           this.isLoading = false;
           const data = resp.data;
             this.totalNumberOfItems = data.count;
-            this.dataSource = new MatTableDataSource<JClassView>(data.jClasses);
+            this.dataSource = new MatTableDataSource<ClassView>(data.jClasses);
         });
     }
 
@@ -78,7 +78,7 @@ export class ClassesViewComponent implements OnInit {
       });
     }
 
-    edit(jClassView: JClassView) {
+    edit(jClassView: ClassView) {
      this.dialogService.open(ClassCreateComponent, {
         context: {
           title: 'Edit Class',
@@ -91,7 +91,7 @@ export class ClassesViewComponent implements OnInit {
         }
       });
     }
-    delete(jClassView: JClassView) {
+    delete(jClassView: ClassView) {
       this.dialogService.open(DeleteModalComponent, {
         context: {
           title: 'Delete Class',

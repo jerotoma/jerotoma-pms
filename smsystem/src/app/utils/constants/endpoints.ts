@@ -9,7 +9,7 @@ export const END_POINTS = {
   logout: '/api/auth/sign-out',
   positions: '/api/secured/positions',
   academicDisciplines: '/api/secured/academic-disciplines',
-  classRooms: '/api/secured/class-rooms',
+  rooms: '/api/secured/rooms',
   courses: '/api/secured/courses',
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',

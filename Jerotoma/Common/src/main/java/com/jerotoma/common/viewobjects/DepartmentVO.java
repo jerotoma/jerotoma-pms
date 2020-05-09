@@ -1,5 +1,7 @@
 package com.jerotoma.common.viewobjects;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,13 @@ public class DepartmentVO {
 		this.name = name;
 		this.createdOn = createdOn;
 		this.updatedOn = updatedOn;
+	}
+
+	public DepartmentVO(ResultSet rs) throws SQLException {
+		this.id = rs.getInt("id");
+		this.name = rs.getString("name");
+		this.createdOn = rs.getDate("createdOn");
+		this.updatedOn = rs.getDate("updatedOn");
 	}
 
 	public Integer getId() {

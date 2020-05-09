@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import com.jerotoma.common.constants.ClassRoomConstant;
+import com.jerotoma.common.constants.RoomConstant;
 import com.jerotoma.common.constants.SystemConstant;
 
 public class RoomVO {
@@ -29,11 +29,11 @@ public class RoomVO {
 	private List<ClassRoomResourceVO> classRoomResources;
 	
 	public RoomVO(ResultSet rs) throws SQLException {
-		this.code = rs.getString(ClassRoomConstant.CLASS_ROOM_CODE);
-		this.name = rs.getString(ClassRoomConstant.CLASS_ROOM_NAME);
-		this.description = rs.getString(ClassRoomConstant.CLASS_ROOM_DESCRIPTION); 
-		this.capacity = rs.getInt(ClassRoomConstant.CLASS_ROOM_CAPACITY); 
-		this.id = rs.getInt(ClassRoomConstant.CLASS_ROOM_ID);
+		this.code = rs.getString(RoomConstant.ROOM_CODE);
+		this.name = rs.getString(RoomConstant.ROOM_NAME);
+		this.description = rs.getString(RoomConstant.ROOM_DESCRIPTION); 
+		this.capacity = rs.getInt(RoomConstant.ROOM_CAPACITY); 
+		this.id = rs.getInt(RoomConstant.ROOM_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);
 		

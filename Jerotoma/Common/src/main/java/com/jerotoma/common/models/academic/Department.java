@@ -1,12 +1,14 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -29,6 +31,9 @@ public class Department {
 	
 	@Column
 	String name;
+	
+	@OneToMany(mappedBy = "department")
+	private List<Course> courses;
 	
 	@Column(name="created_on")
 	private Date createdOn;

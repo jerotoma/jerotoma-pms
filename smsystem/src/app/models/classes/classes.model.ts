@@ -1,24 +1,24 @@
 import { Course } from '../courses';
 import { Teacher, Student } from '../users';
 import { AcademicYear } from '../academic-years';
-import { ClassRoom } from '../class-rooms';
+import { Room } from '../rooms';
 
 
-export interface JClassView {
+export interface ClassView {
   id: number;
   teacher: Teacher;
   course: Course;
   academicYear: AcademicYear;
-  classRoom: ClassRoom;
+  room: Room;
   capacity: number;
 }
 
-export interface JClassAdmission {
+export interface ClassAdmission {
   id: number;
   teacher: Teacher;
   course: Course;
   academicYear: AcademicYear;
-  classRoom: ClassRoom;
+  room: Room;
   capacity: number;
 }
 
@@ -26,7 +26,7 @@ export interface StudentClass {
   id: number;
   student: Student;
   academicYear: AcademicYear;
-  jClasses: JClassView[];
+  jClasses: ClassView[];
   numberOfCourse: number;
 }
 

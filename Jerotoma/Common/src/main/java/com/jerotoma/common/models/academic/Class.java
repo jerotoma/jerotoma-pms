@@ -50,7 +50,7 @@ public class Class {
 	@JoinColumn(name="room_id")
 	private Room room;
 	
-	@ManyToMany(mappedBy="jClasses")
+	@ManyToMany(mappedBy="classes")
 	@JsonBackReference
 	private Set<StudentClass> studentClasses = new HashSet<>();
 	

@@ -6,20 +6,20 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 
-import { ClassRoomCreateComponent } from '../class-room-create/class-room-create.component';
-import { ClassRoomDeleteComponent } from '../class-room-delete/class-room-delete.component';
-import { ClassRoom } from 'app/models';
-import { ClassRoomService } from 'app/services';
+import { RoomCreateComponent } from '../room-create/room-create.component';
+import { RoomDeleteComponent } from '../room-delete/room-delete.component';
+import { Room, ResponseWrapper} from 'app/models';
+import { RoomService } from 'app/services';
 import { QueryParam } from 'app/utils';
 /**
  * @title Table with pagination
  */
 @Component({
   selector: 'app-class-rooms-view',
-  styleUrls: ['class-rooms-view.component.scss'],
-  templateUrl: 'class-rooms-view.component.html',
+  styleUrls: ['rooms-view.component.scss'],
+  templateUrl: 'rooms-view.component.html',
 })
-export class ClassRoomsViewComponent implements OnInit {
+export class RoomsViewComponent implements OnInit {
 
   param: QueryParam = {
     page: 1,
@@ -32,19 +32,19 @@ export class ClassRoomsViewComponent implements OnInit {
   };
 
   title: string = 'List of Class Rooms';
-  classRoom: ClassRoom;
+  classRoom: Room;
   hidePageSize: boolean = false;
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'name', 'code', 'capacity', 'description', 'action'];
-  dataSource: MatTableDataSource<ClassRoom> = new MatTableDataSource<ClassRoom>();
+  dataSource: MatTableDataSource<Room> = new MatTableDataSource<Room>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
-    private classRoomService: ClassRoomService,
+    private roomService: RoomService,
     private dialogService: NbDialogService,
     ) {
   }
@@ -55,7 +55,7 @@ export class ClassRoomsViewComponent implements OnInit {
   }
 
   open() {
-    this.dialogService.open(ClassRoomCreateComponent, {
+    this.dialogService.open(RoomCreateComponent, {
       context: {
         title: 'Add New Class',
         action: 'create',
@@ -67,42 +67,38 @@ export class ClassRoomsViewComponent implements OnInit {
 
   loadSchoolClasses() {
     this.isLoading = true;
-    this.classRoomService.getClassRooms(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        this.isLoading = false;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<ClassRoom>(data.classRooms);
-        }
-      }, error => {
-
+    this.roomService.getRooms(this.param)
+    .subscribe((resp: ResponseWrapper) => {
+      this.isLoading = false;
+      if (resp) {
+        const data = resp.data;
+        this.totalNumberOfItems = data.count;
+          this.dataSource = new MatTableDataSource<Room>(data.rooms);
+      }
     });
   }
-  edit(classRoom: ClassRoom) {
-    this.dialogService.open(ClassRoomCreateComponent, {
+  edit(room: Room) {
+    this.dialogService.open(RoomCreateComponent, {
       context: {
         title: 'Edit Class',
         action: 'edit',
-        id: classRoom.id.toString(),
-        code: classRoom.code,
-        name: classRoom.name,
-        capacity: classRoom.capacity.toString(),
-        description: classRoom.description,
+        id: room.id.toString(),
+        code: room.code,
+        name: room.name,
+        capacity: room.capacity.toString(),
+        description: room.description,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();
     });
   }
-  delete(classRoom: ClassRoom) {
-    this.dialogService.open(ClassRoomDeleteComponent, {
+  delete(room: Room) {
+    this.dialogService.open(RoomDeleteComponent, {
       context: {
         title: 'Delete Class',
         action: 'delete',
-        classRoomId: classRoom.id.toString(),
-        name: classRoom.name,
+        roomId: room.id.toString(),
+        name: room.name,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();

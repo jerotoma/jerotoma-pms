@@ -152,7 +152,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}	
 	
 	private List<ClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException {
-		return assemblerJClasseDao.loadStudentJClassesByAcademicYear(studentId, academicYearId);
+		return assemblerJClasseDao.loadStudentClassesByAcademicYear(studentId, academicYearId);
 	}
 	
 	private StudentVO loadStudentsByStudentID(Integer studentId) throws SQLException {		

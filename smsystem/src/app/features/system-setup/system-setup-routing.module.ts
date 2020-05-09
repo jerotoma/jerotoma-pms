@@ -21,9 +21,9 @@ const routes: Routes = [{
         .then(m => m.PositionsModule),
     },
     {
-      path: 'class-rooms',
-      loadChildren: () => import('./class-rooms/class-rooms.module')
-        .then(m => m.ClassRoomsModule),
+      path: 'rooms',
+      loadChildren: () => import('./rooms/rooms.module')
+        .then(m => m.RoomsModule),
     },
     {
       path: 'academic-years',

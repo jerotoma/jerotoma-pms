@@ -30,14 +30,14 @@ import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerClassRoomDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
 import com.jerotoma.database.assemblers.dao.schedules.AssemblerMeetingTimeDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 @Repository
-public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJClassDao {
+public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJClassDao {
 	
 	
 	private JdbcTemplate jdbcTemplate;
@@ -48,7 +48,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	@Autowired AssemblerCourseDao assemblerCourseDao;
 	@Autowired AssemblerStudentDao assemblerStudentDao;	
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
-	@Autowired AssemblerClassRoomDao assemblerClassRoomDao;
+	@Autowired AssemblerRoomDao assemblerClassRoomDao;
 	
 	Map<String, Object> map;
 	
@@ -138,7 +138,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT c.id, c.teacher_id AS teacherId, c.course_id AS courseId, c.class_room_id AS classRoomId, c.academic_year_id AS academicYearId, c.meeting_time_id AS meetingTimeId, c.capacity, c.updated_by AS updatedBy, c.created_on AS createdOn, c.updated_on AS updatedOn FROM public.classes c ");		
+		return new StringBuilder("SELECT c.id, c.teacher_id AS teacherId, c.course_id AS courseId, c.room_id AS roomId, c.academic_year_id AS academicYearId, c.meeting_time_id AS meetingTimeId, c.capacity, c.updated_by AS updatedBy, c.created_on AS createdOn, c.updated_on AS updatedOn FROM public.classes c ");		
 	}
 	
 	@Override
@@ -164,11 +164,11 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	
 	public ClassVO mapJClassResult(ResultSet rs) throws SQLException {
 		ClassVO jClass = new ClassVO(rs);
-		jClass.setAcademicYear(loadAcademicYear(rs.getInt(ClassConstant.JCLASS_ACADEMIC_YEAR_ID)));
-		jClass.setRoom(loadClassRoom(rs.getInt(ClassConstant.JCLASS_CLASS_ROOM_ID)));
-		jClass.setCourse(loadCourse(rs.getInt(ClassConstant.JCLASS_COURSE_ID)));
-		jClass.setTeacher(loadTeacher(rs.getInt(ClassConstant.JCLASS_TEACHER_ID)));
-		jClass.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.JCLASS_MEETING_TIME_ID)));
+		jClass.setAcademicYear(loadAcademicYear(rs.getInt(ClassConstant.CLASS_ACADEMIC_YEAR_ID)));
+		jClass.setRoom(loadClassRoom(rs.getInt(ClassConstant.CLASS_ROOM_ID)));
+		jClass.setCourse(loadCourse(rs.getInt(ClassConstant.CLASS_COURSE_ID)));
+		jClass.setTeacher(loadTeacher(rs.getInt(ClassConstant.CLASS_TEACHER_ID)));
+		jClass.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));
 		jClass.setStudents(loadStudentsByJClassID(jClass.getId()));
 		return jClass;
 	}
@@ -193,12 +193,12 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 	}
 	
 	@Override
-	public List<ClassVO> loadJClassesByAcademicYear(Integer academicYearId) throws SQLException {
+	public List<ClassVO> loadClassesByAcademicYear(Integer academicYearId) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE c.academic_year_id = ? ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId);
 	}
 	@Override
-	public List<ClassVO> loadStudentUnregisteredJClassesByAcademicYear(Integer academicYearId, Integer studentId)
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()				
 				.append(" WHERE c.academic_year_id = ? AND c.course_id NOT IN( ")
@@ -210,7 +210,7 @@ public class AssemblerJClassDaoImpl extends JdbcDaoSupport implements AssemblerJ
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, academicYearId, studentId);
 	}
 	@Override
-	public List<ClassVO> loadStudentJClassesByAcademicYear(Integer studentId, Integer academicYearId)
+	public List<ClassVO> loadStudentClassesByAcademicYear(Integer studentId, Integer academicYearId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()
 			.append(" INNER JOIN student_registered_classes src ON src.class_id = c.id ")

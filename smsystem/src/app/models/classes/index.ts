@@ -1,1 +1,1 @@
-export * from './jclasses.model';
+export * from './classes.model';

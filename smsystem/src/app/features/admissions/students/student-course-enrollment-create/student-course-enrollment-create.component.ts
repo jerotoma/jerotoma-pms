@@ -12,7 +12,7 @@ import {
 import { QueryParam, USER_TYPE } from 'app/utils';
 import {
   ShowMessage,
-  JClassView,
+  ClassView,
   StudentClassAdmission,
   Student,
   AcademicYear,
@@ -52,7 +52,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     userType:  this.userType,
   };
 
-  jClasses: JClassView[];
+  jClasses: ClassView[];
   academicYears: AcademicYear[];
   student: Student;
   students: Student[];
@@ -96,7 +96,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     });
   }
 
-  checkedChange(checked: boolean, jClass: JClassView) {
+  checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {
       this.jClassIds.push(jClass.id);
     } else {
@@ -140,7 +140,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
 
   loadJClassesByAcademicYear(academicYearId: number) {
     this.isLoading = true;
-    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });
@@ -174,7 +174,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     });
   }
 
-  pushJClasses(jClasses: JClassView[]) {
+  pushJClasses(jClasses: ClassView[]) {
     const jClassesIds  = [];
     jClasses.forEach((jClass) => {
       jClassesIds.push(jClass.id);

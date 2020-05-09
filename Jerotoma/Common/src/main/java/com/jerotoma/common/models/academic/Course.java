@@ -71,11 +71,15 @@ public class Course implements Serializable{
 	@JoinColumn(name="academic_year_id")
 	private AcademicYear academicYear;
 	
+	@ManyToOne
+	@JoinColumn(name="department_id")
+	private Department department;
+	
 	@Column(name="updated_by")
 	private Integer updatedBy;
 	
 	@OneToMany(mappedBy = "course")
-	private List<Class> jclass;
+	private List<Class> classes;
 	
 	@Column(name="created_on")
 	private Date createdOn;

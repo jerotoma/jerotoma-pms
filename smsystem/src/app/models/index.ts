@@ -5,7 +5,7 @@ export * from './tokens';
 export * from './positions';
 export * from './messages';
 export * from './courses';
-export * from './class-rooms';
+export * from './rooms';
 export * from './addresses';
 export * from './classes';
 export * from './system-configs';

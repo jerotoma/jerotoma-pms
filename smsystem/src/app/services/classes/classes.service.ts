@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, JClassView } from 'app/models';
+import { ResponseWrapper, ClassView } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ import { ResponseWrapper, JClassView } from 'app/models';
 export class ClassService {
   constructor(private http: HttpClient) { }
 
-  getClass(classId: number): Observable<JClassView>  {
+  getClass(classId: number): Observable<ClassView>  {
     return this.http.get(`${END_POINTS.classes}/${classId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
@@ -21,7 +21,7 @@ export class ClassService {
     return this.http.get(`${END_POINTS.classes}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
-  loadJClassesByAcademicYear(academicYearId: number): Observable<JClassView[]> {
+  loadJClassesByAcademicYear(academicYearId: number): Observable<ClassView[]> {
     return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
@@ -30,7 +30,7 @@ export class ClassService {
     return this.http.get(`${END_POINTS.classes}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
-  createClass(data?: any): Observable<JClassView> {
+  createClass(data?: any): Observable<ClassView> {
     return this.http.post<any>(`${END_POINTS.classes}`, data)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
@@ -40,7 +40,7 @@ export class ClassService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateClass(data?: any): Observable<JClassView> {
+  updateClass(data?: any): Observable<ClassView> {
     return this.http.put(`${END_POINTS.classes}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

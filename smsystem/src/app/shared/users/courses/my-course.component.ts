@@ -9,7 +9,7 @@ import {
 import { USER_TYPE, QueryParam } from 'app/utils';
 import {
   ShowMessage,
-  JClassView,
+  ClassView,
   StudentClassAdmission,
   Student,
   AcademicYear,
@@ -20,7 +20,7 @@ import {
 @Component({
   selector: 'app-my-course',
   templateUrl: './my-course.component.html',
-  styleUrls: ['./my-course.component.scss']
+  styleUrls: ['./my-course.component.scss'],
 })
 export class MyCourseComponent implements OnInit {
 
@@ -34,7 +34,7 @@ export class MyCourseComponent implements OnInit {
   isLoading: boolean = false;
   confirmed: boolean = false;
   academicYear: AcademicYear;
-  jClasses: JClassView[];
+  jClasses: ClassView[];
   academicYears: AcademicYear[];
   student: Student;
   students: Student[];
@@ -103,7 +103,7 @@ export class MyCourseComponent implements OnInit {
 
   loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
     this.isLoading = true;
-    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });
@@ -135,7 +135,7 @@ export class MyCourseComponent implements OnInit {
 
   loadJClassesByAcademicYear(academicYearId: number) {
     this.isLoading = true;
-    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });

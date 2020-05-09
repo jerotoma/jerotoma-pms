@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.ClassRoomConstant;
+import com.jerotoma.common.constants.RoomConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
@@ -37,19 +37,19 @@ import com.jerotoma.services.users.AuthUserService;
 
 
 @RestController
-@RequestMapping(EndPointConstants.REST_CLASS_ROOM_CONTROLLER.BASE)
-public class RestClassRoomController  extends BaseController {
+@RequestMapping(EndPointConstants.REST_ROOM_CONTROLLER.BASE)
+public class RestRoomController  extends BaseController {
 	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Autowired RoomService schoolClassService;
+	@Autowired RoomService roomService;
 	@Autowired IAuthenticationFacade authenticationFacade;
 	@Autowired AuthUserService authUserService;
 	
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> getSchoolClasss(Authentication auth,
+	protected HttpResponseEntity<Object> getRooms(Authentication auth,
 			@RequestParam(value="searchTerm", required=false) String search,
 			@RequestParam(value="page", required=false) Integer page,
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
@@ -62,7 +62,7 @@ public class RestClassRoomController  extends BaseController {
 		this.securityCheckAccessByRoles(auth);			
 				
 		try {
-			map = schoolClassService.loadMapList(queryParam);		
+			map = roomService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -76,7 +76,7 @@ public class RestClassRoomController  extends BaseController {
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createSchoolClass(
+	protected HttpResponseEntity<Object> createRoom(
 			Authentication auth, 
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		this.securityCheckAccessByRoles(auth);	
@@ -84,22 +84,22 @@ public class RestClassRoomController  extends BaseController {
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						ClassRoomConstant.CLASS_ROOM_NAME,
-						ClassRoomConstant.CLASS_ROOM_DESCRIPTION,
-						ClassRoomConstant.CLASS_ROOM_CODE));
+						RoomConstant.ROOM_NAME,
+						RoomConstant.ROOM_DESCRIPTION,
+						RoomConstant.ROOM_CODE));
 		
-		Room schoolClass = SchoolClassValidator.validate(params, requiredFields);
-		schoolClass.setUpdatedBy(authUser.getId());
+		Room room = SchoolClassValidator.validate(params, requiredFields);
+		room.setUpdatedBy(authUser.getId());
 		
 		try {
-			schoolClass = schoolClassService.createObject(schoolClass);		
+			room = roomService.createObject(room);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(schoolClass);
+		instance.setData(room);
 		return instance;
 	}
 
@@ -118,23 +118,23 @@ public class RestClassRoomController  extends BaseController {
 		this.securityCheckAccessByRoles(auth);	
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
-						ClassRoomConstant.CLASS_ROOM_NAME,
-						ClassRoomConstant.CLASS_ROOM_DESCRIPTION,
-						ClassRoomConstant.CLASS_ROOM_CODE));
+						RoomConstant.ROOM_NAME,
+						RoomConstant.ROOM_DESCRIPTION,
+						RoomConstant.ROOM_CODE));
 		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		
-		Room schoolClass = SchoolClassValidator.validate(params, requiredFields);
-		schoolClass.setUpdatedBy(authUser.getId());
+		Room room = SchoolClassValidator.validate(params, requiredFields);
+		room.setUpdatedBy(authUser.getId());
 		
 		try {
-			schoolClass = schoolClassService.updateObject(schoolClass);		
+			room = roomService.updateObject(room);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(schoolClass);
+		instance.setData(room);
 		return instance;
 	}
 
@@ -144,16 +144,16 @@ public class RestClassRoomController  extends BaseController {
 		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
 			
 		this.securityCheckAccessByRoles(auth);		
-		Room schoolClass;
+		Room room;
 		
 		try {
-			schoolClass = schoolClassService.findObject(schoolClassId);	
-			if (schoolClass == null) {
+			room = roomService.findObject(schoolClassId);	
+			if (room == null) {
 				instance.setSuccess(false);
 				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 				return instance;
 			} 
-			boolean isDeleted = schoolClassService.deleteObject(schoolClass);
+			boolean isDeleted = roomService.deleteObject(room);
 			instance.setSuccess(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

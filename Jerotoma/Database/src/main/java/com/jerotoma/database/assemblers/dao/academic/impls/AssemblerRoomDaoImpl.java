@@ -18,15 +18,15 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.ClassRoomConstant;
+import com.jerotoma.common.constants.RoomConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.RoomVO;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerClassRoomDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 
 @Repository
-public class AssemblerClassRoomDaoImpl extends JdbcDaoSupport implements AssemblerClassRoomDao {
+public class AssemblerRoomDaoImpl extends JdbcDaoSupport implements AssemblerRoomDao {
 	
 	
 private JdbcTemplate jdbcTemplate;
@@ -85,7 +85,7 @@ private JdbcTemplate jdbcTemplate;
 		Object[] paramList = new Object[] {limit, offset};
 		
 		List<RoomVO> classRooms = this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor(), paramList);
-		map.put(ClassRoomConstant.CLASS_ROOMS, classRooms);
+		map.put(RoomConstant.ROOMS, classRooms);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
@@ -123,7 +123,7 @@ private JdbcTemplate jdbcTemplate;
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT id, code, name, capacity, description, created_on, updated_on FROM public.class_rooms ");
+		return new StringBuilder("SELECT id, code, name, capacity, description, created_on, updated_on FROM public.rooms ");
 		
 	}
 

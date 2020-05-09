@@ -2,7 +2,7 @@ export * from './academic-disciplines';
 export * from './academic-years';
 export * from './positions';
 export * from './users';
-export * from './class-rooms';
+export * from './rooms';
 export * from './classes';
 export * from './interceptors';
 export * from './guards';

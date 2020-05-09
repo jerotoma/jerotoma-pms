@@ -9,37 +9,37 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.viewobjects.RoomVO;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerClassRoomDao;
-import com.jerotoma.services.assemblers.academic.AssemblerClassRoomService;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
+import com.jerotoma.services.assemblers.academic.AssemblerRoomService;
 
 @Service
-public class AssemblerClassRoomServiceImpl implements AssemblerClassRoomService {
+public class AssemblerRoomServiceImpl implements AssemblerRoomService {
 	
-	@Autowired AssemblerClassRoomDao assemblerClassRoomDao;
+	@Autowired AssemblerRoomDao assemblerRoomDao;
 	
 	@Override
 	public RoomVO findObject(Integer primaryKey) throws SQLException {
-		return assemblerClassRoomDao.findObject(primaryKey);
+		return assemblerRoomDao.findObject(primaryKey);
 	}
 
 	@Override
 	public RoomVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return assemblerClassRoomDao.findObjectUniqueKey(uniqueKey);
+		return assemblerRoomDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
 	public List<RoomVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerClassRoomDao.loadList(queryParam);
+		return assemblerRoomDao.loadList(queryParam);
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		return assemblerClassRoomDao.loadMapList(queryParam);
+		return assemblerRoomDao.loadMapList(queryParam);
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		return assemblerClassRoomDao.countObject();
+		return assemblerRoomDao.countObject();
 	}
 
 }

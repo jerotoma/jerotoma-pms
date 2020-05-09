@@ -80,16 +80,16 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="class-classRoom" class="label">Class Room</label>
+                        <label for="class-classRoom" class="label">Room</label>
                         <nb-select
                           fullWidth
-                          placeholder="Class Room"
-                          formControlName="classRoomId"
-                          id="class-classRoom">
+                          placeholder="Room"
+                          formControlName="roomId"
+                          id="class-room">
                           <nb-option
-                              *ngFor='let classRoom of classRooms'
-                              [value]="classRoom.id">
-                              {{classRoom.name}}
+                              *ngFor='let room of rooms'
+                              [value]="room.id">
+                              {{room.name}}
                           </nb-option>
                         </nb-select>
                     </div>

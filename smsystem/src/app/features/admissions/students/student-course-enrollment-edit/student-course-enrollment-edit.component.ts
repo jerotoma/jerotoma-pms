@@ -12,12 +12,12 @@ import {
  } from 'app/services';
 import {
   ShowMessage,
-  JClassView,
+  ClassView,
   StudentClassAdmission,
   Student,
   AcademicYear,
   StudentClass,
-  JClassAdmission,
+  ClassAdmission,
   ResponseWrapper,
 } from 'app/models';
 import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
@@ -56,8 +56,8 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     userType: this.userType,
   };
 
-  registeredJClasses: JClassView[];
-  jClasses: JClassView[];
+  registeredJClasses: ClassView[];
+  jClasses: ClassView[];
   academicYears: AcademicYear[];
   student: Student;
   students: Student[];
@@ -102,7 +102,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
               this.dismiss();
           });
   }
-  removeJClass(event: any, jClass: JClassView, isRemoveJClass: boolean) {
+  removeJClass(event: any, jClass: ClassView, isRemoveJClass: boolean) {
     event.preventDefault();
     event.stopPropagation();
     if (isRemoveJClass) {
@@ -114,7 +114,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
      }
     }
   }
-  checkedChange(checked: boolean, jClass: JClassView) {
+  checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {
       this.jClassIds.push(jClass.id);
     } else {
@@ -162,7 +162,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
 
   loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
     this.isLoading = true;
-    this.classService.loadUnregisteredJClassesByStudent(academicYearId, studentId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadUnregisteredJClassesByStudent(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });
@@ -170,7 +170,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
 
   loadJClassesByAcademicYear(academicYearId: number) {
     this.isLoading = true;
-    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });
@@ -207,7 +207,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     });
   }
 
-  pushJClasses(jClasses: JClassView[]) {
+  pushJClasses(jClasses: ClassView[]) {
     const jClassesIds  = [];
     jClasses.forEach((jClass) => {
       jClassesIds.push(jClass.id);
@@ -215,7 +215,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     return jClassesIds;
   }
 
-  removeItemFromArray(jClasses: JClassView[], jClass: JClassView) {
+  removeItemFromArray(jClasses: ClassView[], jClass: ClassView) {
     for (let i = 0; i < this.jClasses.length; i++) {
       if ( this.jClasses[i].id === jClass.id) {
         this.jClasses.splice(i, 1);

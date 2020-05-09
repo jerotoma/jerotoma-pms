@@ -154,6 +154,23 @@
 	    );
 	    
 	    
+	       
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			DEPARTMENT RELATED TABLES					  	  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.departments(
+	    id bigserial NOT NULL,
+	    name character varying(255) NOT NULL,	    
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT department_pkey PRIMARY KEY (id)
+	    );
+	    
+	    
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -163,6 +180,7 @@
 	CREATE TABLE IF NOT EXISTS public.teachers(
 	    id bigserial NOT NULL,
 	    user_id bigint NOT NULL,
+	    department_id bigint NOT NULL,
 	    position_id bigint NOT NULL,
 	    academic_discipline_id bigint NOT NULL,
 	    user_code character varying(255) NOT NULL,
@@ -181,6 +199,10 @@
 	   	CONSTRAINT teachers_pkey PRIMARY KEY (id),
 	   	CONSTRAINT user_id UNIQUE (user_id), 
 	   	CONSTRAINT user_code UNIQUE (user_code),
+	   	CONSTRAINT departments_fkey FOREIGN KEY (department_id)
+	        REFERENCES public.departments (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	    CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
@@ -351,6 +373,7 @@
 	CREATE TABLE IF NOT EXISTS public.courses(
 	    id bigserial NOT NULL,
 	    academic_year_id bigint NOT NULL,
+	    department_id bigint NOT NULL,
 	    name character varying(255) NOT NULL,
 	    code character varying(255) NOT NULL,
 	    description text NOT NULL,
@@ -359,6 +382,10 @@
 	    updated_on timestamp with time zone NOT NULL,
 	    CONSTRAINT courses_ukey UNIQUE (code),
 	   	CONSTRAINT courses_pkey PRIMARY KEY (id),
+	   	CONSTRAINT departments_fkey FOREIGN KEY (department_id)
+	        REFERENCES public.departments (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	   	CONSTRAINT academic_years_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
@@ -533,7 +560,7 @@
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	   	CONSTRAINT class_rooms_pkey PRIMARY KEY(id)   	
+	   	CONSTRAINT rooms_pkey PRIMARY KEY(id)   	
 	    );
 	    
 	    
@@ -588,7 +615,7 @@
 	    id bigserial NOT NULL,
 	    teacher_id bigint NOT NULL,
 	    course_id bigint NOT NULL,
-	    class_room_id bigint NOT NULL,
+	    room_id bigint NOT NULL,
 	   	academic_year_id bigint NOT NULL,
 	   	capacity bigint NOT NULL,
 	   	meeting_time_id bigint NOT NULL,
@@ -609,8 +636,8 @@
 	        REFERENCES public.teachers (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,	
-		CONSTRAINT class_rooms_fkey FOREIGN KEY (class_room_id)
-		    REFERENCES public.class_rooms (id) MATCH SIMPLE
+		CONSTRAINT rooms_fkey FOREIGN KEY (room_id)
+		    REFERENCES public.rooms (id) MATCH SIMPLE
 		    ON UPDATE CASCADE
 		    ON DELETE CASCADE,
 		CONSTRAINT courses_fkey FOREIGN KEY (course_id)

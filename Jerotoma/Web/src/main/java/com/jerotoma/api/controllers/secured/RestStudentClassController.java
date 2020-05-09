@@ -142,11 +142,11 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			
-			for (Integer classId : jClassFields.getjClassIds()) {		
+			for (Integer classId : jClassFields.getClassIds()) {		
 				Class jClass = jClassService.findObject(classId);						
 				jClasses.add(jClass);
 			}
-			studentClass.setJClasses(jClasses);			
+			studentClass.setClasses(jClasses);			
 			studentClass = studentClassService.createObject(studentClass);			
 			instance.setData(studentClass);
 		} catch (SQLException e) {
@@ -189,11 +189,11 @@ public class RestStudentClassController extends BaseController {
 			studentClass.setAcademicYear(academicYear);
 			studentClass.setUpdatedBy(authUser.getId());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());		
-			for (Integer classId : jClassFields.getjClassIds()) {					
+			for (Integer classId : jClassFields.getClassIds()) {					
 				Class jClass = jClassService.findObject(classId);		
 				jClasses.add(jClass);
 			}
-			studentClass.setJClasses(jClasses);			
+			studentClass.setClasses(jClasses);			
 			studentClass = studentClassService.updateObject(studentClass);
 			instance.setData(studentClass);
 				

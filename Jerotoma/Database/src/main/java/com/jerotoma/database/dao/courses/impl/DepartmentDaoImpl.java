@@ -12,74 +12,73 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.RoomConstant;
+import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.models.academic.Room;
+import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.database.dao.DaoUtil;
-import com.jerotoma.database.dao.courses.RoomDao;
+import com.jerotoma.database.dao.courses.DepartmentDao;
 
 @Repository
 @Transactional
-public class RoomDaoImpl implements RoomDao {
+public class DepartmentDaoImpl implements DepartmentDao {
 	
 	@PersistenceContext 
 	private EntityManager entityManager;
-	
-	
+
 	@Override
-	public Room findObject(Integer primaryKey) throws SQLException {
-		return entityManager.find(Room.class, primaryKey);
+	public Department findObject(Integer primaryKey) throws SQLException {
+		return entityManager.find(Department.class, primaryKey);
 	}
 
 	@Override
-	public Room findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return entityManager.createQuery("FROM Room WHERE code := ?", Room.class).setParameter("code", uniqueKey).getSingleResult();
+	public Department findObjectUniqueKey(String uniqueKey) throws SQLException {
+		return findObject(Integer.valueOf(uniqueKey));
 	}
 
 	@Override
-	public Room createObject(Room object) throws SQLException {
+	public Department createObject(Department object) throws SQLException {
 		entityManager.persist(object);
 		return findObject(object.getId());
 	}
 
 	@Override
-	public Boolean deleteObject(Room object) throws SQLException {
+	public Department updateObject(Department object) throws SQLException {		
+		return entityManager.merge(object);
+	}
+
+	@Override
+	public Boolean deleteObject(Department object) throws SQLException {
 		entityManager.remove(entityManager.contains(object) ? object : entityManager.merge(object));
 		return true;
 	}
 
 	@Override
-	public List<Room> loadList(QueryParam queryParam) throws SQLException {
-		return entityManager.createQuery("FROM Room ", Room.class).getResultList();
+	public List<Department> loadList(QueryParam queryParam) throws SQLException {
+		return entityManager.createQuery("FROM Department", Department.class).getResultList();
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		
 		Long countResults = countObject();
 		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
 		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
 		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		List<Room> rooms = entityManager.createQuery("FROM Room", Room.class)				
+		
+		List<Department> departments = entityManager.createQuery("FROM Department", Department.class)
 				.setMaxResults(limit)
 				.setFirstResult(offset)
 				.getResultList();
-		map.put(RoomConstant.ROOMS, rooms);
+		map.put(DepartmentConstant.DEPARTMENTS, departments);
 		map.put(SystemConstant.SYSTEM_COUNT, countResults);
-		map.put(SystemConstant.PAGE_COUNT, pageCount);		
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
+		
 		return map;
 	}
 
 	@Override
-	public Room updateObject(Room object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
-	}
-
-	@Override
 	public Long countObject() throws SQLException {
-		return entityManager.createQuery("SELECT count(*) FROM Room", Long.class)				
+		return entityManager.createQuery("SELECT count(*) FROM Department", Long.class)				
 				.getSingleResult();
 	}
 

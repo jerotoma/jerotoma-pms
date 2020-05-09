@@ -24,21 +24,21 @@ public static Class.ClassFields validate(Map<String, Object> params, List<String
 			capacity  = (Integer)params.get(ClassConstant.JCLASS_CAPACITY);
 		}
 		
-		if(params.containsKey(ClassConstant.JCLASS_COURSE_ID)) {
-			courseId  = (Integer)params.get(ClassConstant.JCLASS_COURSE_ID);
+		if(params.containsKey(ClassConstant.CLASS_COURSE_ID)) {
+			courseId  = (Integer)params.get(ClassConstant.CLASS_COURSE_ID);
 		}
-		if(params.containsKey(ClassConstant.JCLASS_CLASS_ROOM_ID)) {
-			classRoomId  = (Integer)params.get(ClassConstant.JCLASS_CLASS_ROOM_ID);
+		if(params.containsKey(ClassConstant.CLASS_ROOM_ID)) {
+			classRoomId  = (Integer)params.get(ClassConstant.CLASS_ROOM_ID);
 		}
-		if(params.containsKey(ClassConstant.JCLASS_TEACHER_ID)) {
-			teacherId  = (Integer)params.get(ClassConstant.JCLASS_TEACHER_ID);
+		if(params.containsKey(ClassConstant.CLASS_TEACHER_ID)) {
+			teacherId  = (Integer)params.get(ClassConstant.CLASS_TEACHER_ID);
 		}
-		if(params.containsKey(ClassConstant.JCLASS_ACADEMIC_YEAR_ID)) {
-			academicYearId  = (Integer)params.get(ClassConstant.JCLASS_ACADEMIC_YEAR_ID);
+		if(params.containsKey(ClassConstant.CLASS_ACADEMIC_YEAR_ID)) {
+			academicYearId  = (Integer)params.get(ClassConstant.CLASS_ACADEMIC_YEAR_ID);
 		}
 		
-		if(params.containsKey(ClassConstant.JCLASS_MEETING_TIME_ID)) {
-			meetingTimeId  = (Integer)params.get(ClassConstant.JCLASS_MEETING_TIME_ID);
+		if(params.containsKey(ClassConstant.CLASS_MEETING_TIME_ID)) {
+			meetingTimeId  = (Integer)params.get(ClassConstant.CLASS_MEETING_TIME_ID);
 		}
 		
 		if(params.containsKey(ClassConstant.JCLASS_ID)) {
@@ -53,23 +53,23 @@ public static Class.ClassFields validate(Map<String, Object> params, List<String
 			throw new FieldIsRequiredException("Capacity is required to continue");
 		}
 		
-		if (courseId == null && requiredFields.contains(ClassConstant.JCLASS_COURSE_ID)) {
+		if (courseId == null && requiredFields.contains(ClassConstant.CLASS_COURSE_ID)) {
 			throw new FieldIsRequiredException("Course ID is required to continue");
 		}
 		
-		if (teacherId == null && requiredFields.contains(ClassConstant.JCLASS_TEACHER_ID)) {
+		if (teacherId == null && requiredFields.contains(ClassConstant.CLASS_TEACHER_ID)) {
 			throw new FieldIsRequiredException("Teacher ID is required to continue");
 		}
 		
-		if (classRoomId == null && requiredFields.contains(ClassConstant.JCLASS_CLASS_ROOM_ID)) {
+		if (classRoomId == null && requiredFields.contains(ClassConstant.CLASS_ROOM_ID)) {
 			throw new FieldIsRequiredException("Class Room ID is required to continue");
 		}
 		
-		if (academicYearId == null && requiredFields.contains(ClassConstant.JCLASS_ACADEMIC_YEAR_ID)) {
+		if (academicYearId == null && requiredFields.contains(ClassConstant.CLASS_ACADEMIC_YEAR_ID)) {
 			throw new FieldIsRequiredException("Academic Year ID is required to continue");
 		}
 		
-		if (meetingTimeId == null && requiredFields.contains(ClassConstant.JCLASS_MEETING_TIME_ID)) {
+		if (meetingTimeId == null && requiredFields.contains(ClassConstant.CLASS_MEETING_TIME_ID)) {
 			throw new FieldIsRequiredException("Meeting Time ID is required to continue");
 		}
 		

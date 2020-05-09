@@ -24,9 +24,11 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 
@@ -38,6 +40,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	@Autowired DataSource dataSource;
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
+	@Autowired AssemblerDepartmentDao assemblerDepartmentDao;
 	@Autowired AssemblerAcademicDisciplineDao assemblerAcademicDisciplineDao;
 	Map<String, Object> map;
 	
@@ -109,9 +112,14 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		CourseVO course = new CourseVO(rs);
 		course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
 		course.setAcademicDisciplines(findAcademicDisciplinesByCourseId(course.getId()));
+		course.setDepartment(findDepartmentByCourseId(course.getId()));
 		return course;
 	}
 	
+	private DepartmentVO findDepartmentByCourseId(Integer id) throws SQLException {		
+		return assemblerDepartmentDao.findObject(id);
+	}
+
 	public class CourseSingleResultProcessor implements ResultSetExtractor<CourseVO>{
 		@Override
 		public CourseVO extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -135,7 +143,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c ");		
+		return new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c ");		
 	}
 
 	@Override

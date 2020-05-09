@@ -175,8 +175,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/system-setup/courses',
       },
       {
-        title: 'Class Rooms',
-        link: '/dashboard/system-setup/class-rooms',
+        title: 'Rooms',
+        link: '/dashboard/system-setup/rooms',
       },
       {
         title: 'Academic Years',

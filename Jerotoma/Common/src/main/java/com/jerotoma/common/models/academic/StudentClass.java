@@ -51,7 +51,7 @@ public class StudentClass {
         joinColumns = @JoinColumn(name = "student_class_id"),
         inverseJoinColumns = @JoinColumn(name = "class_id"))
 	@JoinColumn(name="class_id")
-	private Set<Class> jClasses;
+	private Set<Class> classes;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -110,26 +110,26 @@ public class StudentClass {
 		this.student = student;
 	}
 	
-	public Set<Class> getJClasses() {
-		return jClasses;
+	public Set<Class> getClasses() {
+		return classes;
 	}
 
-	public void setJClasses(Set<Class> jClasses) {
-		this.jClasses = jClasses;
+	public void setClasses(Set<Class> classes) {
+		this.classes = classes;
 	}
 
 	public static class Fields {
 		Integer Id;
 		Integer studentId;
-		List<Integer> jClassIds;
+		List<Integer> classIds;
 		Integer academicYearId;
 			
 		
-		public Fields(Integer id, Integer studentId, List<Integer> jClassIds, Integer academicYearId) {
+		public Fields(Integer id, Integer studentId, List<Integer> classIds, Integer academicYearId) {
 			super();
 			Id = id;
 			this.studentId = studentId;
-			this.jClassIds = jClassIds;
+			this.classIds = classIds;
 			this.academicYearId = academicYearId;
 		}
 		public Integer getId() {
@@ -145,11 +145,11 @@ public class StudentClass {
 			this.studentId = studentId;
 		}
 		
-		public List<Integer> getjClassIds() {
-			return jClassIds;
+		public List<Integer> getClassIds() {
+			return classIds;
 		}
-		public void setjClassIds(List<Integer> jClassIds) {
-			this.jClassIds = jClassIds;
+		public void setClassIds(List<Integer> classIds) {
+			this.classIds = classIds;
 		}
 		public Integer getAcademicYearId() {
 			return academicYearId;

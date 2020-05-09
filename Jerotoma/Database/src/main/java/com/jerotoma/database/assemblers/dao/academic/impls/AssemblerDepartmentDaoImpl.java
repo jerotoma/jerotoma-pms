@@ -1,0 +1,135 @@
+package com.jerotoma.database.assemblers.dao.academic.impls;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.stereotype.Repository;
+
+import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.constants.DepartmentConstant;
+import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.DepartmentVO;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
+import com.jerotoma.database.dao.DaoUtil;
+
+@Repository
+public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements AssemblerDepartmentDao {
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired DataSource dataSource;
+	Map<String, Object> map;
+	
+	@PostConstruct
+	private void initialize() {
+		setDataSource(dataSource);
+		this.jdbcTemplate = getJdbcTemplate();
+	}
+
+	@Override
+	public DepartmentVO findObject(Integer primaryKey) throws SQLException {
+		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		return this.jdbcTemplate.query(query, new DepartmentSingleResultProcessor(), primaryKey);
+	}
+
+	@Override
+	public DepartmentVO findObjectUniqueKey(String uniqueKey) throws SQLException {
+		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		return this.jdbcTemplate.query(query, new DepartmentSingleResultProcessor(), Integer.valueOf(uniqueKey));
+	}
+
+	@Override
+	public List<DepartmentVO> loadList(QueryParam queryParam) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		.append(" ")
+		.append("limit ? offset ?");
+
+		Long countResults = countObject();
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {limit, offset};
+		
+		return this.jdbcTemplate.query(builder.toString(), new DepartmentResultProcessor(), paramList);
+	}
+
+	@Override
+	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
+		map = new HashMap<>();
+		StringBuilder builder = getBaseSelectQuery();
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		.append(" ")
+		.append("limit ? offset ?");
+
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {limit, offset};
+		
+		List<DepartmentVO> departments = this.jdbcTemplate.query(builder.toString(), new DepartmentResultProcessor(), paramList);
+		map.put(DepartmentConstant.DEPARTMENTS, departments);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
+		
+		return map;
+	}
+
+	@Override
+	public Long countObject() throws SQLException {
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM ").append(DatabaseConstant.TABLES.DEPARTMENTS);
+		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+	
+	private StringBuilder getBaseSelectQuery() {		
+		return new StringBuilder("SELECT d.id, d.name, d.created_on, d.updated_on FROM ").append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ");		
+	}
+	
+	public class DepartmentResultProcessor implements RowMapper<DepartmentVO>{
+		@Override
+		public DepartmentVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return mapDepartment(rs);
+		}		
+	}
+	
+	private DepartmentVO mapDepartment(ResultSet rs) throws SQLException {
+		return new DepartmentVO(rs);		
+	}
+	
+	public class DepartmentSingleResultProcessor implements ResultSetExtractor<DepartmentVO>{
+		@Override
+		public DepartmentVO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			DepartmentVO department = null;
+			if(rs.next()) {
+				return mapDepartment(rs);
+			}
+			return department;
+		}				
+	}
+	
+	public class LongResultProcessor implements ResultSetExtractor<Long>{
+		@Override
+		public Long extractData(ResultSet rs) throws SQLException, DataAccessException {
+			Long l = null;
+			if (rs.next()) {
+				l = rs.getLong(1);
+			 }
+			return l;
+		}				
+	}
+
+}

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { StudentClass, Student, AcademicYear, StudentClassAdmission, JClassView } from 'app/models';
+import { StudentClass, Student, AcademicYear, StudentClassAdmission, ClassView } from 'app/models';
 import { StudentClassService, AcademicYearService, ClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
@@ -33,7 +33,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
   studentClassForm: FormGroup;
   academicYear: AcademicYear;
   studentClassAdmission: StudentClassAdmission;
-  jClasses: JClassView[];
+  jClasses: ClassView[];
   academicYears: AcademicYear[];
 
   constructor(
@@ -114,7 +114,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
 
   loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
     this.isLoading = true;
-    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: JClassView[]) => {
+    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });

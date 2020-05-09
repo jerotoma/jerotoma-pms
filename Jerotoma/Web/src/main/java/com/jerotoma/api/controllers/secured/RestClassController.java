@@ -136,7 +136,7 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadJClassesByAcademicYear(academicYearId));
+			instance.setData(assemblerClassService.loadClassesByAcademicYear(academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -158,7 +158,7 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadStudentUnregisteredJClassesByAcademicYear(academicYearId, studentId));
+			instance.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -180,7 +180,7 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadStudentJClassesByAcademicYear(studentId, academicYearId));
+			instance.setData(assemblerClassService.loadStudentClassesByAcademicYear(studentId, academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -232,12 +232,12 @@ public class RestClassController extends BaseController {
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						ClassConstant.JCLASS_ACADEMIC_YEAR_ID,
-						ClassConstant.JCLASS_CLASS_ROOM_ID,
-						ClassConstant.JCLASS_COURSE_ID,
-						ClassConstant.JCLASS_TEACHER_ID,
+						ClassConstant.CLASS_ACADEMIC_YEAR_ID,
+						ClassConstant.CLASS_ROOM_ID,
+						ClassConstant.CLASS_COURSE_ID,
+						ClassConstant.CLASS_TEACHER_ID,
 						ClassConstant.JCLASS_CAPACITY,
-						ClassConstant.JCLASS_MEETING_TIME_ID
+						ClassConstant.CLASS_MEETING_TIME_ID
 						));
 		Class mClass = new Class();
 		Class.ClassFields jClassFields = JClassValidator.validate(params, requiredFields);
@@ -287,10 +287,10 @@ public class RestClassController extends BaseController {
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
 						ClassConstant.JCLASS_ID,
-						ClassConstant.JCLASS_ACADEMIC_YEAR_ID,
-						ClassConstant.JCLASS_CLASS_ROOM_ID,
-						ClassConstant.JCLASS_COURSE_ID,
-						ClassConstant.JCLASS_TEACHER_ID,
+						ClassConstant.CLASS_ACADEMIC_YEAR_ID,
+						ClassConstant.CLASS_ROOM_ID,
+						ClassConstant.CLASS_COURSE_ID,
+						ClassConstant.CLASS_TEACHER_ID,
 						ClassConstant.JCLASS_CAPACITY
 						));
 		

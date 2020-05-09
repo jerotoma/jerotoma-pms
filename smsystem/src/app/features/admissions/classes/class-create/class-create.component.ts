@@ -3,10 +3,10 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { JClassView, JClassAdmission } from 'app/models';
+import { ClassView, ClassAdmission } from 'app/models';
 import {
   ClassService,
-  ClassRoomService,
+  RoomService,
   AcademicYearService,
   CourseService,
   ModalService,
@@ -15,7 +15,7 @@ import {
 import { QueryParam } from 'app/utils';
 import {
   ShowMessage,
-  ClassRoom,
+  Room,
   Teacher,
   Course,
   AcademicYear,
@@ -38,11 +38,11 @@ export class ClassCreateComponent implements OnInit {
 
   academicYearId: number;
   courseId: number;
-  classRoomId: number;
+  roomId: number;
   teacherId: number;
   capacity: number;
   isLoading: boolean = false;
-  jClassView: JClassView = null;
+  classView: ClassView = null;
 
   param: QueryParam =  {
     page: 1,
@@ -54,13 +54,13 @@ export class ClassCreateComponent implements OnInit {
     userType: 'teacher',
   };
 
-  classRooms: ClassRoom[];
+  rooms: Room[];
   teachers: Teacher[];
   courses: Course[];
   academicYears: AcademicYear[];
 
   classForm: FormGroup;
-  classAdmission: JClassAdmission;
+  classAdmission: ClassAdmission;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -69,7 +69,7 @@ export class ClassCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
-    private classRoomService: ClassRoomService,
+    private roomService: RoomService,
     private courseService: CourseService,
     private modalService: ModalService,
     private academicYearService: AcademicYearService,
@@ -86,22 +86,22 @@ export class ClassCreateComponent implements OnInit {
     }
   }
 
-  patchClassAdmission(jClassView: JClassView) {
-    if (!jClassView) {
+  patchClassAdmission(classView: ClassView) {
+    if (!classView) {
       return;
     }
-    this.capacity = jClassView.capacity;
-    this.academicYearId = jClassView.academicYear.id;
-    this.courseId = jClassView.course.id;
-    this.teacherId = jClassView.teacher.id;
-    this.classRoomId = jClassView.classRoom.id;
+    this.capacity = classView.capacity;
+    this.academicYearId = classView.academicYear.id;
+    this.courseId = classView.course.id;
+    this.teacherId = classView.teacher.id;
+    this.roomId = classView.room.id;
     this.classForm.patchValue({
-      id: jClassView.id,
-      capacity: jClassView.capacity,
-      academicYearId: jClassView.academicYear.id,
-      courseId: jClassView.course.id,
-      teacherId: jClassView.teacher.id,
-      classRoomId: jClassView.classRoom.id,
+      id: classView.id,
+      capacity: classView.capacity,
+      academicYearId: classView.academicYear.id,
+      courseId: classView.course.id,
+      teacherId: classView.teacher.id,
+      classRoomId: classView.room.id,
     }, {emitEvent: false});
   }
 
@@ -117,7 +117,7 @@ export class ClassCreateComponent implements OnInit {
       this.updateClass();
     } else {
       this.classService.createClass(this.classAdmission)
-          .subscribe((result: JClassView ) => {
+          .subscribe((result: ClassView ) => {
             if (result) {
               this.modalService.openSnackBar('New class has been created', 'success');
               this.resetForm(true);
@@ -127,7 +127,7 @@ export class ClassCreateComponent implements OnInit {
   }
   updateClass() {
     this.classService.updateClass(this.classAdmission)
-      .subscribe((result: JClassView ) => {
+      .subscribe((result: ClassView ) => {
         if (result) {
           this.modalService.openSnackBar('Class has been updated', 'success');
           this.resetForm(true);
@@ -141,7 +141,7 @@ export class ClassCreateComponent implements OnInit {
         academicYearId: [null, Validators.required],
         courseId: [null, Validators.required],
         teacherId: [null, Validators.required],
-        classRoomId: [null, Validators.required],
+        roomId: [null, Validators.required],
       });
       this.onChanges();
     }
@@ -165,14 +165,14 @@ export class ClassCreateComponent implements OnInit {
     }
 
     loadClassRooms() {
-      this.classRoomService.getClassRooms(this.param)
+      this.roomService.getRooms(this.param)
       .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
         const resp = result;
         const status = resp.status;
         if (status !== null && status === 200 && resp.body) {
           const data = resp.body.data;
-          this.classRooms = data.classRooms;
-          this.patchClassAdmission(this.jClassView);
+          this.rooms = data.rooms;
+          this.patchClassAdmission(this.classView);
         }
       }, error => {
 
@@ -184,7 +184,7 @@ export class ClassCreateComponent implements OnInit {
       .subscribe((courses: Course[] ) => {
         if (courses) {
           this.courses = courses;
-          this.patchClassAdmission(this.jClassView);
+          this.patchClassAdmission(this.classView);
         }
       });
     }
@@ -193,8 +193,8 @@ export class ClassCreateComponent implements OnInit {
       .subscribe((academicYears: AcademicYear[]) => {
           if (academicYears) {
             this.academicYears = academicYears;
-            if (this.jClassView) {
-              this.patchClassAdmission(this.jClassView);
+            if (this.classView) {
+              this.patchClassAdmission(this.classView);
             }
           }
         });
@@ -203,18 +203,18 @@ export class ClassCreateComponent implements OnInit {
     loadTeachersByCourseID(courseId: number) {
       this.userService.loadTeachersByCourseID(courseId).subscribe((teachers: Teacher[]) => {
         this.teachers = teachers;
-        if (this.jClassView) {
-          setTimeout(() => {this.patchClassAdmission(this.jClassView); }, 100);
+        if (this.classView) {
+          setTimeout(() => {this.patchClassAdmission(this.classView); }, 100);
         }
       });
     }
     loadJClassView(jClassViewId: number) {
       this.isLoading = true;
       this.classService.getClass(jClassViewId)
-        .subscribe((jClass: JClassView) => {
+        .subscribe((jClass: ClassView) => {
           this.isLoading = false;
           if (jClass) {
-            this.jClassView = jClass;
+            this.classView = jClass;
             this.loadCourses(jClass.academicYear.id);
             this.loadTeachersByCourseID(jClass.course.id);
             this.patchClassAdmission(jClass);
