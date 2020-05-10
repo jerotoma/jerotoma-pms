@@ -10,14 +10,14 @@ import {
   User,
   Position,
   AddressWrapper,
-  AcademicDiscipline,
+  Department,
   ShowMessage,
   UserLoginInput,
   UserLoginInputWrapper,
   ResponseWrapper,
 } from 'app/models';
 
-import { PositionService , UserService, AcademicDisciplineService, ModalService } from 'app/services';
+import { PositionService , UserService, DepartmentService, ModalService } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
@@ -32,7 +32,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   @ViewChild(UserLoginInputComponent, {static: false}) appUserLoginInput: UserLoginInputComponent;
   action: string = 'create';
   position: number;
-  academicDiscipline: number;
+  department: number;
 
   teacherForm: FormGroup;
   userLoginInput: UserLoginInput;
@@ -45,12 +45,12 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   };
   users: User[] = [];
   positions: Position[] = [];
-  academicDisciplines: AcademicDiscipline[] = [];
+  departments: Department[] = [];
   listDisplay: string = 'none';
 
   constructor(
     protected positionService: PositionService,
-    protected academicDisciplineService: AcademicDisciplineService,
+    protected departmentService: DepartmentService,
     protected dateService: NbDateService<Date>,
     private userService:  UserService,
     private modalService: ModalService,
@@ -59,7 +59,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadPositionList();
-    this.loadAcademicDisciplineList();
+    this.loadDepartmentList();
     this.loadForm();
   }
   ngAfterViewInit() {
@@ -114,7 +114,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       userId: [null],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       userType: ['teacher'],
-      academicDiscipline: ['', Validators.required],
+      department: ['', Validators.required],
       address: [null, Validators.required],
     });
   }
@@ -141,7 +141,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;
-        this.academicDiscipline = this.teacher.academicDiscipline.id;
+        this.department = this.teacher.department.id;
         this.updateUseInput();
       }
     });
@@ -155,11 +155,11 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadAcademicDisciplineList() {
-    this.academicDisciplineService.loadAcademicDisciplineList().subscribe((academicDisciplines: AcademicDiscipline[] ) => {
-      if (academicDisciplines) {
+  loadDepartmentList() {
+    this.departmentService.loadDepartmentList().subscribe((departments: Department[] ) => {
+      if (departments) {
         this.showMessage.error = false;
-        this.academicDisciplines = academicDisciplines;
+        this.departments = departments;
       }
     });
   }
@@ -209,7 +209,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       emailAddress: this.teacher.username,
       birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
       userType: 'teacher',
-      academicDiscipline: this.teacher.academicDiscipline ? this.teacher.academicDiscipline.id : null,
+      department: this.teacher.department ? this.teacher.department.id : null,
       address: this.teacher.address ? this.teacher.address : null,
     });
 

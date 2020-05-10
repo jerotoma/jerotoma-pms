@@ -74,9 +74,8 @@ public class CourseDaoImpl implements CourseDao {
 	}
 
 	@Override
-	public Course updateObject(Course object) throws SQLException {
-		entityManager.merge(object);
-		return findObject(object.getId().intValue());
+	public Course updateObject(Course object) throws SQLException {		
+		return entityManager.merge(object);
 	}
 
 	@Override

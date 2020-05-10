@@ -52,8 +52,8 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 	protected void addDefaultAccountsIfNotExists() {
 		RoleConstant.USER_ROLES adminRole = RoleConstant.USER_ROLES.ROLE_ADMIN;
 		AuthUser authUser;
-		String username = "john@jerotoma.com";
-		String password = "Doe12345";
+		String username = "support@vimmak.com";
+		String password = "Vimmak";
 		Boolean enabled = true; 
 		Boolean accountNonExpired = true;
 		Boolean credentialsNonExpired = true; 
@@ -75,9 +75,13 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			authUser.setFirstName("John");
 			authUser.setLastName("Doe");
 			authUser = userService.createObject(authUser);
-			UserRole mRole = new UserRole(null, authUser.getId(), roleR.getId());			
-			userRoleService.createObject(mRole);
-			logger.info("User has been created!");
+			
+			UserRole mRole = new UserRole(null, authUser.getId(), roleR.getId());
+			UserRole userRole = userRoleService.findUserRoleByUserIdAndRoleID(mRole.getUserId(), mRole.getRoleId());
+			if (userRole == null) {
+				userRoleService.createObject(mRole);
+				logger.info("User has been created!");
+			}			
 		} catch (SQLException e) {			
 			throw new RuntimeException(e.getMessage(), e); 
 		}

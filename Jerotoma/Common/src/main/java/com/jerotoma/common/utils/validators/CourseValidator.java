@@ -11,7 +11,6 @@ import com.jerotoma.common.utils.CalendarUtil;
 
 public class CourseValidator {
 
-	@SuppressWarnings("unchecked")
 	public static Course validate(Map<String, Object> params, List<String> requiredFields) {
 		
 		Course course = new Course();
@@ -20,9 +19,8 @@ public class CourseValidator {
 		String code = null;	
 		Integer id = null;	
 		Integer academicYearId = null;
-		List<Integer> academicDisciplineIds = null;
-		
-		
+		Integer departmentId = null;
+				
 		if(params.containsKey(CourseConstant.COURSE_NAME)) {
 			name  = params.get(CourseConstant.COURSE_NAME).toString();
 		}
@@ -41,8 +39,8 @@ public class CourseValidator {
 			academicYearId  = (Integer)params.get(CourseConstant.ACADEMIC_YEAR_ID);
 		}
 		
-		if(params.containsKey(CourseConstant.ACADEMIC_DISCIPLINE_IDS)) {
-			academicDisciplineIds = (List<Integer>)params.get(CourseConstant.ACADEMIC_DISCIPLINE_IDS);
+		if(params.containsKey(CourseConstant.DEPARTMENT_ID)) {
+			departmentId = (Integer)params.get(CourseConstant.DEPARTMENT_ID);
 		}
 		
 		if (id == null && requiredFields.contains(CourseConstant.COURSE_ID)) {
@@ -71,10 +69,10 @@ public class CourseValidator {
 		}
 		course.setCode(code);
 		
-		if (academicDisciplineIds == null && requiredFields.contains(CourseConstant.ACADEMIC_DISCIPLINE_IDS)) {
-			throw new FieldIsRequiredException("Academic Descipline is required to continue");
+		if (departmentId == null && requiredFields.contains(CourseConstant.DEPARTMENT_ID)) {
+			throw new FieldIsRequiredException("Department ID is required to continue");
 		}
-		course.setAcademicDisciplineIds(academicDisciplineIds);		
+		course.setDepartmentID(departmentId);		
 		
 		Date today = CalendarUtil.getTodaysDate();		
 		course.setCreatedOn(today);

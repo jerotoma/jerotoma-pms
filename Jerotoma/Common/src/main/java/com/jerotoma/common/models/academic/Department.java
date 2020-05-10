@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.users.Teacher;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.DEPARTMENTS)
@@ -34,6 +35,9 @@ public class Department {
 	
 	@OneToMany(mappedBy = "department")
 	private List<Course> courses;
+	
+	@OneToMany(mappedBy = "department")
+	private List<Teacher> teachers;
 	
 	@Column(name="created_on")
 	private Date createdOn;

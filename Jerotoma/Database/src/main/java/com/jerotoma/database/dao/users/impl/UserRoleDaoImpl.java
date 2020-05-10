@@ -75,4 +75,12 @@ public class UserRoleDaoImpl implements UserRoleDao {
 		throw new DataAccessResourceFailureException("countObject not implemented yet");
 	}
 
+	@Override
+	public UserRole findUserRoleByUserIdAndRoleID(Integer userId, Integer roleId) {
+		return entityManager.createQuery("FROM UserRole WHERE userId = :userId AND roleId = :roleId ", UserRole.class)
+				.setParameter("userId", userId)
+				.setParameter("roleId", roleId)
+				.getSingleResult();
+	}
+
 }

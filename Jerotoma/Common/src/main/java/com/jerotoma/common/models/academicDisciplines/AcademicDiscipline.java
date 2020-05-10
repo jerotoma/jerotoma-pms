@@ -3,24 +3,20 @@ package com.jerotoma.common.models.academicDisciplines;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Course;
-import com.jerotoma.common.models.users.Teacher;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.ACADEMIC_DISCIPLINE)
@@ -50,11 +46,7 @@ public class AcademicDiscipline implements Serializable{
 	
 	@Column
 	private String description;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="academicDiscipline")
-	@JsonBackReference
-	private List<Teacher> teachers;	
-	
+		
 	@ManyToMany(mappedBy="academicDisciplines")
 	@JsonBackReference
 	private Set<Course> courses = new HashSet<>();;

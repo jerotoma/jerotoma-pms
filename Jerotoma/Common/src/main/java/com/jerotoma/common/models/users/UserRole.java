@@ -38,6 +38,8 @@ public class UserRole {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+	
+	public UserRole() {}
 		
 	public UserRole(Integer id, Integer userId, Integer roleId) {
 		super();

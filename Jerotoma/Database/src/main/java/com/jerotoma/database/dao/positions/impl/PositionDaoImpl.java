@@ -32,7 +32,7 @@ public class PositionDaoImpl implements PositionDao{
 
 	@Override
 	public Position findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return entityManager.createQuery("FROM Position WHERE code := ?", Position.class).setParameter("code", uniqueKey).getSingleResult();
+		return entityManager.createQuery("FROM Position WHERE code = :code", Position.class).setParameter("code", uniqueKey).getSingleResult();
 	}
 
 	@Override

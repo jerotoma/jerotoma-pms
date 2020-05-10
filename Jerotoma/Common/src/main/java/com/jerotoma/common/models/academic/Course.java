@@ -47,6 +47,9 @@ public class Course implements Serializable{
 	@Transient
 	private Integer academicYearId;
 	
+	@Transient
+	private Integer departmentId;
+	
 	@Column
 	private String code;
 	
@@ -173,5 +176,20 @@ public class Course implements Serializable{
 
 	public void setAcademicDisciplines(Set<AcademicDiscipline> academicDisciplines) {
 		this.academicDisciplines = academicDisciplines;
+	}
+	
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	public Integer getDepartmentId() {
+		return this.departmentId;
+	}
+	public void setDepartmentID(Integer departmentId) {
+		this.departmentId = departmentId;		
 	}
 }

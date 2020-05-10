@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
+import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
 
@@ -46,9 +46,9 @@ public class Teacher extends Person implements Serializable{
 	
 	@ManyToOne
    	@JsonManagedReference
-   	@JoinColumn(name="academic_discipline_id")
-	private AcademicDiscipline academicDiscipline;
-		
+   	@JoinColumn(name="department_id")
+	private Department department;
+			
 	public Integer getId() {
 		return id;
 	}
@@ -63,15 +63,7 @@ public class Teacher extends Person implements Serializable{
 
 	public void setPosition(Position position) {
 		this.position = position;
-	}
-		
-	public AcademicDiscipline getAcademicDiscipline() {
-		return academicDiscipline;
-	}
-
-	public void setAcademicDiscipline(AcademicDiscipline academicDiscipline) {
-		this.academicDiscipline = academicDiscipline;
-	}
+	}	
 
 	public Set<TeacherAddress> getTeacherAddresses() {
 		return teacherAddresses;
@@ -80,6 +72,12 @@ public class Teacher extends Person implements Serializable{
 	public void setTeacherAddresses(Set<TeacherAddress> teacherAddresses) {
 		this.teacherAddresses = teacherAddresses;
 	}
-	
-	
+
+	public void setDepartment(Department department) {
+		this.department = department;		
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
 }

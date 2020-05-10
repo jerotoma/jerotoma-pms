@@ -4,16 +4,6 @@
             <nb-card size="giant" status="primary">
               <nb-card-header>{{ title }}</nb-card-header>
               <nb-card-body>
-               <!--
-                <div class="row">
-                     <div class="col-md-6">
-                        <app-search-user
-                          [userType]="'teacher'"
-                          (onUserSelected) = "onUserSelected($event)"
-                        ></app-search-user>
-                     </div>
-                  </div>
-               -->
                   <div class="row">
                       <div class="col-md-12">
                           <h4 class="text-primary">Basic Information</h4>
@@ -108,16 +98,16 @@
                       </div>
                       <div class="col-md-6">
                           <div class="form-control-group">
-                              <label for="teacher-academicDiscipline" class="label">Field of Study</label>
+                              <label for="teacher-department" class="label">Department</label>
                               <nb-select
                                 fullWidth
-                                placeholder="Field of Study"
-                                formControlName="academicDiscipline"
-                                id="teacher-academicDiscipline">
+                                placeholder="department"
+                                formControlName="department"
+                                id="teacher-department">
                                 <nb-option
-                                    *ngFor='let acad of academicDisciplines'
-                                    [value]="acad.id">
-                                    {{acad.name}}
+                                    *ngFor='let department of departments'
+                                    [value]="department.id">
+                                    {{department.name}}
                                 </nb-option>
                               </nb-select>
                           </div>

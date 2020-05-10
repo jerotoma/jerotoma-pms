@@ -4,10 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,11 +29,12 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Course;
-import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
+import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.utils.validators.CourseValidator;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.academic.AssemblerCourseService;
+import com.jerotoma.services.assemblers.academic.DepartmentService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.CourseService;
 
@@ -44,6 +43,7 @@ import com.jerotoma.services.courses.CourseService;
 @RequestMapping(EndPointConstants.REST_COURSE_CONTROLLER.BASE)
 public class RestCourseController extends BaseController {
 	
+	@Autowired DepartmentService departmentService;
 	@Autowired CourseService courseService;
 	@Autowired AssemblerCourseService assemblerCourseService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
@@ -140,22 +140,21 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_NAME,
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_CODE,
-						CourseConstant.ACADEMIC_DISCIPLINE_IDS,
+						CourseConstant.DEPARTMENT_ID,
 						CourseConstant.ACADEMIC_YEAR_ID));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
-		Set<AcademicDiscipline> academicDisciplines = new HashSet<>();
+		
 		try {
-			 for (Integer academicDisciplineId: course.getAcademicDisciplineIds()) {
-				 AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
-				 academicDisciplines.add(academicDiscipline);
-			 }
-			 course.setAcademicDisciplines(academicDisciplines);
 			
+			Department department = departmentService.findObject(course.getDepartmentId());
 			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
+			
+			course.setDepartment(department);
 			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());
 			course = courseService.createObject(course);
+			course.setDepartmentID(department.getId());
 			course.setAcademicYearId(academicYear.getId());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
@@ -189,23 +188,20 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_ID,
 						CourseConstant.ACADEMIC_YEAR_ID,
-						CourseConstant.ACADEMIC_DISCIPLINE_IDS,
+						CourseConstant.DEPARTMENT_ID,
 						CourseConstant.COURSE_CODE));
 		
-		Course course = CourseValidator.validate(params, requiredFields);
-		Set<AcademicDiscipline> academicDisciplines = new HashSet<>();
+		Course course = CourseValidator.validate(params, requiredFields);		
 		try {
-			 for (Integer academicDisciplineId: course.getAcademicDisciplineIds()) {
-				 AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
-				 academicDisciplines.add(academicDiscipline);
-			 }
-			 course.setAcademicDisciplines(academicDisciplines);
-			
+			Department department = departmentService.findObject(course.getDepartmentId());
 			AcademicYear academicYear = academicYearService.findObject(course.getAcademicYearId());
+			
+			course.setDepartment(department);
 			course.setAcademicYear(academicYear);
 			course.setUpdatedBy(authUser.getId());
 			course.setUpdatedOn(today);
 			course = courseService.updateObject(course);	
+			course.setDepartmentID(department.getId());
 			course.setAcademicYearId(academicYear.getId());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			

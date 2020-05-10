@@ -30,11 +30,6 @@ export class CourseCreateComponent implements OnInit {
   academicYears: AcademicYear[];
   departments: Department[] = [];
   selectedAcademicDisciplines: number[] = [];
-  showMessage: ShowMessage = {
-    error: false,
-    success: false,
-    message: '',
-  };
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
 
@@ -71,8 +66,6 @@ export class CourseCreateComponent implements OnInit {
   onSubmit() {
     this.isSubmitting = true;
     this.course = this.courseForm.value;
-    this.showMessage.success = false;
-    this.showMessage.error = false;
     if (this.action === 'edit') {
       this.updateCourse();
     } else {
@@ -98,20 +91,15 @@ export class CourseCreateComponent implements OnInit {
             this.dismiss();
           }
       });
-    }
-  getDescriptionContent(description: string) {
-   if (description) {
-    this.courseForm.patchValue({
-      description: description,
-    });
-    }
   }
 
   loadDepartmentList() {
     this.departmentService.loadDepartmentList().subscribe((departments: Department[] ) => {
       if (departments) {
-        this.showMessage.error = false;
         this.departments = departments;
+        if (this.course) {
+          this.patchCourse();
+        }
       }
     });
   }
@@ -121,7 +109,9 @@ export class CourseCreateComponent implements OnInit {
     .subscribe((academicYears: AcademicYear[] ) => {
       if (academicYears) {
         this.academicYears = academicYears;
-        this.patchCourse();
+        if (this.course) {
+          this.patchCourse();
+        }
       }
     });
   }
@@ -133,7 +123,7 @@ export class CourseCreateComponent implements OnInit {
       code: ['', Validators.required],
       description: [''],
       academicYearId: ['', Validators.required],
-      academicDisciplineIds: [null, Validators.required],
+      departmentId: [null, Validators.required],
     });
   }
   loadCourse() {

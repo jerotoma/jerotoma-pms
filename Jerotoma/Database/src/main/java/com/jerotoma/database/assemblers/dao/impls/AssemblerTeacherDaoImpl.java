@@ -21,14 +21,14 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.common.viewobjects.AddressVO;
+import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.PositionVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
-import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerPositionDao;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 
@@ -41,7 +41,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	@Autowired RoleDao roleDao;	
 	@Autowired AssemblerPositionDao positionDao;
 	@Autowired AssemblerAddressDao addressDao;
-	@Autowired AssemblerAcademicDisciplineDao academicDisciplineDao;
+	@Autowired AssemblerDepartmentDao assemblerDepartmentDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
@@ -132,7 +132,10 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT t.id,  u.username, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, t.last_name AS lastName, t.middle_names AS middleNames, t.email_address AS emailAddress, t.phone_number AS phoneNumber, t.occupation, t.gender, t.avatar, t.position_id as positionId, t.academic_discipline_id AS academicDisciplineId, t.birth_date AS birthDate, t.updated_by AS updatedBy, t.created_on AS createdOn, t.updated_on AS updatedOn FROM public.teachers t INNER JOIN users u ON u.id = user_id ");
+		return new StringBuilder("SELECT t.id,  u.username, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, ")
+				.append(" t.last_name AS lastName, t.middle_names AS middleNames, t.email_address AS emailAddress, t.phone_number AS phoneNumber, ")
+				.append(" t.occupation, t.gender, t.avatar, t.position_id as positionId, t.department_id AS departmentId, t.birth_date AS birthDate, t.updated_by AS updatedBy, ")
+				.append(" t.created_on AS createdOn, t.updated_on AS updatedOn FROM public.teachers t INNER JOIN users u ON u.id = user_id ");
 		
 	}
 
@@ -146,8 +149,8 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		return this.positionDao.findObject(primaryKey);
 	}
 	
-	private AcademicDisciplineVO loadAcademicDiscipline(Integer primaryKey) throws SQLException {
-		return this.academicDisciplineDao.findObject(primaryKey);
+	private DepartmentVO loadDepartment(Integer primaryKey) throws SQLException {
+		return this.assemblerDepartmentDao.findObject(primaryKey);
 	}
 	
 	private AddressVO loadAddress(Integer primaryKey) throws SQLException {
@@ -158,7 +161,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		TeacherVO teacher = new TeacherVO(rs);
 		teacher.setAddress(loadAddress(teacher.getId()));	
 		teacher.setPosition(loadPosition(rs.getInt(UserConstant.POSITION_ID)));
-		teacher.setAcademicDiscipline(loadAcademicDiscipline(rs.getInt(UserConstant.ACADEMIC_DISCIPLINE_ID)));
+		teacher.setDepartment(loadDepartment(rs.getInt(UserConstant.DEPARTMENT_ID)));
 		return teacher;
 	}
 

@@ -55,4 +55,9 @@ public class UserRoleServiceImpl implements UserRoleService{
 		return userRoleDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public UserRole findUserRoleByUserIdAndRoleID(Integer userId, Integer roleId) {
+		return userRoleDao.findUserRoleByUserIdAndRoleID(userId, roleId);
+	}
+
 }

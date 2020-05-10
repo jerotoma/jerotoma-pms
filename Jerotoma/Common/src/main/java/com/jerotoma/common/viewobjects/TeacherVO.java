@@ -9,7 +9,7 @@ public class TeacherVO extends PersonVO {
 		
 	private PositionVO position;
 	
-	private AcademicDisciplineVO academicDiscipline;
+	private DepartmentVO department;
 	
 	public TeacherVO(ResultSet rs) throws SQLException {
 		super(rs, UserConstant.USER_TYPES.TEACHER.getType());						
@@ -23,11 +23,11 @@ public class TeacherVO extends PersonVO {
 		this.position = position;
 	}
 
-	public AcademicDisciplineVO getAcademicDiscipline() {
-		return academicDiscipline;
+	public DepartmentVO getDepartment() {
+		return department;
 	}
 
-	public void setAcademicDiscipline(AcademicDisciplineVO academicDiscipline) {
-		this.academicDiscipline = academicDiscipline;
+	public void setDepartment(DepartmentVO department) {
+		this.department = department;
 	}
 }

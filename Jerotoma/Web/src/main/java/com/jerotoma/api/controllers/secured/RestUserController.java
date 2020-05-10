@@ -28,12 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
+import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
@@ -55,6 +57,7 @@ import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
+import com.jerotoma.services.assemblers.academic.DepartmentService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.ParentAddressService;
 import com.jerotoma.services.users.ParentService;
@@ -85,6 +88,7 @@ public class RestUserController extends BaseController {
 	@Autowired ParentAddressService parentAddressService;
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
+	@Autowired DepartmentService departmentService;
 		
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
@@ -230,7 +234,7 @@ public class RestUserController extends BaseController {
 		Position position;
 		StudentAddress studentAddress;
 		ParentAddress parentAddress;
-		AcademicDiscipline academicDiscipline;
+		Department department;
 		
 		
 		requiredFields =  new ArrayList<>(Arrays.asList(
@@ -260,10 +264,9 @@ public class RestUserController extends BaseController {
 			switch(type) {
 			case TEACHER:
 				requiredFields.add(UserConstant.POSITION);
-				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
 				
 				position = processPosition(params, requiredFields);			
-				academicDiscipline = processAcademicDiscipline(params, requiredFields);
+				department = processDepartment(params, requiredFields);
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
 				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
@@ -271,7 +274,7 @@ public class RestUserController extends BaseController {
 								
 				teacher.setUserId(newUser.getId());
 				teacher.setPosition(position);
-				teacher.setAcademicDiscipline(academicDiscipline);
+				teacher.setDepartment(department);
 				teacher.setUpdatedBy(authUser.getId());
 				address = teacher.getAddress();				
 				
@@ -385,8 +388,9 @@ public class RestUserController extends BaseController {
 		
 	}
 
-	private AcademicDiscipline processAcademicDiscipline(Map<String, Object> params, List<String> requiredFields) throws SQLException {
+	protected AcademicDiscipline processAcademicDiscipline(Map<String, Object> params, List<String> requiredFields) throws SQLException {
 		Integer academicDisciplineId = null;
+		AcademicDiscipline academicDiscipline = null;
 		if(params.containsKey(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
 			academicDisciplineId = (Integer) params.get(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
 		}
@@ -395,12 +399,32 @@ public class RestUserController extends BaseController {
 			throw new FieldIsRequiredException("Academic Discipline can not be empty");
 		}
 		
-		AcademicDiscipline academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+		if (academicDisciplineId !=  null) {
+			academicDiscipline = academicDisciplineService.findObject(academicDisciplineId);
+		}
 		
-		if (academicDiscipline == null ) {
+		if (academicDiscipline == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
 			throw new FieldIsRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
 		}
 		return academicDiscipline;
+	}
+	
+	private Department processDepartment(Map<String, Object> params, List<String> requiredFields) throws SQLException {
+		Integer departmentId = null;
+		if(params.containsKey(DepartmentConstant.DEPARTMENT)) {
+			departmentId = (Integer) params.get(DepartmentConstant.DEPARTMENT);
+		}
+		
+		if (departmentId == null && requiredFields.contains(DepartmentConstant.DEPARTMENT)) {
+			throw new FieldIsRequiredException("Department can not be empty");
+		}
+		
+		Department department = departmentService.findObject(departmentId);
+		
+		if (department== null && requiredFields.contains(DepartmentConstant.DEPARTMENT)) {
+			throw new FieldIsRequiredException("Department is required, and invalid department was provided");
+		}
+		return department;
 	}
 
 	private Position processPosition(Map<String, Object> params, List<String> requiredFields)
@@ -435,10 +459,10 @@ public class RestUserController extends BaseController {
 		Staff staff;
 		Parent parent;
 		Teacher teacher;
-		Student student;		
+		Student student;
+		Department department;
 		Address address;
 		Position position;
-		AcademicDiscipline academicDiscipline;
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
@@ -458,10 +482,9 @@ public class RestUserController extends BaseController {
 			switch(type) {
 			case TEACHER:				
 				requiredFields.add(UserConstant.POSITION);
-				requiredFields.add(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE);
-				
+								
 				position = processPosition(params, requiredFields);			
-				academicDiscipline = processAcademicDiscipline(params, requiredFields);
+				department = processDepartment(params, requiredFields);
 				
 				requiredFields.add(UserConstant.USER_CODE);
 				requiredFields.add(UserConstant.BIRTH_DATE);
@@ -474,7 +497,7 @@ public class RestUserController extends BaseController {
 				teacherService.findObject(teacher.getId());
 				
 				teacher.setPosition(position);
-				teacher.setAcademicDiscipline(academicDiscipline);
+				teacher.setDepartment(department);
 				teacher.setUpdatedBy(authUser.getId());
 				address = teacher.getAddress();
 				teacher = teacherService.updateObject(teacher);

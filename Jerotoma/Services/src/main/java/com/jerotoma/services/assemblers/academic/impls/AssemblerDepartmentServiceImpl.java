@@ -42,4 +42,9 @@ public class AssemblerDepartmentServiceImpl implements AssemblerDepartmentServic
 		return assemblerDepartmentDao.countObject();
 	}
 
+	@Override
+	public List<DepartmentVO> getAllDepartment() throws SQLException {
+		return assemblerDepartmentDao.getAllDepartment();
+	}
+
 }

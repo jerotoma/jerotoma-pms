@@ -32,12 +32,12 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone Number </th>
               <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
             </ng-container>
-            <!-- Academic Discipline Column -->
-            <ng-container matColumnDef="academicDiscipline">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Discipline </th>
-              <td mat-cell *matCellDef="let element"> {{element.academicDiscipline.name}} </td>
+            <!-- department Column -->
+            <ng-container matColumnDef="department">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+              <td mat-cell *matCellDef="let element"> {{element.department.name}} </td>
             </ng-container>
-            <!-- Academic Discipline Column -->
+            <!-- Position Column -->
             <ng-container matColumnDef="position">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Position</th>
               <td mat-cell *matCellDef="let element"> {{element.position.name}} </td>

@@ -132,4 +132,9 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 		}				
 	}
 
+	@Override
+	public List<DepartmentVO> getAllDepartment() throws SQLException {		
+		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new DepartmentResultProcessor());
+	}
+
 }

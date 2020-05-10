@@ -25,7 +25,7 @@ export class TeachersViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'academicDiscipline', 'position', 'action'];
+  displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'department', 'position', 'action'];
   dataSource: MatTableDataSource<Teacher> = new MatTableDataSource<Teacher>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

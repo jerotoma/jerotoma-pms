@@ -115,7 +115,7 @@ public abstract class BaseController {
 	protected void securityCheckAdminAccess(Authentication auth, String action) {			
 		UserContext userContext = authenticationFacade.getUserContext(auth);
 		boolean hasRequiredRole = false;
-		if(userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName())){
+		if(userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
 			hasRequiredRole = true;
 		}
 		

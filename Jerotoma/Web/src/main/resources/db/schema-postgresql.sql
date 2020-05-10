@@ -182,7 +182,6 @@
 	    user_id bigint NOT NULL,
 	    department_id bigint NOT NULL,
 	    position_id bigint NOT NULL,
-	    academic_discipline_id bigint NOT NULL,
 	    user_code character varying(255) NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
@@ -210,11 +209,7 @@
 	   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
 	        REFERENCES public.positions(id) MATCH SIMPLE
 	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,
-	   	CONSTRAINT academic_disciplines_fkey FOREIGN KEY (academic_discipline_id)
-	        REFERENCES public.academic_disciplines (id) MATCH SIMPLE
-	        ON UPDATE CASCADE
-	        ON DELETE CASCADE 
+	        ON DELETE CASCADE	   
 	    );
 	    
 	SELECT rename_table_column_if_exists('teachers'::regclass, 'teacher_code', 'user_code');

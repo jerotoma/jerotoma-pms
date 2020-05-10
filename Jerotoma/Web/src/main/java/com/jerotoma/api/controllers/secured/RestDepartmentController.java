@@ -68,6 +68,27 @@ public class RestDepartmentController extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"/list", "/list/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getDepartmentList(Authentication auth) {
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_DEPARTMENT_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		
+		try {
+			instance.setData(assemblerDepartmentService.getAllDepartment());		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
 	@GetMapping(value = {"/{departmentId}", "/{departmentId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> getDepartment(Authentication auth, @PathVariable("departmentId") Integer departmentId) {
