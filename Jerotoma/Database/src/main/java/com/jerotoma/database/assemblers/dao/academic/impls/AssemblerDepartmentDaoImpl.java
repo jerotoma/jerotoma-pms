@@ -21,7 +21,9 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -29,14 +31,15 @@ import com.jerotoma.database.dao.DaoUtil;
 public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements AssemblerDepartmentDao {
 	
 	private JdbcTemplate jdbcTemplate;
+	private AssemblerCourseDao assemblerCourseDao;
+	private Map<String, Object> map;
 	
-	@Autowired DataSource dataSource;
-	Map<String, Object> map;
+	@Autowired DataSource dataSource;	
 	
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
-		this.jdbcTemplate = getJdbcTemplate();
+		this.jdbcTemplate = getJdbcTemplate();		
 	}
 
 	@Override
@@ -107,15 +110,31 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	}
 	
 	private DepartmentVO mapDepartment(ResultSet rs) throws SQLException {
-		return new DepartmentVO(rs);		
+		DepartmentVO department = new DepartmentVO(rs);
+		department.setCourses(findCoursesByDepartmentId(department.getId()));		
+		return department;		
 	}
 	
+	private List<CourseVO> findCoursesByDepartmentId(Integer departmentId) throws SQLException {
+		StringBuilder builder = new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c  WHERE c.department_id = ? ");		
+		return this.jdbcTemplate.query(builder.toString(), new CourseResultProcessor(), departmentId);		
+	}
+	
+	public class CourseResultProcessor implements RowMapper<CourseVO>{
+		@Override
+		public CourseVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+			return new CourseVO(rs);
+		}		
+	}
+	
+
 	public class DepartmentSingleResultProcessor implements ResultSetExtractor<DepartmentVO>{
 		@Override
 		public DepartmentVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			DepartmentVO department = null;
 			if(rs.next()) {
-				return mapDepartment(rs);
+				department = mapDepartment(rs);
+				
 			}
 			return department;
 		}				
@@ -135,6 +154,11 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	@Override
 	public List<DepartmentVO> getAllDepartment() throws SQLException {		
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new DepartmentResultProcessor());
+	}
+
+	@Override
+	public void setAssemblerCourseDao(AssemblerCourseDao assemblerCourseDao) {
+		this.assemblerCourseDao = assemblerCourseDao;		
 	}
 
 }

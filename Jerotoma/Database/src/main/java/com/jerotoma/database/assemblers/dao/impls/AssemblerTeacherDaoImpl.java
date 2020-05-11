@@ -175,8 +175,14 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	@Override
 	public List<TeacherVO> loadTeachersByCourseID(Integer courseID) throws SQLException {
 		StringBuilder query =  getBaseSelectQuery()				
-				.append(" INNER JOIN course_academic_disciplines cad ON cad.academic_discipline_id = t.academic_discipline_id WHERE cad.course_id = ? ");
+				.append(" INNER JOIN courses c ON c.department_id = t.department_id WHERE c.id = ? ");
 		return this.jdbcTemplate.query(query.toString(), new TeacherResultProcessor(), courseID);
+	}
+
+	@Override
+	public List<TeacherVO> findAllTeachers() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();
+		return this.jdbcTemplate.query(builder.toString(), new TeacherResultProcessor());
 	}
 
 }

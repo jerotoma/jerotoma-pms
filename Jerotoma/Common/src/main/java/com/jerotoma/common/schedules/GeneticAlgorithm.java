@@ -4,14 +4,13 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import com.jerotoma.common.constants.ScheduleConstant;
-import com.jerotoma.common.viewobjects.ClassVO;
 
 public class GeneticAlgorithm {
 	
-	List<ClassVO> classes;
+	ScheduleData data;
 
-	public GeneticAlgorithm(List<ClassVO> classes) {
-		this.classes = classes;
+	public GeneticAlgorithm(ScheduleData data) {
+		this.data = data;
 	}
 	
 	public Population evolve(Population population) {
@@ -19,7 +18,7 @@ public class GeneticAlgorithm {
 	}
 	
 	public Population crossoverPopulation(Population population) {
-		Population crossoverPopulation = new Population(classes.size(), classes);
+		Population crossoverPopulation = new Population(population.getSchedules().size(), data);
 		
 		IntStream.range(0, ScheduleConstant.NUMBER_OF_ELITE_SCHEDULES)
 			.forEach(x -> crossoverPopulation.getSchedules().set(x, population.getSchedules().get(x)));
@@ -39,7 +38,7 @@ public class GeneticAlgorithm {
 	}
 	
 	public Population selectTournamentPopulation(Population population) {
-		Population tournamentPopulation = new Population(ScheduleConstant.TOURNAMENT_SELECTION_SIZE, classes);
+		Population tournamentPopulation = new Population(ScheduleConstant.TOURNAMENT_SELECTION_SIZE, data);
 		IntStream.range(0, ScheduleConstant.TOURNAMENT_SELECTION_SIZE).forEach(x -> {
 			tournamentPopulation.getSchedules().set(x, 
 					population.getSchedules().get((int)(Math.random() * population.getSchedules().size())));
@@ -48,7 +47,7 @@ public class GeneticAlgorithm {
 	}
 	
 	public Population mutatePopulation(Population population) {
-		Population mutatePopulation = new Population(population.getSchedules().size(), classes);
+		Population mutatePopulation = new Population(population.getSchedules().size(), data);
 		List<Schedule> schedules = mutatePopulation.getSchedules();
 		IntStream.range(0, ScheduleConstant.NUMBER_OF_ELITE_SCHEDULES).forEach(x -> {
 			mutatePopulation.getSchedules().set(x, schedules.set(x, population.getSchedules().get(x)));
@@ -62,7 +61,7 @@ public class GeneticAlgorithm {
 	}
 	
 	public Schedule mutateSchedule(Schedule mutateSchedule) {
-		Schedule schedule = new Schedule(classes);
+		Schedule schedule = new Schedule(data);
 		IntStream.range(0, mutateSchedule.getClasses().size()).forEach(x -> {
 			if (ScheduleConstant.MUTATION_RATE > Math.random()) {
 				 mutateSchedule.getClasses().set(x, schedule.getClasses().get(x));
@@ -72,7 +71,7 @@ public class GeneticAlgorithm {
 	}
 	
 	public Schedule crossoverSchedule(Schedule schedule1, Schedule schedule2) {
-		Schedule crossoverSchedule = new Schedule(classes);
+		Schedule crossoverSchedule = new Schedule(data);
 		IntStream.range(0, crossoverSchedule.getClasses().size()).forEach(x -> {
 			if (Math.random() > 0.5) {
 				crossoverSchedule.getClasses().set(x, schedule1.getClasses().get(x));

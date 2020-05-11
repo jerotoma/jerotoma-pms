@@ -21,6 +21,8 @@ public class ClassVO {
 	
 	private TeacherVO teacher;
 	
+	private DepartmentVO department;
+	
 	private MeetingTimeVO meetingTime;
 	
 	private Integer updatedBy;
@@ -37,6 +39,12 @@ public class ClassVO {
 		this.updatedOn = rs.getDate(ClassConstant.JCLASS_UPDATED_ON);
 		this.createdOn = rs.getDate(ClassConstant.JCLASS_CREATED_ON);
 		
+	}
+
+	public ClassVO(int id, DepartmentVO department, CourseVO course) {		
+		this.id = id;
+		this.department = department;
+		this.course = course;
 	}
 
 	public Integer getId() {
@@ -125,5 +133,13 @@ public class ClassVO {
 
 	public void setMeetingTime(MeetingTimeVO meetingTime) {
 		this.meetingTime = meetingTime;
-	}	
+	}
+
+	public DepartmentVO getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(DepartmentVO department) {
+		this.department = department;
+	}
 }

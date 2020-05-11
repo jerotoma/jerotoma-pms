@@ -82,6 +82,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
         if (resp && resp.success) {
           this.modalService.openSnackBar('New Teacher has been added', 'success');
           this.resetForms();
+          this.appUserLoginInput.resetForm();
         }
       });
     }
@@ -181,7 +182,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
           confirmPassword: this.userLoginInput.confirmPassword,
         });
         this.teacherForm.controls['username'].setErrors(null);
-        window.console.log(userLoginInputWrapper);
     } else {
       this.teacherForm.controls['username'].setErrors({ invalidUsername: true });
     }
@@ -189,7 +189,6 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.teacherForm.reset();
     this.appAddress.resetForm();
-    this.appUserLoginInput.resetForm();
     this.ref.close();
   }
 

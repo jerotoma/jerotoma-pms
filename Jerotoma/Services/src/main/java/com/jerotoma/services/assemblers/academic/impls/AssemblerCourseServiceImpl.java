@@ -49,7 +49,12 @@ public class AssemblerCourseServiceImpl implements  AssemblerCourseService {
 
 	@Override
 	public List<CourseVO> findCoursesByAcademicDisciplineId(Integer academicDisciplineId) throws SQLException {
-		return assemblerCourseDao.findCoursesByAcademicDisciplineId(academicDisciplineId);
+		return assemblerCourseDao.findCoursesByDepartmentId(academicDisciplineId);
+	}
+
+	@Override
+	public List<CourseVO> findAllCourses() throws SQLException {
+		return assemblerCourseDao.findAllCourses();
 	}
 
 }

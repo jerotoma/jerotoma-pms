@@ -8,5 +8,6 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerCourseDao extends AssemblerDao<CourseVO> {
 	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException;
-	public List<CourseVO> findCoursesByAcademicDisciplineId(Integer academicDisciplineId) throws SQLException;
+	public List<CourseVO> findCoursesByDepartmentId(Integer academicDisciplineId) throws SQLException;
+	public List<CourseVO> findAllCourses() throws SQLException;
 }

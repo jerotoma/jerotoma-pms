@@ -36,15 +36,22 @@ import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.schedules.GeneticAlgorithm;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.Population;
+import com.jerotoma.common.schedules.ScheduleData;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.JClassValidator;
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.common.viewobjects.DepartmentVO;
+import com.jerotoma.common.viewobjects.MeetingTimeVO;
+import com.jerotoma.common.viewobjects.RoomVO;
+import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.courses.CourseService;
 import com.jerotoma.services.courses.ClassService;
 import com.jerotoma.services.schedules.MeetingTimeService;
+import com.jerotoma.services.schedules.ScheduleDataService;
 import com.jerotoma.services.users.TeacherService;
 
 @RestController
@@ -58,6 +65,7 @@ public class RestClassController extends BaseController {
 	@Autowired MeetingTimeService meetingTimeService;
 	@Autowired RoomService roomService;
 	@Autowired TeacherService teacherService;
+	@Autowired ScheduleDataService scheduleDataService;
 	
 	int generationNumber = 0;
 	
@@ -81,9 +89,12 @@ public class RestClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 		
-		
-		
-		List<ClassVO> classList = (List<ClassVO>)map.get(ClassConstant.JCLASSES);
+		List<RoomVO> rooms = scheduleDataService.findRooms();
+		List<TeacherVO> teachers  = scheduleDataService.findTeachers();
+		List<CourseVO> courses = scheduleDataService.findCoursesByAcademicYear(1);
+		List<DepartmentVO> departments  = scheduleDataService.findDepartments();
+		List<MeetingTimeVO> meetingTimes = scheduleDataService.findMeetingTimes();		
+		ScheduleData data = new ScheduleData(rooms, teachers, courses, departments, meetingTimes);
 		
 		System.out.println("> Generation # " + generationNumber);
 		System.out.println(" Schedule # |                                        ");
@@ -91,9 +102,9 @@ public class RestClassController extends BaseController {
 		System.out.println("                               | fitness | Conflicts");
 		System.out.print("---------------------------------------------------------------------------");
 		System.out.println("---------------------------------------------------------------------------");
-		
-		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(classList);
-		Population population = new Population(ScheduleConstant.POPULATION_SIZE, classList).sortByFitness();		
+				
+		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
+		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
 		while (population.getSchedules().get(0).getFitness() != 1.0) {
 			population = geneticAlgorithm.evolve(population).sortByFitness();
 			population.getSchedules().forEach(schedule -> System.out.println("     " + generationNumber++ 
@@ -236,21 +247,27 @@ public class RestClassController extends BaseController {
 						ClassConstant.CLASS_ROOM_ID,
 						ClassConstant.CLASS_COURSE_ID,
 						ClassConstant.CLASS_TEACHER_ID,
-						ClassConstant.JCLASS_CAPACITY,
-						ClassConstant.CLASS_MEETING_TIME_ID
+						ClassConstant.JCLASS_CAPACITY
 						));
 		Class mClass = new Class();
 		Class.ClassFields jClassFields = JClassValidator.validate(params, requiredFields);
 		
 		
 		try {
-			
+			MeetingTime meetingTime = null;
+			Room room = null;
 			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Teacher teacher = teacherService.findObject(jClassFields.getTeacherId());
 			Course course = courseService.findObject(jClassFields.getCourseId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			Room room = roomService.findObject(jClassFields.getRoomId());
-			MeetingTime meetingTime = meetingTimeService.findObject(jClassFields.getMeetingTimeId());
+			
+			if (jClassFields.getRoomId() != null) {
+				room = roomService.findObject(jClassFields.getRoomId());
+			}
+			
+			if (jClassFields.getMeetingTimeId() != null) {
+				meetingTime = meetingTimeService.findObject(jClassFields.getMeetingTimeId());
+			}
 						
 			mClass.setCapacity(jClassFields.getCapacity());
 			mClass.setRoom(room);

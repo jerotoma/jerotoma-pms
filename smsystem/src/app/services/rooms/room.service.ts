@@ -18,15 +18,15 @@ export class RoomService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadRoomList(param: QueryParam): Observable<ResponseWrapper> {
+  loadRooms(): Observable<Room[]> {
     return this.http.get<any>(
-        `${END_POINTS.rooms}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
-        .pipe(map((resp: ResponseWrapper) => resp));
+        `${END_POINTS.rooms}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  getRooms(param: QueryParam): Observable<ResponseWrapper> {
+  getRoomPaginated(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get<any>(
-        `${END_POINTS.rooms}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        `${END_POINTS.rooms}/paginated?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
   createRoom(data?: any): Observable<Room> {

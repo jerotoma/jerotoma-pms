@@ -8,5 +8,6 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerDepartmentDao extends AssemblerDao<DepartmentVO> {
 	public List<DepartmentVO> getAllDepartment() throws SQLException;
+	public void setAssemblerCourseDao(AssemblerCourseDao assemblerCourseDao);
 
 }

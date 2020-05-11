@@ -42,4 +42,9 @@ public class AssemblerRoomServiceImpl implements AssemblerRoomService {
 		return assemblerRoomDao.countObject();
 	}
 
+	@Override
+	public List<RoomVO> findList() throws SQLException {
+		return assemblerRoomDao.findList();
+	}
+
 }

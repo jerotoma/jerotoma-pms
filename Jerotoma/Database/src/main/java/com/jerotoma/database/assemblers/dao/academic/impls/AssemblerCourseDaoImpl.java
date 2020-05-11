@@ -21,7 +21,6 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CourseConstant;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.viewobjects.AcademicDisciplineVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
@@ -48,6 +47,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	private void initialize() {
 		setDataSource(dataSource);
 		this.jdbcTemplate = getJdbcTemplate();
+		this.assemblerDepartmentDao.setAssemblerCourseDao(this);
 	}
 
 	@Override
@@ -110,8 +110,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	private CourseVO mapCourse(ResultSet rs) throws SQLException {
 		CourseVO course = new CourseVO(rs);
-		course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));
-		course.setAcademicDisciplines(findAcademicDisciplinesByCourseId(course.getId()));
+		course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));		
 		course.setDepartment(findDepartmentByCourseId(course.getId()));
 		return course;
 	}
@@ -163,13 +162,15 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	}
 
 	@Override
-	public List<CourseVO> findCoursesByAcademicDisciplineId(Integer academicDisciplineId) throws SQLException {
-		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES).append(" cad ON cad.course_id = c.id  where cad.academic_discipline_id = ? ");
-		return getJdbcTemplate().query(builder.toString(), new CourseResultProcessor(), academicDisciplineId);
+	public List<CourseVO> findCoursesByDepartmentId(Integer departmentId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN ").append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ON d.id = c.department_id  WHERE c.department_id = ? ");
+		return getJdbcTemplate().query(builder.toString(), new CourseResultProcessor(), departmentId);
 	}
 	
-	private List<AcademicDisciplineVO> findAcademicDisciplinesByCourseId(Integer courseId) throws SQLException {
-		return assemblerAcademicDisciplineDao.findAcademicDisciplinesByCourseId(courseId);
+	@Override
+	public List<CourseVO> findAllCourses() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();
+		return this.jdbcTemplate.query(builder.toString(), new CourseResultProcessor());
 	}
 	
 }

@@ -105,4 +105,9 @@ public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements Assem
 	private StringBuilder getBaseSelectQuery() {
 		return new StringBuilder("SELECT id, time, created_on, updated_on FROM ").append(DatabaseConstant.TABLES.MEETING_TIMES).append("  ");
 	}
+
+	@Override
+	public List<MeetingTimeVO> findAllMeetingTimes() throws SQLException {
+		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new MeetingTimeResultProcessor());
+	}
 }

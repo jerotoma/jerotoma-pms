@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import com.jerotoma.common.viewobjects.ClassVO;
-
 public class Population {
 	
 	private List<Schedule> schedules;
 	
-	public Population(int size, List<ClassVO> classes) {
+	public Population(int size, ScheduleData data) {
 		schedules = new ArrayList<>(size);
-		IntStream.range(0, size).forEach(x -> schedules.add(new Schedule(classes)));
+		IntStream.range(0, size).forEach(x -> schedules.add(new Schedule(data).initialize()));
 	}
 	
 

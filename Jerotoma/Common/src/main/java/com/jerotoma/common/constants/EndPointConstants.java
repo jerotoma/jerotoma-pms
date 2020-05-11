@@ -58,6 +58,9 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/academic-years";	
 	}
 	
+	public static interface REST_MEETING_TIME_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/meeting-times";	
+	}
 	
 	
 	

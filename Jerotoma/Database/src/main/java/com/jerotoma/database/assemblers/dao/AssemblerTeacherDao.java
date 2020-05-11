@@ -9,7 +9,5 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 public interface AssemblerTeacherDao extends AssemblerDao<TeacherVO>{
 	List<TeacherVO> loadTeachersByAcademicDisciplineID(Integer academicDisciplineID) throws SQLException;
 	List<TeacherVO> loadTeachersByCourseID(Integer courseID) throws SQLException;
-
-	
-
+	List<TeacherVO> findAllTeachers() throws SQLException;
 }

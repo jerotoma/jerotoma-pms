@@ -165,13 +165,10 @@ export class ClassCreateComponent implements OnInit {
     }
 
     loadClassRooms() {
-      this.roomService.getRooms(this.param)
-      .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200 && resp.body) {
-          const data = resp.body.data;
-          this.rooms = data.rooms;
+      this.roomService.loadRooms()
+      .subscribe((rooms: Room[] ) => {
+        if (rooms) {
+          this.rooms = rooms;
           this.patchClassAdmission(this.classView);
         }
       }, error => {

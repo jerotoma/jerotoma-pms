@@ -1,21 +1,35 @@
 package com.jerotoma.common.schedules;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.DepartmentVO;
 
 public class Schedule {
 	private List<ClassVO> classes;
+	private ScheduleData data;
 	private boolean isFitnessChanged = true;
 	private double fitness = -1;
 	private int numberOfConflicts = 0;
-	private int numberOfClasses = 0;
+	private int classNumber = 0;
 	
-	public Schedule(List<ClassVO> classes) {
-		this.classes = classes;
+	public Schedule(ScheduleData data) {
+		this.data = data;
+		this.classes = new ArrayList<>(data.getNumberOfClasses());
 	}
 	
 	public Schedule initialize() {
+		new ArrayList<DepartmentVO>(data.getDepartments()).forEach(department -> {
+			department.getCourses().forEach(course -> {
+				ClassVO classVO = new ClassVO(classNumber++, department, course);
+				classVO.setMeetingTime(data.getMeetingTimes().get((int)(data.getMeetingTimes().size() * Math.random())));
+				classVO.setRoom(data.getRooms().get((int)(data.getRooms().size() * Math.random())));
+				classVO.setTeacher(data.getTeachers().get((int)(data.getTeachers().size() * Math.random())));
+				classes.add(classVO);
+			});
+		});
+		
 		return this;
 	}
 
@@ -24,7 +38,7 @@ public class Schedule {
 	}
 
 	public int getNumberOfClasses() {
-		return numberOfClasses;
+		return classNumber;
 	}
 		
 	public List<ClassVO> getClasses() {
@@ -58,7 +72,7 @@ public class Schedule {
 				 }				 
 			 });		 
 		 });
-		return 1/(double)(numberOfClasses + 1);
+		return 1/(double)(classNumber + 1);
 	}
 
 }

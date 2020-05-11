@@ -67,7 +67,7 @@ export class RoomsViewComponent implements OnInit {
 
   loadSchoolClasses() {
     this.isLoading = true;
-    this.roomService.getRooms(this.param)
+    this.roomService.getRoomPaginated(this.param)
     .subscribe((resp: ResponseWrapper) => {
       this.isLoading = false;
       if (resp) {

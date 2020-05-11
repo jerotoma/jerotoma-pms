@@ -129,7 +129,13 @@ private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.class_rooms ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.rooms ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+
+	@Override
+	public List<RoomVO> findList() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();
+		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor());
 	}
 }

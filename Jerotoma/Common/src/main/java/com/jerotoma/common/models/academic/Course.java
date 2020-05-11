@@ -2,9 +2,7 @@ package com.jerotoma.common.models.academic;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,17 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.COURSES)
@@ -58,18 +52,7 @@ public class Course implements Serializable{
 	
 	@Column
 	private String description;
-	
-	@Transient
-	private List<Integer> academicDisciplineIds;
-	
-	@ManyToMany
-    @JoinTable(
-    	name = DatabaseConstant.TABLES.COURSE_ACADEMIC_DISCIPLINES,
-        joinColumns = @JoinColumn(name = "course_id"),
-        inverseJoinColumns = @JoinColumn(name = "academic_discipline_id"))
-	@JsonBackReference
-	private Set<AcademicDiscipline> academicDisciplines = new HashSet<>();
-	
+			
 	@ManyToOne
 	@JoinColumn(name="academic_year_id")
 	private AcademicYear academicYear;
@@ -160,23 +143,7 @@ public class Course implements Serializable{
 
 	public void setAcademicYear(AcademicYear academicYear) {
 		this.academicYear = academicYear;
-	}
-
-	public List<Integer> getAcademicDisciplineIds() {
-		return academicDisciplineIds;
-	}
-
-	public void setAcademicDisciplineIds(List<Integer> academicDisciplineIds) {
-		this.academicDisciplineIds = academicDisciplineIds;
-	}
-
-	public Set<AcademicDiscipline> getAcademicDisciplines() {
-		return academicDisciplines;
-	}
-
-	public void setAcademicDisciplines(Set<AcademicDiscipline> academicDisciplines) {
-		this.academicDisciplines = academicDisciplines;
-	}
+	}	
 	
 	public Department getDepartment() {
 		return department;

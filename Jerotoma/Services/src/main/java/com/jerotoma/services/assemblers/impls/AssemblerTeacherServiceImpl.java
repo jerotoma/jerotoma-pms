@@ -52,4 +52,9 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 		return assemblerTeacherDao.loadTeachersByAcademicDisciplineID(academicDisciplineID);
 	}
 
+	@Override
+	public List<TeacherVO> findAllTeachers() throws SQLException {
+		return assemblerTeacherDao.findAllTeachers();
+	}
+
 }

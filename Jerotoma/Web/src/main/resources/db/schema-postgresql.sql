@@ -613,7 +613,7 @@
 	    room_id bigint NOT NULL,
 	   	academic_year_id bigint NOT NULL,
 	   	capacity bigint NOT NULL,
-	   	meeting_time_id bigint NOT NULL,
+	   	meeting_time_id bigint,
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
