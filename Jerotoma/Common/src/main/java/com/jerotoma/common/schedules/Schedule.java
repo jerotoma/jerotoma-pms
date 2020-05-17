@@ -8,13 +8,15 @@ import com.jerotoma.common.viewobjects.DepartmentVO;
 
 public class Schedule {
 	private List<ClassVO> classes;
-	private ScheduleData data;
+	private ScheduledData data;
 	private boolean isFitnessChanged = true;
 	private double fitness = -1;
 	private int numberOfConflicts = 0;
 	private int classNumber = 0;
 	
-	public Schedule(ScheduleData data) {
+	int classCapacity = 34;
+	
+	public Schedule(ScheduledData data) {
 		this.data = data;
 		this.classes = new ArrayList<>(data.getNumberOfClasses());
 	}
@@ -22,11 +24,13 @@ public class Schedule {
 	public Schedule initialize() {
 		new ArrayList<DepartmentVO>(data.getDepartments()).forEach(department -> {
 			department.getCourses().forEach(course -> {
-				ClassVO classVO = new ClassVO(classNumber++, department, course);
-				classVO.setMeetingTime(data.getMeetingTimes().get((int)(data.getMeetingTimes().size() * Math.random())));
-				classVO.setRoom(data.getRooms().get((int)(data.getRooms().size() * Math.random())));
-				classVO.setTeacher(data.getTeachers().get((int)(data.getTeachers().size() * Math.random())));
-				classes.add(classVO);
+				if (course.getAcademicYear().getId().equals(data.getAcademicYear().getId())) {
+					ClassVO classVO = new ClassVO(classNumber++, department, course, classCapacity);
+					classVO.setMeetingTime(data.getMeetingTimes().get((int)(data.getMeetingTimes().size() * Math.random())));
+					classVO.setRoom(data.getRooms().get((int)(data.getRooms().size() * Math.random())));
+					classVO.setTeacher(data.getTeachers().get((int)(data.getTeachers().size() * Math.random())));
+					classes.add(classVO);
+				}				
 			});
 		});
 		
@@ -55,24 +59,24 @@ public class Schedule {
 	}
 	
 	public double calculateFitness() {
-		 numberOfConflicts = 0;
+		 this.numberOfConflicts = 0;
 		 
-		 this.classes.forEach(mClass -> {
-			 if (mClass.getRoom().getCapacity() < mClass.getCapacity()) {
-				 numberOfConflicts++;
+		 this.classes.forEach(xClass -> {
+			 if (xClass.getRoom().getCapacity() < xClass.getCapacity()) {
+				 this.numberOfConflicts++;
 			 }
-			 this.classes.stream().filter(yClass -> this.classes.indexOf(yClass) >= this.classes.indexOf(mClass)).forEach(yClass -> {
-				 if (mClass.getMeetingTime().getId().equals(yClass.getMeetingTime().getId()) && mClass.getId() != yClass.getId()) {
-					 if(mClass.getRoom().getId().equals(yClass.getRoom().getId())) {
-						 numberOfConflicts++;
+			 this.classes.stream().filter(yClass -> this.classes.indexOf(yClass) >= this.classes.indexOf(xClass)).forEach(yClass -> {
+				 if (xClass.getMeetingTime().getId().equals(yClass.getMeetingTime().getId()) && xClass.getId() != yClass.getId()) {
+					 if(xClass.getRoom().getId().equals(yClass.getRoom().getId())) {
+						 this.numberOfConflicts++;
 					 }
-					 if(mClass.getTeacher().getId().equals(yClass.getTeacher().getId())) {
-						 numberOfConflicts++;
+					 if(xClass.getTeacher().getId().equals(yClass.getTeacher().getId())) {
+						 this.numberOfConflicts++;
 					 }
 				 }				 
 			 });		 
 		 });
-		return 1/(double)(classNumber + 1);
+		return 1/(double)(this.numberOfConflicts + 1);
 	}
 
 }

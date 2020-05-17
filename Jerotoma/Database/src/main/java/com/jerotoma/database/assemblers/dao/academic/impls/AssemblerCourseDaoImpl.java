@@ -110,7 +110,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	private CourseVO mapCourse(ResultSet rs) throws SQLException {
 		CourseVO course = new CourseVO(rs);
-		course.setAcademicYear(findAcademicYearByCourseId(course.getAcademicYearId()));		
+		course.setAcademicYear(findAcademicYear(course.getAcademicYearId()));		
 		course.setDepartment(findDepartmentByCourseId(course.getId()));
 		return course;
 	}
@@ -151,7 +151,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
-	public AcademicYearVO findAcademicYearByCourseId(Integer academicYearId) throws SQLException {
+	public AcademicYearVO findAcademicYear(Integer academicYearId) throws SQLException {
 		return assemblerAcademicYearDao.findObject(academicYearId);
 	}
 

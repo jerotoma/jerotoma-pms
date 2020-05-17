@@ -7,9 +7,9 @@ import com.jerotoma.common.constants.ScheduleConstant;
 
 public class GeneticAlgorithm {
 	
-	ScheduleData data;
+	ScheduledData data;
 
-	public GeneticAlgorithm(ScheduleData data) {
+	public GeneticAlgorithm(ScheduledData data) {
 		this.data = data;
 	}
 	
@@ -62,11 +62,17 @@ public class GeneticAlgorithm {
 	
 	public Schedule mutateSchedule(Schedule mutateSchedule) {
 		Schedule schedule = new Schedule(data);
-		IntStream.range(0, mutateSchedule.getClasses().size()).forEach(x -> {
-			if (ScheduleConstant.MUTATION_RATE > Math.random()) {
-				 mutateSchedule.getClasses().set(x, schedule.getClasses().get(x));
-			} 
-		});		
+		int size = mutateSchedule.getClasses().size();
+		if (size > 0) {
+			IntStream.range(0, size).forEach(x -> {
+				if (ScheduleConstant.MUTATION_RATE > Math.random()) {
+					int scheduleClassesSize = schedule.getClasses().size();
+					if (scheduleClassesSize > 0) {
+						 mutateSchedule.getClasses().set(x, schedule.getClasses().get(x));
+					}		
+				} 
+			});	
+		}				
 		return mutateSchedule;
 	}
 	

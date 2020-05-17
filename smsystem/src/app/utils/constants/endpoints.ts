@@ -12,6 +12,7 @@ export const END_POINTS = {
   rooms: '/api/secured/rooms',
   courses: '/api/secured/courses',
   departments: '/api/secured/departments',
+  meetingTimes: '/api/secured/meeting-times',
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',
   studentClasses: '/api/secured/student-classes',

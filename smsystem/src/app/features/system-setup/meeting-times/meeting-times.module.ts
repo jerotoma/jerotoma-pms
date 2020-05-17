@@ -24,16 +24,22 @@ import {
 import { MeetingTimesRoutingModule } from './meeting-times-routing.module';
 import { MeetingTimesComponent } from './meeting-times.component';
 import { MeetingTimesViewComponent } from './meeting-times-view/meeting-times-view.component';
+import { MeetingTimesCreateComponent } from './meeting-times-create/meeting-times-create.component';
+import { MeetingTimesDeleteComponent } from './meeting-times-delete/meeting-times-delete.component';
 
 
 const COMPONENTS = [
   MeetingTimesComponent ,
   MeetingTimesViewComponent,
+  MeetingTimesCreateComponent,
+  MeetingTimesDeleteComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   MeetingTimesComponent ,
   MeetingTimesViewComponent,
+  MeetingTimesCreateComponent,
+  MeetingTimesDeleteComponent,
 ];
 
 const MODULES = [

@@ -41,10 +41,11 @@ public class ClassVO {
 		
 	}
 
-	public ClassVO(int id, DepartmentVO department, CourseVO course) {		
+	public ClassVO(int id, DepartmentVO department, CourseVO course, int capacity) {		
 		this.id = id;
 		this.department = department;
 		this.course = course;
+		this.capacity = capacity;
 	}
 
 	public Integer getId() {

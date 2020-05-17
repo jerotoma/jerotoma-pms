@@ -36,9 +36,12 @@ import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.schedules.GeneticAlgorithm;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.Population;
-import com.jerotoma.common.schedules.ScheduleData;
+import com.jerotoma.common.schedules.Schedule;
+import com.jerotoma.common.schedules.ScheduledClass;
+import com.jerotoma.common.schedules.ScheduledData;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.JClassValidator;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
@@ -88,36 +91,62 @@ public class RestClassController extends BaseController {
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		
+		AcademicYearVO academicYear = scheduleDataService.getAcademicYear(2);
 		List<RoomVO> rooms = scheduleDataService.findRooms();
 		List<TeacherVO> teachers  = scheduleDataService.findTeachers();
-		List<CourseVO> courses = scheduleDataService.findCoursesByAcademicYear(1);
+		List<CourseVO> courses = scheduleDataService.findCoursesByAcademicYear(academicYear.getId());
 		List<DepartmentVO> departments  = scheduleDataService.findDepartments();
 		List<MeetingTimeVO> meetingTimes = scheduleDataService.findMeetingTimes();		
-		ScheduleData data = new ScheduleData(rooms, teachers, courses, departments, meetingTimes);
-		
-		System.out.println("> Generation # " + generationNumber);
-		System.out.println(" Schedule # |                                        ");
-		System.out.print(" Classes [ dept, class, room, meeting-time ]     ");
-		System.out.println("                               | fitness | Conflicts");
-		System.out.print("---------------------------------------------------------------------------");
-		System.out.println("---------------------------------------------------------------------------");
-				
+		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicYear);
 		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
 		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
+		
 		while (population.getSchedules().get(0).getFitness() != 1.0) {
 			population = geneticAlgorithm.evolve(population).sortByFitness();
-			population.getSchedules().forEach(schedule -> System.out.println("     " + generationNumber++ 
-					+ "      | " + schedule + "  | " + String.format("%.5f", schedule.getFitness()) + " | " + schedule.getNumberOfConflicts()));
-			
-		}
-				
+			population.getSchedules().forEach(schedule -> {
+				System.out.println("Fitness :  " + schedule.getFitness());
+				processGeneratedClasses(schedule, generationNumber++, data); 
+			});			
+		}				
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(map);
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
+	
+	private void processGeneratedClasses(Schedule schedule, int generation, ScheduledData scheduleData) {		
+		List<ScheduledClass> scheduledClasses = new ArrayList<>();		
+		if (schedule.getFitness() == 1) {
+			List<ClassVO> classes = schedule.getClasses();			
+			classes.forEach( x -> {
+				int majorIndex = scheduleData.getDepartments().indexOf(x.getDepartment());
+				int courseIndex = -1;
+				for (CourseVO course:  scheduleData.getCourses()) {
+					if (course.getId().equals(x.getCourse().getId())) {
+						courseIndex = scheduleData.getCourses().indexOf(course);
+						break;
+					}
+				}
+				if (courseIndex != -1) {
+					int roomIndex = scheduleData.getRooms().indexOf(x.getRoom());
+					int teacherIndex = scheduleData.getTeachers().indexOf(x.getTeacher());
+					int meetingTimeIndex = scheduleData.getMeetingTimes().indexOf(x.getMeetingTime());
+					DepartmentVO department = scheduleData.getDepartments().get(majorIndex);
+					TeacherVO teacher = scheduleData.getTeachers().get(teacherIndex);
+					MeetingTimeVO meetingTime = scheduleData.getMeetingTimes().get(meetingTimeIndex);
+					CourseVO course = scheduleData.getCourses().get(courseIndex);
+					RoomVO room = scheduleData.getRooms().get(roomIndex);
+					AcademicYearVO academicYear = scheduleData.getAcademicYear();
+					ScheduledClass scheduledClass = new ScheduledClass(department, teacher, course, room, academicYear, meetingTime);
+					scheduledClasses.add(scheduledClass);
+					
+				}		
+			});
+			System.out.print("\n\n> Solution found in " + (generation + 1) + " generations");
+		}
+	}
+	
 	
 	@GetMapping(value = {"/{classId}", "/{classId}/"})
 	@ResponseBody

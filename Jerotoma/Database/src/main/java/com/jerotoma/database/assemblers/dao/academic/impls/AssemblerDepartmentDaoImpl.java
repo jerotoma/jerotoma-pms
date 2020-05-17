@@ -21,8 +21,10 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
 import com.jerotoma.database.dao.DaoUtil;
@@ -31,10 +33,11 @@ import com.jerotoma.database.dao.DaoUtil;
 public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements AssemblerDepartmentDao {
 	
 	private JdbcTemplate jdbcTemplate;
-	private AssemblerCourseDao assemblerCourseDao;
+	protected AssemblerCourseDao assemblerCourseDao;
 	private Map<String, Object> map;
 	
-	@Autowired DataSource dataSource;	
+	@Autowired DataSource dataSource;
+	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
 	
 	@PostConstruct
 	private void initialize() {
@@ -123,7 +126,13 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	public class CourseResultProcessor implements RowMapper<CourseVO>{
 		@Override
 		public CourseVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return new CourseVO(rs);
+			CourseVO course = new CourseVO(rs);
+			course.setAcademicYear(findAcademicYear(course.getAcademicYearId()));			
+			return course;
+		}
+
+		private AcademicYearVO findAcademicYear(Integer academicYearId) throws SQLException {
+			return assemblerAcademicYearDao.findObject(academicYearId);
 		}		
 	}
 	

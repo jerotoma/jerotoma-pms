@@ -2,6 +2,7 @@ package com.jerotoma.services.schedules;
 
 import java.util.List;
 
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
@@ -13,5 +14,7 @@ public interface ScheduleDataService {
 	public List<TeacherVO> findTeachers();
 	public List<CourseVO> findCoursesByAcademicYear(Integer academicYearId);
 	public List<DepartmentVO> findDepartments();
-	public List<MeetingTimeVO> findMeetingTimes();	
+	public List<MeetingTimeVO> findMeetingTimes();
+	public List<CourseVO> findCourses();
+	public AcademicYearVO getAcademicYear(Integer academicYearId);	
 }

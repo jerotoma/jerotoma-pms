@@ -1,0 +1,40 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form  autocomplete="off" [formGroup]="meetingTimeForm" (ngSubmit)="onSubmit()">
+          <nb-card size="giant" status="primary">
+            <nb-card-header>{{ title }}</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                        <label for="meetingTime" class="label">Time</label>
+                        <input
+                            type="text"
+                            nbInput fullWidth
+                            required
+                            id="meetingTime"
+                            formControlName="time"
+                            placeholder="eg. 09:00-10:00">
+                      </div>
+                </div>
+            </div>
+            </nb-card-body>
+            <nb-card-footer>
+              <button class='push-right'
+                  [disabled]="!meetingTimeForm.valid"
+                  type="submit"
+                  nbButton hero
+                  status="success"
+                  [nbSpinner]="isSubmitting"
+                  nbSpinnerStatus="success"
+                  nbSpinnerSize="large"
+                  [nbSpinnerMessage]="action == 'create' ? 'Creating......' : 'Saving......'">
+                    {{action == 'create' ? 'Create' : 'Save Changes'}}
+              </button>
+              <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            </nb-card-footer>
+          </nb-card>
+      </form>
+  </div>
+</div>
+
