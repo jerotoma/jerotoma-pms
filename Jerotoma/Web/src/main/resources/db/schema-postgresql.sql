@@ -582,6 +582,31 @@
 	        ON DELETE CASCADE
 	    );
 	    
+	        
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			CREATE TYPE OF DAY		  			  			  *
+	 * 															  *
+	 *************************************************************/
+	 DROP TYPE IF EXISTS DAY CASCADE;
+	 CREATE TYPE DAY AS ENUM('1', '2', '3', '4', '5', '6', '7');
+	 
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			WORK_DAYS RELATED TABLES		  			  	  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.work_days (
+	    id bigserial NOT NULL,
+	    day_id DAY,
+	   	created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT work_days_pkey PRIMARY KEY(id)	   	
+	    );
+	    
 	    
 	 /**************************************************************
 	 * 															  *
@@ -592,10 +617,18 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.meeting_times (
 	    id bigserial NOT NULL,
+	    work_day_id bigint NOT NULL,
 	    time character varying(255),
+	    start_time TIME without time zone,
+	    end_time TIME without time zone,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	   	CONSTRAINT meeting_times_pkey PRIMARY KEY(id)   	
+	    UNIQUE(work_day_id, start_time),
+	   	CONSTRAINT meeting_times_pkey PRIMARY KEY(id),
+	   	CONSTRAINT work_days_fkey FOREIGN KEY (work_day_id)
+	        REFERENCES public.work_days (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
 	    );
 	
 	

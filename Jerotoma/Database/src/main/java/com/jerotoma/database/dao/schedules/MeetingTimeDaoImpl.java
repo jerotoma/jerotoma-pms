@@ -1,6 +1,5 @@
 package com.jerotoma.database.dao.schedules;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
@@ -59,43 +55,11 @@ public class MeetingTimeDaoImpl implements MeetingTimeDao {
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		return null;
+		throw new RuntimeException("Not implemented for now");
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		return null;
-	}
-		
-	public class MeetingTimeResultProcessor implements RowMapper<MeetingTime>{
-		@Override
-		public MeetingTime mapRow(ResultSet rs, int rowNum) throws SQLException {
-			MeetingTime meetingTime = mapMeetingTimeResult(rs);			
-			return meetingTime;
-		}		
-	}
-	
-	public class MeetingTimeSingleResultProcessor implements ResultSetExtractor<MeetingTime>{
-		@Override
-		public MeetingTime extractData(ResultSet rs) throws SQLException, DataAccessException {
-			MeetingTime meetingTime = null;
-			if(rs.next()) {
-				meetingTime = mapMeetingTimeResult(rs);
-			}
-			return meetingTime;
-		}				
-	}
-	private MeetingTime mapMeetingTimeResult(ResultSet rs) throws SQLException {			
-		return new MeetingTime(rs);
-	}
-	public class LongResultProcessor implements ResultSetExtractor<Long>{
-		@Override
-		public Long extractData(ResultSet rs) throws SQLException, DataAccessException {
-			Long l = null;
-			if(rs.next()) {
-			 l = rs.getLong(1);
-			}
-			return l;
-		}				
+		throw new RuntimeException("Not implemented for now");
 	}
 }

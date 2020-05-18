@@ -13,6 +13,7 @@ export const END_POINTS = {
   courses: '/api/secured/courses',
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',
+  workDays: '/api/secured/work-days',
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',
   studentClasses: '/api/secured/student-classes',

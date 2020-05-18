@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   MatButtonModule,
@@ -50,6 +51,7 @@ import {
   UserLoginInputComponent,
   SearchUserComponent,
   UserDeleteComponent,
+  TimepickerComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -62,6 +64,7 @@ const COMPONENTS = [
   UploadsComponent,
   UserLoginInputComponent,
   SearchUserComponent,
+  TimepickerComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -71,6 +74,7 @@ const ENTRY_COMPONENTS = [
   SearchUserComponent,
   UserLoginInputComponent,
   MyCourseComponent,
+  TimepickerComponent,
 ];
 
 const MODULES = [
@@ -79,6 +83,7 @@ const MODULES = [
   ReactiveFormsModule,
   FileUploadModule,
   ThemeModule,
+  NgbModule,
   NbMomentDateModule,
   NbTabsetModule,
   NbRadioModule,

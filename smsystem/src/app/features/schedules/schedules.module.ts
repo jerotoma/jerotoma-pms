@@ -1,7 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
@@ -21,30 +21,36 @@ import {
   NbListModule,
 } from '@nebular/theme';
 
-import { MeetingTimesRoutingModule } from './meeting-times-routing.module';
-import { MeetingTimesComponent } from './meeting-times.component';
-import { MeetingTimesViewComponent } from './meeting-times-view/meeting-times-view.component';
-import { MeetingTimesCreateComponent } from './meeting-times-create/meeting-times-create.component';
-import { MeetingTimesDeleteComponent } from './meeting-times-delete/meeting-times-delete.component';
+import { SchedulesRoutingModule } from './schedules-routing.module';
+import { SchedulesComponent } from './schedules.component';
+import { MeetingTimesViewComponent } from './meeting-times/meeting-times-view.component';
+import { MeetingTimesCreateComponent } from './meeting-times/meeting-times-create/meeting-times-create.component';
+import { MeetingTimesDeleteComponent } from './meeting-times/meeting-times-delete/meeting-times-delete.component';
+import { WorkDaysComponent } from './work-days/work-days.component';
+import { WorkDaysCreateComponent } from './work-days/work-days-create/work-days-create.component';
+import { WorkDaysDeleteComponent } from './work-days/work-days-delete/work-days-delete.component';
 
 
 const COMPONENTS = [
-  MeetingTimesComponent ,
+  SchedulesComponent ,
   MeetingTimesViewComponent,
   MeetingTimesCreateComponent,
   MeetingTimesDeleteComponent,
+  WorkDaysComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  MeetingTimesComponent ,
+  SchedulesComponent ,
   MeetingTimesViewComponent,
   MeetingTimesCreateComponent,
   MeetingTimesDeleteComponent,
+  WorkDaysComponent,
 ];
 
 const MODULES = [
   SharedModule,
-  MeetingTimesRoutingModule,
+  SchedulesRoutingModule,
+  NgbModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
@@ -72,6 +78,8 @@ imports: [
 ],
 declarations: [
   ...COMPONENTS,
+  WorkDaysCreateComponent,
+  WorkDaysDeleteComponent,
 ],
 providers: [
  ...SERVICES,
@@ -80,4 +88,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class MeetingTimesModule { }
+export class SchedulesModule { }

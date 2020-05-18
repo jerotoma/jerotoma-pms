@@ -158,6 +158,20 @@ export const MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    title: 'Schedules',
+    icon: 'shield-outline',
+    children: [
+      {
+        title: 'Meeting Times',
+        link: '/dashboard/schedules/meeting-times',
+      },
+      {
+        title: 'Work Days',
+        link: '/dashboard/schedules/work-days',
+      },
+    ],
+  },
+  {
     title: 'System Setup',
     icon: 'shuffle-2-outline',
     link: '/dashboard/system-setup',
@@ -177,10 +191,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Departments',
         link: '/dashboard/system-setup/departments',
-      },
-      {
-        title: 'Meeting Times',
-        link: '/dashboard/system-setup/meeting-times',
       },
       {
         title: 'Rooms',

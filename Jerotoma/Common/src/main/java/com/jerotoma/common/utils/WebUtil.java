@@ -20,7 +20,7 @@ public class WebUtil {
     }
 
     public static boolean isContentTypeJson(HttpServletRequest request) {
-    	System.out.println(request.getContentType());
+    	//System.out.println(request.getContentType());
         return request.getHeader(CONTENT_TYPE).contains(CONTENT_TYPE_JSON);
     }
 }

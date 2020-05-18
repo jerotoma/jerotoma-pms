@@ -6,7 +6,7 @@ export * from './positions';
 export * from './messages';
 export * from './courses';
 export * from './departments';
-export * from './meeting-times';
+export * from './schedules';
 export * from './rooms';
 export * from './addresses';
 export * from './classes';

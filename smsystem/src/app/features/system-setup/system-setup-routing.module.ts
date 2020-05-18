@@ -46,11 +46,6 @@ const routes: Routes = [{
         .then(m => m.AcademicDisciplinesModule),
     },
     {
-      path: 'meeting-times',
-      loadChildren: () => import('./meeting-times/meeting-times.module')
-        .then(m => m.MeetingTimesModule),
-    },
-    {
       path: '',
       redirectTo: 'system-setup',
       pathMatch: 'full',

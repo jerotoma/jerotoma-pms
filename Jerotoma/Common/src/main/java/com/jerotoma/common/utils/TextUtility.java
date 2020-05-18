@@ -6,4 +6,8 @@ public class TextUtility {
 		return String.valueOf(tokenExpirationTime);
 	}
 
+	public static boolean isNumeric(String s) {		
+		return StringUtility.isNumeric(s);
+	}
+
 }

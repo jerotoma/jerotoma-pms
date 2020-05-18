@@ -9,6 +9,7 @@ export * from './guards';
 export * from './courses';
 export * from './departments';
 export * from './meeting-times';
+export * from './work-days';
 export * from './auth';
 export * from './uploads';
 export * from './modals';

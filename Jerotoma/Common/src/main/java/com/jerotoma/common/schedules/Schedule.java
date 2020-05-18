@@ -22,6 +22,21 @@ public class Schedule {
 	}
 	
 	public Schedule initialize() {
+		if (data.getMeetingTimes().isEmpty()) {
+			return this;
+		}
+		
+		if (data.getRooms().isEmpty()) {
+			return this;
+		}
+		
+		if (data.getTeachers().isEmpty()) {
+			return this;
+		}
+		
+		if (data.getDepartments().isEmpty()) {
+			return this;
+		}		
 		new ArrayList<DepartmentVO>(data.getDepartments()).forEach(department -> {
 			department.getCourses().forEach(course -> {
 				if (course.getAcademicYear().getId().equals(data.getAcademicYear().getId())) {
@@ -32,8 +47,7 @@ public class Schedule {
 					classes.add(classVO);
 				}				
 			});
-		});
-		
+		});		
 		return this;
 	}
 

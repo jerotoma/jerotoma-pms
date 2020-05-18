@@ -5,16 +5,32 @@
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
               <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                          <label for="meetingTime" class="label">Time Range(24Hours Mode):</label>
+                          <h1 class="text-primary">{{time}}</h1>
+                        </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                          <label for="meetingTime" class="label">Start Time</label>
+                          <app-timepicker
+                            [time]="startTime"
+                            (onChange)="onStartTimeChange($event)"
+                          ></app-timepicker>
+                        </div>
+                  </div>
+              </div>
+              <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="meetingTime" class="label">Time</label>
-                        <input
-                            type="text"
-                            nbInput fullWidth
-                            required
-                            id="meetingTime"
-                            formControlName="time"
-                            placeholder="eg. 09:00-10:00">
+                        <label for="meetingTime" class="label">End Time {{endTime | json}}</label>
+                        <app-timepicker
+                            [time]="endTime"
+                            (onChange)="onEndTimeChange($event)"
+                          ></app-timepicker>
                       </div>
                 </div>
             </div>

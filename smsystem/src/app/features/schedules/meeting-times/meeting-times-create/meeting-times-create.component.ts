@@ -2,7 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { MeetingTime, ResponseWrapper } from 'app/models';
+import {
+  MeetingTime,
+  Time,
+  ResponseWrapper } from 'app/models';
 import {
   MeetingTimeService,
   ModalService,
@@ -20,11 +23,15 @@ export class MeetingTimesCreateComponent implements OnInit {
   @Output() onCreationSuccess = new EventEmitter();
   @Input() id: string;
 
-
+  currentDate: Date = new Date();
   meetingTimeForm: FormGroup;
   meetingTime: MeetingTime;
+  startTime: Time =  { hour: this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
+  endTime: Time = { hour: 1 + this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
+  seconds = true;
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
+  time: string = '';
 
   constructor(
     private meetingTimeService:  MeetingTimeService,
@@ -42,6 +49,8 @@ export class MeetingTimesCreateComponent implements OnInit {
     this.meetingTimeForm.patchValue({
       time: this.meetingTime.time,
       id: this.meetingTime.id,
+      endTime: this.meetingTime.endTime,
+      startTime: this.meetingTime.startTime,
     });
   }
   dismiss() {
@@ -89,6 +98,32 @@ export class MeetingTimesCreateComponent implements OnInit {
     this.meetingTimeForm = this.formBuilder.group({
       id: [null],
       time: ['', Validators.required ],
+      startTime: [null, Validators.required ],
+      endTime: [null, Validators.required ],
+    });
+    this.updateTime();
+    this.onEndTimeChange(this.endTime);
+    this.onStartTimeChange(this.startTime);
+  }
+  onStartTimeChange(startTime: Time) {
+    this.startTime = startTime;
+    this.meetingTimeForm.patchValue({
+      startTime: startTime,
+    });
+    this.updateTime();
+  }
+  onEndTimeChange(endTime: Time) {
+    this.endTime = endTime;
+    this.meetingTimeForm.patchValue({
+      endTime: endTime,
+    });
+    this.updateTime();
+  }
+
+  updateTime() {
+    this.time = this.startTime.hour + ':' + this.startTime.minute + ' - ' + this.endTime.hour + ':' + this.endTime.minute;
+    this.meetingTimeForm.patchValue({
+      time: this.time,
     });
   }
 

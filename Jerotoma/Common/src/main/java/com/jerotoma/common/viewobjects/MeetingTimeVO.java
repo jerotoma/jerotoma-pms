@@ -4,14 +4,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import com.jerotoma.common.constants.MeetingTimeConstant;
+import com.jerotoma.common.schedules.Time;
+import com.jerotoma.common.schedules.WorkDay;
+
 public class MeetingTimeVO {
 	private Integer id;
 	
+	private Integer workDayId;
+	
 	private String time;
+	
+	private Time startTime;
+	
+	private Time endTime;
 	
 	private Date createdOn;
 	
 	private Date updatedOn;
+	
+	private WorkDay workDay;
 	
 	public MeetingTimeVO(Integer id, String time, Date createdOn, Date updatedOn) {
 		super();
@@ -22,10 +34,13 @@ public class MeetingTimeVO {
 	}
 	
 	public MeetingTimeVO(ResultSet rs) throws SQLException {
-		this.id = rs.getInt("id");
-		this.time =  rs.getString("time");		
-		this.createdOn = rs.getDate("created_on");
-		this.updatedOn = rs.getDate("updated_on");
+		this.id = rs.getInt(MeetingTimeConstant.ID);
+		this.workDayId = rs.getInt(MeetingTimeConstant.WORK_DAY_ID);
+		this.time =  rs.getString(MeetingTimeConstant.TIME);
+		this.startTime =  new Time(rs.getString(MeetingTimeConstant.START_TIME));
+		this.endTime =  new Time(rs.getString(MeetingTimeConstant.END_TIME));
+		this.updatedOn = rs.getDate(MeetingTimeConstant.UPDATED_ON);
+		this.createdOn = rs.getDate(MeetingTimeConstant.CREATED_ON);
 	}
 
 	public Integer getId() {
@@ -43,6 +58,22 @@ public class MeetingTimeVO {
 	public void setTime(String time) {
 		this.time = time;
 	}
+	
+	public Time getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Time startTime) {
+		this.startTime = startTime;
+	}
+
+	public Time getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Time endTime) {
+		this.endTime = endTime;
+	}
 
 	public Date getCreatedOn() {
 		return createdOn;
@@ -58,5 +89,21 @@ public class MeetingTimeVO {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public WorkDay getWorkDay() {
+		return workDay;
+	}
+
+	public void setWorkDay(WorkDay workDay) {
+		this.workDay = workDay;
+	}
+
+	public Integer getWorkDayId() {
+		return workDayId;
+	}
+
+	public void setWorkDayId(Integer workDayId) {
+		this.workDayId = workDayId;
 	}
 }

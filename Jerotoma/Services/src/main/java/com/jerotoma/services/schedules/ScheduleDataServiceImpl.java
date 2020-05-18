@@ -12,12 +12,14 @@ import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
 import com.jerotoma.common.viewobjects.RoomVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
+import com.jerotoma.common.viewobjects.WorkDayVO;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.assemblers.academic.AssemblerCourseService;
 import com.jerotoma.services.assemblers.academic.AssemblerDepartmentService;
 import com.jerotoma.services.assemblers.academic.AssemblerMeetingTimeService;
 import com.jerotoma.services.assemblers.academic.AssemblerRoomService;
+import com.jerotoma.services.assemblers.academic.AssemblerWorkDayService;
 
 @Service
 public class ScheduleDataServiceImpl implements ScheduleDataService {
@@ -28,6 +30,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	@Autowired AssemblerCourseService assemblerCourseService;
 	@Autowired AssemblerTeacherService assemblerTeacherService;
 	@Autowired AssemblerMeetingTimeService assemblerMeetingTimeService;
+	@Autowired AssemblerWorkDayService assemblerWorkDayService;
 
 	@Override
 	public List<RoomVO> findRooms() {		
@@ -94,6 +97,16 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	public AcademicYearVO getAcademicYear(Integer academicYearId) {
 		try {
 			return assemblerAcademicYearService.findObject(academicYearId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<WorkDayVO> findAllWorkDays() {
+		try {
+			return assemblerWorkDayService.findAllWorkDays();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

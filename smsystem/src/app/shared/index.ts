@@ -7,4 +7,5 @@ export * from './editors';
 export * from './addresses';
 export * from './user-logins';
 export * from './search';
+export * from './pickers';
 
