@@ -1,6 +1,7 @@
 package com.jerotoma.services.assemblers.academic.impls;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,17 @@ public class AssemblerMeetingTimeServiceImpl implements AssemblerMeetingTimeServ
 	@Override
 	public List<MeetingTimeVO> findAllMeetingTimes() throws SQLException {
 		return assemblerMeetingTimeDao.findAllMeetingTimes();
+	}
+
+	@Override
+	public List<MeetingTimeVO> findAllMeetingTimesByWorkDay(Integer workDayId) throws SQLException {
+		return assemblerMeetingTimeDao.findAllMeetingTimesByWorkDay(workDayId);
+	}
+
+	@Override
+	public List<MeetingTimeVO> findAllOverapsMeetingTimesByWorkDay(Integer workDayId, LocalTime startTime,
+			LocalTime endTime) throws SQLException {
+		return assemblerMeetingTimeDao.findAllOverapsMeetingTimesByWorkDay(workDayId, startTime, endTime);
 	}
 
 	

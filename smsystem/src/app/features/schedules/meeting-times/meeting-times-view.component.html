@@ -12,9 +12,24 @@
               <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
               <td mat-cell *matCellDef="let element; let i = index;"> {{i + 1}}</td>
             </ng-container>
+            <!-- Day Column -->
+            <ng-container matColumnDef="workDay">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Day </th>
+              <td mat-cell *matCellDef="let element"> {{element.workDay.day | titlecase }} </td>
+            </ng-container>
             <!-- Time Column -->
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header> Time </th>
+            <ng-container matColumnDef="startTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
+              <td mat-cell *matCellDef="let element"> {{element.startTime.hour + ':' + element.startTime.minute }} </td>
+            </ng-container>
+              <!-- Time Column -->
+            <ng-container matColumnDef="endTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> End Time </th>
+              <td mat-cell *matCellDef="let element"> {{element.endTime.hour + ':' + element.endTime.minute}} </td>
+            </ng-container>
+             <!-- Time Column -->
+             <ng-container matColumnDef="time">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Time Range </th>
               <td mat-cell *matCellDef="let element"> {{element.time}} </td>
             </ng-container>
              <!-- Created Column -->

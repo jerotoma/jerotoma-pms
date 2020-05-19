@@ -11,12 +11,14 @@
                           <nb-select
                           fullWidth
                           placeholder="Select Day"
+                          class="capitalize"
                           formControlName="dayId"
                           id="class-work-day">
                           <nb-option
+                              class="capitalize"
                               *ngFor='let day of days'
-                              [value]="day">
-                              {{day}} -  {{day.valueOf()}}
+                              [value]="day.day">
+                              {{day.name | titlecase}}
                           </nb-option>
                         </nb-select>
                         </div>

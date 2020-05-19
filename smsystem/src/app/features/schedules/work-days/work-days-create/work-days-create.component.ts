@@ -4,13 +4,14 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import {
   WorkDay,
+  Day,
   Time,
   ResponseWrapper } from 'app/models';
 import {
   WorkDayService,
   ModalService,
 } from 'app/services';
-import { QueryParam, DAY } from 'app/utils';
+import { QueryParam, DAYS } from 'app/utils';
 
 @Component({
   selector: 'app-work-days-create',
@@ -27,7 +28,7 @@ export class WorkDaysCreateComponent implements OnInit {
   currentDate: Date = new Date();
   workDayForm: FormGroup;
   workDay: WorkDay;
-  days: DAY[] = [DAY.MONDAY, DAY.TUESDAY, DAY.WEDNESDAY, DAY.THURSDAY, DAY.FRIDAY, DAY.SATURDAY, DAY.SUNDAY];
+  days: Day[] = DAYS;
   startTime: Time =  { hour: this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
   endTime: Time = { hour: 1 + this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
   seconds = true;

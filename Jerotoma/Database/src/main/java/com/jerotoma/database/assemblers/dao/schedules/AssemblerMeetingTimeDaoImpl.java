@@ -2,6 +2,7 @@ package com.jerotoma.database.assemblers.dao.schedules;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.MeetingTimeConstant;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
+import com.jerotoma.common.viewobjects.WorkDayVO;
 
 @Repository
 public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements AssemblerMeetingTimeDao {
@@ -29,6 +31,7 @@ public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements Assem
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
+	@Autowired AssemblerWorkDayDao assemblerWorkDayDao;
 		
 	Map<String, Object> map;
 	
@@ -99,9 +102,15 @@ public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements Assem
 	}
 	
 	private MeetingTimeVO mapMeetingTimeResult(ResultSet rs) throws SQLException {			
-		return new MeetingTimeVO(rs);
+		MeetingTimeVO meetingTime = new MeetingTimeVO(rs);
+		meetingTime.setWorkDay(loadWorkDay(meetingTime.getWorkDayId()));		
+		return meetingTime;
 	}
 	
+	private WorkDayVO loadWorkDay(Integer workDayId) throws SQLException {
+		return assemblerWorkDayDao.findObject(workDayId);
+	}
+
 	private StringBuilder getBaseSelectQuery() {
 		return new StringBuilder("SELECT id, work_day_id AS workDayId, time, start_time AS startTime, end_time AS endTime, created_on AS createdOn, updated_on AS updatedOn FROM ").append(DatabaseConstant.TABLES.MEETING_TIMES).append("  ");
 	}
@@ -109,5 +118,21 @@ public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements Assem
 	@Override
 	public List<MeetingTimeVO> findAllMeetingTimes() throws SQLException {
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new MeetingTimeResultProcessor());
+	}
+
+	@Override
+	public List<MeetingTimeVO> findAllMeetingTimesByWorkDay(Integer workDayId) throws SQLException {		
+		return this.jdbcTemplate.query(getBaseSelectQuery().append(" WHERE work_day_id = ? ").toString(), new MeetingTimeResultProcessor(), workDayId);
+	}
+
+	@Override
+	public List<MeetingTimeVO> findAllOverapsMeetingTimesByWorkDay(Integer workDayId, LocalTime startTime, LocalTime endTime) throws SQLException {
+		
+		String start = startTime.toString();
+		String end = endTime.toString();
+		StringBuilder query = getBaseSelectQuery()
+				.append(" WHERE work_day_id = ? AND ((start_time <= ?::time without time zone AND end_time > ?::time without time zone ) OR (start_time >= ?::time without time zone AND end_time < ?::time without time zone ))");
+		
+		return this.jdbcTemplate.query(query.toString(), new MeetingTimeResultProcessor(), workDayId, start, start, start, end);
 	}
 }

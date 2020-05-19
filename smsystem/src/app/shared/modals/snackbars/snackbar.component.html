@@ -1,5 +1,9 @@
 <div class="flex">
-  <div class="message">{{data.message}}</div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="message" [innerHTML]="data.message"></div>
+    </div>
+  </div>
   <div class="dismiss">
       <button mat-icon-button (click)="onClose()">
         <mat-icon>close</mat-icon>

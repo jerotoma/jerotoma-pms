@@ -16,6 +16,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.MeetingTimeConstant;
 
@@ -39,6 +40,7 @@ public class MeetingTime {
 	
 	@ManyToOne
 	@JoinColumn(name="work_day_id")
+	@JsonManagedReference
 	WorkDay workDay;
 	
 	@Column
@@ -73,6 +75,10 @@ public class MeetingTime {
 		this.endTime =  LocalTime.parse(rs.getString(MeetingTimeConstant.END_TIME));
 		this.updatedOn = rs.getDate(MeetingTimeConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(MeetingTimeConstant.CREATED_ON);
+	}
+	
+	public boolean isValid() {
+		return this.startTime.isBefore(this.endTime);
 	}
 
 	public Integer getId() {

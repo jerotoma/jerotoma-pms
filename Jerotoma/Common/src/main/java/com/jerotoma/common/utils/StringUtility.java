@@ -18,4 +18,8 @@ public class StringUtility {
 	public static boolean isNumeric(String object) {
 		return StringUtils.isNumeric(object);
 	}
+	
+	public static String capitalize(String s) {
+		return StringUtils.capitalize(s.toLowerCase());
+	}
 }

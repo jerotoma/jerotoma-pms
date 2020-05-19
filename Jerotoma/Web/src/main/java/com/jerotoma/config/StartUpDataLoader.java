@@ -30,6 +30,7 @@ import com.jerotoma.services.users.UserRoleService;
 public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 	private boolean alreadySetup = false;
     private Logger logger = LoggerFactory.getLogger(getClass());
+   
     @Autowired AuthUserService userService;
     @Autowired RoleService roleService;
     @Autowired UserRoleService userRoleService;
@@ -139,5 +140,5 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		}
 		return systemConfig;
 	}
-
+	
 }

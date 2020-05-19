@@ -36,6 +36,8 @@ const COMPONENTS = [
   MeetingTimesViewComponent,
   MeetingTimesCreateComponent,
   MeetingTimesDeleteComponent,
+  WorkDaysCreateComponent,
+  WorkDaysDeleteComponent,
   WorkDaysComponent,
 ];
 
@@ -44,6 +46,8 @@ const ENTRY_COMPONENTS = [
   MeetingTimesViewComponent,
   MeetingTimesCreateComponent,
   MeetingTimesDeleteComponent,
+  WorkDaysCreateComponent,
+  WorkDaysDeleteComponent,
   WorkDaysComponent,
 ];
 
@@ -78,8 +82,6 @@ imports: [
 ],
 declarations: [
   ...COMPONENTS,
-  WorkDaysCreateComponent,
-  WorkDaysDeleteComponent,
 ],
 providers: [
  ...SERVICES,

@@ -1,37 +1,57 @@
 package com.jerotoma;
 
-import java.util.Arrays;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.EncodedResource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 @SpringBootApplication
-public class SchoolManagerApplication extends SpringBootServletInitializer {
+public class SchoolManagerApplication extends SpringBootServletInitializer implements CommandLineRunner {
 	
-	private static Class<SchoolManagerApplication> applicationClass = SchoolManagerApplication.class;
+	@Value("classpath:db/database-functions.sql")
+	Resource databaseFunctionResource;
+	
+	@Autowired DataSource dataSource;
+	
+	private static Class<SchoolManagerApplication> applicationClass = SchoolManagerApplication.class;	
 		
 	public static void main(String[] args) {
 		SpringApplication.run(applicationClass, args);
 	}	
 	
-	@Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-           /* for (String beanName : beanNames) {
-               System.out.println(beanName);
-            } */
-        };
-    }
 	 
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(applicationClass);
     }
+
+
+	@Override
+	public void run(String... args) throws Exception {
+		runDatabaseResources(dataSource, databaseFunctionResource);		
+	}
+	
+	private void runDatabaseResources(DataSource dataSource, Resource resource) {		
+		try {        	      
+   	     ScriptUtils.executeSqlScript(
+   	    		 dataSource.getConnection(),
+   	    		 new EncodedResource(resource, "UTF-8"), 
+   	    		 false, 
+   	    		 false, 
+   	    		 ScriptUtils.DEFAULT_COMMENT_PREFIX, 
+   	    		 ScriptUtils.DEFAULT_STATEMENT_SEPARATOR + ';',
+   	    		 ScriptUtils.DEFAULT_BLOCK_COMMENT_START_DELIMITER, 
+   	    		 ScriptUtils.DEFAULT_BLOCK_COMMENT_END_DELIMITER);
+   	    } catch (Exception e) {
+   	      e.printStackTrace();
+   	    }
+	}
 }

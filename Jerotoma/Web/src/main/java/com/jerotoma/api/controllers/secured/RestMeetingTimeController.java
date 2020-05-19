@@ -25,19 +25,25 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.MeetingTimeConstant;
 import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.schedules.MeetingTime;
+import com.jerotoma.common.schedules.WorkDay;
+import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.MeetingTimeValidator;
+import com.jerotoma.common.viewobjects.MeetingTimeVO;
 import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.services.assemblers.academic.AssemblerMeetingTimeService;
 import com.jerotoma.services.schedules.MeetingTimeService;
+import com.jerotoma.services.schedules.WorkDayService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_MEETING_TIME_CONTROLLER.BASE)
 public class RestMeetingTimeController extends BaseController {
 	
+	@Autowired WorkDayService workDayService;
 	@Autowired MeetingTimeService meetingTimeService;
 	@Autowired AssemblerMeetingTimeService assemblerMeetingTimeService;
 	
@@ -96,11 +102,21 @@ public class RestMeetingTimeController extends BaseController {
 		this.logRequestDetail("POST : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 			
 		requiredFields = new ArrayList<>(
-				Arrays.asList(MeetingTimeConstant.TIME));
+				Arrays.asList(
+						MeetingTimeConstant.TIME,
+						MeetingTimeConstant.END_TIME,
+						MeetingTimeConstant.START_TIME,
+						MeetingTimeConstant.WORK_DAY_ID));
 		
-		MeetingTime meetingTime = MeetingTimeValidator.validate(params, requiredFields);
-		
+		MeetingTime meetingTime = MeetingTimeValidator.validate(params, requiredFields);		
 		try {
+			WorkDay workDay = workDayService.findObject(meetingTime.getWorkDayId());
+			if (workDay == null) {
+				throw new FieldIsRequiredException("Work Day is required to continue");
+			}
+			checkForMeetingTimeOverlapException(workDay, meetingTime);
+			
+			meetingTime.setWorkDay(workDay);
 			instance.setData(meetingTimeService.createObject(meetingTime));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
@@ -109,6 +125,30 @@ public class RestMeetingTimeController extends BaseController {
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		return instance;
+	}
+
+
+	private void checkForMeetingTimeOverlapException(WorkDay workDay, MeetingTime meetingTime) throws SQLException {
+		List<MeetingTimeVO> meetingTimes = assemblerMeetingTimeService.findAllOverapsMeetingTimesByWorkDay(workDay.getId(),  meetingTime.getStartTime(),  meetingTime.getEndTime());
+		if (meetingTimes != null && !meetingTimes.isEmpty()) {
+			
+			StringBuilder builder = new StringBuilder()
+					.append("<h5 class='text-light'>")
+					.append("The meeting time overlaps with following times :")
+					.append("</h5>")
+					.append("<ul class='list-group'>");
+			
+			for (MeetingTimeVO mt : meetingTimes) {
+				builder.append("<li class='list-group-item'>")
+					.append(StringUtility.capitalize(mt.getWorkDay().getDay().toString()))
+					.append(" : ")
+					.append(mt.getTime())
+					.append("</li>");
+			}
+			
+			builder.append("</ul>");
+			throw new RuntimeException(builder.toString());
+		}
 	}
 
 	@PutMapping(value = {"", "/"})
@@ -123,7 +163,12 @@ public class RestMeetingTimeController extends BaseController {
 		this.securityCheckAdminAccess(auth, "edit");
 		
 		requiredFields = new ArrayList<>(
-				Arrays.asList(MeetingTimeConstant.TIME));
+				Arrays.asList(
+						MeetingTimeConstant.ID,
+						MeetingTimeConstant.TIME,
+						MeetingTimeConstant.END_TIME,
+						MeetingTimeConstant.START_TIME,
+						MeetingTimeConstant.WORK_DAY_ID));
 		
 		MeetingTime meetingTime = MeetingTimeValidator.validate(params, requiredFields);
 		

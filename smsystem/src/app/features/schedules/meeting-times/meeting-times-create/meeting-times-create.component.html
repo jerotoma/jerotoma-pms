@@ -7,6 +7,24 @@
               <div class="row">
                   <div class="col-md-6">
                       <div class="form-control-group">
+                          <label for="workDay" class="label">Work Day</label>
+                          <nb-select
+                          fullWidth
+                          placeholder="Select Day"
+                          formControlName="workDayId"
+                          id="class-work-day">
+                          <nb-option
+                              *ngFor='let workDay of workDays'
+                              [value]="workDay.id">
+                              {{workDay.day | titlecase}}
+                          </nb-option>
+                        </nb-select>
+                        </div>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
                           <label for="meetingTime" class="label">Time Range(24Hours Mode):</label>
                           <h1 class="text-primary">{{time}}</h1>
                         </div>

@@ -24,6 +24,7 @@ public class Time {
 	}
 	
 	public Time(String time) {
+		System.out.println(time);
 		LocalTime local = LocalTime.parse(time);		
 		validateHourValue(local.getHour());
 		validateMinuteValue(local.getMinute());
@@ -52,6 +53,10 @@ public class Time {
 	public void setSecond(Integer second) {
 		validateSecondValue(second);
 	}
+	
+	public LocalTime toLocalTime() {
+		return LocalTime.parse(this.toString());
+	}
 
 	@Override
 	public String toString() {
@@ -63,10 +68,10 @@ public class Time {
 	}
 	
 	private void validateHourValue(Integer hour) {
-		if (hour != null && hour > 0 && hour < 23) {
+		if (hour != null && hour > 0 && hour <= 23) {
 			this.hour = hour ;
 		} else {
-			throw new RuntimeException(String.format("Invalid value of hour:  %. Hour value must be from 0 - 23 range", hour));
+			throw new RuntimeException(String.format("Invalid value of hour:  %x. Hour value must be from 0 - 23 range", hour));
 		}
 	}
 	
@@ -75,7 +80,7 @@ public class Time {
 		if (minute != null && minute > 0 && minute < 59) {
 			this.minute = minute ;
 		} else {
-			throw new RuntimeException(String.format("Invalid value of minute:  %. Minute value must be from 0 - 59 range", minute));
+			throw new RuntimeException(String.format("Invalid value of minute:  %x. Minute value must be from 0 - 59 range", minute));
 		}
 	}
 	
@@ -83,7 +88,7 @@ public class Time {
 		if (second != null && second > 0 && second < 59) {
 			this.second = second;
 		} else {
-			throw new RuntimeException(String.format("Invalid value of second:  %. Second value must be from 0 - 59 range", second));
+			throw new RuntimeException(String.format("Invalid value of second:  %x. Second value must be from 0 - 59 range", second));
 		}
 	}
 	

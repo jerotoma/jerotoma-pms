@@ -33,7 +33,7 @@ export class MeetingTimesViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'time', 'createdOn', 'action'];
+  displayedColumns: string[] = ['id', 'workDay', 'startTime', 'endTime', 'time', 'createdOn', 'action'];
   dataSource: MatTableDataSource<MeetingTime> = new MatTableDataSource<MeetingTime>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -90,7 +90,7 @@ export class MeetingTimesViewComponent implements OnInit {
         title: 'Delete Meeting Time',
         action: 'delete',
         meetingTimeId: meetingTime.id.toString(),
-        time: meetingTime.time,
+        time:  meetingTime.workDay.day + ' : ' + meetingTime.time,
       },
     }).onClose.subscribe(_data => {
       this.loadMeetingTimes();

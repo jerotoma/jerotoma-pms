@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
@@ -39,6 +40,7 @@ public class WorkDay {
 	DayOfWeek day;
 	
 	@OneToMany(mappedBy = "workDay")
+	@JsonBackReference
 	private List<MeetingTime> meetingTimes;
 		
 	@Column(name="created_on")

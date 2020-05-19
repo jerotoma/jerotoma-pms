@@ -21,43 +21,37 @@ public class WorkDayServiceImpl implements WorkDayService {
 
 	@Override
 	public WorkDay findObject(Integer primaryKey) throws SQLException {
-		return null;
+		return workDayDao.findObject(primaryKey);
 	}
 
 	@Override
 	public WorkDay findObjectUniqueKey(String uniqueKey) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
 	public WorkDay createObject(WorkDay object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.createObject(object);
 	}
 
 	@Override
 	public WorkDay updateObject(WorkDay object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.updateObject(object);
 	}
 
 	@Override
 	public Boolean deleteObject(WorkDay object) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.deleteObject(object);
 	}
 
 	@Override
 	public List<WorkDay> loadList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.loadList(queryParam);
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		return workDayDao.loadMapList(queryParam);
 	}
 
 }

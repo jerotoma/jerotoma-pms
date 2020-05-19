@@ -6,7 +6,6 @@ import java.util.Date;
 
 import com.jerotoma.common.constants.MeetingTimeConstant;
 import com.jerotoma.common.schedules.Time;
-import com.jerotoma.common.schedules.WorkDay;
 
 public class MeetingTimeVO {
 	private Integer id;
@@ -23,7 +22,7 @@ public class MeetingTimeVO {
 	
 	private Date updatedOn;
 	
-	private WorkDay workDay;
+	private WorkDayVO workDay;
 	
 	public MeetingTimeVO(Integer id, String time, Date createdOn, Date updatedOn) {
 		super();
@@ -91,11 +90,11 @@ public class MeetingTimeVO {
 		this.updatedOn = updatedOn;
 	}
 
-	public WorkDay getWorkDay() {
+	public WorkDayVO getWorkDay() {
 		return workDay;
 	}
 
-	public void setWorkDay(WorkDay workDay) {
+	public void setWorkDay(WorkDayVO workDay) {
 		this.workDay = workDay;
 	}
 

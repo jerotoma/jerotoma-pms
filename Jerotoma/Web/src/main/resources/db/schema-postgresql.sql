@@ -581,16 +581,7 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
-	    
-	        
-	 /**************************************************************
-	 * 															  *
-	 * 															  *
-	 * 			CREATE TYPE OF DAY		  			  			  *
-	 * 															  *
-	 *************************************************************/
-	 DROP TYPE IF EXISTS DAY CASCADE;
-	 CREATE TYPE DAY AS ENUM('1', '2', '3', '4', '5', '6', '7');
+	  
 	 
 	/**************************************************************
 	 * 															  *
@@ -601,10 +592,11 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.work_days (
 	    id bigserial NOT NULL,
-	    day_id DAY,
+	    day_id int NOT NULL,
 	   	created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	   	CONSTRAINT work_days_pkey PRIMARY KEY(id)	   	
+	   	CONSTRAINT work_days_pkey PRIMARY KEY(id),
+	   	CONSTRAINT valid_day check (day_id <= 7)
 	    );
 	    
 	    

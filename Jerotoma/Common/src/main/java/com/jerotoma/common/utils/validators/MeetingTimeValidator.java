@@ -73,6 +73,10 @@ public class MeetingTimeValidator {
 		meetingTime.setCreatedOn(today);
 		meetingTime.setUpdatedOn(today);
 		
+		if (!meetingTime.isValid()) {
+			throw new FieldIsRequiredException("Meeting Time is Invalid, please verify that the start and end time don't overlap.");
+		}
+		
 		return meetingTime;
 	}
 

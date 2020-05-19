@@ -4,13 +4,16 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import {
   MeetingTime,
+  Day,
+  WorkDay,
   Time,
   ResponseWrapper } from 'app/models';
 import {
   MeetingTimeService,
+  WorkDayService,
   ModalService,
 } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, DAYS } from 'app/utils';
 @Component({
   selector: 'app-meeting-times-create',
   templateUrl: './meeting-times-create.component.html',
@@ -32,8 +35,12 @@ export class MeetingTimesCreateComponent implements OnInit {
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
   time: string = '';
+  days: Day[] = DAYS;
+  workDay: WorkDay;
+  workDays: WorkDay[];
 
   constructor(
+    private workDayService:  WorkDayService,
     private meetingTimeService:  MeetingTimeService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
@@ -41,6 +48,7 @@ export class MeetingTimesCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadForm();
+    this.loadWorkDays();
     if (this.action === 'edit') {
         this.loadMeetingTime();
     }
@@ -49,6 +57,7 @@ export class MeetingTimesCreateComponent implements OnInit {
     this.meetingTimeForm.patchValue({
       time: this.meetingTime.time,
       id: this.meetingTime.id,
+      workDayId: this.meetingTime.workDay.id,
       endTime: this.meetingTime.endTime,
       startTime: this.meetingTime.startTime,
     });
@@ -71,6 +80,9 @@ export class MeetingTimesCreateComponent implements OnInit {
                     this.modalService.openSnackBar('MeetingTime ' + meetingTime.time + ' has been created', 'success');
                     this.dismiss();
                   }
+              }, error => {
+                this.isSubmitting = false;
+                // console.log(error);
               });
         }
 
@@ -84,6 +96,9 @@ export class MeetingTimesCreateComponent implements OnInit {
             this.modalService.openSnackBar('MeetingTime ' + meetingTime.time + ' has been updated', 'success');
             this.dismiss();
           }
+      }, error => {
+        this.isSubmitting = false;
+        // console.log(error);
       });
     }
   getDescriptionContent(description: string) {
@@ -98,6 +113,7 @@ export class MeetingTimesCreateComponent implements OnInit {
     this.meetingTimeForm = this.formBuilder.group({
       id: [null],
       time: ['', Validators.required ],
+      workDayId: [null, Validators.required ],
       startTime: [null, Validators.required ],
       endTime: [null, Validators.required ],
     });
@@ -131,9 +147,32 @@ export class MeetingTimesCreateComponent implements OnInit {
     this.meetingTimeService.getMeetingTime(parseInt(this.id, 10)).subscribe((meetingTime: MeetingTime) => {
       if (meetingTime) {
         this.meetingTime = meetingTime;
+        this.startTime = meetingTime.startTime;
+        this.endTime = meetingTime.endTime;
+        this.workDay = meetingTime.workDay;
         this.patchMeetingTime();
       }
     });
+  }
+
+  loadWorkDay(workDayId: number) {
+    this.workDayService.getWorkDay(workDayId).subscribe((workDay: WorkDay) => {
+      if (workDay) {
+        this.workDay = workDay;
+        this.meetingTimeForm.patchValue({
+          workDayId: workDay.id,
+        });
+      }
+    });
+  }
+
+  loadWorkDays() {
+    this.workDayService.loadWorkDays()
+      .subscribe((workDays: WorkDay[]) => {
+        if (workDays) {
+          this.workDays = workDays;
+        }
+      });
   }
 
   getParam(): QueryParam {
