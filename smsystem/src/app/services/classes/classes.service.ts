@@ -35,6 +35,10 @@ export class ClassService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  postAutoGenerateClasses(data: any) {
+    return this.http.post(`${END_POINTS.classes}/auto-generate`, data)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   deleteClass(classId: number): Observable<boolean> {
     return this.http.delete<any>(`${END_POINTS.classes}/${classId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));

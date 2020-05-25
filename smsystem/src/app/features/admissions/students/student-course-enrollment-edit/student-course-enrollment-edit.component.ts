@@ -8,6 +8,7 @@ import { NbDialogRef } from '@nebular/theme';
 import {
   StudentClassService,
   ClassService,
+  ModalService,
   AcademicYearService,
  } from 'app/services';
 import {
@@ -30,7 +31,7 @@ import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 })
 export class StudentCourseEnrollmentEditComponent implements OnInit {
   @Input() title: string;
-  @Input() studentId: string = '0';
+  @Input() studentClassId: string = '0';
   @Output() onCreationSuccess = new EventEmitter();
 
   userType: string = USER_TYPE.student;
@@ -72,6 +73,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   constructor(
     private academicYearService: AcademicYearService,
     private classService: ClassService,
+    private modalService: ModalService,
     private studentClassService: StudentClassService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentCourseEnrollmentEditComponent>) {}
@@ -79,7 +81,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    this.loadStudentClasses(parseInt(this.studentId, 10));
+    this.loadStudentClasses(parseInt(this.studentClassId, 10));
   }
 
   dismiss() {
@@ -96,10 +98,13 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   updateStudentClass() {
     this.studentClassService.updateStudentClass(this.studentClassAdmission)
           .subscribe((result: StudentClassAdmission) => {
-            const resp = result;
+            if (result) {
+              const resp = result;
               this.confirmed = true;
               this.studentClassForm.reset();
               this.dismiss();
+              this.modalService.openSnackBar('Student Class has been updated', 'success');
+            }
           });
   }
   removeJClass(event: any, jClass: ClassView, isRemoveJClass: boolean) {
@@ -163,7 +168,11 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
     this.isLoading = true;
     this.classService.loadUnregisteredJClassesByStudent(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
-      this.jClasses = jClassViews;
+      if (jClassViews && jClassViews.length > 0) {
+        this.jClasses = jClassViews;
+      } else {
+        this.modalService.openSnackBar('No more classes were found', 'success');
+      }
       this.isLoading = false;
     });
   }
@@ -177,7 +186,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   }
 
   loadAcademicYears() {
-    this.academicYearService.getAcademicYears(this.param)
+    this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[]) => {
       if (academicYears) {
         this.academicYears = academicYears;
@@ -185,19 +194,21 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     });
   }
 
-  loadStudentClasses(studentId: number) {
-    this.studentClassService.getStudentClass(studentId).subscribe((studentClass: StudentClass) => {
-      this.student = studentClass.student;
-      this.academicYear = studentClass.academicYear;
-      this.registeredJClasses = studentClass.jClasses;
-      this.jClassIds =  this.pushJClasses(this.registeredJClasses),
-      this.studentClassForm.patchValue({
-        id: studentClass.id,
-        studentId: this.student.id,
-        academicYearId: this.academicYear.id,
-        fullName: this.student.fullName,
-        jClassIds: this.jClassIds,
-      });
+  loadStudentClasses(studentClassId: number) {
+    this.studentClassService.getStudentClass(studentClassId).subscribe((studentClass: StudentClass) => {
+      if (studentClass) {
+        this.student = studentClass.student;
+        this.academicYear = studentClass.academicYear;
+        this.registeredJClasses = studentClass.jClasses;
+        this.jClassIds =  this.pushJClasses(this.registeredJClasses),
+        this.studentClassForm.patchValue({
+          id: studentClass.id,
+          studentId: this.student.id,
+          academicYearId: this.academicYear.id,
+          fullName: this.student.fullName,
+          jClassIds: this.jClassIds,
+        });
+      }
     });
   }
   patchStudent(student: Student) {

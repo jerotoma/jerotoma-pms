@@ -89,7 +89,25 @@
                           <nb-option
                               *ngFor='let room of rooms'
                               [value]="room.id">
-                              {{room.name}}
+                              {{room.name}} - Capacity: {{room.capacity}}
+                          </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-control-group">
+                        <label for="class-meetingTime" class="label">Meeting Time</label>
+                        <nb-select
+                          fullWidth
+                          placeholder="Meeting Time"
+                          formControlName="meetingTimeId"
+                          id="class-meetingTime">
+                          <nb-option
+                              *ngFor='let meetingTime of meetingTimes'
+                              [value]="meetingTime.id">
+                              {{meetingTime.workDay.day |titlecase}} - {{meetingTime.time}}
                           </nb-option>
                         </nb-select>
                     </div>

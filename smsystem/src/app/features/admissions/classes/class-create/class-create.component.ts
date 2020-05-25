@@ -1,13 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
-import { ClassView, ClassAdmission } from 'app/models';
+import { ClassView, ClassAdmission, MeetingTime } from 'app/models';
 import {
   ClassService,
   RoomService,
   AcademicYearService,
+  MeetingTimeService,
   CourseService,
   ModalService,
   UserService,
@@ -40,6 +40,7 @@ export class ClassCreateComponent implements OnInit {
   courseId: number;
   roomId: number;
   teacherId: number;
+  meetingTimeId: number;
   capacity: number;
   isLoading: boolean = false;
   classView: ClassView = null;
@@ -58,6 +59,7 @@ export class ClassCreateComponent implements OnInit {
   teachers: Teacher[];
   courses: Course[];
   academicYears: AcademicYear[];
+  meetingTimes: MeetingTime[];
 
   classForm: FormGroup;
   classAdmission: ClassAdmission;
@@ -69,6 +71,7 @@ export class ClassCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
+    private meetingTimeService: MeetingTimeService,
     private roomService: RoomService,
     private courseService: CourseService,
     private modalService: ModalService,
@@ -94,6 +97,7 @@ export class ClassCreateComponent implements OnInit {
     this.academicYearId = classView.academicYear.id;
     this.courseId = classView.course.id;
     this.teacherId = classView.teacher.id;
+    this.meetingTimeId = classView.meetingTime.id;
     this.roomId = classView.room.id;
     this.classForm.patchValue({
       id: classView.id,
@@ -102,6 +106,7 @@ export class ClassCreateComponent implements OnInit {
       courseId: classView.course.id,
       teacherId: classView.teacher.id,
       classRoomId: classView.room.id,
+      meetingTimeId: classView.meetingTime.id,
     }, {emitEvent: false});
   }
 
@@ -141,6 +146,7 @@ export class ClassCreateComponent implements OnInit {
         academicYearId: [null, Validators.required],
         courseId: [null, Validators.required],
         teacherId: [null, Validators.required],
+        meetingTimeId: [null, Validators.required],
         roomId: [null, Validators.required],
       });
       this.onChanges();
@@ -157,25 +163,42 @@ export class ClassCreateComponent implements OnInit {
             this.loadTeachersByCourseID(courseId);
           }
         });
+        this.classForm.get('capacity').valueChanges.subscribe((capacity: number) => {
+          if (capacity) {
+            this.loadRoomByCapacity(capacity);
+          }
+        });
     }
 
     loadData() {
       this.loadAcademicYears();
-      this.loadClassRooms();
+      this.loadMeetingTimes();
     }
 
-    loadClassRooms() {
-      this.roomService.loadRooms()
-      .subscribe((rooms: Room[] ) => {
-        if (rooms) {
+    loadRoomByCapacity(capacity: number) {
+      this.roomService.loadRoomsByCapacity(capacity)
+      .subscribe((rooms: Room[]) => {
+        if (rooms && rooms.length > 0) {
           this.rooms = rooms;
+          this.patchClassAdmission(this.classView);
+        } else {
+          this.modalService.openSnackBar('No room with ' + capacity + ' capacity was found.', 'info');
+        }
+      }, error => {
+
+      });
+    }
+    loadMeetingTimes() {
+      this.meetingTimeService.loadMeetingTimes()
+      .subscribe((meetingTimes: MeetingTime[]) => {
+        if (meetingTimes) {
+          this.meetingTimes = meetingTimes;
           this.patchClassAdmission(this.classView);
         }
       }, error => {
 
       });
     }
-
     loadCourses(academicYearId: number) {
       this.courseService.getCoursesByAcademicYearId(academicYearId)
       .subscribe((courses: Course[] ) => {
@@ -186,7 +209,7 @@ export class ClassCreateComponent implements OnInit {
       });
     }
     loadAcademicYears() {
-      this.academicYearService.getAcademicYears(this.param)
+      this.academicYearService.getAcademicYears()
       .subscribe((academicYears: AcademicYear[]) => {
           if (academicYears) {
             this.academicYears = academicYears;

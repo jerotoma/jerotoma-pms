@@ -642,7 +642,7 @@
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	    UNIQUE(teacher_id, course_id),
+	    UNIQUE(teacher_id, course_id, academic_year_id),
 	   	CONSTRAINT classes_pkey PRIMARY KEY(id),	   	
 	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE
@@ -680,6 +680,7 @@
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
+	    UNIQUE(student_id, academic_year_id),
 	   	CONSTRAINT class_list_pkey PRIMARY KEY(id),
 	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE

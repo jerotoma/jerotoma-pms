@@ -9,5 +9,6 @@ import com.jerotoma.services.AssemblerService;
 public interface AssemblerRoomService extends AssemblerService<RoomVO>{
 
 	public List<RoomVO> findList() throws SQLException;
+	public List<RoomVO> getRoomsByCapacity(Integer capacity) throws SQLException;
 
 }

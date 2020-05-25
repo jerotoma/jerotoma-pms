@@ -89,7 +89,7 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
   }
 
   loadAcademicYears() {
-    this.academicYearService.getAcademicYears(this.param)
+    this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[] ) => {
       if (academicYears) {
         this.academicYears = academicYears;

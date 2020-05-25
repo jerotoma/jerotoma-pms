@@ -138,4 +138,10 @@ private JdbcTemplate jdbcTemplate;
 		StringBuilder builder = getBaseSelectQuery();
 		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor());
 	}
+
+	@Override
+	public List<RoomVO> getRoomsByCapacity(Integer capacity) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE capacity >= ? ");
+		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor(), capacity);
+	}
 }

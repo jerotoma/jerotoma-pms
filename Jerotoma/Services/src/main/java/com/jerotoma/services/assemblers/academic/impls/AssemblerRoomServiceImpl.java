@@ -47,4 +47,9 @@ public class AssemblerRoomServiceImpl implements AssemblerRoomService {
 		return assemblerRoomDao.findList();
 	}
 
+	@Override
+	public List<RoomVO> getRoomsByCapacity(Integer capacity) throws SQLException {
+		return assemblerRoomDao.getRoomsByCapacity(capacity);
+	}
+
 }

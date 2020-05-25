@@ -22,37 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ClassConstant;
-import com.jerotoma.common.constants.ScheduleConstant;
+import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Class;
+import com.jerotoma.common.models.academic.Course;
+import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.common.models.users.Teacher;
-import com.jerotoma.common.schedules.GeneticAlgorithm;
 import com.jerotoma.common.schedules.MeetingTime;
-import com.jerotoma.common.schedules.Population;
-import com.jerotoma.common.schedules.Schedule;
-import com.jerotoma.common.schedules.ScheduledClass;
-import com.jerotoma.common.schedules.ScheduledData;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.JClassValidator;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.ClassVO;
-import com.jerotoma.common.viewobjects.CourseVO;
-import com.jerotoma.common.viewobjects.DepartmentVO;
-import com.jerotoma.common.viewobjects.MeetingTimeVO;
-import com.jerotoma.common.viewobjects.RoomVO;
-import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
+import com.jerotoma.services.configs.SystemConfigService;
 import com.jerotoma.services.courses.AcademicYearService;
-import com.jerotoma.services.courses.RoomService;
-import com.jerotoma.services.courses.CourseService;
 import com.jerotoma.services.courses.ClassService;
+import com.jerotoma.services.courses.CourseService;
+import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.schedules.MeetingTimeService;
 import com.jerotoma.services.schedules.ScheduleDataService;
 import com.jerotoma.services.users.TeacherService;
@@ -63,6 +53,7 @@ public class RestClassController extends BaseController {
 	
 	@Autowired ClassService classService;
 	@Autowired AssemblerClassService assemblerClassService;
+	@Autowired SystemConfigService systemConfigService;
 	@Autowired AcademicYearService academicYearService;
 	@Autowired CourseService courseService;
 	@Autowired MeetingTimeService meetingTimeService;
@@ -83,6 +74,7 @@ public class RestClassController extends BaseController {
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
@@ -91,68 +83,39 @@ public class RestClassController extends BaseController {
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		AcademicYearVO academicYear = scheduleDataService.getAcademicYear(2);
-		List<RoomVO> rooms = scheduleDataService.findRooms();
-		List<TeacherVO> teachers  = scheduleDataService.findTeachers();
-		List<CourseVO> courses = scheduleDataService.findCoursesByAcademicYear(academicYear.getId());
-		List<DepartmentVO> departments  = scheduleDataService.findDepartments();
-		List<MeetingTimeVO> meetingTimes = scheduleDataService.findMeetingTimes();		
-		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicYear);
-		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
-		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
-		
-		while (population.getSchedules().get(0).getFitness() != 1.0) {
-			population = geneticAlgorithm.evolve(population).sortByFitness();
-			population.getSchedules().forEach(schedule -> {
-				System.out.println("Fitness :  " + schedule.getFitness());
-				processGeneratedClasses(schedule, generationNumber++, data); 
-			});			
-		}				
+								
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(map);
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
-	
-	private void processGeneratedClasses(Schedule schedule, int generation, ScheduledData scheduleData) {		
-		List<ScheduledClass> scheduledClasses = new ArrayList<>();		
-		if (schedule.getFitness() == 1) {
-			List<ClassVO> classes = schedule.getClasses();			
-			classes.forEach( x -> {
-				int majorIndex = scheduleData.getDepartments().indexOf(x.getDepartment());
-				int courseIndex = -1;
-				for (CourseVO course:  scheduleData.getCourses()) {
-					if (course.getId().equals(x.getCourse().getId())) {
-						courseIndex = scheduleData.getCourses().indexOf(course);
-						break;
-					}
-				}
-				if (courseIndex != -1) {
-					int roomIndex = scheduleData.getRooms().indexOf(x.getRoom());
-					int teacherIndex = scheduleData.getTeachers().indexOf(x.getTeacher());
-					int meetingTimeIndex = scheduleData.getMeetingTimes().indexOf(x.getMeetingTime());
-					DepartmentVO department = scheduleData.getDepartments().get(majorIndex);
-					TeacherVO teacher = scheduleData.getTeachers().get(teacherIndex);
-					MeetingTimeVO meetingTime = scheduleData.getMeetingTimes().get(meetingTimeIndex);
-					CourseVO course = scheduleData.getCourses().get(courseIndex);
-					RoomVO room = scheduleData.getRooms().get(roomIndex);
-					AcademicYearVO academicYear = scheduleData.getAcademicYear();
-					ScheduledClass scheduledClass = new ScheduledClass(department, teacher, course, room, academicYear, meetingTime);
-					scheduledClasses.add(scheduledClass);
-					
-				}		
-			});
-			System.out.print("\n\n> Solution found in " + (generation + 1) + " generations");
-		}
+
+	@PostMapping(value = {"/auto-generate", "/auto-generate/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> autoGenerateClasses(
+			Authentication auth,
+			@RequestBody Map<String, Object> params) throws SQLException {
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/auto-generate");
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		Integer academicYearId = (Integer)params.get("academicYearId");
+		AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
+		if (academicYear != null) {
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			instance.setData(scheduleDataService.generateClasses(academicYear, authUser));
+			instance.setHttpStatus(HttpStatus.OK);
+		}		
+		return instance;
 	}
-	
-	
+		
 	@GetMapping(value = {"/{classId}", "/{classId}/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> getJClass(Authentication auth, @PathVariable("classId") Integer classId) {
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/" + classId);
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
@@ -172,7 +135,7 @@ public class RestClassController extends BaseController {
 	@ResponseBody
 	public HttpResponseEntity<Object> loadJClassesByAcademicYear(Authentication auth, @PathVariable("academicYearId") Integer academicYearId) {
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/academic-years/" + academicYearId);
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
@@ -209,14 +172,17 @@ public class RestClassController extends BaseController {
 		return instance;
 	}
 	
-	@GetMapping(value = {"academic-years/{academicYearId}/students/{studentId}", "/academic-years/{academicYearId}/students/{studentId}"})
+	@GetMapping(value = {
+			"academic-years/{academicYearId}/students/{studentId}", 
+			"/academic-years/{academicYearId}/students/{studentId}"
+	})
 	@ResponseBody
 	public HttpResponseEntity<Object> loadStudentJClassesByAcademicYear(
 			Authentication auth, 
 			@PathVariable("academicYearId") Integer academicYearId,
 			@PathVariable("studentId") Integer studentId) {
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/academic-years/" + academicYearId + "/students/" + studentId);
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
@@ -374,7 +340,7 @@ public class RestClassController extends BaseController {
 	@DeleteMapping(value = {"/{classId}", "/{classId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteFieldOfStudy(Authentication auth, @PathVariable("classId") Integer classId) {
-		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_CLASS_CONTROLLER.BASE + "/" + classId);
 		this.securityCheckAccessByRoles(auth);
 		
 		Class mClass;
@@ -395,5 +361,6 @@ public class RestClassController extends BaseController {
 		}
 		return instance;
 	}
+	
 
 }

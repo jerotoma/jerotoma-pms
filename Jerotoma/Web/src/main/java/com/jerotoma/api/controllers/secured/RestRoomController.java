@@ -68,6 +68,27 @@ public class RestRoomController  extends BaseController {
 		return instance;
 	}
 	
+	@GetMapping(value = {"/capacities/{capacity}", "/capacities/{capacity}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getRoomsByCapacity(
+			Authentication auth,
+			@PathVariable("capacity") Integer capacity) {
+		
+		logger.debug("getSchoolClasss : [model] : {}");			
+		this.securityCheckAccessByRoles(auth);				
+		try {
+			instance.setData(assemblerRoomService.getRoomsByCapacity(capacity));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		instance.setSuccess(true);
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		
+		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
 	@GetMapping(value = {"/paginated", "/paginated/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> getRoomPaginated(Authentication auth,

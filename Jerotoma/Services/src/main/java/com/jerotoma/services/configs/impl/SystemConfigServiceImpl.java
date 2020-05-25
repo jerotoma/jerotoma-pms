@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.SystemConfigConstant;
+import com.jerotoma.common.constants.SystemConfigConstant.GENERAL_CONFIG;
 import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.database.dao.configs.SystemConfigDao;
 import com.jerotoma.services.configs.SystemConfigService;
@@ -28,7 +30,10 @@ public class SystemConfigServiceImpl implements SystemConfigService {
 
 	@Override
 	public SystemConfig findObjectUniqueKey(String uniqueKey) throws SQLException {
-
+		GENERAL_CONFIG generalConfig = SystemConfigConstant.getGeneralConfigByName(uniqueKey);
+		if (generalConfig != null) {
+			uniqueKey = generalConfig.getDbName();
+		}
 		return systemConfigDao.findObjectUniqueKey(uniqueKey);
 	}
 

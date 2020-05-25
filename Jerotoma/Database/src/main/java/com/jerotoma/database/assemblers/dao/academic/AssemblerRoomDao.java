@@ -8,5 +8,6 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerRoomDao extends AssemblerDao<RoomVO>{
 	public List<RoomVO> findList() throws SQLException;
+	public List<RoomVO> getRoomsByCapacity(Integer capacity) throws SQLException;
 
 }

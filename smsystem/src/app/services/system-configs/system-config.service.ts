@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse, HttpEvent } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
+import { ResponseWrapper, SystemConfig } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,43 +12,40 @@ export class SystemConfigService {
 
   constructor(private http: HttpClient) { }
 
-  getSystemConfig(systemConfigId: number): Observable<any> {
-    return this.http
-      .get<any>(`${END_POINTS.systemConfigs}/${systemConfigId}`)
-      .pipe(catchError(this.errorHandler));
+  getSystemConfig(systemConfigId: number): Observable<SystemConfig> {
+    return this.http.get(`${END_POINTS.systemConfigs}/${systemConfigId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
-  getSystemConfigByKey(systemConfigKey: string): Observable<any> {
-    return this.http
-      .get<any>(`${END_POINTS.pubSystemConfigs}/keys/?key=${systemConfigKey}`)
-      .pipe(catchError(this.errorHandler));
+  findSystemConfigByKey(systemConfigKey: string): Observable<SystemConfig> {
+    return this.http.get(`${END_POINTS.systemConfigs}/keys/?key=${systemConfigKey}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+  getSystemConfigByKey(systemConfigKey: string): Observable<SystemConfig> {
+    return this.http.get(`${END_POINTS.pubSystemConfigs}/keys/?key=${systemConfigKey}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadSystemConfigList(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
+  loadSystemConfigList(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get<any>(
-        `${END_POINTS.systemConfigs}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(catchError(this.errorHandler));
+        `${END_POINTS.systemConfigs}/list?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  getSystemConfigs(param: QueryParam): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.get<any>(
-        `${END_POINTS.systemConfigs}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`,
-        {observe: 'response'})
-      .pipe(retry(3), catchError(this.errorHandler));
+  getSystemConfigs(param: QueryParam): Observable<ResponseWrapper> {
+    return this.http.get<any>(`${END_POINTS.systemConfigs}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+    .pipe(map((resp: ResponseWrapper) => resp));
   }
-  createSystemConfig(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(`${END_POINTS.systemConfigs}`, data, {observe: 'response'});
+  createSystemConfig(data?: any): Observable<SystemConfig> {
+    return this.http.post(`${END_POINTS.systemConfigs}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  deleteSystemConfig(systemConfigId: number): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.delete<any>(`${END_POINTS.systemConfigs}/${systemConfigId}`, {observe: 'response'});
+  deleteSystemConfig(systemConfigId: number): Observable<boolean> {
+    return this.http.delete<any>(`${END_POINTS.systemConfigs}/${systemConfigId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateSystemConfig(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.put<any>(`${END_POINTS.systemConfigs}`, data, {observe: 'response'});
-  }
-
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.message || 'Server error');
+  updateSystemConfig(data?: any): Observable<SystemConfig> {
+    return this.http.put(`${END_POINTS.systemConfigs}`, data)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }

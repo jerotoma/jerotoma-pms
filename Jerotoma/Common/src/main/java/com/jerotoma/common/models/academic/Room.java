@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.viewobjects.RoomVO;
 
 
 @Entity
@@ -52,6 +53,22 @@ public class Room {
 	
 	@OneToMany(mappedBy = "room")
 	private List<RoomResource> roomResources;
+	
+	
+
+	public Room(RoomVO room) {
+		this.id = room.getId();
+		this.code = room.getCode();
+		this.name = room.getName();
+		this.capacity = room.getCapacity();
+		this.description = room.getDescription();
+		this.createdOn = room.getCreatedOn();
+		this.updatedOn = room.getUpdatedOn();
+	}
+
+	public Room() {
+		
+	}
 
 	public Integer getId() {
 		return id;

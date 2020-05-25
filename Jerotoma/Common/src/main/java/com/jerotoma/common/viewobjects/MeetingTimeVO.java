@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.jerotoma.common.constants.MeetingTimeConstant;
 import com.jerotoma.common.schedules.Time;
+import com.jerotoma.common.utils.NumberFormatter;
 
 public class MeetingTimeVO {
 	private Integer id;
@@ -27,7 +28,7 @@ public class MeetingTimeVO {
 	public MeetingTimeVO(Integer id, String time, Date createdOn, Date updatedOn) {
 		super();
 		this.id = id;
-		this.time = time;
+		this.time = NumberFormatter.formatTimeRange(time);
 		this.createdOn = createdOn;
 		this.updatedOn = updatedOn;
 	}
@@ -35,7 +36,7 @@ public class MeetingTimeVO {
 	public MeetingTimeVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(MeetingTimeConstant.ID);
 		this.workDayId = rs.getInt(MeetingTimeConstant.WORK_DAY_ID);
-		this.time =  rs.getString(MeetingTimeConstant.TIME);
+		this.time = NumberFormatter.formatTimeRange(rs.getString(MeetingTimeConstant.TIME));
 		this.startTime =  new Time(rs.getString(MeetingTimeConstant.START_TIME));
 		this.endTime =  new Time(rs.getString(MeetingTimeConstant.END_TIME));
 		this.updatedOn = rs.getDate(MeetingTimeConstant.UPDATED_ON);

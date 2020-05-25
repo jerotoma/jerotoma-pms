@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from 'app/shared/shared.module';
 
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -14,6 +15,7 @@ import {
   NbInputModule,
   NbIconModule,
   NbAlertModule,
+  NbSelectModule,
 } from '@nebular/theme';
 
 import { AcademicYearsRoutingModule } from './academic-years-routing.module';
@@ -38,8 +40,10 @@ const ENTRY_COMPONENTS = [
 const MODULES = [
   FormsModule,
   ReactiveFormsModule,
+  SharedModule,
   AcademicYearsRoutingModule,
   NbButtonModule,
+  NbSelectModule,
   NbWindowModule,
   NbCardModule,
   NbInputModule,

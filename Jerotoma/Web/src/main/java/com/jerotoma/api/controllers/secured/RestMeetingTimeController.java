@@ -24,17 +24,14 @@ import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.MeetingTimeConstant;
-import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
-import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.WorkDay;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.validators.MeetingTimeValidator;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
-import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.services.assemblers.academic.AssemblerMeetingTimeService;
 import com.jerotoma.services.schedules.MeetingTimeService;
 import com.jerotoma.services.schedules.WorkDayService;
@@ -173,6 +170,13 @@ public class RestMeetingTimeController extends BaseController {
 		MeetingTime meetingTime = MeetingTimeValidator.validate(params, requiredFields);
 		
 		try {
+			WorkDay workDay = workDayService.findObject(meetingTime.getWorkDayId());
+			if (workDay == null) {
+				throw new FieldIsRequiredException("Work Day is required to continue");
+			}
+			checkForMeetingTimeOverlapException(workDay, meetingTime);
+			
+			meetingTime.setWorkDay(workDay);
 			instance.setData(meetingTimeService.updateObject(meetingTime));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
@@ -186,20 +190,10 @@ public class RestMeetingTimeController extends BaseController {
 	@DeleteMapping(value = {"/{meetingTimeId}", "/{meetingTimeId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteMeetingTime(Authentication auth, @PathVariable("meetingTimeId") Integer meetingTimeId) {
-		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
-			
-		if(auth == null) {
-			instance.setSuccess(false);
-			instance.setStatusCode(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-			return instance;
-		}
-		UserContext userContext = authenticationFacade.getUserContext(auth);
-		if(!userContext.getCurrentAuthorities().contains(RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName())){
-			throw new UnAuthorizedAccessException("You have no authorization to add new meetingTime to the system");
-		}
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();			
+		this.securityCheckAdminAccess(auth, "delete");
 		
-		MeetingTime meetingTime;
-		
+		MeetingTime meetingTime;		
 		try {
 			meetingTime = meetingTimeService.findObject(meetingTimeId);	
 			if (meetingTime == null) {
@@ -209,6 +203,7 @@ public class RestMeetingTimeController extends BaseController {
 			} 
 			boolean isDeleted = meetingTimeService.deleteObject(meetingTime);
 			instance.setSuccess(isDeleted);
+			instance.setData(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
 		} catch (SQLException e) {

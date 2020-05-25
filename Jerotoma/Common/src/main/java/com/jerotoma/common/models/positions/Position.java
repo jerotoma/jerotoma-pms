@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.viewobjects.PositionVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.POSITIONS)
@@ -56,6 +57,18 @@ public class Position implements Serializable{
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+
+	public Position(PositionVO position) {
+		this.id = position.getId();
+		this.name = position.getName();
+		this.description = position.getDescription();
+		this.createdOn = position.getCreatedOn();
+		this.updatedOn = position.getUpdatedOn();
+	}
+
+	public Position() {
+		
+	}
 
 	public Integer getId() {
 		return id;

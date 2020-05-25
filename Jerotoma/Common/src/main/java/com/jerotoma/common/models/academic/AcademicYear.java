@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.ACADEMIC_YEARS)
@@ -49,6 +50,22 @@ public class AcademicYear {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+
+	public AcademicYear(AcademicYearVO academicYear) {
+		this.id = academicYear.getId();
+		this.code = academicYear.getCode();
+		this.name = academicYear.getName();
+		this.yearOfStudy = academicYear.getYearOfStudy();
+		this.description = academicYear.getDescription();
+		this.createdOn = academicYear.getCreatedOn();
+		this.updatedOn = academicYear.getUpdatedOn();
+	}
+
+
+	public AcademicYear() {		
+	}
+
+
 
 	public Integer getId() {
 		return id;

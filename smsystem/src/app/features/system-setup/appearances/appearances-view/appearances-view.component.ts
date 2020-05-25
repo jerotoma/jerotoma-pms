@@ -95,10 +95,8 @@ export class AppearancesViewComponent implements OnInit {
 
   updateSystemConfigChange(systemConfig: SystemConfig) {
     this.systemConfigService.updateSystemConfig(systemConfig)
-    .subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const content = resp.body;
-      if (content.success) {
+    .subscribe((data: SystemConfig ) => {
+      if (data) {
          this.loadCurrentTheme();
       }
     }, error => {

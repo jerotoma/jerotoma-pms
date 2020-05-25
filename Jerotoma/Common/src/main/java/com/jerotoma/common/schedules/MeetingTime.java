@@ -19,6 +19,8 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.MeetingTimeConstant;
+import com.jerotoma.common.utils.NumberFormatter;
+import com.jerotoma.common.viewobjects.MeetingTimeVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.MEETING_TIMES)
@@ -62,7 +64,7 @@ public class MeetingTime {
 		
 	public MeetingTime(Integer id, String time, LocalTime startTime,  LocalTime endTime, WorkDay workDay) {
 		this.id = id;
-		this.time =  time;
+		this.time =  NumberFormatter.formatTimeRange(time);
 		this.workDay = workDay;
 		this.startTime =  startTime;
 		this.endTime =  endTime;
@@ -70,13 +72,22 @@ public class MeetingTime {
 	
 	public MeetingTime(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(MeetingTimeConstant.ID);
-		this.time =  rs.getString(MeetingTimeConstant.TIME);
+		this.time =  NumberFormatter.formatTimeRange(rs.getString(MeetingTimeConstant.TIME));
 		this.startTime =  LocalTime.parse(rs.getString(MeetingTimeConstant.START_TIME));
 		this.endTime =  LocalTime.parse(rs.getString(MeetingTimeConstant.END_TIME));
 		this.updatedOn = rs.getDate(MeetingTimeConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(MeetingTimeConstant.CREATED_ON);
 	}
 	
+	public MeetingTime(MeetingTimeVO meetingTime) {
+		this.id = meetingTime.getId();
+		this.time = NumberFormatter.formatTimeRange(meetingTime.getTime());
+		this.startTime =  meetingTime.getStartTime().toLocalTime();
+		this.endTime =  meetingTime.getEndTime().toLocalTime();
+		this.updatedOn = meetingTime.getUpdatedOn();
+		this.createdOn = meetingTime.getCreatedOn();
+	}
+
 	public boolean isValid() {
 		return this.startTime.isBefore(this.endTime);
 	}

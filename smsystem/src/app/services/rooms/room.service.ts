@@ -18,8 +18,14 @@ export class RoomService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadRoomsByCapacity(capacity: number): Observable<Room[]> {
+    return this.http.get(
+      `${END_POINTS.rooms}/capacities/${capacity}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   loadRooms(): Observable<Room[]> {
-    return this.http.get<any>(
+    return this.http.get(
         `${END_POINTS.rooms}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }

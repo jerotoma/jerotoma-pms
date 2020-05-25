@@ -20,12 +20,12 @@
             <!-- Time Column -->
             <ng-container matColumnDef="startTime">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Time </th>
-              <td mat-cell *matCellDef="let element"> {{element.startTime.hour + ':' + element.startTime.minute }} </td>
+              <td mat-cell *matCellDef="let element"> {{element.startTime.stringTime }} </td>
             </ng-container>
               <!-- Time Column -->
             <ng-container matColumnDef="endTime">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> End Time </th>
-              <td mat-cell *matCellDef="let element"> {{element.endTime.hour + ':' + element.endTime.minute}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.endTime.stringTime}} </td>
             </ng-container>
              <!-- Time Column -->
              <ng-container matColumnDef="time">

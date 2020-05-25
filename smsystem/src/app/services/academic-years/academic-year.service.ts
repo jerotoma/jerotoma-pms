@@ -24,9 +24,9 @@ export class AcademicYearService {
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  getAcademicYears(param: QueryParam): Observable<AcademicYear[]> {
+  getAcademicYears(): Observable<AcademicYear[]> {
     return this.http.get(
-        `${END_POINTS.academicYears}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+        `${END_POINTS.academicYears}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
   createAcademicYear(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {

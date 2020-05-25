@@ -79,8 +79,10 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
         title: 'Enroll New Student',
         action: 'create',
       },
-    }).onClose.subscribe(_data => {
-      this.loadStudentClasses();
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+        this.loadStudentClasses();
+      }
     });
   }
 
@@ -88,11 +90,11 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
     this.dialogService.open(StudentCourseEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
-        studentId: studentClass.student.id.toString(),
+        studentClassId: studentClass.id.toString(),
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
-
+        this.loadStudentClasses();
       }
     });
   }

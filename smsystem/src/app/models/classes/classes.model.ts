@@ -1,13 +1,11 @@
-import { Course } from '../courses';
-import { Teacher, Student } from '../users';
-import { AcademicYear } from '../academic-years';
-import { Room } from '../rooms';
+import { Room, AcademicYear, Teacher, Student, Course, MeetingTime } from 'app/models';
 
 
 export interface ClassView {
   id: number;
   teacher: Teacher;
   course: Course;
+  meetingTime: MeetingTime;
   academicYear: AcademicYear;
   room: Room;
   capacity: number;
@@ -18,6 +16,7 @@ export interface ClassAdmission {
   teacher: Teacher;
   course: Course;
   academicYear: AcademicYear;
+  meetingTime: MeetingTime;
   room: Room;
   capacity: number;
 }

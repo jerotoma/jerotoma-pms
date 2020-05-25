@@ -105,7 +105,7 @@ export class CourseCreateComponent implements OnInit {
   }
 
   loadAcademicYears() {
-    this.academicYearService.getAcademicYears(this.getParam())
+    this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[] ) => {
       if (academicYears) {
         this.academicYears = academicYears;

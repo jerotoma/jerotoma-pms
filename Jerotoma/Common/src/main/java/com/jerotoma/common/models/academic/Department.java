@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.viewobjects.DepartmentVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.DEPARTMENTS)
@@ -44,6 +45,17 @@ public class Department {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+
+	public Department(DepartmentVO department) {
+		this.id = department.getId();
+		this.name = department.getName();
+		this.createdOn = department.getCreatedOn();
+		this.updatedOn = department.getUpdatedOn();
+	}
+
+	public Department() {
+		
+	}
 
 	public Integer getId() {
 		return id;

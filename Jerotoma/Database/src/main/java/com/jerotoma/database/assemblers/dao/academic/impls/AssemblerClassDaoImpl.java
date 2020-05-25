@@ -218,4 +218,10 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 			.append(" WHERE c.academic_year_id = ? AND sc.student_id = ? ");				
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, studentId);
 	}
+	@Override
+	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId)
+			throws SQLException {
+		String query = getBaseSelectQuery().append(" WHERE c.teacher_id = ? AND c.course_id = ? AND c.academic_year_id = ?").toString();
+		return this.jdbcTemplate.query(query, new JClassSingleResultProcessor(), teacherId, courseId, academicYearId);
+	}
 }

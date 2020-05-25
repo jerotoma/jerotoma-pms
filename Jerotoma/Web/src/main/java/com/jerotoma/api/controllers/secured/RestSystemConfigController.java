@@ -3,7 +3,6 @@ package com.jerotoma.api.controllers.secured;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,9 @@ import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.SystemConfigConstant;
-import com.jerotoma.common.constants.UserPreferenceConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.config.SystemConfig;
-import com.jerotoma.common.models.config.UserPreference;
 import com.jerotoma.common.utils.validators.SystemConfigValidator;
 import com.jerotoma.services.configs.SystemConfigService;
 import com.jerotoma.services.configs.UserPreferenceService;
@@ -124,37 +121,22 @@ public class RestSystemConfigController extends BaseController {
 	@GetMapping(value = {"/keys", "/keys/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> getSystemConfigByKey(Authentication auth, @RequestParam(required = true, value="key") String systemConfigKey) throws JDataAccessException {
-	
-		Map<String, Object> map = new HashMap<>();
-		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
-		this.securityCheckAccessByRoles(auth);
-		
-		SystemConfig systemConfig = null;
-		UserPreference userPreference = null;
-		
+		this.securityCheckAccessByRoles(auth);		
+		SystemConfig systemConfig = null;		
 		try {
 			systemConfig = systemConfigService.findObjectUniqueKey(systemConfigKey);		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}
-		
-		try {
-			userPreference = userPreferenceService.findUserPreferenceByKeyAndUserID(authUser.getId(), UserPreferenceConstant.THEME_CONFIG.CURRENT_USER_THEME.getDbName());
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException | EmptyResultDataAccessException e) {
 			
-		map.put(SystemConfigConstant.THEME_CONFIG.CURRENT_THEME.getName(), systemConfig);
-		
-		if (userPreference != null) {
-			map.put(UserPreferenceConstant.THEME_CONFIG.CURRENT_USER_THEME.getName(), userPreference);
-		}
-		
+			if (e instanceof EmptyResultDataAccessException) {
+				systemConfig = null;
+			} else {
+				throw new JDataAccessException(e.getMessage(), e);
+			}		
+		}		
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
+		instance.setData(systemConfig);
 		return instance;
 	}
 
@@ -166,7 +148,7 @@ public class RestSystemConfigController extends BaseController {
 	protected HttpResponseEntity<Object> createSystemConfig(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		this.logRequestDetail("POST : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.logRequestDetail("POST : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(
@@ -208,7 +190,7 @@ public class RestSystemConfigController extends BaseController {
 		
 		try {
 			SystemConfig dbSystemConfig  = systemConfigService.findObjectUniqueKey(systemConfig.getName());
-			systemConfig.setId(dbSystemConfig.getId());
+			systemConfig.setId(dbSystemConfig.getId());			
 			systemConfig = systemConfigService.updateObject(systemConfig);		
 		} catch (SQLException | EmptyResultDataAccessException e) {
 			if (e instanceof EmptyResultDataAccessException) {
@@ -219,8 +201,7 @@ public class RestSystemConfigController extends BaseController {
 				}
 			} else {
 				throw new JDataAccessException(e.getMessage(), e);
-			}
-			throw new JDataAccessException(e.getMessage(), e);			
+			}		
 		}
 			
 		instance.setSuccess(true);

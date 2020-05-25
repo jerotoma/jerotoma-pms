@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.viewobjects.CourseVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.COURSES)
@@ -73,6 +74,22 @@ public class Course implements Serializable{
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
+	public Course(CourseVO course) {
+		this.id = course.getId();
+		this.academicYearId = course.getAcademicYearId();
+		this.departmentId = course.getDepartmentId();
+		this.code = course.getCode();
+		this.name = course.getName();
+		this.description = course.getDescription();
+		this.academicYear = new AcademicYear(course.getAcademicYear());
+		this.department = new Department(course.getDepartment());
+		this.createdOn = course.getCreatedOn();
+		this.updatedOn = course.getUpdatedOn();
+	}
+
+	public Course() {
+	}
+
 	public Integer getId() {
 		return id;
 	}

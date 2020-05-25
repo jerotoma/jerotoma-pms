@@ -33,16 +33,19 @@ import { ClassesRoutingModule } from './classes-routing.module';
 import { ClassesComponent } from './classes.component';
 import { ClassCreateComponent } from './class-create/class-create.component';
 import { ClassesViewComponent } from './classes-view/classes-view.component';
+import { ClassesAutoGenerateComponent } from './classes-auto-generate/classes-auto-generate.component';
 
 
 const COMPONENTS = [
   ClassesComponent,
   ClassesViewComponent,
   ClassCreateComponent,
+  ClassesAutoGenerateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   ClassCreateComponent,
+  ClassesAutoGenerateComponent,
 ];
 
 const MODULES = [

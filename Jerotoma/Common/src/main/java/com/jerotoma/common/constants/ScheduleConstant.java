@@ -7,6 +7,4 @@ public class ScheduleConstant {
 	public static final double CROSSOVER_RATE = 0.9;
 	public static final int TOURNAMENT_SELECTION_SIZE = 3;
 	public static final int NUMBER_OF_ELITE_SCHEDULES = 1;
-	
-
 }

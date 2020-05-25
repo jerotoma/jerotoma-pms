@@ -60,4 +60,10 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 		return assemblerClassDao.loadStudentClassesByAcademicYear(studentId, academicYearId);
 	}
 
+	@Override
+	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId)
+			throws SQLException {
+		return assemblerClassDao.findClassByUniqueParams(teacherId, courseId, academicYearId);
+	}
+
 }

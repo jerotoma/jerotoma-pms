@@ -1,6 +1,6 @@
 
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material';
 import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
@@ -9,9 +9,9 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import { AcademicYearCreateComponent } from '../academic-year-create/academic-year-create.component';
 import { AcademicYearDeleteComponent } from '../academic-year-delete/academic-year-delete.component';
-import { AcademicYear, ResponseWrapper } from 'app/models';
-import { AcademicYearService } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { AcademicYear, ResponseWrapper, SystemConfig } from 'app/models';
+import { AcademicYearService, SystemConfigService } from 'app/services';
+import { QueryParam, APP_CONSTANTS } from 'app/utils';
 /**
  * @title Table with pagination
  */
@@ -34,25 +34,31 @@ export class AcademicYearsViewComponent implements OnInit {
 
   title: string = 'List of Academic Years';
   academicYear: AcademicYear;
+  academicYears: AcademicYear[];
+  currentAcademicYear: string = APP_CONSTANTS.currentAcademicYear;
   count: number = 0;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'name', 'code', 'yearOfStudy', 'description', 'action'];
   dataSource: MatTableDataSource<Position> = new MatTableDataSource<Position>();
+  currentAcademicYearForm: FormGroup;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
+    private formBuilder: FormBuilder,
     private academicYearService: AcademicYearService,
     private dialogService: NbDialogService,
+    private systemConfigService: SystemConfigService,
     ) {
   }
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loadAcademicYears();
+    this.loadForm();
   }
 
   open() {
@@ -71,7 +77,9 @@ export class AcademicYearsViewComponent implements OnInit {
         if (resp) {
           const data = resp.data;
           this.totalNumberOfItems = data.count;
+          this.academicYears = data.academicYears;
           this.dataSource = new MatTableDataSource<Position>(data.academicYears);
+          this.loadSystemConfigChange(this.currentAcademicYear);
         }
       });
   }
@@ -106,5 +114,50 @@ export class AcademicYearsViewComponent implements OnInit {
     this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
     this.param.pageSize = pageEvent.pageSize;
     this.loadAcademicYears();
+  }
+  loadForm() {
+    this.currentAcademicYearForm = this.formBuilder.group({
+      academicYearId: [null, Validators.required],
+    });
+    this.onChanges();
+  }
+
+  loadSystemConfigChange(uniqueKey: string) {
+    this.systemConfigService.findSystemConfigByKey(uniqueKey)
+    .subscribe((data: SystemConfig ) => {
+      if (data) {
+        this.currentAcademicYearForm.patchValue({
+          academicYearId: parseInt(data.value, 10),
+        }, {emitEvent: false});
+      }
+    }, error => {
+
+    });
+  }
+
+  updateSystemConfigChange(systemConfig: SystemConfig) {
+    this.systemConfigService.updateSystemConfig(systemConfig)
+    .subscribe((data: SystemConfig ) => {
+      if (data) {
+        this.currentAcademicYearForm.patchValue({
+          academicYearId: parseInt(data.value, 10),
+        }, {emitEvent: false});
+      }
+    }, error => {
+
+    });
+  }
+
+  onChanges(): void {
+    this.currentAcademicYearForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
+      if (academicYearId) {
+        const systemConfig: SystemConfig = {
+            id: null,
+            name: APP_CONSTANTS.currentAcademicYear,
+            value: '' + academicYearId,
+        };
+        this.updateSystemConfigChange(systemConfig);
+      }
+    });
   }
 }

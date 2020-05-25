@@ -19,6 +19,7 @@ import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
+import com.jerotoma.common.viewobjects.TeacherVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.TEACHERS )
@@ -49,6 +50,16 @@ public class Teacher extends Person implements Serializable{
    	@JoinColumn(name="department_id")
 	private Department department;
 			
+	public Teacher(TeacherVO teacher) {
+		super(teacher);
+		this.id = teacher.getId();
+		this.department = new Department(teacher.getDepartment());
+		this.position = new Position(teacher.getPosition());
+	}
+
+	public Teacher() {
+	}
+
 	public Integer getId() {
 		return id;
 	}

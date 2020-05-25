@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.viewobjects.PersonVO;
 
 @MappedSuperclass
 public abstract class Person {
@@ -86,6 +87,24 @@ public abstract class Person {
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
 		this.userCode =  rs.getString(UserConstant.USER_CODE);
+		this.fullName = getFullName();
+	
+	}
+	
+	public Person(PersonVO person) {
+		
+		this.firstName = person.getFirstName();
+		this.lastName = person.getLastName();
+		this.middleNames = person.getMiddleNames();
+		this.phoneNumber = person.getPhoneNumber();
+		this.emailAddress = person.getEmailAddress();
+		this.gender = person.getGender();
+		this.occupation = person.getOccupation();
+		this.picture = person.getPicture();
+		this.updatedOn = person.getUpdatedOn();
+		this.createdOn = person.getCreatedOn();
+		this.birthDate = person.getBirthDate();
+		this.userCode =  person.getUserCode();
 		this.fullName = getFullName();
 	
 	}
