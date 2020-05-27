@@ -1,6 +1,6 @@
-import { DAY } from 'app/utils';
+import { WEEK_DAY } from 'app/utils';
 export interface WorkDay {
   id: number;
   dayId: number;
-  day: DAY;
+  day: WEEK_DAY;
 }

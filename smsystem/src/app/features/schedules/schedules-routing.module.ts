@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SchedulesComponent } from './schedules.component';
 import { MeetingTimesViewComponent } from './meeting-times/meeting-times-view.component';
 import { WorkDaysComponent } from './work-days/work-days.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 const routes: Routes = [{
   path: '',
@@ -20,6 +21,10 @@ const routes: Routes = [{
     {
       path: 'work-days',
       component: WorkDaysComponent,
+    },
+    {
+      path: 'timetable',
+      component: TimetableComponent,
     },
   ],
 }];

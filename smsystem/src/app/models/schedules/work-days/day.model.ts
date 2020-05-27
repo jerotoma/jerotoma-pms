@@ -1,5 +1,5 @@
-import { DAY } from 'app/utils';
+import { WEEK_DAY } from 'app/utils';
 
 export class Day {
-  constructor(public day: DAY, public name: string){}
+  constructor(public day: WEEK_DAY, public name: string) {}
 }

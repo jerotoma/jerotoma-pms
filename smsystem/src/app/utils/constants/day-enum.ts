@@ -1,6 +1,6 @@
 import { Day } from 'app/models';
 
-export enum DAY {
+export enum WEEK_DAY {
   MONDAY = 1,
   TUESDAY = 2,
   WEDNESDAY = 3,
@@ -11,11 +11,11 @@ export enum DAY {
 }
 
 export const DAYS = [
-  new Day(DAY.MONDAY, 'Monday'),
-  new Day(DAY.TUESDAY, 'Tuesday'),
-  new Day(DAY.WEDNESDAY, 'Wednesday'),
-  new Day(DAY.THURSDAY, 'Thursday'),
-  new Day(DAY.FRIDAY, 'Friday'),
-  new Day(DAY.SATURDAY, 'Saturday'),
-  new Day(DAY.SUNDAY, 'Sunday'),
+  new Day(WEEK_DAY.MONDAY, 'Monday'),
+  new Day(WEEK_DAY.TUESDAY, 'Tuesday'),
+  new Day(WEEK_DAY.WEDNESDAY, 'Wednesday'),
+  new Day(WEEK_DAY.THURSDAY, 'Thursday'),
+  new Day(WEEK_DAY.FRIDAY, 'Friday'),
+  new Day(WEEK_DAY.SATURDAY, 'Saturday'),
+  new Day(WEEK_DAY.SUNDAY, 'Sunday'),
 ];

@@ -29,6 +29,7 @@ import { MeetingTimesDeleteComponent } from './meeting-times/meeting-times-delet
 import { WorkDaysComponent } from './work-days/work-days.component';
 import { WorkDaysCreateComponent } from './work-days/work-days-create/work-days-create.component';
 import { WorkDaysDeleteComponent } from './work-days/work-days-delete/work-days-delete.component';
+import { TimetableComponent } from './timetable/timetable.component';
 
 
 const COMPONENTS = [
@@ -39,6 +40,7 @@ const COMPONENTS = [
   WorkDaysCreateComponent,
   WorkDaysDeleteComponent,
   WorkDaysComponent,
+  TimetableComponent,
 ];
 
 const ENTRY_COMPONENTS = [

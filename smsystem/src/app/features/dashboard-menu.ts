@@ -169,6 +169,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Work Days',
         link: '/dashboard/schedules/work-days',
       },
+      {
+        title: 'Timetable',
+        link: '/dashboard/schedules/timetable',
+      },
     ],
   },
   {
