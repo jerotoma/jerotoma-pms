@@ -1,3 +1,4 @@
+
 export class Timetable {
   constructor(
     public locations: Array<any> = [],
@@ -59,7 +60,7 @@ export class Timetable {
     return this;
   }
 
-  addEvent(name: string, location: string, start: Date, end: Date, options: Object): this {
+  addEvent(name: string, location: string, start: Date, end: Date, options?: Object): this {
     if (!this.locationExistsIn(location)) {
       throw new Error('Unknown location');
     }
@@ -75,7 +76,6 @@ export class Timetable {
     });
     return this;
   }
-
 }
 
 export interface TimeScope {

@@ -5,10 +5,10 @@ export class TimetableRenderer {
 
   scopeDurationHours: number;
   container: HTMLElement;
-  hasURL: boolean;
+  hasURL: boolean = false;
   prettyHour: string;
-  hasAdditionalClass: boolean;
-  hasDataAttributes: boolean;
+  hasAdditionalClass: boolean = false;
+  hasDataAttributes: boolean = false;
   hasClickHandler: boolean = false;
 
   constructor(public timetable: Timetable) {}
@@ -96,11 +96,11 @@ export class TimetableRenderer {
     eventNode.title = event.name;
 
     if (this.hasURL) {
-      // eventNode.href = event.options.url;
+      eventNode.setAttribute('href', event.options.url);
     }
 
     if (this.hasDataAttributes && event.options.data) {
-      event.options.data.forEach((key: any, value: any) => {
+      Object.entries(event.options.data).forEach((value: any, key: any) => {
         eventNode.setAttribute('data-' + key, value);
       });
     }
@@ -115,6 +115,11 @@ export class TimetableRenderer {
     eventNode.style.width = this.computeEventBlockWidth(event);
     eventNode.style.left = this.computeEventBlockOffset(event);
     smallNode.textContent = event.name;
+
+    this.hasURL = false;
+    this.hasAdditionalClass = false;
+    this.hasDataAttributes = false;
+    this.hasClickHandler = false;
   }
   computeEventBlockWidth(event) {
     const start = event.startDate;
@@ -132,7 +137,7 @@ export class TimetableRenderer {
     return hoursBeforeEvent / this.scopeDurationHours * 100 + '%';
   }
 
-  emptyNode(node) {
+  emptyNode(node: HTMLElement) {
     while (node.firstChild) {
       node.removeChild(node.firstChild);
     }
@@ -149,7 +154,7 @@ export class TimetableRenderer {
     return this.prettyHour;
   }
 
-  draw(selector: any) {
+  draw(selector: string) {
     this.scopeDurationHours = this.timetable.getDurationHours(this.timetable.scope.hourStart, this.timetable.scope.hourEnd);
     this.container = document.querySelector(selector);
     this.checkContainerPrecondition();
