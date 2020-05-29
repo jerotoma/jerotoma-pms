@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import {
   WorkDay,
-  Day,
+  WeekDay,
   Time,
   ResponseWrapper } from 'app/models';
 import {
@@ -28,7 +28,7 @@ export class WorkDaysCreateComponent implements OnInit {
   currentDate: Date = new Date();
   workDayForm: FormGroup;
   workDay: WorkDay;
-  days: Day[] = DAYS;
+  days: WeekDay[] = DAYS;
   startTime: Time =  { hour: this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
   endTime: Time = { hour: 1 + this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
   seconds = true;

@@ -3,13 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { END_POINTS, QueryParam } from 'app/utils';
-import { ResponseWrapper, MeetingTime } from 'app/models';
+import { ResponseWrapper, MeetingTime, Time } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MeetingTimeService {
-
   constructor(private http: HttpClient) { }
 
   getMeetingTime(meetingTimeId: number): Observable<MeetingTime> {

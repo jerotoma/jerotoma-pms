@@ -5,21 +5,24 @@ import { NbDialogRef } from '@nebular/theme';
 import {
   TimeScope,
   Timetable,
+  Event,
   TimetableRenderer,
 } from 'app/timetable';
 import {
   MeetingTime,
+  ClassView,
   TimeSlot,
-  Day,
+  WeekDay,
   WorkDay,
   Time,
   ResponseWrapper } from 'app/models';
 import {
   MeetingTimeService,
+  ClassService,
   WorkDayService,
   ModalService,
 } from 'app/services';
-import { QueryParam, DAYS } from 'app/utils';
+import { QueryParam, DAYS, getWeekDay, getDateTime } from 'app/utils';
 
 @Component({
   selector: 'app-timetable',
@@ -31,15 +34,21 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
 
   timeSlot: TimeSlot;
   timeSlots: TimeSlot[];
-
+  events: Event[] = [];
+  event: Event;
+  isLoading: boolean;
   timetable: Timetable;
   timeTableRenderer: TimetableRenderer;
   timeScope: TimeScope;
 
-  constructor() { }
+  constructor(
+    private classService: ClassService,
+    private workDayService: WorkDayService,
+    private  meetingTimeService:  MeetingTimeService,
+  ) { }
 
   ngAfterViewInit(): void {
-    this.drawTimetable();
+    // this.drawTimetable();
   }
 
   ngAfterContentInit(): void {
@@ -47,27 +56,37 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
   ngOnInit() {
-    this.drawTimetable();
+   this.loadClasses(2);
   }
 
 
-  drawTimetable() {
+  drawTimetable(events: Event[]) {
     this.timetable =  new Timetable();
     this.timetable.setScope(9, 3);
-    this.timetable.addLocations(['Rotterdam', 'Madrid', 'Los Angeles', 'London', 'New York', 'Jakarta', 'Tokyo']);
-    this.timetable.addEvent('Sightseeing', 'Rotterdam', new Date(2015, 7, 17, 9, 0), new Date(2015, 7, 17, 11, 30), { url: '#' });
-    this.timetable.addEvent('Zumba', 'Madrid', new Date(2015, 7, 17, 12), new Date(2015, 7, 17, 13), { url: '#' });
-    this.timetable.addEvent('Zumbu', 'Madrid', new Date(2015, 7, 17, 13, 30), new Date(2015, 7, 17, 15), { url: '#' });
-    this.timetable.addEvent('Lasergaming', 'London', new Date(2015, 7, 17, 17, 45), new Date(2015, 7, 17, 19, 30), { class: 'vip-only', data: { maxPlayers: 14, gameType: 'Capture the flag' } });
-    this.timetable.addEvent('All-you-can-eat grill', 'New York', new Date(2015, 7, 17, 21), new Date(2015, 7, 18, 1, 30), { url: '#' });
-    this.timetable.addEvent('Hackathon', 'Tokyo', new Date(2015, 7, 17, 11, 30), new Date(2015, 7, 17, 20)); // options attribute is not used for this event
-    this.timetable.addEvent('Tokyo Hackathon Livestream', 'Los Angeles', new Date(2015, 7, 17, 12, 30), new Date(2015, 7, 17, 16, 15)); // options attribute is not used for this event
-    this.timetable.addEvent('Lunch', 'Jakarta', new Date(2015, 7, 17, 9, 30), new Date(2015, 7, 17, 11, 45), { onClick: function(event) {
-      window.alert('You clicked on the ' + event.name + ' event in ' + event.location + '. This is an example of a click handler');
-    }});
-
+    this.timetable.addWeekDays(DAYS);
+    this.timetable.addEvents(events);
     this.timeTableRenderer = new TimetableRenderer(this.timetable);
     this.timeTableRenderer.draw('.timetable');
+  }
+
+  loadClasses(academicYearId: number) {
+    this.isLoading = true;
+    this.classService.loadJClassesByAcademicYear(academicYearId)
+      .subscribe((mClasses: ClassView[]) => {
+        this.isLoading = false;
+        if (mClasses && mClasses.length > 0) {
+          mClasses.forEach( (mClass, index) => {
+            const startTime =  getDateTime(mClass.meetingTime.startTime);
+            const endTime = getDateTime(mClass.meetingTime.endTime);
+            const courseName = mClass.course.name + ' (' + mClass.course.code + ')';
+            const weekDay = new WeekDay(mClass.meetingTime.workDay.dayId, getWeekDay(mClass.meetingTime.workDay.dayId));
+            this.events.push(new Event(courseName, weekDay, startTime, endTime));
+          });
+          this.drawTimetable(this.events);
+        }
+      }, error => {
+        this.isLoading = false;
+      });
   }
 
 }

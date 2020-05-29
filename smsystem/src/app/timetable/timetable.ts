@@ -1,8 +1,10 @@
+import { Event } from './event';
+import { WeekDay } from 'app/models';
 
 export class Timetable {
   constructor(
-    public locations: Array<any> = [],
-    public events: Array<any> = [],
+    public weekDays: WeekDay[] = [],
+    public events?: Event[],
     public usingTwelveHour: boolean = true,
     public scope: TimeScope = {
         hourStart: 8,
@@ -22,11 +24,16 @@ export class Timetable {
     return number >= 0 && number < 24;
   }
 
-  locationExistsIn(location: string) {
-    if (!this.locations) {
-      throw new Error('Locations can not be empty');
+  weekDayExistsIn(weekDay: WeekDay) {
+    if (!this.weekDays) {
+      throw new Error('Week Days can not be empty');
     }
-    return this.locations.indexOf(location) !== -1;
+    for (let i = 0; i < this.weekDays.length; i++) {
+      if (this.weekDays[i].day === weekDay.day && this.weekDays[i].name === weekDay.name) {
+        return true;
+      }
+    }
+    return false;
   }
 
   isValidTimeRange(start: Date, end: Date) {
@@ -49,31 +56,42 @@ export class Timetable {
     return this;
   }
 
-  addLocations(newLocations: string[]): this {
-    newLocations.forEach((loc) => {
-      if (!this.locationExistsIn(loc)) {
-        this.locations.push(loc);
+  addWeekDays(newWeekDays: WeekDay[]): this {
+    newWeekDays.forEach((weekDay) => {
+      if (!this.weekDayExistsIn(weekDay)) {
+        this.weekDays.push(weekDay);
       } else {
-        throw new Error('Location already exists');
+        throw new Error('WeekDay already exists');
       }
     });
     return this;
   }
 
-  addEvent(name: string, location: string, start: Date, end: Date, options?: Object): this {
-    if (!this.locationExistsIn(location)) {
-      throw new Error('Unknown location');
+  addEvent(name: string, weekDay: WeekDay, start: Date, end: Date, options?: Object): this {
+    this.events = [];
+    if (!this.weekDayExistsIn(weekDay)) {
+      throw new Error('Unknown weekDay');
     }
     if (!this.isValidTimeRange(start, end)) {
       throw new Error('Invalid time range: ' + JSON.stringify([start, end]));
     }
-    this.events.push({
-      name: name,
-      location: location,
-      startDate: start,
-      endDate: end,
-      options: options ? options : undefined,
-    });
+    this.events.push(new Event(name, weekDay, start, end, options));
+    return this;
+  }
+
+  addEvents(events: Event[]): this {
+    this.events = [];
+    if (events && events.length > 0) {
+      events.forEach((event, index) => {
+        if (!this.weekDayExistsIn(event.weekDay)) {
+          throw new Error('Unknown weekDay');
+        }
+        if (!this.isValidTimeRange(event.startTime, event.endTime)) {
+          throw new Error('Invalid time range: ' + JSON.stringify([event.startTime, event.endTime]));
+        }
+        this.events.push(event);
+      });
+    }
     return this;
   }
 }
@@ -82,3 +100,6 @@ export interface TimeScope {
   hourEnd: number;
   hourStart: number;
 }
+
+
+

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { END_POINTS, QueryParam } from 'app/utils';
+import { END_POINTS, QueryParam, WEEK_DAY } from 'app/utils';
 import { ResponseWrapper, WorkDay } from 'app/models';
 
 @Injectable({

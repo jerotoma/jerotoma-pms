@@ -1,4 +1,6 @@
 import { Timetable } from './timetable';
+import { WeekDay } from 'app/models';
+import { Event } from './event';
 
 
 export class TimetableRenderer {
@@ -24,11 +26,11 @@ export class TimetableRenderer {
     this.appendRowHeaders(asideULNode);
   }
   appendRowHeaders(ulNode: HTMLElement) {
-    for (let k = 0; k < this.timetable.locations.length; k++) {
+    for (let k = 0; k < this.timetable.weekDays.length; k++) {
       const liNode = ulNode.appendChild(document.createElement('li'));
       const spanNode = liNode.appendChild(document.createElement('span'));
       spanNode.className = 'row-heading';
-      spanNode.textContent = this.timetable.locations[k];
+      spanNode.textContent = this.timetable.weekDays[k].name;
     }
   }
   appendTimetableSection() {
@@ -67,21 +69,21 @@ export class TimetableRenderer {
     const ulNode = node.appendChild(document.createElement('ul'));
     ulNode.style.width = width;
     ulNode.className = 'room-timeline';
-    for (let k = 0; k < this.timetable.locations.length; k++) {
+    for (let k = 0; k < this.timetable.weekDays.length; k++) {
       const liNode = ulNode.appendChild(document.createElement('li'));
-      this.appendLocationEvents(this.timetable.locations[k], liNode);
+      this.appendLocationEvents(this.timetable.weekDays[k], liNode);
     }
   }
 
-  appendLocationEvents(location: string, node: HTMLElement) {
+  appendLocationEvents(weekDay: WeekDay, node: HTMLElement) {
     for (let k = 0; k < this.timetable.events.length; k++) {
       const event = this.timetable.events[k];
-      if (event.location === location) {
+      if (event.weekDay.name === weekDay.name) {
         this.appendEvent(event, node);
       }
     }
   }
-  appendEvent(event: any, node: HTMLElement) {
+  appendEvent(event: Event, node: HTMLElement) {
     const hasOptions = event.options !== undefined;
      if (hasOptions) {
       this.hasURL = event.options.url !== undefined;
@@ -107,7 +109,7 @@ export class TimetableRenderer {
 
     if (this.hasClickHandler) {
       eventNode.addEventListener('click', (e) => {
-        event.options.onClick(event, this.timetable, e);
+        event.options.onClick(event.name, this.timetable, e);
       });
     }
 
@@ -121,18 +123,18 @@ export class TimetableRenderer {
     this.hasDataAttributes = false;
     this.hasClickHandler = false;
   }
-  computeEventBlockWidth(event) {
-    const start = event.startDate;
-    const end = event.endDate;
+  computeEventBlockWidth(event: Event) {
+    const start = event.startTime;
+    const end = event.endTime;
     const durationHours = this.computeDurationInHours(start, end);
     return durationHours / this.scopeDurationHours * 100 + '%';
   }
   computeDurationInHours(start: Date, end: Date) {
     return (end.getTime() - start.getTime()) / 1000 / 60 / 60;
   }
-  computeEventBlockOffset(event: any) {
+  computeEventBlockOffset(event: Event) {
     const scopeStartHours = this.timetable.scope.hourStart;
-    const eventStartHours = event.startDate.getHours() + (event.startDate.getMinutes() / 60);
+    const eventStartHours = event.startTime.getHours() + (event.startTime.getMinutes() / 60);
     const hoursBeforeEvent =  this.timetable.getDurationHours(scopeStartHours, eventStartHours);
     return hoursBeforeEvent / this.scopeDurationHours * 100 + '%';
   }
@@ -163,6 +165,4 @@ export class TimetableRenderer {
     this.appendTimetableSection();
     // this.syncscroll.reset();
   }
-
-
 }

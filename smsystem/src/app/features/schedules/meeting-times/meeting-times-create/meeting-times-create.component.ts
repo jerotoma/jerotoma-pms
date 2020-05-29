@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import {
   MeetingTime,
-  Day,
+  WeekDay,
   WorkDay,
   Time,
   ResponseWrapper } from 'app/models';
@@ -35,7 +35,7 @@ export class MeetingTimesCreateComponent implements OnInit {
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
   time: string = '';
-  days: Day[] = DAYS;
+  days: WeekDay[] = DAYS;
   workDay: WorkDay;
   workDays: WorkDay[];
 
