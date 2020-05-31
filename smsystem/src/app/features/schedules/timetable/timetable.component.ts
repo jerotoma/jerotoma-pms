@@ -62,7 +62,7 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
 
   drawTimetable(events: Event[]) {
     this.timetable =  new Timetable();
-    this.timetable.setScope(9, 3);
+    this.timetable.setScope(8, 16);
     this.timetable.addWeekDays(DAYS);
     this.timetable.addEvents(events);
     this.timeTableRenderer = new TimetableRenderer(this.timetable);
@@ -80,7 +80,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
             const endTime = getDateTime(mClass.meetingTime.endTime);
             const courseName = mClass.course.name + ' (' + mClass.course.code + ')';
             const weekDay = new WeekDay(mClass.meetingTime.workDay.dayId, getWeekDay(mClass.meetingTime.workDay.dayId));
-            this.events.push(new Event(courseName, weekDay, startTime, endTime));
+            const content = '<p> Room: ' + mClass.room.name + '</p><p> Teacher: ' + mClass.teacher.fullName + '</p><p> Time: ' + mClass.meetingTime.time + '</p>';
+            this.events.push(new Event(courseName, weekDay, startTime, endTime, content));
           });
           this.drawTimetable(this.events);
         }

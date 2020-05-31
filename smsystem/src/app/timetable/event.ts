@@ -4,8 +4,8 @@ export class Event {
     public weekDay: any,
     public startTime: Date,
     public endTime: Date,
-    public options?: any,
-    public content?: any) {
+    public content?: any,
+    public options?: any) {
     this.options = options ? options : undefined;
   }
 

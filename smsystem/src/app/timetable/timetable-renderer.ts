@@ -35,11 +35,10 @@ export class TimetableRenderer {
   }
   appendTimetableSection() {
     const sectionNode = this.container.appendChild(document.createElement('section'));
-    const headerNode = this.appendColumnHeaders(sectionNode);
     const timeNode = sectionNode.appendChild(document.createElement('time'));
-    timeNode.className = 'syncscroll';
-    timeNode.setAttribute('name', 'scrollheader');
+    const headerNode = this.appendColumnHeaders(timeNode);
     const width = headerNode.scrollWidth + 'px';
+    headerNode.style.width = width;
     this.appendTimeRows(timeNode, width);
   }
   appendColumnHeaders(node: HTMLElement) {
@@ -71,11 +70,11 @@ export class TimetableRenderer {
     ulNode.className = 'room-timeline';
     for (let k = 0; k < this.timetable.weekDays.length; k++) {
       const liNode = ulNode.appendChild(document.createElement('li'));
-      this.appendLocationEvents(this.timetable.weekDays[k], liNode);
+      this.appendWeekDayEvents(this.timetable.weekDays[k], liNode);
     }
   }
 
-  appendLocationEvents(weekDay: WeekDay, node: HTMLElement) {
+  appendWeekDayEvents(weekDay: WeekDay, node: HTMLElement) {
     for (let k = 0; k < this.timetable.events.length; k++) {
       const event = this.timetable.events[k];
       if (event.weekDay.name === weekDay.name) {
@@ -92,31 +91,38 @@ export class TimetableRenderer {
       this.hasClickHandler = event.options.onClick !== undefined;
     }
 
-    const elementType = this.hasURL ? 'a' : 'span';
-    const eventNode = node.appendChild(document.createElement(elementType));
-    const smallNode = eventNode.appendChild(document.createElement('small'));
-    eventNode.title = event.name;
+    const elementType = this.hasURL ? 'a' : 'div';
+    const eventDivNode = node.appendChild(document.createElement('div'));
+    const eventDivOrAnchorNode = eventDivNode.appendChild(document.createElement(elementType));
+    const smallNode = eventDivOrAnchorNode.appendChild(document.createElement('small'));
+    eventDivNode.className = 'event-container';
+    eventDivNode.title = event.name;
 
     if (this.hasURL) {
-      eventNode.setAttribute('href', event.options.url);
+      eventDivOrAnchorNode.setAttribute('href', event.options.url);
     }
 
     if (this.hasDataAttributes && event.options.data) {
       Object.entries(event.options.data).forEach((value: any, key: any) => {
-        eventNode.setAttribute('data-' + key, value);
+        eventDivNode.setAttribute('data-' + key, value);
       });
     }
 
     if (this.hasClickHandler) {
-      eventNode.addEventListener('click', (e) => {
+      eventDivNode.addEventListener('click', (e) => {
         event.options.onClick(event.name, this.timetable, e);
       });
     }
 
-    eventNode.className = this.hasAdditionalClass ? 'time-entry ' + event.options.class : 'time-entry';
-    eventNode.style.width = this.computeEventBlockWidth(event);
-    eventNode.style.left = this.computeEventBlockOffset(event);
-    smallNode.textContent = event.name;
+    eventDivNode.className = this.hasAdditionalClass ? 'time-entry ' + event.options.class : 'time-entry';
+    eventDivNode.style.width = this.computeEventBlockWidth(event);
+    eventDivNode.style.left = this.computeEventBlockOffset(event);
+    const eventTitle = '<h4 class="event-title">' + event.name + '</h4>';
+    let eventContent = '';
+    if (event.content) {
+      eventContent = '<div class="event-content">' + event.content + '</div>';
+    }
+    smallNode.innerHTML = eventTitle + eventContent;
 
     this.hasURL = false;
     this.hasAdditionalClass = false;
@@ -127,7 +133,7 @@ export class TimetableRenderer {
     const start = event.startTime;
     const end = event.endTime;
     const durationHours = this.computeDurationInHours(start, end);
-    return durationHours / this.scopeDurationHours * 100 + '%';
+    return ((durationHours / this.scopeDurationHours) * 100) + '%';
   }
   computeDurationInHours(start: Date, end: Date) {
     return (end.getTime() - start.getTime()) / 1000 / 60 / 60;
@@ -136,7 +142,7 @@ export class TimetableRenderer {
     const scopeStartHours = this.timetable.scope.hourStart;
     const eventStartHours = event.startTime.getHours() + (event.startTime.getMinutes() / 60);
     const hoursBeforeEvent =  this.timetable.getDurationHours(scopeStartHours, eventStartHours);
-    return hoursBeforeEvent / this.scopeDurationHours * 100 + '%';
+    return ((hoursBeforeEvent / this.scopeDurationHours) * 100) + '%';
   }
 
   emptyNode(node: HTMLElement) {
