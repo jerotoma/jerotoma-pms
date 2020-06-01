@@ -156,7 +156,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicYear);
 		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
 		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
-		
+		population = geneticAlgorithm.evolve(population).sortByFitness();
 		while (population.getSchedules().get(0).getFitness() != 1.0) {
 			population = geneticAlgorithm.evolve(population).sortByFitness();
 			population.getSchedules().forEach(schedule -> {

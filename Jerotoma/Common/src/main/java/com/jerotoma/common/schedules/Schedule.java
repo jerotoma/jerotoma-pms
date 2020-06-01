@@ -12,39 +12,38 @@ public class Schedule {
 	private boolean isFitnessChanged = true;
 	private double fitness = -1;
 	private int numberOfConflicts = 0;
-	private int classNumber = 0;
-	
-	int classCapacity = 34;
-	
+	private int classNumber = 0;	
+		
 	public Schedule(ScheduledData data) {
 		this.data = data;
 		this.classes = new ArrayList<>(data.getNumberOfClasses());
 	}
 	
 	public Schedule initialize() {
-		if (data.getMeetingTimes().isEmpty()) {
-			return this;
+		if (this.data.getMeetingTimes().isEmpty()) {
+			throw new RuntimeException("Meeting Time can not be empty to continue");
 		}
 		
-		if (data.getRooms().isEmpty()) {
-			return this;
+		if (this.data.getRooms().isEmpty()) {
+			throw new RuntimeException("Room can not be empty to continue");
 		}
 		
-		if (data.getTeachers().isEmpty()) {
-			return this;
+		if (this.data.getTeachers().isEmpty()) {
+			throw new RuntimeException("Teacher can not be empty to continue");
 		}
 		
-		if (data.getDepartments().isEmpty()) {
-			return this;
+		if (this.data.getDepartments().isEmpty()) {
+			throw new RuntimeException("Department can not be empty to continue");
 		}		
-		new ArrayList<DepartmentVO>(data.getDepartments()).forEach(department -> {
+		new ArrayList<DepartmentVO>(this.data.getDepartments()).forEach(department -> {
 			department.getCourses().forEach(course -> {
-				if (course.getAcademicYear().getId().equals(data.getAcademicYear().getId())) {
-					ClassVO classVO = new ClassVO(classNumber++, department, course, classCapacity);
-					classVO.setMeetingTime(data.getMeetingTimes().get((int)(data.getMeetingTimes().size() * Math.random())));
-					classVO.setRoom(data.getRooms().get((int)(data.getRooms().size() * Math.random())));
-					classVO.setTeacher(data.getTeachers().get((int)(data.getTeachers().size() * Math.random())));
-					classes.add(classVO);
+				if (course.getAcademicYear().getId().equals(this.data.getAcademicYear().getId())) {
+					ClassVO classVO = new ClassVO(this.classNumber++, department, course);
+					classVO.setMeetingTime(this.data.getMeetingTimes().get((int)(this.data.getMeetingTimes().size() * Math.random())));
+					classVO.setRoom(this.data.getRooms().get((int)(data.getRooms().size() * Math.random())));
+					classVO.setCapacity(classVO.getRoom().getCapacity());
+					classVO.setTeacher(this.data.getTeachers().get((int)(this.data.getTeachers().size() * Math.random())));
+					this.classes.add(classVO);
 				}				
 			});
 		});		
@@ -52,24 +51,24 @@ public class Schedule {
 	}
 
 	public int getNumberOfConflicts() {
-		return numberOfConflicts;
+		return this.numberOfConflicts;
 	}
 
 	public int getNumberOfClasses() {
-		return classNumber;
+		return this.classNumber;
 	}
 		
 	public List<ClassVO> getClasses() {
-		isFitnessChanged = false;
-		return classes;
+		this.isFitnessChanged = false;
+		return this.classes;
 	}
 
 	public double getFitness() {
-		if(isFitnessChanged) {
-			fitness = calculateFitness();
-			isFitnessChanged = false;
+		if(this.isFitnessChanged) {
+			this.fitness = calculateFitness();
+			this.isFitnessChanged = false;
 		}
-		return fitness;
+		return this.fitness;
 	}
 	
 	public double calculateFitness() {

@@ -10,8 +10,7 @@ import com.jerotoma.common.exceptions.FieldIsRequiredException;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.Time;
 import com.jerotoma.common.utils.CalendarUtil;
-import com.jerotoma.common.utils.NumberUtil;
-import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.utils.NumberFormatter;
 
 public class MeetingTimeValidator {
 	
@@ -55,9 +54,7 @@ public class MeetingTimeValidator {
 			throw new FieldIsRequiredException("Time is required to continue");
 		}
 		if (time != null) {
-			String h = time.substring(0, time.indexOf(":"));
-			String m = time.substring(time.indexOf(":"));
-			time = NumberUtil.getTwoDigit(StringUtility.parseInteger(h)) + ":" +  NumberUtil.getTwoDigit(StringUtility.parseInteger(m));
+			time = NumberFormatter.formatTimeRange(time);
 		}		
 		meetingTime.setTime(time);
 		

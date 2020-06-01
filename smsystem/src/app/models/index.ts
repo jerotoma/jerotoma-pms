@@ -12,3 +12,4 @@ export * from './addresses';
 export * from './classes';
 export * from './system-configs';
 export * from './responses';
+export * from './dashboard';

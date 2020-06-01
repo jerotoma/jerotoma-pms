@@ -24,5 +24,6 @@ export const END_POINTS = {
   pubSystemConfigs: '/api/public/system-configs',
   userPreferences: '/api/secured/user-preferences',
   pubUserPreferences: '/api/public/user-preferences',
+  restDashboard: '/api/secured/dashboard',
 
 };

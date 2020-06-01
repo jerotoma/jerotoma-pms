@@ -47,6 +47,12 @@ public class ClassVO {
 		this.course = course;
 		this.capacity = capacity;
 	}
+	
+	public ClassVO(int id, DepartmentVO department, CourseVO course) {		
+		this.id = id;
+		this.department = department;
+		this.course = course;
+	}
 
 	public Integer getId() {
 		return id;

@@ -1,26 +1,25 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-status-card',
-  styleUrls: ['./status-card.component.scss'],
+  selector: 'app-counter-card',
+  styleUrls: ['./counter-card.component.scss'],
   template: `
-    <nb-card (click)="on = !on" [ngClass]="{'off': !on}">
+    <nb-card>
       <div class="icon-container">
         <div class="icon status-{{ type }}">
           <ng-content></ng-content>
         </div>
       </div>
-
       <div class="details">
-        <div class="title h5">{{ title }}</div>
-        <div class="status">{{ on ? 'ON' : 'OFF' }}</div>
+        <div class="title h5">{{ count }}</div>
+        <div class="counter">{{ title }}</div>
       </div>
     </nb-card>
   `,
 })
-export class StatusCardComponent {
+export class CounterCardComponent {
 
   @Input() title: string;
   @Input() type: string;
-  @Input() on = true;
+  @Input() count: number;
 }

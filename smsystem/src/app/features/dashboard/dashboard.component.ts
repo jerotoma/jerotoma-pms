@@ -1,10 +1,15 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators' ;
 import { SolarData } from '../../@core/data/solar';
 
-interface CardSettings {
+import { DashboardService } from 'app/services';
+import { DashboardCounter, ResponseWrapper } from 'app/models';
+import { QueryParam } from 'app/utils';
+
+interface CounterCardSettings {
   title: string;
+  count?: number;
   iconClass: string;
   type: string;
 }
@@ -14,77 +19,88 @@ interface CardSettings {
   styleUrls: ['./dashboard.component.scss'],
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   private alive = true;
 
+  param: QueryParam = {
+    page: 1,
+    pageSize: 10,
+    orderby: 'DESC',
+    status: '',
+    search: '',
+    fieldName: '',
+    userType: 'teacher',
+  };
+
   solarValue: number;
-  lightCard: CardSettings = {
-    title: 'Light',
-    iconClass: 'nb-lightbulb',
+  teacherCounterCard: CounterCardSettings = {
+    title: 'Teachers',
+    iconClass: 'people-outline',
     type: 'primary',
+    count: 56,
   };
-  rollerShadesCard: CardSettings = {
-    title: 'Roller Shades',
-    iconClass: 'nb-roller-shades',
+  studentCounterCard: CounterCardSettings = {
+    title: 'Students',
+    iconClass: 'people-outline',
     type: 'success',
+    count: 230,
   };
-  wirelessAudioCard: CardSettings = {
-    title: 'Wireless Audio',
-    iconClass: 'nb-audio',
+  parentCounterCard: CounterCardSettings = {
+    title: 'Parents',
+    iconClass: 'people-outline',
     type: 'info',
+    count: 200,
   };
-  coffeeMakerCard: CardSettings = {
-    title: 'Coffee Maker',
-    iconClass: 'nb-coffee-maker',
+  staffCounterCard: CounterCardSettings = {
+    title: 'Staffs',
+    iconClass: 'people-outline',
     type: 'warning',
+    count: 20,
   };
 
-  statusCards: string;
+  counterCards: CounterCardSettings[];
 
-  commonStatusCardsSet: CardSettings[] = [
-    this.lightCard,
-    this.rollerShadesCard,
-    this.wirelessAudioCard,
-    this.coffeeMakerCard,
+  commonStatusCardsSet: CounterCardSettings[] = [
+    this.teacherCounterCard,
+    this.studentCounterCard,
+    this.parentCounterCard,
+    this.staffCounterCard,
   ];
 
-  statusCardsByThemes: {
-    default: CardSettings[];
-    cosmic: CardSettings[];
-    corporate: CardSettings[];
-    dark: CardSettings[];
+  counterCardsByThemes: {
+    default: CounterCardSettings[];
+    cosmic: CounterCardSettings[];
+    corporate: CounterCardSettings[];
+    dark: CounterCardSettings[];
   } = {
     default: this.commonStatusCardsSet,
     cosmic: this.commonStatusCardsSet,
     corporate: [
       {
-        ...this.lightCard,
+        ...this.teacherCounterCard,
         type: 'warning',
       },
       {
-        ...this.rollerShadesCard,
+        ...this.studentCounterCard,
         type: 'primary',
       },
       {
-        ...this.wirelessAudioCard,
+        ...this.parentCounterCard,
         type: 'danger',
       },
       {
-        ...this.coffeeMakerCard,
+        ...this.staffCounterCard,
         type: 'info',
       },
     ],
     dark: this.commonStatusCardsSet,
   };
 
-  constructor(private themeService: NbThemeService,
-              private solarService: SolarData) {
-    this.themeService.getJsTheme()
-      .pipe(takeWhile(() => this.alive))
-      .subscribe(theme => {
-        this.statusCards = this.statusCardsByThemes[theme.name];
-    });
+  constructor(
+    private dashboardService: DashboardService,
+    private themeService: NbThemeService,
+    private solarService: SolarData) {
 
     this.solarService.getSolarData()
       .pipe(takeWhile(() => this.alive))
@@ -92,8 +108,29 @@ export class DashboardComponent implements OnDestroy {
         this.solarValue = data;
       });
   }
+  ngOnInit(): void {
+    this.dashboardService.getDashboards(this.param).subscribe((result: ResponseWrapper) => {
+      console.log(result);
+    });
+    this.loadDashboardCounters();
+  }
 
   ngOnDestroy() {
     this.alive = false;
+  }
+
+
+  loadDashboardCounters() {
+    this.dashboardService.getDashboardCount().subscribe((result: DashboardCounter) => {
+      this.teacherCounterCard.count = result.teacherCount;
+      this.studentCounterCard.count = result.studentCount;
+      this.parentCounterCard.count = result.parentCount;
+      this.staffCounterCard.count = result.staffCount;
+      this.themeService.getJsTheme()
+        .pipe(takeWhile(() => this.alive))
+        .subscribe(theme => {
+          this.counterCards = this.counterCardsByThemes[theme.name];
+      });
+    });
   }
 }

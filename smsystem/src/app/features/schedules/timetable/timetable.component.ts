@@ -80,7 +80,7 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
             const endTime = getDateTime(mClass.meetingTime.endTime);
             const courseName = mClass.course.name + ' (' + mClass.course.code + ')';
             const weekDay = new WeekDay(mClass.meetingTime.workDay.dayId, getWeekDay(mClass.meetingTime.workDay.dayId));
-            const content = '<p> Room: ' + mClass.room.name + '</p><p> Teacher: ' + mClass.teacher.fullName + '</p><p> Time: ' + mClass.meetingTime.time + '</p>';
+            const content = '<p> Room: ' + mClass.room.name + ' (' + mClass.room.code + ')</p><p> Teacher: ' + mClass.teacher.fullName + '</p><p> Time: ' + mClass.meetingTime.time + '</p>';
             this.events.push(new Event(courseName, weekDay, startTime, endTime, content));
           });
           this.drawTimetable(this.events);

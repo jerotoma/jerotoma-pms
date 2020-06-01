@@ -14,7 +14,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
-import { StatusCardComponent } from './status-card/status-card.component';
+import { CounterCardComponent } from './counter-card/counter-card.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { RoomsComponent } from './rooms/rooms.component';
 import { RoomSelectorComponent } from './rooms/room-selector/room-selector.component';
@@ -49,7 +49,7 @@ import { FormsModule } from '@angular/forms';
   ],
   declarations: [
     DashboardComponent,
-    StatusCardComponent,
+    CounterCardComponent,
     TemperatureDraggerComponent,
     ContactsComponent,
     RoomSelectorComponent,

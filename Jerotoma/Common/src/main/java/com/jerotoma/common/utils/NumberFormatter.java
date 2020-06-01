@@ -35,15 +35,36 @@ public class NumberFormatter {
 		return stringNumber ;		
 	}
 	
-	public static String formatTimeRange(String time) {		
-		String timePart1 = time.substring(0, time.indexOf("-"));
-		String timePart2 = time.substring(time.indexOf("-") + 1);
+	public static String formatTimeRange(String time) {	
+		String dashPattern = "-";
+		String colonPattern = ":";
 		
-		String hour1 = timePart1.substring(0, timePart1.indexOf(":"));
-		String hour2 = timePart2.substring(0, timePart2.indexOf(":"));
+		if (!time.contains(dashPattern)) {
+			return time;
+		}
 		
-		String min1 = timePart1.substring(timePart1.indexOf(":") + 1);
-		String min2 = timePart2.substring(timePart2.indexOf(":") + 1);
+		String timePart1 = time.substring(0, time.indexOf(dashPattern));
+		String timePart2 = time.substring(time.indexOf(dashPattern) + 1);
+		
+		String hour1 = timePart1;
+		if (timePart1.contains(colonPattern)) {			
+			hour1 = timePart1.substring(0, timePart1.indexOf(colonPattern));			
+		}
+		
+		String hour2 = timePart2;
+		if (timePart2.contains(colonPattern)) {
+			hour2 = timePart2.substring(0, timePart2.indexOf(colonPattern));
+		}
+		
+		String min1 = timePart1;
+		if (timePart1.contains(colonPattern)) {
+			min1 = timePart1.substring(timePart1.indexOf(colonPattern) + 1);
+		}
+		
+		String min2 = timePart2;
+		if (timePart2.contains(colonPattern)) {
+			min2 = timePart2.substring(timePart2.indexOf(colonPattern) + 1);
+		}		
 		
 		String twoDigitHour1 = getTwoDigit(Integer.valueOf(hour1.trim()));
 		String twoDigitHour2 = getTwoDigit(Integer.valueOf(hour2.trim()));

@@ -1,8 +1,11 @@
 <div class="row">
-  <div class="col-xxxl-3 col-md-6" *ngFor="let statusCard of statusCards">
-    <app-status-card [title]="statusCard.title" [type]="statusCard.type">
-      <i [ngClass]="statusCard.iconClass"></i>
-    </app-status-card>
+  <div class="col-xxxl-3 col-md-6" *ngFor="let counterCard of counterCards">
+    <app-counter-card
+      [title]="counterCard.title"
+      [type]="counterCard.type"
+      [count]="counterCard.count">
+      <nb-icon [icon]="counterCard.iconClass"></nb-icon>
+    </app-counter-card>
   </div>
 </div>
 
