@@ -7,7 +7,7 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 
 // Components
 import { UsersComponent } from './users.component';
-import { InfiniteListComponent } from '../backups/infinite-list/infinite-list.component';
+import { InfiniteListComponent } from '../../../backups/infinite-list/infinite-list.component';
 
 const routes: Routes = [{
   path: '',

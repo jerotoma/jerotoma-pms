@@ -40,7 +40,7 @@ import {
   NbAlertModule,
 } from '@nebular/theme';
 
-import { SharedCommonModule, } from './common';
+import { SharedCommonModule } from './common';
 import {
   UploadsComponent,
   UserTableComponent,
@@ -52,6 +52,7 @@ import {
   SearchUserComponent,
   UserDeleteComponent,
   TimepickerComponent,
+  CurrentAcademicYearComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -65,6 +66,7 @@ const COMPONENTS = [
   UserLoginInputComponent,
   SearchUserComponent,
   TimepickerComponent,
+  CurrentAcademicYearComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -75,6 +77,7 @@ const ENTRY_COMPONENTS = [
   UserLoginInputComponent,
   MyCourseComponent,
   TimepickerComponent,
+  CurrentAcademicYearComponent,
 ];
 
 const MODULES = [
@@ -112,7 +115,6 @@ const MODULES = [
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
-
   }),
   NbWindowModule.forRoot(),
 ];

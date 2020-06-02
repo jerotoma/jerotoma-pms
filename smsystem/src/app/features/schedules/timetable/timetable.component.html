@@ -2,5 +2,9 @@
 
 </div>
 <div class="grid-container">
+    <app-current-academic-year
+      [allowUpdate]="false"
+      (onChange)="onCurrentAcademicYearChange($event)"
+    ></app-current-academic-year>
     <div class="timetable"></div>
 </div>

@@ -4,9 +4,9 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { NbDialogRef } from '@nebular/theme';
-import { Staff, Parent, AddressWrapper, Address, UserLoginInput, UserLoginInputWrapper, ShowMessage, Position } from 'app/models';
+import { Staff, Parent, AddressWrapper, Address, UserLoginInput, UserLoginInputWrapper, ShowMessage, Position, ResponseWrapper } from 'app/models';
 import { UserService } from 'app/services/users';
-import { PositionService } from 'app/services';
+import { PositionService, ModalService  } from 'app/services';
 import { QueryParam , DateValidator, DateFormatter, USER_TYPE } from 'app/utils';
 
 @Component({
@@ -50,6 +50,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
     protected positionService: PositionService,
     private userService:  UserService,
     private formBuilder: FormBuilder,
+    private modalService: ModalService,
     protected ref: NbDialogRef<StaffCreateComponent>) {}
 
   ngOnInit() {
@@ -79,46 +80,23 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
     if (this.action === 'edit') {
       this.updateData(data);
     } else {
-      this.userService.addUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-        const resp = result;
-        const status = resp.status;
-        if (status !== null && status === 200) {
-          this.showMessage.success = true;
-          this.showMessage.error = false;
-          this.showMessage.message = resp ? resp.body.message : '';
+      this.userService.addUser(data).subscribe((resp: ResponseWrapper ) => {
+        if (resp && resp.success) {
+          this.modalService.openSnackBar('New Staff has been created', 'success');
           this.resetForms();
-        } else {
-          this.showMessage.success = false;
-          this.showMessage.error = true;
-          this.showMessage.message = resp ? resp.body.message : '';
         }
-      }, error => {
-        this.showMessage.error = true;
-        this.showMessage.success = false;
-        this.showMessage.message = error ? error.error.message : '';
       });
     }
   }
 
   updateData(data: Staff) {
-    this.userService.updateUser(data).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.showMessage.success = true;
+    this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
+      if (resp && resp.success) {
         this.resetForms();
+        this.modalService.openSnackBar('Staff has been updated', 'success');
+        this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
-        this.showMessage.error = false;
-        this.showMessage.message = resp ? resp.body.message : '';
-      } else {
-        this.showMessage.success = false;
-        this.showMessage.error = true;
-        this.showMessage.message = resp ? resp.body.message : '';
       }
-    }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
     });
   }
 

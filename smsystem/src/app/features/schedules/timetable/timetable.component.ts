@@ -9,20 +9,17 @@ import {
   TimetableRenderer,
 } from 'app/timetable';
 import {
-  MeetingTime,
   ClassView,
   TimeSlot,
   WeekDay,
-  WorkDay,
-  Time,
-  ResponseWrapper } from 'app/models';
+  AcademicYear,
+  SystemConfig,
+  } from 'app/models';
 import {
-  MeetingTimeService,
+  SystemConfigService,
   ClassService,
-  WorkDayService,
-  ModalService,
 } from 'app/services';
-import { QueryParam, DAYS, getWeekDay, getDateTime } from 'app/utils';
+import { APP_CONSTANTS, DAYS, getWeekDay, getDateTime } from 'app/utils';
 
 @Component({
   selector: 'app-timetable',
@@ -40,11 +37,12 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
   timetable: Timetable;
   timeTableRenderer: TimetableRenderer;
   timeScope: TimeScope;
+  academicYear: AcademicYear;
+  currentAcademicYear: string = APP_CONSTANTS.currentAcademicYear;
 
   constructor(
+    private systemConfigService: SystemConfigService,
     private classService: ClassService,
-    private workDayService: WorkDayService,
-    private  meetingTimeService:  MeetingTimeService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -56,9 +54,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
   }
 
   ngOnInit() {
-   this.loadClasses(2);
+    this.loadTimeTableByCurrentAcademicYear(this.currentAcademicYear);
   }
-
 
   drawTimetable(events: Event[]) {
     this.timetable =  new Timetable();
@@ -88,6 +85,22 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
       }, error => {
         this.isLoading = false;
       });
+  }
+
+  onCurrentAcademicYearChange(academicYear: AcademicYear) {
+    this.academicYear = academicYear;
+    this.loadClasses(academicYear.id);
+  }
+
+  loadTimeTableByCurrentAcademicYear(uniqueKey: string) {
+    this.systemConfigService.findSystemConfigByKey(uniqueKey)
+    .subscribe((data: SystemConfig ) => {
+      if (data) {
+        this.loadClasses(parseInt(data.value, 10));
+      }
+    }, error => {
+
+    });
   }
 
 }

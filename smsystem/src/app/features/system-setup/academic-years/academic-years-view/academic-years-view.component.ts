@@ -35,7 +35,6 @@ export class AcademicYearsViewComponent implements OnInit {
   title: string = 'List of Academic Years';
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
-  currentAcademicYear: string = APP_CONSTANTS.currentAcademicYear;
   count: number = 0;
   hidePageSize: boolean = false;
   totalNumberOfItems: number = 20;
@@ -58,7 +57,6 @@ export class AcademicYearsViewComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     this.loadAcademicYears();
-    this.loadForm();
   }
 
   open() {
@@ -79,7 +77,6 @@ export class AcademicYearsViewComponent implements OnInit {
           this.totalNumberOfItems = data.count;
           this.academicYears = data.academicYears;
           this.dataSource = new MatTableDataSource<Position>(data.academicYears);
-          this.loadSystemConfigChange(this.currentAcademicYear);
         }
       });
   }
@@ -115,49 +112,8 @@ export class AcademicYearsViewComponent implements OnInit {
     this.param.pageSize = pageEvent.pageSize;
     this.loadAcademicYears();
   }
-  loadForm() {
-    this.currentAcademicYearForm = this.formBuilder.group({
-      academicYearId: [null, Validators.required],
-    });
-    this.onChanges();
-  }
 
-  loadSystemConfigChange(uniqueKey: string) {
-    this.systemConfigService.findSystemConfigByKey(uniqueKey)
-    .subscribe((data: SystemConfig ) => {
-      if (data) {
-        this.currentAcademicYearForm.patchValue({
-          academicYearId: parseInt(data.value, 10),
-        }, {emitEvent: false});
-      }
-    }, error => {
-
-    });
-  }
-
-  updateSystemConfigChange(systemConfig: SystemConfig) {
-    this.systemConfigService.updateSystemConfig(systemConfig)
-    .subscribe((data: SystemConfig ) => {
-      if (data) {
-        this.currentAcademicYearForm.patchValue({
-          academicYearId: parseInt(data.value, 10),
-        }, {emitEvent: false});
-      }
-    }, error => {
-
-    });
-  }
-
-  onChanges(): void {
-    this.currentAcademicYearForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-      if (academicYearId) {
-        const systemConfig: SystemConfig = {
-            id: null,
-            name: APP_CONSTANTS.currentAcademicYear,
-            value: '' + academicYearId,
-        };
-        this.updateSystemConfigChange(systemConfig);
-      }
-    });
+  onCurrentAcademicYearChange(academicYear: AcademicYear) {
+    this.academicYear = academicYear;
   }
 }
