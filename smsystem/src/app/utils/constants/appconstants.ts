@@ -3,4 +3,5 @@ export const APP_CONSTANTS = {
   userPreferenceTheme: 'currentUserTheme',
   overrideUserTheme: 'overrideUserTheme',
   currentAcademicYear: 'currentAcademicYear',
+  appName: 'Jerotoma School Management System',
 }

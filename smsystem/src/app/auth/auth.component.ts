@@ -22,6 +22,7 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
 
   currentTheme = 'default';
   systemTheme: string = APP_CONSTANTS.currentTheme;
+  appName: string = APP_CONSTANTS.appName;
   systemConfig: SystemConfig = null;
   systemSetting: SystemSetting = null;
   mTheme: Theme = null;

@@ -1,44 +1,56 @@
 @import '~@nebular/theme/styles/global/breakpoints';
+@import '../../styles/colors/color-variables';
+
+.navbar {
+  position: relative;
+  min-height: 46px;
+  margin-bottom: 0px;
+  border: 1px solid transparent;
+}
+
+@media (min-width: 769px) {
+  .navbar {
+      border-radius: 0;
+      padding-left: 20px;
+      padding-right: 20px;
+  }
+}
+
+.navbar:after,
+.navbar:before {
+  content: " ";
+  display: table;
+}
+
+.navbar:after {
+  clear: both;
+}
 
 :host {
-  $auth-layout-padding: 2.5rem;
+  display:block;
+  width:100%;
+  max-width:100% !important;
+}
 
-  nb-card {
-    margin: 0;
-    height: calc(100vh - 2 * #{$auth-layout-padding});
-  }
+.bg-indigo {
+  background-color: $blue-color-1;
+  border-color: #3F51B5;
+  color: $white-color;
+}
 
-  .navigation .link {
-    text-decoration: none;
+.app-name-link {
+  color: $white-color;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 10px;
+  text-align: center;
+}
 
-    .icon {
-      font-size: 2rem;
-    }
-  }
-
-  nb-card-body {
-    display: flex;
-    width: 100%;
-  }
-
-  nb-auth-block {
-    margin: auto;
-  }
-
-  @include media-breakpoint-down(sm) {
-    nb-card {
-      border-radius: 0;
-      height: 100vh;
-    }
-  }
-
-  /deep/ {
-    nb-layout .layout .layout-container .content .columns nb-layout-column {
-      padding: $auth-layout-padding;
-
-      @include media-breakpoint-down(sm) {
-        padding: 0;
-      }
-    }
-  }
+.app-name-link,
+.app-name-link:hover,
+.app-name-link:visited
+.app-name-link:focus {
+  color: $white-color;
+  text-decoration: none;
 }

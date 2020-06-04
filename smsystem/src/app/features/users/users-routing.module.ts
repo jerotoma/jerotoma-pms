@@ -7,7 +7,6 @@ import { AuthGuard } from 'app/services/guards/auth-guard.service';
 
 // Components
 import { UsersComponent } from './users.component';
-import { InfiniteListComponent } from '../../../backups/infinite-list/infinite-list.component';
 
 const routes: Routes = [{
   path: '',
@@ -33,10 +32,6 @@ const routes: Routes = [{
       path: 'parents',
       loadChildren: () => import('./parents/parents.module')
       .then(m => m.ParentsModule),
-    },
-    {
-      path: 'infinite-list',
-      component: InfiniteListComponent,
     },
     {
       path: '',

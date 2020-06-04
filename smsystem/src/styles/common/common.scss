@@ -37,7 +37,7 @@
 
   @include media-breakpoint-down(is) {
     button {
-      padding: 0.75rem;
+      padding: 0.25rem;
     }
   }
 }
@@ -109,3 +109,4 @@ button,
 .capitalize {
   text-transform: capitalize;
 }
+

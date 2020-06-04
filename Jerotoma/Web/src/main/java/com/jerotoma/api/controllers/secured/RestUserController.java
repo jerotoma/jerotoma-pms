@@ -205,6 +205,9 @@ public class RestUserController extends BaseController {
 			case PARENT:
 				instance.setData(assemblerParentService.findObjectUniqueKey(username));
 				break;
+			case ADMIN:
+				instance.setData(authUserService.findObjectUniqueKey(username));
+				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
 			}
@@ -373,7 +376,9 @@ public class RestUserController extends BaseController {
 				parentAddress.setUpdatedOn(today);
 				parentAddressService.createObject(parentAddress);				
 				instance.setData(parent);
-				break;			
+				break;	
+			case ADMIN:
+				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
 			}

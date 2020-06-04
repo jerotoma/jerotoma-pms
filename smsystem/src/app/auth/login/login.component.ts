@@ -5,7 +5,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { AuthService } from 'app/services';
 import { ShowMessage, UserContext  } from 'app/models';
-import { CheckBoxValidator, MustMatch } from 'app/utils';
+import { APP_CONSTANTS } from 'app/utils';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +13,7 @@ import { CheckBoxValidator, MustMatch } from 'app/utils';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  appName: string = APP_CONSTANTS.appName;
   user: UserContext = {
     username: '',
     password: '',

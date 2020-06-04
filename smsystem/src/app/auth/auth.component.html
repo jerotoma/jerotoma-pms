@@ -1,16 +1,20 @@
+<nav class="navbar navbar-inverse bg-indigo text-center">
+  <a routerLink="/" class="app-name-link text-center">
+   {{appName}}
+  </a>
+</nav>
 <nb-layout>
   <nb-layout-column>
-    <nb-card>
-      <nb-card-header>
-        <nav class="navigation">
-          <a href="#" (click)="back()" class="link" aria-label="Back"><i class="icon nb-arrow-thin-right"></i></a>
-        </nav>
-      </nb-card-header>
-      <nb-card-body>
-        <nb-auth-block>
-          <router-outlet></router-outlet>
-        </nb-auth-block>
-      </nb-card-body>
-    </nb-card>
+    <div class="row mt-4">
+      <div class="col-md-6 offset-md-3">
+        <nb-card>
+          <nb-card-body>
+            <nb-auth-block style="max-width: 100% !important;">
+              <router-outlet></router-outlet>
+            </nb-auth-block>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
   </nb-layout-column>
 </nb-layout>

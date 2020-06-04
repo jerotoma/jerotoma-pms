@@ -1,10 +1,16 @@
 
-$white-color: #FFFFFF;
-$black-color: #000000;
-$primary-color: #3366FF;
+$white-color: rgb(255, 255, 255);
+$black-color: rgba(0, 0, 0, 1);
+$black-color-1: #263238;
+$blue-color-1: #3F51B5;
+$primary-color: $blue-color-1;  //#3366FF; previous primary
 $secondary-color: rgba(10, 17, 15, .5);
 $success-color: #00d68F;
 $info-color: #0095FF;
 $warning-color: #FFAA00;
 $danger-color: #FF3D71;
 
+
+$active-background-color: #26A69A;
+$hover-background-color: rgba(0, 0, 0, 0.1);
+$submenu-active-background-color: rgba(0, 0, 0, 0.2);

@@ -7,13 +7,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Dashboard',
-    icon: 'home-outline',
+    icon: 'keypad',
     link: '/dashboard',
     home: true,
   },
   {
     title: 'Resources',
-    icon: 'monitor-outline',
+    icon: 'monitor',
     link: '/dashboard/resources',
   },
   {
@@ -22,7 +22,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Users',
-    icon: 'people-outline',
+    icon: 'people',
     children: [
       {
         title: 'Teachers',
@@ -44,7 +44,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Admission',
-    icon: 'book-open-outline',
+    icon: 'book-open',
     children: [
       {
         title: 'Students',
@@ -57,109 +57,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'SCHOOL SCHEDULES',
-    group: true,
-  },
-  {
-    title: 'Students',
-    icon: 'calendar-outline',
-    link: '/dashboard/ui-features',
-    children: [
-      {
-        title: 'Grid',
-        link: '/dashboard/ui-features/grid',
-      },
-      {
-        title: 'Icons',
-        link: '/dashboard/ui-features/icons',
-      },
-      {
-        title: 'Typography',
-        link: '/dashboard/ui-features/typography',
-      },
-      {
-        title: 'Animated Searches',
-        link: '/dashboard/ui-features/search-fields',
-      },
-    ],
-  },
-  {
-    title: 'Teachers',
-    icon: 'calendar-outline',
-    children: [
-      {
-        title: 'Calendar',
-        link: '/dashboard/extra-components/calendar',
-      },
-      {
-        title: 'Progress Bar',
-        link: '/dashboard/extra-components/progress-bar',
-      },
-      {
-        title: 'Spinner',
-        link: '/dashboard/extra-components/spinner',
-      },
-      {
-        title: 'Alert',
-        link: '/dashboard/extra-components/alert',
-      },
-      {
-        title: 'Calendar Kit',
-        link: '/dashboard/extra-components/calendar-kit',
-      },
-      {
-        title: 'Chat',
-        link: '/dashboard/extra-components/chat',
-      },
-    ],
-  },
-  {
-    title: 'SECURITY',
-    group: true,
-  },
-  {
-    title: 'Auth',
-    icon: 'lock-outline',
-    children: [
-      {
-        title: 'Login',
-        link: '/account/login',
-      },
-      {
-        title: 'Register',
-        link: '/account/register',
-      },
-      {
-        title: 'Request Password',
-        link: '/account/request-password',
-      },
-      {
-        title: 'Reset Password',
-        link: '/account/reset-password',
-      },
-    ],
-  },
-  {
-    title: 'Roles & Permission',
-    icon: 'shield-outline',
-    children: [
-      {
-        title: 'Roles',
-        link: '/dashboard/securities/roles',
-      },
-      {
-        title: 'Permissions',
-        link: '/dashboard/securities/permissions',
-      },
-    ],
-  },
-  {
-    title: 'SETTINGS',
-    group: true,
-  },
-  {
     title: 'Schedules',
-    icon: 'shield-outline',
+    icon: 'shield',
     children: [
       {
         title: 'Meeting Times',
@@ -174,6 +73,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/schedules/timetable',
       },
     ],
+  },
+  {
+    title: 'SETTINGS',
+    group: true,
   },
   {
     title: 'System Setup',
@@ -207,6 +110,20 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Academic Disciplines',
         link: '/dashboard/system-setup/academic-disciplines',
+      },
+    ],
+  },
+  {
+    title: 'Security Setup',
+    icon: 'shield',
+    children: [
+      {
+        title: 'Roles',
+        link: '/dashboard/securities/roles',
+      },
+      {
+        title: 'Permissions',
+        link: '/dashboard/securities/permissions',
       },
     ],
   },

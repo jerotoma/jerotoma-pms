@@ -1,4 +1,4 @@
-<nb-card status="primary">
+<nb-card status="info">
     <nb-card-header>User Detail</nb-card-header>
   <nb-card-body>
     <div class="container emp-profile" *ngIf="userDatail">
@@ -12,7 +12,7 @@
                       </div>
                       <div class="profile-head">
                           <h5 *ngIf="userDatail.fullName"> {{userDatail.fullName}} </h5>
-                          <h6 *ngIf="userDatail.occupation">Profession: {{userDatail.occupation}}</h6>
+                          <h6 *ngIf="userDatail.occupation">Employee Type: {{userDatail.occupation}}</h6>
                           <p class="proile-rating" *ngIf="isUserTeacher">Number of Courses Assigned : <span>10</span></p>
                           <p class="proile-rating" *ngIf="isUserStudent">Number of Courses Registered : <span>10</span></p>
                           <p class="proile-rating" *ngIf="isUserParent">Number of Children Registered : <span>10</span></p>

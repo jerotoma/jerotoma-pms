@@ -1,102 +1,70 @@
-<nb-auth-block>
-  <h1 id="title" class="title">Login</h1>
-  <p class="sub-title">Hello! Log in with your username.</p>
 
-  <nb-alert *ngIf="showMessage.error && errors?.length" outline="danger" role="alert">
-    <p class="alert-title"><b>Oh snap!</b></p>
-    <ul class="alert-message-list">
-      <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
-    </ul>
-  </nb-alert>
+<div class="row">
+  <div class="col-md-12">
+    <h1 id="title" class="title">Login</h1>
+    <p class="sub-title text-primary">Enter your credentials to login.</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" aria-labelledby="title">
+      <div class="form-control-group">
+        <label class="label" for="input-username">Username:</label>
+        <input nbInput
+          id="input-username"
+          formControlName="username"
+          placeholder="Username"
+          fullWidth
+          [status]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? 'danger' : ''"
+          [attr.aria-invalid]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? true : null">
+          <ng-container *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
+            <p class="error-message" *ngIf="loginForm.controls['username']?.errors?.required">
+              Email is required!
+            </p>
+            <p class="error-message" *ngIf="loginForm.controls['username']?.errors?.pattern">
+              Username should be the real one!
+            </p>
+          </ng-container>
+      </div>
 
-  <nb-alert *ngIf="showMessage.success && messages?.length && !submitted" outline="success" role="alert">
-    <p class="alert-title"><b>Hooray!</b></p>
-    <ul class="alert-message-list">
-      <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
-    </ul>
-  </nb-alert>
-
-  <form [formGroup]="loginForm" (ngSubmit)="login()" aria-labelledby="title">
-    <div class="form-control-group">
-      <label class="label" for="input-username">Username:</label>
-      <input nbInput
-        id="input-username"
-        formControlName="username"
-        placeholder="Username"
-        fullWidth
-        [status]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? 'danger' : ''"
-        [attr.aria-invalid]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? true : null">
-      <ng-container *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
-      <p class="error-message" *ngIf="loginForm.controls['username']?.errors?.required">
-        Email is required!
-      </p>
-      <p class="error-message" *ngIf="loginForm.controls['username']?.errors?.pattern">
-        Username should be the real one!
-      </p>
-      </ng-container>
-    </div>
-
-    <div class="form-control-group">
-      <span class="label-with-link">
-        <label class="label" for="input-password">Password:</label>
-        <a class="forgot-password caption-2" routerLink="../request-password">Forgot Password?</a>
-      </span>
-      <input nbInput
-           type="password"
-           id="input-password"
-           formControlName="password"
-           placeholder="Password"
-           fullWidth
-           [status]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? 'danger' : ''"
-           [attr.aria-invalid]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? true : null">
-      <ng-container *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
-        <p class="error-message" *ngIf="loginForm.controls['password']?.errors?.required">
-          Password is required!
-        </p>
-      </ng-container>
-    </div>
-
-    <div class="form-control-group accept-group">
-      <nb-checkbox name="rememberMe" *ngIf="rememberMe"
-      (checkedChange)="checkedChange($event)"
-      formControlName="rememberMe"
-      [status]="loginForm.controls['rememberMe'].invalid && loginForm.controls['rememberMe'].touched ? 'danger' : ''">Remember me</nb-checkbox>
-    </div>
-    <button nbButton
+      <div class="form-control-group">
+        <span class="label-with-link">
+          <label class="label" for="input-password">Password:</label>
+          <a class="forgot-password caption-2" routerLink="../request-password">Forgot Password?</a>
+        </span>
+        <input nbInput
+            type="password"
+            id="input-password"
+            formControlName="password"
+            placeholder="Password"
             fullWidth
-            status="primary"
-            size="large"
-            status="success"
-            [disabled]="!loginForm.valid">
-      Log In
-    </button>
-  </form>
+            [status]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? 'danger' : ''"
+            [attr.aria-invalid]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? true : null">
+        <ng-container *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
+          <p class="error-message" *ngIf="loginForm.controls['password']?.errors?.required">
+            Password is required!
+          </p>
+        </ng-container>
+      </div>
 
-  <!-- <section *ngIf="socialLinks && socialLinks.length > 0" class="links" aria-label="Social sign in">
-    or enter with:
-    <div class="socials">
-      <ng-container *ngFor="let socialLink of socialLinks">
-        <a *ngIf="socialLink.link"
-          [routerLink]="socialLink.link"
-          [attr.target]="socialLink.target"
-          [attr.class]="socialLink.icon"
-          [class.with-icon]="socialLink.icon">
-          <nb-icon *ngIf="socialLink.icon; else title" [icon]="socialLink.icon"></nb-icon>
-          <ng-template #title>{{ socialLink.title }}</ng-template>
-        </a>
-        <a *ngIf="socialLink.url"
-          [attr.href]="socialLink.url"
-          [attr.target]="socialLink.target"
-          [attr.class]="socialLink.icon"
-          [class.with-icon]="socialLink.icon">
-          <nb-icon *ngIf="socialLink.icon; else title" [icon]="socialLink.icon"></nb-icon>
-          <ng-template #title>{{ socialLink.title }}</ng-template>
-        </a>
-      </ng-container>
-    </div>
-  </section> -->
+      <div class="form-control-group accept-group">
+        <nb-checkbox name="rememberMe" *ngIf="rememberMe"
+        (checkedChange)="checkedChange($event)"
+        formControlName="rememberMe"
+        [status]="loginForm.controls['rememberMe'].invalid && loginForm.controls['rememberMe'].touched ? 'danger' : ''">Remember me</nb-checkbox>
+      </div>
+      <button nbButton
+              fullWidth
+              status="primary"
+              size="large"
+              status="success"
+              [disabled]="!loginForm.valid">
+        Log In
+      </button>
+    </form>
+    <section class="another-action" aria-label="Register">
+      Don't have an account? <a routerLink="../register" class="text-link">Register</a>
+    </section>
+  </div>
+</div>
 
-  <section class="another-action" aria-label="Register">
-    Don't have an account? <a routerLink="../register" class="text-link">Register</a>
-  </section>
-</nb-auth-block>
