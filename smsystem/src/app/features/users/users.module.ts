@@ -8,7 +8,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 
 import { NbMomentDateModule } from '@nebular/moment';
-import { ThemeModule } from 'app/@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import {
   NbAccordionModule,
   NbSpinnerModule,
@@ -48,7 +48,7 @@ const ENTRY_COMPONENTS = [
 const MODULES = [
     SharedModule,
     NbSpinnerModule,
-    ThemeModule,
+    LayoutModule,
     NbMomentDateModule,
     NbTabsetModule,
     NbRadioModule,

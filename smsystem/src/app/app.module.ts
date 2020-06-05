@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
-import { ThemeModule } from './@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import { AppRoutingModule } from './app-routing.module';
 import {  MatDialogModule, MatDialog } from '@angular/material';
 import { AppAuthModule } from './auth/auth.module';
@@ -54,7 +54,7 @@ const SERVICES = [
     NbActionsModule,
     MatDialogModule,
     SharedCommonModule,
-    ThemeModule.forRoot(),
+    LayoutModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),

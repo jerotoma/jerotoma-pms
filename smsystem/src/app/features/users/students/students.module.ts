@@ -30,7 +30,7 @@ import {
   NbAlertModule,
 } from '@nebular/theme';
 
-import { ThemeModule } from 'app/@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import { StudentsRoutingModule } from './students-routing.module';
 
 import { StudentsComponent } from './students.component';
@@ -51,7 +51,7 @@ const ENTRY_COMPONENTS = [
 
 const MODULES = [
     SharedModule,
-    ThemeModule,
+    LayoutModule,
     NbMomentDateModule,
     NbSpinnerModule,
     NbTabsetModule,

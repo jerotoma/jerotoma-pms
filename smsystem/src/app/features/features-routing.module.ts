@@ -32,7 +32,7 @@ const routes: Routes = [{
     },
     {
       path: 'account',
-      loadChildren: () => import('../@theme/components/header/header.module')
+      loadChildren: () => import('app/layouts/header/header.module')
         .then(m => m.HeaderModule),
     },
     {

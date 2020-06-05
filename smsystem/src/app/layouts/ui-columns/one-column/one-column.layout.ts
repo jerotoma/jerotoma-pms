@@ -2,7 +2,7 @@ import { AfterViewInit, Component, Inject, PLATFORM_ID, ViewChild } from '@angul
 import { isPlatformBrowser } from '@angular/common';
 import { NbLayoutComponent } from '@nebular/theme';
 
-import { WindowModeBlockScrollService } from '../../services/window-mode-block-scroll.service';
+import { WindowModeBlockScrollService } from 'app/services';
 
 @Component({
   selector: 'app-one-column-layout',

@@ -17,7 +17,7 @@ import {
 } from '@angular/material';
 
 import { FileUploadModule } from 'ng2-file-upload';
-import { ThemeModule } from 'app/@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import { NbMomentDateModule } from '@nebular/moment';
 import {
   NbAccordionModule,
@@ -87,7 +87,7 @@ const MODULES = [
   FormsModule,
   ReactiveFormsModule,
   FileUploadModule,
-  ThemeModule,
+  LayoutModule,
   NgbModule,
   NbMomentDateModule,
   NbTabsetModule,

@@ -1,6 +1,6 @@
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
-@import '../../../../@theme/styles/themes';
+@import 'src/styles/themes/themes';
 
 @include nb-install-component() {
   overflow: auto;

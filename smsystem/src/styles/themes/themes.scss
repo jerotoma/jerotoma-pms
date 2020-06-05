@@ -3,7 +3,7 @@
 // @nebular out of the box themes
 @import '~@nebular/theme/styles/themes';
 
-@import '../../../styles/colors/color-variables';
+@import '../colors/color-variables';
 
 $nb-themes: nb-register-theme((
   //Header Section

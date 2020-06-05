@@ -17,31 +17,28 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { NbSecurityModule } from '@nebular/security';
 
 import {
-  FooterComponent,
-  HeaderComponent,
-  SearchInputComponent,
- } from './components';
-import {
   CapitalizePipe,
   PluralPipe,
   RoundPipe,
   TimingPipe,
   NumberWithCommasPipe,
-} from './pipes';
+} from 'app/pipes';
+
+import { FooterComponent } from './footer';
+import { HeaderComponent } from './header/header.component';
+
 import {
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
-} from './layouts';
+} from './ui-columns';
 
-import { HeaderModule } from './components/header/header.module';
+import { WindowModeBlockScrollService } from 'app/services';
 
-
-import { WindowModeBlockScrollService } from './services/window-mode-block-scroll.service';
-import { DEFAULT_THEME } from './styles/theme.default';
-import { COSMIC_THEME } from './styles/theme.cosmic';
-import { CORPORATE_THEME } from './styles/theme.corporate';
-import { DARK_THEME } from './styles/theme.dark';
+import { DEFAULT_THEME } from './themes/theme.default';
+import { COSMIC_THEME } from './themes/theme.cosmic';
+import { CORPORATE_THEME } from './themes/theme.corporate';
+import { DARK_THEME } from './themes/theme.dark';
 
 
 const NB_MODULES = [
@@ -61,7 +58,6 @@ const NB_MODULES = [
 const COMPONENTS = [
   HeaderComponent,
   FooterComponent,
-  SearchInputComponent,
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
@@ -79,10 +75,10 @@ const PIPES = [
   exports: [CommonModule, ...PIPES, ...COMPONENTS],
   declarations: [...COMPONENTS, ...PIPES],
 })
-export class ThemeModule {
+export class LayoutModule {
   static forRoot(): ModuleWithProviders {
     return <ModuleWithProviders>{
-      ngModule: ThemeModule,
+      ngModule: LayoutModule,
       providers: [
         ...NbThemeModule.forRoot(
           {

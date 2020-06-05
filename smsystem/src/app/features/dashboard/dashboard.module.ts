@@ -12,7 +12,7 @@ import {
 } from '@nebular/theme';
 import { NgxEchartsModule } from 'ngx-echarts';
 
-import { ThemeModule } from '../../@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import { DashboardComponent } from './dashboard.component';
 import { CounterCardComponent } from './counter-card/counter-card.component';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +20,7 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     FormsModule,
-    ThemeModule,
+    LayoutModule,
     NbCardModule,
     NbUserModule,
     NbButtonModule,

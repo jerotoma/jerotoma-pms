@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { NbMenuModule } from '@nebular/theme';
 
-import { ThemeModule } from 'app/@theme/theme.module';
+import { LayoutModule } from 'app/layouts/layout.module';
 import { FeaturesComponent } from './features.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { ECommerceModule } from './resources/e-commerce.module';
@@ -12,7 +12,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 @NgModule({
   imports: [
     FeaturesRoutingModule,
-    ThemeModule,
+    LayoutModule,
     NbMenuModule,
     DashboardModule,
     ECommerceModule,
