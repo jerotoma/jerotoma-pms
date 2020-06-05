@@ -34,21 +34,25 @@
                   <div class="col-md-6">
                       <div class="form-control-group">
                           <label for="meetingTime" class="label">Start Time</label>
-                          <app-timepicker
-                            [time]="startTime"
-                            (onChange)="onStartTimeChange($event)"
-                          ></app-timepicker>
+                            <ngb-timepicker
+                              formControlName="startTime"
+                              [meridian]="meridian"
+                              [spinners]="spinners"
+                              [seconds]="second">
+                            </ngb-timepicker>
                         </div>
                   </div>
               </div>
               <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="meetingTime" class="label">End Time {{endTime | json}}</label>
-                        <app-timepicker
-                            [time]="endTime"
-                            (onChange)="onEndTimeChange($event)"
-                          ></app-timepicker>
+                        <label for="meetingTime" class="label">End Time</label>
+                        <ngb-timepicker
+                          formControlName="endTime"
+                          [meridian]="meridian"
+                          [spinners]="spinners"
+                          [seconds]="second">
+                        </ngb-timepicker>
                       </div>
                 </div>
             </div>

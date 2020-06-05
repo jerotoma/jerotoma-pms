@@ -71,6 +71,7 @@
                       </div>
                   </div>
                   <app-user-login-input
+                    *ngIf="action === 'create'"
                     [userLoginInput]="userLoginInput"
                     (onChanges)="onUserLoginInputChange($event)">
                   </app-user-login-input>

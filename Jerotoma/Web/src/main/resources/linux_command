@@ -16,7 +16,7 @@ rm -rf /opt/tomcat/jerotoma && mv /opt/tomcat/webapps/jerotoma /opt/tomcat/
 #Restart Nginx Service
  sudo systemctl restart nginx
  
- #Restart tomcat Service
+#Restart tomcat Service
  sudo systemctl restart tomcat
 
 # Copy file to remote server 

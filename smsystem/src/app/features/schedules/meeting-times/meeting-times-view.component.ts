@@ -9,7 +9,7 @@ import { MeetingTimesCreateComponent } from './meeting-times-create/meeting-time
 import { MeetingTimesDeleteComponent } from './meeting-times-delete/meeting-times-delete.component';
 import { MeetingTime, ResponseWrapper } from 'app/models';
 import { MeetingTimeService } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE} from 'app/utils';
 
 @Component({
   selector: 'app-meeting-times-view',
@@ -54,7 +54,7 @@ export class MeetingTimesViewComponent implements OnInit {
     this.dialogService.open(MeetingTimesCreateComponent, {
       context: {
         title: 'Add New Meeting Time',
-        action: 'create',
+        action: APP_ACTION_TYPE.create,
       },
     }).onClose.subscribe(_data => {
       this.loadMeetingTimes();
@@ -77,7 +77,7 @@ export class MeetingTimesViewComponent implements OnInit {
     this.dialogService.open(MeetingTimesCreateComponent, {
       context: {
         title: 'Edit Meeting Time',
-        action: 'edit',
+        action: APP_ACTION_TYPE.edit,
         id: meetingTime.id.toString(),
       },
     }).onClose.subscribe(_data => {
@@ -88,7 +88,7 @@ export class MeetingTimesViewComponent implements OnInit {
     this.dialogService.open(MeetingTimesDeleteComponent, {
       context: {
         title: 'Delete Meeting Time',
-        action: 'delete',
+        action: APP_ACTION_TYPE.delete,
         meetingTimeId: meetingTime.id.toString(),
         time:  meetingTime.workDay.day + ' : ' + meetingTime.time,
       },

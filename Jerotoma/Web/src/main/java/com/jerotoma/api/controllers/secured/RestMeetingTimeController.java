@@ -88,6 +88,34 @@ public class RestMeetingTimeController extends BaseController {
 		instance.setHttpStatus(HttpStatus.OK);
 		return instance;
 	}
+	
+	
+	@GetMapping(value = {"/{meetingTimeId}", "/{meetingTimeId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getMeetingTime(Authentication auth, @PathVariable("meetingTimeId") Integer meetingTimeId) {
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();			
+		this.securityCheckAdminAccess(auth, "GET");
+		
+		MeetingTimeVO meetingTime;		
+		try {
+			meetingTime = assemblerMeetingTimeService.findObject(meetingTimeId);	
+			if (meetingTime == null) {
+				instance.setSuccess(false);
+				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+				return instance;
+			} 
+			
+			instance.setSuccess(true);
+			instance.setData(meetingTime);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return instance;
+	}
+
+	
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> createMeetingTime(

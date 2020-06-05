@@ -13,7 +13,7 @@ import {
   ResponseWrapper,
 } from 'app/models';
 import { AcademicDisciplineService, ModalService , PositionService, UserService} from 'app/services';
-import { QueryParam , DateFormatter } from 'app/utils';
+import { QueryParam , DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 
@@ -60,7 +60,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     this.onStudentFullInputChanges();
   }
   ngAfterViewInit() {
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.loadParent(parseInt(this.parentId, 10));
     }
   }
@@ -83,7 +83,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   postData(data: Parent) {
     this.showMessage.success = false;
     this.showMessage.error = false;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateData(data);
     } else {
       this.userService.addUser(data).subscribe((resp: ResponseWrapper ) => {
@@ -97,10 +97,10 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   updateData(data: any) {
     this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
       if (resp && resp.success) {
-        this.resetForms();
         this.modalService.openSnackBar('Parent has been updated', 'success');
         this.showMessage.success = true;
         this.onUserCreationSuccess.emit(this.showMessage.success);
+        this.resetForms();
       }
     });
   }
@@ -117,7 +117,9 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.parentForm.reset();
     this.appAddress.resetForm();
-    this.appPassword.resetForm();
+    if (this.action === APP_ACTION_TYPE.create) {
+      this.appPassword.resetForm();
+    }
     this.ref.close();
   }
   loadParentForm() {
@@ -134,7 +136,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       gender: ['', Validators.required],
       userId: [null],
       picture: [''],
-      userType: ['parent'],
+      userType: [USER_TYPE.parent],
       address: [null, Validators.required],
       studentIDs: [''],
       studentFullName: [''],
@@ -148,7 +150,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'parent',
+      userType: USER_TYPE.parent,
     };
   }
   onParentAddressChange(addressWrapper: AddressWrapper ) {
@@ -168,7 +170,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
           confirmPassword: this.userLoginInput.confirmPassword,
         });
         this.parentForm.controls['username'].setErrors(null);
-        window.console.log(userLoginInputWrapper);
+        // window.console.log(userLoginInputWrapper);
     } else {
       this.parentForm.controls['username'].setErrors({ invalidUsername: true });
     }
@@ -242,7 +244,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       phoneNumber: this.parent.phoneNumber,
       emailAddress: this.parent.username,
       birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
-      userType: 'parent',
+      userType: USER_TYPE.parent,
       academicDiscipline: this.parent.academicDiscipline ? this.parent.academicDiscipline.id : null,
       fullName: this.parent.fullName,
       address: this.parent.address ? this.parent.address : null,

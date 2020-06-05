@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { from } from 'rxjs';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
+import { TimepickerComponent } from 'app/shared';
 import {
   MeetingTime,
   WeekDay,
@@ -13,7 +15,7 @@ import {
   WorkDayService,
   ModalService,
 } from 'app/services';
-import { QueryParam, DAYS } from 'app/utils';
+import { QueryParam, DAYS, APP_ACTION_TYPE } from 'app/utils';
 @Component({
   selector: 'app-meeting-times-create',
   templateUrl: './meeting-times-create.component.html',
@@ -22,22 +24,28 @@ import { QueryParam, DAYS } from 'app/utils';
 export class MeetingTimesCreateComponent implements OnInit {
 
   @Input() title: string;
-  @Input() action: string = 'create';
+  @Input() action: string = APP_ACTION_TYPE.create;
   @Output() onCreationSuccess = new EventEmitter();
   @Input() id: string;
+  // @ViewChild(TimepickerComponent, {static: false}) appTimepicker: TimepickerComponent;
 
   currentDate: Date = new Date();
   meetingTimeForm: FormGroup;
   meetingTime: MeetingTime;
-  startTime: Time =  { hour: this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
-  endTime: Time = { hour: 1 + this.currentDate.getHours(), minute: this.currentDate.getMinutes(), second: this.currentDate.getSeconds()};
+  startTime: Time;
+  endTime: Time;
   seconds = true;
   listDisplay: string = 'none';
+  prettyTime: string;
   isSubmitting: boolean = false;
   time: string = '';
   days: WeekDay[] = DAYS;
   workDay: WorkDay;
   workDays: WorkDay[];
+
+  second: boolean = false;
+  meridian: boolean = true;
+  spinners: boolean = true;
 
   constructor(
     private workDayService:  WorkDayService,
@@ -49,18 +57,19 @@ export class MeetingTimesCreateComponent implements OnInit {
   ngOnInit() {
     this.loadForm();
     this.loadWorkDays();
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
         this.loadMeetingTime();
     }
   }
   patchMeetingTime() {
-    this.meetingTimeForm.patchValue({
+    const formInput = {
       time: this.meetingTime.time,
       id: this.meetingTime.id,
       workDayId: this.meetingTime.workDay.id,
       endTime: this.meetingTime.endTime,
       startTime: this.meetingTime.startTime,
-    });
+    };
+    this.meetingTimeForm.patchValue(formInput);
   }
   dismiss() {
     this.ref.close();
@@ -69,7 +78,7 @@ export class MeetingTimesCreateComponent implements OnInit {
   onSubmit() {
     this.isSubmitting = true;
     this.meetingTime = this.meetingTimeForm.value;
-        if (this.action === 'edit') {
+        if (this.action === APP_ACTION_TYPE.edit) {
             this.updateMeetingTime();
         } else {
           this.meetingTimeService.createMeetingTime(this.meetingTime)
@@ -88,7 +97,14 @@ export class MeetingTimesCreateComponent implements OnInit {
 
   }
   updateMeetingTime() {
-    this.meetingTimeService.updateMeetingTime(this.meetingTime)
+    const postMeetingTime = {
+      time: this.meetingTime.time,
+      id: this.meetingTime.id,
+      workDayId: this.meetingTime.workDayId,
+      endTime: this.meetingTime.endTime,
+      startTime: this.meetingTime.startTime,
+    };
+    this.meetingTimeService.updateMeetingTime(postMeetingTime)
         .subscribe((meetingTime: MeetingTime ) => {
           this.isSubmitting = false;
           if (meetingTime) {
@@ -117,30 +133,30 @@ export class MeetingTimesCreateComponent implements OnInit {
       startTime: [null, Validators.required ],
       endTime: [null, Validators.required ],
     });
-    this.updateTime();
-    this.onEndTimeChange(this.endTime);
-    this.onStartTimeChange(this.startTime);
+    this.onChanges();
   }
-  onStartTimeChange(startTime: Time) {
-    this.startTime = startTime;
-    this.meetingTimeForm.patchValue({
-      startTime: startTime,
+  onChanges() {
+    this.meetingTimeForm.get('startTime').valueChanges.subscribe((startTime: Time) => {
+      if (startTime) {
+        this.startTime = startTime;
+        this.updateTime();
+      }
     });
-    this.updateTime();
-  }
-  onEndTimeChange(endTime: Time) {
-    this.endTime = endTime;
-    this.meetingTimeForm.patchValue({
-      endTime: endTime,
+    this.meetingTimeForm.get('endTime').valueChanges.subscribe((endTime: Time) => {
+      if (endTime) {
+        this.endTime = endTime;
+        this.updateTime();
+      }
     });
-    this.updateTime();
   }
 
   updateTime() {
-    this.time = this.startTime.hour + ':' + this.startTime.minute + ' - ' + this.endTime.hour + ':' + this.endTime.minute;
-    this.meetingTimeForm.patchValue({
-      time: this.time,
-    });
+    if (this.startTime && this.endTime) {
+      this.time = this.prettyFormatTime(this.startTime, false) + ' - ' + this.prettyFormatTime(this.endTime, false);
+      this.meetingTimeForm.patchValue({
+        time: this.time,
+      });
+    }
   }
 
   loadMeetingTime() {
@@ -150,6 +166,7 @@ export class MeetingTimesCreateComponent implements OnInit {
         this.startTime = meetingTime.startTime;
         this.endTime = meetingTime.endTime;
         this.workDay = meetingTime.workDay;
+        this.time = meetingTime.time;
         this.patchMeetingTime();
       }
     });
@@ -185,5 +202,17 @@ export class MeetingTimesCreateComponent implements OnInit {
       fieldName: '',
       userType: 'meetingTime',
     };
+  }
+
+  prettyFormatTime(time: Time, usingTwelveHour: boolean) {
+    const minute = time.minute <= 9 ? '0' + time.minute : '' + time.minute;
+    if (usingTwelveHour) {
+            const period = time.hour >= 12 ? 'PM' : 'AM';
+            this.prettyTime = ((time.hour + 11) % 12 + 1) + ':' + minute + period;
+    } else {
+      const hourPrefix = time.hour < 10 ? '0' : '';
+      this.prettyTime = hourPrefix + time.hour + ':' + minute;
+    }
+    return this.prettyTime;
   }
 }

@@ -3,11 +3,12 @@ import { Component, OnInit} from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { MeetingTimeService,  ModalService } from 'app/services';
 import { ShowMessage } from 'app/models';
+import { APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-meeting-times-delete',
   templateUrl: './meeting-times-delete.component.html',
-  styleUrls: ['./meeting-times-delete.component.scss']
+  styleUrls: ['./meeting-times-delete.component.scss'],
 })
 export class MeetingTimesDeleteComponent implements OnInit {
   meetingTimeId: string = '0';
@@ -26,7 +27,7 @@ export class MeetingTimesDeleteComponent implements OnInit {
     private modalService: ModalService,
     protected ref: NbDialogRef<MeetingTimesDeleteComponent>) {}
   ngOnInit() {
-    this.confirmed = this.action === 'delete';
+    this.confirmed = this.action === APP_ACTION_TYPE.delete;
   }
 
   deleteMeetingTime() {

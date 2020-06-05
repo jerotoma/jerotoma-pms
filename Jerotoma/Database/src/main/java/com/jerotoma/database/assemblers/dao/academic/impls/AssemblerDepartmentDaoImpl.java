@@ -47,20 +47,20 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 
 	@Override
 	public DepartmentVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE d.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new DepartmentSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
 	public DepartmentVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE d.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new DepartmentSingleResultProcessor(), Integer.valueOf(uniqueKey));
 	}
 
 	@Override
 	public List<DepartmentVO> loadList(QueryParam queryParam) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		builder.append(DaoUtil.getOrderBy("d." + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 

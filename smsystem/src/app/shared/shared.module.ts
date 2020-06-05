@@ -52,6 +52,7 @@ import {
   SearchUserComponent,
   UserDeleteComponent,
   TimepickerComponent,
+  TinyMCEComponent,
   CurrentAcademicYearComponent,
 } from 'app/shared';
 
@@ -67,6 +68,7 @@ const COMPONENTS = [
   SearchUserComponent,
   TimepickerComponent,
   CurrentAcademicYearComponent,
+  TinyMCEComponent,
 ];
 
 const ENTRY_COMPONENTS = [

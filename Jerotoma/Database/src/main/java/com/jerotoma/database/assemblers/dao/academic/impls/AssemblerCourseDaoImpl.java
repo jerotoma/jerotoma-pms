@@ -27,7 +27,6 @@ import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerDepartmentDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 
@@ -38,16 +37,14 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
-	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
-	@Autowired AssemblerDepartmentDao assemblerDepartmentDao;
+	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;	
 	@Autowired AssemblerAcademicDisciplineDao assemblerAcademicDisciplineDao;
 	Map<String, Object> map;
 	
 	@PostConstruct
 	private void initialize() {
 		setDataSource(dataSource);
-		this.jdbcTemplate = getJdbcTemplate();
-		this.assemblerDepartmentDao.setAssemblerCourseDao(this);
+		this.jdbcTemplate = getJdbcTemplate();		
 	}
 
 	@Override
@@ -111,12 +108,14 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	private CourseVO mapCourse(ResultSet rs) throws SQLException {
 		CourseVO course = new CourseVO(rs);
 		course.setAcademicYear(findAcademicYear(course.getAcademicYearId()));		
-		course.setDepartment(findDepartmentByCourseId(course.getId()));
+		course.setDepartment(findDepartment(course.getDepartmentId()));
 		return course;
 	}
 	
-	private DepartmentVO findDepartmentByCourseId(Integer id) throws SQLException {		
-		return assemblerDepartmentDao.findObject(id);
+	private DepartmentVO findDepartment(Integer id) throws SQLException {		
+		String buildSql = new StringBuilder("SELECT d.id, d.name, d.created_on AS createdOn, d.updated_on AS updatedOn FROM ")
+				.append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ").append(" WHERE d.id = ? ").toString();		
+		return this.jdbcTemplate.query(buildSql, new DepartmentSingleResultProcessor(), id);
 	}
 
 	public class CourseSingleResultProcessor implements ResultSetExtractor<CourseVO>{
@@ -127,6 +126,18 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 				return mapCourse(rs);
 			}
 			return course;
+		}				
+	}
+	
+	public class DepartmentSingleResultProcessor implements ResultSetExtractor<DepartmentVO>{
+		@Override
+		public DepartmentVO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			DepartmentVO department = null;
+			if(rs.next()) {
+				department = new DepartmentVO(rs);
+				
+			}
+			return department;
 		}				
 	}
 	

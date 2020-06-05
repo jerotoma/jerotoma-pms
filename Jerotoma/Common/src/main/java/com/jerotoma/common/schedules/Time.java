@@ -106,7 +106,11 @@ public class Time {
 		}
 	}
 	
-	public static Time parse(String objectString) {
+	public static Time parse(String objectString) {	
+		
+		if (objectString.contains("stringTime")) {
+			objectString = objectString.substring(0, objectString.lastIndexOf(",")) + "}";
+		}
 		JSONObject jsonEndTime = new JSONObject(objectString.replace("=", ":"));
 		int hour = jsonEndTime.getInt("hour");
 		int minute = jsonEndTime.getInt("minute");

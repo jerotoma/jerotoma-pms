@@ -71,6 +71,7 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
     this.classService.loadJClassesByAcademicYear(academicYearId)
       .subscribe((mClasses: ClassView[]) => {
         this.isLoading = false;
+        this.events = [];
         if (mClasses && mClasses.length > 0) {
           mClasses.forEach( (mClass, index) => {
             const startTime =  getDateTime(mClass.meetingTime.startTime);

@@ -45,20 +45,8 @@ export class CourseCreateComponent implements OnInit {
     this.loadForm();
     this.loadAcademicYears();
     this.loadDepartmentList();
-    if (this.action === 'edit') {
-        this.loadCourse();
-    }
   }
-  patchCourse() {
-    this.courseForm.patchValue({
-      name: this.course.name,
-      description: this.course.description,
-      code: this.course.code,
-      id: this.course.id,
-      academicYearId: this.course.academicYear.id,
-      departmentId: this.course.department.id,
-    });
-  }
+
   dismiss() {
     this.ref.close();
   }
@@ -97,6 +85,9 @@ export class CourseCreateComponent implements OnInit {
     this.departmentService.loadDepartmentList().subscribe((departments: Department[] ) => {
       if (departments) {
         this.departments = departments;
+        if (this.action === 'edit') {
+            this.loadCourse();
+        }
         if (this.course) {
           this.patchCourse();
         }
@@ -122,9 +113,19 @@ export class CourseCreateComponent implements OnInit {
       name: ['', Validators.required],
       code: ['', Validators.required],
       description: [''],
-      academicYearId: ['', Validators.required],
+      academicYearId: [null, Validators.required],
       departmentId: [null, Validators.required],
     });
+  }
+  patchCourse() {
+    this.courseForm.patchValue({
+      id: this.course.id,
+      name: this.course.name,
+      code: this.course.code,
+      description: this.course.description,
+      academicYearId: this.course.academicYear.id,
+      departmentId: this.course.department.id,
+    }, {emitEvent: false});
   }
   loadCourse() {
     this.courseService.getCourse(parseInt(this.id, 10)).subscribe((course: Course) => {
@@ -146,5 +147,4 @@ export class CourseCreateComponent implements OnInit {
       userType: 'course',
     };
   }
-
 }

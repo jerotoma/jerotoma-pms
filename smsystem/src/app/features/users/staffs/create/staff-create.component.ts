@@ -7,7 +7,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { Staff, Parent, AddressWrapper, Address, UserLoginInput, UserLoginInputWrapper, ShowMessage, Position, ResponseWrapper } from 'app/models';
 import { UserService } from 'app/services/users';
 import { PositionService, ModalService  } from 'app/services';
-import { QueryParam , DateValidator, DateFormatter, USER_TYPE } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE} from 'app/utils';
 
 @Component({
   selector: 'app-staff-create',
@@ -103,7 +103,9 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   resetForms() {
     this.staffForm.reset();
     this.appAddress.resetForm();
-    this.appPassword.resetForm();
+    if (this.action === APP_ACTION_TYPE.create) {
+      this.appPassword.resetForm();
+    }
     this.ref.close();
   }
 
@@ -115,14 +117,14 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       middleNames: [null],
       phoneNumber: ['', Validators.required],
       emailAddress: [null],
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      username: [null],
+      password: [null],
+      confirmPassword: [null],
       position: ['', Validators.required],
       occupation: ['staff'],
       gender: ['', Validators.required],
       picture: [''],
-      userType: ['staff'],
+      userType: [USER_TYPE.staff],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
       address: [null, Validators.required],
     });
@@ -141,11 +143,9 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadStaff(staffId: number) {
-    this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
-      const resp = result;
-      const status = resp.status;
-      if (status !== null && status === 200) {
-        this.staff = resp.body.data;
+    this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((staff: Staff ) => {
+      if (staff) {
+        this.staff = staff;
         this.staffForm.patchValue({
           id: this.staff.id,
           firstName: this.staff.firstName,
@@ -155,9 +155,6 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           position: this.staff.position.id ,
           gender: this.staff.gender,
           phoneNumber: this.staff.phoneNumber,
-          username: this.userLoginInput.email,
-          password: this.userLoginInput.password,
-          confirmPassword: this.userLoginInput.confirmPassword,
           picture: this.staff.picture,
           birthDate: DateFormatter(this.staff.birthDate, 'YYYY/MM/DD', false),
           userType: USER_TYPE.staff,
@@ -167,9 +164,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
         this.appAddress.patchAddressValue(this.staff.address);
       }
     }, error => {
-      this.showMessage.error = true;
-      this.showMessage.success = false;
-      this.showMessage.message = error ? error.error.message : '';
+
     });
   }
 
@@ -191,7 +186,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           password: this.userLoginInput.password,
           confirmPassword: this.userLoginInput.confirmPassword,
         });
-        window.console.log(userLoginInputWrapper);
+       // window.console.log(userLoginInputWrapper);
     }
   }
 
