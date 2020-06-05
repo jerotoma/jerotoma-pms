@@ -51,7 +51,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/dashboard/admissions/students',
       },
       {
-        title: 'Teachers & Classes',
+        title: 'Classes',
         link: '/dashboard/admissions/classes',
       },
     ],
