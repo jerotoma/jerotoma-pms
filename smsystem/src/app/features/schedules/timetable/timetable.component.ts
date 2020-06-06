@@ -1,7 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterContentInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-
-import { NbDialogRef } from '@nebular/theme';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   TimeScope,
   Timetable,
@@ -27,7 +24,7 @@ import { APP_CONSTANTS, DAYS, getWeekDay, getDateTime } from 'app/utils';
   styleUrls: ['./timetable.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TimetableComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class TimetableComponent implements OnInit {
 
   timeSlot: TimeSlot;
   timeSlots: TimeSlot[];
@@ -44,14 +41,6 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
     private systemConfigService: SystemConfigService,
     private classService: ClassService,
   ) { }
-
-  ngAfterViewInit(): void {
-    // this.drawTimetable();
-  }
-
-  ngAfterContentInit(): void {
-
-  }
 
   ngOnInit() {
     this.loadTimeTableByCurrentAcademicYear(this.currentAcademicYear);
@@ -81,8 +70,8 @@ export class TimetableComponent implements OnInit, AfterViewInit, AfterContentIn
             const content = '<p> Room: ' + mClass.room.name + ' (' + mClass.room.code + ')</p><p> Teacher: ' + mClass.teacher.fullName + '</p><p> Time: ' + mClass.meetingTime.time + '</p>';
             this.events.push(new Event(courseName, weekDay, startTime, endTime, content));
           });
-          this.drawTimetable(this.events);
         }
+        this.drawTimetable(this.events);
       }, error => {
         this.isLoading = false;
       });

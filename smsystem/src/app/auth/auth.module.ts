@@ -2,16 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from 'app/shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
 import { AppAuthRoutingModule } from './auth-routing.module';
-import {
-  NbAuthModule,
-  NbPasswordAuthStrategy,
-  NbAuthJWTToken,
-  NbAuthService,
-  NbTokenService,
-  NbPasswordAuthStrategyOptions,
- } from '@nebular/auth';
+import { NbAuthModule } from '@nebular/auth';
 import {
   NbAlertModule,
   NbButtonModule,

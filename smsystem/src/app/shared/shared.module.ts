@@ -54,6 +54,7 @@ import {
   TimepickerComponent,
   TinyMCEComponent,
   CurrentAcademicYearComponent,
+  LogoComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -69,6 +70,7 @@ const COMPONENTS = [
   TimepickerComponent,
   CurrentAcademicYearComponent,
   TinyMCEComponent,
+  LogoComponent,
 ];
 
 const ENTRY_COMPONENTS = [

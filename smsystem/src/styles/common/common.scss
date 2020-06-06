@@ -69,7 +69,7 @@ nb-dialog-container {
   padding-top: 0.5rem;
 }
 .mat-header-cell {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -86,9 +86,6 @@ button {
 
 .nb-theme-default nb-card {
   max-height: 90vh !important;
-}
-.nb-theme-default nb-layout .layout .layout-container .content .columns nb-layout-column {
-   padding: 1.25rem 1.25rem 0.25rem;
 }
 nb-sidebar > div > div > nb-menu {
   margin-bottom: 6rem !important;

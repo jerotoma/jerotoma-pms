@@ -7,11 +7,15 @@ import { MENU_ITEMS } from './dashboard-menu';
   styleUrls: ['features.component.scss'],
   template: `
     <app-one-column-layout>
-      <nb-menu [items]="menu"></nb-menu>
+      <nb-menu
+        [autoCollapse]="autoCollapse"
+        [items]="menu">
+      </nb-menu>
       <router-outlet></router-outlet>
     </app-one-column-layout>
   `,
 })
 export class FeaturesComponent {
   menu = MENU_ITEMS;
+  autoCollapse: boolean = true;
 }
