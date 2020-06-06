@@ -1,10 +1,21 @@
-<div class="day-header-container">
-
-</div>
-<div class="grid-container">
-    <app-current-academic-year
-      [allowUpdate]="false"
-      (onChange)="onCurrentAcademicYearChange($event)"
-    ></app-current-academic-year>
-    <div class="timetable"></div>
-</div>
+<nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+  <nb-card-header>
+    Classes Schedule for Academic Year {{academicYear?.yearOfStudy}} - {{academicYear?.name}}
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-12">
+        <app-current-academic-year
+          [title]="'Change Current Academic Year'"
+          [allowUpdate]="false"
+          (onChange)="onCurrentAcademicYearChange($event)"
+        ></app-current-academic-year>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <div class="timetable"></div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

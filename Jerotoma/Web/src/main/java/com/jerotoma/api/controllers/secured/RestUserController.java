@@ -246,7 +246,8 @@ public class RestUserController extends BaseController {
 						UserConstant.USERNAME,
 						UserConstant.ADDRESS,
 						UserConstant.BIRTH_DATE,
-						UserConstant.GENDER
+						UserConstant.GENDER,
+						UserConstant.PHONE_NUMBER
 						));
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
@@ -296,7 +297,6 @@ public class RestUserController extends BaseController {
 				break;
 			case STUDENT:
 				studentAddress = new StudentAddress();
-				requiredFields.add(UserConstant.PHONE_NUMBER);
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
 				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				

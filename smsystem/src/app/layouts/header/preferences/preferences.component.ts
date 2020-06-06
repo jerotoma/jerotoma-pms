@@ -22,8 +22,10 @@ export class PreferencesComponent implements OnInit {
   themes = THEMES;
   userPreferenceTheme: string = APP_CONSTANTS.userPreferenceTheme;
   private destroy$: Subject<void> = new Subject<void>();
-  currentTheme = 'default';
+  systemTheme = 'default';
   userPictureOnly: boolean = false;
+  overrideUserTheme: boolean = false;
+  userTheme: string = 'default';
   user: any;
   overrideSystemConfig: SystemConfig = null;
   userPreference: UserPreference = null;
@@ -38,8 +40,8 @@ export class PreferencesComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.systemTheme = this.themeService.currentTheme;
     this.loadCurrentTheme();
-    this.currentTheme = this.themeService.currentTheme;
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
@@ -75,8 +77,10 @@ export class PreferencesComponent implements OnInit {
   loadCurrentTheme() {
     this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
-      if (result.currentTheme) {
-       this.currentTheme = result.currentTheme;
+      if (result) {
+       this.systemTheme = result.systemTheme;
+       this.overrideUserTheme = result.overrideUserTheme;
+       this.userTheme = result.userTheme;
       }
     });
   }

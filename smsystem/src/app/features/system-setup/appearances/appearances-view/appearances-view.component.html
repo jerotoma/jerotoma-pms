@@ -7,13 +7,13 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="inputEmail" class="label">Change Theme</label>
-                  <nb-select fullWidth [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
+                  <nb-select fullWidth [selected]="systemTheme" (selectedChange)="changeTheme($event)" status="primary">
                     <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
                   </nb-select>
                 </div>
                 <div class="form-group">
                   <nb-checkbox
-                    [checked]="overrideSystemConfig && overrideUserTheme"
+                    [checked]="overrideUserTheme"
                       name="overrideUserTheme"
                       id="overrideUserTheme"
                       (checkedChange)="overrideUserThemeCheckedChange($event)"
@@ -21,6 +21,25 @@
                   </div>
               </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <nb-alert status="warning" *ngIf="!overrideUserTheme">
+                The system user theme override is OFF
+              </nb-alert>
+              <div class="table-responsive">
+                <table class="table">
+                  <tr *ngIf="userTheme">
+                    <th>My Theme</th>
+                    <td class="text-primary">{{userTheme | titlecase}}</td>
+                  </tr>
+                  <tr>
+                    <th>System Theme</th>
+                    <td class="text-primary">{{systemTheme | titlecase }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+        </div>
       </nb-card-body>
     </nb-card>
   </div>

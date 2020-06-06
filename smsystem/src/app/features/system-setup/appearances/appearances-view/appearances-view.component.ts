@@ -22,8 +22,8 @@ export class AppearancesViewComponent implements OnInit {
   themes = THEMES;
   systemTheme: string = APP_CONSTANTS.currentTheme;
   private destroy$: Subject<void> = new Subject<void>();
-  currentTheme = 'default';
   mTheme: Theme = null;
+  userTheme: string = null;
   userPictureOnly: boolean = false;
   user: any;
   overrideUserTheme: boolean = false;
@@ -67,14 +67,16 @@ export class AppearancesViewComponent implements OnInit {
   loadCurrentTheme() {
     this.mThemeService.getUserAndSystemThemes()
     .subscribe((result: any) => {
-      if (result.currentTheme) {
-        this.currentTheme = result.currentTheme;
+      if (result) {
+        this.systemTheme = result.systemTheme;
+        this.overrideUserTheme = result.overrideUserTheme;
+        this.userTheme = result.userTheme;
        }
     });
   }
 
   themeInit() {
-    this.currentTheme = this.themeService.currentTheme;
+    this.systemTheme = this.themeService.currentTheme;
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
       .pipe(
@@ -84,13 +86,6 @@ export class AppearancesViewComponent implements OnInit {
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
 
       this.loadCurrentTheme();
-
-   /*  this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName); */
   }
 
   updateSystemConfigChange(systemConfig: SystemConfig) {

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.jerotoma.common.models.config.UserPreference;
+import com.jerotoma.common.viewobjects.ThemeVO;
 import com.jerotoma.services.BaseService;
 
 public interface UserPreferenceService extends BaseService<UserPreference> {

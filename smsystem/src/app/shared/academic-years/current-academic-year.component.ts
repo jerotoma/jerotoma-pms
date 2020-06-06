@@ -14,6 +14,7 @@ import { QueryParam, APP_CONSTANTS } from 'app/utils';
 export class CurrentAcademicYearComponent implements OnInit {
 
   @Input('allowUpdate') allowUpdate: boolean = false;
+  @Input('title') title: string = 'Current Academic Year';
   @Output() onChange: EventEmitter<AcademicYear> = new EventEmitter();
 
   academicYear: AcademicYear;

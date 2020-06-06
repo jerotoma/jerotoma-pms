@@ -1,13 +1,12 @@
 
 import { Injectable } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { SystemConfig, UserPreference, Theme, ResponseWrapper } from 'app/models';
-import { THEMES, APP_CONSTANTS } from 'app/utils';
-import { END_POINTS, QueryParam } from 'app/utils';
+import { Theme, ResponseWrapper } from 'app/models';
+import { THEMES, END_POINTS} from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -15,33 +14,26 @@ import { END_POINTS, QueryParam } from 'app/utils';
 export class ThemeService {
 
   themes = THEMES;
-  userPreferenceTheme: string = APP_CONSTANTS.userPreferenceTheme;
-  currentTheme = 'default';
-  defaultTheme = 'default';
-  mTheme: Theme = null;
-  userPictureOnly: boolean = false;
+  systemTheme: string = 'default';
+  userTheme: string = 'default';
   overrideUserTheme: boolean = false;
-  user: any;
-  systemConfig: SystemConfig = null;
-  overrideSystemConfig: SystemConfig = null;
-  userPreference: UserPreference = null;
+  mTheme: Theme = null;
 
   constructor(
     private http: HttpClient,
     private themeService: NbThemeService) { }
 
   getCurrentSystemTheme(): Observable<any> {
-    return this.http.get<any>(`${END_POINTS.pubThemes}`)
+    return this.http.get(`${END_POINTS.pubThemes}`)
       .pipe(map((resp: ResponseWrapper) => {
         if (resp.success) {
           this.mTheme = resp.data;
-          this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
-          if (this.systemConfig && this.systemConfig.value) {
-            this.currentTheme =  this.systemConfig.value;
-            this.themeService.changeTheme(this.currentTheme);
+         if (this.mTheme && this.mTheme.systemTheme) {
+            this.systemTheme =  this.mTheme.systemTheme;
           }
+          this.themeService.changeTheme(this.systemTheme);
         }
-        return { currentTheme: this.currentTheme };
+        return { systemTheme: this.systemTheme };
       }));
   }
   getUserAndSystemThemes(): Observable<any> {
@@ -49,26 +41,28 @@ export class ThemeService {
       .pipe(map( (resp: ResponseWrapper ) => {
         if (resp.success) {
           this.mTheme = resp.data;
-          this.overrideUserTheme  = false;
-          this.systemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.currentTheme : null;
-          this.userPreference = this.mTheme.mapUserPreferences ? this.mTheme.mapUserPreferences.currentUserTheme : null;
-          this.overrideSystemConfig = this.mTheme.mapSystemConfigs ? this.mTheme.mapSystemConfigs.overrideUserTheme : null;
-          this.currentTheme =  this.userPreference && this.userPreference.value ? this.userPreference.value : this.systemConfig.value;
-          if (this.overrideSystemConfig && this.overrideSystemConfig.value) {
-            this.overrideUserTheme  = this.overrideSystemConfig.value === 'true';
-          }
-          if (this.overrideUserTheme) {
-            this.currentTheme  = this.systemConfig && this.systemConfig.value ? this.systemConfig.value : this.defaultTheme;
-              this.themeService.changeTheme(this.currentTheme );
+          this.overrideUserTheme = false;
+          this.userTheme =  this.userTheme;
+          if (this.mTheme && this.mTheme.userTheme && !this.mTheme.overrideUserTheme) {
+            this.userTheme =  this.mTheme.userTheme;
+            this.overrideUserTheme = this.mTheme.overrideUserTheme;
+            this.themeService.changeTheme(this.userTheme);
+          } else if (this.mTheme && this.mTheme.systemTheme) {
+            this.systemTheme =  this.mTheme.systemTheme;
+            this.overrideUserTheme = this.mTheme.overrideUserTheme;
+            if (this.mTheme && this.mTheme.userTheme) {
+              this.userTheme =  this.mTheme.userTheme;
+            }
+            this.themeService.changeTheme(this.systemTheme);
           } else {
-            this.themeService.changeTheme(this.currentTheme);
+            this.themeService.changeTheme(this.systemTheme);
           }
         }
-        return { currentTheme: this.currentTheme};
+        return {
+          systemTheme: this.systemTheme,
+          overrideUserTheme: this.overrideUserTheme,
+          userTheme: this.userTheme,
+        };
       }));
-  }
-
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.message || 'Server error');
   }
 }

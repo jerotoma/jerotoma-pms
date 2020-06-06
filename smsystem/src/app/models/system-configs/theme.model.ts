@@ -1,5 +1,9 @@
 
 export interface Theme {
-  mapUserPreferences: any;
-  mapSystemConfigs: any;
+  systemThemeID: number;
+  systemTheme: string;
+  userTheme: string;
+  userThemeID: number;
+  overrideUserTheme: boolean;
+  overrideUserThemeID: number;
 }
