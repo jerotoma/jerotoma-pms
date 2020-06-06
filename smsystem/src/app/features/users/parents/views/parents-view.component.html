@@ -36,7 +36,7 @@
             <!-- Registered On Column -->
             <ng-container matColumnDef="createdOn">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Registered On</th>
-              <td mat-cell *matCellDef="let element"> {{element.createdOn}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.createdOn | date:'longDate'}}</td>
             </ng-container>
              <!-- action Column -->
             <ng-container matColumnDef="action">
