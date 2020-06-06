@@ -109,16 +109,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit(): void {
-    this.dashboardService.getDashboards(this.param).subscribe((result: ResponseWrapper) => {
-      console.log(result);
-    });
     this.loadDashboardCounters();
   }
 
   ngOnDestroy() {
     this.alive = false;
   }
-
 
   loadDashboardCounters() {
     this.dashboardService.getDashboardCount().subscribe((result: DashboardCounter) => {

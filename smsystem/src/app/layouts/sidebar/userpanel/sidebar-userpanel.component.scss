@@ -1,0 +1,61 @@
+@import 'src/styles/themes/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+
+@include nb-install-component() {
+  .user-panel {
+    white-space: nowrap;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    padding: 1px 10px 10px 1px;
+    overflow: hidden;
+  }
+
+  .user-panel> .image > img {
+    width: 100%;
+    max-width: 50px;
+    border: 1px solid #FFFFFF;
+    border-radius: 50%;
+    height: 50px!important;
+  }
+
+  img-circle {
+    border-radius: 50%;
+  }
+
+  img {
+    border: 0;
+    vertical-align: middle;
+  }
+
+  .user-panel > .info {
+    padding: 5px 5px 5px 15px;
+    line-height: .25rem;
+    position: absolute;
+    left: 55px;
+    top: 9px;
+  }
+
+  .user-panel > .info > a {
+    text-decoration: none;
+  }
+
+  .user-panel > .info > a,
+  .user-panel > .info > p {
+    line-height: .25rem;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  .user-panel:after {
+    clear: both;
+  }
+
+  .user-panel:before,
+  .user-panel:after {
+    content: " ";
+    display: table;
+  }
+}

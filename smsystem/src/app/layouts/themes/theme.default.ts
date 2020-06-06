@@ -9,7 +9,7 @@ const palette = {
 };
 
 const theme = {
-  fontMain: 'Open Sans, sans-serif',
+  fontMain: '"Roboto", Helvetica Neue, Helvetica, Arial, sans-serif;',
   fontSecondary: 'Raleway, sans-serif',
 
   bg: '#ffffff',

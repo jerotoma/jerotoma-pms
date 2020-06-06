@@ -7,13 +7,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Dashboard',
-    icon: 'keypad',
+    icon: 'keypad-outline',
     link: '/dashboard',
     home: true,
   },
   {
     title: 'Resources',
-    icon: 'monitor',
+    icon: 'monitor-outline',
     link: '/dashboard/resources',
   },
   {
@@ -22,7 +22,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Users',
-    icon: 'people',
+    icon: 'people-outline',
     children: [
       {
         title: 'Teachers',
@@ -44,7 +44,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Admission',
-    icon: 'book-open',
+    icon: 'book-open-outline',
     children: [
       {
         title: 'Students',
@@ -58,7 +58,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Schedules',
-    icon: 'shield',
+    icon: 'shield-outline',
     children: [
       {
         title: 'Meeting Times',
@@ -80,7 +80,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'System Setup',
-    icon: 'shuffle-2-outline',
+    icon: 'shuffle-outline',
     link: '/dashboard/system-setup',
     children: [
       {
@@ -115,7 +115,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Security Setup',
-    icon: 'shield',
+    icon: 'shield-outline',
     children: [
       {
         title: 'Roles',

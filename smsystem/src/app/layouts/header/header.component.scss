@@ -36,7 +36,7 @@
       @include nb-ltr(padding-right, 1.25rem);
       @include nb-rtl(padding-left, 1.25rem);
       text-decoration: none;
-      color: nb-theme($white-color);
+      color: nb-theme(color-basic-100);
       nb-icon {
         font-size: 1.75rem;
       }
@@ -44,8 +44,6 @@
     .logo {
       padding: 0 1.25rem;
       font-size: 1.75rem;
-      @include nb-ltr(border-left, 1px solid nb-theme(divider-color));
-      @include nb-rtl(border-right, 1px solid nb-theme(divider-color));
       white-space: nowrap;
       text-decoration: none;
     }
@@ -67,5 +65,5 @@
 }
 
 .nb-theme-default nb-user .user-name {
-  color: $white-color;
+  color: color-basic-100;
 }

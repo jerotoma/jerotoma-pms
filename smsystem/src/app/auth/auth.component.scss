@@ -8,11 +8,21 @@
   border: 1px solid transparent;
 }
 
+nb-card.auth-ui {
+  border: 0 solid transparent;
+  border-radius: 0.25rem;
+  box-shadow: none !important;
+}
+
 @media (min-width: 769px) {
   .navbar {
       border-radius: 0;
       padding-left: 20px;
       padding-right: 20px;
+  }
+  .auth-ui {
+    width:450px;
+    margin: auto;
   }
 }
 

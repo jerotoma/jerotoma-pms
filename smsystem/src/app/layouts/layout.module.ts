@@ -26,6 +26,7 @@ import {
 
 import { FooterComponent } from './footer';
 import { HeaderComponent } from './header/header.component';
+import { SidebarUserPanelComponent } from './sidebar';
 
 import {
   OneColumnLayoutComponent,
@@ -61,6 +62,7 @@ const COMPONENTS = [
   OneColumnLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
+  SidebarUserPanelComponent,
 ];
 const PIPES = [
   CapitalizePipe,

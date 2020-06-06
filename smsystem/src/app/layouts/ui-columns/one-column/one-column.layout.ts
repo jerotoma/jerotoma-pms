@@ -12,8 +12,8 @@ import { WindowModeBlockScrollService } from 'app/services';
       <nb-layout-header fixed>
         <app-header></app-header>
       </nb-layout-header>
-
       <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
+        <app-sidebar-userpanel></app-sidebar-userpanel>
         <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
 
