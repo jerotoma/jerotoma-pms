@@ -94,8 +94,8 @@ export class MyCourseComponent implements OnInit {
             this.academicYear = academicYear;
           }
         });
-        if (this.academicYear) {
-          this.loadStudentJClassesByAcademicYear(this.academicYear.id, this.student.id);
+        if (this.academicYear && this.userType === USER_TYPE.student) {
+          this.loadStudentJClassesByAcademicYear(this.academicYear.id, this.userId);
         }
       }
     });

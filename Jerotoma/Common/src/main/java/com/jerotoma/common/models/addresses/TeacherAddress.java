@@ -34,6 +34,7 @@ public class TeacherAddress {
 	
 	@ManyToOne
    	@JoinColumn(name="teacher_id")
+	@JsonManagedReference
 	private Teacher teacher;
 	
 	@OneToOne

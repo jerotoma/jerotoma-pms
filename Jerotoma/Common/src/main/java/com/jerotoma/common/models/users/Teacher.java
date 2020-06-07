@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Department;
@@ -37,7 +38,7 @@ public class Teacher extends Person implements Serializable{
 	private Integer id;
 	
 	@OneToMany(mappedBy="teacher")
-	@JsonManagedReference
+	@JsonBackReference
 	private Set<TeacherAddress> teacherAddresses;
 		
 	@ManyToOne

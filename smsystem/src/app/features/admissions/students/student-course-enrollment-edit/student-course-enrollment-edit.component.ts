@@ -195,7 +195,9 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   }
 
   loadStudentClasses(studentClassId: number) {
+    this.isLoading = true;
     this.studentClassService.getStudentClass(studentClassId).subscribe((studentClass: StudentClass) => {
+      this.isLoading = false;
       if (studentClass) {
         this.student = studentClass.student;
         this.academicYear = studentClass.academicYear;
@@ -209,6 +211,8 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
           jClassIds: this.jClassIds,
         });
       }
+    }, error => {
+      this.isLoading = false;
     });
   }
   patchStudent(student: Student) {

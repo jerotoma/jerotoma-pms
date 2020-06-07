@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef, NbDateService } from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
@@ -18,7 +17,7 @@ import {
 } from 'app/models';
 
 import { PositionService , UserService, DepartmentService, ModalService } from 'app/services';
-import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, APP_ACTION_TYPE, USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-teacher-create',
@@ -63,7 +62,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     this.loadForm();
   }
   ngAfterViewInit() {
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.loadTeacher(parseInt(this.teacherId, 10));
     }
   }
@@ -75,7 +74,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     this.teacher = this.teacherForm.value;
     this.showMessage.success = false;
     this.showMessage.error = false;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateTeacher();
     } else {
       this.userService.addUser(this.teacher).subscribe((resp: ResponseWrapper) => {
@@ -103,7 +102,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       position: ['', Validators.required],
-      occupation: ['Teacher'],
+      occupation: [USER_TYPE.teacher],
       userCode: [''],
       gender: ['', Validators.required],
       picture: [''],
@@ -114,7 +113,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       confirmPassword: [null],
       userId: [null],
       birthDate: ['', DateValidator('yyyy/MM/dd')],
-      userType: ['teacher'],
+      userType: [USER_TYPE.teacher],
       department: ['', Validators.required],
       address: [null, Validators.required],
     });
@@ -127,7 +126,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: 'teacher',
+      userType: USER_TYPE.teacher,
     };
   }
 
@@ -138,7 +137,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadTeacher(teacherId: number) {
-    this.userService.loadUser(teacherId, 'teachers').subscribe((teacher: Teacher) => {
+    this.userService.loadUser(teacherId, USER_TYPE.teacher).subscribe((teacher: Teacher) => {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;

@@ -78,4 +78,26 @@ public class Parent extends Person implements Serializable{
 	public void setParentAddresses(List<ParentAddress> parentAddresses) {
 		this.parentAddresses = parentAddresses;
 	}
+
+	@Override
+	public int hashCode() {		
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		
+		if (obj instanceof Parent ) {
+			Parent p = (Parent)obj;			
+			if (p.id == this.id) {
+				return true;
+			}
+		}
+		return super.equals(obj);
+	}
+	
+	
 }

@@ -62,8 +62,9 @@
       display: none;
     }
   }
+  .nb-theme-default nb-user .user-name {
+    color: color-basic-100;
+  }
 }
 
-.nb-theme-default nb-user .user-name {
-  color: color-basic-100;
-}
+

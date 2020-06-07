@@ -499,13 +499,27 @@ public class RestUserController extends BaseController {
 				if (teacher.getId() == null) {
 					throw new FieldIsRequiredException("Teacher ID is required");
 				}
-				teacherService.findObject(teacher.getId());
+				Teacher mTeacher = teacherService.findObject(teacher.getId());
+							
+				mTeacher.setFirstName(teacher.getFirstName());
+				mTeacher.setLastName(teacher.getLastName());
+				mTeacher.setMiddleNames(teacher.getMiddleNames());
+				mTeacher.setFullName(teacher.getFullName());
+				mTeacher.setPosition(position);
+				mTeacher.setDepartment(department);
+				mTeacher.setAge(teacher.getAge());
+				mTeacher.setBirthDate(teacher.getBirthDate());
+				mTeacher.setGender(teacher.getGender());
+				mTeacher.setOccupation(teacher.getOccupation());
+				mTeacher.setPhoneNumber(teacher.getPhoneNumber());
+				mTeacher.setUserCode(teacher.getUserCode());
+				mTeacher.setPicture(teacher.getPicture());
+				mTeacher.setUpdatedOn(new Date());
+				mTeacher.setUpdatedBy(authUser.getId());
+				mTeacher.setAddress(teacher.getAddress());
 				
-				teacher.setPosition(position);
-				teacher.setDepartment(department);
-				teacher.setUpdatedBy(authUser.getId());
 				address = teacher.getAddress();
-				teacher = teacherService.updateObject(teacher);
+				teacher = teacherService.updateObject(mTeacher);
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);
@@ -527,6 +541,7 @@ public class RestUserController extends BaseController {
 				mStudent.setBirthDate(student.getBirthDate());
 				mStudent.setGender(student.getGender());
 				mStudent.setOccupation(student.getOccupation());
+				mStudent.setPhoneNumber(student.getPhoneNumber());
 				mStudent.setParentIds(student.getParentIds());
 				mStudent.setUpdatedOn(new Date());
 				mStudent.setUpdatedBy(authUser.getId());
@@ -555,14 +570,26 @@ public class RestUserController extends BaseController {
 				if (staff.getId() == null) {
 					throw new FieldIsRequiredException("Staff ID is required");
 				}
+				Staff mStaff = staffService.findObject(staff.getId());
+				mStaff.setFirstName(staff.getFirstName());
+				mStaff.setLastName(staff.getLastName());
+				mStaff.setMiddleNames(staff.getMiddleNames());
+				mStaff.setFullName(staff.getFullName());
+				mStaff.setAge(staff.getAge());
+				mStaff.setBirthDate(staff.getBirthDate());
+				mStaff.setGender(staff.getGender());
+				mStaff.setOccupation(staff.getOccupation());
+				mStaff.setPhoneNumber(staff.getPhoneNumber());				
+				mStaff.setUpdatedOn(new Date());				
+				mStaff.setAddress(staff.getAddress());
+				address = staff.getAddress();				
+				mStaff.setPosition(position);
+				mStaff.setUpdatedBy(authUser.getId());
 				
-				staff.setPosition(position);
-				staff.setUpdatedBy(authUser.getId());
-				address = staff.getAddress();
-				staff = staffService.updateObject(staff);
-				
+				staff = staffService.updateObject(mStaff);				
 				address.setUpdatedBy(authUser.getId());
-				address = addressService.updateObject(address); 				
+				address = addressService.updateObject(address); 
+				
 				instance.setData(staff);				
 				break;
 			case PARENT:
@@ -582,6 +609,7 @@ public class RestUserController extends BaseController {
 				mParent.setBirthDate(parent.getBirthDate());
 				mParent.setGender(parent.getGender());
 				mParent.setOccupation(parent.getOccupation());
+				mParent.setPhoneNumber(parent.getPhoneNumber());	
 				mParent.setStudentIds(parent.getStudentIds());
 				mParent.setUpdatedOn(new Date());
 				mParent.setUpdatedBy(authUser.getId());

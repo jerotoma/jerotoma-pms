@@ -7,7 +7,7 @@ import { Student, Parent } from 'app/models/users';
 import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper } from 'app/models';
 import { PositionService, UserService, ModalService } from 'app/services';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
-import { QueryParam , DateValidator, DateFormatter, USER_TYPE } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 
@@ -55,12 +55,14 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     this.onCredentialInputChanges();
   }
   ngAfterViewInit() {
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.loadStudent(parseInt(this.studentId, 10));
     }
   }
   dismiss() {
-    this.ref.close();
+    this.ref.close({
+      confirmed: true,
+    });
   }
   onSubmit() {
     this.parentIds = [];
@@ -72,7 +74,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       this.parentIds.push(this.selectedParents[i].id);
     }
     this.student.parentIds = this.parentIds;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateData(this.student);
     } else {
       this.postData(this.student);
@@ -98,8 +100,9 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
   resetForms() {
     this.studentForm.reset();
-    this.appAddress.resetForm();
-    this.appPassword.resetForm();
+    if (this.action === APP_ACTION_TYPE.create) {
+      this.appPassword.resetForm();
+    }
     this.dismiss();
   }
 

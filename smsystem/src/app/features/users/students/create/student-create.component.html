@@ -94,20 +94,33 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <div class="form-control-group">
                   <label for="student-middle-names" class="label">Other Names</label>
+                  <input
+                      type="text"
+                      nbInput fullWidth
+                      autocomplete="new-password"
+                      id="student-middle-names"
+                      formControlName="middleNames"
+                      placeholder="Other  Names">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                  <label for="student-phone-number" class="label">Emergency Phone Number</label>
                   <input
                         type="text"
                         nbInput fullWidth
                         autocomplete="new-password"
-                        id="student-middle-names"
-                        formControlName="middleNames"
-                        placeholder="Other  Names">
+                        id="student-phone-number"
+                        formControlName="phoneNumber"
+                        placeholder="Emergency Phone Number">
                 </div>
               </div>
             </div>
             <app-user-login-input
+              *ngIf="action === 'create'"
               [userLoginInput]="userLoginInput"
               (onChanges)="onUserLoginInputChange($event)">
             </app-user-login-input>
@@ -140,22 +153,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <label for="student-phone-number" class="label">Emergency Phone Number</label>
-                  <input
-                        type="text"
-                        nbInput fullWidth
-                        autocomplete="new-password"
-                        id="student-phone-number"
-                        formControlName="phoneNumber"
-                        placeholder="Emergency Phone Number">
-                </div>
-              </div>
-              <div class="col-md-6">
-              </div>
-            </div>
             <app-address
               [address]="studentForm.controls['address'].value"
               (onChanges)="onStudentAddressChange($event)">
@@ -163,7 +160,7 @@
         </nb-card-body>
         <nb-card-footer>
             <div class="form-control-group">
-              <button class='push-right' [disabled]="!studentForm.valid" type="submit" nbButton hero status="success">Create Student</button>
+              <button class='push-right' [disabled]="!studentForm.valid" type="submit" nbButton hero status="success">{{action === 'create' ? 'Create' : 'Save Changes'}}</button>
               <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
             </div>
         </nb-card-footer>

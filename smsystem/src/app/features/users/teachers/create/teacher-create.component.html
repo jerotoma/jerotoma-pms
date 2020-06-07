@@ -52,26 +52,26 @@
                       <div class="form-control-group">
                         <label for="teacher-middle-names" class="label">Other Names</label>
                         <input
-                              type="text"
-                              nbInput fullWidth
-                              autocomplete="new-password"
-                              required
-                              id="teacher-middle-names"
-                              formControlName="middleNames"
-                              placeholder="Other  Names">
+                            type="text"
+                            nbInput fullWidth
+                            autocomplete="new-password"
+                            required
+                            id="teacher-middle-names"
+                            formControlName="middleNames"
+                            placeholder="Other  Names">
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-control-group">
                         <label for="teacher-phone-number" class="label">Phone Number</label>
                         <input
-                              type="text"
-                              nbInput fullWidth
-                              autocomplete="new-password"
-                              required
-                              id="teacher-phone-number"
-                              formControlName="phoneNumber"
-                              placeholder="Phone Number">
+                            type="text"
+                            nbInput fullWidth
+                            autocomplete="new-password"
+                            required
+                            id="teacher-phone-number"
+                            formControlName="phoneNumber"
+                            placeholder="Phone Number">
                       </div>
                     </div>
                   </div>
@@ -164,7 +164,14 @@
                       (onChanges)="onAddressChange($event)"></app-address>
               </nb-card-body>
               <nb-card-footer>
-                <button class='push-right' [disabled]="!teacherForm.valid" type="submit" nbButton hero status="success">Submit</button>
+                <button
+                  class='push-right'
+                  [disabled]="!teacherForm.valid"
+                  type="submit"
+                  nbButton hero
+                  status="success">
+                    {{action === 'create' ? 'Create' : 'Save Changes'}}
+                </button>
                 <button  type='button'  class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
               </nb-card-footer>
             </nb-card>
