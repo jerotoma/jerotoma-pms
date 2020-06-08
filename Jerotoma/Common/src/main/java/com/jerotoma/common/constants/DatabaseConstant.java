@@ -35,6 +35,7 @@ public class DatabaseConstant {
 		public static final String MEETING_TIMES = "meeting_times";
 		public static final String WORK_DAYS = "work_days";
 		public static final String DEPARTMENTS = "departments";
+		public static final String CLASS_ATTENDANCES = "class_attendances";
 	}
 	
 	

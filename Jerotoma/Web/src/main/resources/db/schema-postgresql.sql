@@ -802,4 +802,36 @@
 		        ON UPDATE CASCADE
 		        ON DELETE CASCADE
 		);
+		
+		
+		/**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			CLASS ATTENDANCE RELATED TABLES				  	  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for class_attendances
+		CREATE TABLE IF NOT EXISTS public.class_attendances(
+		    id BIGSERIAL PRIMARY KEY,
+		    class_id BIGINT NOT NULL,
+		   	academic_year_id BIGINT NOT NULL,
+		   	attendance_date timestamp with time zone NOT NULL,
+		   	added_by bigint NOT NULL,
+		    created_on timestamp with time zone NOT NULL,
+		  	updated_on timestamp with time zone NOT NULL,
+		  	UNIQUE(class_id, academic_year_id, attendance_date),
+		    CONSTRAINT user_fkey FOREIGN KEY (added_by)
+		        REFERENCES public.users (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE,
+			CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
+		        REFERENCES public.academic_years (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE,
+			CONSTRAINT classes_fkey FOREIGN KEY (class_id)
+		        REFERENCES public.classes (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);
+		
 

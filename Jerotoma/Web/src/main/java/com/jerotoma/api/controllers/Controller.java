@@ -1,4 +1,4 @@
-package com.jerotoma.api.controllers.secured;
+package com.jerotoma.api.controllers;
 
 import java.util.Map;
 

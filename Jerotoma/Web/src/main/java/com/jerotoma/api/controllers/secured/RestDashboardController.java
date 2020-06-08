@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
-import com.jerotoma.common.QueryParam;
+import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
@@ -46,7 +46,7 @@ public class RestDashboardController extends BaseController implements Controlle
 		this.logRequestDetail("GET : " + EndPointConstants.REST_DASHBOARD_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);								
+		// QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);								
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(map);

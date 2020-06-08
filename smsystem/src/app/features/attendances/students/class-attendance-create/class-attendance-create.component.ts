@@ -3,8 +3,8 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { ResponseWrapper,  ClassView, AcademicYear } from 'app/models';
-import { ModalService, AcademicYearService, ClassService} from 'app/services';
+import { ResponseWrapper,  ClassView, AcademicYear, ClassAttendanceParam, ClassAttendance } from 'app/models';
+import { ModalService, AcademicYearService, ClassService, StudentAttendanceService } from 'app/services';
 import { APP_ACTION_TYPE, DateValidator } from 'app/utils';
 
 @Component({
@@ -26,11 +26,13 @@ export class ClassAttendenceCreateComponent implements OnInit {
   jClasses: ClassView[];
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
+  classAttendanceParam: ClassAttendanceParam;
 
   constructor(
     private academicYearService: AcademicYearService,
     private classService: ClassService,
     private formBuilder: FormBuilder,
+    private studentAttendanceService: StudentAttendanceService,
     protected ref: NbDialogRef<ClassAttendenceCreateComponent>) {}
 
   ngOnInit() {
@@ -46,7 +48,14 @@ export class ClassAttendenceCreateComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.classAttendanceParam = this.classAttendanceCreateForm.value;
+    this.studentAttendanceService.createClassAttendance(this.classAttendanceParam)
+    .subscribe((classAttendance: ClassAttendance) => {
+      this.dismiss();
+      if (classAttendance) {
+        window.console.log(classAttendance);
+      }
+    });
   }
 
   loadForm() {
@@ -54,7 +63,7 @@ export class ClassAttendenceCreateComponent implements OnInit {
       id: [null],
       academicYearId: [null, Validators.required],
       classId: ['', Validators.required ],
-      attendanceDateTime: [null, DateValidator('yyyy/MM/dd')],
+      attendanceDate: [null, DateValidator('yyyy/MM/dd')],
     });
     this.onChanges();
   }

@@ -47,20 +47,20 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-control-group">
-                    <label for="student-attendanceDateTime" class="label">Attendance Date</label>
+                    <label for="class-attendanceDate" class="label">Attendance Date</label>
                     <input
-                        [nbDatepicker]="attendanceDateTime"
+                        [nbDatepicker]="attendanceDate"
                         nbInput fullWidth
-                        id="student-attendanceDateTime"
-                        formControlName="attendanceDateTime"
-                        [status]="classAttendanceCreateForm.controls['attendanceDateTime'].invalid && classAttendanceCreateForm.controls['attendanceDateTime'].touched ? 'danger' : ''"
+                        id="class-attendanceDate"
+                        formControlName="attendanceDate"
+                        [status]="classAttendanceCreateForm.controls['attendanceDate'].invalid && classAttendanceCreateForm.controls['attendanceDate'].touched ? 'danger' : ''"
                         placeholder="Attendance Date">
-                    <ng-container *ngIf="classAttendanceCreateForm.controls['attendanceDateTime'].invalid && classAttendanceCreateForm.controls['attendanceDateTime'].touched">
+                    <ng-container *ngIf="classAttendanceCreateForm.controls['attendanceDate'].invalid && classAttendanceCreateForm.controls['attendanceDate'].touched">
                       <p class="error-message">
                         Attendance Date is required!
                       </p>
                     </ng-container>
-                    <nb-datepicker #attendanceDateTime></nb-datepicker>
+                    <nb-datepicker #attendanceDate></nb-datepicker>
                   </div>
               </div>
               </div>

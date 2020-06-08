@@ -25,5 +25,6 @@ export const END_POINTS = {
   userPreferences: '/api/secured/user-preferences',
   pubUserPreferences: '/api/public/user-preferences',
   restDashboard: '/api/secured/dashboard',
+  attendances: '/api/secured/attendances',
 
 };
