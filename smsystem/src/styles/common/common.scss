@@ -25,13 +25,17 @@
       display: block;
     }
   }
+  @include media-breakpoint-up(sm) {
+
+  }
+
+  @include media-breakpoint-up(md) {
+
+  }
 
   @include media-breakpoint-down(lg) {
     button {
       padding: 0.8rem;
-    }
-    nb-dialog-container {
-      width:700px;
     }
   }
 
@@ -39,6 +43,9 @@
     button {
       padding: 0.25rem;
     }
+  }
+  @include media-breakpoint-up(xl) {
+
   }
 }
 
@@ -60,9 +67,6 @@ button {
 .push-left {
   float: left;
 }
-nb-dialog-container {
-  width:1000px;
-}
 
 .form-control-group {
   margin-top: 0.5rem;
@@ -83,13 +87,19 @@ button {
   cursor: pointer;
   border: none;
 }
-
+.nb-theme-cosmic nb-card,
+.nb-theme-corporate nb-card,
+.nb-theme-dark nb-card,
 .nb-theme-default nb-card {
   max-height: 90vh !important;
 }
 nb-sidebar > div > div > nb-menu {
   margin-bottom: 6rem !important;
 }
+
+.nb-theme-cosmic nb-list-item:hover,
+.nb-theme-corporate nb-list-item:hover,
+.nb-theme-dark nb-list-item:hover,
 .nb-theme-default nb-list-item:hover {
   cursor: pointer;
   background-color: #edf1f7;
@@ -100,10 +110,12 @@ nb-sidebar > div > div > nb-menu {
 }
 
 button,
+.nb-theme-cosmic [nbButton].appearance-hero,
+.nb-theme-corporate [nbButton].appearance-hero,
+.nb-theme-dark [nbButton].appearance-hero,
 .nb-theme-default [nbButton].appearance-hero {
   text-transform: none;
 }
 .capitalize {
   text-transform: capitalize;
 }
-

@@ -1,0 +1,76 @@
+<div class='row card-row'>
+  <div class="card-col col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="classAttendanceCreateForm" class="step-container" (ngSubmit)="onSubmit()">
+          <nb-card class="dialog-card" size="medium">
+            <nb-card-header status="danger">Create New Class Attendance</nb-card-header>
+            <nb-card-body
+              [nbSpinner]="isLoading"
+              nbSpinnerStatus="success"
+              nbSpinnerSize="large"
+              nbSpinnerMessage="Loading Classes....">
+              <div class="row">
+                  <div class="col-md-12">
+                      <div class="form-control-group">
+                          <label for="class-academicYear" class="label">Class Academic Year</label>
+                          <nb-select
+                            fullWidth
+                            placeholder="Class Academic Year"
+                            formControlName="academicYearId"
+                            id="class-academicYear">
+                            <nb-option
+                                *ngFor='let acad of academicYears'
+                                [value]="acad.id">
+                                {{acad.name}} - {{acad.yearOfStudy}}
+                            </nb-option>
+                          </nb-select>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="form-control-group">
+                        <label for="class-classId" class="label">Class </label>
+                        <nb-select
+                          fullWidth
+                          placeholder="Class Name"
+                          formControlName="classId"
+                          id="class-classId">
+                          <nb-option
+                            *ngFor="let jClass of jClasses"
+                            [value]="jClass.id">
+                            {{jClass.course.name}}
+                          </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-control-group">
+                    <label for="student-attendanceDateTime" class="label">Attendance Date</label>
+                    <input
+                        [nbDatepicker]="attendanceDateTime"
+                        nbInput fullWidth
+                        id="student-attendanceDateTime"
+                        formControlName="attendanceDateTime"
+                        [status]="classAttendanceCreateForm.controls['attendanceDateTime'].invalid && classAttendanceCreateForm.controls['attendanceDateTime'].touched ? 'danger' : ''"
+                        placeholder="Attendance Date">
+                    <ng-container *ngIf="classAttendanceCreateForm.controls['attendanceDateTime'].invalid && classAttendanceCreateForm.controls['attendanceDateTime'].touched">
+                      <p class="error-message">
+                        Attendance Date is required!
+                      </p>
+                    </ng-container>
+                    <nb-datepicker #attendanceDateTime></nb-datepicker>
+                  </div>
+              </div>
+              </div>
+            </nb-card-body>
+            <nb-card-footer>
+                <button class='push-right' [disabled]="!classAttendanceCreateForm.valid" type="submit" nbButton hero status="success">Create New Class Attendance</button>
+                <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss(false)">Cancel</button>
+            </nb-card-footer>
+          </nb-card>
+      </form>
+    </div>
+</div>
+

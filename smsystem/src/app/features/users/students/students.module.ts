@@ -79,7 +79,6 @@ const MODULES = [
     NbDialogModule.forRoot({
       closeOnBackdropClick: false,
       hasScroll: false,
-
     }),
     NbWindowModule.forRoot(),
     StudentsRoutingModule,

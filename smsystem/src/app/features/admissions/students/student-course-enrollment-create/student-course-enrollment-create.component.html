@@ -4,8 +4,8 @@
       <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
         <nb-card-header status="danger">{{ title }}</nb-card-header>
         <nb-card-body>
-        <div class='row'>
-            <div class='col-md-6'>
+          <div class='row'>
+            <div class='col-md-12'>
               <app-search-user
                 [userType]="userType"
                 title="Select Student"
@@ -14,7 +14,7 @@
             </div>
           </div>
           <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                   <div class="form-control-group">
                       <label for="class-academicYear" class="label">Class Academic Year</label>
                       <nb-select

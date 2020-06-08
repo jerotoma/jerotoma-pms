@@ -8,6 +8,7 @@ import { ECommerceModule } from './resources/e-commerce.module';
 import { SecuritiesModule} from './securities/securities.module';
 import { FeaturesRoutingModule } from './features-routing.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { AttendancesModule } from './attendances/attendances.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
     ECommerceModule,
     MiscellaneousModule,
     SecuritiesModule,
+    AttendancesModule,
   ],
   declarations: [
     FeaturesComponent,

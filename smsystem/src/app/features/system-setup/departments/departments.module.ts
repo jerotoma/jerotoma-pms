@@ -57,7 +57,10 @@ const MODULES = [
   MatPaginatorModule,
   MatIconModule,
   MatMenuModule,
-  NbDialogModule.forRoot(),
+  NbDialogModule.forRoot({
+    closeOnBackdropClick: false,
+    hasScroll: false,
+  }),
 ];
 
 const SERVICES = [

@@ -58,7 +58,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Schedules',
-    icon: 'shield-outline',
+    icon: 'calendar-outline',
     children: [
       {
         title: 'Meeting Times',
@@ -71,6 +71,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Timetable',
         link: '/dashboard/schedules/timetable',
+      },
+    ],
+  },
+  {
+    title: 'Attendences',
+    icon: 'person-done-outline',
+    children: [
+      {
+        title: 'Students',
+        link: '/dashboard/attendances/students',
+      },
+      {
+        title: 'Teachers',
+        link: '/dashboard/attendances/teachers',
+      },
+      {
+        title: 'Staffs',
+        link: '/dashboard/attendances/staffs',
       },
     ],
   },

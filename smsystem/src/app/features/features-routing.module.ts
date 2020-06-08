@@ -5,7 +5,7 @@ import { FeaturesComponent } from './features.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './resources/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import { AuthGuard } from '../services/guards/auth-guard.service';
+import { AuthGuard } from 'app/services';
 
 const routes: Routes = [{
   path: '',
@@ -54,6 +54,11 @@ const routes: Routes = [{
       path: 'schedules',
       loadChildren: () => import('./schedules/schedules.module')
         .then(m => m.SchedulesModule),
+    },
+    {
+      path: 'attendances',
+      loadChildren: () => import('./attendances/attendances.module')
+        .then(m => m.AttendancesModule),
     },
     {
       path: '',

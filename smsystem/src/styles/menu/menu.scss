@@ -1,21 +1,33 @@
  @import '../colors/color-variables';
 
+ .nb-theme-cosmic nb-menu .menu-item > .menu-items,
+.nb-theme-corporate nb-menu .menu-item > .menu-items,
+.nb-theme-dark nb-menu .menu-item > .menu-items,
 .nb-theme-default nb-menu .menu-item > .menu-items {
   padding-right: 0;
   padding-left: 0;
   margin-top: 10px;
 }
 
+.nb-theme-cosmic nb-menu .menu-item > .menu-items > .menu-item a,
+.nb-theme-corporate nb-menu .menu-item > .menu-items > .menu-item a,
+.nb-theme-dark nb-menu .menu-item > .menu-items > .menu-item a,
 .nb-theme-default nb-menu .menu-item > .menu-items > .menu-item a {
   padding-left: 2.75rem;
 }
 
+.nb-theme-cosmic nb-context-menu,
+.nb-theme-corporate nb-context-menu,
+.nb-theme-dark nb-context-menu,
 .nb-theme-default nb-context-menu {
   background-color: $black-color-1;
   position: relative;
   opacity: 1;
 }
 
+.nb-theme-cosmic nb-menu .menu-item,
+.nb-theme-corporate nb-menu .menu-item,
+.nb-theme-dark nb-menu .menu-item,
 .nb-theme-default nb-menu .menu-item {
   border-bottom: none;
 }

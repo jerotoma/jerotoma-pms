@@ -1,7 +1,7 @@
 <div class='row'>
     <div class="col-md-12 col-lg-12 col-xxxl-12">
         <form [formGroup]="classForm" class="step-container" (ngSubmit)="onSubmit()">
-        <nb-card>
+        <nb-card class="dialog-card" >
           <nb-card-header status="danger" >{{ title }}</nb-card-header>
           <nb-card-body
             [nbSpinner]="isLoading"
@@ -9,7 +9,7 @@
             nbSpinnerSize="large"
             nbSpinnerMessage="Loading Classes....">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="class-academicYear" class="label">Class Academic Year</label>
                         <nb-select
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="class-course" class="label">Class Course</label>
                         <nb-select
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="class-teacher" class="label">Class Teacher</label>
                         <nb-select
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-control-group">
                     <label for="class-capacity" class="label">Class Capacity</label>
                     <input
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="class-classRoom" class="label">Room</label>
                         <nb-select
@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="form-control-group">
                         <label for="class-meetingTime" class="label">Meeting Time</label>
                         <nb-select

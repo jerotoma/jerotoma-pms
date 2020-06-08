@@ -72,7 +72,10 @@ const MODULES = [
   NbInputModule,
   NbIconModule,
   NbAlertModule,
-  NbDialogModule.forRoot(),
+  NbDialogModule.forRoot({
+    closeOnBackdropClick: false,
+    hasScroll: false,
+  }),
   NbToastrModule.forRoot(),
   ClassesRoutingModule,
 ];

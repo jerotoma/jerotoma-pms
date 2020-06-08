@@ -1,0 +1,53 @@
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '../themes/themes';
+
+.cdk-global-overlay-wrapper {
+  align-items: flex-start !important;
+}
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+  top: 4%;
+}
+
+@include media-breakpoint-up(sm) {
+  .dialog-card {
+    max-width: 90vw;
+    min-width: 30vw;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .dialog-card {
+    max-width: 90vw;
+    min-width: 40vw;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .dialog-card {
+    max-width: 90vw;
+    min-width: 45vw;
+  }
+}
+
+@include media-breakpoint-down(is) {
+  .dialog-card {
+    max-width: 90vw;
+    min-width: 30vw;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .dialog-card {
+    max-width: 90vw;
+    min-width: 50vw;
+  }
+}
+
+@media (min-width: 40rem) {
+  .dialog-card {
+    max-width: 38rem;
+  }
+}

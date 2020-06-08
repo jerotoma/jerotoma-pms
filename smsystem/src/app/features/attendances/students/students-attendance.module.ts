@@ -1,11 +1,8 @@
-
 import { NgModule } from '@angular/core';
+import { StudentsAttendanceRoutingModule } from './students-attendance-routing.module';
 import { SharedModule } from 'app/shared/shared.module';
-
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatIconModule} from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatTableModule, MatMenuModule, MatIconModule, MatPaginatorModule} from '@angular/material';
 
 import {
   NbButtonModule,
@@ -18,31 +15,28 @@ import {
   NbAlertModule,
   NbSelectModule,
   NbCheckboxModule,
+  NbDatepickerModule,
   NbListModule,
 } from '@nebular/theme';
 
-import { CoursesRoutingModule } from './courses-routing.module';
-import { CoursesComponent } from './courses.component';
-import { CoursesViewComponent } from './course-view/courses-view.component';
-import { CourseCreateComponent } from './course-create/course-create.component';
-import { CourseDeleteComponent } from './course-delete/course-delete.component';
+import { StudentsAttendanceComponent } from './students-attendance.component';
+import { ClassAttendenceCreateComponent } from './class-attendance-create/class-attendance-create.component';
+
 
 
 const COMPONENTS = [
-  CoursesComponent,
-  CoursesViewComponent,
-  CourseCreateComponent,
-  CourseDeleteComponent,
+  StudentsAttendanceComponent,
+  ClassAttendenceCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  CourseCreateComponent,
-  CourseDeleteComponent,
+  ClassAttendenceCreateComponent,
 ];
 
 const MODULES = [
   SharedModule,
-  CoursesRoutingModule,
+  StudentsAttendanceRoutingModule,
+  NgbModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
@@ -51,6 +45,7 @@ const MODULES = [
   NbSelectModule,
   NbCheckboxModule,
   NbListModule,
+  NbDatepickerModule,
   NbIconModule,
   NbAlertModule,
   MatTableModule,
@@ -81,4 +76,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class CoursesModule { }
+export class StudentsAttendanceModule { }
