@@ -2,7 +2,7 @@ import { ClassView, AcademicYear } from 'app/models';
 
 export interface ClassAttendance {
   id: number;
-  class: ClassView;
+  mclass: ClassView;
   academicYear: AcademicYear;
   attendanceDate: Date;
 }

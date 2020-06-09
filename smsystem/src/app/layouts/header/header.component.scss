@@ -1,7 +1,7 @@
 @import '~bootstrap/scss/mixins/breakpoints';
 @import '~@nebular/theme/styles/global/breakpoints';
 @import 'src/styles/themes/themes';
-@import 'src/styles/colors/color-variables';
+@import 'src/styles/colors/color';
 
 @include nb-install-component() {
   display: flex;

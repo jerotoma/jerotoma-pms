@@ -6,9 +6,9 @@
 .cdk-global-overlay-wrapper {
   align-items: flex-start !important;
 }
-.cdk-global-overlay-wrapper,
-.cdk-overlay-container {
-  top: 4%;
+
+.global-dialog-container .mat-dialog-container {
+ top: 4% !important;
 }
 
 @include media-breakpoint-up(sm) {

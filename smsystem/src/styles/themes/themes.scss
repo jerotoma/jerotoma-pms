@@ -3,7 +3,7 @@
 // @nebular out of the box themes
 @import '~@nebular/theme/styles/themes';
 
-@import '../colors/color-variables';
+@import '../colors/color';
 
 $nb-themes: nb-register-theme((
   //Header Section
@@ -44,7 +44,6 @@ $nb-themes: nb-register-theme((
   layout-padding-top: 0.25rem,
   layout-window-mode-padding-top: 0,
   layout-text-line-height: 0.75rem,
-  layout-scrollbar-background-color: $active-background-color,
 
   //Card
   card-height-tiny: 13.5rem,

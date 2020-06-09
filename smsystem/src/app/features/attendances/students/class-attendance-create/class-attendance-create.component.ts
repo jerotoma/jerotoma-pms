@@ -18,6 +18,7 @@ export class ClassAttendenceCreateComponent implements OnInit {
   @Input() action: string = APP_ACTION_TYPE.create;
   @Output() onCreationSuccess = new EventEmitter();
   @Input() id: string;
+  @Input() classAttendance: ClassAttendance;
 
   currentDate: Date = new Date();
   classAttendanceCreateForm: FormGroup;

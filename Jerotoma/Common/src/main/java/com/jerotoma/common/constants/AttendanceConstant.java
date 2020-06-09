@@ -9,5 +9,20 @@ public class AttendanceConstant {
 	public static final String CLASS_ATTENDANCE_ID = "classAttendanceId";
 	public static final String ATTENDANCE_DATE = "attendanceDate";
 	
+	public static final String ATTENDANCE_COUNT = "count";
+	
+	public static final String STUDENT_ATTENDANCES = "classAttendances";
+	public static final String STUDENT_ATTENDANCE = "classAttendance";
+	public static final String STUDENT_ID = "studentId";
+	public static final String STUDENT_ATTENDANCE_ID = "studentAttendanceId";
+	
+	public static final String ATTENDANCE_STATUS_ID = "id";	
+	public static final String ATTENDANCE_STATUS = "status";
+	public static final String ATTENDANCE_STATUS_DESCRIPTION = "description";
+	public static final String ID = "id";
+	public static final String ADDED_BY = "addedBy";
+	public static final String CREATED_ON = "createdOn";
+	public static final String UPDATED_ON = "updatedOn";	;
+	
 
 }

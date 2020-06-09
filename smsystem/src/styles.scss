@@ -1,5 +1,4 @@
-@import './styles/themes/styles';
-@import './styles/common/common';
-@import './styles/snackbar/snackbar';
-@import './styles/menu/menu';
-@import './styles/dialog/dialog';
+@import './styles/styles';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

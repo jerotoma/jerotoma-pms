@@ -1,5 +1,8 @@
- @import '../colors/color-variables';
+ @import '../colors/color';
 
+ nb-sidebar > div > div > nb-menu {
+  margin-bottom: 6rem !important;
+}
  .nb-theme-cosmic nb-menu .menu-item > .menu-items,
 .nb-theme-corporate nb-menu .menu-item > .menu-items,
 .nb-theme-dark nb-menu .menu-item > .menu-items,

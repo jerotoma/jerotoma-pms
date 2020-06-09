@@ -13,8 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AttendanceConstant;
-
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.attendances.ClassAttendance;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.attendances.ClassAttendanceDao;
 
 @Transactional
@@ -49,7 +50,7 @@ public class ClassAttendanceDaoImpl implements ClassAttendanceDao {
 
 	@Override
 	public Boolean deleteObject(ClassAttendance object) throws SQLException {
-		entityManager.remove(object);
+		entityManager.remove(entityManager.contains(object) ? object : entityManager.merge(object));
 		return true;
 	}
 
@@ -61,8 +62,20 @@ public class ClassAttendanceDaoImpl implements ClassAttendanceDao {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<ClassAttendance> systemConfigs = entityManager.createQuery("FROM ClassAttendance", ClassAttendance.class).getResultList();		
-		map.put(AttendanceConstant.CLASS_ATTENDANCES, systemConfigs);
+		
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(), countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		List<ClassAttendance> classAttendances = entityManager.createQuery("FROM ClassAttendance", ClassAttendance.class)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.getResultList();		
+		map.put(AttendanceConstant.CLASS_ATTENDANCES, classAttendances);
+		map.put(AttendanceConstant.ATTENDANCE_COUNT, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
 	}

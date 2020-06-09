@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators' ;
-import { SolarData } from '../../@core/data/solar';
 
 import { DashboardService } from 'app/services';
-import { DashboardCounter, ResponseWrapper } from 'app/models';
+import { DashboardCounter } from 'app/models';
 import { QueryParam } from 'app/utils';
 
 interface CounterCardSettings {
@@ -99,14 +98,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private dashboardService: DashboardService,
-    private themeService: NbThemeService,
-    private solarService: SolarData) {
+    private themeService: NbThemeService) {
 
-    this.solarService.getSolarData()
-      .pipe(takeWhile(() => this.alive))
-      .subscribe((data) => {
-        this.solarValue = data;
-      });
   }
   ngOnInit(): void {
     this.loadDashboardCounters();

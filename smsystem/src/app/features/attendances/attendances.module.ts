@@ -2,7 +2,10 @@ import { NgModule } from '@angular/core';
 import { AttendancesRoutingModule } from './attendances-routing.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {MatTableModule, MatMenuModule, MatIconModule, MatPaginatorModule} from '@angular/material';
+import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import {
   NbButtonModule,

@@ -803,6 +803,22 @@
 		        ON DELETE CASCADE
 		);
 		
+		/**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			ATTENDANCE STATUSES RELATED TABLES				  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for attendance_statuses
+		CREATE TABLE IF NOT EXISTS public.attendance_statuses(
+		    id BIGSERIAL PRIMARY KEY,
+		    status character varying(255) NOT NULL,
+		    description text,
+		   	added_by bigint NOT NULL,
+		    created_on timestamp with time zone NOT NULL,
+		  	updated_on timestamp with time zone NOT NULL		    
+		);
+		
 		
 		/**************************************************************
 		 * 															  *
@@ -830,6 +846,39 @@
 		        ON DELETE CASCADE,
 			CONSTRAINT classes_fkey FOREIGN KEY (class_id)
 		        REFERENCES public.classes (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE
+		);
+		
+		/**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			STUDENT ATTENDANCE RELATED TABLES				  	  *
+		 * 															  *
+		 *************************************************************/
+		-- Tables for student_attendances
+		CREATE TABLE IF NOT EXISTS public.student_attendances(
+		    id BIGSERIAL PRIMARY KEY,
+		    class_attendance_id BIGINT NOT NULL,
+		   	student_id BIGINT NOT NULL,
+		   	attendance_status_id BIGINT NOT NULL,
+		   	added_by BIGINT NOT NULL,
+		    created_on timestamp with time zone NOT NULL,
+		  	updated_on timestamp with time zone NOT NULL,		  
+		    CONSTRAINT user_fkey FOREIGN KEY (added_by)
+		        REFERENCES public.users (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE,
+			CONSTRAINT student_fkey FOREIGN KEY (student_id)
+		        REFERENCES public.students (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE,
+		    CONSTRAINT attendance_status_fkey FOREIGN KEY (attendance_status_id)
+		        REFERENCES public.attendance_statuses (id) MATCH SIMPLE
+		        ON UPDATE CASCADE
+		        ON DELETE CASCADE,
+			CONSTRAINT classe_attendance_fkey FOREIGN KEY (class_attendance_id)
+		        REFERENCES public.class_attendances (id) MATCH SIMPLE
 		        ON UPDATE CASCADE
 		        ON DELETE CASCADE
 		);

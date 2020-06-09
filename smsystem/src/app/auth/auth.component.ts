@@ -11,6 +11,8 @@ import {
 import { APP_CONSTANTS } from 'app/utils';
 import {SystemConfig, SystemSetting, Theme , UserPreference} from 'app/models';
 import {ThemeService } from 'app/services';
+import { authOptions } from './auth.options';
+
 
 @Component({
   selector: 'app-auth',
@@ -28,10 +30,10 @@ export class AuthComponent extends NbAuthComponent implements OnDestroy, OnInit 
   mTheme: Theme = null;
   overrideSystemConfig: SystemConfig = null;
   userPreference: UserPreference = null;
+  showRegister: boolean = authOptions.showRegister;
 
   constructor(
       protected auth: NbAuthService,
-      private themeService: NbThemeService,
       private mThemeService: ThemeService,
       protected location: Location) {
         super(auth, location);

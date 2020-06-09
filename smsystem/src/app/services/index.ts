@@ -17,3 +17,5 @@ export * from './system-configs';
 export * from './dashboard';
 export * from './window-modes';
 export * from './attendances';
+export * from './layouts';
+export * from './analytics';

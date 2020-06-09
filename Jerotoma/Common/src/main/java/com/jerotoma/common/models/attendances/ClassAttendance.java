@@ -50,6 +50,8 @@ public class ClassAttendance {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
+	public ClassAttendance() {}
+	
 	public ClassAttendance(Integer id, Class mClass, AcademicYear academicYear, Date attendanceDate, Integer addedBy,
 			Date createdOn, Date updatedOn) {
 		super();

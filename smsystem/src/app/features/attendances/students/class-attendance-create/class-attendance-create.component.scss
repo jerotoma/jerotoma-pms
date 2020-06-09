@@ -12,3 +12,8 @@
   flex: 1 0 calc(50% - 1rem);
   margin: 0 0.5rem;
 }
+
+:host ::ng-deep .cdk-global-overlay-wrapper,
+:host ::ng-deep .cdk-overlay-container {
+  top: 4%;
+}

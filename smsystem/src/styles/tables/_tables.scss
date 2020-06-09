@@ -1,0 +1,14 @@
+table {
+  width: 100%;
+  tr.mat-header-row {
+    height: 46px;
+  }
+  tr.mat-footer-row,
+  tr.mat-row {
+    height: 35px;
+  }
+}
+.mat-header-cell {
+  font-size: 14px;
+  font-weight: 700;
+}

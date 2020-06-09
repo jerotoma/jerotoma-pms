@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { FeaturesComponent } from './features.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ECommerceComponent } from './resources/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from 'app/services';
 
@@ -15,10 +14,6 @@ const routes: Routes = [{
     {
       path: '',
       component: DashboardComponent,
-    },
-    {
-      path: 'resources',
-      component: ECommerceComponent,
     },
     {
       path: 'users',

@@ -6,7 +6,7 @@ import {User, SystemConfig, UserPreference, Theme } from 'app/models';
 import {UserService, SystemConfigService, ThemeService } from 'app/services';
 
 
-import { LayoutService } from 'app/@core/utils';
+import { LayoutService } from 'app/services';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { APP_CONSTANTS, THEMES } from 'app/utils';

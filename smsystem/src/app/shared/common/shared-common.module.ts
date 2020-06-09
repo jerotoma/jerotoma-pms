@@ -1,18 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  MatButtonModule,
-  MatTableModule,
-  MatPaginatorModule,
-  MatIconModule,
-  MatSelectModule,
-  MatMenuModule,
-  MatDialog,
-  MatSnackBarModule,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
-} from '@angular/material';
-
-import {
   NbAccordionModule,
   NbButtonModule,
   NbDialogModule,
@@ -51,13 +39,6 @@ const ENTRY_COMPONENTS = [
 
 const MODULES = [
   CommonModule,
-  MatTableModule,
-  MatPaginatorModule,
-  MatIconModule,
-  MatMenuModule,
-  MatSelectModule,
-  MatSnackBarModule,
-  MatButtonModule,
   NbDialogModule,
   NbWindowModule,
   NbTabsetModule,
@@ -83,13 +64,7 @@ const EXPORT_MODULES = [
 ];
 
 const SERVICES = [
-  MatDialog,
-  {
-    provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
-    useValue: {
-      duration: 6500,
-     },
-   },
+
 ];
 
 

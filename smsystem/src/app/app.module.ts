@@ -2,10 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CoreModule } from './@core/core.module';
 import { LayoutModule } from 'app/layouts/layout.module';
 import { AppRoutingModule } from './app-routing.module';
-import {  MatDialogModule, MatDialog } from '@angular/material';
+import {  MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AppAuthModule } from './auth/auth.module';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 
@@ -64,7 +63,6 @@ const SERVICES = [
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
-    CoreModule.forRoot(),
   ],
   providers: [
     ...SERVICES,

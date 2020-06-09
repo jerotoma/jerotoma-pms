@@ -24,7 +24,7 @@ public interface Controller {
 	
 	public HttpResponseEntity<Object> update(
 			Authentication auth, 
-			@PathVariable("entityId") Integer entityId, 
+			@PathVariable(required = false, value = "entityId") Integer entityId, 
 			@RequestBody Map<String, Object> params);
 	
 	public HttpResponseEntity<Object> create(
@@ -37,6 +37,5 @@ public interface Controller {
 	
 	
 	public HttpResponseEntity<Object> delete(
-			Authentication auth, 
-			@PathVariable("entityId") Integer entityId);
+			Authentication auth, @PathVariable(required=true, value="entityId") Integer entityId);
 }
