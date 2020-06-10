@@ -11,3 +11,7 @@ nb-card-footer {
 button {
   cursor: pointer;
 }
+
+button:focus {
+  outline: none;
+}

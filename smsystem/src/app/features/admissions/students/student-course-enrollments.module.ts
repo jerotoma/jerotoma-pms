@@ -77,7 +77,11 @@ const MODULES = [
   NbIconModule,
   NbAlertModule,
   NbTreeGridModule,
-  NbDialogModule.forRoot(),
+  NbDialogModule.forRoot({
+    closeOnBackdropClick: false,
+    hasScroll: false,
+    dialogClass: 'global-dialog-container',
+  }),
   StudentCourseEnrollmentsRoutingModule,
 ];
 

@@ -36,6 +36,7 @@ import {
 import { HeaderRoutingModule } from './header-routing.module';
 import { ProfileComponent, EditUserComponent } from './profile';
 import { PreferencesComponent } from './preferences';
+import { AnalyticsService } from 'app/services';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,9 @@ import { PreferencesComponent } from './preferences';
     MatMenuModule,
     MatSelectModule,
     HeaderRoutingModule,
+  ],
+  providers: [
+    AnalyticsService,
   ],
 })
 export class HeaderModule { }

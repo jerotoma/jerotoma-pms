@@ -46,7 +46,11 @@ const MODULES = [
   NbIconModule,
   NbAlertModule,
   Ng2SmartTableModule,
-  NbDialogModule.forRoot(),
+  NbDialogModule.forRoot({
+    closeOnBackdropClick: false,
+    hasScroll: false,
+    dialogClass: 'global-dialog-container',
+  }),
   AdmissionsRoutingModule,
 ];
 

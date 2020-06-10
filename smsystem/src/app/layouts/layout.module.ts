@@ -34,7 +34,7 @@ import {
   TwoColumnsLayoutComponent,
 } from './ui-columns';
 
-import { WindowModeBlockScrollService } from 'app/services';
+import { WindowModeBlockScrollService, AnalyticsService, LayoutService } from 'app/services';
 
 import { DEFAULT_THEME } from './themes/theme.default';
 import { COSMIC_THEME } from './themes/theme.cosmic';
@@ -82,13 +82,14 @@ export class LayoutModule {
     return <ModuleWithProviders>{
       ngModule: LayoutModule,
       providers: [
-        ...NbThemeModule.forRoot(
-          {
+        ...NbThemeModule.forRoot({
             name: 'default',
           },
           [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME, DARK_THEME ],
         ).providers,
         WindowModeBlockScrollService,
+        AnalyticsService,
+        LayoutService,
       ],
     };
   }

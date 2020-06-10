@@ -15,7 +15,7 @@
           formControlName="username"
           placeholder="Username"
           fullWidth
-          [status]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? 'danger' : ''"
+          [status]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? 'danger' : 'basic'"
           [attr.aria-invalid]="loginForm.controls['username'].invalid && loginForm.controls['username'].touched ? true : null">
           <ng-container *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
             <p class="error-message" *ngIf="loginForm.controls['username']?.errors?.required">
@@ -38,7 +38,7 @@
             formControlName="password"
             placeholder="Password"
             fullWidth
-            [status]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? 'danger' : ''"
+            [status]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? 'danger' : 'basic'"
             [attr.aria-invalid]="loginForm.controls['password'].invalid && loginForm.controls['password'].touched ? true : null">
         <ng-container *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
           <p class="error-message" *ngIf="loginForm.controls['password']?.errors?.required">
@@ -51,7 +51,7 @@
         <nb-checkbox name="rememberMe" *ngIf="rememberMe"
         (checkedChange)="checkedChange($event)"
         formControlName="rememberMe"
-        [status]="loginForm.controls['rememberMe'].invalid && loginForm.controls['rememberMe'].touched ? 'danger' : ''">Remember me</nb-checkbox>
+        [status]="loginForm.controls['rememberMe'].invalid && loginForm.controls['rememberMe'].touched ? 'danger' : 'basic'">Remember me</nb-checkbox>
       </div>
       <button nbButton
               fullWidth

@@ -7,8 +7,10 @@
   align-items: flex-start !important;
 }
 
+.cdk-overlay-pane.global-dialog-container,
 .global-dialog-container .mat-dialog-container {
- top: 4% !important;
+  position: absolute !important;
+  top: 4% !important;
 }
 
 @include media-breakpoint-up(sm) {

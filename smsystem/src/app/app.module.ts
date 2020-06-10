@@ -10,12 +10,14 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SharedCommonModule } from 'app/shared/common';
+import { CoreModule } from 'app/core/core.module';
 import { AppComponent } from './app.component';
 
 import {
   AuthInterceptor,
   HttpResponseErrorInterceptor,
   ModalService,
+  AnalyticsService,
 } from './services';
 
 import {
@@ -39,6 +41,7 @@ const SERVICES = [
   NbTokenService,
   ModalService,
   MatDialog,
+  AnalyticsService,
 ];
 
 @NgModule({
@@ -53,16 +56,21 @@ const SERVICES = [
     NbActionsModule,
     MatDialogModule,
     SharedCommonModule,
-    LayoutModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
-    NbDialogModule.forRoot(),
+    NbDialogModule.forRoot({
+      closeOnBackdropClick: false,
+      hasScroll: false,
+      dialogClass: 'global-dialog-container',
+    }),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
+    CoreModule.forRoot(),
+    LayoutModule.forRoot(),
   ],
   providers: [
     ...SERVICES,

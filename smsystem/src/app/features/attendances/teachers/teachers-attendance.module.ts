@@ -54,6 +54,7 @@ const MODULES = [
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
+    dialogClass: 'global-dialog-container',
   }),
 ];
 
