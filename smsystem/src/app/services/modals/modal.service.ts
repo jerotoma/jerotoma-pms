@@ -43,7 +43,7 @@ export class ModalService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         panelClass: panelClass,
-        duration: 2000,
+        duration: 4000,
       });
     }
 

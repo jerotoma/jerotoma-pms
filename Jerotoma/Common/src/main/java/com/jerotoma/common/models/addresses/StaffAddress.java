@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Staff;
@@ -33,6 +34,7 @@ public class StaffAddress {
 	
 	@ManyToOne
    	@JoinColumn(name="staff_id")
+	@JsonBackReference
 	private Staff staff;
 	
 	@OneToOne

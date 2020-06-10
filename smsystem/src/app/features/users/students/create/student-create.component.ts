@@ -32,7 +32,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   parents: Parent[] = [];
   selectedParents: Parent[] = [];
   parentIds: number[]  = [];
-  studentId: string;
+  studentId: number;
   parentFullName: string;
   showMessage: ShowMessage = {
     error: false,
@@ -56,7 +56,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadStudent(parseInt(this.studentId, 10));
+      this.loadStudent(this.studentId);
     }
   }
   dismiss() {

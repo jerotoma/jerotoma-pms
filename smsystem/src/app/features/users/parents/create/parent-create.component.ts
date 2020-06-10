@@ -38,7 +38,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   selectedStudents: Student[] = [];
   studentIds: number[]  = [];
   parent: Parent;
-  parentId: string;
+  parentId: number;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -61,7 +61,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadParent(parseInt(this.parentId, 10));
+      this.loadParent(this.parentId);
     }
   }
   dismiss() {
@@ -94,12 +94,10 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       });
     }
   }
-  updateData(data: any) {
+  updateData(data: Parent) {
     this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
       if (resp && resp.success) {
         this.modalService.openSnackBar('Parent has been updated', 'success');
-        this.showMessage.success = true;
-        this.onUserCreationSuccess.emit(this.showMessage.success);
         this.resetForms();
       }
     });

@@ -9,7 +9,7 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
   styleUrls: ['user-delete.component.scss'],
 })
 export class UserDeleteComponent implements OnInit {
-  userId: string = '0';
+  userId: number;
   title: string = '';
   name: string = '';
   action: string = '';
@@ -55,7 +55,7 @@ export class UserDeleteComponent implements OnInit {
   }
   onConfirmed() {
     this.confirmed = true;
-    this.deleteUser(parseInt(this.userId, 10));
+    this.deleteUser(this.userId);
   }
 
 }

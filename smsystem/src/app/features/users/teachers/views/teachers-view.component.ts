@@ -69,7 +69,7 @@ export class TeachersViewComponent implements OnInit {
       context: {
         title: 'Edit Teacher',
         action: 'edit',
-        teacherId: teacher.id.toString(),
+        teacherId: teacher.id,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
@@ -86,7 +86,7 @@ export class TeachersViewComponent implements OnInit {
         title: 'Delete Teacher',
         action: 'delete',
         userType: 'teacher',
-        userId: teacher.id.toString(),
+        userId: teacher.id,
         name: teacher.fullName,
       },
     }).onClose.subscribe(_data => {

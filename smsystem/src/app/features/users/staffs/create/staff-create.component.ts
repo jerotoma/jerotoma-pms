@@ -32,7 +32,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   address: Address;
   userLoginInput: UserLoginInput;
   parent: Parent;
-  staffId: string;
+  staffId: number;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -59,8 +59,8 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.action === 'edit') {
-      this.loadStaff(parseInt(this.staffId, 10));
+    if (this.action === APP_ACTION_TYPE.edit) {
+      this.loadStaff(this.staffId);
     }
   }
 
@@ -77,7 +77,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   postData(data: Staff) {
     this.showMessage.success = false;
     this.showMessage.error = false;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateData(data);
     } else {
       this.userService.addUser(data).subscribe((resp: ResponseWrapper ) => {
@@ -94,8 +94,6 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       if (resp && resp.success) {
         this.resetForms();
         this.modalService.openSnackBar('Staff has been updated', 'success');
-        this.showMessage.success = true;
-        this.onUserCreationSuccess.emit(this.showMessage.success);
       }
     });
   }
@@ -119,6 +117,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       emailAddress: [null],
       username: [null],
       password: [null],
+      userId: [null],
       confirmPassword: [null],
       position: ['', Validators.required],
       occupation: ['staff'],
@@ -149,6 +148,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
         this.staffForm.patchValue({
           id: this.staff.id,
           firstName: this.staff.firstName,
+          userId: this.staff.userId,
           lastName: this.staff.lastName,
           middleNames: this.staff.middleNames,
           occupation: this.staff.occupation,

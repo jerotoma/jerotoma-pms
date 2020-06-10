@@ -110,7 +110,7 @@ export class StudentsViewComponent implements OnInit {
       context: {
         title: 'Edit ' + student.fullName + '\'s Details',
         action: 'edit',
-        studentId: student.id.toString(),
+        studentId: student.id,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -130,7 +130,7 @@ export class StudentsViewComponent implements OnInit {
         title: 'Delete Student',
         action: 'delete',
         userType: 'student',
-        userId: student.id.toString(),
+        userId: student.id,
         name: student.fullName,
       },
     }).onClose.subscribe(_data => {

@@ -11,7 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserDeleteComponent } from 'app/shared';
 import { ParentCreateComponent } from '../create/parent-create.component';
 
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { UserService } from 'app/services';
 import { Parent } from 'app/models';
 
@@ -76,8 +76,8 @@ export class ParentsViewComponent implements OnInit {
     this.dialogService.open(ParentCreateComponent, {
       context: {
         title: 'Edit ' + parent.fullName + '\'s Details',
-        action: 'edit',
-        parentId: parent.id.toString(),
+        action: APP_ACTION_TYPE.edit,
+        parentId: parent.id,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -94,7 +94,7 @@ export class ParentsViewComponent implements OnInit {
         title: 'Delete Parent',
         action: 'delete',
         userType: 'parent',
-        userId: parent.id.toString(),
+        userId: parent.id,
         name: parent.fullName,
       },
     }).onClose.subscribe(_data => {

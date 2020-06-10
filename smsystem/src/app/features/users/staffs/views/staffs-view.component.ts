@@ -9,7 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { PositionService } from 'app/services/positions';
 import { UserDeleteComponent } from 'app/shared';
@@ -81,8 +81,8 @@ export class StaffsViewComponent implements OnInit {
     this.dialogService.open(StaffCreateComponent, {
       context: {
         title: 'Edit Staff',
-        action: 'edit',
-        staffId: staff.id.toString(),
+        action: APP_ACTION_TYPE.edit,
+        staffId: staff.id,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
@@ -98,7 +98,7 @@ export class StaffsViewComponent implements OnInit {
         title: 'Delete Staff',
         action: 'delete',
         userType: 'staff',
-        userId: staff.id.toString(),
+        userId: staff.id,
         name: staff.fullName,
       },
     }).onClose.subscribe(_data => {

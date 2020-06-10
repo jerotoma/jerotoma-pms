@@ -1,5 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule} from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+
 import {
   NbAccordionModule,
   NbButtonModule,
@@ -57,6 +67,13 @@ const MODULES = [
   NbUserModule,
   NbActionsModule,
   NbIconModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatIconModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatButtonModule,
 ];
 
 const EXPORT_MODULES = [
