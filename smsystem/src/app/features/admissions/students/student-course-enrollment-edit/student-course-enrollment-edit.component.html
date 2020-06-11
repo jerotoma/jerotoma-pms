@@ -5,7 +5,7 @@
         <nb-card-header status="danger" >{{ title }}</nb-card-header>
         <nb-card-body>
         <div class='row'>
-            <div class='col-md-6'>
+            <div class='col-md-12'>
               <div class="form-control-group" *ngIf="student && student.fullName">
                 <label for="student-full-name" class="label">Full Name</label>
                 <p>{{student.fullName}}</p>
@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                   <div class="form-control-group">
                       <label for="class-academicYear" class="label">Class Academic Year</label>
                       <nb-select
@@ -35,10 +35,11 @@
                 <div class="form-control-group">
                   <nb-card class="list-card" accent="success" *ngIf="registeredJClasses">
                     <nb-card-header>List of Registered courses for {{academicYear.name}} - {{academicYear.yearOfStudy}} </nb-card-header>
-                    <nb-card-body>
-                      <nb-list>
-                        <nb-list-item *ngFor="let jClass of registeredJClasses">
-                          <a href="#" (click)="removeJClass($event, jClass, false)">{{jClass.course.name}} <span class='push-right' (click)="removeJClass($event, jClass, true)"><nb-icon icon="close-outline"></nb-icon></span></a>
+                    <nb-card-body style="padding: 0;">
+                      <nb-list class="list-group">
+                        <nb-list-item class="list-group-item"
+                        *ngFor="let jClass of registeredJClasses; index as i;">
+                          <a href="#" (click)="removeJClass($event, jClass, false)"><div class="row"><div class="col-md-1">{{i + 1}}</div><div class="col-md-10">{{jClass.course.name}}</div><div class="col-md-1"><span class='push-right' (click)="removeJClass($event, jClass, true)"><nb-icon icon="close-outline"></nb-icon></span></div></div></a>
                         </nb-list-item>
                       </nb-list>
                     </nb-card-body>

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NbDialogService } from '@nebular/theme';
@@ -13,24 +13,23 @@ import { MeetingTimeService, ClassAttendanceService } from 'app/services';
 import { QueryParam, APP_ACTION_TYPE} from 'app/utils';
 
 @Component({
-  selector: 'app-students-attendances',
-  templateUrl: './students-attendance.component.html',
-  styleUrls: ['./students-attendance.component.scss'],
+  selector: 'app-classes-attendance',
+  templateUrl: './classes-attendance.component.html',
+  styleUrls: ['./classes-attendance.component.scss'],
 })
-export class StudentsAttendanceComponent implements OnInit {
+export class ClassesAttendanceComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  baseURL: string = '/dashboard/admissions/attendances/classes';
+  baseURL: string = '/dashboard/attendances/students';
   hidePageSize: boolean = false;
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  classId: number;
   displayedColumns: string[] = ['id', 'fullName', 'mClass',  'academicYearTerm', 'academicYear', 'attendanceDate', 'action'];
   dataSource: MatTableDataSource<ClassAttendance> = new MatTableDataSource<ClassAttendance>();
-  classAttendance: ClassAttendance;
+  classAttendances: ClassAttendance[];
 
   param: QueryParam = {
     page: 1,
@@ -45,38 +44,38 @@ export class StudentsAttendanceComponent implements OnInit {
   constructor(
     private classAttendanceService: ClassAttendanceService,
     private dialogService: NbDialogService,
-    private route: ActivatedRoute,
     private router: Router,
     ) {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.classId = params['classId'];
-      if (this.classId) {
-        this.loadClassAttendances(this.classId);
-      }
-    });
+    this.loadClassAttendances();
   }
+
 
   open() {
     this.dialogService.open(ClassAttendenceCreateComponent, {
       context: {
         title: 'Add New Class Attendance',
         action: APP_ACTION_TYPE.create,
-      },
+      }
     }).onClose.subscribe(_data => {
-
+      this.loadClassAttendances();
     });
   }
 
-  loadClassAttendances(classId: number) {
+
+  loadClassAttendances() {
     this.isLoading = true;
-    this.classAttendanceService.getClassAttendance(classId)
-    .subscribe((classAttendance: ClassAttendance) => {
+    this.classAttendanceService.loadClassAttendancesPaginated(this.param)
+    .subscribe((result: ResponseWrapper) => {
+      const resp = result;
         this.isLoading = false;
-        if (classAttendance) {
-          this.classAttendance = classAttendance;
+        if (resp) {
+          const data = resp.data;
+          this.classAttendances = data.classAttendances;
+          this.totalNumberOfItems = data.count;
+          this.dataSource = new MatTableDataSource<ClassAttendance>(data.classAttendances);
         }
     }, error => {
       this.isLoading = false;
@@ -91,6 +90,7 @@ export class StudentsAttendanceComponent implements OnInit {
         classAttendance: classAttendance,
       },
     }).onClose.subscribe(_data => {
+      this.loadClassAttendances();
     });
   }
 
@@ -103,17 +103,24 @@ export class StudentsAttendanceComponent implements OnInit {
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
+        this.loadClassAttendances();
       }
     });
   }
 
   view(classAttendance: ClassAttendance) {
-    this.router.navigate([this.baseURL + '/' + classAttendance.id ]);
+     // Set our navigation extras object
+    // that contains our global query params and fragment
+    const navigationExtras: NavigationExtras = {
+      queryParams: {classId: classAttendance.id },
+    };
+    this.router.navigate([this.baseURL], navigationExtras);
   }
 
   onPageChange(pageEvent: PageEvent) {
       this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
       this.param.pageSize = pageEvent.pageSize;
+      this.loadClassAttendances();
   }
 
 }

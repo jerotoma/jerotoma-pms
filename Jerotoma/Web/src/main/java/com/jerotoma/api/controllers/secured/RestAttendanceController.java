@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +75,25 @@ public class RestAttendanceController extends BaseController implements Controll
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setData(map);
 		instance.setHttpStatus(HttpStatus.OK);
+		return instance;
+	}
+	
+	@GetMapping("/classes/{classId}")	
+	@ResponseBody
+	public HttpResponseEntity<Object> getClassAttendance(Authentication auth, @PathVariable(name="classId") Integer classId) {		
+		
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			instance.setData(assemblerClassAttendanceService.findObject(classId));
+			instance.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		
 		return instance;
 	}
 	

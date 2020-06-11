@@ -79,6 +79,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'person-done-outline',
     children: [
       {
+        title: 'classes',
+        link: '/dashboard/attendances/classes',
+      },
+      {
         title: 'Students',
         link: '/dashboard/attendances/students',
       },

@@ -10,6 +10,11 @@ const routes: Routes = [
     component: AttendancesComponent,
     children: [
       {
+        path: 'classes',
+        loadChildren: () => import('./classes/classes-attendance.module')
+        .then(m => m.ClassesAttendanceModule),
+      },
+      {
         path: 'students',
         loadChildren: () => import('./students/students-attendance.module')
         .then(m => m.StudentsAttendanceModule),

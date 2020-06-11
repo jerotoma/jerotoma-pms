@@ -74,17 +74,6 @@
   color: #ff3d71 !important;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-}
-.nb-theme-cosmic nb-card,
-.nb-theme-corporate nb-card,
-.nb-theme-dark nb-card,
-.nb-theme-default nb-card {
-  max-height: 90vh !important;
-}
-
 .nb-theme-cosmic nb-list-item:hover,
 .nb-theme-corporate nb-list-item:hover,
 .nb-theme-dark nb-list-item:hover,
@@ -106,4 +95,14 @@ button,
 }
 .capitalize {
   text-transform: capitalize;
+}
+.nb-theme-cosmic a,
+.nb-theme-corporate a,
+.nb-theme-dark a,
+.nb-theme-default a {
+  text-decoration: none;
+}
+
+.list-group-item {
+  display: block !important;
 }

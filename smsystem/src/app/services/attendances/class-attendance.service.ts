@@ -10,6 +10,11 @@ import { AcademicYear, ResponseWrapper, ClassAttendanceParam, ClassAttendance } 
   providedIn: 'root',
 })
 export class ClassAttendanceService {
+
+  getClassAttendance(classId: number): Observable<ClassAttendance> {
+    return this.http.get(`${END_POINTS.attendances}/classes/${classId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   loadClassAttendancesPaginated(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get(`${END_POINTS.attendances}/classes?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
       .pipe(map((resp: ResponseWrapper) => resp));
