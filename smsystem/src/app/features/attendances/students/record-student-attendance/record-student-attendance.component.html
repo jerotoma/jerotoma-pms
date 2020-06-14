@@ -1,32 +1,58 @@
 <div class='row card-row' *ngIf="classAttendance">
   <div class="card-col col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="recordAttendanceForm" class="step-container" (ngSubmit)="onSubmit()">
-          <nb-card class="dialog-card" size="medium">
+          <nb-card>
             <nb-card-header status="danger">Record Student Attendance</nb-card-header>
-            <nb-card-body>
+            <nb-card-body [nbSpinner]="!hasStatusData" nbSpinnerStatus="primary">
               <div class="row">
                   <div class="col-md-12">
-                      <div class="form-control-group">
-                        <label class="label">Academic Year </label>
-                        {{classAttendance.academicYear.name}} - {{classAttendance.academicYear.yearOfStudy}}
-                      </div>
-                  </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                    <div class="form-control-group">
-                        <label for="class-classId" class="label">Class </label>
-                        {{classAttendance.mclass.course.name}}
-                    </div>
+                    <table class="table">
+                      <tbody>
+                        <tr>
+                          <th scope="row">Academic Year</th>
+                          <td>{{classAttendance.academicYear.name}} - {{classAttendance.academicYear.yearOfStudy}}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Class Name : </th>
+                          <td>{{classAttendance.mclass.course.name}}</td>
+                        </tr>
+                        <tr>
+                          <th scope="row">Attendance Date</th>
+                          <td>{{classAttendance.attendanceDate | date:'longDate'}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <input type="hidden" formControlName="classAttendanceId">
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <div class="form-control-group">
-                    <label for="class-attendanceDate" class="label">Attendance Date</label>
-                    {{classAttendance.attendanceDate | date:'longDate'}}
-                  </div>
-              </div>
+                  <table class="table table-hover" *ngIf="attendanceStatuses &&  attendanceStatuses.length > 0">
+                    <thead>
+                      <tr>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody formArrayName="studentAttendanceStatuses">
+                      <tr *ngFor="let student of classAttendance.mclass.students; let i = index" [formGroupName]="i">
+                        <th scope="row">{{student.fullName}}</th>
+                        <td>
+                          <input type="hidden" formControlName="studentId">
+                          <nb-radio-group
+                            name="attendanceStatusId-{{student.id}}"
+                            formControlName="attendanceStatusId">
+                            <nb-radio
+                              *ngFor="let status of attendanceStatuses"
+                              [value]="status.id">
+                                {{status.name}}
+                            </nb-radio>
+                          </nb-radio-group>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </nb-card-body>
             <nb-card-footer>

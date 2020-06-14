@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +59,7 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 		this.securityCheckAccessByRoles(auth);
 		
 		List<String> requiredFields = new ArrayList<>(Arrays.asList(
-				AttendanceConstant.ATTENDANCE_STATUS,
+				AttendanceConstant.ATTENDANCE_STATUS_NAME,
 				AttendanceConstant.STUDENT_ATTENDANCE_ID,
 				AttendanceConstant.STUDENT_ID,
 				AttendanceConstant.CLASS_ATTENDANCE_ID
@@ -91,13 +92,13 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
 	@Override
-	public HttpResponseEntity<Object> create(Authentication auth, Map<String, Object> params) {
+	public HttpResponseEntity<Object> create(Authentication auth, @RequestBody Map<String, Object> params) {
 		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_ATTENDANCE_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
 		
 		List<String> requiredFields = new ArrayList<>(Arrays.asList(
-				AttendanceConstant.ATTENDANCE_STATUS,
+				AttendanceConstant.ATTENDANCE_STATUS_NAME,
 				AttendanceConstant.STUDENT_ATTENDANCE_ID,
 				AttendanceConstant.STUDENT_ID,
 				AttendanceConstant.CLASS_ATTENDANCE_ID

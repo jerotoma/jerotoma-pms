@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { StudentsAttendanceRoutingModule } from './students-attendance-routing.module';
+import { AttendanceStatusesRoutingModule } from './attendance-statuses-routing.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableModule } from '@angular/material/table';
@@ -20,33 +20,31 @@ import {
   NbCheckboxModule,
   NbDatepickerModule,
   NbListModule,
-  NbRadioModule,
 } from '@nebular/theme';
 
-import { StudentsAttendanceComponent } from './students-attendance.component';
-import { RecordStudentAttendenceComponent } from './record-student-attendance/record-student-attendance.component';
+import { AttendanceStatusesComponent } from './attendance-statuses.component';
+import { AttendanceStatusesCreateComponent} from './attendance-statuses-create/attendance-statuses-create.component';
 
 
 
 const COMPONENTS = [
-  StudentsAttendanceComponent,
-  RecordStudentAttendenceComponent,
+  AttendanceStatusesComponent,
+  AttendanceStatusesCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-
+  AttendanceStatusesCreateComponent,
 ];
 
 const MODULES = [
   SharedModule,
-  StudentsAttendanceRoutingModule,
+  AttendanceStatusesRoutingModule,
   NgbModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
   NbCardModule,
   NbInputModule,
-  NbRadioModule,
   NbSelectModule,
   NbCheckboxModule,
   NbListModule,
@@ -82,4 +80,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class StudentsAttendanceModule { }
+export class AttendanceStatusesModule { }

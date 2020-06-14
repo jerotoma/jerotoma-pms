@@ -28,7 +28,7 @@ public class AttendanceStatus {
 	private Integer id;
 	
 	@Column
-	private String status;
+	private String name;
 	
 	@Column
 	private String description;
@@ -47,7 +47,7 @@ public class AttendanceStatus {
 	public AttendanceStatus(Integer id, String status, String description, Integer addedBy, Date createdOn,
 			Date updatedOn) {
 		this.id = id;
-		this.status = status;
+		this.name = status;
 		this.description = description;
 		this.addedBy = addedBy;
 		this.createdOn = createdOn;
@@ -56,7 +56,7 @@ public class AttendanceStatus {
 	
 	public AttendanceStatus(String status, String description, Integer addedBy, Date createdOn,
 			Date updatedOn) {		
-		this.status = status;
+		this.name = status;
 		this.description = description;
 		this.addedBy = addedBy;
 		this.createdOn = createdOn;
@@ -71,12 +71,12 @@ public class AttendanceStatus {
 		this.id = id;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getName() {
+		return name;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {

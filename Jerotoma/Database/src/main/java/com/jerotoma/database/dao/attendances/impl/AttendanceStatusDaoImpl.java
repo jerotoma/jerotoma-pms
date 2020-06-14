@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AttendanceConstant;
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.attendances.AttendanceStatus;
+import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.attendances.AttendanceStatusDao;
 
 
@@ -60,8 +62,17 @@ public class AttendanceStatusDaoImpl  implements AttendanceStatusDao {
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		List<AttendanceStatus> systemConfigs = entityManager.createQuery("FROM AttendanceStatus", AttendanceStatus.class).getResultList();		
-		map.put(AttendanceConstant.CLASS_ATTENDANCES, systemConfigs);
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(), countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();		
+		List<AttendanceStatus> attendanceStatuses = entityManager.createQuery("FROM AttendanceStatus", AttendanceStatus.class)
+				.setFirstResult(offset)
+				.setMaxResults(limit)
+				.getResultList();		
+		map.put(AttendanceConstant.ATTENDANCE_STATUSES, attendanceStatuses);
+		map.put(AttendanceConstant.ATTENDANCE_COUNT, countResults);
+		map.put(SystemConstant.PAGE_COUNT, pageCount);		
 		
 		return map;
 	}
@@ -69,5 +80,10 @@ public class AttendanceStatusDaoImpl  implements AttendanceStatusDao {
 	@Override
 	public Long countObject() throws SQLException {
 		return entityManager.createQuery("SELECT count(*) FROM AttendanceStatus", Long.class).getSingleResult();
+	}
+
+	@Override
+	public List<AttendanceStatus> getAll() throws SQLException {
+		return entityManager.createQuery("FROM AttendanceStatus", AttendanceStatus.class).getResultList();
 	}
 }

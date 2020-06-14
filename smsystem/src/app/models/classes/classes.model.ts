@@ -7,6 +7,7 @@ export interface ClassView {
   course: Course;
   meetingTime: MeetingTime;
   academicYear: AcademicYear;
+  students?: Student[];
   room: Room;
   capacity: number;
 }

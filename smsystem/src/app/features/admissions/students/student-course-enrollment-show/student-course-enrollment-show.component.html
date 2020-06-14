@@ -39,8 +39,8 @@
                         <nb-list>
                           <nb-list-item>
                               <div class="row">
-                                  <div class="col-md-5">Course Name</div>
-                                  <div class="col-md-1">Code</div>
+                                  <div class="col-md-4">Course Name</div>
+                                  <div class="col-md-2">Code</div>
                                   <div class="col-md-3">Teacher</div>
                                   <div class="col-md-3">Class Room</div>
                               </div>
@@ -48,10 +48,11 @@
                           <nb-list-item *ngFor="let jClass of jClasses">
                             <a href="#" (click)="preventDefaultJClass($event)">
                                 <div class="row">
-                                  <div class="col-md-5">{{jClass.course.name}}</div>
-                                  <div class="col-md-1">{{jClass.course.code}}</div>
+                                  <div class="col-md-4">{{jClass.course.name}}</div>
+                                  <div class="col-md-2">{{jClass.course.code}}</div>
                                   <div class="col-md-3">{{jClass.teacher.fullName}}</div>
-                                  <div class="col-md-3">{{jClass.room.name}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                                  <div class="col-md-2">{{jClass.room.name}}</div>
+                                  <div class="col-md-1"><span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
                                 </div>
                             </a>
                           </nb-list-item>

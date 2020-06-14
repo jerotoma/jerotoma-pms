@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AttendanceConstant;
@@ -29,11 +28,11 @@ import com.jerotoma.services.attendances.AttendanceStatusService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ATTENDANCE_STATUS_CONTROLLER.BASE)
-public class RestAttendanceStatusController extends BaseController implements Controller {
+public class RestAttendanceStatusController extends RestAttendanceController implements Controller {
 
 	@Autowired AttendanceStatusService attendanceStatusService;
 	
-	@GetMapping({"", "/"})
+	@GetMapping({"/paginated", "/paginated/"})
 	@Override
 	public HttpResponseEntity<Object> index(Authentication auth, String search, Integer page, Integer pageSize,
 			String fieldName, String orderby) {
@@ -54,6 +53,26 @@ public class RestAttendanceStatusController extends BaseController implements Co
 		
 		return instance;
 	}
+	
+	@GetMapping({"", "/"})	
+	public HttpResponseEntity<Object> getAll(Authentication auth) {
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_ATTENDANCE_STATUS_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);			
+		
+		try {
+			instance.setData(attendanceStatusService.getAll());
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			instance.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		
+		return instance;
+	}
+
 
 	@Override
 	public HttpResponseEntity<Object> show(Authentication auth, Integer entityId) {
@@ -70,12 +89,11 @@ public class RestAttendanceStatusController extends BaseController implements Co
 		this.securityCheckAccessByRoles(auth);
 		List<String> requiredFields = new ArrayList<>(Arrays.asList(
 				AttendanceConstant.ATTENDANCE_STATUS_ID,
-				AttendanceConstant.ATTENDANCE_STATUS,
-				AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION));
+				AttendanceConstant.ATTENDANCE_STATUS_NAME));
 		AttendanceStatus attendanceStatus  = AttendanceValidator.validateAttendanceStatus(params, requiredFields);				
 		try {
 			AttendanceStatus mAttendanceStatus = attendanceStatusService.findObject( attendanceStatus.getId());
-			mAttendanceStatus.setStatus(attendanceStatus.getStatus());
+			mAttendanceStatus.setName(attendanceStatus.getName());
 			mAttendanceStatus.setDescription(attendanceStatus.getDescription());
 			mAttendanceStatus.setUpdatedOn(attendanceStatus.getUpdatedOn());
 			
@@ -98,8 +116,7 @@ public class RestAttendanceStatusController extends BaseController implements Co
 		this.securityCheckAccessByRoles(auth);
 		
 		List<String> requiredFields = new ArrayList<>(Arrays.asList(
-				AttendanceConstant.ATTENDANCE_STATUS,
-				AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION));
+				AttendanceConstant.ATTENDANCE_STATUS_NAME));
 		AttendanceStatus attendanceStatus  = AttendanceValidator.validateAttendanceStatus(params, requiredFields);	
 				
 		try {

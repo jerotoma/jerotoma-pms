@@ -22,4 +22,11 @@ public class StringUtility {
 	public static String capitalize(String s) {
 		return StringUtils.capitalize(s.toLowerCase());
 	}
+
+	public static String getString(Object object) {
+		if (object != null) {
+			return String.valueOf(object);
+		}
+		return null;
+	}
 }

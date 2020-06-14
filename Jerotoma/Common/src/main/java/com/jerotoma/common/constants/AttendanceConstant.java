@@ -17,12 +17,14 @@ public class AttendanceConstant {
 	public static final String STUDENT_ATTENDANCE_ID = "studentAttendanceId";
 	
 	public static final String ATTENDANCE_STATUS_ID = "id";	
-	public static final String ATTENDANCE_STATUS = "status";
+	public static final String ATTENDANCE_STATUS_NAME = "name";
 	public static final String ATTENDANCE_STATUS_DESCRIPTION = "description";
 	public static final String ID = "id";
 	public static final String ADDED_BY = "addedBy";
 	public static final String CREATED_ON = "createdOn";
-	public static final String UPDATED_ON = "updatedOn";	;
+	public static final String UPDATED_ON = "updatedOn";
+	public static final String ATTENDANCE_STATUSES  = "attendanceStatuses";
+	public static final String ATTENDANCE_STATUS  = "attendanceStatus";
 	
 
 }

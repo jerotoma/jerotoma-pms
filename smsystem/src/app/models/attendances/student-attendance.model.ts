@@ -1,13 +1,18 @@
-import { ClassView, AcademicYear } from 'app/models';
+import { ClassView, AcademicYear, AttendanceStatus } from 'app/models';
 
 export interface StudentAttendance {
    class: ClassView;
    academicYear: AcademicYear;
    attendanceDate: Date;
+   attendanceStatus: AttendanceStatus;
 }
 
 export interface StudentAttendanceParam {
-  classId: number;
-  academicYearId: number;
-  attendanceDate: Date;
+  classAttendanceId: number;
+  studentAttendanceStatuses: StudentAttendanceStatus[];
+}
+
+export interface StudentAttendanceStatus {
+  studentId: number;
+  attendanceStatusId: number;
 }

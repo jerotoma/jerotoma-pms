@@ -1,18 +1,8 @@
 <div class="row">
   <div class="col-md-12">
-    <nb-card>
-      <nb-card-header>Student Attendances </nb-card-header>
-      <nb-card-body
-          [nbSpinner]="isLoading"
-          nbSpinnerStatus="success"
-          nbSpinnerSize="large"
-          nbSpinnerMessage="Loading Enrolled Students....">
-          <app-record-student-attendance
-            *ngIf="classAttendance"
-            [classAttendance]="classAttendance"
-          ></app-record-student-attendance>
-      </nb-card-body>
-      <nb-card-footer>List of Created Attendances</nb-card-footer>
-    </nb-card>
+    <app-record-student-attendance
+      *ngIf="classAttendance"
+      [classAttendance]="classAttendance"
+    ></app-record-student-attendance>
   </div>
 </div>

@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
 import { ResponseWrapper,  ClassView, AcademicYear, ClassAttendanceParam, ClassAttendance } from 'app/models';
-import { ModalService, AcademicYearService, ClassService, StudentAttendanceService } from 'app/services';
+import { ModalService, AcademicYearService, ClassService, ClassAttendanceService } from 'app/services';
 import { APP_ACTION_TYPE, DateValidator } from 'app/utils';
 
 @Component({
@@ -33,7 +33,7 @@ export class ClassAttendenceCreateComponent implements OnInit {
     private academicYearService: AcademicYearService,
     private classService: ClassService,
     private formBuilder: FormBuilder,
-    private studentAttendanceService: StudentAttendanceService,
+    private classAttendanceService: ClassAttendanceService,
     protected ref: NbDialogRef<ClassAttendenceCreateComponent>) {}
 
   ngOnInit() {
@@ -50,7 +50,7 @@ export class ClassAttendenceCreateComponent implements OnInit {
 
   onSubmit() {
     this.classAttendanceParam = this.classAttendanceCreateForm.value;
-    this.studentAttendanceService.createClassAttendance(this.classAttendanceParam)
+    this.classAttendanceService.createClassAttendance(this.classAttendanceParam)
     .subscribe((classAttendance: ClassAttendance) => {
       this.dismiss();
       if (classAttendance) {

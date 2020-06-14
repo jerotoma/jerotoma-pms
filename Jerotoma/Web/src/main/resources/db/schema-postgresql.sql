@@ -812,7 +812,7 @@
 		-- Tables for attendance_statuses
 		CREATE TABLE IF NOT EXISTS public.attendance_statuses(
 		    id BIGSERIAL PRIMARY KEY,
-		    status character varying(255) NOT NULL,
+		    name character varying(255) NOT NULL,
 		    description text,
 		   	added_by bigint NOT NULL,
 		    created_on timestamp with time zone NOT NULL,

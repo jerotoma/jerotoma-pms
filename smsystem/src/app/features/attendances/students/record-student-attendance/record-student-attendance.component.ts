@@ -1,11 +1,9 @@
 import { from } from 'rxjs';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
-import { NbDialogRef } from '@nebular/theme';
-import { ResponseWrapper,  ClassView, AcademicYear, ClassAttendanceParam, ClassAttendance } from 'app/models';
-import { ModalService, AcademicYearService, ClassService, StudentAttendanceService } from 'app/services';
-import { APP_ACTION_TYPE, DateValidator } from 'app/utils';
+import { ClassView, Student, AcademicYear, StudentAttendanceParam, AttendanceStatus, StudentAttendanceStatus, ClassAttendance, StudentAttendance } from 'app/models';
+import { ModalService, ClassService, StudentAttendanceService, AttendanceStatusService } from 'app/services';
 
 @Component({
   selector: 'app-record-student-attendance',
@@ -26,25 +24,41 @@ export class RecordStudentAttendenceComponent implements OnInit {
   jClasses: ClassView[];
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
-  classAttendanceParam: ClassAttendanceParam;
+  studentAttendanceParam: StudentAttendanceParam;
+  studentAttendanceStatuses: StudentAttendanceStatus[] = [];
+  studentAttendance: StudentAttendance;
+  attendanceStatuses: AttendanceStatus[];
+
 
   constructor(
-    private academicYearService: AcademicYearService,
-    private classService: ClassService,
+    private attendanceStatusService: AttendanceStatusService,
     private formBuilder: FormBuilder,
     private studentAttendanceService: StudentAttendanceService) {}
 
   ngOnInit() {
     this.loadForm();
-    this.loadAcademicYears();
+    this.loadAttendanceStatuses();
+  }
+
+  loadAttendanceStatuses() {
+    this.isLoading = true;
+    this.attendanceStatusService.loadAttendanceStatuses().subscribe((attendanceStatuses: AttendanceStatus[]) => {
+      this.isLoading = false;
+      if (attendanceStatuses) {
+        this.attendanceStatuses = attendanceStatuses;
+        const students = this.classAttendance.mclass.students;
+        this.patch(students, attendanceStatuses);
+        this.patchStudentValues();
+      }
+    });
   }
 
   onSubmit() {
-    this.classAttendanceParam = this.recordAttendanceForm.value;
-    this.studentAttendanceService.createClassAttendance(this.classAttendanceParam)
-    .subscribe((classAttendance: ClassAttendance) => {
-      if (classAttendance) {
-        window.console.log(classAttendance);
+    this.studentAttendanceParam = this.recordAttendanceForm.value;
+    this.studentAttendanceService.createStudentAttendance(this.studentAttendanceParam)
+    .subscribe((studentAttendance: StudentAttendance) => {
+      if (studentAttendance) {
+        window.console.log(studentAttendance);
       }
     });
   }
@@ -52,40 +66,43 @@ export class RecordStudentAttendenceComponent implements OnInit {
   loadForm() {
     this.recordAttendanceForm = this.formBuilder.group({
       id: [null],
-      academicYearId: [null, Validators.required],
-      classId: ['', Validators.required ],
-      attendanceDate: [null, DateValidator('yyyy/MM/dd')],
+      classAttendanceId: [null, Validators.required],
+      studentAttendanceStatuses: this.formBuilder.array([]),
     });
     this.onChanges();
   }
+
+  patch(students: Student[], attendanceStatuses: AttendanceStatus[]) {
+    const studentAttendanceStatusesControl = <FormArray>this.recordAttendanceForm.get('studentAttendanceStatuses');
+    students.forEach((student: Student, index: number) => {
+      studentAttendanceStatusesControl.push(this.patchStudentAttendanceStatusValues(student.id, attendanceStatuses[0].id));
+    });
+  }
+  patchStudentAttendanceStatusValues(studentId: number, attendanceStatusId: number) {
+    return this.formBuilder.group({
+      studentId: [studentId, Validators.required],
+      attendanceStatusId: [attendanceStatusId, Validators.required],
+    });
+  }
+  patchStudentValues() {
+    this.recordAttendanceForm.patchValue({
+      classAttendanceId: this.classAttendance.id,
+    });
+  }
+
   onChanges() {
-   this.recordAttendanceForm.get('classId').valueChanges.subscribe((classId: number) => {
-      if (classId) {
-
-      }
-    });
-
-    this.recordAttendanceForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-      if (academicYearId != null) {
-        this.loadJClassesByAcademicYear(academicYearId);
-      }
+    this.recordAttendanceForm.valueChanges.subscribe((values: any) => {
+      window.console.log('Values: ', values);
     });
   }
 
-  loadAcademicYears() {
-    this.academicYearService.getAcademicYears()
-    .subscribe((academicYears: AcademicYear[]) => {
-        if (academicYears) {
-          this.academicYears = academicYears;
-        }
-      });
+  findStudentAttendanceStatus(studentId: number) {
+    return this.studentAttendanceStatuses.find((attendanceStatus: StudentAttendanceStatus) => {
+      return attendanceStatus.studentId === studentId;
+    });
   }
 
-  loadJClassesByAcademicYear(academicYearId: number) {
-    this.isLoading = true;
-    this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: ClassView[]) => {
-      this.jClasses = jClassViews;
-      this.isLoading = false;
-    });
+  get hasStatusData(): boolean {
+    return (this.attendanceStatuses) && (this.attendanceStatuses.length > 0) || !this.isLoading;
   }
 }

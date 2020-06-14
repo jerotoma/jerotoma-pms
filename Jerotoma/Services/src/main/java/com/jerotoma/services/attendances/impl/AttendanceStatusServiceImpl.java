@@ -56,4 +56,9 @@ public class AttendanceStatusServiceImpl implements AttendanceStatusService {
 		return attendanceStatusDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public List<AttendanceStatus> getAll() throws SQLException {
+		return attendanceStatusDao.getAll();
+	}
+
 }

@@ -10,6 +10,7 @@ import com.jerotoma.common.models.attendances.AttendanceStatus;
 import com.jerotoma.common.models.attendances.ClassAttendance.ClassAttendanceParam;
 import com.jerotoma.common.models.attendances.StudentAttendance.StudentAttendanceParam;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.common.utils.StringUtility;
 
 public class AttendanceValidator {
 
@@ -76,8 +77,8 @@ public class AttendanceValidator {
 			classAttendanceId  = (Integer) params.get(AttendanceConstant.CLASS_ATTENDANCE_ID);
 		}
 		
-		if(params.containsKey(AttendanceConstant.ATTENDANCE_STATUS)) {
-			attendanceStatus  = params.get(AttendanceConstant.ATTENDANCE_STATUS).toString();
+		if(params.containsKey(AttendanceConstant.ATTENDANCE_STATUS_NAME)) {
+			attendanceStatus  = params.get(AttendanceConstant.ATTENDANCE_STATUS_NAME).toString();
 		}
 		if(params.containsKey(AttendanceConstant.STUDENT_ATTENDANCE_ID)) {
 			id  = (Integer)params.get(AttendanceConstant.STUDENT_ATTENDANCE_ID);
@@ -120,11 +121,12 @@ public class AttendanceValidator {
 			id  = (Integer)params.get(AttendanceConstant.ATTENDANCE_STATUS_ID);
 		}
 		
-		if(params.containsKey(AttendanceConstant.ATTENDANCE_STATUS)) {
-			status  = params.get(AttendanceConstant.ATTENDANCE_STATUS).toString();
+		if(params.containsKey(AttendanceConstant.ATTENDANCE_STATUS_NAME)) {
+			status  = StringUtility.getString(params.get(AttendanceConstant.ATTENDANCE_STATUS_NAME));
 		}
+		
 		if(params.containsKey(AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION)) {
-			description  = params.get(AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION).toString();
+			description  = StringUtility.getString(params.get(AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION));
 		}
 		
 				
@@ -133,14 +135,14 @@ public class AttendanceValidator {
 		}
 		attendanceStatus.setId(id);
 		
-		if (status == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_STATUS)) {
+		if (status == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_STATUS_NAME)) {
 			throw new FieldIsRequiredException("Status is required to continue");
 		}
-		attendanceStatus.setStatus(status);
+		attendanceStatus.setName(status);
 		
 
 		if (description == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION)) {
-			throw new FieldIsRequiredException("Class ID is required to continue");
+			throw new FieldIsRequiredException("Description ID is required to continue");
 		}
 		attendanceStatus.setDescription(description);
 		

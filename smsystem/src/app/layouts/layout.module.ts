@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   NbActionsModule,
@@ -35,7 +35,7 @@ import {
 } from './ui-columns';
 
 import { WindowModeBlockScrollService, AnalyticsService, LayoutService } from 'app/services';
-
+import { throwIfAlreadyLoaded } from 'app/utils';
 import { DEFAULT_THEME } from './themes/theme.default';
 import { COSMIC_THEME } from './themes/theme.cosmic';
 import { CORPORATE_THEME } from './themes/theme.corporate';
@@ -78,8 +78,8 @@ const PIPES = [
   declarations: [...COMPONENTS, ...PIPES],
 })
 export class LayoutModule {
-  static forRoot(): ModuleWithProviders {
-    return <ModuleWithProviders>{
+  static forRoot(): ModuleWithProviders<LayoutModule> {
+    return {
       ngModule: LayoutModule,
       providers: [
         ...NbThemeModule.forRoot({

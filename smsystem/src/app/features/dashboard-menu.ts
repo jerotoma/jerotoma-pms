@@ -94,6 +94,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Staffs',
         link: '/dashboard/attendances/staffs',
       },
+      {
+        title: 'Attendance Statuses',
+        link: '/dashboard/attendances/statuses',
+      },
     ],
   },
   {

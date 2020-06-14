@@ -55,7 +55,7 @@ public class EndPointConstants {
 	}
 	
 	public static interface REST_ATTENDANCE_STATUS_CONTROLLER {
-		public static final String BASE =  API_SECURED_ROOT + "/attendance-statuses";	
+		public static final String BASE =  REST_ATTENDANCE_CONTROLLER.BASE  + "/statuses";	
 	}
 	
 	public static interface REST_STUDENT_ATTENDANCE_CONTROLLER {
