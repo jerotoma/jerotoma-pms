@@ -77,7 +77,7 @@ public class RoomResourceDaoImpl implements RoomResourceDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(ClassRoomResourceConstant.CLASS_ROOM_RESOURCES, classRoomResource);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;

@@ -8,8 +8,8 @@ import { DeleteModalComponent } from 'app/shared';
 
 import { ClassAttendenceCreateComponent } from '../classes/class-attendance-create/class-attendance-create.component';
 
-import { MeetingTime, ClassAttendance, ResponseWrapper } from 'app/models';
-import { MeetingTimeService, ClassAttendanceService } from 'app/services';
+import {StudentAttendance, ClassAttendance, ResponseWrapper } from 'app/models';
+import {StudentAttendanceService, ClassAttendanceService } from 'app/services';
 import { QueryParam, APP_ACTION_TYPE} from 'app/utils';
 
 @Component({
@@ -28,9 +28,13 @@ export class StudentsAttendanceComponent implements OnInit {
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   classId: number;
-  displayedColumns: string[] = ['id', 'fullName', 'mClass',  'academicYearTerm', 'academicYear', 'attendanceDate', 'action'];
-  dataSource: MatTableDataSource<ClassAttendance> = new MatTableDataSource<ClassAttendance>();
+  currentClassAttendanceId: number;
+  displayedColumns: string[] = ['id', 'fullName', 'courseName',  'academicYearName', 'yearOfStudy', 'attendanceDate', 'statusName', 'action'];
+  dataSource: MatTableDataSource<StudentAttendance> = new MatTableDataSource<StudentAttendance>();
+  studentAttendances: StudentAttendance[];
   classAttendance: ClassAttendance;
+  classAttendances: ClassAttendance[];
+  isRecordTabActive: boolean = false;
 
   param: QueryParam = {
     page: 1,
@@ -45,6 +49,7 @@ export class StudentsAttendanceComponent implements OnInit {
   constructor(
     private classAttendanceService: ClassAttendanceService,
     private dialogService: NbDialogService,
+    private studentAttendanceService: StudentAttendanceService,
     private route: ActivatedRoute,
     private router: Router,
     ) {
@@ -54,8 +59,26 @@ export class StudentsAttendanceComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.classId = params['classId'];
       if (this.classId) {
-        this.loadClassAttendances(this.classId);
+        this.isRecordTabActive = true;
+        this.loadClassAttendancesByClassAttendanceId(this.classId);
       }
+    });
+    this.loadStudentAttendances();
+    this.loadClassAttendances();
+  }
+
+  loadStudentAttendances() {
+    this.studentAttendanceService.loadStudentAttendancesPaginated(this.param).subscribe((result: ResponseWrapper) => {
+      const resp = result;
+        this.isLoading = false;
+        if (resp) {
+          const data = resp.data;
+          this.studentAttendances = data.studentAttendances;
+          this.totalNumberOfItems = data.count;
+          this.dataSource = new MatTableDataSource<StudentAttendance>(data.studentAttendances);
+        }
+    }, error => {
+      this.isLoading = false;
     });
   }
 
@@ -69,18 +92,28 @@ export class StudentsAttendanceComponent implements OnInit {
 
     });
   }
+  onRecordSubmitted(success: boolean) {
+    if (success) {
+      this.loadStudentAttendances();
+    }
+  }
 
-  loadClassAttendances(classId: number) {
+  loadClassAttendancesByClassAttendanceId(classId: number) {
     this.isLoading = true;
     this.classAttendanceService.getClassAttendance(classId)
     .subscribe((classAttendance: ClassAttendance) => {
         this.isLoading = false;
         if (classAttendance) {
           this.classAttendance = classAttendance;
+          this.currentClassAttendanceId = classAttendance.id;
         }
     }, error => {
       this.isLoading = false;
     });
+  }
+
+  selectedChange(classId: number) {
+    this.loadClassAttendancesByClassAttendanceId(classId);
   }
 
   edit(classAttendance: ClassAttendance) {
@@ -114,6 +147,19 @@ export class StudentsAttendanceComponent implements OnInit {
   onPageChange(pageEvent: PageEvent) {
       this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
       this.param.pageSize = pageEvent.pageSize;
+  }
+
+  loadClassAttendances() {
+    this.isLoading = true;
+    this.classAttendanceService.loadClassAttendances()
+    .subscribe((classAttendances: ClassAttendance[]) => {
+        this.isLoading = false;
+        if (classAttendances) {
+          this.classAttendances = classAttendances;
+        }
+    }, error => {
+      this.isLoading = false;
+    });
   }
 
 }

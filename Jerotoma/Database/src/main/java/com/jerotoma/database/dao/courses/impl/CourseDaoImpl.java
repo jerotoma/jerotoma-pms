@@ -67,7 +67,7 @@ public class CourseDaoImpl implements CourseDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(CourseConstant.COURSES, courses);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;

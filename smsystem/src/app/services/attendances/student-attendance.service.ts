@@ -11,11 +11,17 @@ import { AcademicYear, ResponseWrapper, StudentAttendanceParam, StudentAttendanc
 })
 export class StudentAttendanceService {
 
+
   constructor(private http: HttpClient) { }
 
   createStudentAttendance(studentAttendanceParam: StudentAttendanceParam): Observable<StudentAttendance> {
     return this.http.post(`${END_POINTS.attendances}/students`, studentAttendanceParam)
       .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadStudentAttendancesPaginated(param: QueryParam) : Observable<ResponseWrapper> {
+    return this.http.get(`${END_POINTS.attendances}/students?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+    .pipe(map((resp: ResponseWrapper) => resp));
   }
 
 }

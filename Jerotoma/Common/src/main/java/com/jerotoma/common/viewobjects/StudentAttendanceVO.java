@@ -3,15 +3,17 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 import com.jerotoma.common.constants.AttendanceConstant;
 
-public class ClassAttendanceVO {
+public class StudentAttendanceVO {
+	
 	private Integer id;
-	private Integer addedBy;
-	private Integer teacherId;
-	private String fullName;
+	private Integer studentId;
+	private String fullName;	
+	private Integer classAttendanceId;
+	private Integer statusId;	
+	private String statusName;
 	
 	private Integer academicYearId;
 	private String academicYearName;	
@@ -21,19 +23,18 @@ public class ClassAttendanceVO {
 	private Integer courseId;
 	private String courseName;
 	
-	private Date attendanceDate;
+	private Integer addedBy;
 	
-	private List<StudentVO> students;
-		
+	private Date attendanceDate;	
 	private Date createdOn;	
 	private Date updatedOn;
-		
-	public ClassAttendanceVO(ResultSet rs) throws SQLException {
+
+	public StudentAttendanceVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(AttendanceConstant.ID);
-		this.addedBy = rs.getInt(AttendanceConstant.ADDED_BY);
-		this.attendanceDate = rs.getDate(AttendanceConstant.ATTENDANCE_DATE);		
-		
-		this.teacherId = rs.getInt("teacherId");	
+		this.classAttendanceId = rs.getInt(AttendanceConstant.CLASS_ATTENDANCE_ID);
+		this.statusId = rs.getInt(AttendanceConstant.ATTENDANCE_STATUS_ID);
+		this.studentId = rs.getInt(AttendanceConstant.STUDENT_ID);
+		this.statusName = rs.getString("statusName");
 		this.fullName = rs.getString("firstName") + " " + rs.getString("lastName");
 		
 		this.academicYearId = rs.getInt("academicYearId");
@@ -46,8 +47,6 @@ public class ClassAttendanceVO {
 		
 		this.addedBy = rs.getInt(AttendanceConstant.ADDED_BY);
 		this.attendanceDate = rs.getDate(AttendanceConstant.ATTENDANCE_DATE);	
-		
-		
 		this.updatedOn = rs.getDate(AttendanceConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(AttendanceConstant.CREATED_ON);
 	}
@@ -55,25 +54,41 @@ public class ClassAttendanceVO {
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getClassAttendanceId() {
+		return classAttendanceId;
+	}
+
+	public void setClassAttendanceId(Integer classAttendenceId) {
+		this.classAttendanceId = classAttendenceId;
+	}
+
+	public Integer getAttendanceStatusId() {
+		return statusId;
+	}
+
+	public void setAttendanceStatusId(Integer attendenceStatusId) {
+		this.statusId = attendenceStatusId;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 	
 	public Date getAttendanceDate() {
 		return attendanceDate;
 	}
-	
+
 	public void setAttendanceDate(Date attendanceDate) {
 		this.attendanceDate = attendanceDate;
-	}
-	
-	public Integer getAddedBy() {
-		return addedBy;
-	}
-
-	public void setAddedBy(Integer addedBy) {
-		this.addedBy = addedBy;
 	}
 
 	public Date getCreatedOn() {
@@ -91,13 +106,13 @@ public class ClassAttendanceVO {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-
-	public Integer getTeacherId() {
-		return teacherId;
+	
+	public Integer getStudentId() {
+		return studentId;
 	}
 
-	public void setTeacherId(Integer teacherId) {
-		this.teacherId = teacherId;
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getFullName() {
@@ -106,6 +121,14 @@ public class ClassAttendanceVO {
 
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
+	}
+
+	public Integer getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(Integer statusId) {
+		this.statusId = statusId;
 	}
 
 	public Integer getAcademicYearId() {
@@ -156,11 +179,11 @@ public class ClassAttendanceVO {
 		this.courseName = courseName;
 	}
 
-	public List<StudentVO> getStudents() {
-		return students;
+	public Integer getAddedBy() {
+		return addedBy;
 	}
 
-	public void setStudents(List<StudentVO> students) {
-		this.students = students;
+	public void setAddedBy(Integer addedBy) {
+		this.addedBy = addedBy;
 	}
 }

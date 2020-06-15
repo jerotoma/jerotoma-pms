@@ -65,7 +65,7 @@ public class AcademicYearDaoImpl implements AcademicYearDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(AcademicConstants.ACADEMIC_YEARS, academicYears);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);		
 		return map;
 	}

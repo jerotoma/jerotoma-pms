@@ -864,7 +864,8 @@
 		   	attendance_status_id BIGINT NOT NULL,
 		   	added_by BIGINT NOT NULL,
 		    created_on timestamp with time zone NOT NULL,
-		  	updated_on timestamp with time zone NOT NULL,		  
+		  	updated_on timestamp with time zone NOT NULL,
+		  	UNIQUE(class_attendance_id, student_id),
 		    CONSTRAINT user_fkey FOREIGN KEY (added_by)
 		        REFERENCES public.users (id) MATCH SIMPLE
 		        ON UPDATE CASCADE

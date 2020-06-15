@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.attendances;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -39,8 +41,9 @@ public class StudentAttendance {
 	@JoinColumn(name="class_attendance_id")
 	private ClassAttendance classAttendance;
 	
-	@Column(name="attendance_status")
-	private String attendanceStatus;
+	@OneToOne
+	@JoinColumn(name="attendance_status_id")
+	private AttendanceStatus attendanceStatus;
 	
 	@Column(name="added_by")
 	private Integer addedBy;
@@ -53,7 +56,7 @@ public class StudentAttendance {
 	
 	public StudentAttendance() {}
 
-	public StudentAttendance(Integer id, Student student, ClassAttendance classAttendance, String attendanceStatus,
+	public StudentAttendance(Integer id, Student student, ClassAttendance classAttendance, AttendanceStatus attendanceStatus,
 			Integer addedBy, Date createdOn, Date updatedOn) {
 		super();
 		this.id = id;
@@ -65,7 +68,7 @@ public class StudentAttendance {
 		this.updatedOn = updatedOn;
 	}
 	
-	public StudentAttendance(Student student, ClassAttendance classAttendance, String attendanceStatus,
+	public StudentAttendance(Student student, ClassAttendance classAttendance, AttendanceStatus attendanceStatus,
 			Integer addedBy, Date createdOn, Date updatedOn) {
 		this.student = student;
 		this.classAttendance = classAttendance;
@@ -99,11 +102,11 @@ public class StudentAttendance {
 		this.classAttendance = classAttendance;
 	}
 
-	public String getAttendanceStatus() {
+	public AttendanceStatus getAttendanceStatus() {
 		return attendanceStatus;
 	}
 
-	public void setAttendanceStatus(String attendanceStatus) {
+	public void setAttendanceStatus(AttendanceStatus attendanceStatus) {
 		this.attendanceStatus = attendanceStatus;
 	}
 
@@ -131,42 +134,50 @@ public class StudentAttendance {
 		this.updatedOn = updatedOn;
 	}
 	
-	public static class StudentAttendanceParam {
-		Integer id; 
+	public static class StudentAttendanceStatusParam {
 		Integer studentId; 
-		Integer classAttendanceId; 
-		String attendanceStatus;
-		
-		public Integer getId() {
-			return id;
-		}
-		
-		public void setId(Integer id) {
-			this.id = id;
-		}
-		
+		Integer attendanceStatusId;		
+				
 		public Integer getStudentId() {
 			return studentId;
 		}
 		
 		public void setStudentId(Integer studentId) {
 			this.studentId = studentId;
+		}	
+
+		public Integer getAttendanceStatusId() {
+			return attendanceStatusId;
 		}
+
+		public void setAttendanceStatusId(Integer attendanceStatusId) {
+			this.attendanceStatusId = attendanceStatusId;
+		}
+	}
+	
+	public static class StudentAttendanceParam {
+		Integer Id; 
+		Integer classAttendanceId; 
+		List<StudentAttendanceStatusParam> studentAttendanceStatuses;
 		
+		public Integer getId() {
+			return Id;
+		}
+		public void setId(Integer id) {
+			Id = id;
+		}
 		public Integer getClassAttendanceId() {
 			return classAttendanceId;
 		}
-		
 		public void setClassAttendanceId(Integer classAttendanceId) {
 			this.classAttendanceId = classAttendanceId;
 		}
-		
-		public String getAttendanceStatus() {
-			return attendanceStatus;
+		public List<StudentAttendanceStatusParam> getStudentAttendanceStatuses() {
+			return studentAttendanceStatuses;
 		}
+		public void setStudentAttendanceStatuses(List<StudentAttendanceStatusParam> studentAttendanceStatuses) {
+			this.studentAttendanceStatuses = studentAttendanceStatuses;
+		}		
 		
-		public void setAttendanceStatus(String attendanceStatus) {
-			this.attendanceStatus = attendanceStatus;
-		}
 	}
 }

@@ -27,7 +27,7 @@ export class ClassesAttendanceComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'fullName', 'mClass',  'academicYearTerm', 'academicYear', 'attendanceDate', 'action'];
+  displayedColumns: string[] = ['id', 'fullName', 'courseName',  'academicYearName', 'yearOfStudy', 'attendanceDate', 'action'];
   dataSource: MatTableDataSource<ClassAttendance> = new MatTableDataSource<ClassAttendance>();
   classAttendances: ClassAttendance[];
 
@@ -63,7 +63,6 @@ export class ClassesAttendanceComponent implements OnInit {
       this.loadClassAttendances();
     });
   }
-
 
   loadClassAttendances() {
     this.isLoading = true;

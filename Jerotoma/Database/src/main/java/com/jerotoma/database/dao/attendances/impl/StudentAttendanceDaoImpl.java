@@ -1,6 +1,7 @@
 package com.jerotoma.database.dao.attendances.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,5 +69,41 @@ public class StudentAttendanceDaoImpl implements StudentAttendanceDao {
 	@Override
 	public Long countObject() throws SQLException {
 		return entityManager.createQuery("SELECT count(*) FROM StudentAttendance", Long.class).getSingleResult();
+	}
+	
+	@Override
+	public List<StudentAttendance> createBatch(List<StudentAttendance> studentAttendances)  throws SQLException {
+		int entityCount = studentAttendances.size();		
+		List<StudentAttendance> procccessedStudentAttendances = new ArrayList<StudentAttendance>();		
+		for (int i = 0; i < entityCount; i++) {			        			 
+	        StudentAttendance studentAttendance = studentAttendances.get(i);
+	        if (studentAttendance.getId() != null) {	        	
+	        	 procccessedStudentAttendances.add(updateObject(studentAttendance));
+	        } else {
+	        	entityManager.persist(studentAttendance);
+	        	procccessedStudentAttendances.add(findObject(studentAttendance.getId()));
+	        }
+	    }		
+		return procccessedStudentAttendances;		
+	}
+
+	@Override
+	public List<StudentAttendance> updateBatch(List<StudentAttendance> studentAttendances) throws SQLException {
+		int entityCount = studentAttendances.size();		
+		List<StudentAttendance> processedStudentAttendances = new ArrayList<StudentAttendance>();			 
+		for (int i = 0; i < entityCount; i++) {			       			 
+	        StudentAttendance studentAttendance = studentAttendances.get(i);			         
+	        processedStudentAttendances.add(entityManager.merge(studentAttendance));
+	    }		
+		return processedStudentAttendances;
+	}
+
+	@Override
+	public StudentAttendance getStudentAttendanceByStudentIdAndClassAttendanceId(Integer studentId,
+			Integer classAttendanceId) throws SQLException {
+		return entityManager.createQuery("FROM StudentAttendance WHERE student.id =:studentId AND classAttendance.id =:classAttendanceId", StudentAttendance.class)
+				.setParameter("studentId", studentId)
+				.setParameter("classAttendanceId", classAttendanceId)
+				.getSingleResult();
 	}
 }

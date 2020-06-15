@@ -54,5 +54,21 @@ public class StudentAttendanceServiceImpl implements StudentAttendanceService {
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		return studentAttendanceDao.loadMapList(queryParam);
 	}
+	
+	@Override
+	public List<StudentAttendance> createBatch(List<StudentAttendance> studentAttendances) throws SQLException {
+		return studentAttendanceDao.createBatch(studentAttendances);
+	}
+
+	@Override
+	public List<StudentAttendance> updateBatch(List<StudentAttendance> studentAttendances) throws SQLException {
+		return studentAttendanceDao.updateBatch(studentAttendances);
+	}
+
+	@Override
+	public StudentAttendance getStudentAttendanceByStudentIdAndClassAttendanceId(Integer studentId,
+			Integer classAttendanceId) throws SQLException {
+		return studentAttendanceDao.getStudentAttendanceByStudentIdAndClassAttendanceId(studentId, classAttendanceId);
+	}
 
 }

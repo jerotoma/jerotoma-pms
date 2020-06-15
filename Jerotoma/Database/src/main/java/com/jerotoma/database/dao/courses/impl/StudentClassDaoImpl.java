@@ -74,7 +74,7 @@ public class StudentClassDaoImpl implements StudentClassDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(AcademicConstants.STUDENT_CLASSES, studentClasses);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;

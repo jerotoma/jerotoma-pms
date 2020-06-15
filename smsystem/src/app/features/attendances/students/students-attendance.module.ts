@@ -19,6 +19,7 @@ import {
   NbSelectModule,
   NbCheckboxModule,
   NbDatepickerModule,
+  NbTabsetModule,
   NbListModule,
   NbRadioModule,
 } from '@nebular/theme';
@@ -48,6 +49,7 @@ const MODULES = [
   NbInputModule,
   NbRadioModule,
   NbSelectModule,
+  NbTabsetModule,
   NbCheckboxModule,
   NbListModule,
   NbDatepickerModule,

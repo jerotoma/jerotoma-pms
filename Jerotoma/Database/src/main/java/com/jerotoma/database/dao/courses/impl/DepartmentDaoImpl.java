@@ -70,7 +70,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(DepartmentConstant.DEPARTMENTS, departments);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;

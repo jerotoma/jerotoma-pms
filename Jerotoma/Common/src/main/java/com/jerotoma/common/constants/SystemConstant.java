@@ -6,7 +6,7 @@ public class SystemConstant {
 	public static final String CREATED_ON = "created_on";
 	public static final String ADDED_BY = "added_by";
 
-	public static final String SYSTEM_COUNT = "count";
+	public static final String COUNT = "count";
 	public static final String DOC_FILE_PATH = "/resources/";
 	public static final String PACKAGES_TO_SCAN = "com.jerotoma";
 	

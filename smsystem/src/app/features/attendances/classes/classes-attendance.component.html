@@ -17,24 +17,24 @@
                 <!-- fullName Column -->
                 <ng-container matColumnDef="fullName">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Teacher </th>
-                  <td mat-cell *matCellDef="let element"> {{element.mclass.teacher.fullName}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
                 </ng-container>
 
-                <!-- mClass Column -->
-                <ng-container matColumnDef="mClass">
+                <!-- courseName Column -->
+                <ng-container matColumnDef="courseName">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Class</th>
-                  <td mat-cell *matCellDef="let element"> {{element.mclass.course.name}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
                 </ng-container>
 
-                <!-- academicYearTerm Column -->
-                <ng-container matColumnDef="academicYearTerm">
+                <!-- academicYearName Column -->
+                <ng-container matColumnDef="academicYearName">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Term </th>
-                  <td mat-cell *matCellDef="let element"> {{element.academicYear.name}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.academicYearName}} </td>
                 </ng-container>
                 <!-- academicYear Column -->
-                <ng-container matColumnDef="academicYear">
+                <ng-container matColumnDef="yearOfStudy">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> Year of Study </th>
-                  <td mat-cell *matCellDef="let element"> {{element.academicYear.yearOfStudy}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.yearOfStudy}} </td>
                 </ng-container>
                  <!-- academicYear Column -->
                  <ng-container matColumnDef="attendanceDate">
@@ -49,9 +49,9 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #menu="matMenu" xPosition="before">
-                        <button mat-menu-item (click)="view(element)"><mat-icon>visibility</mat-icon> View</button>
-                        <button mat-menu-item (click)="edit(element)"><mat-icon>edit</mat-icon> Edit</button>
-                        <button mat-menu-item (click)="delete(element)"><mat-icon>delete</mat-icon> Delete</button>
+                        <button mat-menu-item (click)="view(element)"><mat-icon>visibility</mat-icon> Record Class Attendance</button>
+                        <button mat-menu-item (click)="edit(element)"><mat-icon>edit</mat-icon> Edit Class Attendance</button>
+                        <button mat-menu-item (click)="delete(element)"><mat-icon>delete</mat-icon> Delete Attendance</button>
                       </mat-menu>
                   </td>
                 </ng-container>

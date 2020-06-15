@@ -1,9 +1,23 @@
-import { from } from 'rxjs';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
-import { ClassView, Student, AcademicYear, StudentAttendanceParam, AttendanceStatus, StudentAttendanceStatus, ClassAttendance, StudentAttendance } from 'app/models';
-import { ModalService, ClassService, StudentAttendanceService, AttendanceStatusService } from 'app/services';
+import {
+  ClassView,
+  Student,
+  AcademicYear,
+  StudentAttendanceParam,
+  AttendanceStatus,
+  StudentAttendanceStatus,
+  ClassAttendance,
+  StudentAttendance,
+} from 'app/models';
+
+import {
+  ModalService,
+  ClassAttendanceService,
+  StudentAttendanceService,
+  AttendanceStatusService,
+} from 'app/services';
 
 @Component({
   selector: 'app-record-student-attendance',
@@ -13,7 +27,7 @@ import { ModalService, ClassService, StudentAttendanceService, AttendanceStatusS
 export class RecordStudentAttendenceComponent implements OnInit {
 
   @Input() title: string;
-  @Output() onCreationSuccess = new EventEmitter();
+  @Output() onRecordSubmitted = new EventEmitter();
   @Input() id: string;
   @Input() classAttendance: ClassAttendance;
 
@@ -29,10 +43,11 @@ export class RecordStudentAttendenceComponent implements OnInit {
   studentAttendance: StudentAttendance;
   attendanceStatuses: AttendanceStatus[];
 
-
   constructor(
+    private classAttendanceService: ClassAttendanceService,
     private attendanceStatusService: AttendanceStatusService,
     private formBuilder: FormBuilder,
+    private modalService: ModalService,
     private studentAttendanceService: StudentAttendanceService) {}
 
   ngOnInit() {
@@ -46,7 +61,7 @@ export class RecordStudentAttendenceComponent implements OnInit {
       this.isLoading = false;
       if (attendanceStatuses) {
         this.attendanceStatuses = attendanceStatuses;
-        const students = this.classAttendance.mclass.students;
+        const students = this.classAttendance.students;
         this.patch(students, attendanceStatuses);
         this.patchStudentValues();
       }
@@ -58,7 +73,8 @@ export class RecordStudentAttendenceComponent implements OnInit {
     this.studentAttendanceService.createStudentAttendance(this.studentAttendanceParam)
     .subscribe((studentAttendance: StudentAttendance) => {
       if (studentAttendance) {
-        window.console.log(studentAttendance);
+        this.modalService.openSnackBar('Attendance has been recorded', 'success');
+        this.onRecordSubmitted.emit({success: true});
       }
     });
   }
@@ -87,12 +103,12 @@ export class RecordStudentAttendenceComponent implements OnInit {
   patchStudentValues() {
     this.recordAttendanceForm.patchValue({
       classAttendanceId: this.classAttendance.id,
-    });
+    }, {emitEvent: false});
   }
 
   onChanges() {
-    this.recordAttendanceForm.valueChanges.subscribe((values: any) => {
-      window.console.log('Values: ', values);
+    this.recordAttendanceForm.controls['classAttendanceId'].valueChanges.subscribe((classAttendanceId: number) => {
+        // this.loadClassAttendancesByClassAttendanceId(classAttendanceId);
     });
   }
 

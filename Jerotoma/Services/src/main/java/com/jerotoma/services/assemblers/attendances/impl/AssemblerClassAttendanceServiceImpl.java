@@ -42,4 +42,9 @@ public class AssemblerClassAttendanceServiceImpl implements AssemblerClassAttend
 		return assemblerClassAttendanceDao.countObject();
 	}
 
+	@Override
+	public List<ClassAttendanceVO> getAll() throws SQLException {		
+		return assemblerClassAttendanceDao.getAll();
+	}
+
 }

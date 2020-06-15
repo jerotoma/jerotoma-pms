@@ -66,7 +66,7 @@ public class RoomDaoImpl implements RoomDao {
 				.setFirstResult(offset)
 				.getResultList();
 		map.put(RoomConstant.ROOMS, rooms);
-		map.put(SystemConstant.SYSTEM_COUNT, countResults);
+		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);		
 		return map;
 	}
