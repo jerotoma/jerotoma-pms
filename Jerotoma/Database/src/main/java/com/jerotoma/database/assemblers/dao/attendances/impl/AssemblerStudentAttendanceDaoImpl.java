@@ -121,19 +121,7 @@ public class AssemblerStudentAttendanceDaoImpl extends JdbcDaoSupport implements
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT ")
-				.append(" sa.id, sa.student_id AS studentId, sa.class_attendance_id AS classAttendanceId, sa.attendance_status_id AS attendanceStatusId, sa.added_by AS addedBy, sa.created_on AS createdOn, sa.updated_on AS updatedOn, ")
-				.append(" s.first_name AS firstName, s.last_name AS lastName, ast.name AS statusName,")
-				.append(" co.name AS courseName, co.id AS courseId, c.id AS classId,  ca.attendance_date AS attendanceDate, ")				
-				.append(" ay.id AS academicYearId, ay.year_of_study AS yearOfStudy, ay.name AS academicYearName ")
-				.append(" FROM public.student_attendances sa ")				
-				.append("  INNER JOIN public.students s ON s.id = sa.student_id ")
-				.append("  INNER JOIN public.attendance_statuses ast ON ast.id = sa.attendance_status_id ")
-				.append("  INNER JOIN public.class_attendances ca ON ca.id = sa.class_attendance_id ")
-				.append("  INNER JOIN public.classes c ON c.id = ca.class_id ")
-				.append("  INNER JOIN public.courses co ON co.id = c.course_id")
-				.append("  INNER JOIN public.academic_years ay ON ay.id = c.academic_year_id");
-		
+		return AssemblerAttendanceConstant.getStudentAttendanceBaseSelectQuery();		
 	}	
 	
 	@Override

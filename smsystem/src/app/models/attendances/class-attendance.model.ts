@@ -1,4 +1,4 @@
-import { Student } from 'app/models';
+import { StudentAttendance } from 'app/models';
 
 export interface ClassAttendance {
   id: number;
@@ -14,7 +14,7 @@ export interface ClassAttendance {
   teacherId: number;
   updatedOn: Date;
   yearOfStudy: string;
-  students?: Student[];
+  studentAttendances?: StudentAttendance[];
 }
 
 export interface ClassAttendanceParam {

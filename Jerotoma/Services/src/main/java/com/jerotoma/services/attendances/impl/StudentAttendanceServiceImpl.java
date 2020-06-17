@@ -67,8 +67,8 @@ public class StudentAttendanceServiceImpl implements StudentAttendanceService {
 
 	@Override
 	public StudentAttendance getStudentAttendanceByStudentIdAndClassAttendanceId(Integer studentId,
-			Integer classAttendanceId) throws SQLException {
-		return studentAttendanceDao.getStudentAttendanceByStudentIdAndClassAttendanceId(studentId, classAttendanceId);
+			Integer classAttendanceId) throws SQLException { //EmptyResultDataAccessException	
+		return studentAttendanceDao.getStudentAttendanceByStudentIdAndClassAttendanceId(studentId, classAttendanceId);		
 	}
 
 }

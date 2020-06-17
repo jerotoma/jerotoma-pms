@@ -111,7 +111,7 @@ export class ClassesAttendanceComponent implements OnInit {
      // Set our navigation extras object
     // that contains our global query params and fragment
     const navigationExtras: NavigationExtras = {
-      queryParams: {classId: classAttendance.id },
+      queryParams: {classAttendanceId: classAttendance.id },
     };
     this.router.navigate([this.baseURL], navigationExtras);
   }

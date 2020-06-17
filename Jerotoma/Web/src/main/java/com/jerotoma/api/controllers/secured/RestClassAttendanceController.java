@@ -133,16 +133,16 @@ public class RestClassAttendanceController extends RestAttendanceController {
 		return instance;
 	}
 	
-	@GetMapping("/{classId}")	
+	@GetMapping("/{classAttendanceId}")	
 	@ResponseBody
-	public HttpResponseEntity<Object> getClassAttendance(Authentication auth, @PathVariable(name="classId") Integer classId) {		
+	public HttpResponseEntity<Object> getClassAttendance(Authentication auth, @PathVariable(name="classAttendanceId") Integer classAttendanceId) {		
 		
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
 			instance.setSuccess(true);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			instance.setData(assemblerClassAttendanceService.findObject(classId));
+			instance.setData(assemblerClassAttendanceService.findObject(classAttendanceId));
 			instance.setHttpStatus(HttpStatus.OK);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			

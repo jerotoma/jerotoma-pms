@@ -31,10 +31,17 @@ public class StudentAttendanceVO {
 
 	public StudentAttendanceVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(AttendanceConstant.ID);
+		if (rs.wasNull()) {
+			this.id = null;
+		}
 		this.classAttendanceId = rs.getInt(AttendanceConstant.CLASS_ATTENDANCE_ID);
 		this.statusId = rs.getInt(AttendanceConstant.ATTENDANCE_STATUS_ID);
-		this.studentId = rs.getInt(AttendanceConstant.STUDENT_ID);
+		if (rs.wasNull()) {
+			this.statusId = null;
+		}
 		this.statusName = rs.getString("statusName");
+		
+		this.studentId = rs.getInt(AttendanceConstant.STUDENT_ID);		
 		this.fullName = rs.getString("firstName") + " " + rs.getString("lastName");
 		
 		this.academicYearId = rs.getInt("academicYearId");
@@ -46,6 +53,9 @@ public class StudentAttendanceVO {
 		this.courseId = rs.getInt("courseId");
 		
 		this.addedBy = rs.getInt(AttendanceConstant.ADDED_BY);
+		if (rs.wasNull()) {
+			this.addedBy = null;
+		}
 		this.attendanceDate = rs.getDate(AttendanceConstant.ATTENDANCE_DATE);	
 		this.updatedOn = rs.getDate(AttendanceConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(AttendanceConstant.CREATED_ON);
@@ -65,14 +75,6 @@ public class StudentAttendanceVO {
 
 	public void setClassAttendanceId(Integer classAttendenceId) {
 		this.classAttendanceId = classAttendenceId;
-	}
-
-	public Integer getAttendanceStatusId() {
-		return statusId;
-	}
-
-	public void setAttendanceStatusId(Integer attendenceStatusId) {
-		this.statusId = attendenceStatusId;
 	}
 
 	public String getStatusName() {
@@ -186,4 +188,39 @@ public class StudentAttendanceVO {
 	public void setAddedBy(Integer addedBy) {
 		this.addedBy = addedBy;
 	}
+
+	@Override
+	public int hashCode() {		
+		int result = 0;
+		if (id != null) {
+			result = (int) (id / 11) * 34 * 12;
+		}
+		return result ;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		// null check
+		if (obj == null) {
+			return false;
+		}
+		 
+		// this instance check
+		if (this == obj) {
+			return true;
+		}
+ 
+		// instanceof Check and actual id check
+		if (obj instanceof StudentAttendanceVO) {
+			StudentAttendanceVO studentAttendance =	(StudentAttendanceVO)obj;			
+			return this.id == studentAttendance.id;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public String toString() {
+		return super.toString();
+	}	
 }

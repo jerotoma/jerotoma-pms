@@ -13,8 +13,8 @@ export class ClassAttendanceService {
 
   constructor(private http: HttpClient) { }
 
-  getClassAttendance(classId: number): Observable<ClassAttendance> {
-    return this.http.get(`${END_POINTS.attendances}/classes/${classId}`)
+  getClassAttendance(classAttendanceId: number): Observable<ClassAttendance> {
+    return this.http.get(`${END_POINTS.attendances}/classes/${classAttendanceId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

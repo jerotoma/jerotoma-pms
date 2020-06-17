@@ -81,29 +81,6 @@
       <nb-tab
         [active]="isRecordTabActive"
         tabTitle="Record Student Attendances">
-        <div class="row mb-4">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-12">
-                  <div class="form-control-group">
-                      <label for="class-classId" class="label">Select Class To Record Attendence</label>
-                      <nb-select
-                        fullWidth
-                        placeholder="Class Name"
-                        [(selected)]="currentClassAttendanceId"
-                        (selectedChange)="selectedChange($event)"
-                        id="class-classId">
-                        <nb-option
-                          *ngFor="let classAttendance of classAttendances"
-                          [value]="classAttendance.id">
-                          {{classAttendance.courseName}}
-                        </nb-option>
-                      </nb-select>
-                  </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="row">
           <div class="col-md-12">
             <div class="row">

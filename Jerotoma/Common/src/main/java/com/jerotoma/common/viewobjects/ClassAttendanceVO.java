@@ -3,7 +3,7 @@ package com.jerotoma.common.viewobjects;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import com.jerotoma.common.constants.AttendanceConstant;
 
@@ -23,7 +23,7 @@ public class ClassAttendanceVO {
 	
 	private Date attendanceDate;
 	
-	private List<StudentVO> students;
+	private Set<StudentAttendanceVO> studentAttendances;
 		
 	private Date createdOn;	
 	private Date updatedOn;
@@ -156,11 +156,11 @@ public class ClassAttendanceVO {
 		this.courseName = courseName;
 	}
 
-	public List<StudentVO> getStudents() {
-		return students;
+	public Set<StudentAttendanceVO> getStudentAttendances() {
+		return studentAttendances;
 	}
 
-	public void setStudents(List<StudentVO> students) {
-		this.students = students;
+	public void setStudentAttendances(Set<StudentAttendanceVO> studentAttendances) {
+		this.studentAttendances = studentAttendances;
 	}
 }

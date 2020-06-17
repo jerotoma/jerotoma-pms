@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -147,7 +148,7 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 			Student student = studentService.findObject(studentAttendanceStatus.getStudentId());
 			AttendanceStatus attendanceStatus = attendanceStatusService.findObject(studentAttendanceStatus.getAttendanceStatusId());
 			
-			StudentAttendance sAttendance = studentAttendanceService.getStudentAttendanceByStudentIdAndClassAttendanceId(student.getId(), classAttendance.getId());				
+			StudentAttendance sAttendance = checkStudentClassAttendanceExistance(classAttendance, student);				
 			if (sAttendance == null) {
 				StudentAttendance studentAttendance = new StudentAttendance(student, classAttendance, attendanceStatus, authUser.getId(), today, today);
 				studentAttendances.add(studentAttendance);
@@ -158,6 +159,20 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 			}				
 		}
 		return studentAttendances;
+	}
+
+	protected StudentAttendance checkStudentClassAttendanceExistance(ClassAttendance classAttendance, Student student) {
+		StudentAttendance studentAttendance = null;
+		try {
+			studentAttendance = studentAttendanceService.getStudentAttendanceByStudentIdAndClassAttendanceId(student.getId(), classAttendance.getId());
+		} catch (SQLException | EmptyResultDataAccessException e) {
+			if (e instanceof EmptyResultDataAccessException) {
+				studentAttendance = null;
+			} else {
+				throw new JDataAccessException(e.getMessage(), e);	
+			}
+		}		
+		return studentAttendance;
 	}
 
 	@Override

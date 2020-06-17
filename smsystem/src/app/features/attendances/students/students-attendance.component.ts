@@ -27,8 +27,7 @@ export class StudentsAttendanceComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  classId: number;
-  currentClassAttendanceId: number;
+  classAttendanceId: number;
   displayedColumns: string[] = ['id', 'fullName', 'courseName',  'academicYearName', 'yearOfStudy', 'attendanceDate', 'statusName', 'action'];
   dataSource: MatTableDataSource<StudentAttendance> = new MatTableDataSource<StudentAttendance>();
   studentAttendances: StudentAttendance[];
@@ -57,14 +56,13 @@ export class StudentsAttendanceComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.classId = params['classId'];
-      if (this.classId) {
+      this.classAttendanceId = params['classAttendanceId'];
+      if (this.classAttendanceId) {
         this.isRecordTabActive = true;
-        this.loadClassAttendancesByClassAttendanceId(this.classId);
+        this.loadClassAttendancesByClassAttendanceId(this.classAttendanceId);
       }
     });
     this.loadStudentAttendances();
-    this.loadClassAttendances();
   }
 
   loadStudentAttendances() {
@@ -98,23 +96,19 @@ export class StudentsAttendanceComponent implements OnInit {
     }
   }
 
-  loadClassAttendancesByClassAttendanceId(classId: number) {
+  loadClassAttendancesByClassAttendanceId(classAttendanceId: number) {
     this.isLoading = true;
-    this.classAttendanceService.getClassAttendance(classId)
+    this.classAttendanceService.getClassAttendance(classAttendanceId)
     .subscribe((classAttendance: ClassAttendance) => {
         this.isLoading = false;
         if (classAttendance) {
           this.classAttendance = classAttendance;
-          this.currentClassAttendanceId = classAttendance.id;
         }
     }, error => {
       this.isLoading = false;
     });
   }
 
-  selectedChange(classId: number) {
-    this.loadClassAttendancesByClassAttendanceId(classId);
-  }
 
   edit(classAttendance: ClassAttendance) {
     this.dialogService.open(ClassAttendenceCreateComponent, {
@@ -148,18 +142,4 @@ export class StudentsAttendanceComponent implements OnInit {
       this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
       this.param.pageSize = pageEvent.pageSize;
   }
-
-  loadClassAttendances() {
-    this.isLoading = true;
-    this.classAttendanceService.loadClassAttendances()
-    .subscribe((classAttendances: ClassAttendance[]) => {
-        this.isLoading = false;
-        if (classAttendances) {
-          this.classAttendances = classAttendances;
-        }
-    }, error => {
-      this.isLoading = false;
-    });
-  }
-
 }

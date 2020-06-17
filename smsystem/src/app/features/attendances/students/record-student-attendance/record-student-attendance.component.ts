@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import {
@@ -32,6 +32,7 @@ export class RecordStudentAttendenceComponent implements OnInit {
   @Input() classAttendance: ClassAttendance;
 
   currentDate: Date = new Date();
+  currentClassAttendanceId: number;
   recordAttendanceForm: FormGroup;
   isSubmitting: boolean = false;
   isLoading: boolean = false;
@@ -42,6 +43,7 @@ export class RecordStudentAttendenceComponent implements OnInit {
   studentAttendanceStatuses: StudentAttendanceStatus[] = [];
   studentAttendance: StudentAttendance;
   attendanceStatuses: AttendanceStatus[];
+  classAttendances: ClassAttendance[];
 
   constructor(
     private classAttendanceService: ClassAttendanceService,
@@ -53,6 +55,7 @@ export class RecordStudentAttendenceComponent implements OnInit {
   ngOnInit() {
     this.loadForm();
     this.loadAttendanceStatuses();
+    this.loadClassAttendances();
   }
 
   loadAttendanceStatuses() {
@@ -60,11 +63,24 @@ export class RecordStudentAttendenceComponent implements OnInit {
     this.attendanceStatusService.loadAttendanceStatuses().subscribe((attendanceStatuses: AttendanceStatus[]) => {
       this.isLoading = false;
       if (attendanceStatuses) {
-        this.attendanceStatuses = attendanceStatuses;
-        const students = this.classAttendance.students;
-        this.patch(students, attendanceStatuses);
+        const studentAttendances = this.classAttendance.studentAttendances;
+        this.patch(studentAttendances);
         this.patchStudentValues();
+        this.attendanceStatuses = attendanceStatuses; // This must be assigned at the last to make sure form is full loaded
       }
+    });
+  }
+
+  loadClassAttendances() {
+    this.isLoading = true;
+    this.classAttendanceService.loadClassAttendances()
+    .subscribe((classAttendances: ClassAttendance[]) => {
+        this.isLoading = false;
+        if (classAttendances) {
+          this.classAttendances = classAttendances;
+        }
+    }, error => {
+      this.isLoading = false;
     });
   }
 
@@ -83,15 +99,14 @@ export class RecordStudentAttendenceComponent implements OnInit {
     this.recordAttendanceForm = this.formBuilder.group({
       id: [null],
       classAttendanceId: [null, Validators.required],
-      studentAttendanceStatuses: this.formBuilder.array([]),
+      studentAttendanceStatusesArray: this.formBuilder.array([]),
     });
     this.onChanges();
   }
 
-  patch(students: Student[], attendanceStatuses: AttendanceStatus[]) {
-    const studentAttendanceStatusesControl = <FormArray>this.recordAttendanceForm.get('studentAttendanceStatuses');
-    students.forEach((student: Student, index: number) => {
-      studentAttendanceStatusesControl.push(this.patchStudentAttendanceStatusValues(student.id, attendanceStatuses[0].id));
+  patch(studentAttendances: StudentAttendance[]) {
+    studentAttendances.forEach((studentAttendance: StudentAttendance, index: number) => {
+      this.studentAttendanceStatusesArray.push(this.patchStudentAttendanceStatusValues(studentAttendance.studentId, studentAttendance.statusId));
     });
   }
   patchStudentAttendanceStatusValues(studentId: number, attendanceStatusId: number) {
@@ -108,7 +123,8 @@ export class RecordStudentAttendenceComponent implements OnInit {
 
   onChanges() {
     this.recordAttendanceForm.controls['classAttendanceId'].valueChanges.subscribe((classAttendanceId: number) => {
-        // this.loadClassAttendancesByClassAttendanceId(classAttendanceId);
+        this.classAttendance = null;
+        this.loadClassAttendancesByClassAttendanceId(classAttendanceId);
     });
   }
 
@@ -116,6 +132,27 @@ export class RecordStudentAttendenceComponent implements OnInit {
     return this.studentAttendanceStatuses.find((attendanceStatus: StudentAttendanceStatus) => {
       return attendanceStatus.studentId === studentId;
     });
+  }
+
+  loadClassAttendancesByClassAttendanceId(classAttendanceId: number) {
+    this.isLoading = true;
+    this.classAttendanceService.getClassAttendance(classAttendanceId)
+    .subscribe((classAttendance: ClassAttendance) => {
+        this.isLoading = false;
+        if (classAttendance) {
+          const studentAttendances = classAttendance.studentAttendances;
+          this.patch(studentAttendances);
+          this.classAttendance = classAttendance;
+          this.patchStudentValues();
+          this.currentClassAttendanceId = classAttendance.id;
+        }
+    }, error => {
+      this.isLoading = false;
+    });
+  }
+
+  get studentAttendanceStatusesArray(): FormArray {
+    return this.recordAttendanceForm.get('studentAttendanceStatusesArray') as FormArray;
   }
 
   get hasStatusData(): boolean {
