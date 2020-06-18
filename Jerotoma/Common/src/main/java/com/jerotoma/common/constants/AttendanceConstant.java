@@ -15,7 +15,7 @@ public class AttendanceConstant {
 	public static final String STUDENT_ATTENDANCE = "studentAttendance";
 	public static final String STUDENT_ID = "studentId";
 	public static final String STUDENT_ATTENDANCE_ID = "studentAttendanceId";
-	public static final String STUDENT_ATTENDANCE_STATUSES = "studentAttendanceStatuses";
+	public static final String STUDENT_ATTENDANCE_STATUSES = "studentAttendanceStatusesArray";
 	
 	public static final String ATTENDANCE_STATUS_ID = "attendanceStatusId";	
 	public static final String ATTENDANCE_STATUS_NAME = "name";

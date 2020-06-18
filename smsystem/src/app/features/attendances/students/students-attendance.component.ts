@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NbDialogService } from '@nebular/theme';
@@ -25,6 +25,7 @@ export class StudentsAttendanceComponent implements OnInit {
   baseURL: string = '/dashboard/admissions/attendances/classes';
   hidePageSize: boolean = false;
   isLoading: boolean = false;
+  currentClassAttendanceId: number;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   classAttendanceId: number;
@@ -62,6 +63,7 @@ export class StudentsAttendanceComponent implements OnInit {
         this.loadClassAttendancesByClassAttendanceId(this.classAttendanceId);
       }
     });
+    this.loadClassAttendances();
     this.loadStudentAttendances();
   }
 
@@ -96,13 +98,36 @@ export class StudentsAttendanceComponent implements OnInit {
     }
   }
 
+  onSelectedChange(classAttendanceId: number) {
+     const URL: string = '/dashboard/attendances/students';
+     const navigationExtras: NavigationExtras = {
+      queryParams: {classAttendanceId: classAttendanceId },
+    };
+    this.router.navigate([URL], navigationExtras);
+  }
+
   loadClassAttendancesByClassAttendanceId(classAttendanceId: number) {
     this.isLoading = true;
+    this.classAttendance = null;
     this.classAttendanceService.getClassAttendance(classAttendanceId)
     .subscribe((classAttendance: ClassAttendance) => {
         this.isLoading = false;
         if (classAttendance) {
           this.classAttendance = classAttendance;
+          this.currentClassAttendanceId = classAttendance.id;
+        }
+    }, error => {
+      this.isLoading = false;
+    });
+  }
+
+  loadClassAttendances() {
+    this.isLoading = true;
+    this.classAttendanceService.loadClassAttendances()
+    .subscribe((classAttendances: ClassAttendance[]) => {
+        this.isLoading = false;
+        if (classAttendances) {
+          this.classAttendances = classAttendances;
         }
     }, error => {
       this.isLoading = false;

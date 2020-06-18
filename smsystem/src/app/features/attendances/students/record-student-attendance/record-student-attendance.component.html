@@ -2,28 +2,6 @@
 <div class='row card-row' *ngIf="classAttendance">
   <div class="card-col col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="recordAttendanceForm" class="step-container" (ngSubmit)="onSubmit()">
-        <div class="row mb-4">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-6">
-                  <div class="form-control-group">
-                      <label for="class-classId" class="label">Select Class To Record Attendence</label>
-                      <nb-select
-                        fullWidth
-                        placeholder="Class Name"
-                        formControlName="classAttendanceId"
-                        id="class-classId">
-                        <nb-option
-                          *ngFor="let classAttendance of classAttendances"
-                          [value]="classAttendance.id">
-                          {{classAttendance.courseName}}
-                        </nb-option>
-                      </nb-select>
-                  </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="row">
             <div class="col-md-12">
               <table class="table">
@@ -38,10 +16,24 @@
                   </tr>
                   <tr>
                     <th scope="row">Attendance Date</th>
-                    <td>{{classAttendance.attendanceDate | date:'longDate'}}</td>
+                    <td>{{classAttendance.attendanceDate | date:'longDate'}}
+                      <mat-form-field class="attendanceDate-full-width">
+                        <input
+                          matInput
+                          formControlName="attendanceDate"
+                          [matDatepicker]="attendanceDate"
+                          placeholder="">
+                        <mat-datepicker #attendanceDate></mat-datepicker>
+                      </mat-form-field>
+                      <button
+                        type="button"
+                        nbButton outline status="info"
+                        (click)="attendanceDate.open()">Change Attendance Date</button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
+              <input type="hidden" [value]="classAttendance?.id" formControlName="classAttendanceId">
           </div>
         </div>
         <div class="row">
@@ -59,6 +51,7 @@
                   <td>
                     <input type="hidden" [value]="classAttendance?.studentAttendances[i]?.studentId" formControlName="studentId">
                     <nb-radio-group
+                      id="attendanceStatusId-{{classAttendance?.studentAttendances[i]?.studentId}}"
                       [value]="classAttendance?.studentAttendances[i]?.statusId"
                       name="attendanceStatusId-{{classAttendance?.studentAttendances[i]?.studentId}}"
                       formControlName="attendanceStatusId">
@@ -74,10 +67,20 @@
             </table>
           </div>
         </div>
-        <div class="row">
+        <div class="row"
+              [nbSpinner]="isSubmitting"
+              nbSpinnerStatus="success"
+              nbSpinnerSize="large"
+              nbSpinnerMessage="Submitting Attendances">
           <div class="col-md-12">
               <div class="form-control-group">
-                <button class='push-right' [disabled]="!recordAttendanceForm.valid" type="submit" nbButton hero status="success">Submit Attendances</button>
+                <button class='push-right'
+                  [disabled]="!recordAttendanceForm.valid || isSubmitting"
+                  type="submit"
+                  nbButton hero
+                  status="success">
+                  {{ isSubmitting ? 'Submitting Attendances' : 'Submit Attendances' }}
+                </button>
               </div>
           </div>
         </div>

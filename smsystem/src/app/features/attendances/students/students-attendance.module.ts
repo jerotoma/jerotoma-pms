@@ -6,6 +6,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatNativeDateModule} from '@angular/material/core';
+import {MatInputModule} from '@angular/material/input';
 
 import {
   NbButtonModule,
@@ -59,6 +63,10 @@ const MODULES = [
   MatPaginatorModule,
   MatIconModule,
   MatMenuModule,
+  MatNativeDateModule,
+  MatDatepickerModule,
+  MatInputModule,
+  MatFormFieldModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
@@ -67,6 +75,7 @@ const MODULES = [
 ];
 
 const SERVICES = [
+  MatNativeDateModule,
 ];
 
 

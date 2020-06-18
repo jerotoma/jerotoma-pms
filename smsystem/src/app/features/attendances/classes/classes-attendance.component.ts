@@ -58,7 +58,7 @@ export class ClassesAttendanceComponent implements OnInit {
       context: {
         title: 'Add New Class Attendance',
         action: APP_ACTION_TYPE.create,
-      }
+      },
     }).onClose.subscribe(_data => {
       this.loadClassAttendances();
     });

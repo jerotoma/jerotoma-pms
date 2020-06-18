@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 
 import {
@@ -18,21 +18,20 @@ import {
   StudentAttendanceService,
   AttendanceStatusService,
 } from 'app/services';
+import { error } from 'console';
 
 @Component({
   selector: 'app-record-student-attendance',
   templateUrl: './record-student-attendance.component.html',
   styleUrls: ['./record-student-attendance.component.scss'],
 })
-export class RecordStudentAttendenceComponent implements OnInit {
-
+export class RecordStudentAttendenceComponent implements OnInit, OnDestroy {
   @Input() title: string;
   @Output() onRecordSubmitted = new EventEmitter();
   @Input() id: string;
   @Input() classAttendance: ClassAttendance;
 
   currentDate: Date = new Date();
-  currentClassAttendanceId: number;
   recordAttendanceForm: FormGroup;
   isSubmitting: boolean = false;
   isLoading: boolean = false;
@@ -54,8 +53,12 @@ export class RecordStudentAttendenceComponent implements OnInit {
 
   ngOnInit() {
     this.loadForm();
+    this.patchStudentValues();
     this.loadAttendanceStatuses();
-    this.loadClassAttendances();
+  }
+
+  ngOnDestroy(): void {
+    // window.console.log('Component Destroyed: ', this);
   }
 
   loadAttendanceStatuses() {
@@ -71,33 +74,26 @@ export class RecordStudentAttendenceComponent implements OnInit {
     });
   }
 
-  loadClassAttendances() {
-    this.isLoading = true;
-    this.classAttendanceService.loadClassAttendances()
-    .subscribe((classAttendances: ClassAttendance[]) => {
-        this.isLoading = false;
-        if (classAttendances) {
-          this.classAttendances = classAttendances;
-        }
-    }, error => {
-      this.isLoading = false;
-    });
-  }
-
   onSubmit() {
+    this.isSubmitting = true;
     this.studentAttendanceParam = this.recordAttendanceForm.value;
     this.studentAttendanceService.createStudentAttendance(this.studentAttendanceParam)
     .subscribe((studentAttendance: StudentAttendance) => {
+      this.isSubmitting = false;
       if (studentAttendance) {
         this.modalService.openSnackBar('Attendance has been recorded', 'success');
         this.onRecordSubmitted.emit({success: true});
       }
+    }, err => {
+      console.error(err);
+      this.isSubmitting = false;
     });
   }
 
   loadForm() {
     this.recordAttendanceForm = this.formBuilder.group({
       id: [null],
+      attendanceDate: [null, Validators.required],
       classAttendanceId: [null, Validators.required],
       studentAttendanceStatusesArray: this.formBuilder.array([]),
     });
@@ -116,15 +112,20 @@ export class RecordStudentAttendenceComponent implements OnInit {
     });
   }
   patchStudentValues() {
-    this.recordAttendanceForm.patchValue({
-      classAttendanceId: this.classAttendance.id,
-    }, {emitEvent: false});
+    if (this.classAttendance) {
+      this.recordAttendanceForm.patchValue({
+        classAttendanceId: this.classAttendance.id,
+        classAttendanceDate: this.classAttendance.attendanceDate,
+      }, {emitEvent: false});
+    }
   }
 
   onChanges() {
-    this.recordAttendanceForm.controls['classAttendanceId'].valueChanges.subscribe((classAttendanceId: number) => {
-        this.classAttendance = null;
-        this.loadClassAttendancesByClassAttendanceId(classAttendanceId);
+    this.recordAttendanceForm.controls['attendanceDate'].valueChanges.subscribe((classAttendanceDate: Date) => {
+      this.classAttendance.attendanceDate = classAttendanceDate;
+      this.recordAttendanceForm.patchValue({
+        classAttendanceDate: classAttendanceDate,
+      });
     });
   }
 
@@ -144,9 +145,10 @@ export class RecordStudentAttendenceComponent implements OnInit {
           this.patch(studentAttendances);
           this.classAttendance = classAttendance;
           this.patchStudentValues();
-          this.currentClassAttendanceId = classAttendance.id;
+          // this.currentClassAttendanceId = classAttendance.id;
         }
-    }, error => {
+    }, (erro) => {
+      console.error(erro);
       this.isLoading = false;
     });
   }
