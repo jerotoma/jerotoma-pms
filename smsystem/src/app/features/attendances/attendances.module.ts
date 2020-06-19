@@ -6,6 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { NbMomentDateModule } from '@nebular/moment';
 
 import {
   NbButtonModule,
@@ -35,6 +36,7 @@ const MODULES = [
   SharedModule,
   AttendancesRoutingModule,
   NgbModule,
+  NbMomentDateModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,

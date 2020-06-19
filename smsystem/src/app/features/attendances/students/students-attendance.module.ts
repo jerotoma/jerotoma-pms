@@ -10,6 +10,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatNativeDateModule} from '@angular/material/core';
 import {MatInputModule} from '@angular/material/input';
+import { NbMomentDateModule } from '@nebular/moment';
 
 import {
   NbButtonModule,
@@ -50,6 +51,7 @@ const MODULES = [
   NbSpinnerModule,
   NbWindowModule,
   NbCardModule,
+  NbMomentDateModule,
   NbInputModule,
   NbRadioModule,
   NbSelectModule,

@@ -18,7 +18,8 @@ import {
   StudentAttendanceService,
   AttendanceStatusService,
 } from 'app/services';
-import { error } from 'console';
+
+import { DateValidator, DateFormatter } from 'app/utils';
 
 @Component({
   selector: 'app-record-student-attendance',
@@ -93,7 +94,7 @@ export class RecordStudentAttendenceComponent implements OnInit, OnDestroy {
   loadForm() {
     this.recordAttendanceForm = this.formBuilder.group({
       id: [null],
-      attendanceDate: [null, Validators.required],
+      attendanceDate: [null, DateValidator('yyyy/MM/dd')],
       classAttendanceId: [null, Validators.required],
       studentAttendanceStatusesArray: this.formBuilder.array([]),
     });
@@ -115,17 +116,15 @@ export class RecordStudentAttendenceComponent implements OnInit, OnDestroy {
     if (this.classAttendance) {
       this.recordAttendanceForm.patchValue({
         classAttendanceId: this.classAttendance.id,
-        classAttendanceDate: this.classAttendance.attendanceDate,
+        attendanceDate: DateFormatter(this.classAttendance.attendanceDate),
       }, {emitEvent: false});
     }
   }
 
   onChanges() {
-    this.recordAttendanceForm.controls['attendanceDate'].valueChanges.subscribe((classAttendanceDate: Date) => {
-      this.classAttendance.attendanceDate = classAttendanceDate;
-      this.recordAttendanceForm.patchValue({
-        classAttendanceDate: classAttendanceDate,
-      });
+    this.recordAttendanceForm.controls['attendanceDate'].valueChanges.subscribe((attendanceDate: Date) => {
+      this.classAttendance.attendanceDate = attendanceDate;
+      this.patchStudentValues();
     });
   }
 

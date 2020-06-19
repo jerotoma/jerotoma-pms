@@ -16,19 +16,15 @@
                   </tr>
                   <tr>
                     <th scope="row">Attendance Date</th>
-                    <td>{{classAttendance.attendanceDate | date:'longDate'}}
-                      <mat-form-field class="attendanceDate-full-width">
-                        <input
-                          matInput
-                          formControlName="attendanceDate"
-                          [matDatepicker]="attendanceDate"
-                          placeholder="">
-                        <mat-datepicker #attendanceDate></mat-datepicker>
-                      </mat-form-field>
-                      <button
-                        type="button"
-                        nbButton outline status="info"
-                        (click)="attendanceDate.open()">Change Attendance Date</button>
+                    <td>
+                      <input
+                          [nbDatepicker]="attendanceDate"
+                          nbInput fullWidth
+                          fieldSize="small"
+                          [value]="classAttendance.attendanceDate | date:'longDate'"
+                          id="attendanceDate"
+                          formControlName="attendanceDate">
+                      <nb-datepicker #attendanceDate></nb-datepicker>
                     </td>
                   </tr>
                 </tbody>
