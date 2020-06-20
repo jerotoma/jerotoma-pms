@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import com.jerotoma.common.models.users.AuthUser;
-import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.services.users.AuthUserService;
 
 

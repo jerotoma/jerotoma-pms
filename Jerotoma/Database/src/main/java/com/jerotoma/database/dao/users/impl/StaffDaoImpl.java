@@ -63,9 +63,8 @@ public class StaffDaoImpl implements StaffDao {
 	}
 
 	@Override
-	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public Long countObject() throws SQLException {		
+		return entityManager.createQuery("SELECT count(*) FROM Staff", Long.class).getSingleResult();
 	}
 
 }

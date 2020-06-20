@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 
 import com.jerotoma.common.jwt.AccessJwtToken;
 import com.jerotoma.common.jwt.JwtToken;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.config.auth.common.Scopes;
-import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.jwt.JwtSettings;
 
 import io.jsonwebtoken.Claims;

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +16,6 @@ import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.database.dao.configs.SystemConfigDao;
 
 @Repository
-@Transactional
 public class SystemConfigDaoImpl implements SystemConfigDao {
 	
 	@PersistenceContext 

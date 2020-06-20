@@ -12,7 +12,7 @@ public class StaffVO extends PersonVO {
 	private PositionVO position;
 	
 	public StaffVO(ResultSet rs) throws SQLException {
-		super(rs, UserConstant.USER_TYPES.STAFF.getType());
+		super(rs, UserConstant.USER_TYPE.STAFF.getType());
 		this.id = rs.getInt(UserConstant.ID);
 	}
 

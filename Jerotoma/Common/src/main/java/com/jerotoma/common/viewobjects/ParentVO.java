@@ -13,7 +13,7 @@ public class ParentVO extends PersonVO {
 	private List<StudentVO> students;
 
 	public ParentVO(ResultSet rs) throws SQLException {
-		super(rs, UserConstant.USER_TYPES.PARENT.getType());
+		super(rs, UserConstant.USER_TYPE.PARENT.getType());
 		this.id = rs.getInt(UserConstant.ID);
 	}
 

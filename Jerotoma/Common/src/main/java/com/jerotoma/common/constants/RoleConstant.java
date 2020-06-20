@@ -39,7 +39,7 @@ public class RoleConstant {
 		}
 		
 		public static USER_ROLES getRole(Integer roleId) {			
-			for(USER_ROLES userRole: USER_ROLES.values()) {
+			for(USER_ROLES userRole: values()) {
 				if(userRole.getRoleCode().equals(roleId)) {
 					return userRole;
 				}
@@ -48,7 +48,7 @@ public class RoleConstant {
 			
 		}
 		public static USER_ROLES getRole(String roleName) {			
-			for(USER_ROLES userRole: USER_ROLES.values()) {
+			for(USER_ROLES userRole: values()) {
 				if(userRole.getRoleName().equals(roleName)) {
 					return userRole;
 				}

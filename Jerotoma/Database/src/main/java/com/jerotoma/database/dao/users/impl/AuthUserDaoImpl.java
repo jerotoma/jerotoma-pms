@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
 import com.jerotoma.database.dao.DaoUtil;
@@ -67,8 +68,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		        PreparedStatement ps = conn.prepareStatement(commonInsertQuery().toString(),new String[] { "id" /* name of your id column */ });
 			        ps.setString(pos++, object.getUsername());
 			        ps.setString(pos++, passwordEncoder.encode(object.getPassword()));
-			        ps.setString(pos++, object.getFirstName());
-			        ps.setString(pos++, object.getLastName());
+			        ps.setString(pos++, object.getUserType().getType());			       
 			        ps.setBoolean(pos++, object.isEnabled());
 			        ps.setBoolean(pos++, object.isAccountNonExpired());
 			        ps.setBoolean(pos++,object.isCredentialsNonExpired());
@@ -164,13 +164,12 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	public AuthUser mapAuthUserResult(ResultSet rs) throws SQLException {	
 		AuthUser authUser = null;
 		String password = null;
-		Integer userId = rs.getInt("id");
-		String username = rs.getString("username");
-		if(DaoUtil.hasColumn(rs, "password")) {
-			password = rs.getString("password");
+		Integer userId = rs.getInt(UserConstant.ID);
+		String username = rs.getString(UserConstant.USERNAME);
+		if(DaoUtil.hasColumn(rs, UserConstant.PASSWORD)) {
+			password = rs.getString(UserConstant.PASSWORD);
 		}		
-		String firstName = rs.getString("first_name");
-		String lastName = rs.getString("last_name");
+		String userType = rs.getString("user_type");		
 		Boolean enabled  = rs.getBoolean("enabled"); 
 		Boolean accountNonExpired = rs.getBoolean("account_non_expired"); 
 		Boolean credentialsNonExpired = rs.getBoolean("credentials_non_expired"); 
@@ -181,8 +180,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		authUser.setId(userId);
 		authUser.setCreatedOn(createdOn);
 		authUser.setUpdatedOn(updatedOn);
-		authUser.setFirstName(firstName);
-		authUser.setLastName(lastName);
+		authUser.setUserType(UserConstant.processUserType(userType));		
 		return authUser;
 	}
 
@@ -200,7 +198,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 	
 	private StringBuilder commonSelectQuery(boolean removePassword) {		
-		StringBuilder builder = new StringBuilder("SELECT id, username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+		StringBuilder builder = new StringBuilder("SELECT id, username, password, user_type, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
 		if(removePassword) {
 			builder.toString().replace("password,", "");
 		}
@@ -209,8 +207,8 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 	
 	private StringBuilder commonInsertQuery() {		
-		return new StringBuilder("INSERT INTO public.users(username, password, first_name, last_name, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on) ")
-				.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		return new StringBuilder("INSERT INTO public.users(username, password, user_type, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on) ")
+				.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	}
 	
 	private StringBuilder commonRoleUserInsertQuery() {

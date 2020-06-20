@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
@@ -25,8 +26,7 @@ public class AuthUser extends User {
 	
 	private Integer id;
 	private Collection<Role> roles;
-	private String firstName;
-	private String lastName;
+	private USER_TYPE userType;
 	private Date createdOn;
 	private Date updatedOn;
 		
@@ -48,13 +48,12 @@ public class AuthUser extends User {
 	
 	public static AuthUser validateAndMapAuthUser(Map<String, Object> params, RoleConstant.USER_ROLES userRole) {
 		
-		String username = (String) params.get(UserConstant.USERNAME);
-		String firstName = (String) params.get(UserConstant.FIRST_NAME);
-		String lastName = (String) params.get(UserConstant.LAST_NAME);
+		String username = (String) params.get(UserConstant.USERNAME);		
 		String password = (String) params.get(UserConstant.PASSWORD);
 		String confirmPass = (String) params.get(UserConstant.CONFIRM_PASS);
-		Date updatedOn = new Date();
-		Date createdOn = new Date();
+		String userType = (String) params.get(UserConstant.userType);		
+		Date updatedOn = CalendarUtil.getTodaysDate();
+		Date createdOn =  CalendarUtil.getTodaysDate();
 		
 		if (StringUtility.isEmpty(username)) {
 			throw new RuntimeException("Invalid or Empty username was provided");
@@ -62,6 +61,10 @@ public class AuthUser extends User {
 		
 		if (StringUtility.isEmpty(password)) {
 			throw new RuntimeException("Invalid or Empty password was provided");
+		}
+		
+		if (StringUtility.isEmpty(userType)) {
+			throw new RuntimeException("Invalid or Empty user type was provided");
 		}
 		
 				
@@ -74,11 +77,10 @@ public class AuthUser extends User {
 		role.setName(userRole.getRoleName());
 		role.setDisplayName(userRole.getDisplayName());
 		roles.add(role);
-		
-		AuthUser authUser = new AuthUser(username, password, true, true, true, true, roles);
-		authUser.setCreatedOn(createdOn);
-		authUser.setFirstName(firstName);
-		authUser.setLastName(lastName);		
+		USER_TYPE uType = UserConstant.processUserType(userType);		
+		AuthUser authUser = new AuthUser(username, password, true, true, true, true, roles);		
+		authUser.setUserType(uType);
+		authUser.setCreatedOn(createdOn);		
 		authUser.setUpdatedOn(updatedOn);
 		
 		return authUser;
@@ -101,25 +103,6 @@ public class AuthUser extends User {
 		this.id = id;
 	}
 	
-	
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	
-
 	public Date getCreatedOn() {
 		return createdOn;
 	}
@@ -136,14 +119,19 @@ public class AuthUser extends User {
 		this.updatedOn = updatedOn;
 	}
 
-
 	public Collection<Role> getRoles() {
 		return roles;
 	}
 
-
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
-	}	
-	
+	}
+
+	public USER_TYPE getUserType() {
+		return userType;
+	}
+
+	public void setUserType(USER_TYPE userType) {
+		this.userType = userType;
+	}
 }

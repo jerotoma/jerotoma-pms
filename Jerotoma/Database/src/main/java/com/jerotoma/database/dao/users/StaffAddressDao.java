@@ -5,4 +5,6 @@ import com.jerotoma.database.dao.BaseDao;
 
 public interface StaffAddressDao extends BaseDao<StaffAddress> {
 
+	StaffAddress getStaffAddressByStaffId(Integer staffId);
+
 }

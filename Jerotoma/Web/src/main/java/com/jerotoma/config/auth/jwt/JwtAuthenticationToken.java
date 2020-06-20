@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {

@@ -37,9 +37,11 @@ public class UserConstant {
 	public static final String STUDENT_IDS = "studentIds";
 	public static final String USER_CODE = "userCode";
 	public static final String DEPARTMENT_ID = "departmentId";
+	public static final String userType = "userType";
+	public static final String DEFAULT_PHONE_NUMBER = "800-900-8888";
+	public static final String DEFAULT_BIRTH_DATE = "1920-01-01";
 	
-	public static enum USER_TYPES{
-		ADMIN("admin"),
+	public static enum USER_TYPE {		
 		TEACHER("teacher"),
 		TEACHERS("teachers"),
 		PARENT("parent"),
@@ -53,7 +55,7 @@ public class UserConstant {
 		
 		private String type;
 		
-		USER_TYPES(String type){
+		USER_TYPE(String type){
 			this.type = type;
 		}
 		
@@ -61,14 +63,10 @@ public class UserConstant {
 			return type;
 		}
 	}
-
-	public static String USER_TYPE = "userType";
 	
-	
-	
-	public static USER_TYPES processUserType(String type) {
-		for (USER_TYPES ut : USER_TYPES.values()) {
-			if(ut.type.equals(type)) {
+	public static USER_TYPE processUserType(String type) {
+		for (USER_TYPE ut : USER_TYPE.values()) {
+			if(ut.type.equals(type) || ut.name().equals(type)) {
 				return ut;
 			}
 		}
@@ -97,7 +95,7 @@ public class UserConstant {
 
 	public static userTypeByPath processUserTypeByPath(String type) {
 		for (userTypeByPath ut : userTypeByPath.values()) {
-			if(ut.type.equals(type)) {
+			if(ut.type.equals(type) || ut.name().equals(type)) {
 				return ut;
 			}
 		}
@@ -106,30 +104,30 @@ public class UserConstant {
 
 
 
-	public static USER_TYPES processUserType(Role role) {
+	public static USER_TYPE processUserType(Role role) {
 		if (RoleConstant.USER_ROLES.ROLE_PARENT.getRoleName().equals(role.getName())) {
-			return USER_TYPES.PARENT;
+			return USER_TYPE.PARENT;
 		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
-			return USER_TYPES.TEACHER;
+			return USER_TYPE.TEACHER;
 		} else if (RoleConstant.USER_ROLES.ROLE_STUDENT.getRoleName().equals(role.getName())) {
-			return USER_TYPES.STUDENT;
+			return USER_TYPE.STUDENT;
 		} else if (RoleConstant.USER_ROLES.ROLE_STAFF.getRoleName().equals(role.getName())) {
-			return USER_TYPES.STAFF;
+			return USER_TYPE.STAFF;
 		} else if (RoleConstant.USER_ROLES.ROLE_ADMIN.getRoleName().equals(role.getName())) {
-			return USER_TYPES.ADMIN;
+			return USER_TYPE.STAFF;
 		} else if (RoleConstant.USER_ROLES.ROLE_USER.getRoleName().equals(role.getName())) {
-			return USER_TYPES.USER;
+			return USER_TYPE.USER;
 		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
-			return USER_TYPES.TEACHER;
+			return USER_TYPE.TEACHER;
 		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
-			return USER_TYPES.TEACHER;
+			return USER_TYPE.TEACHER;
 		} else if (RoleConstant.USER_ROLES.ROLE_TEACHER.getRoleName().equals(role.getName())) {
-			return USER_TYPES.TEACHER;
+			return USER_TYPE.TEACHER;
 		}		
 		return null;
 	}
 
-	public static USER_TYPES processUserTypeByRole(Collection<Role> roles) {
+	public static USER_TYPE processUserTypeByRole(Collection<Role> roles) {
 		Role role = roles.stream().findFirst().get();
 		return processUserType(role);
 	}

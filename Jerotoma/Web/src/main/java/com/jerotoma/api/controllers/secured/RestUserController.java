@@ -49,6 +49,10 @@ import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.validators.UserValidator;
+import com.jerotoma.common.viewobjects.ParentVO;
+import com.jerotoma.common.viewobjects.StaffVO;
+import com.jerotoma.common.viewobjects.StudentVO;
+import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.AddressService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
@@ -106,7 +110,7 @@ public class RestUserController extends BaseController {
 		QueryParam queryParam = this.setParams(page, pageSize, fieldName, orderby);
 		
 		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:
@@ -189,33 +193,8 @@ public class RestUserController extends BaseController {
 		if (!userContext.getUsername().equals(username.trim())) {
 			throw new UsernameNotFoundException("User type not found");		
 		}
-		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());		
-		UserConstant.USER_TYPES type = UserConstant.processUserTypeByRole(authUser.getRoles());
-		try {
-			switch(type) {
-			case TEACHER:
-				instance.setData(assemblerTeacherService.findObjectUniqueKey(String.valueOf(authUser.getId())));	
-				break;
-			case STUDENT:
-				instance.setData(assemblerStudentService.findObjectUniqueKey(username));
-				break;
-			case STAFF:
-				instance.setData(assemblerStaffService.findObjectUniqueKey(username));
-				break;
-			case PARENT:
-				instance.setData(assemblerParentService.findObjectUniqueKey(username));
-				break;
-			case ADMIN:
-				instance.setData(authUserService.findObjectUniqueKey(username));
-				break;
-			default:
-				throw new UsernameNotFoundException("User type not found");
-			}
-		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}	
-				
+		UserVO user = userService.getUserByUsername(username);		
+		instance.setData(user);	
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setHttpStatus(HttpStatus.OK);
@@ -254,15 +233,15 @@ public class RestUserController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 					
-		if(!params.containsKey(UserConstant.USER_TYPE)) {
+		if(!params.containsKey(UserConstant.userType)) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
-		String userType = (String) params.get(UserConstant.USER_TYPE);
+		String userType = (String) params.get(UserConstant.userType);
 		
 		if (userType == null) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 					
 		try {
 			switch(type) {
@@ -376,9 +355,7 @@ public class RestUserController extends BaseController {
 				parentAddress.setUpdatedOn(today);
 				parentAddressService.createObject(parentAddress);				
 				instance.setData(parent);
-				break;	
-			case ADMIN:
-				break;
+				break;				
 			default:
 				throw new UsernameNotFoundException("User type not found");
 			}
@@ -473,16 +450,16 @@ public class RestUserController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 			
-		if(!params.containsKey(UserConstant.USER_TYPE)) {
+		if(!params.containsKey(UserConstant.userType)) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
-		String userType = (String) params.get(UserConstant.USER_TYPE);
+		String userType = (String) params.get(UserConstant.userType);
 		
 		if (userType == null) {
 			throw new FieldIsRequiredException("User type can not be empty");
 		}
 		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:				
@@ -589,6 +566,13 @@ public class RestUserController extends BaseController {
 				staff = staffService.updateObject(mStaff);				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address); 
+								
+				StaffAddress staffAddress = new StaffAddress();
+				staffAddress.setAddress(address);
+				staffAddress.setStaff(staff);
+				staffAddress.setCreatedOn(today);
+				staffAddress.setUpdatedOn(today);
+				staffAddressService.updateObject(staffAddress);
 				
 				instance.setData(staff);				
 				break;
@@ -660,7 +644,7 @@ public class RestUserController extends BaseController {
 			throw new FieldIsRequiredException("Teacher's ID is required, and invalid ID was provided");					
 		}
 		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:
@@ -696,17 +680,14 @@ public class RestUserController extends BaseController {
 	
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER)
 	@ResponseBody
-	public HttpResponseEntity<UserVO> getLoggedUser(Authentication auth) throws UsernameNotFoundException{
-		HttpResponseEntity<UserVO> instance = new HttpResponseEntity<>();
-		
+	public HttpResponseEntity<Object> getLoggedUser(Authentication auth) throws UsernameNotFoundException {				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(new UserVO(authUser));
-		return instance;
-		
+		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		instance.setData(getAuthenticatedUser());		
+		return instance;		
 	}
 	
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.SEARCH)
@@ -720,34 +701,51 @@ public class RestUserController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) throws UsernameNotFoundException{
 		
-		List<AuthUser> users = null;
-		List<UserVO> userVOs = new ArrayList<>();
+		List<UserVO> users = new ArrayList<>();
+		List<TeacherVO> teachers = new ArrayList<>();
+		List<StudentVO> students = new ArrayList<>();
+		List<StaffVO> staffs = new ArrayList<>();
+		List<ParentVO> parents = new ArrayList<>();
 		
 	
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
-		UserConstant.USER_TYPES type = UserConstant.processUserType(userType);
+		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:
-				users = authUserService.search(queryParam);	
+				teachers = assemblerTeacherService.search(queryParam);	
 				if(users != null) {
-					for(AuthUser authUser: users) {
-						userVOs.add(new UserVO(authUser));
+					for(TeacherVO teacher: teachers) {
+						users.add(new UserVO(authUser, teacher));
 					}
-				}
-				instance.setData(userVOs);
+				}				
 				break;
 			case STUDENT:
-				instance.setData(assemblerStudentService.search(queryParam));
+				students = assemblerStudentService.search(queryParam);
+				if(users != null) {
+					for(StudentVO student: students) {
+						users.add(new UserVO(authUser, student));
+					}
+				}
 				break;
 			case STAFF:
-				instance.setData(assemblerStaffService.search(queryParam));					
+				staffs = assemblerStaffService.search(queryParam);
+				if(users != null) {
+					for(StaffVO staff: staffs) {
+						users.add(new UserVO(authUser, staff));
+					}
+				}									
 				break;
-			case PARENT:				
-				instance.setData(assemblerParentService.search(queryParam));
+			case PARENT:
+				parents = assemblerParentService.search(queryParam);
+				if(users != null) {
+					for(ParentVO parent: parents) {
+						users.add(new UserVO(authUser, parent));
+					}
+				}				
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -756,7 +754,7 @@ public class RestUserController extends BaseController {
 		} catch (SQLException | JDataAccessException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
-			
+		instance.setData(users);	
 		instance.setSuccess(true);
 		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		instance.setHttpStatus(HttpStatus.OK);

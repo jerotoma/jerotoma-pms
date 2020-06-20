@@ -58,7 +58,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public TeacherVO findObjectUniqueKey(String uniqueKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE t.user_id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE u.username = ? ").toString();
 		return this.jdbcTemplate.query(query, new TeacherSingleResultProcessor(), Integer.valueOf(uniqueKey));
 	}
 
@@ -132,7 +132,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT t.id,  u.username, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, ")
+		return new StringBuilder("SELECT t.id,  u.username, u.user_type AS userType, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, ")
 				.append(" t.last_name AS lastName, t.middle_names AS middleNames, t.email_address AS emailAddress, t.phone_number AS phoneNumber, ")
 				.append(" t.occupation, t.gender, t.avatar, t.position_id as positionId, t.department_id AS departmentId, t.birth_date AS birthDate, t.updated_by AS updatedBy, ")
 				.append(" t.created_on AS createdOn, t.updated_on AS updatedOn FROM public.teachers t INNER JOIN users u ON u.id = user_id ");
@@ -184,5 +184,28 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		StringBuilder builder = getBaseSelectQuery();
 		return this.jdbcTemplate.query(builder.toString(), new TeacherResultProcessor());
 	}
+
+	@Override
+	public List<TeacherVO> search(QueryParam queryParam) throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery();
+		queryBuilder.append(" WHERE lower(t.first_name) like ? OR lower(t.last_name) like ? OR lower(t.middle_names) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "t"))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new TeacherResultProcessor(), paramList);
+	}
+
 
 }

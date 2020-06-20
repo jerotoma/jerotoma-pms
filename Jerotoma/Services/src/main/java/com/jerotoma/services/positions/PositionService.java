@@ -9,4 +9,6 @@ import com.jerotoma.services.BaseService;
 public interface PositionService extends BaseService<Position> {
 	public List<Position> loadList() throws SQLException;
 
+	public Long countObject() throws SQLException;
+
 }

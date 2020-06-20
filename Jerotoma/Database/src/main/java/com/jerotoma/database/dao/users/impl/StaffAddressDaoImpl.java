@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -67,6 +68,19 @@ public class StaffAddressDaoImpl implements StaffAddressDao {
 	public Long countObject() throws SQLException {
 		
 		return null;
+	}
+
+	@Override
+	public StaffAddress getStaffAddressByStaffId(Integer staffId) {		
+		StaffAddress staffAddress = null;			
+		try {
+			staffAddress = entityManager.createQuery("FROM StaffAddress WHERE staff.id =:staffId ", StaffAddress.class)
+					.setParameter("staffId", staffId)
+					.getSingleResult();
+		} catch (NoResultException e) {			
+			staffAddress = null;
+		}		
+		return staffAddress;
 	}
 
 }

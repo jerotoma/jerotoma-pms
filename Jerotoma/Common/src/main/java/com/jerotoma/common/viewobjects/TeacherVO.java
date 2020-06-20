@@ -7,12 +7,11 @@ import com.jerotoma.common.constants.UserConstant;
 
 public class TeacherVO extends PersonVO {
 		
-	private PositionVO position;
-	
+	private PositionVO position;	
 	private DepartmentVO department;
 	
 	public TeacherVO(ResultSet rs) throws SQLException {
-		super(rs, UserConstant.USER_TYPES.TEACHER.getType());						
+		super(rs, UserConstant.USER_TYPE.TEACHER.getType());						
 	}
 
 	public PositionVO getPosition() {

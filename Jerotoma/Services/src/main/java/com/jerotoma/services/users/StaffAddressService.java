@@ -5,4 +5,6 @@ import com.jerotoma.services.BaseService;
 
 public interface StaffAddressService extends BaseService<StaffAddress> {
 
+	StaffAddress getStaffAddressByStaffId(Integer id);
+
 }

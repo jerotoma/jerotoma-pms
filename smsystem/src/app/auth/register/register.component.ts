@@ -2,7 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CheckBoxValidator, MustMatch } from 'app/utils';
+import { CheckBoxValidator, MustMatch, USER_TYPE } from 'app/utils';
 import { AuthService } from 'app/services/auth/auth.service';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
@@ -40,6 +40,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     this.user = this.registerForm.value;
+    this.user.userType = USER_TYPE.staff;
     this.authService.register(this.user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       this.submitted = false;
       const resp = result;

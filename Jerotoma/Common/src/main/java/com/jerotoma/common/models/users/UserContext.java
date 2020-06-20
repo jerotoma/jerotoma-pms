@@ -1,4 +1,4 @@
-package com.jerotoma.config.auth.common;
+package com.jerotoma.common.models.users;
 
 import java.io.Serializable;
 import java.util.ArrayList;

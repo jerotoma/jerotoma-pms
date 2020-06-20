@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.Assert;
 
-import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.services.users.AuthUserService;
 
 

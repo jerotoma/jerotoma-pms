@@ -112,6 +112,7 @@ export class EditUserComponent implements OnInit {
     this.positionService.loadPositionList().subscribe((positions: Position[]) => {
       if (positions) {
         this.positions = positions;
+        this.updateUserInput(this.user);
       }
     });
   }
@@ -167,7 +168,7 @@ export class EditUserComponent implements OnInit {
       academicDiscipline: user.academicDiscipline ? user.academicDiscipline.id : null,
       address: user.address,
     });
-    if (this.appAddress) {
+    if (this.appAddress && user.address) {
       this.appAddress.patchAddressValue(user.address);
     }
    this.userLoginInput = {

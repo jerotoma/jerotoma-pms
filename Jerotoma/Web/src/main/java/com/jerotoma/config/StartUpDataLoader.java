@@ -13,17 +13,24 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
-import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.constants.RoleConstant.USER_ROLES;
 import com.jerotoma.common.constants.SystemConfigConstant;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.config.SystemConfig;
+import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.UserRole;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.common.viewobjects.StaffVO;
+import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.configs.SystemConfigService;
+import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.roles.RoleService;
 import com.jerotoma.services.users.AuthUserService;
+import com.jerotoma.services.users.StaffService;
 import com.jerotoma.services.users.UserRoleService;
 
 @Component
@@ -32,6 +39,9 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
     private Logger logger = LoggerFactory.getLogger(getClass());
    
     @Autowired AuthUserService userService;
+    @Autowired AssemblerStaffService assemblerStaffService;
+    @Autowired StaffService staffService;
+    @Autowired PositionService positionService;
     @Autowired RoleService roleService;
     @Autowired UserRoleService userRoleService;
     @Autowired SystemConfigService systemConfigService;
@@ -51,7 +61,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
         }
 	}
 	protected void addDefaultAccountsIfNotExists() {
-		RoleConstant.USER_ROLES adminRole = RoleConstant.USER_ROLES.ROLE_ADMIN;
+		USER_ROLES adminRole = USER_ROLES.ROLE_ADMIN;
 		AuthUser authUser;
 		String username = "support@vimmak.com";
 		String password = "Vimmak";
@@ -62,6 +72,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		
 		try {
 			createRoles();
+			createPosition();
 			Long count = userService.countObject();
 			if (count != null && count != 0) {
 				return;
@@ -72,9 +83,8 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			}
 			
 			Collection<Role> roles = new ArrayList<>(Arrays.asList(roleR));
-			authUser = new AuthUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);
-			authUser.setFirstName("John");
-			authUser.setLastName("Doe");
+			authUser = new AuthUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);			
+			authUser.setUserType(USER_TYPE.STAFF);
 			authUser = userService.createObject(authUser);
 			
 			UserRole mRole = new UserRole(null, authUser.getId(), roleR.getId());
@@ -86,10 +96,13 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		} catch (SQLException e) {			
 			throw new RuntimeException(e.getMessage(), e); 
 		}
-		
+		Position position = createPosition();
+		if (authUser != null) {		
+			createStaff(authUser, position);
+		}		
 	}
 	private void createRoles() throws SQLException {
-		for (RoleConstant.USER_ROLES userRole : RoleConstant.USER_ROLES.values()) {
+		for (USER_ROLES userRole : USER_ROLES.values()) {
 			Role role = new Role();
 			role.setUpdatedOn(CalendarUtil.getTodaysDate());
 			role.setCreatedOn(CalendarUtil.getTodaysDate());
@@ -99,6 +112,52 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			if (roleR == null) {
 				roleR = roleService.createObject(role);
 			}
+		}
+	}
+	
+	private Position createPosition() {
+		Position position = null;
+		try {
+			Long count = positionService.countObject();			
+			if (count != null && count != 0) {
+				position = positionService.loadList().get(0);
+			} else {
+				position = new Position();
+				position.setCode("AD-345");
+				position.setName("System Admin");
+				position.setCreatedOn(CalendarUtil.getTodaysDate());
+				position.setUpdatedOn(CalendarUtil.getTodaysDate());
+				position = positionService.createObject(position);
+			}		
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage(), e); 
+		}
+		return position;
+	}
+	
+	private void createStaff(AuthUser user, Position position) {
+		StaffVO staffVO;
+		try {
+			staffVO = assemblerStaffService.findObjectUniqueKey(user.getUsername());
+		} catch (SQLException | EmptyResultDataAccessException e) {
+			if (e instanceof EmptyResultDataAccessException ) {
+				staffVO = null;				
+			} else {
+				throw new RuntimeException(e.getMessage(), e); 
+			}			
+		}	
+		if (staffVO != null) {
+			return;
+		}
+		Staff staff = new Staff();
+		staff.setUserId(user.getId());
+		staff.setPosition(position);
+		staff.setFirstName("John");
+		staff.setLastName("Doe");
+		try {
+			staffService.createObject(staff);
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage(), e); 
 		}
 	}
 	

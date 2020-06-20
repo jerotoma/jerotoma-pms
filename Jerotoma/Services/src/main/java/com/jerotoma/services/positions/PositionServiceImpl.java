@@ -59,4 +59,9 @@ public class PositionServiceImpl implements PositionService{
 		return positionDao.loadList();
 	}
 
+	@Override
+	public Long countObject() throws SQLException {
+		return positionDao.countObject();
+	}
+
 }

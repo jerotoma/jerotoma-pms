@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,8 @@ import org.springframework.stereotype.Service;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.SystemConfigConstant;
 import com.jerotoma.common.constants.SystemConfigConstant.GENERAL_CONFIG;
-import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.constants.UserPreferenceConstant;
+import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.common.models.config.UserPreference;
 import com.jerotoma.common.viewobjects.ThemeVO;
@@ -23,7 +21,6 @@ import com.jerotoma.database.dao.configs.UserPreferenceDao;
 import com.jerotoma.services.configs.SystemConfigService;
 
 @Service
-@Transactional
 public class SystemConfigServiceImpl implements SystemConfigService {
 	
 	@Autowired SystemConfigDao systemConfigDao;

@@ -15,6 +15,7 @@ import com.jerotoma.common.exceptions.JwtExpiredTokenException;
 import com.jerotoma.common.jwt.AccessJwtToken;
 import com.jerotoma.common.jwt.AuthToken;
 import com.jerotoma.common.jwt.JwtToken;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.TextUtility;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
 import com.jerotoma.config.auth.tokens.RawAccessJwtToken;

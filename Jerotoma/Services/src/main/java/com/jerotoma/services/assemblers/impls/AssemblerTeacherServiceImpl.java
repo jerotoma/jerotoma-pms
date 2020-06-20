@@ -57,4 +57,10 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 		return assemblerTeacherDao.findAllTeachers();
 	}
 
+	@Override
+	public List<TeacherVO> search(QueryParam queryParam) throws SQLException {
+		
+		return assemblerTeacherDao.search(queryParam);
+	}
+
 }

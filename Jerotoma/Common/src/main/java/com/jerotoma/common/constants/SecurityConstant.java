@@ -14,6 +14,7 @@ public class SecurityConstant {
 	public static final String JWT_TOKEN_HEADER_PARAM = "X-Authorization";
 	public static final String REFRESH_TOKEN_KEY = "refreshToken";
 	public static final String REFRESH_TOKEN_VALUE = "ROLE_REFRESH_TOKEN";
+	public static final String CURRENT_LOGGED_IN_USER = "currentLoggegInUser";
 	
 	
 

@@ -32,8 +32,8 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.positions.Position;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.validators.PositionValidator;
-import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.positions.PositionService;
 

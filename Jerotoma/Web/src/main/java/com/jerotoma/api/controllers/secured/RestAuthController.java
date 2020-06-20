@@ -21,15 +21,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SecurityConstant;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.InvalidJwtTokenException;
+import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
 import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.Staff;
+import com.jerotoma.common.models.users.UserContext;
+import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.config.auth.common.UserContext;
 import com.jerotoma.config.auth.jwt.extractor.TokenExtractor;
 import com.jerotoma.config.auth.jwt.verifier.TokenVerifier;
 import com.jerotoma.config.auth.tokens.JwtTokenFactory;
@@ -41,28 +46,40 @@ import com.jerotoma.services.users.AuthUserService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_AUTH_CONTROLLER.BASE)
-public class RestAuthController {
+public class RestAuthController extends BaseController {
 	
 	@Autowired private AuthUserService authUserService;
 	@Autowired private CookieService cookieService;
     @Autowired private HttpService httpService;
     @Autowired private JwtTokenFactory tokenFactory;
-    @Autowired private AuthUserService userService;
     @Autowired private TokenVerifier tokenVerifier;
     @Autowired private ObjectMapper mapper;
     @Autowired @Qualifier("jwtHeaderTokenExtractor") TokenExtractor tokenExtractor;
-   
-	AuthUser authUser;
 	
 	@PostMapping(EndPointConstants.REST_AUTH_CONTROLLER.REGISTER)
 	@ResponseBody
-	public HttpResponseEntity<AuthUser> postCreate(@RequestBody Map<String, Object> params) throws SQLException{
-		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();
+	public HttpResponseEntity<Object> postCreate(@RequestBody Map<String, Object> params) {		
 		instance.setSuccess(true);
-		instance.setStatusCode("200");
-		instance.setData(authUserService.createUserLoginAccount(AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_USER)));
-		return instance;
-		
+		instance.setStatusCode("200");		
+		try {
+			authUser = authUserService.createUserLoginAccount(
+					AuthUser.validateAndMapAuthUser(params, 
+							RoleConstant.USER_ROLES.ROLE_USER));		
+			
+			Staff staff = new Staff();
+			staff.setUserId(authUser.getId());		
+			staff.setFirstName(params.get(UserConstant.FIRST_NAME).toString());
+			staff.setLastName(params.get(UserConstant.LAST_NAME).toString());
+			staff.setPhoneNumber(UserConstant.DEFAULT_PHONE_NUMBER);			
+			staff.setBirthDate(CalendarUtil.convertStringToDate(UserConstant.DEFAULT_BIRTH_DATE));
+			staff.setCreatedOn(CalendarUtil.getTodaysDate());
+			staff.setUpdatedOn(CalendarUtil.getTodaysDate());
+			staffService.createObject(staff);
+			instance.setData(userService.getUserByUsername(authUser.getUsername()));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);	
+		}		
+		return instance;		
 	}
 	
     
@@ -99,7 +116,7 @@ public class RestAuthController {
         }
 
         String subject = refreshToken.getSubject();
-        AuthUser user = userService.loadUserByUsername(subject);
+        AuthUser user = authUserService.loadUserByUsername(subject);
 
         if (user == null) {
         	throw new UsernameNotFoundException("User not found of the provided token");

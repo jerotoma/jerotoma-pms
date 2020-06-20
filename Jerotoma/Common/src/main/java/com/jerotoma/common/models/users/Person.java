@@ -109,12 +109,6 @@ public abstract class Person {
 	
 	}
 	
-	public Person(AuthUser authUser) {
-		this.firstName = authUser.getFirstName();
-		this.lastName = authUser.getLastName();
-		this.fullName = getFullName();
-	}
-
 	public String getFirstName() {
 		return firstName;
 	}

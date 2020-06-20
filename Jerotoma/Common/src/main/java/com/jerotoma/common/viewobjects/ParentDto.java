@@ -10,7 +10,7 @@ public class ParentDto extends PersonVO {
 	private Integer id;
 	
 	public ParentDto(ResultSet rs) throws SQLException {
-		super(rs, UserConstant.USER_TYPES.PARENT.getType());
+		super(rs, UserConstant.USER_TYPE.PARENT.getType());
 		this.id = rs.getInt(UserConstant.ID);
 	}
 

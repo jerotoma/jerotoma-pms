@@ -18,12 +18,17 @@ import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.assemblers.AssemblerStaffService;
+import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.roles.RoleService;
 import com.jerotoma.services.users.AuthUserService;
+import com.jerotoma.services.users.StaffService;
+import com.jerotoma.services.users.UserService;
 
 public abstract class BaseController {
 	
@@ -41,6 +46,10 @@ public abstract class BaseController {
 	
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
+	@Autowired protected UserService userService;
+	@Autowired protected AssemblerStaffService assemblerStaffService;
+    @Autowired protected StaffService staffService;
+    @Autowired protected PositionService positionService;
 	@Autowired protected ServletContext context;
 	@Autowired protected RoleService roleService;
 	
@@ -133,5 +142,10 @@ public abstract class BaseController {
 	}
 	
 	protected void logExceptionDetail(Throwable throwable) {}
+	
+	
+	protected UserVO getAuthenticatedUser() {
+		return this.userService.loadCurrentUser();
+	}
 
 }

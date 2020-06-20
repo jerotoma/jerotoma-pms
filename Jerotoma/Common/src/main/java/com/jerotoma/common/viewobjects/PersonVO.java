@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.utils.StringUtility;
 
 public abstract class PersonVO {
@@ -14,7 +14,7 @@ public abstract class PersonVO {
 	
 	protected String firstName;
 	
-	protected String userType;
+	protected USER_TYPE userType;
 	
 	protected String lastName;
 	
@@ -65,19 +65,35 @@ public abstract class PersonVO {
 		this.username = rs.getString(UserConstant.USERNAME);
 		this.gender = rs.getString(UserConstant.GENDER);
 		this.occupation = rs.getString(UserConstant.OCCUPATION);
-		this.picture = rs.getString(UserConstant.AVATAR);
+		String pic = rs.getString(UserConstant.AVATAR);		
+		this.picture = StringUtility.isEmpty(pic) ? "/assets/images/default_profile.jpeg" : pic ;
 		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
 		this.userCode = rs.getString(UserConstant.USER_CODE);
-		this.userType = userType;
+		this.userType = UserConstant.processUserType(userType);
 		this.fullName = getFullName();
 	
 	}
 	
-	public PersonVO(AuthUser authUser) {
-		this.firstName = authUser.getFirstName();
-		this.lastName = authUser.getLastName();
+	public PersonVO(PersonVO person) {
+		this.id = person.id;
+		this.firstName = person.firstName;
+		this.lastName = person.lastName;
+		this.middleNames = person.middleNames;
+		this.phoneNumber = person.phoneNumber;
+		this.emailAddress = person.emailAddress;
+		this.userId = person.userId;
+		this.username = person.username;
+		this.gender = person.gender;
+		this.occupation = person.occupation;		
+		this.picture = person.picture;
+		this.updatedOn = person.updatedOn;
+		this.createdOn = person.createdOn;
+		this.birthDate = person.birthDate;
+		this.userCode = person.userCode;
+		this.userType = person.userType;
+		this.address = person.address;
 		this.fullName = getFullName();
 	}
 
@@ -234,11 +250,11 @@ public abstract class PersonVO {
 		this.username = username;
 	}
 
-	public String getUserType() {
+	public USER_TYPE getUserType() {
 		return userType;
 	}
 
-	public void setUserType(String userType) {
+	public void setUserType(USER_TYPE userType) {
 		this.userType = userType;
 	}	
 }

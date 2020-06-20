@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +13,6 @@ import com.jerotoma.database.dao.configs.UserPreferenceDao;
 import com.jerotoma.services.configs.UserPreferenceService;
 
 @Service
-@Transactional
 public class UserPreferenceServiceImpl implements UserPreferenceService {
 	
 	@Autowired UserPreferenceDao systemPreferenceDao;

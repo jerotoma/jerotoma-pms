@@ -609,7 +609,7 @@ public class UserValidator {
 			throw new FieldIsRequiredException("Staff's ID is required to continue");
 		}
 		staff.setId(id);
-			
+		requiredFields.remove(UserConstant.ID);
 		address = AddressValidator.validateAddress(params, requiredFields);
 		staff.setAddress(address);
 		Date today = CalendarUtil.getTodaysDate();

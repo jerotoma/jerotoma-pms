@@ -6,7 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import com.jerotoma.config.auth.common.UserContext;
+import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.config.auth.jwt.JwtAuthenticationToken;
 
