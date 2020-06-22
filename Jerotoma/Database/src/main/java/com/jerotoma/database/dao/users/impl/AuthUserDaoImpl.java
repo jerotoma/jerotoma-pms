@@ -27,7 +27,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.security.Role;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 import com.jerotoma.database.dao.users.AuthUserDao;
@@ -51,14 +51,14 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	@Override
-	public AuthUser findObject(Integer primaryKey) throws SQLException {
+	public User findObject(Integer primaryKey) throws SQLException {
 		String query = commonSelectQuery(false).append("WHERE id = ? ").toString();
 		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), primaryKey);
 	
 	}
 
 	@Override
-	public AuthUser createObject(AuthUser object) throws SQLException {
+	public User createObject(User object) throws SQLException {
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		
 		if(object != null && doesRoleExists(object.getRoles())){
@@ -103,12 +103,12 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	@Override
-	public Boolean deleteObject(AuthUser object) throws SQLException {
+	public Boolean deleteObject(User object) throws SQLException {
 		return this.jdbcTemplate.update(DELETE_QUERY.toString(), object.getId()) != 0 ? true : false;
 	}
 
 	@Override
-	public List<AuthUser> loadList(QueryParam queryParam) throws SQLException {
+	public List<User> loadList(QueryParam queryParam) throws SQLException {
 		String query = commonSelectQuery(true).toString();
 		return this.jdbcTemplate.query(query, new AuthUserResultProcessor());
 	}
@@ -120,29 +120,29 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	@Override
-	public AuthUser findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public User findObjectUniqueKey(String uniqueKey) throws SQLException {
 		return loadUserByUsername(uniqueKey);
 	}
 
 	@Override
-	public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {
 		String query = commonSelectQuery(false).append("WHERE username = ? ").toString();
 		return this.jdbcTemplate.query(query, new AuthUserSingleResultProcessor(), username);
 	
 	}
 	
-	public class AuthUserResultProcessor implements RowMapper<AuthUser>{
+	public class AuthUserResultProcessor implements RowMapper<User>{
 		@Override
-		public AuthUser mapRow(ResultSet rs, int rowNum) throws SQLException {
-			AuthUser role = mapAuthUserResult(rs);			
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+			User role = mapAuthUserResult(rs);			
 			return role;
 		}		
 	}
 	
-	public class AuthUserSingleResultProcessor implements ResultSetExtractor<AuthUser>{
+	public class AuthUserSingleResultProcessor implements ResultSetExtractor<User>{
 		@Override
-		public AuthUser extractData(ResultSet rs) throws SQLException, DataAccessException {
-			AuthUser authUser = null;
+		public User extractData(ResultSet rs) throws SQLException, DataAccessException {
+			User authUser = null;
 			if(rs.next()) {
 				authUser = mapAuthUserResult(rs);
 			}
@@ -161,8 +161,8 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		}				
 	}
 
-	public AuthUser mapAuthUserResult(ResultSet rs) throws SQLException {	
-		AuthUser authUser = null;
+	public User mapAuthUserResult(ResultSet rs) throws SQLException {	
+		User authUser = null;
 		String password = null;
 		Integer userId = rs.getInt(UserConstant.ID);
 		String username = rs.getString(UserConstant.USERNAME);
@@ -176,7 +176,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 		Boolean accountNonLocked = rs.getBoolean("account_non_locked");;	
 		Date createdOn = rs.getDate("created_on");
 		Date updatedOn = rs.getDate("updated_on");		
-		authUser = new AuthUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, loadAuthorities(userId));
+		authUser = new User(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, loadAuthorities(userId));
 		authUser.setId(userId);
 		authUser.setCreatedOn(createdOn);
 		authUser.setUpdatedOn(updatedOn);
@@ -217,13 +217,13 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	}
 
 	@Override
-	public AuthUser updateObject(AuthUser object) throws SQLException {
+	public User updateObject(User object) throws SQLException {
 		
 		return null;
 	}
 
 	@Override
-	public List<AuthUser> search(QueryParam queryParam) throws SQLException {
+	public List<User> search(QueryParam queryParam) throws SQLException {
 		StringBuilder queryBuilder = commonSelectQuery(true);
 		queryBuilder.append(" WHERE LOWER(first_name) like ? OR LOWER(last_name) like ? OR LOWER(username) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))

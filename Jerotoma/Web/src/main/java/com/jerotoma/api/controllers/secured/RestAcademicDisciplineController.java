@@ -60,11 +60,11 @@ public class RestAcademicDisciplineController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -84,11 +84,11 @@ public class RestAcademicDisciplineController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		super.instance.setSuccess(true);
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(academicDisciplines);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
+		super.response.setSuccess(true);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(academicDisciplines);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
 	}
 
 
@@ -127,10 +127,10 @@ public class RestAcademicDisciplineController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(fieldOfStudy);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(fieldOfStudy);
+		return response;
 	}
 
 	@PutMapping(value = {"", "/"})

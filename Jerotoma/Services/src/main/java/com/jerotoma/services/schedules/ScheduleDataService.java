@@ -3,7 +3,7 @@ package com.jerotoma.services.schedules;
 import java.util.List;
 
 import com.jerotoma.common.models.academic.Class;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
@@ -22,5 +22,5 @@ public interface ScheduleDataService {
 	public List<CourseVO> findCourses();
 	public AcademicYearVO getAcademicYear(Integer academicYearId);
 	public AcademicYearVO getCurrentAcademicYear();
-	public List<Class> generateClasses(AcademicYearVO academicYear, AuthUser authUser);	
+	public List<Class> generateClasses(AcademicYearVO academicYear, User authUser);	
 }

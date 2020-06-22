@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.jerotoma.common.constants.RoleConstant.USER_ROLES;
 import com.jerotoma.common.models.security.Role;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 
 public class UserVO extends PersonVO implements Serializable {
 	
@@ -21,7 +21,7 @@ public class UserVO extends PersonVO implements Serializable {
 	private DepartmentVO department;
 	private Integer studentNumber;
 
-	public UserVO(AuthUser authUser, PersonVO person) {
+	public UserVO(User authUser, PersonVO person) {
 		super(person);		
 		this.userId = authUser.getId();
 		this.username = authUser.getUsername();	    

@@ -52,6 +52,7 @@ import {
   TinyMCEComponent,
   CurrentAcademicYearComponent,
   LogoComponent,
+  UploadAvatarDialogComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -68,6 +69,7 @@ const COMPONENTS = [
   CurrentAcademicYearComponent,
   TinyMCEComponent,
   LogoComponent,
+  UploadAvatarDialogComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -79,6 +81,7 @@ const ENTRY_COMPONENTS = [
   MyCourseComponent,
   TimepickerComponent,
   CurrentAcademicYearComponent,
+  UploadAvatarDialogComponent,
 ];
 
 const MODULES = [
@@ -116,6 +119,7 @@ const MODULES = [
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,
+    dialogClass: 'global-dialog-container',
   }),
   NbWindowModule.forRoot(),
 ];

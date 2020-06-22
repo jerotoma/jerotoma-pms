@@ -20,7 +20,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.security.Role;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.UserRole;
 import com.jerotoma.common.utils.CalendarUtil;
@@ -62,7 +62,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 	}
 	protected void addDefaultAccountsIfNotExists() {
 		USER_ROLES adminRole = USER_ROLES.ROLE_ADMIN;
-		AuthUser authUser;
+		User authUser;
 		String username = "support@vimmak.com";
 		String password = "Vimmak";
 		Boolean enabled = true; 
@@ -83,7 +83,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			}
 			
 			Collection<Role> roles = new ArrayList<>(Arrays.asList(roleR));
-			authUser = new AuthUser(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);			
+			authUser = new User(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);			
 			authUser.setUserType(USER_TYPE.STAFF);
 			authUser = userService.createObject(authUser);
 			
@@ -135,7 +135,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		return position;
 	}
 	
-	private void createStaff(AuthUser user, Position position) {
+	private void createStaff(User user, Position position) {
 		StaffVO staffVO;
 		try {
 			staffVO = assemblerStaffService.findObjectUniqueKey(user.getUsername());

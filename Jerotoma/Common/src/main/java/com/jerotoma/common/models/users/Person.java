@@ -20,6 +20,9 @@ public abstract class Person {
 	@Column(name = "user_id")
 	private Integer userId;
 	
+	@Column(name = "profile_image_id")
+	protected Integer profileImageId;
+	
 	@Column(name = "first_name")
 	protected String firstName;
 	
@@ -236,4 +239,11 @@ public abstract class Person {
 		this.userId = userId;
 	}
 
+	public Integer getProfileImageId() {
+		return profileImageId;
+	}
+
+	public void setProfileImageId(Integer profileImageId) {
+		this.profileImageId = profileImageId;
+	}
 }

@@ -43,15 +43,15 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);		
 		
 		try {
-			instance.setData(attendanceStatusService.loadMapList(queryParam));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			instance.setHttpStatus(HttpStatus.OK);
+			response.setData(attendanceStatusService.loadMapList(queryParam));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
 		
-		return instance;
+		return response;
 	}
 	
 	@GetMapping({"", "/"})	
@@ -62,15 +62,15 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		this.securityCheckAccessByRoles(auth);			
 		
 		try {
-			instance.setData(attendanceStatusService.getAll());
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			instance.setHttpStatus(HttpStatus.OK);
+			response.setData(attendanceStatusService.getAll());
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}
 		
-		return instance;
+		return response;
 	}
 
 
@@ -97,14 +97,14 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 			mAttendanceStatus.setDescription(attendanceStatus.getDescription());
 			mAttendanceStatus.setUpdatedOn(attendanceStatus.getUpdatedOn());
 			
-			instance.setData(attendanceStatusService.updateObject(mAttendanceStatus));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(attendanceStatusService.updateObject(mAttendanceStatus));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -121,14 +121,14 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 				
 		try {
 			attendanceStatus.setAddedBy(authUser.getId());		
-			instance.setData(attendanceStatusService.createObject(attendanceStatus));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(attendanceStatusService.createObject(attendanceStatus));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 	@Override
@@ -145,14 +145,14 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		this.securityCheckAccessByRoles(auth);				
 		try {
 			AttendanceStatus attendanceStatus = attendanceStatusService.findObject(entityId);	
-			instance.setData(attendanceStatusService.deleteObject(attendanceStatus));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(attendanceStatusService.deleteObject(attendanceStatus));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 }

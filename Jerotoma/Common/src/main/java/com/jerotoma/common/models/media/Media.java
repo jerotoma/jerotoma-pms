@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.media;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -11,8 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.jerotoma.common.constants.DatabaseConstant;
+
 @Entity
-@Table(name="media")
+@Table(name = DatabaseConstant.TABLES.MEDIA)
 public class Media implements Serializable{
 	
 	/**  
@@ -21,9 +24,14 @@ public class Media implements Serializable{
 	private static final long serialVersionUID = 1L; 
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="media_generator")
-	@SequenceGenerator(name="media_generator", sequenceName = "media_id_seq", allocationSize=1)
-	@Column(name="id")
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.MEDIA + "_generator")
+	@SequenceGenerator(
+			name = DatabaseConstant.TABLES.MEDIA + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.MEDIA + "_id_seq", 
+			allocationSize=1)
+	@Column
 	private Integer id;
 	
 	@Column(name="absolute_path")
@@ -43,6 +51,12 @@ public class Media implements Serializable{
 	
 	@Column(name="size")
 	private long size;
+	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
 	
 	public Media() {
 		
@@ -109,7 +123,23 @@ public class Media implements Serializable{
 	public void setAbsolutePath(String absolutPath) {
 		this.absolutePath = absolutPath;
 	}
-
+	
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+	
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+	
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+	
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) { return false;}
@@ -118,8 +148,11 @@ public class Media implements Serializable{
 			Media m = (Media)obj;
 			return getId().equals(m.getId());
 		}
-		return false;
-		
+		return false;		
 	}
 	
+	@Override
+	public int hashCode() {		
+		return super.hashCode();
+	}
 }

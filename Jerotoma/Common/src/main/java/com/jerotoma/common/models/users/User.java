@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
@@ -17,7 +16,7 @@ import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
 
-public class AuthUser extends User {
+public class User extends org.springframework.security.core.userdetails.User {
 	
 	/**
 	 * 
@@ -30,7 +29,7 @@ public class AuthUser extends User {
 	private Date createdOn;
 	private Date updatedOn;
 		
-	public AuthUser(
+	public User(
 			String username, 
 			String password, 
 			Boolean enabled, 
@@ -46,7 +45,7 @@ public class AuthUser extends User {
 	}
 	
 	
-	public static AuthUser validateAndMapAuthUser(Map<String, Object> params, RoleConstant.USER_ROLES userRole) {
+	public static User validateAndMapAuthUser(Map<String, Object> params, RoleConstant.USER_ROLES userRole) {
 		
 		String username = (String) params.get(UserConstant.USERNAME);		
 		String password = (String) params.get(UserConstant.PASSWORD);
@@ -78,7 +77,7 @@ public class AuthUser extends User {
 		role.setDisplayName(userRole.getDisplayName());
 		roles.add(role);
 		USER_TYPE uType = UserConstant.processUserType(userType);		
-		AuthUser authUser = new AuthUser(username, password, true, true, true, true, roles);		
+		User authUser = new User(username, password, true, true, true, true, roles);		
 		authUser.setUserType(uType);
 		authUser.setCreatedOn(createdOn);		
 		authUser.setUpdatedOn(updatedOn);

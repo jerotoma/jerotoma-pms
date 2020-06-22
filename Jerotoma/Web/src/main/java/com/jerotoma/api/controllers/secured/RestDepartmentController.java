@@ -61,11 +61,11 @@ public class RestDepartmentController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/list", "/list/"})
@@ -78,15 +78,15 @@ public class RestDepartmentController extends BaseController {
 		
 		
 		try {
-			instance.setData(assemblerDepartmentService.getAllDepartment());		
+			response.setData(assemblerDepartmentService.getAllDepartment());		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/{departmentId}", "/{departmentId}/"})
@@ -98,15 +98,15 @@ public class RestDepartmentController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		
 		try {
-			instance.setData(assemblerDepartmentService.findObject(departmentId));		
+			response.setData(assemblerDepartmentService.findObject(departmentId));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@PostMapping(value = {"", "/"})
@@ -132,10 +132,10 @@ public class RestDepartmentController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(department);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(department);
+		return response;
 	}
 
 	protected HttpResponseEntity<Object> showDepartment() {
@@ -168,10 +168,10 @@ public class RestDepartmentController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(department);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(department);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{departmentId}", "/{departmentId}/"})

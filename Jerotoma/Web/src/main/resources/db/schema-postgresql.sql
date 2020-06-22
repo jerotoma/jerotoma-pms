@@ -1,56 +1,3 @@
-	 /**************************************************************
-	 * 															  *
-	 * 															  *
-	 * 			ADD TABLE COLUMN RELATED TABLES					  *
-	 * 															  *
-	 *************************************************************/
-	
-	--RUN THIS SCRIPTS MUNUALLY
-	
-	/** 
-	CREATE OR REPLACE function add_table_column_if_not_exists(tableName regclass, columnName  text, dataType regtype)
-	RETURNS bool AS 
-	$BODY$ 
-		BEGIN 
-		  	IF EXISTS (SELECT 1 FROM pg_attribute WHERE  attrelid = tableName AND attname = columnName AND NOT attisdropped) THEN		  	
-		  		RETURN FALSE;
-		  	ELSE
-		  		EXECUTE format('ALTER TABLE %s ADD COLUMN %I %s', tableName, columnName, dataType);
-		      	RETURN TRUE;
-		   	END IF;	   
-		END;
-	$BODY$ 
-	LANGUAGE plpgsql; 
-	**/
-	
-	 /**************************************************************
-	 * 															  *
-	 * 															  *
-	 * 			ADD TABLE COLUMN RELATED TABLES					  *
-	 * 															  *
-	 *************************************************************/
-	
-	--RUN THIS SCRIPTS MUNUALLY
-	
-	/**
-	CREATE OR REPLACE function rename_table_column_if_exists(tableName regclass, currentColumnName  TEXT, newColumnName TEXT)
-	RETURNS bool AS 
-	$BODY$ 
-		BEGIN 
-		  IF NOT EXISTS 
-		  	(SELECT 1 FROM pg_attribute WHERE  attrelid = tableName AND attname = currentColumnName AND NOT attisdropped) 
-		  THEN
-		     RETURN FALSE;
-		  ELSE
-		     EXECUTE 'ALTER TABLE ' || tableName || ' RENAME COLUMN ' || currentColumnName || ' TO ' || newColumnName;
-		     RETURN TRUE;
-		  END IF;
-		END;
-	$BODY$ 
-	LANGUAGE plpgsql;  
-	*/
-		
-
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -169,6 +116,53 @@
 	   	CONSTRAINT department_pkey PRIMARY KEY (id)
 	    );
 	    
+  	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			MEDIA RELATED TABLES				  			  *
+	 * 															  *
+	 *************************************************************/
+	-- Tables for media
+	
+	CREATE TABLE IF NOT EXISTS public.media(
+	    id bigserial PRIMARY KEY,
+	    added_by bigint,
+	    title character varying(255),
+	    description text,
+	    src text NOT NULL,
+	    size bigint,
+	    type character varying(255) NOT NULL,
+	    absolute_path text NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	  	updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT user_fkey FOREIGN KEY (added_by)
+	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	);
+
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			USER_MEDIA RELATED TABLES				  		  *
+	 * 															  *
+	 *************************************************************/
+	-- Tables for user_media
+	
+	CREATE TABLE IF NOT EXISTS public.user_media(
+	    id bigserial PRIMARY KEY,
+	    user_id bigint NOT NULL,
+	    media_id bigint NOT NULL,		  
+	    CONSTRAINT user_fkey FOREIGN KEY (user_id)
+	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT media_fkey FOREIGN KEY (media_id)
+	        REFERENCES public.media (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	);
+	    
 	    
 	/**************************************************************
 	 * 															  *
@@ -189,7 +183,7 @@
 	    email_address character varying(255),
 	    occupation character varying(255) NOT NULL,
 	    gender character varying(25) NOT NULL,
-	    avatar character varying(255) NOT NULL,    
+	    profile_image_id bigint,    
 	    birth_date timestamp with time zone,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
@@ -203,6 +197,10 @@
 	        ON DELETE CASCADE,
 	    CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	    CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id)
+	        REFERENCES public.user_media (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
 	   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
@@ -230,13 +228,17 @@
 	    email_address character varying(255),
 	    occupation character varying(255) NOT NULL,
 	    gender character varying(25) NOT NULL,
-	    avatar character varying(255) NOT NULL,
+	    profile_image_id bigint,
 	    birth_date timestamp with time zone,
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	    CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id)
+	        REFERENCES public.user_media (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
 	   	CONSTRAINT parents_pkey PRIMARY KEY (id)
@@ -262,7 +264,7 @@
 	    phone_number character varying(255) NOT NULL,
 	    occupation character varying(255),
 	    gender character varying(25) NOT NULL,
-	    avatar character varying(255) NOT NULL,
+	    profile_image_id bigint,
 	    position character varying(255),
 	    birth_date timestamp with time zone NOT NULL,
 	    updated_by bigint NOT NULL,
@@ -270,6 +272,10 @@
 	    updated_on timestamp with time zone NOT NULL,
 	   	CONSTRAINT students_pkey PRIMARY KEY (id),
 	   	CONSTRAINT student_number UNIQUE (student_number),
+	   	CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id)
+	        REFERENCES public.user_media (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
 	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
@@ -297,7 +303,7 @@
 	    email_address character varying(255),
 	    occupation character varying(255),
 	    gender character varying(25),
-	    avatar character varying(255),
+	    profile_image_id bigint,
 	    birth_date timestamp with time zone,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
@@ -305,6 +311,10 @@
 	   	CONSTRAINT staffs_pkey PRIMARY KEY (id),
 	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+		CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id)
+	        REFERENCES public.user_media (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
 	   	CONSTRAINT positions_fkey FOREIGN KEY (position_id)
@@ -746,28 +756,7 @@
 		);
 		
 		 
-	    /**************************************************************
-		 * 															  *
-		 * 															  *
-		 * 			MEDIA RELATED TABLES				  *
-		 * 															  *
-		 *************************************************************/
-		-- Tables for media
-		
-		CREATE TABLE IF NOT EXISTS public.media(
-		    id bigserial PRIMARY KEY,
-		    user_id bigint,
-		    title character varying(255),
-		    description text,
-		    src text NOT NULL,
-		    size bigint,
-		    type character varying(255) NOT NULL,
-		    absolute_path text NOT NULL,
-		    CONSTRAINT user_fkey FOREIGN KEY (user_id)
-		        REFERENCES public.users (id) MATCH SIMPLE
-		        ON UPDATE CASCADE
-		        ON DELETE CASCADE
-		);
+	   
 
 		/**************************************************************
 		 * 															  *

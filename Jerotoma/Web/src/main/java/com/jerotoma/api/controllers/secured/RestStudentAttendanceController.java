@@ -60,11 +60,11 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	@Override
@@ -106,13 +106,13 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 				studentAttendances.add(studentAttendance);
 			}
 			studentAttendanceService.updateBatch(studentAttendances);
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -132,14 +132,14 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 		try {						
 			ClassAttendance classAttendance = classAttendanceService.findObject(studentAttendanceParam.getClassAttendanceId());
 			List<StudentAttendanceStatusParam> studentAttendanceStatuses = studentAttendanceParam.getStudentAttendanceStatuses();
-			instance.setData(studentAttendanceService.createBatch(processRequest(classAttendance, studentAttendanceStatuses)));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(studentAttendanceService.createBatch(processRequest(classAttendance, studentAttendanceStatuses)));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 	protected List<StudentAttendance> processRequest(ClassAttendance classAttendance, List<StudentAttendanceStatusParam> studentAttendanceStatuses) throws SQLException {

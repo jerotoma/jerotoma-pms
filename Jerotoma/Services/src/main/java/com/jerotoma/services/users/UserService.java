@@ -10,5 +10,6 @@ public interface UserService extends UserDetailsService {
 	public UserVO loadCurrentUser();
 	public UserContext getUserContext(Authentication authentication);
 	public UserVO getUserByUsername(String username);
+	public UserVO getUserByUserId(Integer userId);
 
 }

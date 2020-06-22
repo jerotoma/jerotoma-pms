@@ -40,16 +40,16 @@ public class RestClassAttendanceController extends RestAttendanceController {
 	public HttpResponseEntity<Object> index(Authentication auth, String search, Integer page, Integer pageSize,
 			String fieldName, String orderby) {
 		try {
-			instance.setData(assemblerClassAttendanceService.getAll());		
+			response.setData(assemblerClassAttendanceService.getAll());		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -87,14 +87,14 @@ public class RestClassAttendanceController extends RestAttendanceController {
 			Class mClass = classService.findObject(classAttendanceParam.getClassId());			
 			classAttendance = new ClassAttendance(mClass, academicYear, classAttendanceParam.getAttendanceDate(), authUser.getId(), today, today);
 			
-			instance.setData(classAttendanceService.createObject(classAttendance));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(classAttendanceService.createObject(classAttendance));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
-		instance.setHttpStatus(HttpStatus.OK);	
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);	
+		return response;
 	}
 
 	@Override
@@ -126,11 +126,11 @@ public class RestClassAttendanceController extends RestAttendanceController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping("/{classAttendanceId}")	
@@ -140,15 +140,15 @@ public class RestClassAttendanceController extends RestAttendanceController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			instance.setData(assemblerClassAttendanceService.findObject(classAttendanceId));
-			instance.setHttpStatus(HttpStatus.OK);
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(assemblerClassAttendanceService.findObject(classAttendanceId));
+			response.setHttpStatus(HttpStatus.OK);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
 		
-		return instance;
+		return response;
 	}
 }

@@ -58,8 +58,7 @@ public class CalendarUtil {
 		}
 		 return date;
 	}
-	public static Date getTodaysDate() {
-		
+	public static Date getTodaysDate() {		
 		return new Date();
 	}
 

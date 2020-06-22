@@ -30,7 +30,7 @@ import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.utils.CalendarUtil;
@@ -84,11 +84,11 @@ public class RestClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 								
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	@PostMapping(value = {"/auto-generate", "/auto-generate/"})
@@ -103,12 +103,12 @@ public class RestClassController extends BaseController {
 		Integer academicYearId = (Integer)params.get("academicYearId");
 		AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
 		if (academicYear != null) {
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			instance.setData(scheduleDataService.generateClasses(academicYear, authUser));
-			instance.setHttpStatus(HttpStatus.OK);
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(scheduleDataService.generateClasses(academicYear, authUser));
+			response.setHttpStatus(HttpStatus.OK);
 		}		
-		return instance;
+		return response;
 	}
 		
 	@GetMapping(value = {"/{classId}", "/{classId}/"})
@@ -120,15 +120,15 @@ public class RestClassController extends BaseController {
 		
 		try {
 			ClassVO jClassVO = assemblerClassService.findObject(classId);	
-			instance.setData(jClassVO);
+			response.setData(jClassVO);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"academic-years/{academicYearId}", "/academic-years/{academicYearId}/"})
@@ -139,15 +139,15 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadClassesByAcademicYear(academicYearId));
+			response.setData(assemblerClassService.loadClassesByAcademicYear(academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"academic-years/{academicYearId}/students/{studentId}/unregistered", "/academic-years/{academicYearId}/students/{studentId}/unregistered"})
@@ -161,15 +161,15 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId));
+			response.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {
@@ -186,15 +186,15 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			instance.setData(assemblerClassService.loadStudentClassesByAcademicYear(studentId, academicYearId));
+			response.setData(assemblerClassService.loadStudentClassesByAcademicYear(studentId, academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/list", "/list/"})
@@ -219,11 +219,11 @@ public class RestClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		super.instance.setSuccess(true);
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(mClasses);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
+		super.response.setSuccess(true);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(mClasses);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -251,7 +251,7 @@ public class RestClassController extends BaseController {
 		try {
 			MeetingTime meetingTime = null;
 			Room room = null;
-			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Teacher teacher = teacherService.findObject(jClassFields.getTeacherId());
 			Course course = courseService.findObject(jClassFields.getCourseId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
@@ -279,10 +279,10 @@ public class RestClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(mClass);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(mClass);
+		return response;
 	}
 
 	@PutMapping(value = {"", "/"})
@@ -331,10 +331,10 @@ public class RestClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(mClass);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(mClass);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{classId}", "/{classId}/"})
@@ -348,18 +348,18 @@ public class RestClassController extends BaseController {
 		try {
 			mClass = classService.findObject(classId);	
 			if (mClass == null) {
-				instance.setSuccess(false);
-				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-				return instance;
+				response.setSuccess(false);
+				response.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+				return response;
 			} 
 			boolean isDeleted = classService.deleteObject(mClass);
-			instance.setSuccess(isDeleted);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setSuccess(isDeleted);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		return instance;
+		return response;
 	}
 	
 

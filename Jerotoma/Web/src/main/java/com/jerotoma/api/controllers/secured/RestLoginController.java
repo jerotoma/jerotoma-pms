@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.services.users.AuthUserService;
 
 @RestController
@@ -23,8 +23,8 @@ public class RestLoginController {
 	
 	@GetMapping(value={""})
 	@ResponseBody
-	public HttpResponseEntity<AuthUser> getIndexLogin(){
-		HttpResponseEntity<AuthUser> instance = new HttpResponseEntity<AuthUser>();
+	public HttpResponseEntity<User> getIndexLogin(){
+		HttpResponseEntity<User> instance = new HttpResponseEntity<User>();
 		
 		return instance;
 		

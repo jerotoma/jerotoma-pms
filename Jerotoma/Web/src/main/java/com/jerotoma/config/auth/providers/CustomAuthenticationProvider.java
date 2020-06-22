@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.services.users.AuthUserService;
 
@@ -34,7 +34,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
-        AuthUser user = userService.loadUserByUsername(username);
+        User user = userService.loadUserByUsername(username);
         
         if(user == null) {
         	throw new UsernameNotFoundException("User not found");

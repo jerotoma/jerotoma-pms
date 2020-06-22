@@ -47,11 +47,11 @@ public class RestDashboardController extends BaseController implements Controlle
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
 		// QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);								
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 
@@ -68,15 +68,15 @@ public class RestDashboardController extends BaseController implements Controlle
 			dashboardCount.setStudentCount(assemblerStudentService.countObject().intValue());
 			dashboardCount.setParentCount(assemblerParentService.countObject().intValue());
 			dashboardCount.setStaffCount(assemblerStaffService.countObject().intValue());			
-			instance.setData(dashboardCount);				
+			response.setData(dashboardCount);				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 								
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	@Override

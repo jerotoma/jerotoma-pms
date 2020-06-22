@@ -32,18 +32,18 @@ public class RestThemeController  extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_THEME_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);		
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		try {
-			instance.setData(systemConfigService.getCurrentThemeByUserID(authUser.getId()));
+			response.setData(systemConfigService.getCurrentThemeByUserID(authUser.getId()));
 		} catch (SQLException  | EmptyResultDataAccessException e) {
 			if (e instanceof EmptyResultDataAccessException) {
-				instance.setData(null);
+				response.setData(null);
 			} else {
 				throw new JDataAccessException(e.getMessage(), e);
 			}	
 		}		
 		
-		return instance;
+		return response;
 	}
 }

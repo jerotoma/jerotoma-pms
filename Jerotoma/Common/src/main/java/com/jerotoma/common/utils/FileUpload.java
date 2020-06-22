@@ -4,9 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -15,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jerotoma.common.constants.MediaConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.models.media.FileUploadWrapper;
 import com.jerotoma.common.models.media.Media;
 
 public class FileUpload {
@@ -33,9 +33,9 @@ public class FileUpload {
 	  return fileUploadeController;		
 	}
 		
-	public static Map<String, Object> uploadFileHandler(MultipartFile file, ServletContext context, String folderName) {
-		Map<String, Object>   map = new HashMap<String, Object>();
-		String message;		
+	public static FileUploadWrapper uploadFileHandler(MultipartFile file, ServletContext context, String folderName) {
+		FileUploadWrapper fileUploadWrapper = new FileUploadWrapper();
+		
 		System.out.println("Base : " + System.getProperty("catalina.base"));
 		System.out.println("App Deployed Directory path: " + context.getRealPath(File.separator));
 		System.out.println("getContextPath(): " + context.getContextPath());
@@ -51,10 +51,9 @@ public class FileUpload {
 				//Creating the directory to store file
 				
 				if(StringUtility.isEmpty(folderName)) {
-					map.put("message", "Directory can not be empty");
-					map.put("success", false);
-					
-					return map;
+					fileUploadWrapper.setMessage(MediaConstant.EMPTY_FOLDER_NAME_MESSAGE);
+					fileUploadWrapper.setSuccess(false);				
+					return fileUploadWrapper;
 				}
 				
 				if(folderName == null || folderName.equals("site-images")) {
@@ -68,12 +67,12 @@ public class FileUpload {
 				String fileName = SlugifyUtil.getSlugify().slugify(fileBaseName);
 				
 										
-				File dir = new File( SystemConstant.UPLOAD_PATH + "/" + folderName);
-				if (!dir.exists())
+				File dir = new File(SystemConstant.UPLOAD_PATH.concat(SystemConstant.FORWARD_SLASH).concat(folderName));
+				if (!dir.exists()) {
 					dir.mkdirs();
-              
+				}
 				//Create the file on server
-				File serverFile = new File(dir.getAbsolutePath() + "/" + fileName +"."+fileExtension);
+				File serverFile = new File(dir.getAbsolutePath().concat(SystemConstant.FORWARD_SLASH).concat(fileName).concat(SystemConstant.PERIOD).concat(fileExtension));
 				BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 				stream.write(bytes);
 				stream.close();
@@ -85,38 +84,33 @@ public class FileUpload {
 				media.setType(file.getContentType());
 				media.setAbsolutePath(serverFile.getAbsolutePath());
 				media.setSize(file.getSize());
-				media.setSrc(context.getContextPath()+ SystemConstant.RESOURCE_PATH + "/" +folderName+"/"+serverFile.getName());
+				media.setSrc(context.getContextPath()+ SystemConstant.RESOURCE_PATH + SystemConstant.FORWARD_SLASH +folderName+ SystemConstant.FORWARD_SLASH + serverFile.getName());
 				media.setDescription("");
-				message = "You successfully uploaded file=" + serverFile.getAbsolutePath();
+				media.setCreatedOn(CalendarUtil.getTodaysDate());
+				media.setUpdatedOn(CalendarUtil.getTodaysDate());
 				
+				fileUploadWrapper.setMedia(media);
+				fileUploadWrapper.setSuccess(true);	
+				fileUploadWrapper.setMessage(String.format(MediaConstant.MEDIA_UPLOAD_SUCCESS_MESSAGE, serverFile.getAbsolutePath()));
+				return fileUploadWrapper;
 				
-				map.put("media", media);
-				map.put("success", true);
-				return map; 
-			} catch (Exception e) {
-				message = "You failed to upload " + file.getOriginalFilename() + " => " + e.getMessage();
-				map.put("message", message);
-				map.put("success", false);
-				
-				
-				return map;
+			} catch (Exception e) {					
+				fileUploadWrapper.setMessage(String.format(MediaConstant.MEDIA_UPLOAD_FAILED_MESSAGE, file.getOriginalFilename(), e.getMessage()));
+				fileUploadWrapper.setSuccess(false);				
+				return fileUploadWrapper;
 			}
-		} else {
-			
-			message = "You failed to upload " + file.getOriginalFilename() + " because the file was empty.";
-			map.put("success", false);
-			map.put("message", message);
-			
-			return map; 
+		} else {			
+			fileUploadWrapper.setMessage(String.format(MediaConstant.INVALID_FILE_MESSAGE, file.getOriginalFilename()));
+			fileUploadWrapper.setSuccess(false);				
+			return fileUploadWrapper;			
 		}
 	}
 	
-	public static List<Map<String, Object>>  uploadMultipleFileHandler(MultipartFile[] files, ServletContext context, String folderName) {
-		List<Map<String, Object>>  list = new ArrayList<>();
+	public static List<FileUploadWrapper>  uploadMultipleFileHandler(MultipartFile[] files, ServletContext context, String folderName) {
+		List<FileUploadWrapper>  list = new ArrayList<>();
 		for(MultipartFile file: files) {
 			list.add(uploadFileHandler(file, context,folderName));
-		}
-		
+		}		
 		return list;
 	}
 	

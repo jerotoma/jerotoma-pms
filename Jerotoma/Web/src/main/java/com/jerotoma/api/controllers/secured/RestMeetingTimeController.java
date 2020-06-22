@@ -52,15 +52,15 @@ public class RestMeetingTimeController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_MEETING_TIME_CONTROLLER.BASE);
 		
 		try {
-			instance.setData(assemblerMeetingTimeService.findAllMeetingTimes());
+			response.setData(assemblerMeetingTimeService.findAllMeetingTimes());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	
@@ -78,15 +78,15 @@ public class RestMeetingTimeController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		
 		try {
-			instance.setData(assemblerMeetingTimeService.loadMapList(queryParam));
+			response.setData(assemblerMeetingTimeService.loadMapList(queryParam));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -142,14 +142,14 @@ public class RestMeetingTimeController extends BaseController {
 			checkForMeetingTimeOverlapException(workDay, meetingTime);
 			
 			meetingTime.setWorkDay(workDay);
-			instance.setData(meetingTimeService.createObject(meetingTime));		
+			response.setData(meetingTimeService.createObject(meetingTime));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		return response;
 	}
 
 

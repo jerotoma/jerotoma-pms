@@ -30,7 +30,7 @@ import com.jerotoma.common.exceptions.InvalidJwtTokenException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.jwt.AccessJwtToken;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.CalendarUtil;
@@ -59,11 +59,11 @@ public class RestAuthController extends BaseController {
 	@PostMapping(EndPointConstants.REST_AUTH_CONTROLLER.REGISTER)
 	@ResponseBody
 	public HttpResponseEntity<Object> postCreate(@RequestBody Map<String, Object> params) {		
-		instance.setSuccess(true);
-		instance.setStatusCode("200");		
+		response.setSuccess(true);
+		response.setStatusCode("200");		
 		try {
 			authUser = authUserService.createUserLoginAccount(
-					AuthUser.validateAndMapAuthUser(params, 
+					User.validateAndMapAuthUser(params, 
 							RoleConstant.USER_ROLES.ROLE_USER));		
 			
 			Staff staff = new Staff();
@@ -75,11 +75,11 @@ public class RestAuthController extends BaseController {
 			staff.setCreatedOn(CalendarUtil.getTodaysDate());
 			staff.setUpdatedOn(CalendarUtil.getTodaysDate());
 			staffService.createObject(staff);
-			instance.setData(userService.getUserByUsername(authUser.getUsername()));
+			response.setData(userService.getUserByUsername(authUser.getUsername()));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}		
-		return instance;		
+		return response;		
 	}
 	
     
@@ -116,7 +116,7 @@ public class RestAuthController extends BaseController {
         }
 
         String subject = refreshToken.getSubject();
-        AuthUser user = authUserService.loadUserByUsername(subject);
+        User user = authUserService.loadUserByUsername(subject);
 
         if (user == null) {
         	throw new UsernameNotFoundException("User not found of the provided token");

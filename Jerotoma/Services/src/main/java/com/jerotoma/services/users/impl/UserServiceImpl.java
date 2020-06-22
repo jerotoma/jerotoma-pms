@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.viewobjects.PersonVO;
 import com.jerotoma.common.viewobjects.UserVO;
@@ -42,31 +41,8 @@ public class UserServiceImpl implements UserService {
 	public UserVO loadCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserContext userContext = getUserContext(authentication);
-		AuthUser authUser = (AuthUser) loadUserByUsername(userContext.getUsername());
-		PersonVO person = null;
-		try {
-			switch (authUser.getUserType()) {
-			case TEACHER:
-				person = assemblerTeacherService.findObjectUniqueKey(authUser.getUsername());
-				break;
-			case STUDENT:
-				person = assemblerStudentService.findObjectUniqueKey(authUser.getUsername());
-				break;
-			case STAFF:
-				person = assemblerStaffService.findObjectUniqueKey(authUser.getUsername());
-				break;
-			case PARENT:
-				person = assemblerParentService.findObjectUniqueKey(authUser.getUsername());
-				break;
-			default:
-				throw new UsernameNotFoundException("User type not found");
-			}
-		} catch (SQLException e) {
-			person = null;
-			e.printStackTrace();
-		}
-
-		return new UserVO(authUser, person);
+		User authUser = (User) loadUserByUsername(userContext.getUsername());		
+		return getUserDetails(authUser);
 	}
 
 	@Override
@@ -80,7 +56,7 @@ public class UserServiceImpl implements UserService {
 		if (authentication.getPrincipal() instanceof UserContext) {
 			return (UserContext) principal;
 		} else if (principal instanceof User) {
-			User user = (org.springframework.security.core.userdetails.User) principal;
+			User user = (User) principal;
 			return new UserContext(user.getUsername(), user.getAuthorities());
 		} else {
 			throw new BadCredentialsException("Invalid credential was provided");
@@ -88,9 +64,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserVO getUserByUsername(String username) {
+	public UserVO getUserByUsername(String username) {		
+		User authUser = (User)loadUserByUsername(username);		
+		return getUserDetails(authUser);
+	}
+
+	private UserVO getUserDetails(User authUser) {
 		PersonVO person = null;
-		AuthUser authUser = (AuthUser) loadUserByUsername(username);
+		
+		if (authUser == null) {
+			return null;
+		}
+		
 		try {
 			switch (authUser.getUserType()) {
 			case TEACHER:
@@ -112,8 +97,27 @@ public class UserServiceImpl implements UserService {
 			person = null;
 			e.printStackTrace();
 		}
-
+		
+		if (person == null) {
+			return null;
+		}		
 		return new UserVO(authUser, person);
+	}
+
+	@Override
+	public UserVO getUserByUserId(Integer userId) {
+		User authUser = getUserById(userId);
+		return getUserDetails(authUser);
+	}
+	
+	
+	private User getUserById(Integer userId) {
+		try {
+			return authUserService.findObject(userId);
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

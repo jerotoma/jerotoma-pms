@@ -31,7 +31,7 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.StudentClass;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.StudentClassValidator;
@@ -74,11 +74,11 @@ public class RestStudentClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -104,11 +104,11 @@ public class RestStudentClassController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		super.instance.setSuccess(true);
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(studentClasses);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
+		super.response.setSuccess(true);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(studentClasses);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -132,7 +132,7 @@ public class RestStudentClassController extends BaseController {
 		StudentClass studentClass = new StudentClass();		
 		try {
 			
-			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());	
 			
@@ -148,15 +148,15 @@ public class RestStudentClassController extends BaseController {
 			}
 			studentClass.setClasses(jClasses);			
 			studentClass = studentClassService.createObject(studentClass);			
-			instance.setData(studentClass);
+			response.setData(studentClass);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		
-		return instance;
+		return response;
 	}
 
 	@PutMapping(value = {"", "/"})
@@ -182,7 +182,7 @@ public class RestStudentClassController extends BaseController {
 		Set<Class> jClasses = new HashSet<>();		
 		try {			
 			studentClass = studentClassService.findObject(jClassFields.getId());	
-			AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Student student = studentService.findObject(jClassFields.getStudentId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
 			studentClass.setStudent(student);
@@ -195,15 +195,15 @@ public class RestStudentClassController extends BaseController {
 			}
 			studentClass.setClasses(jClasses);			
 			studentClass = studentClassService.updateObject(studentClass);
-			instance.setData(studentClass);
+			response.setData(studentClass);
 				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		return response;
 	}
 	
 	@GetMapping(value = {"students/{studentId}", "/students/{studentId}/"})
@@ -212,14 +212,14 @@ public class RestStudentClassController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
-			instance.setData(assemblerStudentClassService.findStudentClassesByStudentId(studentId));
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(assemblerStudentClassService.findStudentClassesByStudentId(studentId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		return instance;
+		return response;
 	}
 	
 	@GetMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
@@ -231,14 +231,14 @@ public class RestStudentClassController extends BaseController {
 		StudentClassVO studentClassVO;
 		try {
 			studentClassVO = assemblerStudentClassService.findObject(studentClassId);
-			instance.setData(studentClassVO);
-			instance.setSuccess(true);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setData(studentClassVO);
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		return instance;
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
@@ -252,18 +252,18 @@ public class RestStudentClassController extends BaseController {
 		try {
 			studentClass = studentClassService.findObject(studentClassId);	
 			if (studentClass == null) {
-				instance.setSuccess(false);
-				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
-				return instance;
+				response.setSuccess(false);
+				response.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+				return response;
 			} 
 			boolean isDeleted = studentClassService.deleteObject(studentClass);
-			instance.setSuccess(isDeleted);
-			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setSuccess(isDeleted);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
-		return instance;
+		return response;
 	}
 
 }

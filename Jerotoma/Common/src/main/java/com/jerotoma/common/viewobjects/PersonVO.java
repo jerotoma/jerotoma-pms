@@ -26,6 +26,8 @@ public abstract class PersonVO {
 	
 	protected Integer userId;
 	
+	protected Integer profileImageId;
+	
 	protected String userCode;
 	
 	protected AddressVO address;

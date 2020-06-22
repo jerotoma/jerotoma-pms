@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.exceptions.JDataAccessException;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.database.dao.users.AuthUserDao;
 
@@ -24,32 +24,32 @@ public class AuthUserServiceImpl implements AuthUserService {
 	@Autowired AuthUserDao authUserDao;
 
 	@Override
-	public AuthUser loadUserByUsername(String username) throws UsernameNotFoundException {		
+	public User loadUserByUsername(String username) throws UsernameNotFoundException {		
 		return authUserDao.loadUserByUsername(username);
 	}
 
 	@Override
-	public AuthUser findObject(Integer primaryKey) throws SQLException {
+	public User findObject(Integer primaryKey) throws SQLException {
 		return authUserDao.findObject(primaryKey);
 	}
 
 	@Override
-	public AuthUser findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public User findObjectUniqueKey(String uniqueKey) throws SQLException {
 		return authUserDao.findObjectUniqueKey(uniqueKey);
 	}
 
 	@Override
-	public AuthUser createObject(AuthUser object) throws SQLException {
+	public User createObject(User object) throws SQLException {
 		return authUserDao.createObject(object);
 	}
 
 	@Override
-	public Boolean deleteObject(AuthUser object) throws SQLException {
+	public Boolean deleteObject(User object) throws SQLException {
 		return authUserDao.deleteObject(object);
 	}
 
 	@Override
-	public List<AuthUser> loadList(QueryParam queryParam) throws SQLException {
+	public List<User> loadList(QueryParam queryParam) throws SQLException {
 		return authUserDao.loadList(queryParam);
 	}
 
@@ -59,12 +59,12 @@ public class AuthUserServiceImpl implements AuthUserService {
 	}
 
 	@Override
-	public AuthUser updateObject(AuthUser object) throws SQLException {
+	public User updateObject(User object) throws SQLException {
 		return authUserDao.updateObject(object);
 	}
 
 	@Override
-	public List<AuthUser> search(QueryParam queryParam) throws SQLException {
+	public List<User> search(QueryParam queryParam) throws SQLException {
 		return  authUserDao.search(queryParam);
 	}
 
@@ -74,7 +74,7 @@ public class AuthUserServiceImpl implements AuthUserService {
 	}
 	
 	@Override
-	public AuthUser createUserLoginAccount(AuthUser authUser) {		
+	public User createUserLoginAccount(User authUser) {		
 		if (doesUserExist(authUser.getUsername())) {
 			throw new DuplicateKeyException("Sorry, Username exists already");
 		}

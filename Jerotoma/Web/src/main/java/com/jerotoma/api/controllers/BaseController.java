@@ -17,7 +17,7 @@ import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.security.Role;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
@@ -34,7 +34,7 @@ public abstract class BaseController {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
-	protected HttpResponseEntity<Object> instance;
+	protected HttpResponseEntity<Object> response;
 	
 	protected Date today = CalendarUtil.getTodaysDate();
 	
@@ -42,7 +42,7 @@ public abstract class BaseController {
 	
 	protected UserContext userContext;
 	
-	protected AuthUser authUser;
+	protected User authUser;
 	
 	@Autowired protected IAuthenticationFacade authenticationFacade;
 	@Autowired protected AuthUserService authUserService;
@@ -57,7 +57,7 @@ public abstract class BaseController {
 	
 	@PostConstruct
 	private void initialize(){
-		instance = new HttpResponseEntity<>();
+		response = new HttpResponseEntity<>();
 		map = new HashMap<>();
 		//
 	}

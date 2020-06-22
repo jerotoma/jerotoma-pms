@@ -16,7 +16,10 @@ public class DashboardController {
 			"/{path:[^\\.]*}/{path:[^\\.]*}",
 			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
 			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
-			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}"})
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}",
+			"/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}/{path:[^\\.]*}"
+			})
 	public String redirect(Authentication auth) {	
 	   return "forward:/";
 	}

@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.constants.SecurityConstant;
 import com.jerotoma.common.jwt.AuthToken;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.WebUtil;
 import com.jerotoma.config.auth.common.AuthProcessor;
@@ -75,7 +75,7 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
        	
     	if(authentication.isAuthenticated()) { 
        		UserContext userContext = authFacade.getUserContext(authentication);
-       		AuthUser auth =  userservice.loadUserByUsername(userContext.getUsername());
+       		User auth =  userservice.loadUserByUsername(userContext.getUsername());
        		if(WebUtil.isContentTypeJson(request)) {
             	jwtSuccessProcessor(request, response, authentication, auth);
             }else{
@@ -123,7 +123,7 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
 								HttpServletRequest request, 
 								HttpServletResponse response, 
 								Authentication authentication,  
-								AuthUser auth) throws IOException, JsonGenerationException, JsonMappingException {
+								User auth) throws IOException, JsonGenerationException, JsonMappingException {
 		
 		Map<String, Object> tokenMap = new HashMap<>();
 		

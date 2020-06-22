@@ -1,0 +1,71 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card size="medium" class="dialog-card" status="primary">
+      <nb-card-header>Upload User Profile Image</nb-card-header>
+      <nb-card-body>
+          <div class="row" *ngIf="!mediaURL">
+            <div class="col-md-12">
+              <div class="form-group">
+                <div class="row">
+                  <label class="col-sm-3 col-form-label" for="files">Documents</label>
+                  <div class="col-sm-9">
+                    <span class="hidden-file">
+                      <input type="file" #fileInput ng2FileSelect [uploader]="uploader" (onFileSelected)="onFileSelected($event)" />
+                    </span>
+                    <div class="btn-group" (click)="fileInput.click()">
+                      <button type="button" class="btn btn-primary btn-group-icon btn-group-divider">
+                          <i class="ion-plus-round"></i>
+                      </button>
+                      <button type="button" class="btn btn-primary">
+                        Select Image
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="mediaURL">
+            <div class="col-md-12">
+              <div class="media-container">
+                <img mat-card-image [src]="mediaURL" alt="" >
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 mt-2">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of uploader.queue">
+                    <td>
+                      {{ item?.file?.name }}
+                    </td>
+                    <td>
+                      {{ item?.file?.size/1024/1024 | number:'.2' }} MB
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-xs" (click)="removeItem(item)">
+                          <span class="glyphicon glyphicon-trash"></span>Remove
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+      </nb-card-body>
+      <nb-card-footer>
+          <button type='button' class='push-right' nbButton hero status="success" (click)="onSubmit()">Upload</button>
+          <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+      </nb-card-footer>
+    </nb-card>
+  </div>
+</div>
+

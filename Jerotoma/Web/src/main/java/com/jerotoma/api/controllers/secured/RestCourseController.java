@@ -71,11 +71,11 @@ public class RestCourseController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -88,15 +88,15 @@ public class RestCourseController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		
 		try {
-			instance.setData(assemblerCourseService.findObject(courseId));		
+			response.setData(assemblerCourseService.findObject(courseId));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/academicYears/{academicYearId}"})
@@ -116,11 +116,11 @@ public class RestCourseController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(courses);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(courses);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -160,10 +160,10 @@ public class RestCourseController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(course);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(course);
+		return response;
 	}
 
 	protected HttpResponseEntity<Object> showCourse() {
@@ -207,10 +207,10 @@ public class RestCourseController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(course);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(course);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{courseId}", "/{courseId}/"})

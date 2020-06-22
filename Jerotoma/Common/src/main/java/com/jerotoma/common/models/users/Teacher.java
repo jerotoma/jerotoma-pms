@@ -32,8 +32,13 @@ public class Teacher extends Person implements Serializable{
 	private static final long serialVersionUID = 1L;	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="teachers_generator")
-	@SequenceGenerator(name="teachers_generator", sequenceName = "teachers_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.TEACHERS + "_generator")
+	@SequenceGenerator(
+			name=DatabaseConstant.TABLES.TEACHERS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.TEACHERS + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	

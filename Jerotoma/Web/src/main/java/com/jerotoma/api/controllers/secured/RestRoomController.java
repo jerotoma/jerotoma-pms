@@ -29,7 +29,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.validators.SchoolClassValidator;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.assemblers.academic.AssemblerRoomService;
@@ -56,16 +56,16 @@ public class RestRoomController  extends BaseController {
 		logger.debug("getSchoolClasss : [model] : {}");			
 		this.securityCheckAccessByRoles(auth);				
 		try {
-			instance.setData(assemblerRoomService.findList());
+			response.setData(assemblerRoomService.findList());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/capacities/{capacity}", "/capacities/{capacity}/"})
@@ -77,16 +77,16 @@ public class RestRoomController  extends BaseController {
 		logger.debug("getSchoolClasss : [model] : {}");			
 		this.securityCheckAccessByRoles(auth);				
 		try {
-			instance.setData(assemblerRoomService.getRoomsByCapacity(capacity));
+			response.setData(assemblerRoomService.getRoomsByCapacity(capacity));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/paginated", "/paginated/"})
@@ -109,11 +109,11 @@ public class RestRoomController  extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	@PostMapping(value = {"", "/"})
@@ -123,7 +123,7 @@ public class RestRoomController  extends BaseController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		this.securityCheckAccessByRoles(auth);	
 		List<String> requiredFields;
-		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+		User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
 						RoomConstant.ROOM_NAME,
@@ -139,10 +139,10 @@ public class RestRoomController  extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(room);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(room);
+		return response;
 	}
 
 	protected HttpResponseEntity<Object> showSchoolClass() {
@@ -163,7 +163,7 @@ public class RestRoomController  extends BaseController {
 						RoomConstant.ROOM_NAME,
 						RoomConstant.ROOM_DESCRIPTION,
 						RoomConstant.ROOM_CODE));
-		AuthUser authUser = authUserService.loadUserByUsername(userContext.getUsername());
+		User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 		
 		Room room = SchoolClassValidator.validate(params, requiredFields);
 		room.setUpdatedBy(authUser.getId());
@@ -174,10 +174,10 @@ public class RestRoomController  extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(room);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(room);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{schoolClassId}", "/{schoolClassId}/"})

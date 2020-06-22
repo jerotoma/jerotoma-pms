@@ -59,11 +59,11 @@ public class RestSystemConfigController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -89,11 +89,11 @@ public class RestSystemConfigController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		super.instance.setSuccess(true);
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(systemConfigs);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
+		super.response.setSuccess(true);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(systemConfigs);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
 	}
 
 	
@@ -112,10 +112,10 @@ public class RestSystemConfigController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(systemConfig);
+		return response;
 	}
 	
 	@GetMapping(value = {"/keys", "/keys/"})
@@ -134,10 +134,10 @@ public class RestSystemConfigController extends BaseController {
 				throw new JDataAccessException(e.getMessage(), e);
 			}		
 		}		
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(systemConfig);
+		return response;
 	}
 
 
@@ -164,10 +164,10 @@ public class RestSystemConfigController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(systemConfig);
+		return response;
 	}
 
 	@PutMapping(value = {"", "/"})
@@ -204,10 +204,10 @@ public class RestSystemConfigController extends BaseController {
 			}		
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(systemConfig);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(systemConfig);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{id}", "/{id}/"})

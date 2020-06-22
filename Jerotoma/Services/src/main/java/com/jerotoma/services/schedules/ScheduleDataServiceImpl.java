@@ -16,7 +16,7 @@ import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.schedules.GeneticAlgorithm;
 import com.jerotoma.common.schedules.MeetingTime;
@@ -146,7 +146,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	}
 	
 	@Override
-	public List<Class> generateClasses(AcademicYearVO academicYear, AuthUser authUser) {
+	public List<Class> generateClasses(AcademicYearVO academicYear, User authUser) {
 		
 		List<RoomVO> rooms = findRooms();
 		List<TeacherVO> teachers  = findTeachers();

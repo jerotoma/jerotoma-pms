@@ -22,6 +22,9 @@ export class UploadsComponent implements OnInit {
   formData: FormData;
   uploadForm: FormGroup;
 
+  public hasBaseDropZoneOver: boolean = false;
+  public hasAnotherDropZoneOver: boolean = false;
+
   public uploader: FileUploader = new FileUploader({
     url: END_POINTS.uploads,
     disableMultipart : false,
@@ -38,12 +41,8 @@ export class UploadsComponent implements OnInit {
 
   public onFileSelected(event: EventEmitter<File[]>) {
     const file: File = event[0];
-    console.log(file);
-
+    window.console.log(file);
   }
-
-  public hasBaseDropZoneOver: boolean = false;
-  public hasAnotherDropZoneOver: boolean = false;
 
   public fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;

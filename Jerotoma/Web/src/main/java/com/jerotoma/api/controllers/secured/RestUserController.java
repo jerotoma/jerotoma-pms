@@ -43,7 +43,7 @@ import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
-import com.jerotoma.common.models.users.AuthUser;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
@@ -133,11 +133,11 @@ public class RestUserController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(mapVOs);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(mapVOs);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 		
 	}
 	
@@ -155,16 +155,16 @@ public class RestUserController extends BaseController {
 		try {
 			switch(type) {
 			case TEACHERS:
-				instance.setData(assemblerTeacherService.findObject(primaryKey));				
+				response.setData(assemblerTeacherService.findObject(primaryKey));				
 				break;
 			case STUDENTS:
-				instance.setData(assemblerStudentService.findObject(primaryKey));
+				response.setData(assemblerStudentService.findObject(primaryKey));
 				break;
 			case STAFFS:
-				instance.setData(assemblerStaffService.findObject(primaryKey));
+				response.setData(assemblerStaffService.findObject(primaryKey));
 				break;
 			case PARENTS:
-				instance.setData(assemblerParentService.findObject(primaryKey));
+				response.setData(assemblerParentService.findObject(primaryKey));
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -174,10 +174,10 @@ public class RestUserController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 		
 	}
 	
@@ -194,11 +194,11 @@ public class RestUserController extends BaseController {
 			throw new UsernameNotFoundException("User type not found");		
 		}
 		UserVO user = userService.getUserByUsername(username);		
-		instance.setData(user);	
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setData(user);	
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 		
 	}
 	
@@ -209,7 +209,7 @@ public class RestUserController extends BaseController {
 		List<String> requiredFields;
 		Staff staff;
 		Parent parent;
-		AuthUser newUser;
+		User newUser;
 		Teacher teacher;
 		Student student;		
 		Address address;
@@ -252,7 +252,7 @@ public class RestUserController extends BaseController {
 				department = processDepartment(params, requiredFields);
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
-				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
 				newUser = authUserService.createUserLoginAccount(newUser);
 								
 				teacher.setUserId(newUser.getId());
@@ -272,13 +272,13 @@ public class RestUserController extends BaseController {
 				teacherAddress.setCreatedOn(today);
 				teacherAddress.setUpdatedOn(today);
 				teacherAddressService.createObject(teacherAddress);
-				instance.setData(teacher);
+				response.setData(teacher);
 				break;
 			case STUDENT:
 				studentAddress = new StudentAddress();
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
-				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				
 				newUser = authUserService.createUserLoginAccount(newUser);	
 								
 				student.setUpdatedBy(authUser.getId());
@@ -304,7 +304,7 @@ public class RestUserController extends BaseController {
 				studentAddress.setUpdatedOn(today);
 				studentAddressService.createObject(studentAddress);	
 				
-				instance.setData(student);				
+				response.setData(student);				
 				
 				break;
 			case STAFF:
@@ -316,7 +316,7 @@ public class RestUserController extends BaseController {
 				staff.setUpdatedBy(authUser.getId());
 				address = staff.getAddress();
 				
-				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STAFF);				
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STAFF);				
 				newUser = authUserService.createUserLoginAccount(newUser);	
 				
 				staff.setUserId(newUser.getId());
@@ -331,14 +331,14 @@ public class RestUserController extends BaseController {
 				staffAddress.setCreatedOn(today);
 				staffAddress.setUpdatedOn(today);
 				staffAddressService.createObject(staffAddress);
-				instance.setData(staff);
+				response.setData(staff);
 				break;
 			case PARENT:
 				requiredFields.remove(UserConstant.BIRTH_DATE);
 				parentAddress = new ParentAddress();
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				
-				newUser = AuthUser.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_PARENT);				
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_PARENT);				
 				newUser = authUserService.createUserLoginAccount(newUser);
 				
 				parent.setUserId(newUser.getId());
@@ -354,7 +354,7 @@ public class RestUserController extends BaseController {
 				parentAddress.setCreatedOn(today);
 				parentAddress.setUpdatedOn(today);
 				parentAddressService.createObject(parentAddress);				
-				instance.setData(parent);
+				response.setData(parent);
 				break;				
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -363,10 +363,10 @@ public class RestUserController extends BaseController {
 		} catch (SQLException | JDataAccessException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}			
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setMessage("User has been created");
-		instance.setSuccess(true);
-		return instance;
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setMessage("User has been created");
+		response.setSuccess(true);
+		return response;
 		
 	}
 
@@ -500,7 +500,7 @@ public class RestUserController extends BaseController {
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);
-				instance.setData(teacher);				
+				response.setData(teacher);				
 				break;
 			case STUDENT:
 				requiredFields.add(UserConstant.PHONE_NUMBER);
@@ -537,7 +537,7 @@ public class RestUserController extends BaseController {
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);				
-				instance.setData(student);								
+				response.setData(student);								
 				break;
 			case STAFF:
 				requiredFields.add(UserConstant.POSITION);				
@@ -574,7 +574,7 @@ public class RestUserController extends BaseController {
 				staffAddress.setUpdatedOn(today);
 				staffAddressService.updateObject(staffAddress);
 				
-				instance.setData(staff);				
+				response.setData(staff);				
 				break;
 			case PARENT:
 				
@@ -612,7 +612,7 @@ public class RestUserController extends BaseController {
 				
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.updateObject(address);
-				instance.setData(mParent);
+				response.setData(mParent);
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -622,10 +622,10 @@ public class RestUserController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setMessage("User has been updated");
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setMessage("User has been updated");
+		return response;
 		
 	}
 	
@@ -649,20 +649,20 @@ public class RestUserController extends BaseController {
 			switch(type) {
 			case TEACHER:
 				Teacher teacher = teacherService.findObject(userId);							
-				instance.setSuccess(teacherService.deleteObject(teacher));
+				response.setSuccess(teacherService.deleteObject(teacher));
 				break;
 			case STUDENT:
 				
 				Student student = studentService.findObject(userId);							
-				instance.setSuccess(studentService.deleteObject(student));				
+				response.setSuccess(studentService.deleteObject(student));				
 				break;
 			case STAFF:				
 				Staff staff = staffService.findObject(userId);							
-				instance.setSuccess(staffService.deleteObject(staff));	
+				response.setSuccess(staffService.deleteObject(staff));	
 				break;
 			case PARENT:				
 				Parent parent =  parentService.findObject(userId);							
-				instance.setSuccess(parentService.deleteObject(parent));	
+				response.setSuccess(parentService.deleteObject(parent));	
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -672,9 +672,9 @@ public class RestUserController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 			
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setMessage("User has been created");
-		return instance;
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setMessage("User has been created");
+		return response;
 		
 	}
 	
@@ -684,10 +684,10 @@ public class RestUserController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setData(getAuthenticatedUser());		
-		return instance;		
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setData(getAuthenticatedUser());		
+		return response;		
 	}
 	
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.SEARCH)
@@ -754,11 +754,11 @@ public class RestUserController extends BaseController {
 		} catch (SQLException | JDataAccessException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
-		instance.setData(users);	
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;		
+		response.setData(users);	
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;		
 	}	
 	
 	
@@ -768,13 +768,13 @@ public class RestUserController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		try {
-			instance.setData(assemblerTeacherService.loadTeachersByCourseID(courseID));
+			response.setData(assemblerTeacherService.loadTeachersByCourseID(courseID));
 		} catch (SQLException | JDataAccessException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 }

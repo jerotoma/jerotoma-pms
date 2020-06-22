@@ -49,15 +49,15 @@ public class RestAcademicYearController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		
 		try {
-			instance.setData(assemblercademicYearService.loadAllList());
+			response.setData(assemblercademicYearService.loadAllList());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	
@@ -75,15 +75,15 @@ public class RestAcademicYearController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		
 		try {
-			instance.setData(assemblercademicYearService.loadMapList(queryParam));
+			response.setData(assemblercademicYearService.loadMapList(queryParam));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
@@ -109,10 +109,10 @@ public class RestAcademicYearController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(academicYear);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(academicYear);
+		return response;
 	}
 
 	protected HttpResponseEntity<Object> showAcademicYear() {

@@ -38,9 +38,7 @@ public class SystemConstant {
 	public static final String BASE_DIRECTORY_NAME = "resources/uploads";
 	public static final String FORWARD_SLASH = "/";
 	public static final String PERIOD = ".";
-	public static final String MEDIA_URL = "mediaUrl";
-	public static final String MEDIA_CDN_URL = "mediaCdnUrl";
-	public static final String STORED_OBJECT = "storedObject";
+	
 	public static final String SUCCESS = "success";
 	public static final String MESSAGE = "message";
 	public static final String HTTP_STATUS = "httpStatus";

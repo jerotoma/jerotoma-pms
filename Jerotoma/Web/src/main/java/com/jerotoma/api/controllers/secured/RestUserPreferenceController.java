@@ -57,11 +57,11 @@ public class RestUserPreferenceController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(map);
-		instance.setHttpStatus(HttpStatus.OK);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(map);
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	
@@ -83,18 +83,18 @@ public class RestUserPreferenceController extends BaseController {
 		
 		try {
 			userPreferences = userPreferenceService.loadList(queryParam);			
-			super.instance.setSuccess(true);
+			super.response.setSuccess(true);
 		} catch (SQLException | EmptyResultDataAccessException e) {
 			if (e instanceof EmptyResultDataAccessException) {
-				instance.setSuccess(false); 
+				response.setSuccess(false); 
 			} else {
 				throw new JDataAccessException(e.getMessage(), e);
 			}			
 		}	
-		super.instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.instance.setData(userPreferences);
-		super.instance.setHttpStatus(HttpStatus.OK);
-		return super.instance;
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(userPreferences);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
 	}
 
 	
@@ -110,18 +110,18 @@ public class RestUserPreferenceController extends BaseController {
 		
 		try {
 			userPreference = userPreferenceService.findObject(userPreferenceId);
-			instance.setSuccess(true);
+			response.setSuccess(true);
 		} catch (SQLException | EmptyResultDataAccessException e) {
 			if (e instanceof EmptyResultDataAccessException) {
 				userPreference = null; 
-				instance.setSuccess(false);
+				response.setSuccess(false);
 			} else {
 				throw new JDataAccessException(e.getMessage(), e);
 			}			
 		}
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(userPreference);
-		return instance;
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(userPreference);
+		return response;
 	}
 	
 	@GetMapping(value = {"/keys", "/keys/"})
@@ -135,19 +135,19 @@ public class RestUserPreferenceController extends BaseController {
 		
 		try {
 			userPreference = userPreferenceService.findObjectUniqueKey(userPreferenceKey);
-			instance.setSuccess(true);
+			response.setSuccess(true);
 		} catch (SQLException | EmptyResultDataAccessException e) {
 			if (e instanceof EmptyResultDataAccessException) {
 				userPreference = null; 
-				instance.setSuccess(false);
+				response.setSuccess(false);
 			} else {
 				throw new JDataAccessException(e.getMessage(), e);
 			}		
 		}
 			
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(userPreference);
-		return instance;
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(userPreference);
+		return response;
 	}
 
 
@@ -176,10 +176,10 @@ public class RestUserPreferenceController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(userPreference);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(userPreference);
+		return response;
 	}
 
 	@PutMapping(value = {"", "/"})
@@ -208,10 +208,10 @@ public class RestUserPreferenceController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
 			
-		instance.setSuccess(true);
-		instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		instance.setData(userPreference);
-		return instance;
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(userPreference);
+		return response;
 	}
 
 	@DeleteMapping(value = {"/{id}", "/{id}/"})
