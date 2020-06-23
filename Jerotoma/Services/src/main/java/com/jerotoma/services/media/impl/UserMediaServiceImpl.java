@@ -55,4 +55,9 @@ public class UserMediaServiceImpl  implements UserMediaService {
 		return userMediaDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public UserMedia findUserMediaByIDs(Integer mediaId, Integer userId) throws SQLException {
+		return userMediaDao.findUserMediaByIDs(mediaId, userId);
+	}
+
 }

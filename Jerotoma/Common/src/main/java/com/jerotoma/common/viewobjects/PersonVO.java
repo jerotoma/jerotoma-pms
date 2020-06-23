@@ -69,6 +69,7 @@ public abstract class PersonVO {
 		this.occupation = rs.getString(UserConstant.OCCUPATION);
 		String pic = rs.getString(UserConstant.AVATAR);		
 		this.picture = StringUtility.isEmpty(pic) ? "/assets/images/default_profile.jpeg" : pic ;
+		this.profileImageId = rs.getInt(UserConstant.PROFILE_IMAGE_ID);
 		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
@@ -90,6 +91,7 @@ public abstract class PersonVO {
 		this.gender = person.gender;
 		this.occupation = person.occupation;		
 		this.picture = person.picture;
+		this.profileImageId = person.profileImageId;
 		this.updatedOn = person.updatedOn;
 		this.createdOn = person.createdOn;
 		this.birthDate = person.birthDate;
@@ -258,5 +260,13 @@ public abstract class PersonVO {
 
 	public void setUserType(USER_TYPE userType) {
 		this.userType = userType;
-	}	
+	}
+
+	public Integer getProfileImageId() {
+		return profileImageId;
+	}
+
+	public void setProfileImageId(Integer profileImageId) {
+		this.profileImageId = profileImageId;
+	}
 }

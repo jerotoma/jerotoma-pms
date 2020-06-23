@@ -132,10 +132,16 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT t.id,  u.username, u.user_type AS userType, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, ")
+		return new StringBuilder("SELECT t.id, t.user_id AS userId, t.user_code AS userCode, t.first_name AS firstName, ")
 				.append(" t.last_name AS lastName, t.middle_names AS middleNames, t.email_address AS emailAddress, t.phone_number AS phoneNumber, ")
-				.append(" t.occupation, t.gender, t.avatar, t.position_id as positionId, t.department_id AS departmentId, t.birth_date AS birthDate, t.updated_by AS updatedBy, ")
-				.append(" t.created_on AS createdOn, t.updated_on AS updatedOn FROM public.teachers t INNER JOIN users u ON u.id = user_id ");
+				.append(" t.occupation, t.gender, t.position_id as positionId, t.department_id AS departmentId, t.birth_date AS birthDate, t.updated_by AS updatedBy, ")
+				.append(" t.created_on AS createdOn, t.updated_on AS updatedOn, ")
+				.append(" u.username, u.user_type AS userType, ")
+				.append(" m.src AS avatar, t.profile_image_id AS profileImageId ")				
+				.append(" FROM FROM public.teachers t ")
+				.append(" INNER JOIN users u ON u.id = t.user_id  ")
+				.append(" LEFT JOIN user_media um ON um.id = t.profile_image_id ")
+				.append(" LEFT JOIN media m ON m.id = um.media_id ");
 		
 	}
 

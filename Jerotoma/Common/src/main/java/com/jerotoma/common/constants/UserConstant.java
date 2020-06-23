@@ -40,6 +40,7 @@ public class UserConstant {
 	public static final String userType = "userType";
 	public static final String DEFAULT_PHONE_NUMBER = "800-900-8888";
 	public static final String DEFAULT_BIRTH_DATE = "1920-01-01";
+	public static final String PROFILE_IMAGE_ID = "profileImageId";
 	
 	public static enum USER_TYPE {		
 		TEACHER("teacher"),

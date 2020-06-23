@@ -82,4 +82,12 @@ public class UserMediaDaoImpl implements UserMediaDao {
 				.getSingleResult();
 	}
 
+	@Override
+	public UserMedia findUserMediaByIDs(Integer mediaId, Integer userId) {
+		return entityManager.createQuery("FROM UserMedia WHERE userId =:userId AND mediaId =:mediaId", UserMedia.class)
+				.setParameter("mediaId", mediaId)
+				.setParameter("userId", userId)
+				.getSingleResult();
+	}
+
 }

@@ -23,8 +23,7 @@ public class StaffDaoImpl implements StaffDao {
 	
 
 	@Override
-	public Staff findObject(Integer primaryKey) throws SQLException {
-		
+	public Staff findObject(Integer primaryKey) throws SQLException {		
 		return entityManager.find(Staff.class, primaryKey);
 	}
 

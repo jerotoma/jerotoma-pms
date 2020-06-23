@@ -152,7 +152,8 @@
 	CREATE TABLE IF NOT EXISTS public.user_media(
 	    id bigserial PRIMARY KEY,
 	    user_id bigint NOT NULL,
-	    media_id bigint NOT NULL,		  
+	    media_id bigint NOT NULL,
+	    UNIQUE(user_id, media_id),
 	    CONSTRAINT user_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
@@ -183,7 +184,7 @@
 	    email_address character varying(255),
 	    occupation character varying(255) NOT NULL,
 	    gender character varying(25) NOT NULL,
-	    profile_image_id bigint,    
+	    profile_image_id bigint,
 	    birth_date timestamp with time zone,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,

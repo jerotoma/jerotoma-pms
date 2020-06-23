@@ -12,5 +12,6 @@ public class MediaConstant {
 	public static final String MEDIA_UPLOAD_FAILED_MESSAGE = "You failed to upload %s => %s.";
 	public static final String INVALID_FILE_MESSAGE = "You failed to upload %s because the file was empty.";
 	public static final String MEDIA_UPLOAD_SUCCESS_MESSAGE = "You successfully uploaded file = %s.";
-
+	public static final String USER_MEDIA_COUNT = "userMediaCount";
+	
 }

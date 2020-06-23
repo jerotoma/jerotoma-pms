@@ -63,7 +63,7 @@ public abstract class Person {
 	@Column(name = "birth_date")
 	protected Date birthDate;
 	
-	@Column(name = "avatar")
+	@Transient
 	protected String picture;
 	
 	@Column(name="created_on")
@@ -85,7 +85,6 @@ public abstract class Person {
 		this.emailAddress = rs.getString(UserConstant.EMAIL_ADDRESS);
 		this.gender = rs.getString(UserConstant.GENDER);
 		this.occupation = rs.getString(UserConstant.OCCUPATION);
-		this.picture = rs.getString(UserConstant.AVATAR);
 		this.updatedOn = rs.getDate(UserConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(UserConstant.CREATED_ON);
 		this.birthDate = rs.getDate(UserConstant.BIRTH_DATE);
