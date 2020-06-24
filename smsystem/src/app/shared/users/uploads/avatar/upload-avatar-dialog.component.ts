@@ -14,6 +14,7 @@ import { USER_TYPE, END_POINTS } from 'app/utils';
 })
 export class UploadAvatarDialogComponent implements OnInit {
   @Input('user') user: User;
+  @Input('onSuccess') onSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public uploader: FileUploader;
   mediaURL: any = null;
@@ -42,6 +43,14 @@ export class UploadAvatarDialogComponent implements OnInit {
   onSubmit() {
     if (this.userAvatar) {
       this.uploader.uploadAll();
+      this.uploader.onProgressAll = (progress: any) => {
+          window.console.log(progress);
+      };
+      this.uploader.onCompleteAll = () => {
+        this.uploader.clearQueue();
+        this.uploader.destroy();
+        this.dismiss();
+      };
     }
    }
 

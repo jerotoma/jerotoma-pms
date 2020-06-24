@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { UploadAvatarDialogComponent } from 'app/shared/users/uploads';
 import { NbDialogService } from '@nebular/theme';
 
-import { User } from 'app/models';
+import { User, Student, Parent, Teacher, Staff } from 'app/models';
 import { USER_TYPE, END_POINTS } from 'app/utils';
 
 @Component({
@@ -11,8 +11,9 @@ import { USER_TYPE, END_POINTS } from 'app/utils';
   styleUrls: ['./user-details.component.scss'],
 })
 export class UserDetailsComponent implements OnInit {
-    @Input('userDatail') userDatail: User = {};
+    @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
     @Input('userType') userType: string = USER_TYPE.teacher;
+    @Input('onProfileImageChangeSuccess') onProfileImageChangeSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     constructor(private dialogService: NbDialogService){}
 
@@ -33,7 +34,7 @@ export class UserDetailsComponent implements OnInit {
           user: this.userDatail,
         },
       }).onClose.subscribe(data => {
-
+        this.onProfileImageChangeSuccess.emit(true);
       });
     }
 
