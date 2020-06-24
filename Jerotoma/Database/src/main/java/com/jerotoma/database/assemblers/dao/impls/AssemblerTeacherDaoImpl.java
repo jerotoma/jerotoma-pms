@@ -59,7 +59,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 	@Override
 	public TeacherVO findObjectUniqueKey(String uniqueKey) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE u.username = ? ").toString();
-		return this.jdbcTemplate.query(query, new TeacherSingleResultProcessor(), Integer.valueOf(uniqueKey));
+		return this.jdbcTemplate.query(query, new TeacherSingleResultProcessor(), uniqueKey);
 	}
 
 	@Override

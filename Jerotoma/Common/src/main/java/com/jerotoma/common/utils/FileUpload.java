@@ -94,7 +94,8 @@ public class FileUpload {
 				fileUploadWrapper.setMessage(String.format(MediaConstant.MEDIA_UPLOAD_SUCCESS_MESSAGE, serverFile.getAbsolutePath()));
 				return fileUploadWrapper;
 				
-			} catch (Exception e) {					
+			} catch (Exception e) {	
+				e.printStackTrace();
 				fileUploadWrapper.setMessage(String.format(MediaConstant.MEDIA_UPLOAD_FAILED_MESSAGE, file.getOriginalFilename(), e.getMessage()));
 				fileUploadWrapper.setSuccess(false);				
 				return fileUploadWrapper;
