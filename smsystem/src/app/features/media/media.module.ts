@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { AttendancesRoutingModule } from './attendances-routing.module';
 import { SharedModule } from 'app/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableModule } from '@angular/material/table';
@@ -19,13 +18,16 @@ import {
   NbAlertModule,
   NbSelectModule,
   NbCheckboxModule,
+  NbDatepickerModule,
+  NbTabsetModule,
   NbListModule,
+  NbRadioModule,
 } from '@nebular/theme';
 
-import { AttendancesComponent } from './attendances.component';
-
+import { MediaRoutingModule } from './media-routing.module';
+import { MediaComponent } from './media.component';
 const COMPONENTS = [
-  AttendancesComponent,
+  MediaComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -34,9 +36,10 @@ const ENTRY_COMPONENTS = [
 
 const MODULES = [
   SharedModule,
-  AttendancesRoutingModule,
+  MediaRoutingModule,
   NgbModule,
   NbMomentDateModule,
+  NbDatepickerModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
@@ -44,11 +47,13 @@ const MODULES = [
   NbInputModule,
   NbSelectModule,
   NbCheckboxModule,
+  NbTabsetModule,
   NbListModule,
   NbIconModule,
   NbAlertModule,
   MatTableModule,
   MatPaginatorModule,
+  NbRadioModule,
   MatIconModule,
   MatMenuModule,
   NbDialogModule.forRoot({
@@ -76,4 +81,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class AttendancesModule { }
+export class MediaModule { }

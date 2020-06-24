@@ -101,6 +101,28 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Media',
+    icon: 'person-done-outline',
+    children: [
+      {
+        title: 'All',
+        link: '/dashboard/media',
+      },
+      {
+        title: 'Students',
+        link: '/dashboard/media/students',
+      },
+      {
+        title: 'Teachers',
+        link: '/dashboard/media/teachers',
+      },
+      {
+        title: 'Staffs',
+        link: '/dashboard/media/staffs',
+      },
+    ],
+  },
+  {
     title: 'SETTINGS',
     group: true,
   },
