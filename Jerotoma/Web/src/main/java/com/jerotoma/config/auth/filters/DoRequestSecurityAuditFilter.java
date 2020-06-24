@@ -9,7 +9,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -34,9 +33,7 @@ public class DoRequestSecurityAuditFilter extends GenericFilterBean {
 	protected void validateCurrentUserToken(final HttpServletRequest httpRequest, HttpServletResponse httpResponse,
 			SecurityContext securityContext) {
 
-		Authentication authentication = securityContext.getAuthentication();
-		
-		
+		// Authentication authentication = securityContext.getAuthentication();
 		
 	}
 }

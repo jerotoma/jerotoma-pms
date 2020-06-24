@@ -138,7 +138,7 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 				.append(" t.created_on AS createdOn, t.updated_on AS updatedOn, ")
 				.append(" u.username, u.user_type AS userType, ")
 				.append(" m.src AS avatar, t.profile_image_id AS profileImageId ")				
-				.append(" FROM FROM public.teachers t ")
+				.append(" FROM public.teachers t ")
 				.append(" INNER JOIN users u ON u.id = t.user_id  ")
 				.append(" LEFT JOIN user_media um ON um.id = t.profile_image_id ")
 				.append(" LEFT JOIN media m ON m.id = um.media_id ");

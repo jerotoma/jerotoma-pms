@@ -29,6 +29,9 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.config.SystemConfig;
 import com.jerotoma.common.utils.validators.SystemConfigValidator;
+import com.jerotoma.common.viewobjects.SystemConfigVO;
+import com.jerotoma.services.assemblers.systemconfigs.AssemblerSystemConfigService;
+import com.jerotoma.services.assemblers.systemconfigs.AssemblerUserPreferenceService;
 import com.jerotoma.services.configs.SystemConfigService;
 import com.jerotoma.services.configs.UserPreferenceService;
 
@@ -36,6 +39,8 @@ import com.jerotoma.services.configs.UserPreferenceService;
 @RequestMapping(EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE)
 public class RestSystemConfigController extends BaseController {
 	
+	@Autowired AssemblerSystemConfigService assemblerSystemConfigService;
+	@Autowired AssemblerUserPreferenceService assemblerUserPreferenceService;
 	@Autowired SystemConfigService systemConfigService;
 	@Autowired UserPreferenceService userPreferenceService;;
 	
@@ -54,7 +59,7 @@ public class RestSystemConfigController extends BaseController {
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = systemConfigService.loadMapList(queryParam);		
+			map = assemblerSystemConfigService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -77,14 +82,14 @@ public class RestSystemConfigController extends BaseController {
 			@RequestParam(value="fieldName", required=false) String fieldName,
 			@RequestParam(value="orderby", required=false) String orderby) {
 		
-		List<SystemConfig> systemConfigs = new ArrayList<>();
+		List<SystemConfigVO> systemConfigs = new ArrayList<>();
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			systemConfigs = systemConfigService.loadList(queryParam);		
+			systemConfigs = assemblerSystemConfigService.loadList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -104,10 +109,10 @@ public class RestSystemConfigController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
-		SystemConfig systemConfig = null;
+		SystemConfigVO systemConfig = null;
 		
 		try {
-			systemConfig = systemConfigService.findObject(systemConfigId);		
+			systemConfig = assemblerSystemConfigService.findObject(systemConfigId);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -123,9 +128,9 @@ public class RestSystemConfigController extends BaseController {
 	public HttpResponseEntity<Object> getSystemConfigByKey(Authentication auth, @RequestParam(required = true, value="key") String systemConfigKey) throws JDataAccessException {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);		
-		SystemConfig systemConfig = null;		
+		SystemConfigVO systemConfig = null;		
 		try {
-			systemConfig = systemConfigService.findObjectUniqueKey(systemConfigKey);		
+			systemConfig = assemblerSystemConfigService.findObjectUniqueKey(systemConfigKey);		
 		} catch (SQLException | EmptyResultDataAccessException e) {
 			
 			if (e instanceof EmptyResultDataAccessException) {
@@ -189,6 +194,8 @@ public class RestSystemConfigController extends BaseController {
 		SystemConfig systemConfig = SystemConfigValidator.validate(params, requiredFields);
 		
 		try {
+			
+			
 			SystemConfig dbSystemConfig  = systemConfigService.findObjectUniqueKey(systemConfig.getName());
 			systemConfig.setId(dbSystemConfig.getId());			
 			systemConfig = systemConfigService.updateObject(systemConfig);		

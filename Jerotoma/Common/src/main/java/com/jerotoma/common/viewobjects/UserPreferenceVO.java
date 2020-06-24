@@ -14,14 +14,14 @@ public class UserPreferenceVO {
 	
 	private String value;
 	
-	private TeacherVO user;
-	
+	private Integer userId;	
+
 	public UserPreferenceVO(){
 		
 	}
 	
-	public UserPreferenceVO(ResultSet rs, TeacherVO user) throws SQLException {
-		this.user = user;
+	public UserPreferenceVO(ResultSet rs) throws SQLException {		
+		this.userId = rs.getInt(UserPreferenceConstant.USER_ID);
 		this.name = rs.getString(UserPreferenceConstant.NAME);
 		this.value = rs.getString(UserPreferenceConstant.VALUE);
 		this.id = rs.getInt(UserPreferenceConstant.ID);
@@ -57,11 +57,11 @@ public class UserPreferenceVO {
 		this.value = value;
 	}
 
-	public TeacherVO getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public void setUser(TeacherVO user) {
-		this.user = user;
-	}		
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 }

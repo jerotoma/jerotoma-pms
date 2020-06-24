@@ -7,6 +7,7 @@ public class UserPreferenceConstant {
 	public static final String VALUE = "value";
 	public static final String ID = "id";
 	public static final String USER_ID = "user_id";
+	public static final String COUNT = "count";
 	
 	public static enum THEME_CONFIG {
 		CURRENT_USER_THEME("currentUserTheme", "system.config.userpreference.current_theme");

@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import com.jerotoma.database.dao.configs.UserPreferenceDao;
 import com.jerotoma.services.configs.SystemConfigService;
 
 @Service
+@Transactional
 public class SystemConfigServiceImpl implements SystemConfigService {
 	
 	@Autowired SystemConfigDao systemConfigDao;
