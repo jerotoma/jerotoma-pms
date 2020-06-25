@@ -26,8 +26,20 @@ import {
 
 import { MediaRoutingModule } from './media-routing.module';
 import { MediaComponent } from './media.component';
+import { MediaListComponent } from './media-list/media-list.component';
+import { MediaStudentsComponent } from './media-students/media-students.component';
+import { MediaTeachersComponent } from './media-teachers/media-teachers.component';
+import { MediaStaffsComponent } from './media-staffs/media-staffs.component';
+import { MediaCreateComponent } from './media-create/media-create.component';
+import { MediaShowComponent } from './media-show/media-show.component';
+
 const COMPONENTS = [
   MediaComponent,
+  MediaListComponent,
+  MediaCreateComponent,
+  MediaStudentsComponent,
+  MediaTeachersComponent,
+  MediaStaffsComponent,
 ];
 
 const ENTRY_COMPONENTS = [

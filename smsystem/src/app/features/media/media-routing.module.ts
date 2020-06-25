@@ -3,7 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from 'app/services';
 import { MediaComponent } from './media.component';
-
+import { MediaListComponent } from './media-list/media-list.component';
+import { MediaStudentsComponent } from './media-students/media-students.component';
+import { MediaTeachersComponent } from './media-teachers/media-teachers.component';
+import { MediaStaffsComponent } from './media-staffs/media-staffs.component';
 
 const routes: Routes = [
   {
@@ -13,19 +16,19 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: MediaComponent,
+        component: MediaListComponent,
       },
       {
         path: 'students',
-        component: MediaComponent,
+        component: MediaStudentsComponent,
       },
       {
         path: 'teachers',
-        component: MediaComponent,
+        component: MediaTeachersComponent,
       },
       {
         path: 'staffs',
-        component: MediaComponent,
+        component: MediaStaffsComponent,
       },
     ],
   },
