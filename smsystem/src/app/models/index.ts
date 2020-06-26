@@ -14,3 +14,4 @@ export * from './system-configs';
 export * from './responses';
 export * from './dashboard';
 export * from './attendances';
+export * from './media';

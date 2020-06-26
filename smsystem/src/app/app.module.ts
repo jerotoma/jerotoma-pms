@@ -9,6 +9,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppAuthModule } from './auth/auth.module';
 
+import 'hammerjs';
+import 'mousetrap';
+import { GalleryModule } from '@ks89/angular-modal-gallery';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SharedCommonModule } from 'app/shared/common';
@@ -74,6 +77,7 @@ const SERVICES = [
     }),
     CoreModule.forRoot(),
     LayoutModule.forRoot(),
+    GalleryModule.forRoot(),
     AppRoutingModule,
   ],
   providers: [

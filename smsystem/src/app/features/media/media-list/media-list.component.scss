@@ -1,0 +1,95 @@
+.box-body{
+  padding:0;
+}
+#pagination-section{
+  float: right;
+}
+#number-of-item-per-page{
+  margin-top:15px;
+  width:70px;
+}
+.load-data-spinner:before{
+     left:50%;
+  }
+/* Create two equal columns that floats next to each other */
+.row-media {
+  display: flex;
+  border: 2px solid #3c8dbc;
+  display: -ms-flexbox;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 0 2px 2px;
+}
+.row-media:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.column-media {
+   -ms-flex: 50%; /* IE 10 */
+    flex: 50%;
+    padding: 0 4px;
+  }
+.column-media a img {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width:100%;
+    vertical-align: middle;
+  }
+.column-media a span{
+    display: inline-block;
+    position: absolute;
+    z-index:600;
+    padding: 6px;
+    color: brown;
+    margin: 0%;
+  }
+  .td-file{
+    width: 25%;
+    max-height: 190px;
+  }
+  .td-number{
+    width: 5%;
+  }
+  .td-size{
+    width: 10%;
+  }
+  .td-action{
+    width: 30%;
+
+  }
+  .td-src{
+    width: 45%;
+  }
+  table>tbody>tr:first-child{
+    border-top: 1px solid #3c8dbc
+  }
+
+  table>tbody>tr:last-child{
+    border-bottom: 1px solid #3c8dbc
+  }
+  table{
+    border: 2px solid #3c8dbc;
+  }
+  table thead, table tfoot{
+    background-color: #3c8dbc;
+    border-color: #3c8dbc;
+  }
+  table thead th,table tfoot th{
+    color:rgba(255, 255, 255, 1);
+  }
+  /* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+  .column-media {
+    flex: 50%;
+    max-width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column-media {
+    flex: 100%;
+    max-width: 100%;
+  }
+}

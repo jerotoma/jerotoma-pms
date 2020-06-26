@@ -43,6 +43,32 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Attendences',
+    icon: 'person-done-outline',
+    children: [
+      {
+        title: 'classes',
+        link: '/dashboard/attendances/classes',
+      },
+      {
+        title: 'Students',
+        link: '/dashboard/attendances/students',
+      },
+      {
+        title: 'Teachers',
+        link: '/dashboard/attendances/teachers',
+      },
+      {
+        title: 'Staffs',
+        link: '/dashboard/attendances/staffs',
+      },
+      {
+        title: 'Attendance Statuses',
+        link: '/dashboard/attendances/statuses',
+      },
+    ],
+  },
+  {
     title: 'Admission',
     icon: 'book-open-outline',
     children: [
@@ -75,34 +101,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
-    title: 'Attendences',
-    icon: 'person-done-outline',
-    children: [
-      {
-        title: 'classes',
-        link: '/dashboard/attendances/classes',
-      },
-      {
-        title: 'Students',
-        link: '/dashboard/attendances/students',
-      },
-      {
-        title: 'Teachers',
-        link: '/dashboard/attendances/teachers',
-      },
-      {
-        title: 'Staffs',
-        link: '/dashboard/attendances/staffs',
-      },
-      {
-        title: 'Attendance Statuses',
-        link: '/dashboard/attendances/statuses',
-      },
-    ],
-  },
-  {
     title: 'Media',
-    icon: 'person-done-outline',
+    icon: 'image-outline',
     children: [
       {
         title: 'All',

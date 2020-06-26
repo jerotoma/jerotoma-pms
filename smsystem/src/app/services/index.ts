@@ -19,3 +19,4 @@ export * from './window-modes';
 export * from './attendances';
 export * from './layouts';
 export * from './analytics';
+export * from './media';

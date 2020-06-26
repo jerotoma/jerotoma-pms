@@ -40,6 +40,8 @@ public abstract class BaseController {
 	
 	protected Map<String, Object> map;
 	
+	protected QueryParam queryParam;
+	
 	protected UserContext userContext;
 	
 	protected User authUser;

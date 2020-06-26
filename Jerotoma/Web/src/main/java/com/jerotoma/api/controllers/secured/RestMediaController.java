@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jerotoma.api.controllers.BaseController;
+import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ExceptionMessageConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
@@ -29,6 +32,7 @@ import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.utils.FileUpload;
 import com.jerotoma.common.viewobjects.UserVO;
+import com.jerotoma.services.assemblers.media.AssemblerMediaService;
 import com.jerotoma.services.assemblers.media.AssemblerUserMediaService;
 import com.jerotoma.services.media.MediaService;
 import com.jerotoma.services.media.UserMediaService;
@@ -39,15 +43,63 @@ import com.jerotoma.services.users.TeacherService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_MEDIA_CONTROLLER.BASE)
-public class RestMediaController extends BaseController {
+public class RestMediaController extends BaseController implements Controller {
 	
 	@Autowired AssemblerUserMediaService assemblerUserMediaService;
+	@Autowired AssemblerMediaService assemblerMediaService;
 	@Autowired UserMediaService userMediaService;
 	@Autowired TeacherService teacherService;
 	@Autowired StudentService studentService;
 	@Autowired StaffService staffService;
 	@Autowired ParentService parentService;
 	@Autowired MediaService mediaService;
+	
+	
+	@GetMapping(value = {"/paginated", "/paginated/"})
+	@ResponseBody
+	@Override
+	public HttpResponseEntity<Object> index(
+							Authentication auth, 
+							String search, 
+							Integer page, 
+							Integer pageSize,
+							String fieldName, 
+							String orderby) {
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_DASHBOARD_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		queryParam = this.setParams(search, page, pageSize, fieldName, orderby);								
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		try {
+			response.setData(assemblerMediaService.loadMapList(queryParam));
+		} catch (SQLException e) {
+			response.setSuccess(false);
+			throw new JDataAccessException(e.getMessage(), e);	
+		}
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
+	
+	@GetMapping(value = {"", "/"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadUploads(Authentication auth) throws SQLException{
+		this.logRequestDetail("GET : " + EndPointConstants.REST_DASHBOARD_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		try {
+			response.setData(assemblerMediaService.getMediaList());
+		} catch (SQLException e) {
+			response.setSuccess(false);
+			throw new JDataAccessException(e.getMessage(), e);	
+		}
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
 	
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
@@ -155,6 +207,37 @@ public class RestMediaController extends BaseController {
 			throw new JDataAccessException(e.getMessage(), e);	
 		}
 		
+	}
+
+	
+	@Override
+	public HttpResponseEntity<Object> show(Authentication auth, Integer entityId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HttpResponseEntity<Object> create(Authentication auth, Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HttpResponseEntity<Object> edit(Authentication auth, Map<String, Object> params) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HttpResponseEntity<Object> delete(Authentication auth, Integer entityId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

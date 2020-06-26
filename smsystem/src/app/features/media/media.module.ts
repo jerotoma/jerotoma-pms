@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NbMomentDateModule } from '@nebular/moment';
 
+import { GalleryModule } from '@ks89/angular-modal-gallery';
+
 import {
   NbButtonModule,
   NbSpinnerModule,
@@ -32,6 +34,7 @@ import { MediaTeachersComponent } from './media-teachers/media-teachers.componen
 import { MediaStaffsComponent } from './media-staffs/media-staffs.component';
 import { MediaCreateComponent } from './media-create/media-create.component';
 import { MediaShowComponent } from './media-show/media-show.component';
+import { MediaPDFViewerComponent } from './media-pdf-viewer/media-pdf-viewer.component';
 
 const COMPONENTS = [
   MediaComponent,
@@ -40,6 +43,8 @@ const COMPONENTS = [
   MediaStudentsComponent,
   MediaTeachersComponent,
   MediaStaffsComponent,
+  MediaShowComponent,
+  MediaPDFViewerComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -73,6 +78,7 @@ const MODULES = [
     hasScroll: false,
     dialogClass: 'global-dialog-container',
   }),
+  GalleryModule,
 ];
 
 const SERVICES = [

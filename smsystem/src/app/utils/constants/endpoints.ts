@@ -1,4 +1,5 @@
 export const END_POINTS = {
+  baseURL: 'https://jerotoma.com',
   dashboard: '/dashboard',
   rootURL: '/api/secured',
   users: '/api/secured/users',
@@ -26,5 +27,4 @@ export const END_POINTS = {
   pubUserPreferences: '/api/public/user-preferences',
   restDashboard: '/api/secured/dashboard',
   attendances: '/api/secured/attendances',
-
 };

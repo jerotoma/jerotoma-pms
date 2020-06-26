@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import com.google.common.collect.Lists;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.MediaConstant;
 import com.jerotoma.common.constants.SystemConstant;
@@ -82,6 +83,8 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 		Object[] paramList = new Object[] {limit, offset};
 		
 		List<MediaVO> mediaList = this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
+		
+		map.put(MediaConstant.MEDIA_CHUNKS, Lists.partition(mediaList, 2));
 		map.put(MediaConstant.MEDIA_LIST, mediaList);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
@@ -98,11 +101,11 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 	public class MediaSingleResultProcessor implements ResultSetExtractor<MediaVO>{
 		@Override
 		public MediaVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			MediaVO address = null;
+			MediaVO media = null;
 			if(rs.next()) {
-				address = new MediaVO(rs);			
+				media = new MediaVO(rs);			
 			}
-			return address;
+			return media;
 		}				
 	}
 	
@@ -124,7 +127,13 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.mediaList ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.media ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+
+	@Override
+	public List<MediaVO> getMediaList() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();
+		return this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor());
 	}
 }

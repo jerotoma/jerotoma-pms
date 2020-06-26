@@ -14,6 +14,7 @@ export class UserDetailsComponent implements OnInit {
     @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
     @Input('userType') userType: string = USER_TYPE.teacher;
     @Input('onProfileImageChangeSuccess') onProfileImageChangeSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
+    baseURL: string = END_POINTS.baseURL;
 
     constructor(private dialogService: NbDialogService){}
 

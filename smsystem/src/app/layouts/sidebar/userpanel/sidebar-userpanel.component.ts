@@ -3,6 +3,7 @@ import { NbAuthService } from '@nebular/auth';
 
 import { User } from 'app/models';
 import {UserService } from 'app/services';
+import { END_POINTS } from 'app/utils';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {UserService } from 'app/services';
 export class SidebarUserPanelComponent implements OnInit, OnDestroy {
 
   user: User;
+  baseURL: string = END_POINTS.baseURL;
 
   constructor(
     private userService: UserService,

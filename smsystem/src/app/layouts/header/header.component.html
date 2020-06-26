@@ -8,11 +8,13 @@
 </div>
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               [onlyPicture]="userPictureOnly"
-               [name]="user?.fullName"
-               [picture]="user?.picture">
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user
+          *ngIf="user"
+          [nbContextMenu]="userMenu"
+          [onlyPicture]="userPictureOnly"
+          [name]="user?.fullName"
+          [picture]="baseURL + user?.picture">
       </nb-user>
     </nb-action>
   </nb-actions>

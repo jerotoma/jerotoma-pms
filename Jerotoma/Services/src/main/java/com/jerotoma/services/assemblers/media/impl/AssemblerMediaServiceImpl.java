@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.viewobjects.MediaVO;
 import com.jerotoma.database.assemblers.dao.media.AssemblerMediaDao;
 import com.jerotoma.services.assemblers.media.AssemblerMediaService;
 
+@Service
 public class AssemblerMediaServiceImpl implements AssemblerMediaService{
 	
 	@Autowired AssemblerMediaDao assemblerMediaDao;
@@ -38,6 +40,11 @@ public class AssemblerMediaServiceImpl implements AssemblerMediaService{
 	@Override
 	public Long countObject() throws SQLException {
 		return assemblerMediaDao.countObject();
+	}
+
+	@Override
+	public List<MediaVO> getMediaList() throws SQLException {
+		return assemblerMediaDao.getMediaList();
 	}
 
 }

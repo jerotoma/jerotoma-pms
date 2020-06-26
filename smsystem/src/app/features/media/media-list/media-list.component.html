@@ -1,1 +1,118 @@
-<p>media-list works!</p>
+<nb-card>
+  <nb-card-header></nb-card-header>
+  <nb-card-body>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header">
+                <div class="row">
+                  <div class="col-md-6">
+                        <div class="form-group">
+                            <input  (keyup)="findMatch($event)" [(ngModel)]="searchTerm" class="form-control" id="focusedInput" placeholder="Search for a media" type="text">
+                        </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <button class="btn btn-success btn-sm push-right" (click)="showUploadMediaView()">Add New</button>
+                      <button class="btn btn-default btn-sm push-right" [class]="activeView.isView2 ? 'active' : ''" (click)="changeToRowView()"><i class="fa fa-bars"></i></button>
+                      <button class="btn btn-default btn-sm push-right" [class]="activeView.isView1 ? 'active' : ''" (click)="changeViewGrid(1)"><i class="fa fa-th"></i></button>
+                    </div>
+                  </div>
+              </div>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+              <div class="row">
+                <div class="col-md-12" *ngIf="mediaList">
+                  <div class="row-media" *ngIf="!activeView.isRowView; else normalGridView">
+                    <ks-modal-gallery
+                      [id]="3"
+                      [modalImages]="images"
+                      [plainGalleryConfig]="plainGalleryGrid">
+                    </ks-modal-gallery>
+                  </div>
+                  <ng-template #normalGridView>
+                    <div class="table-responsive">
+                      <table class="table table-hover table-striped">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>File</th>
+                            <th>Size</th>
+                            <th>Url</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let file of mediaList; index as i" [id]="'media-' + file.id">
+                            <td>{{i+1}}</td>
+                            <td class="td-file">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <div class="thumbnail">
+                                        <a href="#" (click)="showMediaView(file)">
+                                          <app-media-pdfviewer *ngIf="file.type == 'application/pdf' else normalMedia" [pdfFile]="file"></app-media-pdfviewer>
+                                          <ng-template #normalMedia>
+                                              <img [src]="baseURL + file.src" [alt]="file.title" style="width:100%">
+                                          </ng-template>
+                                        <div class="caption">
+                                          <p>{{file.title}}</p>
+                                        </div>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
+                            <td class="td-size" >{{file.size}}</td>
+                            <td class="td-src" >{{file.src}}</td>
+                            <td class="td-action" >
+                              <div class="row">
+                                  <div class="col-md-12">
+                                        <a href="#" (click)="deleteMedia(file)">
+                                          <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                              </td>
+                          </tr>
+                        </tbody>
+                          <tfoot>
+                          <tr>
+                            <th>#</th>
+                            <th>File</th>
+                            <th>Size</th>
+                            <th>Url</th>
+                            <th>Action</th>
+                          </tr>
+                          </tfoot>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <select v-model="itemToShow" class="form-control" id="number-of-item-per-page">
+                      <option value="12" >12</option>
+                      <option value="24" >24</option>
+                      <option value="36" >36</option>
+                      <option value="48" >48</option>
+                      <option value="60" >60</option>
+                      <option value="100" >100</option>
+                      <option value="200" >200</option>
+                      <option value="300" >300</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <nav aria-label="" id="pagination-section" style="float:right;">
+                    </nav>
+                </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+  </nb-card-body>
+</nb-card>

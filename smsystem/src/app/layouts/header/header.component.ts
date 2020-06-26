@@ -9,7 +9,7 @@ import {UserService, SystemConfigService, ThemeService } from 'app/services';
 import { LayoutService } from 'app/services';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { APP_CONSTANTS, THEMES } from 'app/utils';
+import { APP_CONSTANTS, THEMES, END_POINTS } from 'app/utils';
 import { USER_DROPDOWN_ITEMS } from './header-menu';
 
 @Component({
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   overrideUserTheme: boolean = false;
   user: User;
   themes = THEMES;
+  baseURL: string = END_POINTS.baseURL;
   mTheme: Theme = null;
   currentTheme = 'default';
   systemTheme: string = APP_CONSTANTS.currentTheme;

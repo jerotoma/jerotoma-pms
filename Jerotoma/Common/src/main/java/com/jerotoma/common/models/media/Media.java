@@ -34,6 +34,9 @@ public class Media implements Serializable{
 	@Column
 	private Integer id;
 	
+	@Column(name="added_by")
+	private Integer addedBy;
+	
 	@Column(name="absolute_path")
 	private String absolutePath;
 	
@@ -61,7 +64,7 @@ public class Media implements Serializable{
 	public Media() {
 		
 	}	
-	public Media(int id, String absolutePath, String title, String description, String src, String type, long size) {
+	public Media(int id, String absolutePath, String title, String description, String src, String type, long size, int addedBy) {
 		super();
 		this.id = id;
 		this.absolutePath = absolutePath;
@@ -70,6 +73,7 @@ public class Media implements Serializable{
 		this.src = src;
 		this.type = type;
 		this.size = size;
+		this.addedBy = addedBy;
 	}
 
 	public Media(Map<String, String> params) {
