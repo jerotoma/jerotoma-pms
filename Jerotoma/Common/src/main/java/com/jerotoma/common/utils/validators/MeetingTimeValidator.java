@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.MeetingTimeConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.Time;
 import com.jerotoma.common.utils.CalendarUtil;
@@ -46,12 +46,12 @@ public class MeetingTimeValidator {
 		}
 		
 		if (id == null && requiredFields.contains(MeetingTimeConstant.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		meetingTime.setId(id);
 		
 		if (time == null && requiredFields.contains(MeetingTimeConstant.TIME)) {
-			throw new FieldIsRequiredException("Time is required to continue");
+			throw new FieldRequiredException("Time is required to continue");
 		}
 		if (time != null) {
 			time = NumberFormatter.formatTimeRange(time);
@@ -59,17 +59,17 @@ public class MeetingTimeValidator {
 		meetingTime.setTime(time);
 		
 		if (startTime == null && requiredFields.contains(MeetingTimeConstant.START_TIME)) {
-			throw new FieldIsRequiredException("Start Time is required to continue");
+			throw new FieldRequiredException("Start Time is required to continue");
 		}
 		meetingTime.setStartTime(startTime);
 		
 		if (endTime == null && requiredFields.contains(MeetingTimeConstant.END_TIME)) {
-			throw new FieldIsRequiredException("End Time is required to continue");
+			throw new FieldRequiredException("End Time is required to continue");
 		}
 		meetingTime.setEndTime(endTime);
 		
 		if (workDayId == null && requiredFields.contains(MeetingTimeConstant.WORK_DAY_ID)) {
-			throw new FieldIsRequiredException("Work Day ID is required to continue");
+			throw new FieldRequiredException("Work Day ID is required to continue");
 		}		
 		meetingTime.setWorkDayId(workDayId);
 		
@@ -78,7 +78,7 @@ public class MeetingTimeValidator {
 		meetingTime.setUpdatedOn(today);
 		
 		if (!meetingTime.isValid()) {
-			throw new FieldIsRequiredException("Meeting Time is Invalid, please verify that the start and end time don't overlap.");
+			throw new FieldRequiredException("Meeting Time is Invalid, please verify that the start and end time don't overlap.");
 		}
 		
 		return meetingTime;

@@ -16,7 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.exceptions.JwtExpiredTokenException;
 import com.jerotoma.common.exceptions.UnAuthorizedAccessException;
@@ -38,7 +38,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		SQLException.class,
 		JwtExpiredTokenException.class,
 		UsernameNotFoundException.class,
-		FieldIsRequiredException.class,
+		FieldRequiredException.class,
 		TransactionSystemException.class,
 		DataIntegrityViolationException.class,
 		JDataAccessException.class

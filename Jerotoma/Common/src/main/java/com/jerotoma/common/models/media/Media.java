@@ -86,6 +86,15 @@ public class Media implements Serializable{
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public Integer getAddedBy() {
+		return addedBy;
+	}
+	
+	public void setAddedBy(Integer addedBy) {
+		this.addedBy = addedBy;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

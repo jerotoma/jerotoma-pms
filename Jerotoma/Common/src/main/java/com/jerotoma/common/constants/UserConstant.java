@@ -42,7 +42,8 @@ public class UserConstant {
 	public static final String DEFAULT_BIRTH_DATE = "1920-01-01";
 	public static final String PROFILE_IMAGE_ID = "profileImageId";
 	
-	public static enum USER_TYPE {		
+	public static enum USER_TYPE {
+		ALL("all"),
 		TEACHER("teacher"),
 		TEACHERS("teachers"),
 		PARENT("parent"),

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { UploadAvatarDialogComponent } from 'app/shared/users/uploads';
 import { NbDialogService } from '@nebular/theme';
 
@@ -13,13 +13,13 @@ import { USER_TYPE, END_POINTS } from 'app/utils';
 export class UserDetailsComponent implements OnInit {
     @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
     @Input('userType') userType: string = USER_TYPE.teacher;
-    @Input('onProfileImageChangeSuccess') onProfileImageChangeSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = END_POINTS.baseURL;
 
     constructor(private dialogService: NbDialogService){}
 
     ngOnInit() {
-      // window.console.log(this.userDatail);
+      window.console.log(this.userDatail);
     }
 
     onSubmit() {
@@ -35,7 +35,10 @@ export class UserDetailsComponent implements OnInit {
           user: this.userDatail,
         },
       }).onClose.subscribe(data => {
-        this.onProfileImageChangeSuccess.emit(true);
+        this.onImageChangeSuccess.emit({
+          succes: true,
+          id: this.userDatail.id,
+        });
       });
     }
 

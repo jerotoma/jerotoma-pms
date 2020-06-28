@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.PositionConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -34,22 +34,22 @@ public class PositionValidator {
 		}
 		
 		if (id == null && requiredFields.contains(PositionConstant.POSITION_ID)) {
-			throw new FieldIsRequiredException("Position ID can not be empty");
+			throw new FieldRequiredException("Position ID can not be empty");
 		}
 		position.setId(id);
 		
 		if (name == null && requiredFields.contains(PositionConstant.POSITION_NAME)) {
-			throw new FieldIsRequiredException("Position Name can not be empty");
+			throw new FieldRequiredException("Position Name can not be empty");
 		}
 		position.setName(name);
 		
 		if (description == null && requiredFields.contains(PositionConstant.POSITION_DESCRIPTION)) {
-			throw new FieldIsRequiredException("Position Description can not be empty");
+			throw new FieldRequiredException("Position Description can not be empty");
 		}
 		position.setDescription(description);
 		
 		if (code == null && requiredFields.contains(PositionConstant.POSITION_CODE)) {
-			throw new FieldIsRequiredException("Position Code can not be empty");
+			throw new FieldRequiredException("Position Code can not be empty");
 		}
 		position.setCode(code);
 		

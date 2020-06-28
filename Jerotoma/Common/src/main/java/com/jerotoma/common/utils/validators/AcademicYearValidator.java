@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.AcademicYearConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -40,27 +40,27 @@ public class AcademicYearValidator {
 		}
 		
 		if (id == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		academicYear.setId(id);
 		
 		if (name == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_NAME)) {
-			throw new FieldIsRequiredException("Name is required to continue");
+			throw new FieldRequiredException("Name is required to continue");
 		}
 		academicYear.setName(name);
 		
 		if (description == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_DESCRIPTION)) {
-			throw new FieldIsRequiredException("Description is required to continue");
+			throw new FieldRequiredException("Description is required to continue");
 		}
 		academicYear.setDescription(description);
 		
 		if (code == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_CODE)) {
-			throw new FieldIsRequiredException("Code is required to continue");
+			throw new FieldRequiredException("Code is required to continue");
 		}
 		academicYear.setCode(code);
 		
 		if (yearOfStudy == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_OF_STUDY)) {
-			throw new FieldIsRequiredException("Year of Study is required to continue");
+			throw new FieldRequiredException("Year of Study is required to continue");
 		}
 		academicYear.setYearOfStudy(yearOfStudy);
 		

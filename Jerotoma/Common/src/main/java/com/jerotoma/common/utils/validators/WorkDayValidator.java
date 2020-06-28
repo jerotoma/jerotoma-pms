@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.WorkDayConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.schedules.WorkDay;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -28,12 +28,12 @@ public class WorkDayValidator {
 		
 		
 		if (id == null && requiredFields.contains(WorkDayConstant.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		workDay.setId(id);
 		
 		if (dayId == null && requiredFields.contains(WorkDayConstant.DAY_ID)) {
-			throw new FieldIsRequiredException("Day ID is required to continue");
+			throw new FieldRequiredException("Day ID is required to continue");
 		}
 		workDay.setDayId(dayId);
 		day = DayOfWeek.of(dayId);

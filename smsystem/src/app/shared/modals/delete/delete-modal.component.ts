@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { ShowMessage } from 'app/models';
 @Component({
@@ -17,12 +17,13 @@ import { ShowMessage } from 'app/models';
   styleUrls: ['delete-modal.component.scss'],
 })
 export class DeleteModalComponent implements OnInit {
-  id: string = '0';
-  title: string = '';
-  name: string = '';
-  action: string = '';
-  userType: string = '';
-  confirmed: boolean = false;
+  @Input('id') id: string = '0';
+  @Input('title') title: string = '';
+  @Input('name') name: string = '';
+  @Input('action') action: string = '';
+  @Input('userType') userType: string = '';
+  @Input('confirmed') confirmed: boolean = false;
+
   showMessage: ShowMessage = {
     error: false,
     success: false,

@@ -35,6 +35,7 @@ import {
   NbUserModule,
   NbCheckboxModule,
   NbAlertModule,
+  NbProgressBarModule,
 } from '@nebular/theme';
 
 import { SharedCommonModule } from './common';
@@ -106,6 +107,7 @@ const MODULES = [
   NbListModule,
   NbAccordionModule,
   NbUserModule,
+  NbProgressBarModule,
   NbActionsModule,
   NbIconModule,
   MatTableModule,

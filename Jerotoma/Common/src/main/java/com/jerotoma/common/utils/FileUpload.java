@@ -114,6 +114,21 @@ public class FileUpload {
 		}		
 		return list;
 	}
+
+	public static boolean deleteFile(Media media) {
+		try {
+			File dir = new File(media.getAbsolutePath());
+			if (!dir.exists()) {
+				return false;
+			}
+			dir.delete();
+			return true;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;	
+	}
 	
 	
 	

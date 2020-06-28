@@ -32,7 +32,7 @@ import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Department;
@@ -234,12 +234,12 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 					
 		if(!params.containsKey(UserConstant.userType)) {
-			throw new FieldIsRequiredException("User type can not be empty");
+			throw new FieldRequiredException("User type can not be empty");
 		}
 		String userType = (String) params.get(UserConstant.userType);
 		
 		if (userType == null) {
-			throw new FieldIsRequiredException("User type can not be empty");
+			throw new FieldRequiredException("User type can not be empty");
 		}
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 					
@@ -378,7 +378,7 @@ public class RestUserController extends BaseController {
 		}
 		
 		if (academicDisciplineId == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-			throw new FieldIsRequiredException("Academic Discipline can not be empty");
+			throw new FieldRequiredException("Academic Discipline can not be empty");
 		}
 		
 		if (academicDisciplineId !=  null) {
@@ -386,7 +386,7 @@ public class RestUserController extends BaseController {
 		}
 		
 		if (academicDiscipline == null && requiredFields.contains(AcademicDisciplineConstant.ACADEMIC_DISCIPLINE)) {
-			throw new FieldIsRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
+			throw new FieldRequiredException("Academic Discipline is required, and invalid academic discipline was provided");
 		}
 		return academicDiscipline;
 	}
@@ -398,13 +398,13 @@ public class RestUserController extends BaseController {
 		}
 		
 		if (departmentId == null && requiredFields.contains(DepartmentConstant.DEPARTMENT)) {
-			throw new FieldIsRequiredException("Department can not be empty");
+			throw new FieldRequiredException("Department can not be empty");
 		}
 		
 		Department department = departmentService.findObject(departmentId);
 		
 		if (department== null && requiredFields.contains(DepartmentConstant.DEPARTMENT)) {
-			throw new FieldIsRequiredException("Department is required, and invalid department was provided");
+			throw new FieldRequiredException("Department is required, and invalid department was provided");
 		}
 		return department;
 	}
@@ -417,13 +417,13 @@ public class RestUserController extends BaseController {
 		}
 		
 		if (positionId == null && requiredFields.contains(UserConstant.POSITION)) {
-			throw new FieldIsRequiredException("Position can not be empty");
+			throw new FieldRequiredException("Position can not be empty");
 		}
 		
 		Position position = positionService.findObject(positionId);
 		
 		if (position == null ) {
-			throw new FieldIsRequiredException("Position is required, and invalid position was provided");
+			throw new FieldRequiredException("Position is required, and invalid position was provided");
 		}
 		return position;
 	}
@@ -451,12 +451,12 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 			
 		if(!params.containsKey(UserConstant.userType)) {
-			throw new FieldIsRequiredException("User type can not be empty");
+			throw new FieldRequiredException("User type can not be empty");
 		}
 		String userType = (String) params.get(UserConstant.userType);
 		
 		if (userType == null) {
-			throw new FieldIsRequiredException("User type can not be empty");
+			throw new FieldRequiredException("User type can not be empty");
 		}
 		
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
@@ -474,7 +474,7 @@ public class RestUserController extends BaseController {
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				
 				if (teacher.getId() == null) {
-					throw new FieldIsRequiredException("Teacher ID is required");
+					throw new FieldRequiredException("Teacher ID is required");
 				}
 				Teacher mTeacher = teacherService.findObject(teacher.getId());
 							
@@ -507,7 +507,7 @@ public class RestUserController extends BaseController {
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
 				if (student.getId() == null) {
-					throw new FieldIsRequiredException("Student ID is required");
+					throw new FieldRequiredException("Student ID is required");
 				}
 				Student mStudent = studentService.findObject(student.getId());	
 				mStudent.setFirstName(student.getFirstName());
@@ -545,7 +545,7 @@ public class RestUserController extends BaseController {
 				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
 				
 				if (staff.getId() == null) {
-					throw new FieldIsRequiredException("Staff ID is required");
+					throw new FieldRequiredException("Staff ID is required");
 				}
 				Staff mStaff = staffService.findObject(staff.getId());
 				mStaff.setFirstName(staff.getFirstName());
@@ -581,7 +581,7 @@ public class RestUserController extends BaseController {
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);
 				
 				if (parent.getId() == null) {
-					throw new FieldIsRequiredException("Parent ID is required");
+					throw new FieldRequiredException("Parent ID is required");
 				}
 				
 				Parent mParent = parentService.findObject(parent.getId());	
@@ -637,11 +637,11 @@ public class RestUserController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 			
 		if (userType == null) {
-			throw new FieldIsRequiredException("User type can not be empty");
+			throw new FieldRequiredException("User type can not be empty");
 		}
 		
 		if (userId == null) {					
-			throw new FieldIsRequiredException("Teacher's ID is required, and invalid ID was provided");					
+			throw new FieldRequiredException("Teacher's ID is required, and invalid ID was provided");					
 		}
 		
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);

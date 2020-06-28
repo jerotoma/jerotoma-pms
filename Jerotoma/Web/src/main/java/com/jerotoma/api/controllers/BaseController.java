@@ -26,6 +26,8 @@ import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.roles.RoleService;
+import com.jerotoma.services.securities.SecurityClearance;
+import com.jerotoma.services.securities.UserSecurityClearance;
 import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.StaffService;
 import com.jerotoma.services.users.UserService;
@@ -54,6 +56,7 @@ public abstract class BaseController {
     @Autowired protected PositionService positionService;
 	@Autowired protected ServletContext context;
 	@Autowired protected RoleService roleService;
+	@Autowired protected UserSecurityClearance userSecurityClearance;
 	
 	public BaseController() {}
 	
@@ -94,6 +97,7 @@ public abstract class BaseController {
 	protected QueryParam setParams(Integer page, Integer pageSize, String fieldName, String orderby){		
 		
 		pageSize = pageSize == null ? 12 : pageSize;
+		page = page == null ? 1 : page;
 		orderby = StringUtility.isEmpty(orderby) || orderby.equals("none") || orderby.equals("undefined") ? "DESC" : orderby;
 		fieldName = StringUtility.isEmpty(fieldName) || fieldName.equals("none") || fieldName.equals("undefined") ? "created_on" : fieldName;
 		

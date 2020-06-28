@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.viewobjects.MediaVO;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.database.assemblers.dao.media.AssemblerMediaDao;
 import com.jerotoma.services.assemblers.media.AssemblerMediaService;
 
@@ -45,6 +46,11 @@ public class AssemblerMediaServiceImpl implements AssemblerMediaService{
 	@Override
 	public List<MediaVO> getMediaList() throws SQLException {
 		return assemblerMediaDao.getMediaList();
+	}
+
+	@Override
+	public ResultBuilder<MediaVO> searchMedia(QueryParam queryParam) throws SQLException {		
+		return assemblerMediaDao.searchMedia(queryParam);
 	}
 
 }

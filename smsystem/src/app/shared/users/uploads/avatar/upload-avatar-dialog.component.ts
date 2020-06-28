@@ -2,8 +2,9 @@
 import { Component, Input, EventEmitter, OnInit } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
 import { FileUploader, FileItem } from 'ng2-file-upload';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 
-import { AuthService } from 'app/services';
+import {  ModalService, UploadService } from 'app/services';
 import { User } from 'app/models';
 import { USER_TYPE, END_POINTS } from 'app/utils';
 
@@ -21,17 +22,24 @@ export class UploadAvatarDialogComponent implements OnInit {
   uploadDir: string = 'users';
   formData: FormData;
   userAvatar: File;
+  progress: number = 0;
 
   constructor(
-    private authService: AuthService,
+    private uploadService: UploadService,
+    private modalService: ModalService,
     protected ref: NbDialogRef<UploadAvatarDialogComponent>) {}
 
   ngOnInit(): void {
     this.initUploader();
   }
 
-  dismiss(): void {
-    this.ref.close();
+  dismiss(confirmed: boolean): void {
+    this.userAvatar = null;
+    this.uploader.clearQueue();
+    this.uploader.destroy();
+    this.ref.close({
+      confirmed: confirmed,
+    });
   }
 
   public onFileSelected(event: EventEmitter<File[]>) {
@@ -42,15 +50,26 @@ export class UploadAvatarDialogComponent implements OnInit {
 
   onSubmit() {
     if (this.userAvatar) {
-      this.uploader.uploadAll();
-      this.uploader.onProgressAll = (progress: any) => {
-          window.console.log(progress);
-      };
-      this.uploader.onCompleteAll = () => {
-        this.uploader.clearQueue();
-        this.uploader.destroy();
-        this.dismiss();
-      };
+      const formData = new FormData();
+      formData.append('media_file', this.userAvatar);
+      this.uploadService.uploadProfileImageTrackProgress(this.user.userId, formData).subscribe((event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            break;
+          case HttpEventType.ResponseHeader:
+            break;
+          case HttpEventType.UploadProgress:
+            this.progress = Math.round(event.loaded / event.total * 100);
+            break;
+          case HttpEventType.Response:
+            this.modalService.openSnackBar('Profile Image has been uploaded successfully ', 'success');
+            setTimeout(() => {
+              this.progress = 0;
+              this.dismiss(true);
+              this.onSuccess.emit(true);
+            }, 1500);
+        }
+      });
     }
    }
 
@@ -63,7 +82,6 @@ export class UploadAvatarDialogComponent implements OnInit {
       itemAlias: 'media_file',
       allowedFileType: ['image'],
       queueLimit: 1,
-      authToken: this.authService.getAccessToken(),
     });
    }
 
@@ -78,5 +96,17 @@ export class UploadAvatarDialogComponent implements OnInit {
   removeItem(fileItem: FileItem) {
     this.mediaURL = null;
     fileItem.remove();
+  }
+
+  get status() {
+    if (this.progress <= 25) {
+      return 'danger';
+    } else if (this.progress <= 50) {
+      return 'warning';
+    } else if (this.progress <= 75) {
+      return 'info';
+    } else {
+      return 'success';
+    }
   }
 }

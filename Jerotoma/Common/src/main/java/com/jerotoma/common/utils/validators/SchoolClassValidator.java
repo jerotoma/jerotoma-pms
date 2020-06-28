@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.RoomConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -41,27 +41,27 @@ public class SchoolClassValidator {
 		}
 		
 		if (id == null && requiredFields.contains(RoomConstant.ROOM_ID)) {
-			throw new FieldIsRequiredException("ID is required continue");
+			throw new FieldRequiredException("ID is required continue");
 		}
 		schoolClass.setId(id);
 		
 		if (capacity == null && requiredFields.contains(RoomConstant.ROOM_CAPACITY)) {
-			throw new FieldIsRequiredException("Capacity is required continue");
+			throw new FieldRequiredException("Capacity is required continue");
 		}
 		schoolClass.setCapacity(capacity);
 		
 		if (name == null && requiredFields.contains(RoomConstant.ROOM_NAME)) {
-			throw new FieldIsRequiredException("Name is required continue");
+			throw new FieldRequiredException("Name is required continue");
 		}
 		schoolClass.setName(name);
 		
 		if (description == null && requiredFields.contains(RoomConstant.ROOM_DESCRIPTION)) {
-			throw new FieldIsRequiredException("Description is required continue");
+			throw new FieldRequiredException("Description is required continue");
 		}
 		schoolClass.setDescription(description);
 		
 		if (code == null && requiredFields.contains(RoomConstant.ROOM_CODE)) {
-			throw new FieldIsRequiredException("Code is required continue");
+			throw new FieldRequiredException("Code is required continue");
 		}
 		schoolClass.setCode(code);
 		

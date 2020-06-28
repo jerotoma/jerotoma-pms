@@ -12,6 +12,7 @@ import { Parent, ShowMessage  } from 'app/models';
               *ngIf='parent'
               [userDatail]="parent"
               [userType]="'parent'"
+              (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
 export class ParentShowComponent implements OnInit {
@@ -42,6 +43,9 @@ export class ParentShowComponent implements OnInit {
     });
   }
 
+  reloadParentDetails(data: any) {
+    this.loadParentDetails(data.id);
+  }
   loadParentDetails(parentId: number) {
       this.userService.loadUser(parentId, 'parents').subscribe((parent: Parent) => {
         if (parent) {

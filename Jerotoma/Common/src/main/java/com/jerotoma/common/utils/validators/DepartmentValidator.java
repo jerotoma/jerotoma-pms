@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.DepartmentConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.utils.CalendarUtil;
 
@@ -26,12 +26,12 @@ public class DepartmentValidator {
 		}		
 		
 		if (id == null && requiredFields.contains(DepartmentConstant.DEPARTMENT_ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		department.setId(id);
 				
 		if (name == null && requiredFields.contains(DepartmentConstant.DEPARTMENT_NAME)) {
-			throw new FieldIsRequiredException("Name is required to continue");
+			throw new FieldRequiredException("Name is required to continue");
 		}
 		department.setName(name);		
 		

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.AttendanceConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.attendances.AttendanceStatus;
 import com.jerotoma.common.models.attendances.ClassAttendance.ClassAttendanceParam;
 import com.jerotoma.common.models.attendances.StudentAttendance.StudentAttendanceParam;
@@ -39,24 +39,24 @@ public class AttendanceValidator {
 		}		
 		
 		if (id == null && requiredFields.contains(AttendanceConstant.CLASS_ATTENDANCE_ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		classAttendanceParam.setId(id);
 		
 		if (academicYearId == null && requiredFields.contains(AttendanceConstant.ACADEMIC_YEAR_ID)) {
-			throw new FieldIsRequiredException("Academic Year ID is required to continue");
+			throw new FieldRequiredException("Academic Year ID is required to continue");
 		}
 		classAttendanceParam.setAcademicYearId(academicYearId);
 		
 
 		if (classId == null && requiredFields.contains(AttendanceConstant.CLASS_ID)) {
-			throw new FieldIsRequiredException("Class ID is required to continue");
+			throw new FieldRequiredException("Class ID is required to continue");
 		}
 		classAttendanceParam.setClassId(classId);
 		
 
 		if (attendanceDate == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_DATE)) {
-			throw new FieldIsRequiredException("Attendance Date is required to continue");
+			throw new FieldRequiredException("Attendance Date is required to continue");
 		}
 		Date cal = CalendarUtil.convertStringToDate(attendanceDate);
 		classAttendanceParam.setAttendanceDate(cal);	
@@ -92,12 +92,12 @@ public class AttendanceValidator {
 				
 				studentId = (Integer)studentAttendanceStatus.get(AttendanceConstant.STUDENT_ID);
 				if (studentId == null && requiredFields.contains(AttendanceConstant.STUDENT_ID)) {
-					throw new FieldIsRequiredException("Student ID is required to continue");
+					throw new FieldRequiredException("Student ID is required to continue");
 				}
 				
 				attendanceStatusId = (Integer)studentAttendanceStatus.get(AttendanceConstant.STUDENT_ATTENDANCE_STATUS_ID);
 				if (attendanceStatusId == null && requiredFields.contains(AttendanceConstant.STUDENT_ATTENDANCE_STATUS_ID)) {
-					throw new FieldIsRequiredException("Attendance Status is required to continue");
+					throw new FieldRequiredException("Attendance Status is required to continue");
 				}
 				
 				studentAttendanceStatusParam.setStudentId(studentId);
@@ -105,17 +105,17 @@ public class AttendanceValidator {
 				studentAttendanceStatusParams.add(studentAttendanceStatusParam);
 			}
 		} else {
-			throw new FieldIsRequiredException("Student Attendance Statuses are required to continue");
+			throw new FieldRequiredException("Student Attendance Statuses are required to continue");
 		}
 		studentAttendanceParam.setStudentAttendanceStatuses(studentAttendanceStatusParams);
 		
 		if (id == null && requiredFields.contains(AttendanceConstant.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		studentAttendanceParam.setId(id);
 		
 		if (classAttendanceId == null && requiredFields.contains(AttendanceConstant.CLASS_ATTENDANCE_ID)) {
-			throw new FieldIsRequiredException("Class Attendance ID is required to continue");
+			throw new FieldRequiredException("Class Attendance ID is required to continue");
 		}
 		studentAttendanceParam.setClassAttendanceId(classAttendanceId);
 		
@@ -148,18 +148,18 @@ public class AttendanceValidator {
 		
 				
 		if (id == null && requiredFields.contains(AttendanceConstant.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		attendanceStatus.setId(id);
 		
 		if (status == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_STATUS_NAME)) {
-			throw new FieldIsRequiredException("Status is required to continue");
+			throw new FieldRequiredException("Status is required to continue");
 		}
 		attendanceStatus.setName(status);
 		
 
 		if (description == null && requiredFields.contains(AttendanceConstant.ATTENDANCE_STATUS_DESCRIPTION)) {
-			throw new FieldIsRequiredException("Description ID is required to continue");
+			throw new FieldRequiredException("Description ID is required to continue");
 		}
 		attendanceStatus.setDescription(description);
 		

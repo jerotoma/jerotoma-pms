@@ -29,7 +29,7 @@ export class MediaService {
   }
 
   getMediaPaginated(param: QueryParam): Observable<ResponseWrapper> {
-    return this.http.get(`${END_POINTS.uploads}/paginated?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+    return this.http.get(`${END_POINTS.uploads}/paginated?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
@@ -47,4 +47,10 @@ export class MediaService {
     return this.http.put(`${END_POINTS.uploads}`, data)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  search(data: any, param: QueryParam): Observable<ResponseWrapper> {
+    return this.http.post(`${END_POINTS.uploads}/search?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`, data)
+    .pipe(map((resp: ResponseWrapper) => resp));
+  }
+
 }

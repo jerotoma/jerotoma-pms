@@ -11,6 +11,7 @@ import { USER_TYPE } from 'app/utils';
               *ngIf='student'
               [userDatail]="student"
               [userType]="'student'"
+              (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
 export class StudentShowComponent implements OnInit {
@@ -38,6 +39,10 @@ export class StudentShowComponent implements OnInit {
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
     });
+  }
+
+  reloadParentDetails(data: any) {
+    this.loadStudentDetails(data.id);
   }
 
   loadStudentDetails(studentId: number) {

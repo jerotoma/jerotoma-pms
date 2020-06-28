@@ -62,8 +62,11 @@
           </div>
       </nb-card-body>
       <nb-card-footer>
-          <button type='button' class='push-right' nbButton hero status="success" (click)="onSubmit()">Upload</button>
-          <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+        <div class="upload-progress mb-2" *ngIf="progress > 0">
+          <nb-progress-bar [value]="progress" [status]="status" [displayValue]="true"></nb-progress-bar>
+        </div>
+        <button type='button' class='push-right' nbButton hero status="success" (click)="onSubmit()">Upload</button>
+        <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss(false)">Cancel</button>
       </nb-card-footer>
     </nb-card>
   </div>

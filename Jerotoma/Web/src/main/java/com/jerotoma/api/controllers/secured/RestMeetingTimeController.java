@@ -24,7 +24,7 @@ import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.MeetingTimeConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.schedules.MeetingTime;
@@ -137,7 +137,7 @@ public class RestMeetingTimeController extends BaseController {
 		try {
 			WorkDay workDay = workDayService.findObject(meetingTime.getWorkDayId());
 			if (workDay == null) {
-				throw new FieldIsRequiredException("Work Day is required to continue");
+				throw new FieldRequiredException("Work Day is required to continue");
 			}
 			checkForMeetingTimeOverlapException(workDay, meetingTime);
 			
@@ -200,7 +200,7 @@ public class RestMeetingTimeController extends BaseController {
 		try {
 			WorkDay workDay = workDayService.findObject(meetingTime.getWorkDayId());
 			if (workDay == null) {
-				throw new FieldIsRequiredException("Work Day is required to continue");
+				throw new FieldRequiredException("Work Day is required to continue");
 			}
 			checkForMeetingTimeOverlapException(workDay, meetingTime);
 			

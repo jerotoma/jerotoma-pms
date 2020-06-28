@@ -1,5 +1,5 @@
 <nb-card>
-  <nb-card-header></nb-card-header>
+  <nb-card-header>{{title}}</nb-card-header>
   <nb-card-body>
       <div class="row">
         <div class="col-md-12">
@@ -7,15 +7,15 @@
             <div class="box-header">
                 <div class="row">
                   <div class="col-md-6">
-                        <div class="form-group">
-                            <input  (keyup)="findMatch($event)" [(ngModel)]="searchTerm" class="form-control" id="focusedInput" placeholder="Search for a media" type="text">
-                        </div>
+                      <div class="form-group">
+                          <input (keyup)="findMatch($event)" [(ngModel)]="searchTerm" class="form-control" id="focusedInput" placeholder="Search for a media" type="text">
+                      </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <button class="btn btn-success btn-sm push-right" (click)="showUploadMediaView()">Add New</button>
-                      <button class="btn btn-default btn-sm push-right" [class]="activeView.isView2 ? 'active' : ''" (click)="changeToRowView()"><i class="fa fa-bars"></i></button>
-                      <button class="btn btn-default btn-sm push-right" [class]="activeView.isView1 ? 'active' : ''" (click)="changeViewGrid(1)"><i class="fa fa-th"></i></button>
+                      <button class="btn btn-success btn-sm push-right ml-1" (click)="addNewMedia()">Add New</button>
+                      <button class="btn btn-sm push-right ml-1" [class]="activeView.isView2 ? 'btn-primary' : 'btn-info'" (click)="changeToRowView()"><i class="fa fa-bars"></i></button>
+                      <button class="btn btn-sm push-right ml-1" [class]="activeView.isView1 ? 'btn-primary' : 'btn-info'" (click)="changeViewGrid(1)"><i class="fa fa-th"></i></button>
                     </div>
                   </div>
               </div>
@@ -50,7 +50,7 @@
                                 <div class="row">
                                   <div class="col-md-12">
                                     <div class="thumbnail">
-                                        <a href="#" (click)="showMediaView(file)">
+                                        <a href="#" (click)="showMediaView($event, file)">
                                           <app-media-pdfviewer *ngIf="file.type == 'application/pdf' else normalMedia" [pdfFile]="file"></app-media-pdfviewer>
                                           <ng-template #normalMedia>
                                               <img [src]="baseURL + file.src" [alt]="file.title" style="width:100%">
@@ -68,7 +68,7 @@
                             <td class="td-action" >
                               <div class="row">
                                   <div class="col-md-12">
-                                        <a href="#" (click)="deleteMedia(file)">
+                                        <a href="#" (click)="deleteMedia($event, file)">
                                           <i class="fa fa-trash"></i>
                                         </a>
                                     </div>

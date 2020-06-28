@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.SystemConfigConstant;
 import com.jerotoma.common.constants.SystemConfigConstant.GENERAL_CONFIG;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.config.SystemConfig;
 
 public class SystemConfigValidator {
@@ -30,19 +30,19 @@ public class SystemConfigValidator {
 		
 		
 		if (id == null && requiredFields.contains(SystemConfigConstant.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		systemConfig.setId(id);
 		
 		if (name == null && requiredFields.contains(SystemConfigConstant.NAME)) {
-			throw new FieldIsRequiredException("Name is required to continue");
+			throw new FieldRequiredException("Name is required to continue");
 		}
 		
 		GENERAL_CONFIG themeConfig = SystemConfigConstant.getGeneralConfigByName(name);
 		systemConfig.setName(themeConfig != null ? themeConfig.getDbName() : name);
 		
 		if (value == null && requiredFields.contains(SystemConfigConstant.VALUE)) {
-			throw new FieldIsRequiredException("Value is required to continue");
+			throw new FieldRequiredException("Value is required to continue");
 		}
 		systemConfig.setValue(value);
 		

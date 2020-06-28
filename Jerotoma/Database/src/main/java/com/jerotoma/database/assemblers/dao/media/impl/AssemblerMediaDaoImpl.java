@@ -21,7 +21,10 @@ import com.google.common.collect.Lists;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.MediaConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.constants.UserConstant;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.viewobjects.MediaVO;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.database.assemblers.dao.media.AssemblerMediaDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -53,16 +56,38 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 	@Override
 	public List<MediaVO> loadList(QueryParam queryParam) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		USER_TYPE userType  = UserConstant.processUserType(queryParam.getType())	;	
+		switch(userType) {
+		case PARENT:
+		case STUDENT:
+		case TEACHER:
+		case STAFF:
+			builder
+			.append(" INNER JOIN public.user_media um ON um.media_id = m.id ")
+			.append(" INNER JOIN public.users u ON u.id = um.user_id")
+			.append(" WHERE u.user_type = ? ");
+			break;
+		default:
+			
+		}		
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
 				.append("limit ? offset ?");
 
 		Long countResults = countObject();
 		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
 		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
 		Object[] paramList = new Object[] {limit, offset};
-		
+		switch(userType) {
+		case PARENT:
+		case STUDENT:
+		case TEACHER:
+		case STAFF:
+			paramList = new Object[] {queryParam.getType(), limit, offset};
+			break;
+		default:
+			
+		}		
 		return this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
 	}
 
@@ -71,17 +96,39 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-		.append(" ")
-		.append("limit ? offset ?");
+		USER_TYPE userType  = UserConstant.processUserType(queryParam.getType());	
+		switch(userType) {
+		case PARENT:
+		case STUDENT:
+		case TEACHER:
+		case STAFF:
+			builder
+			.append(" INNER JOIN public.user_media um ON um.media_id = m.id ")
+			.append(" INNER JOIN public.users u ON u.id = um.user_id")
+			.append(" WHERE u.user_type = ? ");
+			break;
+		default:
+			
+		}		
+		builder.append(DaoUtil.getOrderBy("m." + queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
 
 		Long countResults = countObject();
 		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
 		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
 		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
 		Object[] paramList = new Object[] {limit, offset};
-		
+		switch(userType) {
+		case PARENT:
+		case STUDENT:
+		case TEACHER:
+		case STAFF:
+			paramList = new Object[] {queryParam.getType(), limit, offset};
+			break;
+		default:
+			
+		}
 		List<MediaVO> mediaList = this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
 		
 		map.put(MediaConstant.MEDIA_CHUNKS, Lists.partition(mediaList, 2));
@@ -135,5 +182,64 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 	public List<MediaVO> getMediaList() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
 		return this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor());
+	}
+
+	@Override
+	public ResultBuilder<MediaVO> searchMedia(QueryParam queryParam) throws SQLException {
+		ResultBuilder<MediaVO> result;
+		
+		map = new HashMap<>();
+		StringBuilder builder = getBaseSelectQuery();
+		String searchClause = " LOWER(m.title) like ? OR LOWER(m.src) like ? OR LOWER(m.absolute_path) like ? OR LOWER(m.absolute_path) like ? ";
+		USER_TYPE userType  = UserConstant.processUserType(queryParam.getType());
+		if (userType == null) {
+			builder.append(" WHERE ").append(searchClause);
+		} else {
+			builder
+			.append(" INNER JOIN public.user_media um ON um.media_id = m.id ")
+			.append(" INNER JOIN public.users u ON u.id = um.user_id")
+			.append(" WHERE u.user_type = ?  AND ")
+			.append(searchClause);
+		}
+		
+		builder.append(DaoUtil.getOrderBy("m." + queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+
+		Long countResults = countObject();
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		
+		Object[] paramList = null;
+		if (userType == null) {
+			paramList = new Object[] {
+					DaoUtil.addPercentBothSide(queryParam.getSearch()),
+					DaoUtil.addPercentBothSide(queryParam.getSearch()),
+					DaoUtil.addPercentBothSide(queryParam.getSearch()),
+					DaoUtil.addPercentBothSide(queryParam.getSearch()),
+					limit, 
+					offset
+			};
+		} else {
+			paramList = new Object[] {
+				userType.getType(),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+			};
+		}		
+		List<MediaVO> mediaList = this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
+		result = new ResultBuilder<MediaVO>();
+		result.setCount(countResults.intValue());
+		result.setDataList(mediaList);
+		result.setCurrentPage(queryParam.getPage());
+		result.setPageSize(queryParam.getPageSize());
+		result.setPageCount(pageCount);			
+		return result;
 	}
 }

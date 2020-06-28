@@ -12,6 +12,7 @@ import { Teacher, ShowMessage  } from 'app/models';
               *ngIf='teacher'
               [userDatail]="teacher"
               [userType]="'teacher'"
+              (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
 export class TeacherShowComponent implements OnInit {
@@ -40,6 +41,10 @@ export class TeacherShowComponent implements OnInit {
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
     });
+  }
+
+  reloadParentDetails(data: any) {
+    this.loadTeacherDetails(data.id);
   }
 
   loadTeacherDetails(teacherId: number) {

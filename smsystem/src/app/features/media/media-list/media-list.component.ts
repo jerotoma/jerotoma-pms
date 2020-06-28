@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
 
+import { Component, OnInit, Input } from '@angular/core';
+import { NbDialogService, NbMenuService } from '@nebular/theme';
+
+import { UploadsComponent, DeleteModalComponent } from 'app/shared';
+import { MediaShowComponent } from './../media-show/media-show.component';
 import {
   GalleryService,
   GridLayout,
@@ -9,9 +13,9 @@ import {
 } from '@ks89/angular-modal-gallery';
 
 
-import { MediaService } from 'app/services';
+import { MediaService, ModalService } from 'app/services';
 import { Media, ResponseWrapper } from 'app/models';
-import { QueryParam, END_POINTS } from 'app/utils';
+import { QueryParam, END_POINTS, USER_TYPE } from 'app/utils';
 
 export interface ActiveView {
   gridView: number;
@@ -26,6 +30,10 @@ export interface ActiveView {
   styleUrls: ['./media-list.component.scss'],
 })
 export class MediaListComponent implements OnInit {
+
+  @Input('title') title: string = 'List of All Media';
+  @Input('mediaList') mediaList: Media[] = [];
+  @Input('isUserType') isUserType: boolean = false;
 
   baseURL: string = END_POINTS.baseURL;
   public activeView: ActiveView = {
@@ -42,27 +50,46 @@ export class MediaListComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: 'teacher',
+    userType: USER_TYPE.all,
   };
   media: Media;
-  mediaList: Media[] = [];
-  mediaChunks: Array<Media[]> = [];
   images: Image[] = [];
   searchTerm: string;
 
   plainGalleryGrid: PlainGalleryConfig = {
     strategy: PlainGalleryStrategy.GRID,
-    layout: new GridLayout({ width: '180px', height: '180px' }, { length: 3, wrap: true }),
+    layout: new GridLayout({ width: '24.59%', height: 'auto' }, { length: 4, wrap: true }),
   };
 
-  constructor(private mediaService: MediaService) { }
+  constructor(
+    private mediaService: MediaService,
+    private modalService: ModalService,
+    private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
-    this.loadMediaList();
+    if (!this.isUserType) {
+      this.loadMediaList();
+    } else {
+      if (this.mediaList) {
+        this.processImages();
+      }
+    }
   }
 
-  findMatch(event: any) {
-
+  findMatch(event: Event) {
+    event.preventDefault();
+    if (!this.searchTerm) {
+      return;
+    }
+    const dataToSearch = {
+      searchTerm: this.searchTerm,
+    };
+    this.mediaService.search(dataToSearch, this.param).subscribe((resp: ResponseWrapper) => {
+      const data = resp.data;
+      this.mediaList = data.dataList;
+      this.processImages();
+      // console.log(this.mediaChunks);
+    });
   }
 
   changeViewGrid(num: number) {
@@ -88,8 +115,15 @@ export class MediaListComponent implements OnInit {
     }
   }
 
-  showUploadMediaView() {
-
+  addNewMedia() {
+    this.dialogService.open(UploadsComponent, {
+      context: {
+        title: 'Add New Media',
+        action: 'create',
+      },
+    }).onClose.subscribe(data => {
+      this.loadMediaList();
+    });
   }
 
   changeToRowView() {
@@ -98,11 +132,36 @@ export class MediaListComponent implements OnInit {
     this.activeView.isView2 = false;
   }
 
-  showMediaView(media: Media) {
-    this.media = media;
+  showMediaView(event: Event, media: Media) {
+    event.preventDefault();
+    this.dialogService.open(MediaShowComponent, {
+      context: {
+        title: 'View ' + media.title,
+        media: media,
+      },
+    }).onClose.subscribe(data => {
+
+    });
   }
 
-  deleteMedia(file: Media) {
+  deleteMedia(event: Event, media: Media) {
+    event.preventDefault();
+    this.dialogService.open(DeleteModalComponent, {
+      context: {
+        title: 'Delete Media',
+        action: 'delete',
+        id: media.id + '',
+      },
+    }).onClose.subscribe(data => {
+      if (data.confirmed) {
+        this.mediaService.deleteMedia(data.id).subscribe((result: boolean) => {
+          if (result) {
+            this.modalService.openSnackBar('Media has been deleted', 'success');
+            this.loadMediaList();
+          }
+        });
+      }
+    });
 
   }
 
@@ -110,25 +169,29 @@ export class MediaListComponent implements OnInit {
     this.mediaService.getMediaPaginated(this.param).subscribe((resp: ResponseWrapper) => {
       const data = resp.data;
       this.mediaList = data.mediaList;
-      this.mediaChunks = data.mediaChunks;
-      this.images = [];
-      this.mediaList.forEach((media, index) => {
-        this.images.push(new Image(media.id, {
-          img: this.baseURL + media.src,
-          title: media.title,
-          alt: media.title,
-          extUrl: this.baseURL,
-          description: media.description,
-        }, {
-          img: this.baseURL + media.src,
-          alt: media.title,
-          title: media.title,
-          description: media.description,
-          ariaLabel: media.title,
-        }));
-      });
+      this.processImages();
       // console.log(this.mediaChunks);
     });
   }
+
+  processImages() {
+    this.images = [];
+    this.mediaList.forEach((media, index) => {
+      this.images.push(new Image(media.id, {
+        img: this.baseURL + media.src,
+        title: media.title,
+        alt: media.title,
+        extUrl: this.baseURL,
+        description: media.description,
+      }, {
+        img: this.baseURL + media.src,
+        alt: media.title,
+        title: media.title,
+        description: media.description,
+        ariaLabel: media.title,
+      }));
+    });
+  }
+
 }
 

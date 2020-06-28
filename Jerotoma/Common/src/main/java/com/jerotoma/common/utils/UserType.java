@@ -6,7 +6,7 @@ public enum UserType {
 	STUDENT("student"),
 	PARENT("parent"),
 	TEACHER("teacher"),
-	OTHER_STAFF("other-staff");
+	STAFF("staff");
 	
 	private String value;
 	

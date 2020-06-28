@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.StudentConstant;
-import com.jerotoma.common.exceptions.FieldIsRequiredException;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.StudentClass;
 
 public class StudentClassValidator {
@@ -34,20 +34,20 @@ public class StudentClassValidator {
 		}
 		
 		if (id == null && requiredFields.contains(StudentConstant.Class.ID)) {
-			throw new FieldIsRequiredException("ID is required to continue");
+			throw new FieldRequiredException("ID is required to continue");
 		}
 		
 		
 		if (studentId == null && requiredFields.contains(StudentConstant.Class.STUDENT_ID)) {
-			throw new FieldIsRequiredException("Student ID is required to continue");
+			throw new FieldRequiredException("Student ID is required to continue");
 		}
 		
 		if (jClassIds == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
-			throw new FieldIsRequiredException("Class ID is required to continue");
+			throw new FieldRequiredException("Class ID is required to continue");
 		}
 		
 		if (academicYearId == null && requiredFields.contains(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
-			throw new FieldIsRequiredException("Academic Year ID is required to continue");
+			throw new FieldRequiredException("Academic Year ID is required to continue");
 		}
 		
 		

@@ -1,10 +1,17 @@
 
-import { Component, OnInit, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { FileUploader } from 'ng2-file-upload';
-import { UploadService } from 'app/services';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+
+import { FileUploader, FileItem } from 'ng2-file-upload';
+import { UploadService, AuthService, ModalService } from 'app/services';
 import { NbDialogRef } from '@nebular/theme';
-import { END_POINTS } from 'app/utils';
+import { END_POINTS, APP_ACTION_TYPE } from 'app/utils';
+
+export interface UploadFile {
+  file: File;
+  dataURL: string | ArrayBuffer;
+}
 
 @Component({
   selector: 'app-uploads',
@@ -12,76 +19,125 @@ import { END_POINTS } from 'app/utils';
   styleUrls: ['uploads.component.scss'],
 })
 export class UploadsComponent implements OnInit {
-  id: string = '0';
-  title: string = '';
-  name: string = '';
-  action: string = '';
-  uploadType: string = '';
-  confirmed: boolean = false;
-  uploadDir: string = 'users';
+  @Input('uploadDir') uploadDir: string = 'users';
+  @Input('uploadURL') url: string = END_POINTS.uploads;
+  @Input('uploadURL') title: string = '';
+  @Input('action') action: string = APP_ACTION_TYPE.create;
+  @Input('uploadLimit') uploadLimit: number = 10;
+  @Output() onSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   formData: FormData;
   uploadForm: FormGroup;
+  public uploader: FileUploader;
+  uploadFiles: UploadFile[] = [];
+  userAvatar: File;
+  progress: number = 0;
 
   public hasBaseDropZoneOver: boolean = false;
   public hasAnotherDropZoneOver: boolean = false;
 
-  public uploader: FileUploader = new FileUploader({
-    url: END_POINTS.uploads,
-    disableMultipart : false,
-    autoUpload: false,
-    method: 'post',
-    itemAlias: 'media_files',
-    allowedFileType: ['image', 'pdf'],
-  });
-
   constructor(
     private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private modalService: ModalService,
     private uploadService: UploadService,
     protected ref: NbDialogRef<UploadsComponent>) {}
 
-  public onFileSelected(event: EventEmitter<File[]>) {
-    const file: File = event[0];
-    window.console.log(file);
-  }
+    ngOnInit(): void {
+      this.loadForm();
+      this.initUploader();
+    }
 
-  public fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
-  }
+    dismiss(confirmed: boolean): void {
+      this.uploadFiles = null;
+      this.uploader.clearQueue();
+      this.uploader.destroy();
+      this.ref.close({
+        confirmed: confirmed,
+      });
+    }
 
-  public fileOverAnother(e: any): void {
-    this.hasAnotherDropZoneOver = e;
-  }
+    public onFileSelected(event: EventEmitter<File[]>) {
+      const file: File = event[0];
+      this.userAvatar = file;
+      this.readFile(file);
+    }
+    onSubmit() {
+      if (this.uploadFiles) {
+        const formData = new FormData();
+        this.uploadFiles.forEach((uploadFile: UploadFile, index: number) => {
+          formData.append('media_files[]', uploadFile.file);
+        });
+        this.uploadService.uploadFileTrackProgress(formData).subscribe((event: HttpEvent<any>) => {
+          switch (event.type) {
+            case HttpEventType.Sent:
+              break;
+            case HttpEventType.ResponseHeader:
+              break;
+            case HttpEventType.UploadProgress:
+              this.progress = Math.round(event.loaded / event.total * 100);
+              break;
+            case HttpEventType.Response:
+              if (this.uploadFiles.length > 1) {
+                this.modalService.openSnackBar('Files have been uploaded successfully', 'success');
+              } else {
+                this.modalService.openSnackBar('File has been uploaded successfully ', 'success');
+              }
+              setTimeout(() => {
+                this.progress = 0;
+                this.dismiss(true);
+                this.onSuccess.emit(true);
+              }, 1500);
+          }
+        });
+      }
+     }
 
-  error: string;
-  uploadResponse = { status: '', message: '', filePath: '' };
+    initUploader() {
+      this.uploader = new FileUploader({
+        url: this.url,
+        disableMultipart : false,
+        autoUpload: false,
+        queueLimit: this.uploadLimit,
+        authToken: this.authService.getAccessToken(),
+      });
+     }
 
-  ngOnInit() {
-    this.uploadForm = this.formBuilder.group({
-      media_files: [''],
-    });
-  }
-  dismiss() {
-    this.ref.close({
-      id: parseInt(this.id, 10),
-      uploadType: this.uploadType,
-      formData: this.formData,
-      confirmed: this.confirmed,
-    });
-  }
-  onConfirmed() {
-    this.confirmed = true;
-    this.dismiss();
-  }
-  onSubmit() {
-   this.uploader.uploadAll();
-  }
+    readFile(file: File) {
+      const reader = new FileReader();
+      reader.addEventListener('load', (e) => {
+        this.uploadFiles.push({
+          file: file,
+          dataURL: reader.result,
+        });
+      });
+      reader.readAsDataURL(file);
+    }
 
-  onFileChange(event: any) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      window.console.log(file);
-      this.uploadForm.get('media_files').setValue(file);
+    removeItem(fileItem: FileItem) {
+      this.uploadFiles.forEach((uploadFile: UploadFile, index: number) => {
+        if (fileItem._file === uploadFile.file) {
+          this.uploadFiles.splice(index, 1);
+        }
+      });
+      fileItem.remove();
+    }
+
+    loadForm() {
+      this.uploadForm = this.formBuilder.group({
+
+      });
+    }
+
+    get status() {
+      if (this.progress <= 25) {
+        return 'danger';
+      } else if (this.progress <= 50) {
+        return 'warning';
+      } else if (this.progress <= 75) {
+        return 'info';
+      } else {
+        return 'success';
+      }
     }
   }
-
-}

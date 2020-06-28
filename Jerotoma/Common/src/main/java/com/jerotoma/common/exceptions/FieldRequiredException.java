@@ -1,13 +1,13 @@
 package com.jerotoma.common.exceptions;
 
-public class FieldIsRequiredException extends RuntimeException {
+public class FieldRequiredException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public FieldIsRequiredException(String message) {
+	public FieldRequiredException(String message) {
 		super(message);
 	}
 
