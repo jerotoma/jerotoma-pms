@@ -19,7 +19,7 @@ export class UserDetailsComponent implements OnInit {
     constructor(private dialogService: NbDialogService){}
 
     ngOnInit() {
-      window.console.log(this.userDatail);
+      // window.console.log(this.userDatail);
     }
 
     onSubmit() {

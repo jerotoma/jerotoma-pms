@@ -32,6 +32,8 @@ public class DatabaseConstant {
 		public static final String TEACHER_COURSE_ADMISSIONS = "teacher_course_admissions";
 		public static final String CLASSES = "classes";
 		public static final String COURSE_ACADEMIC_DISCIPLINES = "course_academic_disciplines";
+		public static final String ACADEMIC_LEVELS = "academic_levels";
+		public static final String PROGRAMS = "programs";
 		
 		public static final String MEETING_TIMES = "meeting_times";
 		public static final String WORK_DAYS = "work_days";

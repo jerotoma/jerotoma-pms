@@ -129,6 +129,16 @@ public class EndPointConstants {
 		public static final String CURRENT_USER = "/currentUser";
 	}
 	
+	public static interface REST_PROGRAM_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/programs";
+		public static final String INDEX = "/";
+	}
+	
+	public static interface REST_ACADEMIC_LEVEL_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/academic-levels";
+		public static final String INDEX = "/";
+	}
+	
 	public static interface REST_USER_PREFERENCE_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/user-preferences";
 	}
