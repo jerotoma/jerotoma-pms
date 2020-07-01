@@ -8,5 +8,6 @@ public class ProgramConstant {
 	public static final String CODE = "code";
 	public static final String DESCRIPTION = "description";
 	public static final String TOTAL_ACADEMIC_LEVELS_REQUIRED = "totalAcademicLevelsRequired";
+	public static final String ACADEMIC_LEVEL_IDS = "academicLevelIDs";
 
 }

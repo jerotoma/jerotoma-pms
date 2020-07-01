@@ -42,7 +42,6 @@ public class AcademicLevel {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-
 	public Integer getId() {
 		return id;
 	}

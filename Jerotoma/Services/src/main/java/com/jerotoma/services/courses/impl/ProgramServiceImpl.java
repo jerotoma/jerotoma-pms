@@ -55,5 +55,4 @@ public class ProgramServiceImpl implements ProgramService {
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		return programDao.loadMapList(queryParam);
 	}
-
 }

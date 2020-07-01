@@ -55,4 +55,9 @@ public class AcademicLevelServiceImpl implements AcademicLevelService {
 		return academicLevelDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public List<AcademicLevel> getAllAcademicLevels() throws SQLException {
+		return academicLevelDao.getAllAcademicLevels();
+	}
+
 }

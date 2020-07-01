@@ -83,4 +83,9 @@ public class AcademicLevelDaoImpl implements AcademicLevelDao {
 				.getSingleResult();
 	}
 
+	@Override
+	public List<AcademicLevel> getAllAcademicLevels() throws SQLException {		
+		return entityManager.createQuery("FROM AcademicLevel", AcademicLevel.class).getResultList();
+	}
+
 }

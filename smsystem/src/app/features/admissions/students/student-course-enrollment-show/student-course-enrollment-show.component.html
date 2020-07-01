@@ -34,10 +34,10 @@
               <div class="col-md-12">
                   <div class="form-control-group">
                     <nb-card class="list-card" accent="success" *ngIf="jClasses">
-                      <nb-card-body>
+                      <nb-card-body style="padding: 0;">
                         <h5>List of Registered courses for {{academicYear.name}} - {{academicYear.yearOfStudy}}</h5>
-                        <nb-list>
-                          <nb-list-item>
+                        <nb-list class="list-group">
+                          <nb-list-item class="list-group-item" >
                               <div class="row">
                                   <div class="col-md-4">Course Name</div>
                                   <div class="col-md-2">Code</div>
@@ -45,7 +45,7 @@
                                   <div class="col-md-3">Class Room</div>
                               </div>
                           </nb-list-item>
-                          <nb-list-item *ngFor="let jClass of jClasses">
+                          <nb-list-item class="list-group-item"  *ngFor="let jClass of jClasses">
                             <a href="#" (click)="preventDefaultJClass($event)">
                                 <div class="row">
                                   <div class="col-md-4">{{jClass.course.name}}</div>

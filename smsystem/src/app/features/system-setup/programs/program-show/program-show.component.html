@@ -1,0 +1,63 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card accent="success">
+      <nb-card-header>Show Program</nb-card-header>
+      <nb-card-body>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-control-group">
+                    <label for="program-name" class="label">Name</label>
+                    <p>{{program.name}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+              <div class="form-control-group">
+                <label for="program-code" class="label">Code</label>
+                <p>{{program.code}}</p>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+                <div class="form-control-group">
+                  <label for="program-description" class="label">Description</label>
+                  <p>{{program.description}}</p>
+                  <!-- <app-mce-editor (editorKeyup)=getDescriptionContent($event) ></app-mce-editor> -->
+                </div>
+          </div>
+        </div>
+        <div class="lists row">
+          <div class="col-md-12">
+              <div class="form-control-group">
+                <nb-card class="list-card" accent="success" *ngIf="program.academicLevels">
+                  <nb-card-header>List of Required Levels to graduate the program </nb-card-header>
+                  <nb-card-body style="padding: 0;">
+                    <nb-list class="list-group">
+                      <nb-list-item class="list-group-item" *ngFor="let academicLevel of program.academicLevels; index as i;">
+                        <a href="#" (click)="removeAcademicLevel($event, academicLevel, false)">
+                          <div class="row">
+                            <div class="col-md-1">{{i + 1}}</div>
+                            <div class="col-md-10">{{academicLevel.name}}</div>
+                            <div class="col-md-1">
+                              <span class="push-right">
+                                <nb-icon icon="checkmark-outline"></nb-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </a>
+                      </nb-list-item>
+                    </nb-list>
+                  </nb-card-body>
+                  <nb-card-footer>
+                    <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Close</button>
+                  </nb-card-footer>
+                </nb-card>
+              </div>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

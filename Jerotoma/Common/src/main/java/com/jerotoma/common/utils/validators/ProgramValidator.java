@@ -1,5 +1,6 @@
 package com.jerotoma.common.utils.validators;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,14 @@ import com.jerotoma.common.utils.CalendarUtil;
 
 public class ProgramValidator {
 
+	@SuppressWarnings("unchecked")
 	public static Program validate(Map<String, Object> params, List<String> requiredFields) {
 		Program program = new Program();
 		Integer id = null;
 		String code = null;
 		String name = null;
-		Integer totalAcademicLevelsRequired = null;
-		String description = null;
+		String description = null;		
+		List<Integer> academicLevelIDs = null;
 		
 		if (params.containsKey(ProgramConstant.ID)) {
 			id = (Integer) params.get(ProgramConstant.ID);
@@ -35,9 +37,10 @@ public class ProgramValidator {
 			description = (String) params.get(ProgramConstant.DESCRIPTION);
 		}
 		
-		if (params.containsKey(ProgramConstant.TOTAL_ACADEMIC_LEVELS_REQUIRED)) {
-			totalAcademicLevelsRequired = (Integer) params.get(ProgramConstant.TOTAL_ACADEMIC_LEVELS_REQUIRED);
+		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_IDS)) {
+			academicLevelIDs = (ArrayList<Integer>) params.get(ProgramConstant.ACADEMIC_LEVEL_IDS);
 		}
+		
 		
 		if (id == null && requiredFields.contains(ProgramConstant.ID)) {
 			throw new FieldRequiredException("ID is required to continue");
@@ -57,12 +60,12 @@ public class ProgramValidator {
 		if (description == null && requiredFields.contains(ProgramConstant.DESCRIPTION)) {
 			throw new FieldRequiredException("Description is required to continue");
 		}
-		program.setDescription(description);
+		program.setDescription(description);		
 		
-		if (totalAcademicLevelsRequired == null && requiredFields.contains(ProgramConstant.TOTAL_ACADEMIC_LEVELS_REQUIRED)) {
-			throw new FieldRequiredException("Total Academic Levels is required to continue");
+		if (academicLevelIDs == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_IDS)) {
+			throw new FieldRequiredException("Academic Level IDs are required to continue");
 		}
-		program.setTotalAcademicLevelsRequired(totalAcademicLevelsRequired);
+		program.setAcademicLevelIDs(academicLevelIDs);
 		
 		Date today = CalendarUtil.getTodaysDate();
 		

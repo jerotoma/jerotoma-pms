@@ -46,6 +46,16 @@ const routes: Routes = [{
         .then(m => m.AcademicDisciplinesModule),
     },
     {
+      path: 'academic-levels',
+      loadChildren: () => import('./academic-levels/academic-levels.module')
+        .then(m => m.AcademicLevelsModule),
+    },
+    {
+      path: 'programs',
+      loadChildren: () => import('./programs/programs.module')
+        .then(m => m.ProgramsModule),
+    },
+    {
       path: '',
       redirectTo: 'system-setup',
       pathMatch: 'full',

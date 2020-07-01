@@ -12,6 +12,7 @@ export const END_POINTS = {
   academicDisciplines: '/api/secured/academic-disciplines',
   rooms: '/api/secured/rooms',
   courses: '/api/secured/courses',
+  programs: '/api/secured/programs',
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',
   workDays: '/api/secured/work-days',
@@ -27,4 +28,5 @@ export const END_POINTS = {
   pubUserPreferences: '/api/public/user-preferences',
   restDashboard: '/api/secured/dashboard',
   attendances: '/api/secured/attendances',
+  academicLevels: '/api/secured/academic-levels',
 };

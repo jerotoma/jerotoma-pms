@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+}
+button {
+  cursor: pointer;
+  border: none;
+}
+
+button:focus {
+  outline: none;
+}
+button:hover {
+  background-color: rgba(0, 0, 0, 0.03);;
+}
+a:hover {
+  text-decoration: none;
+}
+
+:host .nb-theme-default nb-card-body {
+  padding-left: 0;
+  padding-right: 0;
+}

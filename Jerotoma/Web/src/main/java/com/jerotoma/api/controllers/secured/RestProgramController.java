@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
@@ -21,10 +23,19 @@ import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ProgramConstant;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Program;
+import com.jerotoma.common.models.academic.ProgramAcademicLevel;
 import com.jerotoma.common.utils.validators.ProgramValidator;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.common.viewobjects.ProgramVO;
+import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
+import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
+import com.jerotoma.services.courses.AcademicLevelService;
+import com.jerotoma.services.courses.ProgramAcademicLevelService;
 import com.jerotoma.services.courses.ProgramService;
 
 @RestController
@@ -32,10 +43,20 @@ import com.jerotoma.services.courses.ProgramService;
 public class RestProgramController extends BaseController implements Controller {
 	
 	@Autowired ProgramService programService;
+	@Autowired AssemblerProgramService assemblerProgramService;
+	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
+	@Autowired ProgramAcademicLevelService programAcademicLevelService;
+	@Autowired AcademicLevelService academicLevelService;
 
+	@GetMapping
 	@Override
-	public HttpResponseEntity<Object> index(Authentication auth, String search, Integer page, Integer pageSize,
-			String fieldName, String orderby) {
+	public HttpResponseEntity<Object> index(
+			Authentication auth, 
+			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize,
+			@RequestParam(value="fieldName", required=false) String fieldName,
+			@RequestParam(value="orderby", required=false) String orderby) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
@@ -43,7 +64,7 @@ public class RestProgramController extends BaseController implements Controller 
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = programService.loadMapList(queryParam);		
+			map = assemblerProgramService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -59,11 +80,9 @@ public class RestProgramController extends BaseController implements Controller 
 	@Override
 	public HttpResponseEntity<Object> show(Authentication auth, Integer entityId) {
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE + "/" + entityId);
-		this.securityCheckAccessByRoles(auth);
-		
+		this.securityCheckAccessByRoles(auth);		
 		try {
-			Program program = programService.findObject(entityId);	
-			response.setData(program);
+			response.setData(assemblerProgramService.findObject(entityId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -86,15 +105,30 @@ public class RestProgramController extends BaseController implements Controller 
 						ProgramConstant.ID,
 						ProgramConstant.NAME,
 						ProgramConstant.CODE,
-						ProgramConstant.DESCRIPTION,
-						ProgramConstant.TOTAL_ACADEMIC_LEVELS_REQUIRED
+						ProgramConstant.DESCRIPTION,						
+						ProgramConstant.ACADEMIC_LEVEL_IDS
 						));
-		
+		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
 		Program program = ProgramValidator.validate(params, requiredFields);
+		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
 		userSecurityClearance.checkProgramCreationPermission();
 		
 		try {
-			program = programService.createObject(program);	
+			program = programService.updateObject(program);	
+			for (Integer academicLevelID: academicLevelIDs) {
+				AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
+				ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
+				if (assemblerProgramService.doesProgramAcademicLevelExist(program.getId(), academicLevel.getId())) {
+					programAcademicLevel  = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
+					programAcademicLevel.setAcademicLevel(academicLevel);
+					programAcademicLevel.setProgram(program);
+					programAcademicLevelService.updateObject(programAcademicLevel);
+				} else {
+					programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
+				}			
+				programAcademicLevels.add(programAcademicLevel);				
+			}
+			program.setProgramAcademicLevels(programAcademicLevels);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -114,18 +148,24 @@ public class RestProgramController extends BaseController implements Controller 
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						ProgramConstant.ID,
 						ProgramConstant.NAME,
 						ProgramConstant.CODE,
-						ProgramConstant.DESCRIPTION,
-						ProgramConstant.TOTAL_ACADEMIC_LEVELS_REQUIRED
+						ProgramConstant.DESCRIPTION,						
+						ProgramConstant.ACADEMIC_LEVEL_IDS
 						));
-		
+		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
 		Program program = ProgramValidator.validate(params, requiredFields);
-		userSecurityClearance.checkProgramCreationPermission();
-		
+		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
+		userSecurityClearance.checkProgramCreationPermission();		
 		try {
 			program = programService.createObject(program);	
+			for (Integer academicLevelID: academicLevelIDs) {
+				AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
+				ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
+				programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
+				programAcademicLevels.add(programAcademicLevel);				
+			}
+			program.setProgramAcademicLevels(programAcademicLevels);			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -155,11 +195,39 @@ public class RestProgramController extends BaseController implements Controller 
 		return response;
 	}
 	
-	@Override
-	public HttpResponseEntity<Object> edit(Authentication auth, Map<String, Object> params) {
+	@DeleteMapping(value = {"/{programId}/academic-levels/{academicLevelId}"})
+	public HttpResponseEntity<Object> removeAcademicLevelFromProgram(Authentication auth, 
+			@PathVariable(required = true, value = "programId") Integer programId,
+			@PathVariable(required = true, value = "academicLevelId") Integer academicLevelId) {
 		
+		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE + "/" + programId + "/academic-levels/" + academicLevelId);
+		this.securityCheckAccessByRoles(auth);
+		userSecurityClearance.checkGeneralEntityDeletionPermission();
+		try {
+			ProgramVO program = assemblerProgramService.findObject(programId);	
+			AcademicLevelVO academicLevel = assemblerAcademicLevelService.findObject(academicLevelId);
+			if (program == null || academicLevel == null) {
+				throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+			}
+			if (assemblerProgramService.doesProgramAcademicLevelExist(program.getId(), academicLevel.getId())) {
+				ProgramAcademicLevel programAcademicLevel  = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
+				response.setData(programAcademicLevelService.deleteObject(programAcademicLevel));
+			} else {
+				throw new FieldRequiredException("Program academic level does not exist.");
+			}		
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
+	@Override
+	public HttpResponseEntity<Object> edit(Authentication auth, Map<String, Object> params) {		
 		return null;
 	}
-
-
 }

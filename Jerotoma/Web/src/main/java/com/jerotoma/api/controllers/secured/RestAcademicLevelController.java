@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
@@ -25,6 +27,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.utils.validators.AcademicLevelValidator;
+import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.courses.AcademicLevelService;
 
 @RestController
@@ -32,6 +35,7 @@ import com.jerotoma.services.courses.AcademicLevelService;
 public class RestAcademicLevelController extends BaseController implements Controller {
 	
 	@Autowired AcademicLevelService academicLevelService;
+	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 
 	@GetMapping
 	@Override
@@ -44,7 +48,7 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = academicLevelService.loadMapList(queryParam);		
+			map = assemblerAcademicLevelService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -55,7 +59,49 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		response.setHttpStatus(HttpStatus.OK);
 		return response;
 	}
+	
+	@GetMapping("/list")
+	@ResponseBody
+	public HttpResponseEntity<Object> getList(Authentication auth) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		
+		
+		try {
+			response.setData(assemblerAcademicLevelService.getAllAcademicLevels());		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+								
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
 
+	@GetMapping("/programs/{programId}/unadded")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadUnAddedAcademicLevels(Authentication auth, @PathVariable(required = true, value = "programId") Integer programId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		
+		
+		try {
+			response.setData(assemblerAcademicLevelService.loadUnAddedAcademicLevelByProgram(programId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
+
+	
 	@PutMapping
 	@Override
 	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {

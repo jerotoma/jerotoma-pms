@@ -20,3 +20,5 @@ export * from './attendances';
 export * from './layouts';
 export * from './analytics';
 export * from './media';
+export * from './academic-levels';
+export * from './programs';

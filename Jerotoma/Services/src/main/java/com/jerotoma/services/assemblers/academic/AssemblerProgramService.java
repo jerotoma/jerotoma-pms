@@ -1,8 +1,15 @@
 package com.jerotoma.services.assemblers.academic;
 
-import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.services.BaseService;
+import java.sql.SQLException;
+import java.util.List;
 
-public interface AssemblerProgramService extends BaseService<Program>{
+import com.jerotoma.common.viewobjects.ProgramVO;
+import com.jerotoma.services.AssemblerService;
+
+public interface AssemblerProgramService extends AssemblerService<ProgramVO>{
+
+	List<ProgramVO> getAllProgram() throws SQLException;
+	
+	boolean doesProgramAcademicLevelExist(Integer programId, Integer academicLevelId);
 
 }

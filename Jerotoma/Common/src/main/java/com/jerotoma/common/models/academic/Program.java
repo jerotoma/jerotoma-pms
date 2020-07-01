@@ -1,15 +1,19 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
@@ -33,9 +37,6 @@ public class Program {
 	@Column
 	private String name;
 	
-	@Column(name="total_academic_levels_required")
-	private Integer totalAcademicLevelsRequired;
-	
 	@Column
 	private String description;
 	
@@ -44,6 +45,13 @@ public class Program {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+	
+	@OneToMany(mappedBy = "program")
+	@JsonManagedReference
+	private List<ProgramAcademicLevel> programAcademicLevels;
+	
+	@Transient
+	private List<Integer> academicLevelIDs;
 
 	public Integer getId() {
 		return id;
@@ -69,14 +77,6 @@ public class Program {
 		this.name = name;
 	}
 
-	public Integer getTotalAcademicLevelsRequired() {
-		return totalAcademicLevelsRequired;
-	}
-
-	public void setTotalAcademicLevelsRequired(Integer totalAcademicLevelsRequired) {
-		this.totalAcademicLevelsRequired = totalAcademicLevelsRequired;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -100,4 +100,23 @@ public class Program {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+
+	public void setAcademicLevelIDs(List<Integer> academicLevelIDs) {
+		this.academicLevelIDs = academicLevelIDs;
+		
+	}
+
+	public List<Integer> getAcademicLevelIDs() {
+		return academicLevelIDs;
+	}
+
+	public List<ProgramAcademicLevel> getProgramAcademicLevels() {
+		return programAcademicLevels;
+	}
+
+	public void setProgramAcademicLevels(List<ProgramAcademicLevel> programAcademicLevels) {
+		this.programAcademicLevels = programAcademicLevels;
+	}
+	
+	
 }

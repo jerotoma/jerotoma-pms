@@ -15,3 +15,5 @@ export * from './responses';
 export * from './dashboard';
 export * from './attendances';
 export * from './media';
+export * from './programs';
+export * from './academic-levels';

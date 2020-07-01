@@ -1,8 +1,13 @@
 package com.jerotoma.services.assemblers.academic;
 
-import com.jerotoma.common.models.academic.AcademicLevel;
-import com.jerotoma.services.BaseService;
+import java.sql.SQLException;
+import java.util.List;
 
-public interface AssemblerAcademicLevelService extends BaseService<AcademicLevel> {
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.services.AssemblerService;
 
+public interface AssemblerAcademicLevelService extends AssemblerService<AcademicLevelVO> {
+	public List<AcademicLevelVO> getAllAcademicLevels() throws SQLException;
+
+	public List<AcademicLevelVO> loadUnAddedAcademicLevelByProgram(Integer programId) throws SQLException;
 }

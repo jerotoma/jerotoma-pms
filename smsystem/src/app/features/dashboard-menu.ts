@@ -159,6 +159,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Academic Disciplines',
         link: '/dashboard/system-setup/academic-disciplines',
       },
+      {
+        title: 'Academic Levels',
+        link: '/dashboard/system-setup/academic-levels',
+      },
+      {
+        title: 'Programs',
+        link: '/dashboard/system-setup/programs',
+      },
     ],
   },
   {

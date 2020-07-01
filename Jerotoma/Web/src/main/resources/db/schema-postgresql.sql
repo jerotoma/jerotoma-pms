@@ -100,6 +100,58 @@
 	    );
 	    
 	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ACADEMIC LEVEL RELATED TABLES					  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.academic_levels(
+	    id bigserial NOT NULL,
+	    name character varying(255) NOT NULL,
+	    code character varying(255) NOT NULL,
+	    description text NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT academic_levels_ukey UNIQUE (code),
+	   	CONSTRAINT academic_levels_pkey PRIMARY KEY (id)
+	    );
+	    
+	    
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			PROGRAMS RELATED TABLES					  	      *
+	 * 															  *
+	 *************************************************************/
+	    
+	 CREATE TABLE IF NOT EXISTS public.programs(
+	    id bigserial NOT NULL,
+	    name character varying(255) NOT NULL,
+	    code character varying(255) NOT NULL,	   
+	    description text NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT programs_ukey UNIQUE (code),
+	   	CONSTRAINT programs_pkey PRIMARY KEY (id)
+	    );
+	    
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			PROGRAM ACADEMIC LEVELS RELATED TABLES			  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.program_academic_levels(
+	 	id bigserial NOT NULL,
+    	program_id BIGINT NOT NULL,
+    	academic_level_id BIGINT NOT NULL,
+    	UNIQUE(program_id, academic_level_id)
+    );
+	    
+	    
 	       
 	 /**************************************************************
 	 * 															  *
