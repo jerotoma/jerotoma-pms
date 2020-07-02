@@ -4,8 +4,8 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper } from 'app/models';
-import { PositionService, UserService, ModalService } from 'app/services';
+import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper, Program, AcademicLevel, AcademicYear } from 'app/models';
+import { PositionService, UserService, ModalService, ProgramService, AcademicLevelService } from 'app/services';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
@@ -31,6 +31,9 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   parent: Parent;
   parents: Parent[] = [];
   selectedParents: Parent[] = [];
+  academicLevels: AcademicLevel[] = [];
+  academicYears: AcademicYear[] = [];
+  programs: Program[] = [];
   parentIds: number[]  = [];
   studentId: number;
   parentFullName: string;
@@ -42,6 +45,8 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   listDisplay: string = 'none';
 
   constructor(
+    protected programService: ProgramService,
+    protected academicLevelService: AcademicLevelService,
     protected positionService: PositionService,
     protected academicDisciplineService: AcademicDisciplineService,
     protected ref: NbDialogRef<StudentCreateComponent>,
@@ -53,6 +58,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loadStudentForm();
     this.onCredentialInputChanges();
+    this.loadPrograms();
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
@@ -125,8 +131,17 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       parentFullName: [''],
       selectedParents: [''],
       userId: [null],
+      programId: [null, Validators.required],
+      academicLevelId: [null, Validators.required],
+    });
+
+    this.studentForm.get('programId').valueChanges.subscribe(programId => {
+      if (programId) {
+        this.loadAcademicLevelByProgram(programId);
+      }
     });
   }
+
   getParam(): QueryParam {
     return {
       page: 1,
@@ -170,7 +185,6 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
           confirmPassword: this.userLoginInput.confirmPassword,
         });
         this.studentForm.controls['username'].setErrors(null);
-        window.console.log(userLoginInputWrapper);
     } else {
       this.studentForm.controls['username'].setErrors({ invalidUsername: true });
     }
@@ -247,10 +261,30 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       academicDiscipline: this.student.academicDiscipline ? this.student.academicDiscipline.id : null,
       fullName: this.student.fullName,
       address: this.student.address ? this.student.address : null,
+      programId: this.student.programId,
+      academicLevelId: this.student.academicLevelId,
     });
 
     if (this.student.address) {
       this.appAddress.patchAddressValue(this.student.address);
     }
+  }
+
+  loadAcademicLevelByProgram(programId: number) {
+    this.academicLevels = [];
+    this.academicLevelService.loadAcademicLevelByProgram(programId).subscribe((academicLevels: AcademicLevel[]) => {
+      if (academicLevels) {
+        this.academicLevels = academicLevels;
+      }
+    });
+  }
+
+  loadPrograms() {
+    this.programService.loadProgramList()
+      .subscribe((programs: Program[]) => {
+         if (programs) {
+         this.programs = programs;
+        }
+      });
   }
 }

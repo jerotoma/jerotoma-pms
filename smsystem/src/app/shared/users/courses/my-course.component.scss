@@ -7,3 +7,7 @@ button:hover {
 a:hover {
   text-decoration: none;
 }
+:host .nb-theme-default nb-card-body {
+  padding-left: 0;
+  padding-right: 0;
+}

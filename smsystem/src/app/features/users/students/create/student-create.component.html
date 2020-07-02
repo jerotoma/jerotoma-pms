@@ -1,25 +1,9 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onSubmit()">
-        <nb-card class="dialog-card">
+        <nb-card class="dialog-card" status="primary">
           <nb-card-header status="danger" >{{ title }}</nb-card-header>
           <nb-card-body>
-            <div class='row'>
-              <div class='col-md-12'>
-                  <nb-alert *ngIf="showMessage.error" outline="danger" role="alert">
-                      <p class="alert-title"><b>Sorry!</b></p>
-                      <ul class="alert-message-list">
-                          <li class="alert-message">{{ showMessage.message }}</li>
-                        </ul>
-                    </nb-alert>
-                    <nb-alert *ngIf="showMessage.success" outline="success" role="alert">
-                      <p class="alert-title"><b>Success!</b></p>
-                      <ul class="alert-message-list">
-                        <li class="alert-message">{{ showMessage.message }}</li>
-                      </ul>
-                    </nb-alert>
-              </div>
-            </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">
@@ -54,6 +38,11 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-primary">Basic Information</h4>
+                </div>
+            </div>
+            <div class="row">
               <div class="col-md-6">
                 <div class="form-control-group">
                   <label for="student-first-name" class="label">First Name</label>
@@ -63,7 +52,7 @@
                         autocomplete="new-password"
                         required
                         id="student-first-name"
-                        [status]="studentForm.controls['firstName'].invalid && studentForm.controls['firstName'].touched ? 'danger' : ''"
+                        [status]="studentForm.controls['firstName'].invalid && studentForm.controls['firstName'].touched ? 'danger' : 'basic'"
                         formControlName="firstName"
                         placeholder="First Name">
                   <ng-container *ngIf="studentForm.controls['firstName'].invalid && studentForm.controls['firstName'].touched">
@@ -82,7 +71,7 @@
                         autocomplete="new-password"
                         nbInput fullWidth
                         id="student-last-name"
-                        [status]="studentForm.controls['lastName'].invalid && studentForm.controls['lastName'].touched ? 'danger' : ''"
+                        [status]="studentForm.controls['lastName'].invalid && studentForm.controls['lastName'].touched ? 'danger' : 'basic'"
                         formControlName="lastName"
                         placeholder="Last Name">
                   <ng-container *ngIf="studentForm.controls['lastName'].invalid && studentForm.controls['lastName'].touched">
@@ -142,7 +131,7 @@
                           nbInput fullWidth
                           id="student-birthDate"
                           formControlName="birthDate"
-                          [status]="studentForm.controls['birthDate'].invalid && studentForm.controls['birthDate'].touched ? 'danger' : ''"
+                          [status]="studentForm.controls['birthDate'].invalid && studentForm.controls['birthDate'].touched ? 'danger' : 'basic'"
                           placeholder="Birth Date">
                       <ng-container *ngIf="studentForm.controls['birthDate'].invalid && studentForm.controls['birthDate'].touched">
                         <p class="error-message">
@@ -153,10 +142,53 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                  <h4 class="text-primary mt-4">Address</h4>
+                </div>
+            </div>
             <app-address
               [address]="studentForm.controls['address'].value"
               (onChanges)="onStudentAddressChange($event)">
             </app-address>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-primary mt-4">Program and Current Academic Level</h4>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                  <div class="form-control-group">
+                      <label for="student-program" class="label">Program</label>
+                      <nb-select
+                        fullWidth
+                        placeholder="Program"
+                        formControlName="programId"
+                        id="student-program">
+                        <nb-option
+                            *ngFor='let program of programs' [value]="program.id">
+                            {{program.name}}
+                        </nb-option>
+                      </nb-select>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-control-group">
+                      <label for="student-current-level" class="label">Current Academic Level</label>
+                      <nb-select
+                        fullWidth
+                        placeholder="Current Academic Level"
+                        formControlName="academicLevelId"
+                        id="student-current-level">
+                        <nb-option
+                            *ngFor='let academicLevel of academicLevels'
+                            [value]="academicLevel.id">
+                            {{academicLevel.name}}
+                        </nb-option>
+                      </nb-select>
+                  </div>
+              </div>
+          </div>
         </nb-card-body>
         <nb-card-footer>
             <div class="form-control-group">

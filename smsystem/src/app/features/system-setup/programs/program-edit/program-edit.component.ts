@@ -37,7 +37,6 @@ export class ProgramEditComponent implements OnInit {
 
   ngOnInit() {
     this.loadForm();
-    this.loadAcademicLevels();
     this.patchProgram();
   }
   patchProgram() {
@@ -119,16 +118,6 @@ export class ProgramEditComponent implements OnInit {
     });
   }
 
-  loadAcademicLevels() {
-    this.isLoading = true;
-    this.academicLevelService.loadAcademicLevelList()
-      .subscribe((academicLevels: AcademicLevel[]) => {
-        this.isLoading = false;
-        if (academicLevels) {
-          this.academicLevels = academicLevels;
-        }
-      });
-  }
   addMoreAcademicLevel() {
     this.isAddMore = true;
     if (this.program) {
@@ -138,9 +127,10 @@ export class ProgramEditComponent implements OnInit {
 
   loadUnAddedAcademicLevelByProgram(programId: number) {
     this.isLoading = true;
+    this.academicLevels = [];
     this.academicLevelService.loadUnAddedAcademicLevelByProgram(programId).subscribe((academicLevels: AcademicLevel[]) => {
       this.isLoading = false;
-      if (academicLevels) {
+      if (academicLevels && academicLevels.length > 0) {
         this.academicLevels = academicLevels;
       } else {
         this.modalService.openSnackBar('No more level were found', 'success');

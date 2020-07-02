@@ -12,7 +12,9 @@ public class CourseVO {
 	
 	private Integer id;
 	
-	private Integer academicYearId;
+	private Integer academicLevelId;
+	
+	private Integer programId;
 	
 	private Integer departmentId;
 	
@@ -21,6 +23,10 @@ public class CourseVO {
 	private String name;
 	
 	private String description;
+	
+	private ProgramVO program;
+	
+	private AcademicLevelVO academicLevel;
 	
 	private AcademicYearVO academicYear;
 	
@@ -37,7 +43,7 @@ public class CourseVO {
 		this.name = rs.getString(CourseConstant.COURSE_NAME);
 		this.description = rs.getString(CourseConstant.COURSE_DESCRIPTION); 
 		this.id = rs.getInt(CourseConstant.COURSE_ID);
-		this.academicYearId = rs.getInt(CourseConstant.ACADEMIC_YEAR_ID);
+		this.academicLevelId = rs.getInt(CourseConstant.ACADEMIC_LEVEL_ID);
 		this.departmentId = rs.getInt(CourseConstant.DEPARTMENT_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);		
@@ -91,16 +97,20 @@ public class CourseVO {
 		this.updatedOn = updatedOn;
 	}
 
-	public AcademicYearVO getAcademicYear() {
-		return academicYear;
+	public AcademicLevelVO getAcademicLevel() {
+		return academicLevel;
 	}
 
-	public void setAcademicYear(AcademicYearVO academicYear) {
-		this.academicYear = academicYear;
+	public void setAcademicLevel(AcademicLevelVO academicLevel) {
+		this.academicLevel = academicLevel;
 	}
 
-	public Integer getAcademicYearId() {		
-		return academicYearId;
+	public Integer getAcademicLevelId() {		
+		return academicLevelId;
+	}
+	
+	public void setAcademicLevelId(Integer academicLevelId) {
+		this.academicLevelId = academicLevelId;
 	}
 
 	public Integer getDepartmentId() {
@@ -112,7 +122,7 @@ public class CourseVO {
 	}
 
 	public void setAcademicYearId(Integer academicYearId) {
-		this.academicYearId = academicYearId;
+		this.academicLevelId = academicYearId;
 	}
 
 	public List<AcademicDisciplineVO> getAcademicDisciplines() {
@@ -129,5 +139,29 @@ public class CourseVO {
 
 	public void setDepartment(DepartmentVO department) {
 		this.department = department;
-	}	
+	}
+
+	public AcademicYearVO getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYearVO academicYear) {
+		this.academicYear = academicYear;
+	}
+
+	public ProgramVO getProgram() {
+		return program;
+	}
+
+	public void setProgram(ProgramVO program) {
+		this.program = program;
+	}
+
+	public Integer getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(Integer programId) {
+		this.programId = programId;
+	}
 }

@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.ACADEMIC_LEVELS)
@@ -42,6 +43,16 @@ public class AcademicLevel {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
+	public AcademicLevel(AcademicLevelVO academicLevel) {
+		this.id = academicLevel.getId();
+		this.code = academicLevel.getCode();
+		this.name = academicLevel.getName();
+		this.createdOn = academicLevel.getCreatedOn();
+		this.updatedOn = academicLevel.getUpdatedOn();
+	}
+
+	public AcademicLevel() {}
+
 	public Integer getId() {
 		return id;
 	}

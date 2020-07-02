@@ -18,7 +18,8 @@ public class CourseValidator {
 		String description = null;
 		String code = null;	
 		Integer id = null;	
-		Integer academicYearId = null;
+		Integer academicLevelId = null;
+		Integer programId = null;
 		Integer departmentId = null;
 				
 		if(params.containsKey(CourseConstant.COURSE_NAME)) {
@@ -35,8 +36,12 @@ public class CourseValidator {
 			id  = (Integer)params.get(CourseConstant.COURSE_ID);
 		}
 		
-		if(params.containsKey(CourseConstant.ACADEMIC_YEAR_ID)) {
-			academicYearId  = (Integer)params.get(CourseConstant.ACADEMIC_YEAR_ID);
+		if(params.containsKey(CourseConstant.ACADEMIC_LEVEL_ID)) {
+			academicLevelId  = (Integer)params.get(CourseConstant.ACADEMIC_LEVEL_ID);
+		}
+		
+		if(params.containsKey(CourseConstant.PROGRAM_ID)) {
+			programId  = (Integer)params.get(CourseConstant.PROGRAM_ID);
 		}
 		
 		if(params.containsKey(CourseConstant.DEPARTMENT_ID)) {
@@ -48,10 +53,15 @@ public class CourseValidator {
 		}
 		course.setId(id);
 		
-		if (academicYearId == null && requiredFields.contains(CourseConstant.ACADEMIC_YEAR_ID)) {
-			throw new FieldRequiredException("Academic Year ID is required to continue");
+		if (academicLevelId == null && requiredFields.contains(CourseConstant.ACADEMIC_LEVEL_ID)) {
+			throw new FieldRequiredException("Academic Level ID is required to continue");
 		}
-		course.setAcademicYearId(academicYearId);
+		course.setAcademicLevelId(academicLevelId);
+		
+		if (programId == null && requiredFields.contains(CourseConstant.PROGRAM_ID)) {
+			throw new FieldRequiredException("Program ID is required to continue");
+		}
+		course.setAcademicLevelId(academicLevelId);
 		
 		
 		if (name == null && requiredFields.contains(CourseConstant.COURSE_NAME)) {

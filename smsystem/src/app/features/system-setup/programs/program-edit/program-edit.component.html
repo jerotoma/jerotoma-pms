@@ -88,7 +88,7 @@
               <div class="lists row">
                 <div class="col-md-12">
                     <div class="form-control-group" [@openClose]="isAddMore ? 'open' : 'closed'">
-                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels">
+                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels && academicLevels.length > 0">
                         <nb-card-header>Add more Academic Levels </nb-card-header>
                         <nb-card-body
                           [nbSpinner]="isLoading"

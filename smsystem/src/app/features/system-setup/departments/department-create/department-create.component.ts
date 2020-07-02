@@ -1,13 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import { Department, ResponseWrapper } from 'app/models';
 import {
   DepartmentService,
-  AcademicYearService,
-  AcademicDisciplineService,
   ModalService,
 } from 'app/services';
 import { QueryParam } from 'app/utils';

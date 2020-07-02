@@ -41,6 +41,10 @@ public class UserConstant {
 	public static final String DEFAULT_PHONE_NUMBER = "800-900-8888";
 	public static final String DEFAULT_BIRTH_DATE = "1920-01-01";
 	public static final String PROFILE_IMAGE_ID = "profileImageId";
+	public static final String ACADEMIC_LEVEL_ID =  "academicLevelId";
+	public static final String PROGRAM_ID =  "programId";
+	public static final String PROGRAM_NAME =  "programName";
+	public static final String ACADEMIC_LEVEL_NAME = "academicLevelName";;
 	
 	public static enum USER_TYPE {
 		ALL("all"),

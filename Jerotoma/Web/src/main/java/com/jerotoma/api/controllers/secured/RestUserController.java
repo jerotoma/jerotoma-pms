@@ -43,11 +43,11 @@ import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
-import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.StaffVO;
@@ -61,7 +61,10 @@ import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
+import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 import com.jerotoma.services.assemblers.academic.DepartmentService;
+import com.jerotoma.services.courses.AcademicLevelService;
+import com.jerotoma.services.courses.ProgramService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.users.ParentAddressService;
 import com.jerotoma.services.users.ParentService;
@@ -93,6 +96,9 @@ public class RestUserController extends BaseController {
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
 	@Autowired DepartmentService departmentService;
+	@Autowired ProgramService programService;
+	@Autowired AcademicLevelService academicLevelService;
+	@Autowired AssemblerProgramService assemblerProgramService;
 		
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
@@ -232,6 +238,7 @@ public class RestUserController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
+		userSecurityClearance.checkGeneralEntityCreationPermission();
 					
 		if(!params.containsKey(UserConstant.userType)) {
 			throw new FieldRequiredException("User type can not be empty");
@@ -276,6 +283,8 @@ public class RestUserController extends BaseController {
 				break;
 			case STUDENT:
 				studentAddress = new StudentAddress();
+				requiredFields.add(UserConstant.ACADEMIC_LEVEL_ID);
+				requiredFields.add(UserConstant.PROGRAM_ID);
 				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
 				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				
@@ -293,6 +302,12 @@ public class RestUserController extends BaseController {
 				student.setUserId(newUser.getId());
 				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
 				address = student.getAddress();
+				if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
+					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+				}
+				student.setProgram(programService.findObject(student.getProgramId()));	
+				student.setCurrentAcademicLevel(academicLevelService.findObject(student.getAcademicLevelId()));
+				
 				student = studentService.createObject(student);
 								
 				address.setUpdatedBy(authUser.getId());
@@ -449,6 +464,7 @@ public class RestUserController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
+		userSecurityClearance.checkGeneralEntityModificationPermission();
 			
 		if(!params.containsKey(UserConstant.userType)) {
 			throw new FieldRequiredException("User type can not be empty");
@@ -523,6 +539,13 @@ public class RestUserController extends BaseController {
 				mStudent.setUpdatedOn(new Date());
 				mStudent.setUpdatedBy(authUser.getId());
 				mStudent.setAddress(student.getAddress());
+				
+				if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
+					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+				}
+				mStudent.setProgram(programService.findObject(student.getProgramId()));	
+				mStudent.setCurrentAcademicLevel(academicLevelService.findObject(student.getAcademicLevelId()));
+				
 				address = mStudent.getAddress();
 				
 				if (mStudent.getParentIds() != null) {
@@ -643,6 +666,7 @@ public class RestUserController extends BaseController {
 		if (userId == null) {					
 			throw new FieldRequiredException("Teacher's ID is required, and invalid ID was provided");					
 		}
+		userSecurityClearance.checkGeneralEntityDeletionPermission();
 		
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {

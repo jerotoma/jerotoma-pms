@@ -23,3 +23,16 @@ ALTER TABLE students
 	ADD CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id) REFERENCES user_media (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
+        
+        
+ALTER TABLE students 
+	ADD COLUMN program_id bigint NOT NULL DEFAULT 1,
+	ADD CONSTRAINT programs_fkey FOREIGN KEY (program_id) REFERENCES programs (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+               
+ALTER TABLE students 
+	ADD COLUMN current_academic_level_id bigint NOT NULL DEFAULT 1,
+	ADD CONSTRAINT academic_levels_fkey FOREIGN KEY (current_academic_level_id) REFERENCES academic_levels (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;

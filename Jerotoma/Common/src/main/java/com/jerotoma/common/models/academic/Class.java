@@ -43,6 +43,10 @@ public class Class {
 	private Course course;
 	
 	@ManyToOne
+	@JoinColumn(name="academic_level_id")
+	private AcademicLevel academicLevel;
+	
+	@ManyToOne
 	@JoinColumn(name="academic_year_id")
 	private AcademicYear academicYear;
 	
@@ -114,12 +118,12 @@ public class Class {
 		this.course = course;
 	}
 
-	public AcademicYear getAcademicYear() {
-		return academicYear;
+	public AcademicLevel getAcademicLevel() {
+		return academicLevel;
 	}
 
-	public void setAcademicYear(AcademicYear academicYear) {
-		this.academicYear = academicYear;
+	public void setAcademicLevel(AcademicLevel academicLevel) {
+		this.academicLevel = academicLevel;
 	}
 
 	public Room getRoom() {
@@ -162,6 +166,16 @@ public class Class {
 		this.meetingTime = meetingTime;
 	}
 	
+	public AcademicYear getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYear academicYear) {
+		this.academicYear = academicYear;
+	}
+
+
+
 	public static class ClassFields{
 		Integer courseId = null;
 		Integer academicYearId = null;

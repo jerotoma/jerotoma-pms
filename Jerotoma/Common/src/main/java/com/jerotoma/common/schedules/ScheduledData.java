@@ -2,7 +2,7 @@ package com.jerotoma.common.schedules;
 
 import java.util.List;
 
-import com.jerotoma.common.viewobjects.AcademicYearVO;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
@@ -12,7 +12,7 @@ import com.jerotoma.common.viewobjects.TeacherVO;
 public class ScheduledData {
 	
 	private int numberOfClasses;
-	private AcademicYearVO academicYear;
+	private AcademicLevelVO academicLevel;
 	private List<RoomVO> rooms;
 	private List<TeacherVO> teachers;
 	private List<CourseVO> courses;
@@ -23,13 +23,13 @@ public class ScheduledData {
 	}
 	
 	public ScheduledData(List<RoomVO> rooms, List<TeacherVO> teachers, List<CourseVO> courses,
-			List<DepartmentVO> departments, List<MeetingTimeVO> meetingTimes, AcademicYearVO academicYear) {		
+			List<DepartmentVO> departments, List<MeetingTimeVO> meetingTimes, AcademicLevelVO academicLevel) {		
 		this.rooms = rooms;
 		this.teachers = teachers;
 		this.courses = courses;
 		this.departments = departments;
 		this.meetingTimes = meetingTimes;
-		this.academicYear = academicYear;
+		this.academicLevel = academicLevel;
 		this.departments.forEach(x -> this.numberOfClasses += x.getCourses().size());
 	}
 
@@ -81,12 +81,12 @@ public class ScheduledData {
 		this.meetingTimes = meetingTimes;
 	}
 
-	public AcademicYearVO getAcademicYear() {
-		return academicYear;
+	public AcademicLevelVO getAcademicLevel() {
+		return academicLevel;
 	}
 
-	public void setAcademicYear(AcademicYearVO academicYear) {
-		this.academicYear = academicYear;
+	public void setAcademicYear(AcademicLevelVO academicLevel) {
+		this.academicLevel = academicLevel;
 	}
 	
 }

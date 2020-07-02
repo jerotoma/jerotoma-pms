@@ -38,6 +38,8 @@ public class UserValidator {
 	static List<Integer> parentIDs = null;
 	static List<Integer> studentIDs = null;
 	static Integer userId = null;
+	static Integer programId = null;
+	static Integer academicLevelId = null;
 	static String userCode = null;
 	
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
@@ -216,6 +218,14 @@ public class UserValidator {
 			userId = (Integer) params.get(UserConstant.USER_ID);	
 		}
 		
+		if(params.containsKey(UserConstant.PROGRAM_ID)) {
+			programId = (Integer) params.get(UserConstant.PROGRAM_ID);	
+		}
+		
+		if(params.containsKey(UserConstant.ACADEMIC_LEVEL_ID)) {
+			academicLevelId = (Integer) params.get(UserConstant.ACADEMIC_LEVEL_ID);	
+		}
+		
 		if(params.containsKey(UserConstant.AGE)) {
 			age = (Integer) params.get(UserConstant.AGE);	
 		}
@@ -325,9 +335,21 @@ public class UserValidator {
 		if (parentIDs == null && requiredFields.contains(UserConstant.PARENT_IDS)) {
 			throw new FieldRequiredException("Parent ID is required to continue");
 		}
+		
 		if (id == null && requiredFields.contains(UserConstant.ID)) {
 			throw new FieldRequiredException("Student's ID is required to continue");
 		}
+		
+		if (programId == null && requiredFields.contains(UserConstant.PROGRAM_ID)) {
+			throw new FieldRequiredException("Program's ID is required to continue");
+		}
+		student.setProgramId(programId);
+		
+		if (academicLevelId == null && requiredFields.contains(UserConstant.ACADEMIC_LEVEL_ID)) {
+			throw new FieldRequiredException("Academic Level's ID is required to continue");
+		}
+		student.setAcademicLevelId(academicLevelId);
+		
 		student.setId(id);
 		student.setParentIds(parentIDs);
 		address = AddressValidator.validateAddress(params, requiredFields);

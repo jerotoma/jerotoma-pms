@@ -13,6 +13,8 @@ public class DatabaseConstant {
 		public static final String POSITIONS = "positions";
 		public static final String TEACHERS = "teachers";
 		public static final String STUDENTS = "students";
+		public static final String COMPLETED_ACADEMIC_LEVELS = "completed_academic_levels";
+		public static final String ACADEMIC_DETAIL = "academic_details";
 		public static final String COURSES = "courses";
 		public static final String ADDRESSES = "addresses";
 		public static final String STUDENT_ADDRESSES = "student_addresses";

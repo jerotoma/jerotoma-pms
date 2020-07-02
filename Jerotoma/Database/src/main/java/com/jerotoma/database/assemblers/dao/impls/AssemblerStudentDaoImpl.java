@@ -137,9 +137,13 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 				.append(" st.phone_number as phoneNumber, st.user_code AS userCode, st.occupation, st.gender, st.position, st.birth_date AS birthDate, ")
 				.append(" st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn, ")
 				.append(" u.username, u.user_type AS userType, ")
+				.append(" pr.name AS programName, pr.id AS programId, ")
+				.append(" al.name AS academicLevelName, al.id AS academicLevelId, ")
 				.append(" m.src AS avatar, st.profile_image_id AS profileImageId ")				
 				.append(" FROM public.students st  ")
 				.append(" INNER JOIN users u ON u.id = st.user_id ")
+				.append(" INNER JOIN programs pr ON pr.id = st.program_id ")
+				.append(" INNER JOIN academic_levels al ON al.id = st.current_academic_level_id ")
 				.append(" LEFT JOIN user_media um ON um.id = st.profile_image_id ")
 				.append(" LEFT JOIN media m ON m.id = um.media_id ");
 		

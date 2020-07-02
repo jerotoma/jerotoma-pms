@@ -317,6 +317,8 @@
 	    phone_number character varying(255) NOT NULL,
 	    occupation character varying(255),
 	    gender character varying(25) NOT NULL,
+	    program_id bigint NOT NULL,
+	    current_academic_level_id bigint NOT NULL,
 	    profile_image_id bigint,
 	    position character varying(255),
 	    birth_date timestamp with time zone NOT NULL,
@@ -331,6 +333,14 @@
 	        ON DELETE CASCADE,
 	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
 	        REFERENCES public.users (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	    CONSTRAINT  programs_fkey FOREIGN KEY (program_id)
+	        REFERENCES public.programs (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	   	CONSTRAINT academic_levels_fkey FOREIGN KEY (current_academic_level_id)
+	        REFERENCES public.academic_levels (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	   	);

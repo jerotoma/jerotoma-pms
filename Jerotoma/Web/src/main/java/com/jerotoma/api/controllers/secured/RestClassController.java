@@ -30,15 +30,17 @@ import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.JClassValidator;
-import com.jerotoma.common.viewobjects.AcademicYearVO;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 import com.jerotoma.services.configs.SystemConfigService;
+import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.ClassService;
 import com.jerotoma.services.courses.CourseService;
@@ -52,6 +54,8 @@ import com.jerotoma.services.users.TeacherService;
 public class RestClassController extends BaseController {
 	
 	@Autowired ClassService classService;
+	@Autowired AcademicLevelService academicLevelService;
+	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 	@Autowired AssemblerClassService assemblerClassService;
 	@Autowired SystemConfigService systemConfigService;
 	@Autowired AcademicYearService academicYearService;
@@ -100,12 +104,16 @@ public class RestClassController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/auto-generate");
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
-		Integer academicYearId = (Integer)params.get("academicYearId");
-		AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
-		if (academicYear != null) {
+		// Integer academicYearId = (Integer)params.get("academicYearId");
+		Integer academicLevelId = (Integer)params.get("academicLevelId");
+		// AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
+		AcademicLevelVO academicLevel = assemblerAcademicLevelService.findObject(academicLevelId);
+		
+		
+		if (academicLevel != null) {
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			response.setData(scheduleDataService.generateClasses(academicYear, authUser));
+			response.setData(scheduleDataService.generateClasses(academicLevel, authUser));
 			response.setHttpStatus(HttpStatus.OK);
 		}		
 		return response;

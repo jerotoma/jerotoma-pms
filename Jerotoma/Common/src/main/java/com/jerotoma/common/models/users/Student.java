@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -21,6 +22,8 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.StudentClass;
 
 
@@ -34,8 +37,13 @@ public class Student extends Person implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="students_generator")
-	@SequenceGenerator(name="students_generator", sequenceName = "students_id_seq", allocationSize=1)
+	@GeneratedValue(
+			strategy = GenerationType.SEQUENCE, 
+			generator = DatabaseConstant.TABLES.STUDENTS + "_generator")
+	@SequenceGenerator(
+			name= DatabaseConstant.TABLES.STUDENTS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.STUDENTS + "_id_seq", 
+			allocationSize=1)
 	@Column
 	private Integer id;
 	
@@ -45,8 +53,22 @@ public class Student extends Person implements Serializable{
 	@Transient
 	List<Integer> parentIds;
 	
+	@Transient
+	Integer programId;
+	
+	@Transient
+	Integer academicLevelId;
+	
 	@Column(name="student_number")
 	private Integer studentNumber;
+	
+	@OneToOne
+	@JoinColumn(name="program_id", referencedColumnName="id")	
+	private Program program;
+	
+	@OneToOne
+	@JoinColumn(name="current_academic_level_id", referencedColumnName="id")
+	private AcademicLevel currentAcademicLevel;
 	
 	@ManyToMany
     @JoinTable(
@@ -108,5 +130,44 @@ public class Student extends Person implements Serializable{
 	public void setParents(Set<Parent> parents) {
 		this.parents = parents;
 	}
-	
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+
+	public AcademicLevel getCurrentAcademicLevel() {
+		return currentAcademicLevel;
+	}
+
+	public void setCurrentAcademicLevel(AcademicLevel currentAcademicLevel) {
+		this.currentAcademicLevel = currentAcademicLevel;
+	}
+
+	public Set<StudentClass> getStudentClasses() {
+		return studentClasses;
+	}
+
+	public void setStudentClasses(Set<StudentClass> studentClasses) {
+		this.studentClasses = studentClasses;
+	}
+
+	public Integer getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(Integer programId) {
+		this.programId = programId;
+	}
+
+	public Integer getAcademicLevelId() {
+		return academicLevelId;
+	}
+
+	public void setAcademicLevelId(Integer academicLevelId) {
+		this.academicLevelId = academicLevelId;
+	}
 }

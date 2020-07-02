@@ -37,7 +37,7 @@ public class Schedule {
 		}		
 		new ArrayList<DepartmentVO>(this.data.getDepartments()).forEach(department -> {
 			department.getCourses().forEach(course -> {
-				if (course.getAcademicYear().getId().equals(this.data.getAcademicYear().getId())) {
+				if (course.getAcademicLevel().getId().equals(this.data.getAcademicLevel().getId())) {
 					ClassVO classVO = new ClassVO(this.classNumber++, department, course);
 					classVO.setMeetingTime(this.data.getMeetingTimes().get((int)(this.data.getMeetingTimes().size() * Math.random())));
 					classVO.setRoom(this.data.getRooms().get((int)(data.getRooms().size() * Math.random())));

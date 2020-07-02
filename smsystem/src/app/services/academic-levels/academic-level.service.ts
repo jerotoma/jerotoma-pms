@@ -10,7 +10,6 @@ import { ResponseWrapper, AcademicLevel } from 'app/models';
   providedIn: 'root',
 })
 export class AcademicLevelService {
-
   constructor(private http: HttpClient) { }
 
   getAcademicLevel(academicLevelId: number): Observable<AcademicLevel> {
@@ -24,11 +23,15 @@ export class AcademicLevelService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUnAddedAcademicLevelByProgram(programId: number) {
+  loadUnAddedAcademicLevelByProgram(programId: number): Observable<AcademicLevel[]> {
     return this.http.get(`${END_POINTS.academicLevels}/programs/${programId}/unadded`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadAcademicLevelByProgram(programId: number): Observable<AcademicLevel[]> {
+    return this.http.get(`${END_POINTS.academicLevels}/programs/${programId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 
   getAcademicLevels(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get(`${END_POINTS.academicLevels}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)

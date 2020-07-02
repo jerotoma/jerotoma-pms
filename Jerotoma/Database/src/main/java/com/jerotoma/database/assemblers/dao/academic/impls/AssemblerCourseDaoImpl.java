@@ -21,12 +21,14 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CourseConstant;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.viewobjects.AcademicYearVO;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
+import com.jerotoma.common.viewobjects.ProgramVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAcademicDisciplineDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerProgramDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 
@@ -37,7 +39,8 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
-	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;	
+	@Autowired AssemblerAcademicLevelDao assemblerAcademicLevelDao;
+	@Autowired AssemblerProgramDao assemblerProgramDao;	
 	@Autowired AssemblerAcademicDisciplineDao assemblerAcademicDisciplineDao;
 	Map<String, Object> map;
 	
@@ -107,11 +110,20 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	private CourseVO mapCourse(ResultSet rs) throws SQLException {
 		CourseVO course = new CourseVO(rs);
-		course.setAcademicYear(findAcademicYear(course.getAcademicYearId()));		
+		course.setAcademicLevel(findAcademicLvel(course.getAcademicLevelId()));	
+		course.setProgram(findProgram(course.getProgramId()));	
 		course.setDepartment(findDepartment(course.getDepartmentId()));
 		return course;
 	}
 	
+	private ProgramVO findProgram(Integer programId) throws SQLException {		
+		return assemblerProgramDao.findObject(programId);
+	}
+
+	private AcademicLevelVO findAcademicLvel(Integer academicLevelId) throws SQLException {	
+		return assemblerAcademicLevelDao.findObject(academicLevelId);
+	}
+
 	private DepartmentVO findDepartment(Integer id) throws SQLException {		
 		String buildSql = new StringBuilder("SELECT d.id, d.name, d.created_on AS createdOn, d.updated_on AS updatedOn FROM ")
 				.append(DatabaseConstant.TABLES.DEPARTMENTS).append(" d ").append(" WHERE d.id = ? ").toString();		
@@ -162,10 +174,6 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
-	public AcademicYearVO findAcademicYear(Integer academicYearId) throws SQLException {
-		return assemblerAcademicYearDao.findObject(academicYearId);
-	}
-
 	@Override
 	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException {		
 		String query = getBaseSelectQuery().append("WHERE academic_year_id = ? ").toString();

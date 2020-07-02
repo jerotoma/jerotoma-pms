@@ -10,5 +10,6 @@ public interface AssemblerAcademicLevelDao extends AssemblerDao<AcademicLevelVO>
 
 	public List<AcademicLevelVO> getAllAcademicLevel() throws SQLException;
 	public List<AcademicLevelVO> loadUnAddedAcademicLevelByProgram(Integer programId) throws SQLException;
+	public List<AcademicLevelVO> loadAcademicLevelByProgram(Integer programId) throws SQLException;
 
 }

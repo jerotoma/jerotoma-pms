@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
@@ -73,6 +74,22 @@ public class RestProgramController extends BaseController implements Controller 
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setData(map);
 		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
+	@GetMapping(value = {"/list"})
+	@ResponseBody
+	public HttpResponseEntity<Object> getList(Authentication auth) {
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE + "/list");
+		this.securityCheckAccessByRoles(auth);		
+		try {
+			response.setData(assemblerProgramService.getAllProgram());
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
 		return response;
 	}
 

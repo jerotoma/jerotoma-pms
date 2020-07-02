@@ -51,4 +51,9 @@ public class AssemblerAcademicLevelServiceImpl implements AssemblerAcademicLevel
 	public List<AcademicLevelVO> loadUnAddedAcademicLevelByProgram(Integer programId) throws SQLException {
 		return assemblerAcademicLevelDao.loadUnAddedAcademicLevelByProgram(programId);
 	}
+
+	@Override
+	public List<AcademicLevelVO> loadAcademicLevelByProgram(Integer programId) throws SQLException {
+		return assemblerAcademicLevelDao.loadAcademicLevelByProgram(programId);
+	}
 }

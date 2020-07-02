@@ -8,7 +8,7 @@
                  formControlName="email"
                  placeholder="Email Address"
                  fullWidth
-                 [status]="userLoginInputForm.controls['email'].invalid && userLoginInputForm.controls['email'].touched ? 'danger' : ''"
+                 [status]="userLoginInputForm.controls['email'].invalid && userLoginInputForm.controls['email'].touched ? 'danger' : 'basic'"
                  [attr.aria-invalid]="userLoginInputForm.controls['email'].invalid && userLoginInputForm.controls['email'].touched ? true : null">
           <ng-container *ngIf="userLoginInputForm.controls['email']?.invalid && userLoginInputForm.controls['email']?.touched">
             <p class="error-message" *ngIf="userLoginInputForm.controls['email']?.errors?.required">
@@ -26,7 +26,7 @@
             *ngIf="showCheckBox"
             (checkedChange)="checkedChange($event)"
             formControlName="canUserLogin"
-            [status]="userLoginInputForm.controls['canUserLogin'].invalid && userLoginInputForm.controls['canUserLogin'].touched ? 'danger' : ''">
+            [status]="userLoginInputForm.controls['canUserLogin'].invalid && userLoginInputForm.controls['canUserLogin'].touched ? 'danger' : 'basic'">
             Check the box if this user can login
           </nb-checkbox>
         </div>

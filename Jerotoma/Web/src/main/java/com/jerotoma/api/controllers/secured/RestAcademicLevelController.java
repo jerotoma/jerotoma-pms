@@ -100,6 +100,26 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		}
 		return response;
 	}
+	
+	@GetMapping("/programs/{programId}")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadAcademicLevelsByProgram(Authentication auth, @PathVariable(required = true, value = "programId") Integer programId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		
+		
+		try {
+			response.setData(assemblerAcademicLevelService.loadAcademicLevelByProgram(programId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
 
 	
 	@PutMapping

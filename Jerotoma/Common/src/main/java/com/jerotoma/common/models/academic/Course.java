@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -40,7 +41,7 @@ public class Course implements Serializable{
 	private Integer id;
 	
 	@Transient
-	private Integer academicYearId;
+	private Integer academicLevelId;
 	
 	@Transient
 	private Integer departmentId;
@@ -53,10 +54,14 @@ public class Course implements Serializable{
 	
 	@Column
 	private String description;
-			
-	@ManyToOne
-	@JoinColumn(name="academic_year_id")
-	private AcademicYear academicYear;
+		
+	@OneToOne
+	@JoinColumn(name="program_id", referencedColumnName = "id")
+	private Program program;
+	
+	@OneToOne
+	@JoinColumn(name="academic_level_id", referencedColumnName = "id")
+	private AcademicLevel academicLevel;
 	
 	@ManyToOne
 	@JoinColumn(name="department_id")
@@ -76,12 +81,12 @@ public class Course implements Serializable{
 	
 	public Course(CourseVO course) {
 		this.id = course.getId();
-		this.academicYearId = course.getAcademicYearId();
+		this.academicLevelId = course.getAcademicLevelId();
 		this.departmentId = course.getDepartmentId();
 		this.code = course.getCode();
 		this.name = course.getName();
 		this.description = course.getDescription();
-		this.academicYear = new AcademicYear(course.getAcademicYear());
+		this.academicLevel = new AcademicLevel(course.getAcademicLevel());
 		this.department = new Department(course.getDepartment());
 		this.createdOn = course.getCreatedOn();
 		this.updatedOn = course.getUpdatedOn();
@@ -146,20 +151,20 @@ public class Course implements Serializable{
 		this.updatedBy = updatedBy;
 	}
 
-	public Integer getAcademicYearId() {
-		return academicYearId;
+	public Integer getAcademicLevelId() {
+		return academicLevelId;
 	}
 
-	public void setAcademicYearId(Integer academicYearId) {
-		this.academicYearId = academicYearId;
+	public void setAcademicLevelId(Integer academicLevelId) {
+		this.academicLevelId = academicLevelId;
 	}
 
-	public AcademicYear getAcademicYear() {
-		return academicYear;
+	public AcademicLevel getAcademicLevel() {
+		return academicLevel;
 	}
 
-	public void setAcademicYear(AcademicYear academicYear) {
-		this.academicYear = academicYear;
+	public void setAcademicLevel(AcademicLevel academicLevel) {
+		this.academicLevel = academicLevel;
 	}	
 	
 	public Department getDepartment() {
@@ -175,5 +180,25 @@ public class Course implements Serializable{
 	}
 	public void setDepartmentID(Integer departmentId) {
 		this.departmentId = departmentId;		
+	}
+
+	public List<Class> getClasses() {
+		return classes;
+	}
+
+	public void setClasses(List<Class> classes) {
+		this.classes = classes;
+	}
+
+	public void setDepartmentId(Integer departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public Program getProgram() {
+		return program;
+	}
+
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 }

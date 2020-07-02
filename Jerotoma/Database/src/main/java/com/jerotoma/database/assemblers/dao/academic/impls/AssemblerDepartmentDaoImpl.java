@@ -21,7 +21,6 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
@@ -126,14 +125,9 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	public class CourseResultProcessor implements RowMapper<CourseVO>{
 		@Override
 		public CourseVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			CourseVO course = new CourseVO(rs);
-			course.setAcademicYear(findAcademicYear(course.getAcademicYearId()));			
+			CourseVO course = new CourseVO(rs);				
 			return course;
-		}
-
-		private AcademicYearVO findAcademicYear(Integer academicYearId) throws SQLException {
-			return assemblerAcademicYearDao.findObject(academicYearId);
-		}		
+		}	
 	}
 	
 

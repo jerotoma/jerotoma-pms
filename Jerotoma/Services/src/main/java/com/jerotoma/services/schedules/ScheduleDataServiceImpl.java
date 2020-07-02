@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.constants.ScheduleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
-import com.jerotoma.common.models.academic.AcademicYear;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Room;
-import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.schedules.GeneticAlgorithm;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.schedules.Population;
@@ -25,6 +25,7 @@ import com.jerotoma.common.schedules.Schedule;
 import com.jerotoma.common.schedules.ScheduledClass;
 import com.jerotoma.common.schedules.ScheduledData;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.CourseVO;
@@ -146,14 +147,14 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	}
 	
 	@Override
-	public List<Class> generateClasses(AcademicYearVO academicYear, User authUser) {
+	public List<Class> generateClasses(AcademicLevelVO academicLevel, User authUser) {
 		
 		List<RoomVO> rooms = findRooms();
 		List<TeacherVO> teachers  = findTeachers();
-		List<CourseVO> courses = findCoursesByAcademicYear(academicYear.getId());
+		List<CourseVO> courses = findCoursesByAcademicYear(academicLevel.getId());
 		List<DepartmentVO> departments  = findDepartments();
 		List<MeetingTimeVO> meetingTimes = findMeetingTimes();		
-		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicYear);
+		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicLevel);
 		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
 		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
 		population = geneticAlgorithm.evolve(population).sortByFitness();
@@ -196,8 +197,8 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 					CourseVO course = scheduleData.getCourses().get(courseIndex);
 					course.setDepartment(department);
 					RoomVO room = scheduleData.getRooms().get(roomIndex);
-					AcademicYearVO academicYear = scheduleData.getAcademicYear();
-					ScheduledClass scheduledClass = new ScheduledClass(department, teacher, course, room, academicYear, meetingTime);
+					AcademicLevelVO academicLevel = scheduleData.getAcademicLevel();
+					ScheduledClass scheduledClass = new ScheduledClass(department, teacher, course, room, academicLevel, meetingTime);
 					scheduledClasses.add(scheduledClass);
 					
 				}		
@@ -211,7 +212,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 					mClass.setTeacher(new Teacher(scheduledClass.getTeacher()));
 					mClass.setCourse(new Course(scheduledClass.getCourse()));
 					mClass.setMeetingTime(new MeetingTime(scheduledClass.getMeetingTime()));
-					mClass.setAcademicYear(new AcademicYear(scheduledClass.getAcademicYear()));
+					mClass.setAcademicLevel(new AcademicLevel(scheduledClass.getAcademicLevel()));
 					mClass.setUpdatedBy(userId);
 					mClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 					mClass.setCreatedOn(CalendarUtil.getTodaysDate());
