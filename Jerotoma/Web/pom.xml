@@ -28,13 +28,7 @@
 	      	<groupId>com.jerotoma</groupId>
 	      	<artifactId>jerotoma-common</artifactId>
 	      	<version>${project.version}</version>      	
-	    </dependency>
-	    <dependency>
-	      	<groupId>com.jerotoma</groupId>
-	      	<artifactId>jerotoma-front</artifactId>
-	      	<version>${project.version}</version> 
-	      	<scope>runtime</scope>     	
-	    </dependency>		
+	    </dependency>	   	
 	</dependencies>
 
 	<build>

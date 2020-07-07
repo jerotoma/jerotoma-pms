@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -38,13 +39,9 @@ public class Class {
 	@Column
 	private Integer capacity;
 		
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="course_id")
 	private Course course;
-	
-	@ManyToOne
-	@JoinColumn(name="academic_level_id")
-	private AcademicLevel academicLevel;
 	
 	@ManyToOne
 	@JoinColumn(name="academic_year_id")
@@ -118,14 +115,6 @@ public class Class {
 		this.course = course;
 	}
 
-	public AcademicLevel getAcademicLevel() {
-		return academicLevel;
-	}
-
-	public void setAcademicLevel(AcademicLevel academicLevel) {
-		this.academicLevel = academicLevel;
-	}
-
 	public Room getRoom() {
 		return room;
 	}
@@ -173,20 +162,23 @@ public class Class {
 	public void setAcademicYear(AcademicYear academicYear) {
 		this.academicYear = academicYear;
 	}
-
+	
+	
 
 
 	public static class ClassFields{
 		Integer courseId = null;
 		Integer academicYearId = null;
 		Integer roomId = null;
+		Integer academicLevelId = null;
+		Integer programId = null;
 		Integer teacherId = null;
 		Integer meetingTimeId = null;
 		Integer capacity = null;	
 		Integer id = null;
 				
-		public ClassFields(Integer courseId, Integer academicYearId, Integer roomId, Integer teacherId, Integer meetingTimeId,
-				Integer capacity, Integer id) {
+		public ClassFields(Integer courseId, Integer academicYearId, Integer roomId, Integer academicLevelId, Integer programId, Integer teacherId, Integer meetingTimeId,
+				Integer capacity, Integer id) {		
 			super();
 			this.courseId = courseId;
 			this.academicYearId = academicYearId;
@@ -195,6 +187,8 @@ public class Class {
 			this.meetingTimeId = meetingTimeId;
 			this.capacity = capacity;
 			this.id = id;
+			this.academicLevelId = academicLevelId;
+			this.programId = programId;
 		}
 		
 		public Integer getCourseId() {
@@ -252,6 +246,21 @@ public class Class {
 		public void setMeetingTimeId(Integer meetingTimeId) {
 			this.meetingTimeId = meetingTimeId;
 		}
-		
+
+		public Integer getAcademicLevelId() {
+			return academicLevelId;
+		}
+
+		public void setAcademicLevelId(Integer academicLevelId) {
+			this.academicLevelId = academicLevelId;
+		}
+
+		public Integer getProgramId() {
+			return programId;
+		}
+
+		public void setProgramId(Integer programId) {
+			this.programId = programId;
+		}
 	}
 }

@@ -2,7 +2,6 @@ package com.jerotoma.common.models.academic;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -44,6 +42,9 @@ public class Course implements Serializable{
 	private Integer academicLevelId;
 	
 	@Transient
+	private Integer programId;
+	
+	@Transient
 	private Integer departmentId;
 	
 	@Column
@@ -70,8 +71,8 @@ public class Course implements Serializable{
 	@Column(name="updated_by")
 	private Integer updatedBy;
 	
-	@OneToMany(mappedBy = "course")
-	private List<Class> classes;
+	@OneToOne(mappedBy = "course")
+	private Class mclass;
 	
 	@Column(name="created_on")
 	private Date createdOn;
@@ -158,6 +159,14 @@ public class Course implements Serializable{
 	public void setAcademicLevelId(Integer academicLevelId) {
 		this.academicLevelId = academicLevelId;
 	}
+	
+	public Integer getProgramId() {
+		return programId;
+	}
+
+	public void setProgramId(Integer programId) {
+		this.programId = programId;
+	}
 
 	public AcademicLevel getAcademicLevel() {
 		return academicLevel;
@@ -180,14 +189,6 @@ public class Course implements Serializable{
 	}
 	public void setDepartmentID(Integer departmentId) {
 		this.departmentId = departmentId;		
-	}
-
-	public List<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(List<Class> classes) {
-		this.classes = classes;
 	}
 
 	public void setDepartmentId(Integer departmentId) {

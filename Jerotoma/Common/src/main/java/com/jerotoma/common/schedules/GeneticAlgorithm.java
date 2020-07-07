@@ -87,8 +87,4 @@ public class GeneticAlgorithm {
 		});		
 		return crossoverSchedule;
 	}
-	
-	
-	
-
 }

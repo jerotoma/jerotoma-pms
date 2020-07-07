@@ -43,8 +43,8 @@ public class AssemblerCourseServiceImpl implements  AssemblerCourseService {
 	}
 
 	@Override
-	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException {
-		return assemblerCourseDao.findCoursesByAcademicYearId(academicYearId);
+	public List<CourseVO> findCoursesByAcademicLevelId(Integer academicLevelId) throws SQLException {
+		return assemblerCourseDao.findCoursesByAcademicLevelId(academicLevelId);
 	}
 
 	@Override
@@ -55,6 +55,11 @@ public class AssemblerCourseServiceImpl implements  AssemblerCourseService {
 	@Override
 	public List<CourseVO> findAllCourses() throws SQLException {
 		return assemblerCourseDao.findAllCourses();
+	}
+
+	@Override
+	public List<CourseVO> findCoursesByProgramAndAcademicLevelIDs(Integer programId, Integer academicLevelId) throws SQLException {
+		return assemblerCourseDao.findCoursesByProgramAndAcademicLevelIDs(programId, academicLevelId);
 	}
 
 }

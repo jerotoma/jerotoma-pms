@@ -18,8 +18,8 @@ export class CourseService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  getCoursesByAcademicYearId(academicYearId: number): Observable<Course[]> {
-    return this.http.get(`${END_POINTS.courses}/academicYears/${academicYearId}`)
+  getCoursesByProgramAndAcademicLevelIDs(programId: number, academicLevelId: number): Observable<Course[]> {
+    return this.http.get(`${END_POINTS.courses}/programs/${programId}/academicLevels/${academicLevelId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

@@ -101,8 +101,8 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		Object[] paramList = new Object[] {limit, offset};
 		
 		List<ClassVO> classes = this.jdbcTemplate.query(builder.toString(), new JClassResultProcessor(), paramList);
-		map.put(ClassConstant.JCLASSES, classes);
-		map.put(ClassConstant.JCLASS_COUNT, countResults);
+		map.put(ClassConstant.CLASSES, classes);
+		map.put(ClassConstant.CLASS_COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		
 		return map;
@@ -198,16 +198,16 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId);
 	}
 	@Override
-	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId)
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId, Integer academicLevelId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()				
-				.append(" WHERE c.academic_year_id = ? AND c.course_id NOT IN( ")
+				.append(" WHERE cc.academic_year_id = ? AND c.academic_level_id = ? AND c.course_id NOT IN( ")
 					.append(" SELECT course_id FROM public.classes cc ")
 						.append(" INNER JOIN student_registered_classes srcc ON srcc.class_id = cc.id ")
 						.append(" INNER JOIN student_classes scc ON scc.id = srcc.student_class_id")
 					.append(" WHERE cc.academic_year_id = ? AND scc.student_id = ? ")
 				.append(")");
-		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, academicYearId, studentId);
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, academicLevelId, academicYearId, studentId);
 	}
 	@Override
 	public List<ClassVO> loadStudentClassesByAcademicYear(Integer studentId, Integer academicYearId)

@@ -28,7 +28,7 @@ export class AcademicLevelService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadAcademicLevelByProgram(programId: number): Observable<AcademicLevel[]> {
+  loadAcademicLevelsByProgramId(programId: number): Observable<AcademicLevel[]> {
     return this.http.get(`${END_POINTS.academicLevels}/programs/${programId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }

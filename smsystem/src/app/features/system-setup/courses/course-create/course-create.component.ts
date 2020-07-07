@@ -2,14 +2,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Course, AcademicYear, Department } from 'app/models';
+import { Course, AcademicLevel, Department, Program } from 'app/models';
 import {
   CourseService,
-  AcademicYearService,
+  AcademicLevelService,
+  ProgramService,
   DepartmentService,
   ModalService,
 } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { ShowMessage } from 'app/models/messages/show-message.model';
 
 @Component({
@@ -19,32 +20,34 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
 })
 export class CourseCreateComponent implements OnInit {
   @Input() title: string;
-  @Input() action: string = 'create';
+  @Input() action: string = APP_ACTION_TYPE.create;
   @Output() onCreationSuccess = new EventEmitter();
   @Input() id: string;
 
 
   courseForm: FormGroup;
   course: Course;
-  academicYear: AcademicYear;
-  academicYears: AcademicYear[];
+  academicLevel: AcademicLevel;
+  academicLevels: AcademicLevel[];
+  programs: Program[];
   departments: Department[] = [];
   selectedAcademicDisciplines: number[] = [];
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
 
   constructor(
+    private programService: ProgramService,
     private courseService:  CourseService,
     private formBuilder: FormBuilder,
-    private academicYearService: AcademicYearService,
+    private academicLevelService: AcademicLevelService,
     protected departmentService: DepartmentService,
     private modalService: ModalService,
     protected ref: NbDialogRef<CourseCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
-    this.loadAcademicYears();
     this.loadDepartmentList();
+    this.loadPrograms();
   }
 
   dismiss() {
@@ -54,7 +57,7 @@ export class CourseCreateComponent implements OnInit {
   onSubmit() {
     this.isSubmitting = true;
     this.course = this.courseForm.value;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateCourse();
     } else {
       this.courseService.createCourse(this.course)
@@ -85,7 +88,7 @@ export class CourseCreateComponent implements OnInit {
     this.departmentService.loadDepartmentList().subscribe((departments: Department[] ) => {
       if (departments) {
         this.departments = departments;
-        if (this.action === 'edit') {
+        if (this.action === APP_ACTION_TYPE.edit) {
             this.loadCourse();
         }
         if (this.course) {
@@ -95,16 +98,26 @@ export class CourseCreateComponent implements OnInit {
     });
   }
 
-  loadAcademicYears() {
-    this.academicYearService.getAcademicYears()
-    .subscribe((academicYears: AcademicYear[] ) => {
-      if (academicYears) {
-        this.academicYears = academicYears;
+  loadAcademicLevelsByProgramId(programId: number) {
+    this.academicLevels = [];
+    this.academicLevelService.loadAcademicLevelsByProgramId(programId)
+    .subscribe((academicLevels: AcademicLevel[] ) => {
+      if (academicLevels) {
+        this.academicLevels = academicLevels;
         if (this.course) {
           this.patchCourse();
         }
       }
     });
+  }
+
+  loadPrograms() {
+    this.programService.loadProgramList()
+      .subscribe((programs: Program[]) => {
+        if (programs) {
+          this.programs = programs;
+        }
+      });
   }
 
   loadForm() {
@@ -113,8 +126,15 @@ export class CourseCreateComponent implements OnInit {
       name: ['', Validators.required],
       code: ['', Validators.required],
       description: [''],
-      academicYearId: [null, Validators.required],
+      academicLevelId: [null, Validators.required],
+      programId: [null, Validators.required],
       departmentId: [null, Validators.required],
+    });
+
+    this.courseForm.get('programId').valueChanges.subscribe(programId => {
+      if (programId) {
+        this.loadAcademicLevelsByProgramId(programId);
+      }
     });
   }
   patchCourse() {
@@ -123,7 +143,8 @@ export class CourseCreateComponent implements OnInit {
       name: this.course.name,
       code: this.course.code,
       description: this.course.description,
-      academicYearId: this.course.academicYear.id,
+      academicLevelId: this.course.academicLevel.id,
+      programId: this.course.program.id,
       departmentId: this.course.department.id,
     }, {emitEvent: false});
   }
@@ -131,6 +152,7 @@ export class CourseCreateComponent implements OnInit {
     this.courseService.getCourse(parseInt(this.id, 10)).subscribe((course: Course) => {
       if (course) {
         this.course = course;
+        this.loadAcademicLevelsByProgramId(course.program.id);
         this.patchCourse();
       }
     });

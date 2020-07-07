@@ -30,6 +30,7 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Department;
+import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.utils.validators.CourseValidator;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
@@ -38,6 +39,7 @@ import com.jerotoma.services.assemblers.academic.DepartmentService;
 import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.CourseService;
+import com.jerotoma.services.courses.ProgramService;
 
 
 @RestController
@@ -50,6 +52,7 @@ public class RestCourseController extends BaseController {
 	@Autowired AcademicDisciplineService academicDisciplineService;
 	@Autowired AcademicYearService academicYearService;
 	@Autowired AcademicLevelService academicLevelService;
+	@Autowired ProgramService programService;
 		
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
@@ -101,10 +104,11 @@ public class RestCourseController extends BaseController {
 		return response;
 	}
 	
-	@GetMapping(value = {"/academicYears/{academicYearId}"})
+	@GetMapping(value = {"/programs/{programId}/academicLevels/{academicLevelId}"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> getCoursesByAcademicYear(Authentication auth,
-			@PathVariable(value="academicYearId", required=true)Integer academicYearId) {
+			@PathVariable(value="programId", required=true)Integer programId,
+			@PathVariable(value="academicLevelId", required=true)Integer academicLevelId) {
 		
 		List<CourseVO> courses = new ArrayList<>();
 		
@@ -113,7 +117,7 @@ public class RestCourseController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		
 		try {
-			courses = assemblerCourseService.findCoursesByAcademicYearId(academicYearId);		
+			courses = assemblerCourseService.findCoursesByProgramAndAcademicLevelIDs(programId, academicLevelId);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -135,7 +139,7 @@ public class RestCourseController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		
-		this.securityCheckAdminAccess(auth, "create course");
+		this.userSecurityClearance.checkGeneralEntityCreationPermission();
 		
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -143,6 +147,7 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_CODE,
 						CourseConstant.DEPARTMENT_ID,
+						CourseConstant.PROGRAM_ID,
 						CourseConstant.ACADEMIC_LEVEL_ID));
 		
 		Course course = CourseValidator.validate(params, requiredFields);
@@ -151,9 +156,11 @@ public class RestCourseController extends BaseController {
 			
 			Department department = departmentService.findObject(course.getDepartmentId());
 			AcademicLevel academicLevel = academicLevelService.findObject(course.getAcademicLevelId());
+			Program program = programService.findObject(course.getProgramId());
 			
 			course.setDepartment(department);
 			course.setAcademicLevel(academicLevel);
+			course.setProgram(program);
 			course.setUpdatedBy(authUser.getId());
 			course = courseService.createObject(course);
 			course.setDepartmentID(department.getId());
@@ -183,6 +190,7 @@ public class RestCourseController extends BaseController {
 		this.logRequestDetail("PUT : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
+		this.userSecurityClearance.checkGeneralEntityModificationPermission();
 	
 		List<String> requiredFields = new ArrayList<>(
 				Arrays.asList(
@@ -190,6 +198,7 @@ public class RestCourseController extends BaseController {
 						CourseConstant.COURSE_DESCRIPTION,
 						CourseConstant.COURSE_ID,
 						CourseConstant.ACADEMIC_LEVEL_ID,
+						CourseConstant.PROGRAM_ID,
 						CourseConstant.DEPARTMENT_ID,
 						CourseConstant.COURSE_CODE));
 		
@@ -197,9 +206,11 @@ public class RestCourseController extends BaseController {
 		try {
 			Department department = departmentService.findObject(course.getDepartmentId());
 			AcademicLevel academicLevel = academicLevelService.findObject(course.getAcademicLevelId());
+			Program program = programService.findObject(course.getProgramId());
 			
 			course.setDepartment(department);
 			course.setAcademicLevel(academicLevel);
+			course.setProgram(program);			
 			course.setUpdatedBy(authUser.getId());
 			course.setUpdatedOn(today);
 			course = courseService.updateObject(course);	

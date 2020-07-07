@@ -11,5 +11,5 @@ public class CourseConstant {
 	public static final String ACADEMIC_LEVEL_ID = "academicLevelId";
 	public static final String ACADEMIC_DISCIPLINE_IDS = "academicDisciplineIds";
 	public static final String DEPARTMENT_ID = "departmentId";
-	public static final Object PROGRAM_ID = "programId";
+	public static final String PROGRAM_ID = "programId";
 }

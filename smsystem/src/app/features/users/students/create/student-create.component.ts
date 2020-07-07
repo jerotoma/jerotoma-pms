@@ -272,7 +272,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
   loadAcademicLevelByProgram(programId: number) {
     this.academicLevels = [];
-    this.academicLevelService.loadAcademicLevelByProgram(programId).subscribe((academicLevels: AcademicLevel[]) => {
+    this.academicLevelService.loadAcademicLevelsByProgramId(programId).subscribe((academicLevels: AcademicLevel[]) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;
       }

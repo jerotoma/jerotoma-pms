@@ -439,7 +439,8 @@
 	    
 	CREATE TABLE IF NOT EXISTS public.courses(
 	    id bigserial NOT NULL,
-	    academic_year_id bigint NOT NULL,
+	    program_id bigint NOT NULL,
+	    academic_level_id bigint NOT NULL,
 	    department_id bigint NOT NULL,
 	    name character varying(255) NOT NULL,
 	    code character varying(255) NOT NULL,
@@ -447,14 +448,19 @@
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
+	    UNIQUE(program_id, academic_level_id),
 	    CONSTRAINT courses_ukey UNIQUE (code),
 	   	CONSTRAINT courses_pkey PRIMARY KEY (id),
 	   	CONSTRAINT departments_fkey FOREIGN KEY (department_id)
 	        REFERENCES public.departments (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	   
+	    CONSTRAINT  programs_fkey FOREIGN KEY (program_id)
+	        REFERENCES public.programs (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
-	   	CONSTRAINT academic_years_fkey FOREIGN KEY (academic_year_id)
-	        REFERENCES public.academic_years (id) MATCH SIMPLE
+	   	CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id)
+	        REFERENCES public.academic_levels (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );

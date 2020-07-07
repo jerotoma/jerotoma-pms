@@ -27,7 +27,41 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
+              <div class="col-md-6">
+                <div class="form-control-group">
+                    <label for="course-program" class="label">Program</label>
+                    <nb-select
+                        fullWidth
+                        placeholder="Program"
+                        formControlName="programId"
+                        id="course-program">
+                        <nb-option
+                            *ngFor='let program of programs'
+                            [value]="program.id">
+                            {{program.name}}
+                        </nb-option>
+                      </nb-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                    <label for="class-academicLevel" class="label">Class Academic Level</label>
+                    <nb-select
+                      fullWidth
+                      placeholder="Course Academic Level"
+                      formControlName="academicLevelId"
+                      id="class-academicLevel">
+                      <nb-option
+                          *ngFor='let acad of academicLevels'
+                          [value]="acad.id">
+                          {{acad.name}} - {{acad.code}}
+                      </nb-option>
+                    </nb-select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-control-group">
                         <label for="class-course" class="label">Class Course</label>
                         <nb-select
@@ -43,9 +77,7 @@
                         </nb-select>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-control-group">
                         <label for="class-teacher" class="label">Class Teacher</label>
                         <nb-select

@@ -40,7 +40,7 @@ public class AcademicYear {
 	private String yearOfStudy;
 	
 	@OneToMany(mappedBy = "academicYear")
-	private List<Course> courses;
+	private List<Class> classes;
 	
 	@Column
 	private String description;

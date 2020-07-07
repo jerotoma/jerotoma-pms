@@ -118,7 +118,7 @@ public class AssemblerDepartmentDaoImpl extends JdbcDaoSupport implements Assemb
 	}
 	
 	private List<CourseVO> findCoursesByDepartmentId(Integer departmentId) throws SQLException {
-		StringBuilder builder = new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c  WHERE c.department_id = ? ");		
+		StringBuilder builder = new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_level_id AS academicLevelId, c.program_id AS programId, c.created_on, c.updated_on FROM public.courses c  WHERE c.department_id = ? ");		
 		return this.jdbcTemplate.query(builder.toString(), new CourseResultProcessor(), departmentId);		
 	}
 	

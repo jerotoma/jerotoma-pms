@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.constants.ScheduleConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
-import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Room;
@@ -83,7 +83,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	@Override
 	public List<CourseVO> findCoursesByAcademicYear(Integer academicYearId) {
 		try {
-			return assemblerCourseService.findCoursesByAcademicYearId(academicYearId);
+			return assemblerCourseService.findCoursesByAcademicLevelId(academicYearId);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -147,14 +147,14 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 	}
 	
 	@Override
-	public List<Class> generateClasses(AcademicLevelVO academicLevel, User authUser) {
+	public List<Class> generateClasses(AcademicYearVO academicYear, AcademicLevelVO academicLevel, User authUser) {
 		
 		List<RoomVO> rooms = findRooms();
 		List<TeacherVO> teachers  = findTeachers();
-		List<CourseVO> courses = findCoursesByAcademicYear(academicLevel.getId());
+		List<CourseVO> courses = findCoursesByAcademicYear(academicYear.getId());
 		List<DepartmentVO> departments  = findDepartments();
 		List<MeetingTimeVO> meetingTimes = findMeetingTimes();		
-		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicLevel);
+		ScheduledData data = new ScheduledData(rooms, teachers, courses, departments, meetingTimes, academicYear, academicLevel);
 		GeneticAlgorithm geneticAlgorithm =  new GeneticAlgorithm(data);
 		Population population = new Population(ScheduleConstant.POPULATION_SIZE, data).sortByFitness();		
 		population = geneticAlgorithm.evolve(population).sortByFitness();
@@ -197,7 +197,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 					CourseVO course = scheduleData.getCourses().get(courseIndex);
 					course.setDepartment(department);
 					RoomVO room = scheduleData.getRooms().get(roomIndex);
-					AcademicLevelVO academicLevel = scheduleData.getAcademicLevel();
+					AcademicYearVO academicLevel = scheduleData.getAcademicYear();
 					ScheduledClass scheduledClass = new ScheduledClass(department, teacher, course, room, academicLevel, meetingTime);
 					scheduledClasses.add(scheduledClass);
 					
@@ -212,7 +212,7 @@ public class ScheduleDataServiceImpl implements ScheduleDataService {
 					mClass.setTeacher(new Teacher(scheduledClass.getTeacher()));
 					mClass.setCourse(new Course(scheduledClass.getCourse()));
 					mClass.setMeetingTime(new MeetingTime(scheduledClass.getMeetingTime()));
-					mClass.setAcademicLevel(new AcademicLevel(scheduledClass.getAcademicLevel()));
+					mClass.setAcademicYear(new AcademicYear(scheduledClass.getAcademicYear()));
 					mClass.setUpdatedBy(userId);
 					mClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 					mClass.setCreatedOn(CalendarUtil.getTodaysDate());

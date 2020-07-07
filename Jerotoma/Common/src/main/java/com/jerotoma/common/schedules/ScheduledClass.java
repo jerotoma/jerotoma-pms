@@ -1,6 +1,7 @@
 package com.jerotoma.common.schedules;
 
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
@@ -12,17 +13,17 @@ public class ScheduledClass {
 	TeacherVO teacher;
 	CourseVO course;
 	RoomVO room;
-	AcademicLevelVO academicLevel;
+	AcademicYearVO academicYear;
 	MeetingTimeVO meetingTime;
 		
 	public ScheduledClass(DepartmentVO department, TeacherVO teacher, CourseVO course, RoomVO room,
-			AcademicLevelVO academicLevel, MeetingTimeVO meetingTime) {
+			AcademicYearVO academicYear, MeetingTimeVO meetingTime) {
 		super();
 		this.department = department;
 		this.teacher = teacher;
 		this.course = course;
 		this.room = room;
-		this.academicLevel = academicLevel;
+		this.academicYear = academicYear;
 		this.meetingTime = meetingTime;
 	}
 	public DepartmentVO getDepartment() {
@@ -49,11 +50,11 @@ public class ScheduledClass {
 	public void setRoom(RoomVO room) {
 		this.room = room;
 	}
-	public AcademicLevelVO getAcademicLevel() {
-		return academicLevel;
+	public AcademicYearVO getAcademicYear() {
+		return academicYear;
 	}
-	public void setAcademicYear(AcademicLevelVO academicLevel) {
-		this.academicLevel = academicLevel;
+	public void setAcademicYear(AcademicYearVO academicYear) {
+		this.academicYear = academicYear;
 	}
 	public MeetingTimeVO getMeetingTime() {
 		return meetingTime;

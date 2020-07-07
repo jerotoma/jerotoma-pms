@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { ClassView, ClassAdmission, MeetingTime } from 'app/models';
+import { ClassView, ClassAdmission, MeetingTime, AcademicLevel, Program } from 'app/models';
 import {
   ClassService,
   RoomService,
@@ -11,8 +11,10 @@ import {
   CourseService,
   ModalService,
   UserService,
+  ProgramService,
+  AcademicLevelService,
  } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import {
   ShowMessage,
   Room,
@@ -28,7 +30,7 @@ import {
 })
 export class ClassCreateComponent implements OnInit {
   @Input() title: string;
-  @Input() action: string = 'create';
+  @Input() action: string = APP_ACTION_TYPE.create;
   @Output() onCreationSuccess = new EventEmitter();
 
   @Input() name: string = '';
@@ -40,6 +42,8 @@ export class ClassCreateComponent implements OnInit {
   courseId: number;
   roomId: number;
   teacherId: number;
+  programId: number;
+  academicLevelId: number;
   meetingTimeId: number;
   capacity: number;
   isLoading: boolean = false;
@@ -60,6 +64,9 @@ export class ClassCreateComponent implements OnInit {
   courses: Course[];
   academicYears: AcademicYear[];
   meetingTimes: MeetingTime[];
+  academicLevel: AcademicLevel;
+  academicLevels: AcademicLevel[];
+  programs: Program[];
 
   classForm: FormGroup;
   classAdmission: ClassAdmission;
@@ -71,6 +78,8 @@ export class ClassCreateComponent implements OnInit {
   listDisplay: string = 'none';
 
   constructor(
+    private programService: ProgramService,
+    private academicLevelService: AcademicLevelService,
     private meetingTimeService: MeetingTimeService,
     private roomService: RoomService,
     private courseService: CourseService,
@@ -84,7 +93,8 @@ export class ClassCreateComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    if (this.action === 'edit') {
+    this.loadPrograms();
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.loadJClassView(parseInt(this.id, 10));
     }
   }
@@ -99,13 +109,17 @@ export class ClassCreateComponent implements OnInit {
     this.teacherId = classView.teacher.id;
     this.meetingTimeId = classView.meetingTime.id;
     this.roomId = classView.room.id;
+    this.programId = classView.course.program.id;
+    this.academicLevelId = classView.course.academicLevel.id;
     this.classForm.patchValue({
       id: classView.id,
       capacity: classView.capacity,
       academicYearId: classView.academicYear.id,
+      academicLevelId: classView.course.academicLevel.id,
+      programId: classView.course.program.id,
       courseId: classView.course.id,
       teacherId: classView.teacher.id,
-      classRoomId: classView.room.id,
+      roomId: classView.room.id,
       meetingTimeId: classView.meetingTime.id,
     }, {emitEvent: false});
   }
@@ -118,7 +132,7 @@ export class ClassCreateComponent implements OnInit {
 
   onSubmit() {
     this.classAdmission = this.classForm.value;
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
       this.updateClass();
     } else {
       this.classService.createClass(this.classAdmission)
@@ -144,6 +158,8 @@ export class ClassCreateComponent implements OnInit {
         id: [null],
         capacity: [null, Validators.required],
         academicYearId: [null, Validators.required],
+        academicLevelId: [null, Validators.required],
+        programId: [null, Validators.required],
         courseId: [null, Validators.required],
         teacherId: [null, Validators.required],
         meetingTimeId: [null, Validators.required],
@@ -153,13 +169,27 @@ export class ClassCreateComponent implements OnInit {
     }
 
     onChanges(): void {
-        this.classForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-          if (academicYearId) {
-            this.loadCourses(academicYearId);
+        this.classForm.get('programId').valueChanges.subscribe(programId => {
+          if (programId) {
+            this.classForm.patchValue({
+                courseId: null,
+                teacherId: null,
+                academicLevelId: null,
+            });
+            this.loadAcademicLevelsByProgramId(programId);
+          }
+        });
+        this.classForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
+          const programId = this.classForm.get('programId').value;
+          if (academicLevelId && programId) {
+            this.loadCourses(academicLevelId, programId);
           }
         });
         this.classForm.get('courseId').valueChanges.subscribe((courseId: number) => {
           if (courseId) {
+            this.classForm.patchValue({
+                teacherId: null,
+            });
             this.loadTeachersByCourseID(courseId);
           }
         });
@@ -176,11 +206,13 @@ export class ClassCreateComponent implements OnInit {
     }
 
     loadRoomByCapacity(capacity: number) {
+      this.classForm.patchValue({
+          roomId: null,
+      });
       this.roomService.loadRoomsByCapacity(capacity)
       .subscribe((rooms: Room[]) => {
         if (rooms && rooms.length > 0) {
           this.rooms = rooms;
-          this.patchClassAdmission(this.classView);
         } else {
           this.modalService.openSnackBar('No room with ' + capacity + ' capacity was found.', 'info');
         }
@@ -199,12 +231,16 @@ export class ClassCreateComponent implements OnInit {
 
       });
     }
-    loadCourses(academicYearId: number) {
-      this.courseService.getCoursesByAcademicYearId(academicYearId)
+    loadCourses(academicLevelId: number, programId: number) {
+      this.courses = [];
+      this.classForm.patchValue({
+          courseId: null,
+          teacherId: null,
+      });
+      this.courseService.getCoursesByProgramAndAcademicLevelIDs(programId, academicLevelId)
       .subscribe((courses: Course[] ) => {
         if (courses) {
           this.courses = courses;
-          this.patchClassAdmission(this.classView);
         }
       });
     }
@@ -221,11 +257,9 @@ export class ClassCreateComponent implements OnInit {
     }
 
     loadTeachersByCourseID(courseId: number) {
+      this.teachers = [];
       this.userService.loadTeachersByCourseID(courseId).subscribe((teachers: Teacher[]) => {
         this.teachers = teachers;
-        if (this.classView) {
-          setTimeout(() => {this.patchClassAdmission(this.classView); }, 100);
-        }
       });
     }
     loadJClassView(jClassViewId: number) {
@@ -235,12 +269,35 @@ export class ClassCreateComponent implements OnInit {
           this.isLoading = false;
           if (jClass) {
             this.classView = jClass;
-            this.loadCourses(jClass.academicYear.id);
+            this.loadAcademicLevelsByProgramId(jClass.course.program.id);
+            this.loadCourses(jClass.course.academicLevel.id, jClass.course.program.id);
             this.loadTeachersByCourseID(jClass.course.id);
-            this.patchClassAdmission(jClass);
+            this.loadRoomByCapacity(jClass.capacity);
+            setTimeout(() => {this.patchClassAdmission(jClass); }, 200);
           }
         });
     }
+
+    loadAcademicLevelsByProgramId(programId: number) {
+      this.academicLevels = [];
+      this.courses = [];
+      this.academicLevelService.loadAcademicLevelsByProgramId(programId)
+      .subscribe((academicLevels: AcademicLevel[] ) => {
+        if (academicLevels) {
+          this.academicLevels = academicLevels;
+        }
+      });
+    }
+
+    loadPrograms() {
+      this.programService.loadProgramList()
+        .subscribe((programs: Program[]) => {
+          if (programs) {
+            this.programs = programs;
+          }
+        });
+    }
+
     resetForm(isClassCreated: boolean) {
       this.classForm.reset();
       this.dismiss(isClassCreated);

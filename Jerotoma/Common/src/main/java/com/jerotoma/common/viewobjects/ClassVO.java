@@ -34,10 +34,10 @@ public class ClassVO {
 	private List<StudentVO> students;
 	
 	public ClassVO(ResultSet rs) throws SQLException {
-		this.id = rs.getInt(ClassConstant.JCLASS_ID);
-		this.capacity = rs.getInt(ClassConstant.JCLASS_CAPACITY);
-		this.updatedOn = rs.getDate(ClassConstant.JCLASS_UPDATED_ON);
-		this.createdOn = rs.getDate(ClassConstant.JCLASS_CREATED_ON);
+		this.id = rs.getInt(ClassConstant.CLASS_ID);
+		this.capacity = rs.getInt(ClassConstant.CLASS_CAPACITY);
+		this.updatedOn = rs.getDate(ClassConstant.CLASS_UPDATED_ON);
+		this.createdOn = rs.getDate(ClassConstant.CLASS_CREATED_ON);
 		
 	}
 

@@ -23,5 +23,5 @@ public interface ScheduleDataService {
 	public List<CourseVO> findCourses();
 	public AcademicYearVO getAcademicYear(Integer academicYearId);
 	public AcademicYearVO getCurrentAcademicYear();
-	public List<Class> generateClasses(AcademicLevelVO academicLevel, User authUser);	
+	public List<Class> generateClasses(AcademicYearVO academicYear, AcademicLevelVO academicLevel, User authUser);	
 }

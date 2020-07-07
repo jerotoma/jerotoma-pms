@@ -5,13 +5,14 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
-        <dependent-module archiveName="jerotoma-services-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JerotomaServices/JerotomaServices">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-test-sources/test-annotations"/>
+        <dependent-module archiveName="jerotoma-services-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jerotoma-services/jerotoma-services">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="jerotoma-database-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JerotomaDatabase/JerotomaDatabase">
+        <dependent-module archiveName="jerotoma-database-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jerotoma-database/jerotoma-database">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="jerotoma-common-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JerotomaCommon/JerotomaCommon">
+        <dependent-module archiveName="jerotoma-common-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jerotoma-common/jerotoma-common">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/JerotomaWeb/target/classes"/>

@@ -9,8 +9,7 @@ import com.jerotoma.services.AssemblerService;
 public interface AssemblerClassService  extends AssemblerService<ClassVO> {
 
 	public List<ClassVO> loadClassesByAcademicYear(Integer academicYearId) throws SQLException;
-	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId) throws SQLException;
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId, Integer academicLevelrId) throws SQLException;
 	public List<ClassVO> loadStudentClassesByAcademicYear(Integer studentId, Integer academicYearId) throws SQLException;
 	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId) throws SQLException;
-
 }

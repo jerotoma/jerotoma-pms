@@ -44,6 +44,7 @@ public class CourseVO {
 		this.description = rs.getString(CourseConstant.COURSE_DESCRIPTION); 
 		this.id = rs.getInt(CourseConstant.COURSE_ID);
 		this.academicLevelId = rs.getInt(CourseConstant.ACADEMIC_LEVEL_ID);
+		this.programId = rs.getInt(CourseConstant.PROGRAM_ID);
 		this.departmentId = rs.getInt(CourseConstant.DEPARTMENT_ID);
 		this.updatedOn = rs.getDate(SystemConstant.UPDATED_ON);
 		this.createdOn = rs.getDate(SystemConstant.CREATED_ON);		

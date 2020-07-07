@@ -5,34 +5,52 @@
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
               <div class="row">
+                <div class="col-md-12">
+                  <div class="form-control-group">
+                      <label for="course-department" class="label">Department</label>
+                      <nb-select
+                          fullWidth
+                          placeholder="Department"
+                          formControlName="departmentId"
+                          id="course-department">
+                          <nb-option
+                              *ngFor='let department of departments'
+                              [value]="department.id">
+                              {{department.name}}
+                          </nb-option>
+                        </nb-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
                   <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="course-department" class="label">Department</label>
+                        <label for="course-program" class="label">Program</label>
                         <nb-select
                             fullWidth
-                            placeholder="Department"
-                            formControlName="departmentId"
-                            id="course-department">
+                            placeholder="Program"
+                            formControlName="programId"
+                            id="course-program">
                             <nb-option
-                                *ngFor='let department of departments'
-                                [value]="department.id">
-                                {{department.name}}
+                                *ngFor='let program of programs'
+                                [value]="program.id">
+                                {{program.name}}
                             </nb-option>
                           </nb-select>
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="class-academicYear" class="label">Course Academic Year</label>
+                        <label for="class-academicLevel" class="label">Course Academic Level</label>
                         <nb-select
                           fullWidth
-                          placeholder="Course Academic Year"
-                          formControlName="academicYearId"
-                          id="class-academicYear">
+                          placeholder="Course Academic Level"
+                          formControlName="academicLevelId"
+                          id="class-academicLevel">
                           <nb-option
-                              *ngFor='let acad of academicYears'
+                              *ngFor='let acad of academicLevels'
                               [value]="acad.id">
-                              {{acad.name}} - {{acad.yearOfStudy}}
+                              {{acad.name}} - {{acad.code}}
                           </nb-option>
                         </nb-select>
                     </div>

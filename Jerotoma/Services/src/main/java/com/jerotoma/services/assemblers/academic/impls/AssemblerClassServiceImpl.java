@@ -48,10 +48,9 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	}
 
 	@Override
-	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId)
-			throws SQLException {
-		
-		return assemblerClassDao.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId);
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId, Integer academicLevelrId)
+			throws SQLException {		
+		return assemblerClassDao.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId, academicLevelrId);
 	}
 
 	@Override

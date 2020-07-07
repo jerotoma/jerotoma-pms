@@ -26,16 +26,19 @@ import com.jerotoma.common.constants.ClassConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
+import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.schedules.MeetingTime;
 import com.jerotoma.common.utils.CalendarUtil;
-import com.jerotoma.common.utils.validators.JClassValidator;
+import com.jerotoma.common.utils.validators.ClassValidator;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
@@ -44,6 +47,7 @@ import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.ClassService;
 import com.jerotoma.services.courses.CourseService;
+import com.jerotoma.services.courses.ProgramService;
 import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.schedules.MeetingTimeService;
 import com.jerotoma.services.schedules.ScheduleDataService;
@@ -56,6 +60,7 @@ public class RestClassController extends BaseController {
 	@Autowired ClassService classService;
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
+	@Autowired ProgramService programService;
 	@Autowired AssemblerClassService assemblerClassService;
 	@Autowired SystemConfigService systemConfigService;
 	@Autowired AcademicYearService academicYearService;
@@ -104,16 +109,16 @@ public class RestClassController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/auto-generate");
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
-		// Integer academicYearId = (Integer)params.get("academicYearId");
+		Integer academicYearId = (Integer)params.get("academicYearId");
 		Integer academicLevelId = (Integer)params.get("academicLevelId");
-		// AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
+		AcademicYearVO academicYear = academicYearId != null ? scheduleDataService.getAcademicYear(academicYearId) : scheduleDataService.getCurrentAcademicYear();
 		AcademicLevelVO academicLevel = assemblerAcademicLevelService.findObject(academicLevelId);
 		
 		
 		if (academicLevel != null) {
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			response.setData(scheduleDataService.generateClasses(academicLevel, authUser));
+			response.setData(scheduleDataService.generateClasses(academicYear, academicLevel, authUser));
 			response.setHttpStatus(HttpStatus.OK);
 		}		
 		return response;
@@ -163,13 +168,14 @@ public class RestClassController extends BaseController {
 	public HttpResponseEntity<Object> loadUnregisteredJClassesByStudent(
 			Authentication auth, 
 			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("academicLevelId") Integer academicLevelrId,
 			@PathVariable("studentId") Integer studentId) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			response.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId));
+			response.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId, academicLevelrId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -236,7 +242,7 @@ public class RestClassController extends BaseController {
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> createJClasses(
+	protected HttpResponseEntity<Object> createClasses(
 			Authentication auth, 
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
@@ -250,29 +256,49 @@ public class RestClassController extends BaseController {
 						ClassConstant.CLASS_ROOM_ID,
 						ClassConstant.CLASS_COURSE_ID,
 						ClassConstant.CLASS_TEACHER_ID,
-						ClassConstant.JCLASS_CAPACITY
+						ClassConstant.CLASS_CAPACITY,
+						ClassConstant.CLASS_PROGRAM_ID,
+						ClassConstant.CLASS_ACADEMIC_LEVEL_ID
 						));
 		Class mClass = new Class();
-		Class.ClassFields jClassFields = JClassValidator.validate(params, requiredFields);
+		Class.ClassFields classFields = ClassValidator.validate(params, requiredFields);
 		
 		
 		try {
 			MeetingTime meetingTime = null;
 			Room room = null;
+			Program program = null;
+			AcademicLevel academicLevel = null;
 			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
-			Teacher teacher = teacherService.findObject(jClassFields.getTeacherId());
-			Course course = courseService.findObject(jClassFields.getCourseId());
-			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
+			Teacher teacher = teacherService.findObject(classFields.getTeacherId());
+			Course course = courseService.findObject(classFields.getCourseId());
+			AcademicYear academicYear = academicYearService.findObject(classFields.getAcademicYearId());
 			
-			if (jClassFields.getRoomId() != null) {
-				room = roomService.findObject(jClassFields.getRoomId());
+			if (classFields.getRoomId() != null) {
+				room = roomService.findObject(classFields.getRoomId());
 			}
 			
-			if (jClassFields.getMeetingTimeId() != null) {
-				meetingTime = meetingTimeService.findObject(jClassFields.getMeetingTimeId());
+			if (classFields.getMeetingTimeId() != null) {
+				meetingTime = meetingTimeService.findObject(classFields.getMeetingTimeId());
 			}
-						
-			mClass.setCapacity(jClassFields.getCapacity());
+			
+			if (classFields.getProgramId()!= null) {
+				program = programService.findObject(classFields.getProgramId());
+			}
+			
+			if (classFields.getAcademicLevelId() != null) {
+				academicLevel = academicLevelService.findObject(classFields.getAcademicLevelId());
+			}
+			
+			if (program == null || program.getId() != course.getProgram().getId()) {
+				throw new RuntimeException("Invalid program");
+			}
+			
+			if (academicLevel == null || academicLevel.getId() != course.getAcademicLevel().getId()) {
+				throw new RuntimeException("Invalide Academic Level");
+			}
+									
+			mClass.setCapacity(classFields.getCapacity());
 			mClass.setRoom(room);
 			mClass.setTeacher(teacher);
 			mClass.setCourse(course);
@@ -306,26 +332,55 @@ public class RestClassController extends BaseController {
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
-						ClassConstant.JCLASS_ID,
+						ClassConstant.CLASS_ID,
 						ClassConstant.CLASS_ACADEMIC_YEAR_ID,
 						ClassConstant.CLASS_ROOM_ID,
 						ClassConstant.CLASS_COURSE_ID,
 						ClassConstant.CLASS_TEACHER_ID,
-						ClassConstant.JCLASS_CAPACITY
+						ClassConstant.CLASS_CAPACITY,
+						ClassConstant.CLASS_PROGRAM_ID,
+						ClassConstant.CLASS_ACADEMIC_LEVEL_ID
 						));
 		
-		Class.ClassFields mClassFields = JClassValidator.validate(params, requiredFields);
+		Class.ClassFields classFields = ClassValidator.validate(params, requiredFields);
 		Class mClass;
 		
+		Program program = null;
+		AcademicLevel academicLevel = null;
+		
 		try {
-			mClass = classService.findObject(mClassFields.getId());
-			Teacher teacher = teacherService.findObject(mClassFields.getTeacherId());
-			Course course = courseService.findObject(mClassFields.getCourseId());
-			AcademicYear academicYear = academicYearService.findObject(mClassFields.getAcademicYearId());
-			Room room = roomService.findObject(mClassFields.getRoomId());
-			MeetingTime meetingTime = meetingTimeService.findObject(mClassFields.getMeetingTimeId());
+			mClass = classService.findObject(classFields.getId());
+			Teacher teacher = teacherService.findObject(classFields.getTeacherId());
+			Course course = courseService.findObject(classFields.getCourseId());
+			AcademicYear academicYear = academicYearService.findObject(classFields.getAcademicYearId());
+			Room room = null;
+			MeetingTime meetingTime = null;
 			
-			mClass.setCapacity(mClassFields.getCapacity());
+			if (classFields.getRoomId() != null) {
+				room = roomService.findObject(classFields.getRoomId());
+			}
+			
+			if (classFields.getMeetingTimeId() != null) {
+				meetingTime = meetingTimeService.findObject(classFields.getMeetingTimeId());
+			}
+			
+			if (classFields.getProgramId()!= null) {
+				program = programService.findObject(classFields.getProgramId());
+			}
+			
+			if (classFields.getAcademicLevelId() != null) {
+				academicLevel = academicLevelService.findObject(classFields.getAcademicLevelId());
+			}
+			
+			if (program == null || program.getId() != course.getProgram().getId()) {
+				throw new RuntimeException("Invalid program");
+			}
+			
+			if (academicLevel == null || academicLevel.getId() != course.getAcademicLevel().getId()) {
+				throw new RuntimeException("Invalide Academic Level");
+			}
+			
+			mClass.setCapacity(classFields.getCapacity());
 			mClass.setRoom(room);
 			mClass.setTeacher(teacher);
 			mClass.setCourse(course);

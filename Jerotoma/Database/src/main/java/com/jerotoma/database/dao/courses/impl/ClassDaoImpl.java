@@ -65,7 +65,7 @@ public class ClassDaoImpl  implements ClassDao {
 				.setMaxResults(limit)
 				.setFirstResult(offset)
 				.getResultList();
-		map.put(ClassConstant.JCLASSES, jClasses);
+		map.put(ClassConstant.CLASSES, jClasses);
 		map.put(SystemConstant.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
 		

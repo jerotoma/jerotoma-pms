@@ -61,7 +61,7 @@ public class CourseValidator {
 		if (programId == null && requiredFields.contains(CourseConstant.PROGRAM_ID)) {
 			throw new FieldRequiredException("Program ID is required to continue");
 		}
-		course.setAcademicLevelId(academicLevelId);
+		course.setProgramId(programId);
 		
 		
 		if (name == null && requiredFields.contains(CourseConstant.COURSE_NAME)) {

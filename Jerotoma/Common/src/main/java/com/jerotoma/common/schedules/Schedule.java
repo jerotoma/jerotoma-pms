@@ -43,6 +43,8 @@ public class Schedule {
 					classVO.setRoom(this.data.getRooms().get((int)(data.getRooms().size() * Math.random())));
 					classVO.setCapacity(classVO.getRoom().getCapacity());
 					classVO.setTeacher(this.data.getTeachers().get((int)(this.data.getTeachers().size() * Math.random())));
+					classVO.setAcademicYear(this.data.getAcademicYear());
+					
 					this.classes.add(classVO);
 				}				
 			});

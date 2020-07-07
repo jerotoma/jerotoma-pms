@@ -8,20 +8,22 @@ import com.jerotoma.common.constants.ClassConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.Class;
 
-public class JClassValidator {
+public class ClassValidator {
 public static Class.ClassFields validate(Map<String, Object> params, List<String> requiredFields) {
 		
 		
 		Integer courseId = null;
 		Integer academicYearId = null;
 		Integer classRoomId = null;
+		Integer academicLevelId = null;
+		Integer programId = null;
 		Integer teacherId = null;
 		Integer meetingTimeId = null;
 		Integer capacity = null;	
 		Integer id = null;	
 		
-		if(params.containsKey(ClassConstant.JCLASS_CAPACITY)) {
-			capacity  = (Integer)params.get(ClassConstant.JCLASS_CAPACITY);
+		if(params.containsKey(ClassConstant.CLASS_CAPACITY)) {
+			capacity  = (Integer)params.get(ClassConstant.CLASS_CAPACITY);
 		}
 		
 		if(params.containsKey(ClassConstant.CLASS_COURSE_ID)) {
@@ -41,15 +43,23 @@ public static Class.ClassFields validate(Map<String, Object> params, List<String
 			meetingTimeId  = (Integer)params.get(ClassConstant.CLASS_MEETING_TIME_ID);
 		}
 		
-		if(params.containsKey(ClassConstant.JCLASS_ID)) {
-			id  = (Integer)params.get(ClassConstant.JCLASS_ID);
+		if(params.containsKey(ClassConstant.CLASS_ACADEMIC_LEVEL_ID)) {
+			academicLevelId  = (Integer)params.get(ClassConstant.CLASS_ACADEMIC_LEVEL_ID);
+		}
+		
+		if(params.containsKey(ClassConstant.CLASS_PROGRAM_ID)) {
+			programId  = (Integer)params.get(ClassConstant.CLASS_PROGRAM_ID);
+		}
+		
+		if(params.containsKey(ClassConstant.CLASS_ID)) {
+			id  = (Integer)params.get(ClassConstant.CLASS_ID);
 		}
 		
 		if (id == null && requiredFields.contains(AcademicYearConstant.ACADEMIC_YEAR_ID)) {
 			throw new FieldRequiredException("ID is required to continue");
 		}
 		
-		if (capacity == null && requiredFields.contains(ClassConstant.JCLASS_CAPACITY)) {
+		if (capacity == null && requiredFields.contains(ClassConstant.CLASS_CAPACITY)) {
 			throw new FieldRequiredException("Capacity is required to continue");
 		}
 		
@@ -73,7 +83,15 @@ public static Class.ClassFields validate(Map<String, Object> params, List<String
 			throw new FieldRequiredException("Meeting Time ID is required to continue");
 		}
 		
+
+		if (academicLevelId == null && requiredFields.contains(ClassConstant.CLASS_ACADEMIC_LEVEL_ID)) {
+			throw new FieldRequiredException("Academic Level ID is required to continue");
+		}
 		
-		return new Class.ClassFields(courseId, academicYearId, classRoomId, teacherId, meetingTimeId, capacity, id);
+		if (programId == null && requiredFields.contains(ClassConstant.CLASS_PROGRAM_ID)) {
+			throw new FieldRequiredException("Program ID is required to continue");
+		}
+		
+		return new Class.ClassFields(courseId, academicYearId, classRoomId, academicLevelId, programId, teacherId, meetingTimeId, capacity, id);
 	}
 }

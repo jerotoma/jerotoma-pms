@@ -110,17 +110,31 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	
 	private CourseVO mapCourse(ResultSet rs) throws SQLException {
 		CourseVO course = new CourseVO(rs);
-		course.setAcademicLevel(findAcademicLvel(course.getAcademicLevelId()));	
+		course.setAcademicLevel(findAcademicLevel(course.getAcademicLevelId()));	
 		course.setProgram(findProgram(course.getProgramId()));	
 		course.setDepartment(findDepartment(course.getDepartmentId()));
 		return course;
 	}
 	
 	private ProgramVO findProgram(Integer programId) throws SQLException {		
-		return assemblerProgramDao.findObject(programId);
+		StringBuilder builder = new StringBuilder("SELECT p.id, p.name, p.code, p.description, p.created_on AS createdOn, p.updated_on AS updatedOn FROM ")
+				.append(DatabaseConstant.TABLES.PROGRAMS)
+				.append(" p ")
+				.append("WHERE p.id = ? ");
+		
+		return this.jdbcTemplate.query(builder.toString(), new ResultSetExtractor<ProgramVO>(){
+			@Override
+			public ProgramVO extractData(ResultSet rs) throws SQLException, DataAccessException {
+				if(rs.next()) {
+					ProgramVO program = new ProgramVO(rs);				
+					return program;
+				}
+				return null;
+			}	
+		}, programId);
 	}
 
-	private AcademicLevelVO findAcademicLvel(Integer academicLevelId) throws SQLException {	
+	private AcademicLevelVO findAcademicLevel(Integer academicLevelId) throws SQLException {	
 		return assemblerAcademicLevelDao.findObject(academicLevelId);
 	}
 
@@ -165,7 +179,7 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_year_id AS academicYearId, c.created_on, c.updated_on FROM public.courses c ");		
+		return new StringBuilder("SELECT c.id, c.code, c.name, c.description, c.department_id AS departmentId, c.academic_level_id AS academicLevelId, c.program_id AS programId, c.created_on, c.updated_on FROM public.courses c ");		
 	}
 
 	@Override
@@ -175,9 +189,9 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	}
 	
 	@Override
-	public List<CourseVO> findCoursesByAcademicYearId(Integer academicYearId) throws SQLException {		
-		String query = getBaseSelectQuery().append("WHERE academic_year_id = ? ").toString();
-		return this.jdbcTemplate.query(query, new CourseResultProcessor(), academicYearId);		
+	public List<CourseVO> findCoursesByAcademicLevelId(Integer academicLevelId) throws SQLException {		
+		String query = getBaseSelectQuery().append("WHERE c.academic_level_id = ? ").toString();
+		return this.jdbcTemplate.query(query, new CourseResultProcessor(), academicLevelId);		
 	}
 
 	@Override
@@ -190,6 +204,13 @@ public class AssemblerCourseDaoImpl extends JdbcDaoSupport implements AssemblerC
 	public List<CourseVO> findAllCourses() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
 		return this.jdbcTemplate.query(builder.toString(), new CourseResultProcessor());
+	}
+
+	@Override
+	public List<CourseVO> findCoursesByProgramAndAcademicLevelIDs(Integer programId, Integer academicLevelId)
+			throws SQLException {
+		String query = getBaseSelectQuery().append("WHERE c.academic_level_id = ? AND c.program_id = ? ").toString();
+		return this.jdbcTemplate.query(query, new CourseResultProcessor(), academicLevelId, programId);	
 	}
 	
 }
