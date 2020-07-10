@@ -27,8 +27,8 @@ public class AssemblerUserPreferenceServiceImpl implements AssemblerUserPreferen
 	}
 
 	@Override
-	public List<UserPreferenceVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerUserPreferenceDao.loadList(queryParam);
+	public List<UserPreferenceVO> loadList() throws SQLException {
+		return assemblerUserPreferenceDao.loadList();
 	}
 
 	@Override

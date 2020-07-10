@@ -51,19 +51,9 @@ public class AssemblerPositionDaoImpl extends JdbcDaoSupport implements Assemble
 	}
 
 	@Override
-	public List<PositionVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<PositionVO> loadList() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {limit, offset};
-		
-		return this.jdbcTemplate.query(builder.toString(), new PositionResultProcessor(), paramList);
+		return this.jdbcTemplate.query(builder.toString(), new PositionResultProcessor());
 	}
 
 	@Override

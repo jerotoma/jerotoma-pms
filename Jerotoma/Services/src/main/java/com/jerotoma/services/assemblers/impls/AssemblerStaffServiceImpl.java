@@ -28,8 +28,8 @@ public class AssemblerStaffServiceImpl  implements AssemblerStaffService{
 	}
 
 	@Override
-	public List<StaffVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerStaffDao.loadList(queryParam);
+	public List<StaffVO> loadList() throws SQLException {
+		return assemblerStaffDao.loadList();
 	}
 
 	@Override

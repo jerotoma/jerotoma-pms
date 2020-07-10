@@ -26,6 +26,10 @@ public class UserVO extends PersonVO implements Serializable {
 		this.userId = authUser.getId();
 		this.username = authUser.getUsername();	    
 		this.roles = getUserRoles(authUser.getRoles());
+		this.enabled = authUser.isEnabled();
+		this.accountNonExpired = authUser.isAccountNonExpired(); 
+		this.credentialsNonExpired = authUser.isCredentialsNonExpired();
+		this.accountNonLocked = authUser.isAccountNonLocked();
 		
 		if (person instanceof TeacherVO) {
 			TeacherVO teacher = (TeacherVO)person;

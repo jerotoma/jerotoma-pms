@@ -53,19 +53,9 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	}
 
 	@Override
-	public List<AcademicLevelVO> loadList(QueryParam queryParam) throws SQLException {
-		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy("al." + queryParam.getFieldName(), queryParam.getOrderby()))
-		.append(" ")
-		.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {limit, offset};
-		
-		return this.jdbcTemplate.query(builder.toString(), new AcademicLevelResultProcessor(), paramList);
+	public List<AcademicLevelVO> loadList() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();		
+		return this.jdbcTemplate.query(builder.toString(), new AcademicLevelResultProcessor());
 	}
 
 	@Override

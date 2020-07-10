@@ -40,9 +40,9 @@ public class AssemblerParentServiceImpl implements AssemblerParentService {
 	}
 
 	@Override
-	public List<ParentVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<ParentVO> loadList() throws SQLException {
 		List<ParentVO> parentVOs = new ArrayList<>();
-		List<ParentVO> parents = assemblerParentDao.loadList(queryParam);
+		List<ParentVO> parents = assemblerParentDao.loadList();
 		if (parents != null) {
 			for(ParentVO parent : parents ) {
 				List<StudentVO> students = loadStudentsByParentId(parent.getId());

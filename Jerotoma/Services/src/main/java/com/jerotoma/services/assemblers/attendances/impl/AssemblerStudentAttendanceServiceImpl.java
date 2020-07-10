@@ -28,8 +28,8 @@ public class AssemblerStudentAttendanceServiceImpl implements AssemblerStudentAt
 	}
 
 	@Override
-	public List<StudentAttendanceVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerStudentAttendanceDao.loadList(queryParam);
+	public List<StudentAttendanceVO> loadList() throws SQLException {
+		return assemblerStudentAttendanceDao.loadList();
 	}
 
 	@Override

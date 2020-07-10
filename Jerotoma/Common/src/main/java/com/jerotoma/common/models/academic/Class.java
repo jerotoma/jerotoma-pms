@@ -12,11 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.schedules.MeetingTime;
@@ -39,8 +39,9 @@ public class Class {
 	@Column
 	private Integer capacity;
 		
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="course_id")
+	@JsonManagedReference
 	private Course course;
 	
 	@ManyToOne

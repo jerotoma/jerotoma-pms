@@ -53,19 +53,9 @@ private JdbcTemplate jdbcTemplate;
 	}
 
 	@Override
-	public List<RoomVO> loadList(QueryParam queryParam) throws SQLException {
-		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {limit, offset};
-		
-		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor(), paramList);
+	public List<RoomVO> loadList() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();				
+		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResultProcessor());
 	}
 
 	@Override

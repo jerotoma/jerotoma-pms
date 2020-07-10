@@ -28,8 +28,8 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 	}
 
 	@Override
-	public List<TeacherVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerTeacherDao.loadList(queryParam);
+	public List<TeacherVO> loadList() throws SQLException {
+		return assemblerTeacherDao.loadList();
 	}
 
 	@Override

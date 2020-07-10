@@ -86,10 +86,9 @@ public class RestSystemConfigController extends BaseController {
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_SYSTEM_CONFIG_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			systemConfigs = assemblerSystemConfigService.loadList(queryParam);		
+			systemConfigs = assemblerSystemConfigService.loadList();		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

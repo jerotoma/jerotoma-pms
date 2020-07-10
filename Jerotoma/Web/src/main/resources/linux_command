@@ -13,6 +13,8 @@ scp dist/jerotoma-blog/index.html root@jerotoma.com:/var/www/blog.jerotoma
 rm -rf /opt/tomcat/jerotoma && mv /opt/tomcat/webapps/jerotoma /opt/tomcat/
 #RESTART
 
+sudo reboot 
+
 #Restart Nginx Service
  sudo systemctl restart nginx
  

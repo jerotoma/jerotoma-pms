@@ -28,8 +28,8 @@ public class AssemblerDepartmentServiceImpl implements AssemblerDepartmentServic
 	}
 
 	@Override
-	public List<DepartmentVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerDepartmentDao.loadList(queryParam);
+	public List<DepartmentVO> loadList() throws SQLException {
+		return assemblerDepartmentDao.loadList();
 	}
 
 	@Override

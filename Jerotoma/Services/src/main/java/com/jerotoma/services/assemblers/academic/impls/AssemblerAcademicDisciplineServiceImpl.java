@@ -29,8 +29,8 @@ public class AssemblerAcademicDisciplineServiceImpl implements AssemblerAcademic
 	}
 
 	@Override
-	public List<AcademicDisciplineVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerAcademicDisciplineDao.loadList(queryParam);
+	public List<AcademicDisciplineVO> loadList() throws SQLException {
+		return assemblerAcademicDisciplineDao.loadList();
 	}
 
 	@Override

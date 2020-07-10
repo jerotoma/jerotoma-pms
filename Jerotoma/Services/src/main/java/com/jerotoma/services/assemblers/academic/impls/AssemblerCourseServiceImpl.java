@@ -28,8 +28,8 @@ public class AssemblerCourseServiceImpl implements  AssemblerCourseService {
 	}
 
 	@Override
-	public List<CourseVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerCourseDao.loadList(queryParam);
+	public List<CourseVO> loadList() throws SQLException {
+		return assemblerCourseDao.loadList();
 	}
 
 	@Override

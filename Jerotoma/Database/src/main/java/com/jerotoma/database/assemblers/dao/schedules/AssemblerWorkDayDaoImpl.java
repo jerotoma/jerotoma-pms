@@ -49,7 +49,7 @@ public class AssemblerWorkDayDaoImpl  extends JdbcDaoSupport implements Assemble
 	}
 
 	@Override
-	public List<WorkDayVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<WorkDayVO> loadList() throws SQLException {
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new WorkDayResultProcessor());
 	}
 

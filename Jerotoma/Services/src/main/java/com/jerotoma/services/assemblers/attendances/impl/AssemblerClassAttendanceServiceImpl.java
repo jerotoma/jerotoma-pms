@@ -28,8 +28,8 @@ public class AssemblerClassAttendanceServiceImpl implements AssemblerClassAttend
 	}
 
 	@Override
-	public List<ClassAttendanceVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerClassAttendanceDao.loadList(queryParam);
+	public List<ClassAttendanceVO> loadList() throws SQLException {
+		return assemblerClassAttendanceDao.loadList();
 	}
 
 	@Override

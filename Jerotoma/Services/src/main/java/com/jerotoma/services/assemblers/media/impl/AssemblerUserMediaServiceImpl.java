@@ -28,8 +28,8 @@ public class AssemblerUserMediaServiceImpl implements AssemblerUserMediaService 
 	}
 
 	@Override
-	public List<UserMediaVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerUserMediaDao.loadList(queryParam);
+	public List<UserMediaVO> loadList() throws SQLException {
+		return assemblerUserMediaDao.loadList();
 	}
 
 	@Override

@@ -29,8 +29,8 @@ public class AssemblerMeetingTimeServiceImpl implements AssemblerMeetingTimeServ
 	}
 
 	@Override
-	public List<MeetingTimeVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerMeetingTimeDao.loadList(queryParam);
+	public List<MeetingTimeVO> loadList() throws SQLException {
+		return assemblerMeetingTimeDao.loadList();
 	}
 
 	@Override

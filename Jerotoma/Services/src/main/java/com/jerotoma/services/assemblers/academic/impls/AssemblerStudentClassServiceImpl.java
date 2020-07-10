@@ -29,8 +29,8 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 	}
 
 	@Override
-	public List<StudentClassVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerStudentClassDao.loadList(queryParam);
+	public List<StudentClassVO> loadList() throws SQLException {
+		return assemblerStudentClassDao.loadList();
 	}
 
 	@Override

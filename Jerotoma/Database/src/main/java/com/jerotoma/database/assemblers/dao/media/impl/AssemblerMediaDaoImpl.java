@@ -54,41 +54,9 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 	}
 
 	@Override
-	public List<MediaVO> loadList(QueryParam queryParam) throws SQLException {
-		StringBuilder builder = getBaseSelectQuery();
-		USER_TYPE userType  = UserConstant.processUserType(queryParam.getType())	;	
-		switch(userType) {
-		case PARENT:
-		case STUDENT:
-		case TEACHER:
-		case STAFF:
-			builder
-			.append(" INNER JOIN public.user_media um ON um.media_id = m.id ")
-			.append(" INNER JOIN public.users u ON u.id = um.user_id")
-			.append(" WHERE u.user_type = ? ");
-			break;
-		default:
-			
-		}		
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		Object[] paramList = new Object[] {limit, offset};
-		switch(userType) {
-		case PARENT:
-		case STUDENT:
-		case TEACHER:
-		case STAFF:
-			paramList = new Object[] {queryParam.getType(), limit, offset};
-			break;
-		default:
-			
-		}		
-		return this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
+	public List<MediaVO> loadList() throws SQLException {
+		StringBuilder builder = getBaseSelectQuery();				
+		return this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor());
 	}
 
 	@Override

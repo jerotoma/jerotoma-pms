@@ -35,8 +35,8 @@ public class AssemblerAcademicYearServiceImpl implements AssemblerAcademicYearSe
 	}
 
 	@Override
-	public List<AcademicYearVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerAcademicYearDao.loadList(queryParam);
+	public List<AcademicYearVO> loadList() throws SQLException {
+		return assemblerAcademicYearDao.loadList();
 	}
 
 	@Override

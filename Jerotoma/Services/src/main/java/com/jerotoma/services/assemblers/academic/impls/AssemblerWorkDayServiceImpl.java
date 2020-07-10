@@ -28,8 +28,8 @@ public class AssemblerWorkDayServiceImpl implements AssemblerWorkDayService {
 	}
 
 	@Override
-	public List<WorkDayVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerWorkDayDao.loadList(queryParam);
+	public List<WorkDayVO> loadList() throws SQLException {
+		return assemblerWorkDayDao.loadList();
 	}
 
 	@Override

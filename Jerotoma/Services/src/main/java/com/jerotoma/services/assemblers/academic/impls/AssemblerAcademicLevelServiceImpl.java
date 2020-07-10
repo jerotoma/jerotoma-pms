@@ -28,8 +28,8 @@ public class AssemblerAcademicLevelServiceImpl implements AssemblerAcademicLevel
 	}
 
 	@Override
-	public List<AcademicLevelVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerAcademicLevelDao.loadList(queryParam);
+	public List<AcademicLevelVO> loadList() throws SQLException {
+		return assemblerAcademicLevelDao.loadList();
 	}
 
 	@Override

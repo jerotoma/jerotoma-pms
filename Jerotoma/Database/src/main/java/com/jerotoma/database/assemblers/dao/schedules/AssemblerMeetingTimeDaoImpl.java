@@ -52,7 +52,7 @@ public class AssemblerMeetingTimeDaoImpl extends JdbcDaoSupport implements Assem
 	}
 
 	@Override
-	public List<MeetingTimeVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<MeetingTimeVO> loadList() throws SQLException {
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new MeetingTimeResultProcessor());
 	}
 

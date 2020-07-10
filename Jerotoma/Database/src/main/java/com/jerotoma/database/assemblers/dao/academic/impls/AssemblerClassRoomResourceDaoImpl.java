@@ -53,19 +53,9 @@ public class AssemblerClassRoomResourceDaoImpl  extends JdbcDaoSupport implement
 	}
 
 	@Override
-	public List<ClassRoomResourceVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<ClassRoomResourceVO> loadList() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {limit, offset};
-		
-		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResourceResultProcessor(), paramList);
+		return this.jdbcTemplate.query(builder.toString(), new ClassRoomResourceResultProcessor());
 	}
 
 	@Override

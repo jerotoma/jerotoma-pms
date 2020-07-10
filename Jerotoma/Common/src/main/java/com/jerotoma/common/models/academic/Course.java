@@ -2,6 +2,7 @@ package com.jerotoma.common.models.academic;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.viewobjects.CourseVO;
 
@@ -71,8 +74,9 @@ public class Course implements Serializable{
 	@Column(name="updated_by")
 	private Integer updatedBy;
 	
-	@OneToOne(mappedBy = "course")
-	private Class mclass;
+	@OneToMany(mappedBy = "course")
+	@JsonBackReference
+	private Set<Class> mclasses;
 	
 	@Column(name="created_on")
 	private Date createdOn;

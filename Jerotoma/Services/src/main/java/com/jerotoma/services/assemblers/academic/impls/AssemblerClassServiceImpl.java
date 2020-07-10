@@ -28,8 +28,8 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	}
 
 	@Override
-	public List<ClassVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerClassDao.loadList(queryParam);
+	public List<ClassVO> loadList() throws SQLException {
+		return assemblerClassDao.loadList();
 	}
 
 	@Override

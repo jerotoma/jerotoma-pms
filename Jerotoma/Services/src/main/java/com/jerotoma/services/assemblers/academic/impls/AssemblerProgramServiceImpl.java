@@ -29,8 +29,8 @@ public class AssemblerProgramServiceImpl implements AssemblerProgramService {
 	}
 
 	@Override
-	public List<ProgramVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerProgramDao.loadList(queryParam);
+	public List<ProgramVO> loadList() throws SQLException {
+		return assemblerProgramDao.loadList();
 	}
 
 	@Override

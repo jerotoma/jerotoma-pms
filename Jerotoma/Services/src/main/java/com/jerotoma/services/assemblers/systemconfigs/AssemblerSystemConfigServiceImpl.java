@@ -42,8 +42,8 @@ public class AssemblerSystemConfigServiceImpl implements AssemblerSystemConfigSe
 
 
 	@Override
-	public List<SystemConfigVO> loadList(QueryParam queryParam) throws SQLException {
-		return systemConfigDao.loadList(queryParam);
+	public List<SystemConfigVO> loadList() throws SQLException {
+		return systemConfigDao.loadList();
 	}
 
 	@Override

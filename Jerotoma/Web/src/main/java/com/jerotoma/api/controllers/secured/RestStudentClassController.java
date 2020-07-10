@@ -96,10 +96,8 @@ public class RestStudentClassController extends BaseController {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
-		
 		try {
-			studentClasses = assemblerStudentClassService.loadList(queryParam);		
+			studentClasses = assemblerStudentClassService.loadList();		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

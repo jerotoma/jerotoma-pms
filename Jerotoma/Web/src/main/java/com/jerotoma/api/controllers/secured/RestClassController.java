@@ -246,11 +246,9 @@ public class RestClassController extends BaseController {
 		List<ClassVO> mClasses = new ArrayList<>();
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_CLASS_CONTROLLER.BASE + "/list");
-		this.securityCheckAccessByRoles(auth);
-		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
-		
+		this.securityCheckAccessByRoles(auth);		
 		try {
-			mClasses = assemblerClassService.loadList(queryParam);		
+			mClasses = assemblerClassService.loadList();		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

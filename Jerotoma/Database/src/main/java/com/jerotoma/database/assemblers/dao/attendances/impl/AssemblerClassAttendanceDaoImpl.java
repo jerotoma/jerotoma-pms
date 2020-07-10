@@ -57,19 +57,9 @@ public class AssemblerClassAttendanceDaoImpl extends JdbcDaoSupport implements A
 	}
 
 	@Override
-	public List<ClassAttendanceVO> loadList(QueryParam queryParam) throws SQLException {
+	public List<ClassAttendanceVO> loadList() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy("ca." + queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-
-		Long countResults = countObject();
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {limit, offset};
-		
-		return this.jdbcTemplate.query(builder.toString(), new ClassAttendanceResultProcessor(), paramList);
+		return this.jdbcTemplate.query(builder.toString(), new ClassAttendanceResultProcessor());
 	}
 
 	@Override

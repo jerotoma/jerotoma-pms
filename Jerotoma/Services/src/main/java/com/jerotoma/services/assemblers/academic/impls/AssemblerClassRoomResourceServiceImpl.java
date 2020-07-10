@@ -28,8 +28,8 @@ public class AssemblerClassRoomResourceServiceImpl implements AssemblerClassRoom
 	}
 
 	@Override
-	public List<ClassRoomResourceVO> loadList(QueryParam queryParam) throws SQLException {
-		return assemblerClassRoomResourceDao.loadList(queryParam);
+	public List<ClassRoomResourceVO> loadList() throws SQLException {
+		return assemblerClassRoomResourceDao.loadList();
 	}
 
 	@Override
