@@ -216,5 +216,13 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	public List<ParentVO> loadParentsByStudentId(Integer studentId) throws SQLException {
 		return parentDao.findParentsByStudentId(studentId);
 	}
+
+	@Override
+	public List<StudentVO> loadStudentsByProgramAndAcademicLevelIDs(Integer programId, Integer academicLevelId)
+			throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery();
+		queryBuilder.append("WHERE pr.id = ? AND  al.id = ? ");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new StudentResultProcessor(), programId, academicLevelId);
+	}
 	
 }

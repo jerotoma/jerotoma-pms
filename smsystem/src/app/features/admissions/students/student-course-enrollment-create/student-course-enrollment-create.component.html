@@ -4,13 +4,69 @@
       <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
         <nb-card-header status="danger">{{ title }}</nb-card-header>
         <nb-card-body>
-          <div class='row'>
-            <div class='col-md-12'>
-              <app-search-user
-                [userType]="userType"
-                title="Select Student"
-                (onUserSelected)="patchStudent($event)"
-              ></app-search-user>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-control-group">
+                  <label for="course-program" class="label">Program</label>
+                  <nb-select
+                      fullWidth
+                      placeholder="Program"
+                      formControlName="programId"
+                      id="course-program">
+                      <nb-option
+                          *ngFor='let program of programs'
+                          [value]="program.id">
+                          {{program.name}}
+                      </nb-option>
+                    </nb-select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-control-group">
+                  <label for="class-academicLevel" class="label">Class Academic Level</label>
+                  <nb-select
+                    fullWidth
+                    placeholder="Course Academic Level"
+                    formControlName="academicLevelId"
+                    id="class-academicLevel">
+                    <nb-option
+                        *ngFor='let acad of academicLevels'
+                        [value]="acad?.id">
+                        {{acad?.name}} - {{acad?.code}}
+                    </nb-option>
+                  </nb-select>
+              </div>
+            </div>
+          </div>
+          <div class="lists row">
+            <div class="col-md-12">
+                <div class="form-control-group">
+                  <nb-card class="list-card" accent="success" *ngIf="students && students.length > 0 ">
+                    <nb-card-header>Choose Students
+                      <nb-checkbox
+                      (checkedChange)="checkAllStudentBoxes($event)"
+                      status="success"
+                      class="push-right">Check All</nb-checkbox>
+                    </nb-card-header>
+                    <nb-card-body
+                      [nbSpinner]="isLoading"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      nbSpinnerMessage="Loading Scheduled Students....">
+                      <nb-list>
+                        <nb-list-item *ngFor="let student of students">
+                          <nb-checkbox
+                          [id]="'student-'+ student?.id"
+                          [checked]="checkAllStudents"
+                          (checkedChange)="studentCheckedChange($event, student) "
+                          status="success">
+                          {{student?.fullName}}
+                        </nb-checkbox>
+                        </nb-list-item>
+                      </nb-list>
+                    </nb-card-body>
+                  </nb-card>
+                </div>
             </div>
           </div>
           <div class="row">
@@ -24,8 +80,8 @@
                         id="class-academicYear">
                         <nb-option
                             *ngFor='let acad of academicYears'
-                            [value]="acad.id">
-                            {{acad.name}} - {{acad.yearOfStudy}}
+                            [value]="acad?.id">
+                            {{acad?.name}} - {{acad?.yearOfStudy}}
                         </nb-option>
                       </nb-select>
                   </div>
@@ -34,8 +90,14 @@
           <div class="lists row">
             <div class="col-md-12">
                 <div class="form-control-group">
-                  <nb-card class="list-card" accent="success" *ngIf="jClasses">
-                    <nb-card-header>Choose courses from a list of available courses for {{academicYear.name}} - {{academicYear.yearOfStudy}} </nb-card-header>
+                  <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && academicYear">
+                    <nb-card-header>
+                      Choose courses from a list of available courses for {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
+                      <nb-checkbox
+                      (checkedChange)="checkAllCourseBoxes($event)"
+                      status="success"
+                      class="push-right">Check All</nb-checkbox>
+                    </nb-card-header>
                     <nb-card-body
                       [nbSpinner]="isLoading"
                       nbSpinnerStatus="success"
@@ -44,7 +106,8 @@
                       <nb-list>
                         <nb-list-item *ngFor="let jClass of jClasses">
                           <nb-checkbox
-                          [id]="'jClass-'+ jClass.id"
+                          [id]="'jClass-'+ jClass?.id"
+                          [checked]="checkAllCourses"
                           status="success"
                           (checkedChange)="checkedChange($event, jClass)"
                           >{{jClass.course.name}}

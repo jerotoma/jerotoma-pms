@@ -59,7 +59,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	}
 	@Override
 	public ClassVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE c.id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE cl.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new JClassSingleResultProcessor(), primaryKey);
 	}
 
@@ -71,7 +71,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	@Override
 	public List<ClassVO> loadList(QueryParam queryParam) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
-				builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				builder.append(DaoUtil.getOrderBy("cl." + queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
 				.append("limit ? offset ?");
 
@@ -89,7 +89,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery();
-		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+		builder.append(DaoUtil.getOrderBy("cl." + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -138,7 +138,8 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT c.id, c.teacher_id AS teacherId, c.course_id AS courseId, c.room_id AS roomId, c.academic_year_id AS academicYearId, c.meeting_time_id AS meetingTimeId, c.capacity, c.updated_by AS updatedBy, c.created_on AS createdOn, c.updated_on AS updatedOn FROM public.classes c ");		
+		return new StringBuilder("SELECT cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn FROM public.classes cl ")
+				.append("INNER JOIN courses co ON co.id = cl.course_id ");		
 	}
 	
 	@Override
@@ -194,14 +195,14 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	
 	@Override
 	public List<ClassVO> loadClassesByAcademicYear(Integer academicYearId) throws SQLException {
-		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE c.academic_year_id = ? ");
+		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE cl.academic_year_id = ? ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId);
 	}
 	@Override
-	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId, Integer academicLevelId)
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()				
-				.append(" WHERE cc.academic_year_id = ? AND c.academic_level_id = ? AND c.course_id NOT IN( ")
+				.append(" WHERE cl.academic_year_id = ? AND co.academic_level_id = ? AND cl.course_id NOT IN( ")
 					.append(" SELECT course_id FROM public.classes cc ")
 						.append(" INNER JOIN student_registered_classes srcc ON srcc.class_id = cc.id ")
 						.append(" INNER JOIN student_classes scc ON scc.id = srcc.student_class_id")
@@ -213,15 +214,23 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	public List<ClassVO> loadStudentClassesByAcademicYear(Integer studentId, Integer academicYearId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()
-			.append(" INNER JOIN student_registered_classes src ON src.class_id = c.id ")
+			.append(" INNER JOIN student_registered_classes src ON src.class_id = cl.id ")
 			.append(" INNER JOIN student_classes sc ON sc.id = src.student_class_id")
-			.append(" WHERE c.academic_year_id = ? AND sc.student_id = ? ");				
+			.append(" WHERE cl.academic_year_id = ? AND sc.student_id = ? ");				
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), academicYearId, studentId);
 	}
 	@Override
 	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId)
 			throws SQLException {
-		String query = getBaseSelectQuery().append(" WHERE c.teacher_id = ? AND c.course_id = ? AND c.academic_year_id = ?").toString();
+		String query = getBaseSelectQuery().append(" WHERE cl.teacher_id = ? AND cl.course_id = ? AND cl.academic_year_id = ?").toString();
 		return this.jdbcTemplate.query(query, new JClassSingleResultProcessor(), teacherId, courseId, academicYearId);
+	}
+	
+	@Override
+	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId)
+			throws SQLException {
+		StringBuilder queryBuilder = getBaseSelectQuery()				
+				.append(" WHERE co.program_id = ? AND co.academic_level_id = ? AND  cl.academic_year_id = ?");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), programId, academicLevelrId, academicYearId);
 	}
 }

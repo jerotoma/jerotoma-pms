@@ -103,7 +103,7 @@ export class MyCourseComponent implements OnInit {
 
   loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
     this.isLoading = true;
-    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
+    this.classService.loadStudentClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });

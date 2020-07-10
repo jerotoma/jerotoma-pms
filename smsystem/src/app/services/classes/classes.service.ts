@@ -10,6 +10,7 @@ import { ResponseWrapper, ClassView } from 'app/models';
   providedIn: 'root',
 })
 export class ClassService {
+
   constructor(private http: HttpClient) { }
 
   getClass(classId: number): Observable<ClassView>  {
@@ -44,16 +45,21 @@ export class ClassService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadJClassesByParams(programId: number, academicLevelId: number, academicYearId: number): Observable<ClassView[]> {
+    return this.http.get(`${END_POINTS.classes}/programs/${programId}/academic-levels/${academicLevelId}/academic-years/${academicYearId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   updateClass(data?: any): Observable<ClassView> {
     return this.http.put(`${END_POINTS.classes}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
-    return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}/unregistered`)
+  loadUnregisteredClassesByStudent(studentId: number, academicLevelId: number, academicYearId: number): Observable<ClassView[]> {
+    return this.http.get(`${END_POINTS.classes}/students/${studentId}/academic-levels/${academicLevelId}/academic-years/${academicYearId}/unregistered`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
+  loadStudentClassesByAcademicYear(academicYearId: number, studentId: number) {
     return this.http.get(`${END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }

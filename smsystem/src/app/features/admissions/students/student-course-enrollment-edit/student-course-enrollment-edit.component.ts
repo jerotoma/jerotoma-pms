@@ -10,6 +10,7 @@ import {
   ClassService,
   ModalService,
   AcademicYearService,
+  AcademicLevelService,
  } from 'app/services';
 import {
   ShowMessage,
@@ -17,9 +18,8 @@ import {
   StudentClassAdmission,
   Student,
   AcademicYear,
+  AcademicLevel,
   StudentClass,
-  ClassAdmission,
-  ResponseWrapper,
 } from 'app/models';
 import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
@@ -31,7 +31,7 @@ import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 })
 export class StudentCourseEnrollmentEditComponent implements OnInit {
   @Input() title: string;
-  @Input() studentClassId: string = '0';
+  @Input() studentClass: StudentClass;
   @Output() onCreationSuccess = new EventEmitter();
 
   userType: string = USER_TYPE.student;
@@ -45,6 +45,8 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   confirmed: boolean = false;
   isAddMore: boolean = false;
   academicYear: AcademicYear;
+  academicLevel: AcademicLevel;
+  academicLevels: AcademicLevel[];
   studentClassAdmission: StudentClassAdmission;
 
   param: QueryParam =  {
@@ -72,6 +74,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
 
   constructor(
     private academicYearService: AcademicYearService,
+    private academicLevelService: AcademicLevelService,
     private classService: ClassService,
     private modalService: ModalService,
     private studentClassService: StudentClassService,
@@ -81,7 +84,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    this.loadStudentClasses(parseInt(this.studentClassId, 10));
+    this.loadStudentClasses(this.studentClass);
   }
 
   dismiss() {
@@ -137,13 +140,21 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     this.studentClassForm = this.formBuilder.group({
       id: [null],
       academicYearId: ['', Validators.required],
+      academicLevelId: ['', Validators.required],
       jClassIds: [[], Validators.required],
-      studentId: ['', Validators.required],
+      studentIds: ['', Validators.required],
       fullName: ['', Validators.required],
     });
+    this.onChanges();
   }
 
   onChanges() {
+    this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
+      if (academicLevelId) {
+        this.setCurrentAcademicLevel(academicLevelId);
+      }
+    });
+
     this.studentClassForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
       if (academicYearId != null) {
         this.academicYears.forEach(academicYear => {
@@ -151,23 +162,47 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
             this.academicYear = academicYear;
           }
         });
-        this.loadJClassesByAcademicYear(academicYearId);
       }
     });
   }
   addMoreCourses() {
     this.isAddMore = true;
-    if (this.academicYear) {
-      this.loadUnregisteredJClassesByStudent(this.academicYear.id, this.student.id);
+
+    if (this.academicYear && this.academicLevel) {
+      this.loadUnregisteredClassesByStudent(this.student.id, this.academicLevel.id, this.academicYear.id);
+    } else {
+      this.modalService.openSnackBar('Academic Year or Level must have a value to continue', 'info');
     }
   }
   loadData() {
     this.loadAcademicYears();
   }
 
-  loadUnregisteredJClassesByStudent(academicYearId: number, studentId: number) {
+  loadAcademicLevelsByProgramId(programId: number) {
+    this.academicLevels = [];
+    this.academicLevelService.loadAcademicLevelsByProgramId(programId)
+    .subscribe((academicLevels: AcademicLevel[] ) => {
+      if (academicLevels) {
+        this.academicLevels = academicLevels;
+        this.setCurrentAcademicLevel(this.studentClass.student.academicLevelId);
+        this.studentClassForm.patchValue({
+          academicLevelId: this.studentClass.student.academicLevelId,
+        }, {emitEvent: false});
+      }
+    });
+  }
+
+  setCurrentAcademicLevel(academicLevelId: number) {
+    this.academicLevels.forEach(academicLevel => {
+      if (academicLevel.id === academicLevelId) {
+        this.academicLevel = academicLevel;
+      }
+    });
+  }
+
+  loadUnregisteredClassesByStudent(studentId: number, academicLevelId: number, academicYearId: number) {
     this.isLoading = true;
-    this.classService.loadUnregisteredJClassesByStudent(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
+    this.classService.loadUnregisteredClassesByStudent(studentId, academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
       if (jClassViews && jClassViews.length > 0) {
         this.jClasses = jClassViews;
       } else {
@@ -194,26 +229,21 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     });
   }
 
-  loadStudentClasses(studentClassId: number) {
-    this.isLoading = true;
-    this.studentClassService.getStudentClass(studentClassId).subscribe((studentClass: StudentClass) => {
-      this.isLoading = false;
+  loadStudentClasses(studentClass: StudentClass) {
       if (studentClass) {
+        this.loadAcademicLevelsByProgramId(studentClass.student.programId);
         this.student = studentClass.student;
         this.academicYear = studentClass.academicYear;
         this.registeredJClasses = studentClass.jClasses;
         this.jClassIds =  this.pushJClasses(this.registeredJClasses),
         this.studentClassForm.patchValue({
           id: studentClass.id,
-          studentId: this.student.id,
+          studentIds: [this.student.id],
           academicYearId: this.academicYear.id,
           fullName: this.student.fullName,
           jClassIds: this.jClassIds,
-        });
+        }, {emitEvent: false});
       }
-    }, error => {
-      this.isLoading = false;
-    });
   }
   patchStudent(student: Student) {
     this.student = student;

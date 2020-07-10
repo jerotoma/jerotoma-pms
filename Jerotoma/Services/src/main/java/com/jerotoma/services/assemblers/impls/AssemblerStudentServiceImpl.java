@@ -53,4 +53,10 @@ public class AssemblerStudentServiceImpl  implements AssemblerStudentService{
 		return assemblerStudentDao.loadParentsByStudentId(studentId);
 	}
 
+	@Override
+	public List<StudentVO> loadStudentsByProgramAndAcademicLevelIDs(Integer programId, Integer academicLevelId)
+			throws SQLException {
+		return assemblerStudentDao.loadStudentsByProgramAndAcademicLevelIDs(programId, academicLevelId);
+	}
+
 }

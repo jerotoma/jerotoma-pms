@@ -9,6 +9,10 @@ public class EnvironmentConfig {
 	
 	public static final String DEV = "dev";
 	public static final String PROD = "prod";
+	private static final String ACTIVE_PROFILE = "spring.profiles.active";
+	private static final String APP_PROPS_FILE_NAME = "application.properties";
+	private static final String PROD_PROPS_FILE_NAME = "application-prod.properties";
+	private static final String DEV_PROPS_FILE_NAME = "application-dev.properties";
 	
 	private static Properties loadConfigFile(String fileName) {
 		Properties properties = new Properties();
@@ -21,18 +25,29 @@ public class EnvironmentConfig {
 	}
 	
 	public static Properties loadAppEnv() {
-		Properties properties = loadConfigFile("application.properties");
-		String activeProfile = properties.getProperty("spring.profiles.active");
-		
-		if(!StringUtility.isEmpty(activeProfile)) {
-			if(activeProfile.equals(DEV)) {
-				properties = loadConfigFile("application-dev.properties");
+		Properties properties = null;
+		if(!StringUtility.isEmpty(getActiveMode())) {
+			if(isDev()) {
+				properties = loadConfigFile(DEV_PROPS_FILE_NAME);
 			} 
-			if(activeProfile.equals(PROD)) {
-				properties = loadConfigFile("application-prod.properties");
+			if(isProd()) {
+				properties = loadConfigFile(PROD_PROPS_FILE_NAME);
 			}
 		}		
 		return properties;		
+	}
+	
+	public static boolean isDev() {
+		return getActiveMode().equals(DEV);
+	}
+	
+	public static boolean isProd() {
+		return getActiveMode().equals(PROD);
+	}
+	
+	private static String getActiveMode() {
+		Properties properties = loadConfigFile(APP_PROPS_FILE_NAME);
+		return properties.getProperty(ACTIVE_PROFILE);
 	}
 	
 }

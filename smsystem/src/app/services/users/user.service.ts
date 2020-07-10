@@ -10,7 +10,6 @@ import { END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
   providedIn: 'root',
 })
 export class UserService {
-
   constructor(private http: HttpClient) { }
 
   getCurrentUser(): Observable<User> {
@@ -44,6 +43,13 @@ export class UserService {
     .get(`${END_POINTS.users}/${userType}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  loadStudentsByProgramAndAcademicLevelIDs(academicLevelId: number, programId: number):  Observable<User[]> {
+    return this.http
+    .get(`${END_POINTS.users}/programs/${programId}/academic-levels/${academicLevelId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
 
   loadUserDetails(username: string): Observable<User> {
     return this.http

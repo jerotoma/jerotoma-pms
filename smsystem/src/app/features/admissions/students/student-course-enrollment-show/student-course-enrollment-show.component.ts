@@ -106,15 +106,15 @@ export class StudentCourseEnrollmentShowComponent implements OnInit {
           }
         });
         if (this.academicYear) {
-          this.loadStudentJClassesByAcademicYear(this.academicYear.id, this.student.id);
+          this.loadStudentClassesByAcademicYear(this.academicYear.id, this.student.id);
         }
       }
     });
   }
 
-  loadStudentJClassesByAcademicYear(academicYearId: number, studentId: number) {
+  loadStudentClassesByAcademicYear(academicYearId: number, studentId: number) {
     this.isLoading = true;
-    this.classService.loadStudentJClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
+    this.classService.loadStudentClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });

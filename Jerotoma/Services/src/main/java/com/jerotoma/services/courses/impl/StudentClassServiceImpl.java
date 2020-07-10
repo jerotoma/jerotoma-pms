@@ -55,4 +55,9 @@ public class StudentClassServiceImpl implements StudentClassService {
 		return studenClassDao.loadMapList(queryParam);
 	}
 
+	@Override
+	public List<StudentClass> createBatchObject(List<StudentClass> studentClasses) throws SQLException {
+		return studenClassDao.createBatchObject(studentClasses);
+	}
+
 }

@@ -31,15 +31,15 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.StudentClass;
-import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.Student;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.StudentClassValidator;
 import com.jerotoma.common.viewobjects.StudentClassVO;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
 import com.jerotoma.services.courses.AcademicYearService;
-import com.jerotoma.services.courses.CourseService;
 import com.jerotoma.services.courses.ClassService;
+import com.jerotoma.services.courses.CourseService;
 import com.jerotoma.services.courses.StudentClassService;
 import com.jerotoma.services.users.StudentService;
 
@@ -120,35 +120,39 @@ public class RestStudentClassController extends BaseController {
 		List<String> requiredFields;
 		this.logRequestDetail("POST : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
+		userSecurityClearance.checkStudentCreationPermission();
 		
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
-						StudentConstant.Class.STUDENT_ID,
+						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_IDS
 						));
+		
+		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);		
+		List<StudentClass> studentClasses = new ArrayList<>();
 		Set<Class> jClasses = new HashSet<>();
-		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
-		StudentClass studentClass = new StudentClass();		
 		try {
-			
-			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
-			Student student = studentService.findObject(jClassFields.getStudentId());
-			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());	
-			
-			studentClass.setStudent(student);
-			studentClass.setAcademicYear(academicYear);
-			studentClass.setUpdatedBy(authUser.getId());
-			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-			
+			UserVO authUser = getAuthenticatedUser();
+			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
 			for (Integer classId : jClassFields.getClassIds()) {		
 				Class jClass = jClassService.findObject(classId);						
 				jClasses.add(jClass);
 			}
-			studentClass.setClasses(jClasses);			
-			studentClass = studentClassService.createObject(studentClass);			
-			response.setData(studentClass);
+			
+			for (Integer studentId: jClassFields.getStudentIds()) {
+				StudentClass studentClass = new StudentClass();	
+				studentClass.setClasses(jClasses);	
+				studentClass.setAcademicYear(academicYear);
+				studentClass.setUpdatedBy(authUser.getUserId());
+				studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
+				studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());	
+						
+				Student student = studentService.findObject(studentId);
+				studentClass.setStudent(student);
+				studentClasses.add(studentClass);				
+			}			
+			response.setData(studentClassService.createBatchObject(studentClasses));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -173,28 +177,31 @@ public class RestStudentClassController extends BaseController {
 				Arrays.asList(
 						StudentConstant.Class.ID,
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
-						StudentConstant.Class.STUDENT_ID,
+						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_ID
 						));
 		
 		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);
 		StudentClass studentClass;
 		Set<Class> jClasses = new HashSet<>();		
-		try {			
-			studentClass = studentClassService.findObject(jClassFields.getId());	
-			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
-			Student student = studentService.findObject(jClassFields.getStudentId());
+		try {
+			studentClass = studentClassService.findObject(jClassFields.getId());
+			UserVO authUser = getAuthenticatedUser();
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			studentClass.setStudent(student);
 			studentClass.setAcademicYear(academicYear);
 			studentClass.setUpdatedBy(authUser.getId());
-			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());		
-			for (Integer classId : jClassFields.getClassIds()) {					
-				Class jClass = jClassService.findObject(classId);		
+			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());	
+			for (Integer classId : jClassFields.getClassIds()) {		
+				Class jClass = jClassService.findObject(classId);						
 				jClasses.add(jClass);
 			}
-			studentClass.setClasses(jClasses);			
-			studentClass = studentClassService.updateObject(studentClass);
+			studentClass.setClasses(jClasses);	
+			
+			for (Integer studentId: jClassFields.getStudentIds()) {
+				Student student = studentService.findObject(studentId);
+				studentClass.setStudent(student);
+				studentClass = studentClassService.updateObject(studentClass);	
+			}
 			response.setData(studentClass);
 				
 		} catch (SQLException e) {

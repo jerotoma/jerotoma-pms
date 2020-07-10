@@ -90,7 +90,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
     this.dialogService.open(StudentCourseEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
-        studentClassId: studentClass.id.toString(),
+        studentClass: studentClass,
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
@@ -108,7 +108,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
-        this.loadStudentClasses();
+        this.deleteEnrolledStudent(result.id);
       }
     });
   }

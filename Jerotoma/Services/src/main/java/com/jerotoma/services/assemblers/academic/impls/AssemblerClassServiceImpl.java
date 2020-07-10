@@ -48,9 +48,9 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	}
 
 	@Override
-	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer academicYearId, Integer studentId, Integer academicLevelrId)
+	public List<ClassVO> loadStudentUnregisteredClassesByAcademicYear(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {		
-		return assemblerClassDao.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId, academicLevelrId);
+		return assemblerClassDao.loadStudentUnregisteredClassesByAcademicYear(studentId, academicLevelId, academicYearId);
 	}
 
 	@Override
@@ -63,6 +63,12 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId)
 			throws SQLException {
 		return assemblerClassDao.findClassByUniqueParams(teacherId, courseId, academicYearId);
+	}
+
+	@Override
+	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId)
+			throws SQLException {
+		return assemblerClassDao.loadClassesByParams(programId, academicLevelrId, academicYearId);
 	}
 
 }

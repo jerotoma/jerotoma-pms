@@ -14,5 +14,6 @@ public interface AssemblerStudentDao extends AssemblerDao<StudentVO>{
 	List<StudentVO> search(QueryParam queryParam) throws SQLException;
 	List<StudentVO> findStudentsByParentId(Integer parentId) throws SQLException;
 	List<ParentVO> loadParentsByStudentId(Integer studentId)  throws SQLException;
+	List<StudentVO> loadStudentsByProgramAndAcademicLevelIDs(Integer programId, Integer academicLevelId) throws SQLException;
 
 }

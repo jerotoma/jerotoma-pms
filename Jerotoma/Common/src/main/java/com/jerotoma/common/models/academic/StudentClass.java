@@ -120,15 +120,15 @@ public class StudentClass {
 
 	public static class Fields {
 		Integer Id;
-		Integer studentId;
+		List<Integer> studentIds;
 		List<Integer> classIds;
 		Integer academicYearId;
 			
 		
-		public Fields(Integer id, Integer studentId, List<Integer> classIds, Integer academicYearId) {
+		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer academicYearId) {
 			super();
 			Id = id;
-			this.studentId = studentId;
+			this.studentIds = studentIds;
 			this.classIds = classIds;
 			this.academicYearId = academicYearId;
 		}
@@ -138,27 +138,30 @@ public class StudentClass {
 		public void setId(Integer id) {
 			Id = id;
 		}
-		public Integer getStudentId() {
-			return studentId;
+		
+		public List<Integer> getStudentIds() {
+			return studentIds;
 		}
-		public void setStudentId(Integer studentId) {
-			this.studentId = studentId;
+		
+		public void setStudentIds(List<Integer> studentIds) {
+			this.studentIds = studentIds;
 		}
 		
 		public List<Integer> getClassIds() {
 			return classIds;
 		}
+		
 		public void setClassIds(List<Integer> classIds) {
 			this.classIds = classIds;
 		}
+		
 		public Integer getAcademicYearId() {
 			return academicYearId;
 		}
+		
 		public void setAcademicYearId(Integer academicYearId) {
 			this.academicYearId = academicYearId;
-		}
-		
-		
+		}		
 	}
 	
 }

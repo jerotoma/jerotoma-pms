@@ -1,6 +1,7 @@
 package com.jerotoma.database.dao.courses.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
@@ -24,6 +26,9 @@ public class StudentClassDaoImpl implements StudentClassDao {
 
 	@PersistenceContext 
 	private EntityManager entityManager;
+	
+	@Value("${spring.jpa.properties.hibernate.jdbc.batch_size}")
+	private int batchSize;
 
 	@Override
 	public StudentClass findObject(Integer primaryKey) throws SQLException {
@@ -84,5 +89,22 @@ public class StudentClassDaoImpl implements StudentClassDao {
 	public Long countObject() throws SQLException {		
 		return entityManager.createQuery("SELECT count(*) FROM StudentClass", Long.class)				
 				.getSingleResult();
+	}
+
+	@Override
+	public List<StudentClass> createBatchObject(List<StudentClass> studentClasses) throws SQLException {
+		List<StudentClass> studentClassList = new ArrayList<>();
+		int i = 0;
+		for (StudentClass studentClass : studentClasses) {
+			entityManager.persist(studentClass);
+			studentClassList.add(studentClass);
+			i++;
+		    if (i % batchSize == 0) {
+		      // Flush a batch of inserts and release memory.
+		      entityManager.flush();
+		      entityManager.clear();
+		    }
+		}
+		return studentClassList;
 	}
 }

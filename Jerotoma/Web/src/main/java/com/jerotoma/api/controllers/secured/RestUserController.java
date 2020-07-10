@@ -208,6 +208,28 @@ public class RestUserController extends BaseController {
 		
 	}
 	
+	@GetMapping(value = {"/programs/{programId}/academic-levels/{academicLevelId}"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getStudentsByAcademicYear(Authentication auth,
+			@PathVariable(value="programId", required=true)Integer programId,
+			@PathVariable(value="academicLevelId", required=true)Integer academicLevelId) {		
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		try {
+			response.setData(assemblerStudentService.loadStudentsByProgramAndAcademicLevelIDs(programId, academicLevelId));	
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{

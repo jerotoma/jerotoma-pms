@@ -84,4 +84,17 @@ public class SecurityClearance {
 		}
 		
 	}
+
+	public void checkStudentCreationPermission() {
+		UserVO currentUser = userService.loadCurrentUser();
+		UnAuthorizedAccessException unAuthorizedAccess = new UnAuthorizedAccessException(String.format(ExceptionMessageConstant.UN_AUTHORIZED_ACCESS_MESSAGE, "create new program"));
+		if (currentUser == null) {
+			throw unAuthorizedAccess;
+		}
+		
+		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
+			throw unAuthorizedAccess;
+		}
+		
+	}
 }

@@ -163,7 +163,7 @@ public class RestClassController extends BaseController {
 		return response;
 	}
 	
-	@GetMapping(value = {"academic-years/{academicYearId}/students/{studentId}/unregistered", "/academic-years/{academicYearId}/students/{studentId}/unregistered"})
+	@GetMapping(value = {"/students/{studentId}/academic-levels/{academicLevelId}/academic-years/{academicYearId}/unregistered"})
 	@ResponseBody
 	public HttpResponseEntity<Object> loadUnregisteredJClassesByStudent(
 			Authentication auth, 
@@ -175,7 +175,7 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			response.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(academicYearId, studentId, academicLevelrId));
+			response.setData(assemblerClassService.loadStudentUnregisteredClassesByAcademicYear(studentId, academicLevelrId, academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -209,6 +209,28 @@ public class RestClassController extends BaseController {
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setHttpStatus(HttpStatus.OK);
 		return response;
+	}
+	
+	@GetMapping(value= {"/programs/{programId}/academic-levels/{academicLevelId}/academic-years/{academicYearId}"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadClassesByParams(
+			Authentication auth, 
+			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("academicLevelId") Integer academicLevelrId,
+			@PathVariable("programId") Integer programId) {
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/programs/" + programId + "/academic-levels/" + academicLevelrId + "/academic-years/" + academicYearId);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			response.setData(assemblerClassService.loadClassesByParams(programId, academicLevelrId, academicYearId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;		
 	}
 	
 	@GetMapping(value = {"/list", "/list/"})
