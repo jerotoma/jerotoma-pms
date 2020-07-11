@@ -15,7 +15,7 @@ import {
 
 import { MediaService, ModalService } from 'app/services';
 import { Media, ResponseWrapper } from 'app/models';
-import { QueryParam, END_POINTS, USER_TYPE } from 'app/utils';
+import { QueryParam, API_END_POINTS, USER_TYPE } from 'app/utils';
 
 export interface ActiveView {
   gridView: number;
@@ -35,7 +35,7 @@ export class MediaListComponent implements OnInit {
   @Input('mediaList') mediaList: Media[] = [];
   @Input('isUserType') isUserType: boolean = false;
 
-  baseURL: string = END_POINTS.baseURL;
+  baseURL: string = API_END_POINTS.baseURL;
   public activeView: ActiveView = {
     gridView: 25,
     isRowView: false,

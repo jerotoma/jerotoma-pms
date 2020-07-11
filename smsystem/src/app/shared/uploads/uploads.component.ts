@@ -6,7 +6,7 @@ import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { FileUploader, FileItem } from 'ng2-file-upload';
 import { UploadService, AuthService, ModalService } from 'app/services';
 import { NbDialogRef } from '@nebular/theme';
-import { END_POINTS, APP_ACTION_TYPE } from 'app/utils';
+import { API_END_POINTS, APP_ACTION_TYPE } from 'app/utils';
 
 export interface UploadFile {
   file: File;
@@ -20,7 +20,7 @@ export interface UploadFile {
 })
 export class UploadsComponent implements OnInit {
   @Input('uploadDir') uploadDir: string = 'users';
-  @Input('uploadURL') url: string = END_POINTS.uploads;
+  @Input('uploadURL') url: string = API_END_POINTS.uploads;
   @Input('uploadURL') title: string = '';
   @Input('action') action: string = APP_ACTION_TYPE.create;
   @Input('uploadLimit') uploadLimit: number = 10;

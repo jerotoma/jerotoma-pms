@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { END_POINTS, QueryParam } from 'app/utils';
+import { API_END_POINTS, QueryParam } from 'app/utils';
 
 import { ResponseWrapper, AcademicLevel } from 'app/models';
 
@@ -14,42 +14,42 @@ export class AcademicLevelService {
 
   getAcademicLevel(academicLevelId: number): Observable<AcademicLevel> {
     return this.http
-      .get(`${END_POINTS.academicLevels}/${academicLevelId}`)
+      .get(`${API_END_POINTS.academicLevels}/${academicLevelId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadAcademicLevelList(): Observable<AcademicLevel[]> {
-    return this.http.get(`${END_POINTS.academicLevels}/list`)
+    return this.http.get(`${API_END_POINTS.academicLevels}/list`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadUnAddedAcademicLevelByProgram(programId: number): Observable<AcademicLevel[]> {
-    return this.http.get(`${END_POINTS.academicLevels}/programs/${programId}/unadded`)
+    return this.http.get(`${API_END_POINTS.academicLevels}/programs/${programId}/unadded`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadAcademicLevelsByProgramId(programId: number): Observable<AcademicLevel[]> {
-    return this.http.get(`${END_POINTS.academicLevels}/programs/${programId}`)
+    return this.http.get(`${API_END_POINTS.academicLevels}/programs/${programId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   getAcademicLevels(param: QueryParam): Observable<ResponseWrapper> {
-    return this.http.get(`${END_POINTS.academicLevels}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+    return this.http.get(`${API_END_POINTS.academicLevels}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
   createAcademicLevel(data?: any): Observable<AcademicLevel> {
-    return this.http.post(`${END_POINTS.academicLevels}`, data)
+    return this.http.post(`${API_END_POINTS.academicLevels}`, data)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   deleteAcademicLevel(academicLevelId: number): Observable<any> {
-    return this.http.delete(`${END_POINTS.academicLevels}/${academicLevelId}`)
+    return this.http.delete(`${API_END_POINTS.academicLevels}/${academicLevelId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   updateAcademicLevel(data?: any): Observable<AcademicLevel> {
-    return this.http.put(`${END_POINTS.academicLevels}`, data)
+    return this.http.put(`${API_END_POINTS.academicLevels}`, data)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }

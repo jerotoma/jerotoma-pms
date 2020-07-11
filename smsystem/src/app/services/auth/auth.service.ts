@@ -8,8 +8,8 @@ import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from 'app/services/auth/token.service';
 import {  UserService } from 'app/services/users';
 import {  LocalStorageService } from 'app/services/storage';
-import { Role } from 'app/models';
-import { END_POINTS } from 'app/utils';
+import { Role, USER_ROLE } from 'app/models';
+import { API_END_POINTS } from 'app/utils';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({
@@ -27,7 +27,7 @@ export class AuthService {
 
   refreshToken(): Observable<HttpResponse<any> | HttpErrorResponse > {
       return this.http
-      .post<any>(`${END_POINTS.refreshToken}`, {refreshToken: 'ROLE_REFRESH_TOKEN'}, {observe: 'response'})
+      .post<any>(`${API_END_POINTS.refreshToken}`, {refreshToken: 'ROLE_REFRESH_TOKEN'}, {observe: 'response'})
         .pipe(tap(result => {
           const resp = result;
           const token = resp.headers.get(AUTH_CONSTANT.authorization);
@@ -78,7 +78,7 @@ export class AuthService {
    * @returns {Observable<HttpResponse<any> | HttpErrorResponse>}
    */
   authenticate(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post(`${END_POINTS.login}`, data, {observe: 'response'})
+    return this.http.post(`${API_END_POINTS.login}`, data, {observe: 'response'})
     .pipe(map(result => {
       const resp = result;
       const token = resp.headers.get(AUTH_CONSTANT.authorization);
@@ -98,7 +98,14 @@ export class AuthService {
     if (roles) {
       return roles;
     }
-    return null;
+    return [ {
+        id: null,
+        name: USER_ROLE.ANANYMOUS,
+        displayName: null,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+      },
+    ];
   }
 
   /**
@@ -113,7 +120,7 @@ export class AuthService {
    * @returns {Observable<HttpResponse<any> | HttpErrorResponse>}
    */
   register(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(`${END_POINTS.register}`, data, {observe: 'response'})
+    return this.http.post<any>(`${API_END_POINTS.register}`, data, {observe: 'response'})
     .pipe(tap(resp => resp, catchError(this.errorHandler)));
   }
 
@@ -124,7 +131,7 @@ export class AuthService {
    * @returns {Observable<HttpResponse<any> | HttpErrorResponse>}
    */
   logout(): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<any>(`${END_POINTS.logout}`, {}, {observe: 'response'})
+    return this.http.post<any>(`${API_END_POINTS.logout}`, {}, {observe: 'response'})
     .pipe(map(result => {
       const resp = result;
       const status = resp.status;
@@ -145,7 +152,7 @@ export class AuthService {
    * @returns {Observable<HttpResponse<any> | HttpErrorResponse>}
    */
   requestPassword(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<HttpResponse<any>>(`${END_POINTS.resetPassword}`, data, {observe: 'response'})
+    return this.http.post<HttpResponse<any>>(`${API_END_POINTS.resetPassword}`, data, {observe: 'response'})
     .pipe(tap(resp => resp, catchError(this.errorHandler)));
   }
 
@@ -160,7 +167,7 @@ export class AuthService {
    * @returns {Observable<HttpResponse<any> | HttpErrorResponse>}
    */
   resetPassword(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
-    return this.http.post<HttpResponse<any>>(`${END_POINTS.resetPassword}`, data, {observe: 'response'})
+    return this.http.post<HttpResponse<any>>(`${API_END_POINTS.resetPassword}`, data, {observe: 'response'})
     .pipe(tap(resp => resp, catchError(this.errorHandler)));
   }
 }

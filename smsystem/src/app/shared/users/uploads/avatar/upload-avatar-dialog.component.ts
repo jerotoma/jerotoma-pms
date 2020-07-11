@@ -6,7 +6,7 @@ import { HttpEvent, HttpEventType } from '@angular/common/http';
 
 import {  ModalService, UploadService } from 'app/services';
 import { User } from 'app/models';
-import { USER_TYPE, END_POINTS } from 'app/utils';
+import { USER_TYPE, API_END_POINTS } from 'app/utils';
 
 @Component({
   selector: 'app-upload-avatar-dialog',
@@ -75,7 +75,7 @@ export class UploadAvatarDialogComponent implements OnInit {
 
   initUploader() {
     this.uploader = new FileUploader({
-      url: END_POINTS.uploads + '/users/' + this.user.userId + '/profile',
+      url: API_END_POINTS.uploads + '/users/' + this.user.userId + '/profile',
       disableMultipart : false,
       autoUpload: false,
       method: 'POST',

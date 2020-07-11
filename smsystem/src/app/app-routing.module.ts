@@ -1,19 +1,20 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { USER_ROLE } from 'app/models';
+import { USER_ROLE, ALL_ROLES } from 'app/models';
 import { AuthGuard } from './services/guards/auth-guard.service';
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'dashboard',
     canActivate: [AuthGuard], // here we tell Angular to check the access with our AuthGuard
+    data: { roles: ALL_ROLES },
     loadChildren: () => import('./features/features.module')
       .then(m => m.FeaturesModule),
   },
   {
     path: 'account',
     canActivate: [AuthGuard],
-    data: { roles: [USER_ROLE.ADMIN] },
+    data: { roles: [ALL_ROLES] },
     loadChildren: () => import('./auth/auth.module').then(m => m.AppAuthModule),
 
   },

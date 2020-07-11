@@ -9,9 +9,12 @@ import {
 } from '@angular/router';
 import { AuthService } from 'app/services/auth';
 import { UserService } from 'app/services/users';
+import { ModalService } from 'app/services/modals';
 import { Role } from 'app/models/securities';
 import { Observable, of as observableOf } from 'rxjs';
 import { tap } from 'rxjs/operators';
+
+import { FRONT_END_POINTS, MESSAGE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +25,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   constructor(
     private authService: AuthService,
+    private modalService: ModalService,
     private userService: UserService,
     private router: Router) {
   }
@@ -44,7 +48,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.authService.isAuthenticated().pipe(
       tap(authenticated => {
         if (!authenticated) {
-          this.router.navigate(['/account/login']);
+          this.router.navigate([FRONT_END_POINTS.login]);
         }
       }),
     );
@@ -59,9 +63,10 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
           return observableOf(true);
         }
       }
-      // role not authorised so redirect to home page
-      this.router.navigate(['/']);
-      return observableOf(false);
     }
+    // role not authorised so redirect to home page
+    this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
+    this.router.navigate([FRONT_END_POINTS.login]);
+    return observableOf(false);
   }
 }

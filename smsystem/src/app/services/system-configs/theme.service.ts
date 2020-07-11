@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Theme, ResponseWrapper } from 'app/models';
-import { THEMES, END_POINTS} from 'app/utils';
+import { THEMES, API_END_POINTS} from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class ThemeService {
     private themeService: NbThemeService) { }
 
   getCurrentSystemTheme(): Observable<any> {
-    return this.http.get(`${END_POINTS.pubThemes}`)
+    return this.http.get(`${API_END_POINTS.pubThemes}`)
       .pipe(map((resp: ResponseWrapper) => {
         if (resp.success) {
           this.mTheme = resp.data;
@@ -37,7 +37,7 @@ export class ThemeService {
       }));
   }
   getUserAndSystemThemes(): Observable<any> {
-    return this.http.get(`${END_POINTS.themes}`)
+    return this.http.get(`${API_END_POINTS.themes}`)
       .pipe(map( (resp: ResponseWrapper ) => {
         if (resp.success) {
           this.mTheme = resp.data;

@@ -8,4 +8,8 @@ export enum USER_ROLE {
   STAFF = 'ROLE_STAFF',
   LIBRARIAN = 'ROLE_LIBRARIAN',
   USER = 'ROLE_USER',
+  ANANYMOUS = 'ROLE_ANANYMOUS',
 }
+
+export const ALL_ROLES = Object.values(USER_ROLE);
+

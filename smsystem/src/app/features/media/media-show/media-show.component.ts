@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Input } from '@angular/core';
 import { NbDialogRef } from '@nebular/theme';
-import { QueryParam, END_POINTS } from 'app/utils';
+import { QueryParam, API_END_POINTS } from 'app/utils';
 
 import { Media } from 'app/models';
 @Component({
@@ -14,7 +14,7 @@ export class MediaShowComponent implements OnInit {
   @Input('media') media: Media;
   @Input('title') title: string;
 
-  baseURL: string = END_POINTS.baseURL;
+  baseURL: string = API_END_POINTS.baseURL;
 
   constructor(protected ref: NbDialogRef<MediaShowComponent>) { }
 

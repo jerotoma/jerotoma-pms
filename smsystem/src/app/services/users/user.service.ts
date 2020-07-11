@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map, catchError, retry } from 'rxjs/operators';
 
 import { User, ResponseWrapper, Role } from 'app/models';
-import { END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
+import { API_END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -13,20 +13,20 @@ export class UserService {
 
   loadCurrentUserRoles(): Observable<Role[]> {
     return this.http
-      .get(`${END_POINTS.users}/currentUser/roles`).
+      .get(`${API_END_POINTS.users}/currentUser/roles`).
       pipe(map((resp: ResponseWrapper) => resp.data));
   }
   constructor(private http: HttpClient) { }
 
   getCurrentUser(): Observable<User> {
     return this.http
-      .get(`${END_POINTS.users}/currentUser`).
+      .get(`${API_END_POINTS.users}/currentUser`).
       pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   getUser(userId: number): Observable<User> {
     return this.http
-      .get(`${END_POINTS.users}/${userId}`)
+      .get(`${API_END_POINTS.users}/${userId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
@@ -46,59 +46,59 @@ export class UserService {
         break;
     }
     return this.http
-    .get(`${END_POINTS.users}/${userType}/${userId}`)
+    .get(`${API_END_POINTS.users}/${userType}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadStudentsByProgramAndAcademicLevelIDs(academicLevelId: number, programId: number):  Observable<User[]> {
     return this.http
-    .get(`${END_POINTS.users}/programs/${programId}/academic-levels/${academicLevelId}`)
+    .get(`${API_END_POINTS.users}/programs/${programId}/academic-levels/${academicLevelId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
 
   loadUserDetails(username: string): Observable<User> {
     return this.http
-    .post(`${END_POINTS.users}/profile`, {username: username})
+    .post(`${API_END_POINTS.users}/profile`, {username: username})
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   load(param: QueryParam): Observable<any> {
     return this.http
-      .get(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+      .get(`${API_END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadUsers(param: QueryParam): Observable<any> {
     return this.http
-      .get(`${END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
+      .get(`${API_END_POINTS.users}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   addUser(data: any): Observable<ResponseWrapper>  {
-    return this.http.post(`${END_POINTS.users}`, data)
+    return this.http.post(`${API_END_POINTS.users}`, data)
     .pipe(map((resp: ResponseWrapper) => resp));
   }
 
   updateUser(data: any): Observable<ResponseWrapper>  {
-    return this.http.put(`${END_POINTS.users}`, data)
+    return this.http.put(`${API_END_POINTS.users}`, data)
     .pipe(map((resp: ResponseWrapper) => resp));
   }
 
   deleteUser(userId: number, userType: string): Observable<User> {
-    return this.http.delete(`${END_POINTS.users}/${userId}?userType=${userType}`)
+    return this.http.delete(`${API_END_POINTS.users}/${userId}?userType=${userType}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   search(param: QueryParam): Observable<User[]> {
     return this.http
-    .get(`${END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
+    .get(`${API_END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadTeachersByCourseID(courseID: number): Observable<User[]> {
     return this.http
-    .get(`${END_POINTS.users}/teachers/courses/${courseID}`)
+    .get(`${API_END_POINTS.users}/teachers/courses/${courseID}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }

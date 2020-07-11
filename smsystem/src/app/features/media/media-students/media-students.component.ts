@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { MediaService, ModalService } from 'app/services';
 import { Media, ResponseWrapper } from 'app/models';
-import { QueryParam, END_POINTS, USER_TYPE } from 'app/utils';
+import { QueryParam, API_END_POINTS, USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-media-students',

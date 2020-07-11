@@ -3,7 +3,7 @@ import { UploadAvatarDialogComponent } from 'app/shared/users/uploads';
 import { NbDialogService } from '@nebular/theme';
 
 import { User, Student, Parent, Teacher, Staff } from 'app/models';
-import { USER_TYPE, END_POINTS } from 'app/utils';
+import { USER_TYPE, API_END_POINTS } from 'app/utils';
 
 @Component({
   selector: 'app-user-details',
@@ -14,7 +14,7 @@ export class UserDetailsComponent implements OnInit {
     @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
     @Input('userType') userType: string = USER_TYPE.teacher;
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
-    baseURL: string = END_POINTS.baseURL;
+    baseURL: string = API_END_POINTS.baseURL;
 
     constructor(private dialogService: NbDialogService){}
 

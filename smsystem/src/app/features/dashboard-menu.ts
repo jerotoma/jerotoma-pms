@@ -1,4 +1,5 @@
 import { NbMenuItem } from '@nebular/theme';
+import { FRONT_END_POINTS } from 'app/utils';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -8,13 +9,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'keypad-outline',
-    link: '/dashboard',
+    link: FRONT_END_POINTS.dashboard,
     home: true,
   },
   {
     title: 'Resources',
     icon: 'monitor-outline',
-    link: '/dashboard/resources',
+    link: FRONT_END_POINTS.resources,
   },
   {
     title: 'FEATURES',
@@ -26,19 +27,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Teachers',
-        link: '/dashboard/users/teachers',
+        link: FRONT_END_POINTS.teachers,
       },
       {
         title: 'Students',
-        link: '/dashboard/users/students',
+        link: FRONT_END_POINTS.students,
       },
       {
         title: 'Parents',
-        link: '/dashboard/users/parents',
+        link: FRONT_END_POINTS.parents,
       },
       {
         title: 'Staffs',
-        link: '/dashboard/users/staffs',
+        link: FRONT_END_POINTS.staffs,
       },
     ],
   },

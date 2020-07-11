@@ -1,4 +1,4 @@
-export const END_POINTS = {
+export const API_END_POINTS = {
   baseURL: 'https://jerotoma.com',
   dashboard: '/dashboard',
   rootURL: '/api/secured',
@@ -29,4 +29,17 @@ export const END_POINTS = {
   restDashboard: '/api/secured/dashboard',
   attendances: '/api/secured/attendances',
   academicLevels: '/api/secured/academic-levels',
+};
+
+
+export const FRONT_END_POINTS = {
+  baseURL: 'https://jerotoma.com',
+  dashboard: '/dashboard',
+  login: '/account/login',
+  resources: '/dashboard/resources',
+  users: '/dashboard/users',
+  staffs: '/dashboard/users/staffs',
+  teachers: '/dashboard/users/teachers',
+  parents: '/dashboard/users/parents',
+  students: '/dashboard/users/students',
 };
