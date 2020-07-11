@@ -3,8 +3,9 @@ import { Observable, of as observableOf, throwError } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 import { AUTH_CONSTANT } from './auth-constant';
-import { LocalStorage, isObjectEmpty } from 'app/utils';
+import { isObjectEmpty } from 'app/utils';
 import { Token } from 'app/models/tokens/token';
+import { LocalStorageService } from 'app/services/storage';
 
 
 @Injectable({
@@ -12,9 +13,9 @@ import { Token } from 'app/models/tokens/token';
 })
 export class TokenService {
   token: string = '';
-  storage: LocalStorage = null;
   jwtHelper: JwtHelperService = null;
-  constructor() {
+
+  constructor(private storage: LocalStorageService) {
     this.init();
   }
 
@@ -39,9 +40,6 @@ export class TokenService {
   }
 
   init() {
-    if (this.storage == null) {
-      this.storage = new LocalStorage();
-    }
     if ( this.jwtHelper == null) {
       this.jwtHelper =  new JwtHelperService();
     }

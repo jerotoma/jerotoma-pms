@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { MENU_ITEMS } from './dashboard-menu';
 
@@ -15,7 +15,11 @@ import { MENU_ITEMS } from './dashboard-menu';
     </app-one-column-layout>
   `,
 })
-export class FeaturesComponent {
+export class FeaturesComponent implements OnInit {
   menu = MENU_ITEMS;
   autoCollapse: boolean = true;
+
+  ngOnInit(): void {
+
+  }
 }

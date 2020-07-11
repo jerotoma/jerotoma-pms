@@ -3,13 +3,19 @@ import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/htt
 import { Observable, throwError } from 'rxjs';
 import { map, catchError, retry } from 'rxjs/operators';
 
-import { User, ResponseWrapper } from 'app/models';
+import { User, ResponseWrapper, Role } from 'app/models';
 import { END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+
+  loadCurrentUserRoles(): Observable<Role[]> {
+    return this.http
+      .get(`${END_POINTS.users}/currentUser/roles`).
+      pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   constructor(private http: HttpClient) { }
 
   getCurrentUser(): Observable<User> {

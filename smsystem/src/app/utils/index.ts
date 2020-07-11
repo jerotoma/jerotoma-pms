@@ -2,7 +2,6 @@ export * from './constants';
 export * from './query-params';
 export * from './animations';
 export * from './helpers';
-export * from './local-storage';
 export * from './validators/date.validator';
 export * from './validators/must-match.validator';
 export * from './validators/check-box.validator';

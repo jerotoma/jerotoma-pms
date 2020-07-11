@@ -727,7 +727,7 @@ public class RestUserController extends BaseController {
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER)
 	@ResponseBody
 	public HttpResponseEntity<Object> getLoggedUser(Authentication auth) throws UsernameNotFoundException {				
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE.concat(EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER));
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		response.setSuccess(true);
@@ -736,6 +736,17 @@ public class RestUserController extends BaseController {
 		return response;		
 	}
 	
+	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER_ROLES)
+	@ResponseBody
+	public HttpResponseEntity<Object> getLoggedUserRoles(Authentication auth) throws UsernameNotFoundException {				
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE.concat(EndPointConstants.REST_USER_CONTROLLER.CURRENT_USER_ROLES));
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setData(roleService.loadListFromRoleNames(getAuthenticatedUser().getRoles()));		
+		return response;		
+	}
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.SEARCH)
 	@ResponseBody
 	public HttpResponseEntity<Object> searchUser(

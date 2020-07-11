@@ -5,8 +5,12 @@ import { Observable, of as observableOf, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Token } from 'app/models/tokens/token';
 import { AUTH_CONSTANT } from './auth-constant';
-import { TokenService } from './token.service';
+import { TokenService } from 'app/services/auth/token.service';
+import {  UserService } from 'app/services/users';
+import {  LocalStorageService } from 'app/services/storage';
+import { Role } from 'app/models';
 import { END_POINTS } from 'app/utils';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +19,11 @@ export class AuthService {
   // store the URL so we can redirect after logging in
   redirectUrl: string;
 
-  constructor(private tokenService: TokenService, private http: HttpClient) {}
+  constructor(
+    private storageService: LocalStorageService,
+    private userService: UserService,
+    private tokenService: TokenService,
+    private http: HttpClient) {}
 
   refreshToken(): Observable<HttpResponse<any> | HttpErrorResponse > {
       return this.http
@@ -27,6 +35,9 @@ export class AuthService {
           if (status !== null && status === 200) {
             if (token !== null) {
               this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
+              this.userService.loadCurrentUserRoles().subscribe((roles: Role[]) => {
+                this.storageService.store(AUTH_CONSTANT.roles, JSON.stringify(roles));
+              });
             }
           }
         }));
@@ -74,9 +85,20 @@ export class AuthService {
       const status = resp.status;
       if (status !== null && status === 200 && token) {
         this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
+        this.userService.loadCurrentUserRoles().subscribe((roles: Role[]) => {
+          this.storageService.store(AUTH_CONSTANT.roles, JSON.stringify(roles));
+        });
       }
       return result;
     }));
+  }
+
+  loadCurrentUserRoles(): Role[] {
+    const roles: Role[] = JSON.parse(this.storageService.getValue(AUTH_CONSTANT.roles));
+    if (roles) {
+      return roles;
+    }
+    return null;
   }
 
   /**

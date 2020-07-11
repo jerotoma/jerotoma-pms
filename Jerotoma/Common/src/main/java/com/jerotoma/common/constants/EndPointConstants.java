@@ -127,6 +127,7 @@ public class EndPointConstants {
 		public static final String INDEX = "/";
 		public static final String SEARCH = "/search";
 		public static final String CURRENT_USER = "/currentUser";
+		public static final String CURRENT_USER_ROLES = CURRENT_USER + "/roles";
 	}
 	
 	public static interface REST_PROGRAM_CONTROLLER {

@@ -1,6 +1,7 @@
 package com.jerotoma.services.roles;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.RoleConstant.USER_ROLES;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.database.dao.roles.RoleDao;
 
@@ -54,6 +56,17 @@ public class RoleServiceImpl  implements RoleService {
 	@Override
 	public List<Role> loadList() {		
 		return roleDao.loadList();
+	}
+
+	@Override
+	public List<Role> loadListFromRoleNames(List<USER_ROLES> userRoles) {
+		
+		try {
+			return roleDao.loadListFromRoleNames(userRoles);
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return new ArrayList<Role>();
 	}
 
 }

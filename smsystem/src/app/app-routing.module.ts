@@ -1,6 +1,6 @@
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-
+import { USER_ROLE } from 'app/models';
 import { AuthGuard } from './services/guards/auth-guard.service';
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -12,8 +12,10 @@ const routes: Routes = [
   },
   {
     path: 'account',
-    loadChildren: () => import('./auth/auth.module')
-      .then(m => m.AppAuthModule),
+    canActivate: [AuthGuard],
+    data: { roles: [USER_ROLE.ADMIN] },
+    loadChildren: () => import('./auth/auth.module').then(m => m.AppAuthModule),
+
   },
   { path: '**', redirectTo: '' },
 ];
