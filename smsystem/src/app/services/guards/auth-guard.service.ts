@@ -14,7 +14,7 @@ import { Role } from 'app/models/securities';
 import { Observable, of as observableOf } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { FRONT_END_POINTS, MESSAGE } from 'app/utils';
+import { FRONTEND_ENDPOINTS, MESSAGE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const url: string = state.url;
-    return this.checkLogin(url) && this.checkRoles(route);
+    return this.checkLogin(url) && this.checkRoles(route, state);
   }
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(route, state);
@@ -47,26 +47,45 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     this.authService.redirectUrl = url;
     return this.authService.isAuthenticated().pipe(
       tap(authenticated => {
+        this.isAuthenticated = authenticated;
         if (!authenticated) {
-          this.router.navigate([FRONT_END_POINTS.login]);
+          this.router.navigate([FRONTEND_ENDPOINTS.login.path]);
         }
       }),
     );
   }
 
-  checkRoles(route: ActivatedRouteSnapshot): Observable<boolean> {
+  checkRoles(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    this.authService.isAuthenticated().subscribe(success => {
+      this.isAuthenticated = success;
+    });
     const roles: Role[] = this.authService.loadCurrentUserRoles();
+    const navigationExtras: NavigationExtras = {
+      queryParams: {returnUrl: state.url },
+    };
     // check if route is restricted by role
-    if (route.data.roles) {
+    if (route.data.roles && roles) {
       for (let i = 0; i < roles.length; i++) {
         if (route.data.roles.indexOf(roles[i].name) !== -1) {
           return observableOf(true);
         }
       }
+      // role not authorised so redirect to home page
+      this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
+      navigationExtras.replaceUrl = false;
+      this.router.navigate([FRONTEND_ENDPOINTS.dashboard.path], navigationExtras);
+    } else {
+      navigationExtras.replaceUrl = true;
+      if (this.isAuthenticated) {
+         // role not authorised so redirect to home page
+        this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
+        navigationExtras.replaceUrl = false;
+        this.router.navigate([FRONTEND_ENDPOINTS.dashboard.path], navigationExtras);
+      } else {
+        navigationExtras.replaceUrl = true;
+        this.router.navigate([FRONTEND_ENDPOINTS.login.path], navigationExtras);
+      }
     }
-    // role not authorised so redirect to home page
-    this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
-    this.router.navigate([FRONT_END_POINTS.login]);
     return observableOf(false);
   }
 }

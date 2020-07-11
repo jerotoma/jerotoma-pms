@@ -17,6 +17,15 @@ import { HTTP_STATUS_CODES } from 'app/utils';
 @Injectable()
 export class HttpResponseErrorInterceptor implements HttpInterceptor {
 
+   HTTP_400_SERIES_ERROR_CODES: number[] = [
+    HTTP_STATUS_CODES.CODE_400.id,
+    HTTP_STATUS_CODES.CODE_401.id,
+    HTTP_STATUS_CODES.CODE_402.id,
+    HTTP_STATUS_CODES.CODE_403.id,
+    HTTP_STATUS_CODES.CODE_404.id,
+    HTTP_STATUS_CODES.CODE_405.id,
+  ];
+
   constructor(
     private authService: AuthService,
     private errorDialogService: ModalService,
@@ -39,26 +48,11 @@ export class HttpResponseErrorInterceptor implements HttpInterceptor {
       }),
       catchError((err: HttpEvent<any>) => {
         if (err instanceof HttpErrorResponse) {
-          switch (err.status) {
-              case HTTP_STATUS_CODES.CODE_400.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-              case HTTP_STATUS_CODES.CODE_402.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-              case HTTP_STATUS_CODES.CODE_403.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-              case HTTP_STATUS_CODES.CODE_404.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-              case HTTP_STATUS_CODES.CODE_405.id:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-                default:
-                this.errorDialogService.openSnackBar(err.error.message, 'danger');
-                break;
-            }
+          if (this.HTTP_400_SERIES_ERROR_CODES.indexOf(err.status) !== -1) {
+              this.errorDialogService.openSnackBar(err.error.message, 'danger');
+          } else {
+            this.errorDialogService.openSnackBar(err.error.message, 'danger');
+          }
         }
         return throwError(err);
       }),

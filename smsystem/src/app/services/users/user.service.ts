@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map, catchError, retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { User, ResponseWrapper, Role } from 'app/models';
 import { API_END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
@@ -13,8 +13,8 @@ export class UserService {
 
   loadCurrentUserRoles(): Observable<Role[]> {
     return this.http
-      .get(`${API_END_POINTS.users}/currentUser/roles`).
-      pipe(map((resp: ResponseWrapper) => resp.data));
+      .get(`${API_END_POINTS.users}/currentUser/roles`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
   constructor(private http: HttpClient) { }
 

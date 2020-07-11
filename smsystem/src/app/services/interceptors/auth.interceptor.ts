@@ -21,7 +21,6 @@ import { HTTP_STATUS_CODES } from 'app/utils';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private token: string = '';
-  private redirectUrl: string = '/account/login';
   private isRefreshing: boolean = false;
 
   // Refresh Token Subject tracks the current token, or is null if no token is currently

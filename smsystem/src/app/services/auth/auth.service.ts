@@ -8,7 +8,7 @@ import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from 'app/services/auth/token.service';
 import {  UserService } from 'app/services/users';
 import {  LocalStorageService } from 'app/services/storage';
-import { Role, USER_ROLE } from 'app/models';
+import { Role, ResponseWrapper} from 'app/models';
 import { API_END_POINTS } from 'app/utils';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
@@ -64,7 +64,11 @@ export class AuthService {
    * @returns {Observable<boolean>}
    */
   isAuthenticated(): Observable<boolean> {
-   return observableOf(this.tokenService.isTokenValid());
+    if (!this.tokenService.isTokenValid()) {
+        this.storageService.clear();
+        return observableOf(false);
+    }
+    return observableOf(this.tokenService.isTokenValid());
   }
 
   /**
@@ -95,17 +99,10 @@ export class AuthService {
 
   loadCurrentUserRoles(): Role[] {
     const roles: Role[] = JSON.parse(this.storageService.getValue(AUTH_CONSTANT.roles));
-    if (roles) {
+    if (roles  && this.tokenService.isTokenValid()) {
       return roles;
     }
-    return [ {
-        id: null,
-        name: USER_ROLE.ANANYMOUS,
-        displayName: null,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-    ];
+    return null;
   }
 
   /**

@@ -16,7 +16,7 @@ export class UserDetailsComponent implements OnInit {
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = API_END_POINTS.baseURL;
 
-    constructor(private dialogService: NbDialogService){}
+    constructor(private dialogService: NbDialogService) {}
 
     ngOnInit() {
       // window.console.log(this.userDatail);

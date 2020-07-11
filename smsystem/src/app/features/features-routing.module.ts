@@ -5,7 +5,11 @@ import { FeaturesComponent } from './features.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { AuthGuard } from 'app/services';
-import { USER_ROLE, ALL_ROLES } from 'app/models';
+import {
+  ALL_ROLES,
+  ADMINS_AND_EXECUTIVES_ROLES,
+  ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
+  ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES } from 'app/models';
 
 const routes: Routes = [{
   path: '',
@@ -14,20 +18,20 @@ const routes: Routes = [{
   children: [
     {
       path: '',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.TEACHER, USER_ROLE.PRINCIPAL] },
+      data: { roles: ALL_ROLES },
       canActivateChild: [AuthGuard],
       component: DashboardComponent,
     },
     {
       path: 'users',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.TEACHER, USER_ROLE.STAFF, USER_ROLE.PARENT, USER_ROLE.PRINCIPAL] },
+      data: { roles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./users/users.module')
         .then(m => m.UsersModule),
     },
     {
       path: 'system-setup',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.PRINCIPAL] },
+      data: { roles: ADMINS_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./system-setup/system-setup.module')
         .then(m => m.SystemSetupModule),
@@ -41,7 +45,7 @@ const routes: Routes = [{
     },
     {
       path: 'admissions',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.TEACHER, USER_ROLE.PRINCIPAL] },
+      data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./admissions/admissions.module')
         .then(m => m.AdmissionsModule),
@@ -55,21 +59,21 @@ const routes: Routes = [{
     },
     {
       path: 'securities',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.PRINCIPAL] },
+      data: { roles: ADMINS_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./securities/securities.module')
         .then(m => m.SecuritiesModule),
     },
     {
       path: 'schedules',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.TEACHER, USER_ROLE.PRINCIPAL] },
+      data: { roles: ALL_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./schedules/schedules.module')
         .then(m => m.SchedulesModule),
     },
     {
       path: 'attendances',
-      data: { roles: [USER_ROLE.ADMIN, USER_ROLE.TEACHER, USER_ROLE.PRINCIPAL] },
+      data: { roles: ALL_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./attendances/attendances.module')
         .then(m => m.AttendancesModule),

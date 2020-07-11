@@ -35,7 +35,6 @@ import {
 } from './ui-columns';
 
 import { WindowModeBlockScrollService, AnalyticsService, LayoutService } from 'app/services';
-import { throwIfAlreadyLoaded } from 'app/utils';
 import { DEFAULT_THEME } from './themes/theme.default';
 import { COSMIC_THEME } from './themes/theme.cosmic';
 import { CORPORATE_THEME } from './themes/theme.corporate';

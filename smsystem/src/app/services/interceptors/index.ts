@@ -1,2 +1,2 @@
 export * from './auth.interceptor';
-export * from './http-response-error-handler.interceptor';
+export * from './error.interceptor';

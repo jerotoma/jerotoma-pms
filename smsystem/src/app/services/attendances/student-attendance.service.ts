@@ -19,7 +19,7 @@ export class StudentAttendanceService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadStudentAttendancesPaginated(param: QueryParam) : Observable<ResponseWrapper> {
+  loadStudentAttendancesPaginated(param: QueryParam): Observable<ResponseWrapper> {
     return this.http.get(`${API_END_POINTS.attendances}/students?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
     .pipe(map((resp: ResponseWrapper) => resp));
   }

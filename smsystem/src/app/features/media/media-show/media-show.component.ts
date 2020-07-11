@@ -7,7 +7,7 @@ import { Media } from 'app/models';
 @Component({
   selector: 'app-media-show',
   templateUrl: './media-show.component.html',
-  styleUrls: ['./media-show.component.scss']
+  styleUrls: ['./media-show.component.scss'],
 })
 export class MediaShowComponent implements OnInit {
 

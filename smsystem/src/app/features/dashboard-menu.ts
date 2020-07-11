@@ -1,5 +1,5 @@
 import { NbMenuItem } from '@nebular/theme';
-import { FRONT_END_POINTS } from 'app/utils';
+import { FRONTEND_ENDPOINTS } from 'app/utils';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -9,63 +9,66 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'keypad-outline',
-    link: FRONT_END_POINTS.dashboard,
+    link: FRONTEND_ENDPOINTS.dashboard.path,
     home: true,
   },
   {
     title: 'Resources',
     icon: 'monitor-outline',
-    link: FRONT_END_POINTS.resources,
+    link: FRONTEND_ENDPOINTS.resources.path,
   },
   {
     title: 'FEATURES',
     group: true,
+    hidden: false,
   },
   {
     title: 'Users',
     icon: 'people-outline',
+    link: FRONTEND_ENDPOINTS.users.path,
     children: [
       {
         title: 'Teachers',
-        link: FRONT_END_POINTS.teachers,
+        link: FRONTEND_ENDPOINTS.teachers.path,
       },
       {
         title: 'Students',
-        link: FRONT_END_POINTS.students,
+        link: FRONTEND_ENDPOINTS.students.path,
       },
       {
         title: 'Parents',
-        link: FRONT_END_POINTS.parents,
+        link: FRONTEND_ENDPOINTS.parents.path,
       },
       {
         title: 'Staffs',
-        link: FRONT_END_POINTS.staffs,
+        link: FRONTEND_ENDPOINTS.staffs.path,
       },
     ],
   },
   {
     title: 'Attendences',
     icon: 'person-done-outline',
+    link: FRONTEND_ENDPOINTS.attendances.path,
     children: [
       {
         title: 'classes',
-        link: '/dashboard/attendances/classes',
+        link: FRONTEND_ENDPOINTS.attendanceClasses.path,
       },
       {
         title: 'Students',
-        link: '/dashboard/attendances/students',
+        link: FRONTEND_ENDPOINTS.attendanceStudents.path,
       },
       {
         title: 'Teachers',
-        link: '/dashboard/attendances/teachers',
+        link: FRONTEND_ENDPOINTS.attendanceTeacher.path,
       },
       {
         title: 'Staffs',
-        link: '/dashboard/attendances/staffs',
+        link: FRONTEND_ENDPOINTS.attendanceStaffs.path,
       },
       {
         title: 'Attendance Statuses',
-        link: '/dashboard/attendances/statuses',
+        link: FRONTEND_ENDPOINTS.attendanceStatus.path,
       },
     ],
   },
