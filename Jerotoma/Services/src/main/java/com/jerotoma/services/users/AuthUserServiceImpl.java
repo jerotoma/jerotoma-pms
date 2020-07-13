@@ -15,6 +15,7 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.users.AuthUserDao;
 
 @Service
@@ -94,6 +95,11 @@ public class AuthUserServiceImpl implements AuthUserService {
 			throw new RuntimeException("Invalid or Empty username was provided");
 		}
 		return loadUserByUsername(username) != null;
+	}
+
+	@Override
+	public List<UserVO> searchUser(QueryParam param) throws SQLException {		
+		return authUserDao.searchUser(param);
 	}
 
 

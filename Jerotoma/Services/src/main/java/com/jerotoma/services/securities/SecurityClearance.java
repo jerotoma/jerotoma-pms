@@ -97,4 +97,23 @@ public class SecurityClearance {
 		}
 		
 	}
+
+	public void checkRoleAssignationPermission() {
+		
+		UserVO currentUser = userService.loadCurrentUser();
+		UnAuthorizedAccessException unAuthorizedAccess = new UnAuthorizedAccessException(String.format(ExceptionMessageConstant.UN_AUTHORIZED_ACCESS_MESSAGE, "create new program"));
+		if (currentUser == null) {
+			throw unAuthorizedAccess;
+		}
+		
+		boolean allowedAccess = 
+				currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN) 
+				|| currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_DIRECTOR) 
+				|| currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_SUPER_ADMIN) 
+				|| currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_PRINCIPAL);
+		
+		if (!allowedAccess) {
+			throw unAuthorizedAccess;
+		}		
+	}
 }

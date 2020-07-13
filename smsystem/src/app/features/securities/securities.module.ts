@@ -33,6 +33,7 @@ import {
 
 import { SecuritiesComponent } from './securities.component';
 import { RolesComponent } from './roles/roles.component';
+import { RoleAssignationComponent } from './roles/assign/role-assignation.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { SecuritiesRoutingModule } from './securities-routing.module';
 
@@ -40,10 +41,11 @@ const COMPONENTS = [
     SecuritiesComponent,
     RolesComponent,
     PermissionsComponent,
+    RoleAssignationComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-
+  RoleAssignationComponent,
 ];
 
 const MODULES = [

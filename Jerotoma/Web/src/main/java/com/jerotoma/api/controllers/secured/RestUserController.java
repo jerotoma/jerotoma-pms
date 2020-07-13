@@ -262,10 +262,10 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		userSecurityClearance.checkGeneralEntityCreationPermission();
 					
-		if(!params.containsKey(UserConstant.userType)) {
+		if(!params.containsKey(UserConstant.USER_TYPE_LABEL)) {
 			throw new FieldRequiredException("User type can not be empty");
 		}
-		String userType = (String) params.get(UserConstant.userType);
+		String userType = (String) params.get(UserConstant.USER_TYPE_LABEL);
 		
 		if (userType == null) {
 			throw new FieldRequiredException("User type can not be empty");
@@ -488,10 +488,10 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		userSecurityClearance.checkGeneralEntityModificationPermission();
 			
-		if(!params.containsKey(UserConstant.userType)) {
+		if(!params.containsKey(UserConstant.USER_TYPE_LABEL)) {
 			throw new FieldRequiredException("User type can not be empty");
 		}
-		String userType = (String) params.get(UserConstant.userType);
+		String userType = (String) params.get(UserConstant.USER_TYPE_LABEL);
 		
 		if (userType == null) {
 			throw new FieldRequiredException("User type can not be empty");
@@ -776,7 +776,7 @@ public class RestUserController extends BaseController {
 				teachers = assemblerTeacherService.search(queryParam);	
 				if(users != null) {
 					for(TeacherVO teacher: teachers) {
-						users.add(new UserVO(authUser, teacher));
+						users.add(userService.getUserByUserId(teacher.getUserId()));
 					}
 				}				
 				break;
@@ -784,7 +784,7 @@ public class RestUserController extends BaseController {
 				students = assemblerStudentService.search(queryParam);
 				if(users != null) {
 					for(StudentVO student: students) {
-						users.add(new UserVO(authUser, student));
+						users.add(userService.getUserByUserId(student.getUserId()));
 					}
 				}
 				break;
@@ -792,7 +792,7 @@ public class RestUserController extends BaseController {
 				staffs = assemblerStaffService.search(queryParam);
 				if(users != null) {
 					for(StaffVO staff: staffs) {
-						users.add(new UserVO(authUser, staff));
+						users.add(userService.getUserByUserId(staff.getUserId()));
 					}
 				}									
 				break;
@@ -800,9 +800,12 @@ public class RestUserController extends BaseController {
 				parents = assemblerParentService.search(queryParam);
 				if(users != null) {
 					for(ParentVO parent: parents) {
-						users.add(new UserVO(authUser, parent));
+						users.add(userService.getUserByUserId(parent.getUserId()));
 					}
 				}				
+				break;
+			case ALL:
+				users = userService.searchUser(queryParam);							
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");

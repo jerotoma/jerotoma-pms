@@ -3,7 +3,12 @@ import { NgModule } from '@angular/core';
 import { ALL_ROLES } from 'app/models';
 import { AuthGuard } from 'app/services';
 const routes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: '',
+    canActivate: [AuthGuard], // here we tell Angular to check the access with our AuthGuard
+    data: { roles: ALL_ROLES },
+    redirectTo: 'dashboard',
+    pathMatch: 'full' },
   {
     path: 'dashboard',
     canActivate: [AuthGuard], // here we tell Angular to check the access with our AuthGuard
@@ -16,7 +21,11 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AppAuthModule),
 
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: '**',
+    canActivate: [AuthGuard], // here we tell Angular to check the access with our AuthGuard
+    data: { roles: ALL_ROLES },
+    redirectTo: '' },
 ];
 
 const config: ExtraOptions = {

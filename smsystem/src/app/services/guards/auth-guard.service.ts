@@ -10,7 +10,7 @@ import {
 import { AuthService } from 'app/services/auth';
 import { UserService } from 'app/services/users';
 import { ModalService } from 'app/services/modals';
-import { Role } from 'app/models/securities';
+import { Role, USER_ROLE } from 'app/models/securities';
 import { Observable, of as observableOf } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -56,17 +56,14 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   checkRoles(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    this.authService.isAuthenticated().subscribe(success => {
-      this.isAuthenticated = success;
-    });
-    const roles: Role[] = this.authService.loadCurrentUserRoles();
+    const roles: USER_ROLE[] = this.authService.loadCurrentUserRoles();
     const navigationExtras: NavigationExtras = {
       queryParams: {returnUrl: state.url },
     };
     // check if route is restricted by role
     if (route.data.roles && roles) {
       for (let i = 0; i < roles.length; i++) {
-        if (route.data.roles.indexOf(roles[i].name) !== -1) {
+        if (route.data.roles.indexOf(roles[i]) !== -1) {
           return observableOf(true);
         }
       }
@@ -74,17 +71,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
       this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
       navigationExtras.replaceUrl = false;
       this.router.navigate([FRONTEND_ENDPOINTS.dashboard.path], navigationExtras);
-    } else {
-      navigationExtras.replaceUrl = true;
-      if (this.isAuthenticated) {
-         // role not authorised so redirect to home page
-        this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
-        navigationExtras.replaceUrl = false;
-        this.router.navigate([FRONTEND_ENDPOINTS.dashboard.path], navigationExtras);
-      } else {
-        navigationExtras.replaceUrl = true;
-        this.router.navigate([FRONTEND_ENDPOINTS.login.path], navigationExtras);
-      }
+    }  else {
+      this.router.navigate([FRONTEND_ENDPOINTS.login.path], navigationExtras);
     }
     return observableOf(false);
   }

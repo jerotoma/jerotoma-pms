@@ -135,6 +135,15 @@ public class EndPointConstants {
 		public static final String INDEX = "/";
 	}
 	
+	public static interface REST_ROLE_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/roles";
+		public static final String INDEX = "/";
+	}
+	public static interface REST_PERMISSION_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/permissions";
+		public static final String INDEX = "/";
+	}
+	
 	public static interface REST_ACADEMIC_LEVEL_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/academic-levels";
 		public static final String INDEX = "/";

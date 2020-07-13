@@ -1,0 +1,74 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form  autocomplete="off" [formGroup]="roleAssignationForm" (ngSubmit)="onSubmit()">
+          <nb-card status="primary">
+            <nb-card-header>{{ title }}</nb-card-header>
+            <nb-card-body>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-control-group">
+                      <label for="user-type" class="label">User Type</label>
+                      <nb-select
+                          fullWidth
+                          placeholder="User Type"
+                          formControlName="userType"
+                          id="user-type">
+                          <nb-option
+                              *ngFor='let userType of userTypes'
+                              [value]="userType">
+                              {{userType | appCapitalize}}
+                          </nb-option>
+                        </nb-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-12">
+                      <app-search-user
+                        [title]="'Search for a User'"
+                        [userType]="userType"
+                        (onUserSelected)="userSelected($event)"
+                      ></app-search-user>
+                  </div>
+              </div>
+              <div class="lists row">
+                <div class="col-md-12">
+                    <div class="form-control-group">
+                      <nb-card class="list-card" accent="success" *ngIf="roles">
+                        <nb-card-header>Assign from the following list of roles</nb-card-header>
+                        <nb-card-body>
+                          <nb-list>
+                            <nb-list-item *ngFor="let role of roles">
+                              <nb-checkbox
+                              [id]="'role-'+ role.id"
+                              status="success"
+                              (checkedChange)="checkedChange($event, role)">
+                              {{role.displayName | appCapitalize}}
+                            </nb-checkbox>
+                            </nb-list-item>
+                          </nb-list>
+                        </nb-card-body>
+                      </nb-card>
+                    </div>
+                </div>
+              </div>
+            </nb-card-body>
+            <nb-card-footer>
+              <button class='push-right'
+                  [disabled]="!roleAssignationForm.valid"
+                  type="submit"
+                  nbButton hero
+                  status="success"
+                  [nbSpinner]="isSubmitting"
+                  nbSpinnerStatus="success"
+                  nbSpinnerSize="large"
+                  [nbSpinnerMessage]="'Assigning roles......'">
+                    Assign Role {{roles.length > 1 ? 's' : ''}}
+              </button>
+              <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            </nb-card-footer>
+          </nb-card>
+      </form>
+  </div>
+</div>
+

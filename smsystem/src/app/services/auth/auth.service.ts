@@ -8,7 +8,7 @@ import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from 'app/services/auth/token.service';
 import {  UserService } from 'app/services/users';
 import {  LocalStorageService } from 'app/services/storage';
-import { Role, ResponseWrapper} from 'app/models';
+import { Role, ResponseWrapper, USER_ROLE, convertStringToEnum } from 'app/models';
 import { API_END_POINTS } from 'app/utils';
 import { ActivatedRouteSnapshot } from '@angular/router';
 
@@ -35,9 +35,6 @@ export class AuthService {
           if (status !== null && status === 200) {
             if (token !== null) {
               this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
-              this.userService.loadCurrentUserRoles().subscribe((roles: Role[]) => {
-                this.storageService.store(AUTH_CONSTANT.roles, JSON.stringify(roles));
-              });
             }
           }
         }));
@@ -89,17 +86,19 @@ export class AuthService {
       const status = resp.status;
       if (status !== null && status === 200 && token) {
         this.tokenService.setToken(AUTH_CONSTANT.appAccessToken, token);
-        this.userService.loadCurrentUserRoles().subscribe((roles: Role[]) => {
-          this.storageService.store(AUTH_CONSTANT.roles, JSON.stringify(roles));
-        });
       }
       return result;
     }));
   }
 
-  loadCurrentUserRoles(): Role[] {
-    const roles: Role[] = JSON.parse(this.storageService.getValue(AUTH_CONSTANT.roles));
-    if (roles  && this.tokenService.isTokenValid()) {
+  loadCurrentUserRoles(): USER_ROLE[] {
+    const token = this.tokenService.getToakenPayload();
+    const scopes: string[] = token ? token.scopes : [];
+    const roles: USER_ROLE[] = [];
+    scopes.forEach(scope => {
+      roles.push(convertStringToEnum(scope));
+    });
+    if (this.tokenService.isTokenValid() && roles) {
       return roles;
     }
     return null;

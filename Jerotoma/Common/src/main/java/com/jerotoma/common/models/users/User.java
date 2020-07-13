@@ -50,7 +50,7 @@ public class User extends org.springframework.security.core.userdetails.User {
 		String username = (String) params.get(UserConstant.USERNAME);		
 		String password = (String) params.get(UserConstant.PASSWORD);
 		String confirmPass = (String) params.get(UserConstant.CONFIRM_PASS);
-		String userType = (String) params.get(UserConstant.userType);		
+		String userType = (String) params.get(UserConstant.USER_TYPE_LABEL);		
 		Date updatedOn = CalendarUtil.getTodaysDate();
 		Date createdOn =  CalendarUtil.getTodaysDate();
 		

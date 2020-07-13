@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { User, ResponseWrapper, Role } from 'app/models';
+import { User, ResponseWrapper, Role, USER_ROLE } from 'app/models';
 import { API_END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
 
 @Injectable({
@@ -11,12 +11,23 @@ import { API_END_POINTS, QueryParam, USER_TYPE } from 'app/utils';
 })
 export class UserService {
 
-  loadCurrentUserRoles(): Observable<Role[]> {
+  private currentUserRolesSubject: BehaviorSubject<USER_ROLE[]>;
+  public currentUserRoles: Observable<USER_ROLE[]>;
+
+  constructor(private http: HttpClient) {}
+
+  loadCurrentUserRoles(): Observable<USER_ROLE[]> {
     return this.http
       .get(`${API_END_POINTS.users}/currentUser/roles`)
-      .pipe(map((resp: ResponseWrapper) => resp.data));
+      .pipe(map((resp: ResponseWrapper) => {
+        this.currentUserRolesSubject = new BehaviorSubject<USER_ROLE[]>(resp.data);
+        return resp.data;
+      }));
   }
-  constructor(private http: HttpClient) { }
+
+  public get loggedInUserRoles(): USER_ROLE[] {
+    return this.currentUserRolesSubject.value;
+  }
 
   getCurrentUser(): Observable<User> {
     return this.http

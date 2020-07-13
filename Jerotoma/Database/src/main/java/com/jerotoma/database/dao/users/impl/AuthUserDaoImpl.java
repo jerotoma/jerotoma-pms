@@ -28,6 +28,7 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.User;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 import com.jerotoma.database.dao.users.AuthUserDao;
@@ -211,6 +212,10 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 				.append("VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	}
 	
+	private StringBuilder commonUpdateQuery() {		
+		return new StringBuilder("UPDATE public.users SET user_type = ?, enabled = ?, account_non_expired = ?, credentials_non_expired = ?, account_non_locked = ?, updated_on = ?  WHERE id = ? ");
+	}
+	
 	private StringBuilder commonRoleUserInsertQuery() {
 		return new StringBuilder("INSERT INTO public.user_roles(role_id, user_id) ")
 				.append("VALUES (?, ?)");	
@@ -218,8 +223,35 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public User updateObject(User object) throws SQLException {
-		
+		if(object != null && doesRoleExists(object.getRoles())){			
+			jdbcTemplate.update(conn -> {
+				int pos = 1;
+		        PreparedStatement ps = conn.prepareStatement(commonUpdateQuery().toString());
+			        ps.setString(pos++, object.getUserType().getType());			       
+			        ps.setBoolean(pos++, object.isEnabled());
+			        ps.setBoolean(pos++, object.isAccountNonExpired());
+			        ps.setBoolean(pos++,object.isCredentialsNonExpired());
+			        ps.setBoolean(pos++,object.isAccountNonLocked());
+					ps.setDate(pos++,new java.sql.Date(object.getUpdatedOn().getTime()));
+					ps.setInt(pos++, object.getId());
+		         return ps;
+		        });
+		 
+			for(Role role : object.getRoles()) {
+				Role r = roleDao.findObjectUniqueKey(role.getName());				
+				if (!doesUserRoleExists(object.getId(), r.getId())) {					
+					this.jdbcTemplate.update(commonRoleUserInsertQuery().toString(), r.getId(), object.getId());
+				}
+			}
+			return findObject(object.getId());
+		}
 		return null;
+	}
+	
+	private boolean doesUserRoleExists(Integer userId, Integer roleId) {
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.user_roles WHERE role_id = ? AND user_id = ?");
+		Long count =  this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor(), roleId, userId);		
+		return count > 0;		
 	}
 
 	@Override
@@ -249,6 +281,35 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	public Long countObject() throws SQLException {
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.users");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
+	}
+
+	@Override
+	public List<UserVO> searchUser(QueryParam  queryParam) throws SQLException {
+		StringBuilder queryBuilder = commonSelectQuery(true);
+		queryBuilder.append(" WHERE LOWER(first_name) like ? OR LOWER(last_name) like ? OR LOWER(username) like ? ")
+				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
+				.append(" ")
+				.append("limit ? offset ?");
+		
+		Long countResults = countObject();
+		//int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {				
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				DaoUtil.addPercentBothSide(queryParam.getSearch()),
+				limit, 
+				offset
+		};
+		return this.jdbcTemplate.query(queryBuilder.toString(), new RowMapper<UserVO>(){
+			@Override
+			public UserVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				// User role = mapAuthUserResult(rs);			
+				return null;
+			}
+		}, paramList);
 	}
 	
 }

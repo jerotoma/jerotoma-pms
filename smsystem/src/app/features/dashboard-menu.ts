@@ -5,6 +5,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'HOME',
     group: true,
+    hidden: false,
   },
   {
     title: 'Dashboard',
@@ -75,115 +76,120 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Admission',
     icon: 'book-open-outline',
+    link: FRONTEND_ENDPOINTS.admission.path,
     children: [
       {
         title: 'Students',
-        link: '/dashboard/admissions/students',
+        link: FRONTEND_ENDPOINTS.admissionStudents.path,
       },
       {
         title: 'Classes',
-        link: '/dashboard/admissions/classes',
+        link: FRONTEND_ENDPOINTS.admissionClasses.path,
       },
     ],
   },
   {
     title: 'Schedules',
     icon: 'calendar-outline',
+    link: FRONTEND_ENDPOINTS.schedules.path,
     children: [
       {
         title: 'Meeting Times',
-        link: '/dashboard/schedules/meeting-times',
+        link: FRONTEND_ENDPOINTS.scheduleMeetingTimes.path,
       },
       {
         title: 'Work Days',
-        link: '/dashboard/schedules/work-days',
+        link: FRONTEND_ENDPOINTS.scheduleWorkDays.path,
       },
       {
         title: 'Timetable',
-        link: '/dashboard/schedules/timetable',
+        link: FRONTEND_ENDPOINTS.scheduleTimetables.path,
       },
     ],
   },
   {
     title: 'Media',
     icon: 'image-outline',
+    link: FRONTEND_ENDPOINTS.media.path,
     children: [
       {
         title: 'All',
-        link: '/dashboard/media',
+        link: FRONTEND_ENDPOINTS.media.path,
       },
       {
         title: 'Students',
-        link: '/dashboard/media/students',
+        link: FRONTEND_ENDPOINTS.mediaStudents.path,
       },
       {
         title: 'Teachers',
-        link: '/dashboard/media/teachers',
+        link: FRONTEND_ENDPOINTS.mediaTeachers.path,
       },
       {
         title: 'Staffs',
-        link: '/dashboard/media/staffs',
+        link: FRONTEND_ENDPOINTS.mediaStaffs.path,
       },
     ],
   },
   {
     title: 'SETTINGS',
     group: true,
+    hidden: false,
   },
   {
     title: 'System Setup',
     icon: 'shuffle-outline',
-    link: '/dashboard/system-setup',
+    link: FRONTEND_ENDPOINTS.systemSetup.path,
     children: [
       {
         title: 'Appearances',
-        link: '/dashboard/system-setup/appearances',
+        link: FRONTEND_ENDPOINTS.systemSetupAppearances.path,
       },
       {
         title: 'Positions',
-        link: '/dashboard/system-setup/positions',
+        link: FRONTEND_ENDPOINTS.systemSetupPositions.path,
       },
       {
         title: 'Courses',
-        link: '/dashboard/system-setup/courses',
+        link: FRONTEND_ENDPOINTS.systemSetupAcademicYears.path,
       },
       {
         title: 'Departments',
-        link: '/dashboard/system-setup/departments',
+        link: FRONTEND_ENDPOINTS.systemSetupDepartments.path,
       },
       {
         title: 'Rooms',
-        link: '/dashboard/system-setup/rooms',
+        link: FRONTEND_ENDPOINTS.systemSetupRooms.path,
       },
       {
         title: 'Academic Years',
-        link: '/dashboard/system-setup/academic-years',
+        link: FRONTEND_ENDPOINTS.systemSetupAcademicYears.path,
       },
       {
         title: 'Academic Disciplines',
-        link: '/dashboard/system-setup/academic-disciplines',
+        link: FRONTEND_ENDPOINTS.systemSetupAcademicDisciplines.path,
       },
       {
         title: 'Academic Levels',
-        link: '/dashboard/system-setup/academic-levels',
+        link: FRONTEND_ENDPOINTS.systemSetupAcademicLevels.path,
       },
       {
         title: 'Programs',
-        link: '/dashboard/system-setup/programs',
+        link: FRONTEND_ENDPOINTS.systemSetupPrograms.path,
       },
     ],
   },
   {
     title: 'Security Setup',
     icon: 'shield-outline',
+    link: FRONTEND_ENDPOINTS.securities.path,
     children: [
       {
         title: 'Roles',
-        link: '/dashboard/securities/roles',
+        link: FRONTEND_ENDPOINTS.securitiesRoles.path,
       },
       {
         title: 'Permissions',
-        link: '/dashboard/securities/permissions',
+        link: FRONTEND_ENDPOINTS.securitiesPermissions.path,
       },
     ],
   },

@@ -1,6 +1,8 @@
 package com.jerotoma.services.users.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.viewobjects.PersonVO;
@@ -118,6 +121,16 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public List<UserVO> searchUser(QueryParam param) {		
+		try {
+			return authUserService.searchUser(param);
+		} catch (SQLException e) {			
+			e.printStackTrace();
+		}
+		return new ArrayList<UserVO>();		
 	}
 
 }

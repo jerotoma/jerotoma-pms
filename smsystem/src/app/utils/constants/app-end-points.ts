@@ -2,9 +2,11 @@ import {
   ALL_ROLES,
   ADMINS_AND_EXECUTIVES_ROLES,
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
+  ADMINS_PARENT_AND_EXECUTIVES_ROLES,
   ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STAFF_AND_EXECUTIVES_ROLES,
   ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+  ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
 } from 'app/models';
 
 export const API_END_POINTS = {
@@ -25,6 +27,8 @@ export const API_END_POINTS = {
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',
   workDays: '/api/secured/work-days',
+  roles: '/api/secured/roles',
+  permissions: '/api/secured/permissions',
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',
   studentClasses: '/api/secured/student-classes',
@@ -68,7 +72,7 @@ export const FRONTEND_ENDPOINTS = {
   },
   parents: {
     path: '/dashboard/users/parents',
-    allowedRoles: ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_PARENT_AND_EXECUTIVES_ROLES,
   },
   students: {
     path: '/dashboard/users/students',
@@ -100,6 +104,102 @@ export const FRONTEND_ENDPOINTS = {
   },
   attendanceStatus: {
     path: '/dashboard/attendances/statuses',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  admission: {
+    path: '/dashboard/admissions',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  admissionStudents: {
+    path: '/dashboard/admissions/students',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  admissionClasses: {
+    path: '/dashboard/admissions/classes',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  schedules: {
+    path: '/dashboard/schedules',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  scheduleMeetingTimes: {
+    path: '/dashboard/schedules/meeting-times',
+    allowedRoles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
+  },
+  scheduleWorkDays: {
+    path: '/dashboard/schedules/work-days',
+    allowedRoles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
+  },
+  scheduleTimetables: {
+    path: '/dashboard/schedules/timetable',
+    allowedRoles: ALL_ROLES,
+  },
+  media: {
+    path: '/dashboard/media',
+    allowedRoles: ALL_ROLES,
+  },
+  mediaStudents: {
+    path: '/dashboard/media/students',
+    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+  },
+  mediaTeachers: {
+    path: '/dashboard/media/teachers',
+    allowedRoles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
+  },
+  mediaStaffs: {
+    path: '/dashboard/media/staffs',
+    allowedRoles: ADMINS_STAFF_AND_EXECUTIVES_ROLES,
+  },
+  systemSetup: {
+    path: '/dashboard/system-setup',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupAppearances: {
+    path: '/dashboard/system-setup/appearances',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupPositions: {
+    path: '/dashboard/system-setup/positions',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupDepartments: {
+    path: '/dashboard/system-setup/departments',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupCourses: {
+    path: '/dashboard/system-setup/courses',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupRooms: {
+    path: '/dashboard/system-setup/rooms',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupAcademicYears: {
+    path: '/dashboard/system-setup/academic-years',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupAcademicDisciplines: {
+    path: '/dashboard/system-setup/academic-disciplines',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupAcademicLevels: {
+    path: '/dashboard/system-setup/academic-levels',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupPrograms: {
+    path: '/dashboard/system-setup/programs',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  securities: {
+    path: '/dashboard/securities',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  securitiesRoles: {
+    path: '/dashboard/securities/roles',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  securitiesPermissions: {
+    path: '/dashboard/securities/permissions',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
 };

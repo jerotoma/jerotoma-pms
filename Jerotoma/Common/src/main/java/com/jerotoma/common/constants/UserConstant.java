@@ -37,7 +37,7 @@ public class UserConstant {
 	public static final String STUDENT_IDS = "studentIds";
 	public static final String USER_CODE = "userCode";
 	public static final String DEPARTMENT_ID = "departmentId";
-	public static final String userType = "userType";
+	public static final String USER_TYPE_LABEL = "userType";
 	public static final String DEFAULT_PHONE_NUMBER = "800-900-8888";
 	public static final String DEFAULT_BIRTH_DATE = "1920-01-01";
 	public static final String PROFILE_IMAGE_ID = "profileImageId";

@@ -45,6 +45,15 @@ export class TokenService {
     }
   }
 
+  getToakenPayload(): Token {
+    let token = this.getAccessToken(AUTH_CONSTANT.appAccessToken);
+    if (token == null || token === '') {
+        return null;
+    }
+    token = token.replace(AUTH_CONSTANT.authorizationPrefix, '');
+   return this.jwtHelper.decodeToken(token);
+  }
+
   processToken(accessToken: string): Observable<Token>  {
    return observableOf(this.jwtHelper.decodeToken(accessToken.replace(AUTH_CONSTANT.authorizationPrefix, '')));
   }
