@@ -6,6 +6,7 @@ import { NbDialogRef } from '@nebular/theme';
 import { ResponseWrapper,  ClassView, AcademicYear, ClassAttendanceParam, ClassAttendance } from 'app/models';
 import { ModalService, AcademicYearService, ClassService, ClassAttendanceService } from 'app/services';
 import { APP_ACTION_TYPE, DateValidator } from 'app/utils';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-class-attendance-create',
@@ -64,7 +65,7 @@ export class ClassAttendenceCreateComponent implements OnInit {
       id: [null],
       academicYearId: [null, Validators.required],
       classId: ['', Validators.required ],
-      attendanceDate: [null, DateValidator('yyyy/MM/dd')],
+      attendanceDate: [null, DateValidator()],
     });
     this.onChanges();
   }

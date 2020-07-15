@@ -20,7 +20,7 @@ import {
   ModalService,
 } from 'app/services';
 
-import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
+import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-edit-user',
@@ -28,11 +28,11 @@ import { QueryParam , DateValidator, DateFormatter } from 'app/utils';
   styleUrls: ['./edit-user.component.scss'],
 })
 export class EditUserComponent implements OnInit {
-  @Input('userType') userType: string = 'teacher';
+  @Input('userType') userType: string = USER_TYPE.teacher;
   @Input('user') user: User = null;
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
-  action: string = 'edit';
+  action: string = APP_ACTION_TYPE.edit;
   position: number;
   academicDiscipline: number;
   userLoginInput: UserLoginInput;
@@ -95,7 +95,7 @@ export class EditUserComponent implements OnInit {
       middleNames: [null],
       phoneNumber: ['', Validators.required],
       userId: [null, Validators.required],
-      birthDate: ['', DateValidator('yyyy/MM/dd')],
+      birthDate: ['', Validators.required],
       userType: [null],
       academicDiscipline: [''],
       address: [null, Validators.required],
@@ -163,7 +163,7 @@ export class EditUserComponent implements OnInit {
       userId: user.userId,
       middleNames: user.middleNames,
       phoneNumber: user.phoneNumber,
-      birthDate: DateFormatter(user.birthDate, 'YYYY/MM/DD', false),
+      // birthDate: DateFormatter(user.birthDate),
       userType: user.userType,
       academicDiscipline: user.academicDiscipline ? user.academicDiscipline.id : null,
       address: user.address,

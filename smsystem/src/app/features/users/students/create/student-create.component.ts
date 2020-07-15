@@ -126,7 +126,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       gender: ['', Validators.required],
       picture: [''],
       userType: [USER_TYPE.student],
-      birthDate: ['', DateValidator('yyyy/MM/dd')],
+      birthDate: ['', DateValidator()],
       address: [null, Validators.required],
       parentFullName: [''],
       selectedParents: [''],

@@ -124,7 +124,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       gender: ['', Validators.required],
       picture: [''],
       userType: [USER_TYPE.staff],
-      birthDate: ['', DateValidator('yyyy/MM/dd')],
+      birthDate: ['', DateValidator()],
       address: [null, Validators.required],
     });
   }

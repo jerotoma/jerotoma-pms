@@ -2,18 +2,18 @@ import * as moment from 'moment';
 import { WEEK_DAY } from 'app/utils/constants';
 import { Time } from 'app/models';
 
-export function DateFormatter(date: Date, format: string = 'YYYY-MM-DD', isStrict: boolean = false): moment.Moment {
+export function DateFormatter(date: Date, format: moment.MomentFormatSpecification = moment.ISO_8601, isStrict: boolean = false): moment.Moment {
   if (!date) {
     return null;
   }
   return moment(date, format, isStrict);
 }
 
-export function StringDateFormatter(date: string, format: string = 'YYYY-MM-DD', isStrict: boolean = false): moment.Moment {
+export function StringDateFormatter(date: string, format: moment.MomentFormatSpecification = moment.ISO_8601, isStrict: boolean = false): moment.Moment {
   if (!date) {
     return null;
   }
-  return moment(date, format, isStrict);
+  return moment(new Date(date), format, isStrict);
 }
 
 export function getWeekDay(enumWeekDay: number) {

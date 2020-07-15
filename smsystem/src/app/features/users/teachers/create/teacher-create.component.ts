@@ -112,7 +112,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       password: [null],
       confirmPassword: [null],
       userId: [null],
-      birthDate: ['', DateValidator('yyyy/MM/dd')],
+      birthDate: ['', DateValidator()],
       userType: [USER_TYPE.teacher],
       department: ['', Validators.required],
       address: [null, Validators.required],

@@ -94,7 +94,7 @@ export class RecordStudentAttendenceComponent implements OnInit, OnDestroy {
   loadForm() {
     this.recordAttendanceForm = this.formBuilder.group({
       id: [null],
-      attendanceDate: [null, DateValidator('yyyy/MM/dd')],
+      attendanceDate: [null, DateValidator()],
       classAttendanceId: [null, Validators.required],
       studentAttendanceStatusesArray: this.formBuilder.array([]),
     });

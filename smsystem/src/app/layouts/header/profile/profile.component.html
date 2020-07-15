@@ -5,7 +5,7 @@
         <app-user-details
           *ngIf="user"
           [userDatail]="user"
-          [userType]="user.userType"
+          [userType]="user?.userType"
         ></app-user-details>
       </nb-tab>
       <nb-tab tabTitle="Edit User Details" tabIcon="edit-outline">
