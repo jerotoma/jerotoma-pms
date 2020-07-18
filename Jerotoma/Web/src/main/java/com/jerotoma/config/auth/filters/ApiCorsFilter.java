@@ -22,7 +22,7 @@ public class ApiCorsFilter extends CorsFilter {
         config.setMaxAge(36000L);
         config.setAllowedMethods(Arrays.asList("GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration(EndPointConstants.API_SECURED_ROOT+EndPointConstants.SLASH_DOUBLE_ASTERIK, config);
+        source.registerCorsConfiguration(EndPointConstants.API_SECURED_ROOT + EndPointConstants.SLASH_DOUBLE_ASTERIK, config);
         return source;
     }
 }

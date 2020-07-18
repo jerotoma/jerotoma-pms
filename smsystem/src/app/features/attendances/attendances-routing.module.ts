@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from 'app/services';
 import { AttendancesComponent } from './attendances.component';
-import { ADMINS_TEACHER_AND_EXECUTIVES_ROLES} from 'app/models';
+import { ADMINS_TEACHER_AND_EXECUTIVES_ROLES, ADMINS_AND_EXECUTIVES_ROLES } from 'app/models';
 
 const routes: Routes = [
   {
@@ -41,7 +41,9 @@ const routes: Routes = [
       },
       {
         path: 'statuses',
-        loadChildren: () => import('./attendance-statuses/attendance-statuses.module')
+        canActivateChild: [AuthGuard],
+        data: { roles: ADMINS_AND_EXECUTIVES_ROLES},
+        loadChildren: () => import('./statuses/attendance-statuses.module')
           .then(m => m.AttendanceStatusesModule),
       },
     ],

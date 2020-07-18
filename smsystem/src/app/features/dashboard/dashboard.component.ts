@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators' ;
 
-import { DashboardService } from 'app/services';
-import { DashboardCounter } from 'app/models';
+import { DashboardService, SecurityClearanceService } from 'app/services';
+import { DashboardCounter, USER_ROLE } from 'app/models';
 import { QueryParam } from 'app/utils';
 
 interface CounterCardSettings {
@@ -21,6 +21,8 @@ interface CounterCardSettings {
 export class DashboardComponent implements OnInit, OnDestroy {
 
   private alive = true;
+  private userRole: USER_ROLE;
+  private userRoles: USER_ROLE[];
 
   param: QueryParam = {
     page: 1,
@@ -98,9 +100,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private dashboardService: DashboardService,
-    private themeService: NbThemeService) {
+    private securityClearanceService: SecurityClearanceService,
+    private themeService: NbThemeService) {}
 
-  }
   ngOnInit(): void {
     this.loadDashboardCounters();
   }
@@ -121,5 +123,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.counterCards = this.counterCardsByThemes[theme.name];
       });
     });
+  }
+
+  get isAdminAndExecutive() {
+    return this.userRoles && (this.userRoles.indexOf(USER_ROLE.ADMIN) || this.userRoles.indexOf(USER_ROLE.PRINCIPAL));
+  }
+
+  get isAdmin() {
+    return this.securityClearanceService.isAdmin;
+  }
+
+  get isStaff() {
+    return this.securityClearanceService.isStaff;
+  }
+
+  get isStudent() {
+    return this.securityClearanceService.isStudent;
   }
 }

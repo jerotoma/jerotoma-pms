@@ -8,6 +8,7 @@ import {
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+  ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_PARENT_AND_EXECUTIVES_ROLES,
 } from 'app/models';
 // Components
@@ -20,7 +21,7 @@ const routes: Routes = [{
   children: [
     {
       path: 'teachers',
-      data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES },
+      data: { roles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./teachers/teachers.module')
         .then(m => m.TeachersModule),
@@ -42,7 +43,7 @@ const routes: Routes = [{
     {
       path: 'parents',
       canActivateChild: [AuthGuard],
-      data: { roles: ADMINS_PARENT_AND_EXECUTIVES_ROLES },
+      data: { roles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES  },
       loadChildren: () => import('./parents/parents.module')
       .then(m => m.ParentsModule),
     },

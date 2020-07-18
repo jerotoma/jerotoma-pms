@@ -68,15 +68,15 @@ export const FRONTEND_ENDPOINTS = {
   },
   teachers: {
     path: '/dashboard/users/teachers',
-    allowedRoles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   parents: {
     path: '/dashboard/users/parents',
-    allowedRoles: ADMINS_PARENT_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   students: {
     path: '/dashboard/users/students',
-    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   attendances: {
     path: '/dashboard/attendances',
@@ -84,11 +84,11 @@ export const FRONTEND_ENDPOINTS = {
   },
   attendanceClasses: {
     path: '/dashboard/attendances/classes',
-    allowedRoles: ALL_ROLES,
+    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   attendanceStudents: {
     path: '/dashboard/attendances/students',
-    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   attendanceStaffs: {
     path: '/dashboard/attendances/staffs',
@@ -201,6 +201,18 @@ export const FRONTEND_ENDPOINTS = {
   securitiesPermissions: {
     path: '/dashboard/securities/permissions',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  profile: {
+    path: '/dashboard/account/profile',
+    allowedRoles: ALL_ROLES,
+  },
+  preferences: {
+    path: '/dashboard/account/preferences',
+    allowedRoles: ALL_ROLES,
+  },
+  logout: {
+    path: '/account/logout',
+    allowedRoles: ALL_ROLES,
   },
 };
 

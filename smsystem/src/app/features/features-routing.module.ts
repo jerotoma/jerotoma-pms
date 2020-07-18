@@ -24,10 +24,17 @@ const routes: Routes = [{
     },
     {
       path: 'users',
-      data: { roles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES },
+      data: { roles:  ALL_ROLES },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./users/users.module')
         .then(m => m.UsersModule),
+    },
+    {
+      path: 'resources',
+      data: { roles: ALL_ROLES },
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./resources/resources.module')
+        .then(m => m.ResourcesModule),
     },
     {
       path: 'system-setup',

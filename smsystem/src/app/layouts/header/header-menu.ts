@@ -1,19 +1,20 @@
 import { NbMenuItem } from '@nebular/theme';
+import { FRONTEND_ENDPOINTS } from 'app/utils';
 
 export const USER_DROPDOWN_ITEMS: NbMenuItem[] = [
   {
     title: 'Profile',
-    link: '/dashboard/account/profile',
+    link: FRONTEND_ENDPOINTS.profile.path,
     icon: 'person-outline',
    },
    {
     title: 'Preferences',
-    link: '/dashboard/account/preferences',
+    link: FRONTEND_ENDPOINTS.preferences.path,
     icon: 'settings-2-outline',
    },
    {
      title: 'Log out',
-     link: '/account/logout',
+     link: FRONTEND_ENDPOINTS.logout.path,
      icon: 'log-out-outline',
    },
 ];

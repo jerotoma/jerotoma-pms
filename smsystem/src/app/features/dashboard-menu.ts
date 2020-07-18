@@ -68,7 +68,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: FRONTEND_ENDPOINTS.attendanceStaffs.path,
       },
       {
-        title: 'Attendance Statuses',
+        title: 'Statuses',
         link: FRONTEND_ENDPOINTS.attendanceStatus.path,
       },
     ],
@@ -150,7 +150,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Courses',
-        link: FRONTEND_ENDPOINTS.systemSetupAcademicYears.path,
+        link: FRONTEND_ENDPOINTS.systemSetupCourses.path,
       },
       {
         title: 'Departments',
