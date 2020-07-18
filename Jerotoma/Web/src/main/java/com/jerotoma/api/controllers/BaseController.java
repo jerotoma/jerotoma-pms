@@ -21,6 +21,7 @@ import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
+import com.jerotoma.common.viewobjects.Auth;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
@@ -149,8 +150,20 @@ public abstract class BaseController {
 	protected void logExceptionDetail(Throwable throwable) {}
 	
 	
-	protected UserVO getAuthenticatedUser() {
+	protected UserVO getAuthenticatedUserVO() {
 		return this.userService.loadCurrentUser();
+	}
+	
+	protected Auth getAuth() {
+		UserVO user = getAuthenticatedUserVO();
+		Auth auth = new Auth();
+		auth.setFullName(user.getFullName());
+		auth.setUserId(user.getUserId());
+		auth.setAvatar(user.getPicture());
+		auth.setAvatarId(user.getProfileImageId());
+		auth.setRoles(user.getRoles());
+		auth.setUserType(user.getUserType());
+		return auth;
 	}
 
 }

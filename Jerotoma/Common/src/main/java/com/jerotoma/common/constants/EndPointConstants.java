@@ -153,9 +153,16 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/user-preferences";
 	}
 	
-	public static interface REST_AUTH_CONTROLLER {
+	public static interface REST_PUB_AUTH_CONTROLLER {
 		public static final String BASE = API_APP_AUTH;
-		public static final String REGISTER = "/register";		
+		public static final String REGISTER = "/register";	
+		public static final String AUTH_USER = "/user";
+	}
+	
+	public static interface REST_AUTH_CONTROLLER {
+		public static final String BASE = API_SECURED_ROOT + "/auth";
+		public static final String REGISTER = "/register";	
+		public static final String AUTH_USER = "/user";
 	}
 	
 	public static interface AUTH_CONTROLLER {

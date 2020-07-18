@@ -2,17 +2,19 @@ import {
   ALL_ROLES,
   ADMINS_AND_EXECUTIVES_ROLES,
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
-  ADMINS_PARENT_AND_EXECUTIVES_ROLES,
+  ADMINS_STUDENT_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STAFF_AND_EXECUTIVES_ROLES,
   ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
+  STUDENT_AND_TEACHER_ROLES,
 } from 'app/models';
 
 export const API_END_POINTS = {
   baseURL: 'https://jerotoma.com',
   dashboard: '/dashboard',
   rootURL: '/api/secured',
+  authUser: '/api/secured/auth/user',
   users: '/api/secured/users',
   refreshToken: '/api/auth/refresh-token',
   login: '/api/auth/login',
@@ -56,7 +58,7 @@ export const FRONTEND_ENDPOINTS = {
   },
   resources: {
     path: '/dashboard/resources',
-    allowedRoles: ALL_ROLES,
+    allowedRoles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
   },
   users: {
     path: '/dashboard/users',
@@ -72,7 +74,7 @@ export const FRONTEND_ENDPOINTS = {
   },
   parents: {
     path: '/dashboard/users/parents',
-    allowedRoles: ADMINS_STUDENT_PARENT_TEACHER_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_STUDENT_TEACHER_AND_EXECUTIVES_ROLES,
   },
   students: {
     path: '/dashboard/users/students',
@@ -133,6 +135,14 @@ export const FRONTEND_ENDPOINTS = {
   scheduleTimetables: {
     path: '/dashboard/schedules/timetable',
     allowedRoles: ALL_ROLES,
+  },
+  myschedules: {
+    path: '/dashboard/my-schedules',
+    allowedRoles: STUDENT_AND_TEACHER_ROLES,
+  },
+  mycourses: {
+    path: '/dashboard/my-courses',
+    allowedRoles: STUDENT_AND_TEACHER_ROLES,
   },
   media: {
     path: '/dashboard/media',

@@ -131,7 +131,7 @@ public class RestStudentClassController extends BaseController {
 		List<StudentClass> studentClasses = new ArrayList<>();
 		Set<Class> jClasses = new HashSet<>();
 		try {
-			UserVO authUser = getAuthenticatedUser();
+			UserVO authUser = getAuthenticatedUserVO();
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
 			for (Integer classId : jClassFields.getClassIds()) {		
 				Class jClass = jClassService.findObject(classId);						
@@ -184,7 +184,7 @@ public class RestStudentClassController extends BaseController {
 		Set<Class> jClasses = new HashSet<>();		
 		try {
 			studentClass = studentClassService.findObject(jClassFields.getId());
-			UserVO authUser = getAuthenticatedUser();
+			UserVO authUser = getAuthenticatedUserVO();
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
 			studentClass.setAcademicYear(academicYear);
 			studentClass.setUpdatedBy(authUser.getId());

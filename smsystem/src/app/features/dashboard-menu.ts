@@ -74,6 +74,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'My Courses',
+    icon: 'book-open-outline',
+    link: FRONTEND_ENDPOINTS.mycourses.path,
+  },
+  {
+    title: 'My Schedules',
+    icon: 'calendar-outline',
+    link: FRONTEND_ENDPOINTS.myschedules.path,
+  },
+  {
     title: 'Admission',
     icon: 'book-open-outline',
     link: FRONTEND_ENDPOINTS.admission.path,

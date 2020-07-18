@@ -148,7 +148,7 @@ public class RestMediaController extends BaseController {
 		List<FileUploadWrapper>  fileUploadWrappers = new ArrayList<>();
 		List<FileUploadWrapper>  uploadedFiles = FileUpload.uploadMultipleFileHandler(files, context, "users");
 		for (FileUploadWrapper uploadedFile: uploadedFiles) {
-			fileUploadWrappers.add(saveUpload(uploadedFile, getAuthenticatedUser().getUserId(), false));		
+			fileUploadWrappers.add(saveUpload(uploadedFile, getAuthenticatedUserVO().getUserId(), false));		
 		}	
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
@@ -213,7 +213,7 @@ public class RestMediaController extends BaseController {
 			UserVO userVO = userService.getUserByUserId(userId);			
 			if (fileUploadWrapper.getSuccess()) {
 				Media media = fileUploadWrapper.getMedia();
-				media.setAddedBy(getAuthenticatedUser().getUserId());
+				media.setAddedBy(getAuthenticatedUserVO().getUserId());
 				media = mediaService.createObject(media);
 				UserMedia userMedia = new UserMedia();
 				userMedia.setMediaId(media.getId());

@@ -1,17 +1,19 @@
 
 import { Injectable } from '@angular/core';
 import { AuthService } from 'app/services/auth';
-import { USER_ROLE } from 'app/models';
+import { USER_ROLE, User, Auth } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SecurityClearanceService {
+  private userRoles: USER_ROLE[];
+  private isLoading: boolean = false;
 
- private userRoles: USER_ROLE[];
+  constructor(private authService: AuthService) {}
 
-  constructor(private authService: AuthService) {
-    this.loadCurrentUser();
+  get hasResult() {
+    return this.isLoading;
   }
 
   get isAdmin() {
@@ -26,12 +28,19 @@ export class SecurityClearanceService {
     return this.userRoles && this.userRoles.indexOf(USER_ROLE.STAFF) !== -1;
   }
 
-
   get isParent() {
     return this.userRoles && this.userRoles.indexOf(USER_ROLE.PARENT) !== -1;
   }
 
   loadCurrentUser() {
-    this.userRoles = this.authService.loadCurrentUserRoles();
+    this.authService.getAuthenticatedUser().subscribe((auth: Auth) => {
+      this.userRoles = auth.roles;
+      this.isLoading = true;
+    });
+  }
+
+  distroyCurrentUser() {
+    this.userRoles = null;
+    this.isLoading = false;
   }
 }

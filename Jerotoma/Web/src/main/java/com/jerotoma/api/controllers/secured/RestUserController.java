@@ -732,7 +732,7 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		response.setData(getAuthenticatedUser());		
+		response.setData(getAuthenticatedUserVO());		
 		return response;		
 	}
 	
@@ -744,7 +744,7 @@ public class RestUserController extends BaseController {
 		this.proccessLoggedInUser(auth);
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
-		response.setData(roleService.loadListFromRoleNames(getAuthenticatedUser().getRoles()));		
+		response.setData(roleService.loadListFromRoleNames(getAuthenticatedUserVO().getRoles()));		
 		return response;		
 	}
 	@GetMapping(EndPointConstants.REST_USER_CONTROLLER.SEARCH)

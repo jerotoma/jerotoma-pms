@@ -9,7 +9,8 @@ import {
   ALL_ROLES,
   ADMINS_AND_EXECUTIVES_ROLES,
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
-  ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES } from 'app/models';
+  ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
+  STUDENT_AND_TEACHER_ROLES} from 'app/models';
 
 const routes: Routes = [{
   path: '',
@@ -35,6 +36,20 @@ const routes: Routes = [{
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./resources/resources.module')
         .then(m => m.ResourcesModule),
+    },
+    {
+      path: 'my-schedules',
+      data: { roles: STUDENT_AND_TEACHER_ROLES },
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./myschedules/my-schedules.module')
+        .then(m => m.MySchedulesModule ),
+    },
+    {
+      path: 'my-courses',
+      data: { roles: STUDENT_AND_TEACHER_ROLES },
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./mycourses/my-courses.module')
+        .then(m => m.MyCoursesModule),
     },
     {
       path: 'system-setup',

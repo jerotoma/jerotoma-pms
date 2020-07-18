@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {AuthService } from 'app/services/auth';
+import {AuthService, SecurityClearanceService } from 'app/services';
 
 @Component({
   selector: 'app-logout',
@@ -14,21 +14,27 @@ export class LogoutComponent implements OnInit {
   errors: string[];
   constructor(
     protected service: AuthService,
+    private securityClearanceService: SecurityClearanceService,
     protected router: Router) {
 
     }
 
   ngOnInit() {
-    this.logout();
+    this.checkAuthenticationStatusAndLogout();
   }
 
   logout() {
-    if (!this.service.isAuthenticated()) {
-      this.router.navigate([this.redirectUrl]);
-      return;
-    }
     this.service.logout().subscribe((res: any) => {
-
+      this.securityClearanceService.distroyCurrentUser();
+    });
+  }
+  checkAuthenticationStatusAndLogout() {
+    this.service.isAuthenticated().subscribe((isAuthenticated: boolean) => {
+      if (!isAuthenticated) {
+        this.router.navigate([this.redirectUrl]);
+        return;
+      }
+      this.logout();
     });
   }
 }

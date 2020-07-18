@@ -1,16 +1,14 @@
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, of as observableOf, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Token } from 'app/models/tokens/token';
 import { AUTH_CONSTANT } from './auth-constant';
 import { TokenService } from 'app/services/auth/token.service';
-import {  UserService } from 'app/services/users';
 import {  LocalStorageService } from 'app/services/storage';
-import { Role, ResponseWrapper, USER_ROLE, convertStringToEnum } from 'app/models';
+import { ResponseWrapper, USER_ROLE, convertStringToEnum, Auth } from 'app/models';
 import { API_END_POINTS } from 'app/utils';
-import { ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +19,6 @@ export class AuthService {
 
   constructor(
     private storageService: LocalStorageService,
-    private userService: UserService,
     private tokenService: TokenService,
     private http: HttpClient) {}
 
@@ -102,6 +99,11 @@ export class AuthService {
       return roles;
     }
     return null;
+  }
+
+  getAuthenticatedUser(): Observable<Auth> {
+    return this.http.get(`${API_END_POINTS.authUser}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   /**

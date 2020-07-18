@@ -18,3 +18,4 @@ export * from './media';
 export * from './programs';
 export * from './academic-levels';
 export * from './securities';
+export * from './auth';

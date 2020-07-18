@@ -104,7 +104,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService) {}
 
   ngOnInit(): void {
+    this.loadCurrentUser();
     this.loadDashboardCounters();
+  }
+
+  loadCurrentUser() {
+    this.securityClearanceService.loadCurrentUser();
   }
 
   ngOnDestroy() {
@@ -123,6 +128,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.counterCards = this.counterCardsByThemes[theme.name];
       });
     });
+  }
+
+  get hasResult() {
+    return this.securityClearanceService.hasResult;
   }
 
   get isAdminAndExecutive() {
