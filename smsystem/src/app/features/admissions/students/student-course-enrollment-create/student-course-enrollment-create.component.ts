@@ -35,7 +35,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   @Input() studentId: string = '0';
   @Output() onCreationSuccess = new EventEmitter();
 
-  userType: string = USER_TYPE.student;
+  userType: string = USER_TYPE.STUDENT;
 
   academicYearId: number;
   courseId: number;

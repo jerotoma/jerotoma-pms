@@ -41,14 +41,14 @@ const routes: Routes = [{
       path: 'my-schedules',
       data: { roles: STUDENT_AND_TEACHER_ROLES },
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./myschedules/my-schedules.module')
+      loadChildren: () => import('./my-schedules/my-schedules.module')
         .then(m => m.MySchedulesModule ),
     },
     {
       path: 'my-courses',
       data: { roles: STUDENT_AND_TEACHER_ROLES },
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./mycourses/my-courses.module')
+      loadChildren: () => import('./my-courses/my-courses.module')
         .then(m => m.MyCoursesModule),
     },
     {

@@ -32,6 +32,10 @@ export class SecurityClearanceService {
     return this.userRoles && this.userRoles.indexOf(USER_ROLE.PARENT) !== -1;
   }
 
+  get isTeacher() {
+    return this.userRoles && this.userRoles.indexOf(USER_ROLE.TEACHER) !== -1;
+  }
+
   loadCurrentUser() {
     this.authService.getAuthenticatedUser().subscribe((auth: Auth) => {
       this.userRoles = auth.roles;

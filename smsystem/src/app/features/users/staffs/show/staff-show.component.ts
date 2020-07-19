@@ -49,7 +49,7 @@ export class StaffShowComponent implements OnInit {
   }
 
   loadStaffDetails(staffId: number) {
-      this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((staff: Staff) => {
+      this.userService.loadUser(staffId, USER_TYPE.STAFF).subscribe((staff: Staff) => {
           this.staff = staff;
         });
   }

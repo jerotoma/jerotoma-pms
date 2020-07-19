@@ -34,7 +34,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   @Input() studentClass: StudentClass;
   @Output() onCreationSuccess = new EventEmitter();
 
-  userType: string = USER_TYPE.student;
+  userType: string = USER_TYPE.STUDENT;
   checkboxColor: ThemePalette = 'warn';
 
   academicYearId: number;

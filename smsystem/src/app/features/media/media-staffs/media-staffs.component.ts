@@ -20,7 +20,7 @@ export class MediaStaffsComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: USER_TYPE.staff,
+    userType: USER_TYPE.STAFF,
   };
 
   constructor(

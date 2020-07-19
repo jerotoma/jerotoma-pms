@@ -20,7 +20,7 @@ export class MediaStudentsComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: USER_TYPE.student,
+    userType: USER_TYPE.STUDENT,
   };
 
   constructor(

@@ -43,16 +43,16 @@ export class UserService {
 
   loadUser(userId: number, userType: string): Observable<User> {
     switch (userType) {
-        case USER_TYPE.parent:
+        case USER_TYPE.PARENT:
           userType = 'parents';
         break;
-        case USER_TYPE.staff:
+        case USER_TYPE.STAFF:
           userType = 'staffs';
         break;
-        case USER_TYPE.teacher:
+        case USER_TYPE.TEACHER:
           userType = 'teachers';
         break;
-        case USER_TYPE.student:
+        case USER_TYPE.STUDENT:
           userType = 'students';
         break;
     }

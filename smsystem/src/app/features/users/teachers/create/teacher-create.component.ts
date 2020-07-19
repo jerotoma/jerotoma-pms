@@ -102,7 +102,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       position: ['', Validators.required],
-      occupation: [USER_TYPE.teacher],
+      occupation: [USER_TYPE.TEACHER],
       userCode: [''],
       gender: ['', Validators.required],
       picture: [''],
@@ -113,7 +113,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       confirmPassword: [null],
       userId: [null],
       birthDate: ['', DateValidator()],
-      userType: [USER_TYPE.teacher],
+      userType: [USER_TYPE.TEACHER],
       department: ['', Validators.required],
       address: [null, Validators.required],
     });
@@ -126,7 +126,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: USER_TYPE.teacher,
+      userType: USER_TYPE.TEACHER,
     };
   }
 
@@ -137,7 +137,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadTeacher(teacherId: number) {
-    this.userService.loadUser(teacherId, USER_TYPE.teacher).subscribe((teacher: Teacher) => {
+    this.userService.loadUser(teacherId, USER_TYPE.TEACHER).subscribe((teacher: Teacher) => {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;

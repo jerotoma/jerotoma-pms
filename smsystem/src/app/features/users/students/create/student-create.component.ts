@@ -125,7 +125,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       confirmPassword: [null],
       gender: ['', Validators.required],
       picture: [''],
-      userType: [USER_TYPE.student],
+      userType: [USER_TYPE.STUDENT],
       birthDate: ['', DateValidator()],
       address: [null, Validators.required],
       parentFullName: [''],
@@ -150,12 +150,12 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: USER_TYPE.student,
+      userType: USER_TYPE.STUDENT,
     };
   }
 
   loadStudent(studentId: number) {
-    this.userService.loadUser(studentId, USER_TYPE.student).subscribe((student: Student) => {
+    this.userService.loadUser(studentId, USER_TYPE.STUDENT).subscribe((student: Student) => {
        if (student) {
         this.student = student;
         this.updateUseInput();
@@ -257,7 +257,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       phoneNumber: this.student.phoneNumber,
       emailAddress: this.student.username,
       birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
-      userType: USER_TYPE.student,
+      userType: USER_TYPE.STUDENT,
       academicDiscipline: this.student.academicDiscipline ? this.student.academicDiscipline.id : null,
       fullName: this.student.fullName,
       address: this.student.address ? this.student.address : null,

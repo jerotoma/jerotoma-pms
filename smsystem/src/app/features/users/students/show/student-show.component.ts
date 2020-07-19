@@ -46,7 +46,7 @@ export class StudentShowComponent implements OnInit {
   }
 
   loadStudentDetails(studentId: number) {
-      this.userService.loadUser(studentId, USER_TYPE.student).subscribe((user: Student) => {
+      this.userService.loadUser(studentId, USER_TYPE.STUDENT).subscribe((user: Student) => {
        if (user) {
           this.student = user;
         }

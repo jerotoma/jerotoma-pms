@@ -22,7 +22,7 @@ export class RoleAssignationComponent implements OnInit {
   @Input() role: Role;
 
   roles: Role[] = null;
-  userType: string = USER_TYPE.teacher;
+  userType: string = USER_TYPE.TEACHER;
   userTypes: string[] = Object.values(USER_TYPE);
   roleAssignationForm: FormGroup;
   roleIDs: number[] = [];
@@ -38,7 +38,7 @@ export class RoleAssignationComponent implements OnInit {
     protected ref: NbDialogRef<RoleAssignationComponent>) {}
 
   ngOnInit() {
-    this.userTypes = this.userTypes.filter(userType => userType !== USER_TYPE.all);
+    this.userTypes = this.userTypes.filter(userType => userType !== USER_TYPE.ALL);
     this.loadForm();
     if (!this.role) {
       this.loadRoles();
@@ -80,7 +80,7 @@ export class RoleAssignationComponent implements OnInit {
 
   loadForm() {
     this.roleAssignationForm = this.formBuilder.group({
-      userType: [USER_TYPE.teacher, Validators.required ],
+      userType: [USER_TYPE.TEACHER, Validators.required ],
       userId: ['', Validators.required ],
       roleIDs: ['', Validators.required ],
     });

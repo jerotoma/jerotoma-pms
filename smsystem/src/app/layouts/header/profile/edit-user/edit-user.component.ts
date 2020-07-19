@@ -28,7 +28,7 @@ import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE }
   styleUrls: ['./edit-user.component.scss'],
 })
 export class EditUserComponent implements OnInit {
-  @Input('userType') userType: string = USER_TYPE.teacher;
+  @Input('userType') userType: string = USER_TYPE.TEACHER;
   @Input('user') user: User = null;
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;

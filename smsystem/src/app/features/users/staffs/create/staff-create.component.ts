@@ -123,7 +123,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       occupation: ['staff'],
       gender: ['', Validators.required],
       picture: [''],
-      userType: [USER_TYPE.staff],
+      userType: [USER_TYPE.STAFF],
       birthDate: ['', DateValidator()],
       address: [null, Validators.required],
     });
@@ -137,12 +137,12 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: USER_TYPE.staff,
+      userType: USER_TYPE.STAFF,
     };
   }
 
   loadStaff(staffId: number) {
-    this.userService.loadUser(staffId, USER_TYPE.staff).subscribe((staff: Staff ) => {
+    this.userService.loadUser(staffId, USER_TYPE.STAFF).subscribe((staff: Staff ) => {
       if (staff) {
         this.staff = staff;
         this.staffForm.patchValue({
@@ -157,7 +157,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
           phoneNumber: this.staff.phoneNumber,
           picture: this.staff.picture,
           birthDate: DateFormatter(this.staff.birthDate, 'YYYY/MM/DD', false),
-          userType: USER_TYPE.staff,
+          userType: USER_TYPE.STAFF,
           fullName: this.staff.fullName,
           address: this.staff.address,
         });

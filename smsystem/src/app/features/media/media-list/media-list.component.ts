@@ -50,7 +50,7 @@ export class MediaListComponent implements OnInit {
     status: '',
     search: '',
     fieldName: '',
-    userType: USER_TYPE.all,
+    userType: USER_TYPE.ALL,
   };
   media: Media;
   images: Image[] = [];

@@ -3,7 +3,8 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from 'app/services/users/user.service';
-import { Teacher, ShowMessage  } from 'app/models';
+import { USER_TYPE } from 'app/utils';
+import { Teacher  } from 'app/models';
 
 
 @Component({
@@ -11,18 +12,14 @@ import { Teacher, ShowMessage  } from 'app/models';
   template: `<app-user-details
               *ngIf='teacher'
               [userDatail]="teacher"
-              [userType]="'teacher'"
+              [userType]="userType"
               (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
 export class TeacherShowComponent implements OnInit {
 
   teacher: Teacher = null;
-  showMessage: ShowMessage = {
-    error: false,
-    success: false,
-    message: '',
-  };
+  userType: USER_TYPE = USER_TYPE.TEACHER;
 
   constructor(
     private userService: UserService,
@@ -48,7 +45,7 @@ export class TeacherShowComponent implements OnInit {
   }
 
   loadTeacherDetails(teacherId: number) {
-      this.userService.loadUser(teacherId, 'teachers').subscribe((teacher: Teacher ) => {
+      this.userService.loadUser(teacherId, this.userType).subscribe((teacher: Teacher ) => {
         if (teacher) {
           this.teacher = teacher;
         }

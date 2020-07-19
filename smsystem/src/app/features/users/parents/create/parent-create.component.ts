@@ -104,7 +104,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
 
   loadParent(parentId: number) {
-    this.userService.loadUser(parentId, 'parents').subscribe((parent: Parent) => {
+    this.userService.loadUser(parentId, USER_TYPE.PARENT).subscribe((parent: Parent) => {
       if (parent) {
         this.parent = parent;
         this.updateUseInput();
@@ -134,7 +134,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       gender: ['', Validators.required],
       userId: [null],
       picture: [''],
-      userType: [USER_TYPE.parent],
+      userType: [USER_TYPE.PARENT],
       address: [null, Validators.required],
       studentIDs: [''],
       studentFullName: [''],
@@ -148,7 +148,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       status: '',
       search: '',
       fieldName: '',
-      userType: USER_TYPE.parent,
+      userType: USER_TYPE.PARENT,
     };
   }
   onParentAddressChange(addressWrapper: AddressWrapper ) {
@@ -242,7 +242,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       phoneNumber: this.parent.phoneNumber,
       emailAddress: this.parent.username,
       birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
-      userType: USER_TYPE.parent,
+      userType: USER_TYPE.PARENT,
       academicDiscipline: this.parent.academicDiscipline ? this.parent.academicDiscipline.id : null,
       fullName: this.parent.fullName,
       address: this.parent.address ? this.parent.address : null,

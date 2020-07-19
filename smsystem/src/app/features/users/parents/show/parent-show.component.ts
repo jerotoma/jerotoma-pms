@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { UserService } from 'app/services/users/user.service';
 import { Parent, ShowMessage  } from 'app/models';
+import { USER_TYPE } from 'app/utils';
 
 
 @Component({
@@ -11,13 +12,14 @@ import { Parent, ShowMessage  } from 'app/models';
   template: `<app-user-details
               *ngIf='parent'
               [userDatail]="parent"
-              [userType]="'parent'"
+              [userType]="userType"
               (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
 export class ParentShowComponent implements OnInit {
 
   parent: Parent = null;
+  userType: USER_TYPE = USER_TYPE.PARENT;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -47,7 +49,7 @@ export class ParentShowComponent implements OnInit {
     this.loadParentDetails(data.id);
   }
   loadParentDetails(parentId: number) {
-      this.userService.loadUser(parentId, 'parents').subscribe((parent: Parent) => {
+      this.userService.loadUser(parentId, this.userType).subscribe((parent: Parent) => {
         if (parent) {
           this.parent = parent;
         }

@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
       return;
     }
     this.user = this.registerForm.value;
-    this.user.userType = USER_TYPE.staff;
+    this.user.userType = USER_TYPE.STAFF;
     this.authService.register(this.user).subscribe((result: HttpResponse<any> | HttpErrorResponse | any ) => {
       this.submitted = false;
       const resp = result;

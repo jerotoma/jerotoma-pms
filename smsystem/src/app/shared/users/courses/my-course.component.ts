@@ -8,13 +8,10 @@ import {
  } from 'app/services';
 import { USER_TYPE, QueryParam } from 'app/utils';
 import {
-  ShowMessage,
   ClassView,
-  StudentClassAdmission,
   Student,
   AcademicYear,
   StudentClass,
-  ResponseWrapper,
 } from 'app/models';
 
 @Component({
@@ -24,7 +21,7 @@ import {
 })
 export class MyCourseComponent implements OnInit {
 
-  @Input('userType') userType = USER_TYPE.student;
+  @Input('userType') userType = USER_TYPE.STUDENT;
   @Input('userId') userId: number = null;
 
   academicYearId: number;
@@ -60,7 +57,7 @@ export class MyCourseComponent implements OnInit {
 
   ngOnInit() {
     this.loadForm();
-    if (this.userId && this.userType === USER_TYPE.student) {
+    if (this.userId && this.userType === USER_TYPE.STUDENT) {
       this.loadAcademicYears();
       this.loadStudentClasses();
     }
@@ -94,7 +91,7 @@ export class MyCourseComponent implements OnInit {
             this.academicYear = academicYear;
           }
         });
-        if (this.academicYear && this.userType === USER_TYPE.student) {
+        if (this.academicYear && this.userType === USER_TYPE.STUDENT) {
           this.loadStudentJClassesByAcademicYear(this.academicYear.id, this.userId);
         }
       }

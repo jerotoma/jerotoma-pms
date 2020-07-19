@@ -12,7 +12,7 @@ import { USER_TYPE, API_END_POINTS } from 'app/utils';
 })
 export class UserDetailsComponent implements OnInit {
     @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
-    @Input('userType') userType: string = USER_TYPE.teacher;
+    @Input('userType') userType: string = USER_TYPE.TEACHER;
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = API_END_POINTS.baseURL;
 
@@ -52,19 +52,19 @@ export class UserDetailsComponent implements OnInit {
     }
 
     get isUserTeacher() {
-      return this.userType === USER_TYPE.teacher;
+      return this.userType === USER_TYPE.TEACHER;
     }
 
     get isUserStudent() {
-      return this.userType === USER_TYPE.student;
+      return this.userType === USER_TYPE.STUDENT;
     }
 
     get isUserParent() {
-      return this.userType === USER_TYPE.parent;
+      return this.userType === USER_TYPE.PARENT;
     }
 
     get isUserStaff() {
-      return this.userType === USER_TYPE.staff;
+      return this.userType === USER_TYPE.STAFF;
     }
 
 }

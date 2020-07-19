@@ -13,7 +13,7 @@ import { UserService } from 'app/services';
 })
 export class SearchUserComponent implements OnInit {
 
-  @Input('userType') userType: string =  USER_TYPE.all;
+  @Input('userType') userType: string =  USER_TYPE.ALL;
   @Input('user') user: User  = null;
   @Input('title') title: string = 'Login Cridentials';
   @Output() onUserSelected: EventEmitter<User> = new EventEmitter();
