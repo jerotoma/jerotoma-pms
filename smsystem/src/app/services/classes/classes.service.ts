@@ -10,7 +10,6 @@ import { ResponseWrapper, ClassView } from 'app/models';
   providedIn: 'root',
 })
 export class ClassService {
-
   constructor(private http: HttpClient) { }
 
   getClass(classId: number): Observable<ClassView>  {
@@ -48,6 +47,11 @@ export class ClassService {
   loadJClassesByParams(programId: number, academicLevelId: number, academicYearId: number): Observable<ClassView[]> {
     return this.http.get(`${API_END_POINTS.classes}/programs/${programId}/academic-levels/${academicLevelId}/academic-years/${academicYearId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadClassesByStudentIDAndAcademicLevelID(studentId: number, academicLevelId: number): Observable<ClassView[]> {
+    return this.http.get(`${API_END_POINTS.classes}/students/${studentId}/academic-levels/${academicLevelId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   updateClass(data?: any): Observable<ClassView> {

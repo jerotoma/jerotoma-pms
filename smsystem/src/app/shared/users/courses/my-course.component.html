@@ -1,19 +1,23 @@
 <div class='row'>
-  <div class="col-md-12 col-lg-12 col-xxxl-12">
+  <div class="col-md-12 col-lg-12 col-xxxl-12"
+    [nbSpinner]="isLoading"
+    nbSpinnerStatus="success"
+    nbSpinnerSize="large"
+    nbSpinnerMessage="Loading courses....">
       <form [formGroup]="studentClassForm" class="step-container">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="class-academicYear" class="label">Class Academic Year</label>
+                        <label for="class-academicLevel" class="label">Academic Level</label>
                         <nb-select
                           fullWidth
-                          placeholder="Class Academic Year"
-                          formControlName="academicYearId"
-                          id="class-academicYear">
+                          placeholder="Academic Level"
+                          formControlName="academicLevelId"
+                          id="class-academicLevel">
                           <nb-option
-                              *ngFor='let acad of academicYears'
+                              *ngFor='let acad of academicLevels'
                               [value]="acad.id">
-                              {{acad.name}} - {{acad.yearOfStudy}}
+                              {{acad.name}} - {{acad.code}}
                           </nb-option>
                         </nb-select>
                     </div>
@@ -22,9 +26,9 @@
             <div class="lists row">
               <div class="col-md-12">
                   <div class="form-control-group">
-                    <nb-card class="list-card" accent="success" *ngIf="jClasses">
-                      <nb-card-body style="padding: 0;">
-                        <h5>List of courses for {{academicYear.name}} - {{academicYear.yearOfStudy}}</h5>
+                    <nb-card class="list-card" accent="success">
+                      <nb-card-body style="padding: 0;" *ngIf="jClasses">
+                        <h5>List of courses for {{academicLevel.name}} - {{academicLevel.code}}</h5>
                         <nb-list class="list-group">
                           <nb-list-item class="list-group-item" >
                               <div class="row">

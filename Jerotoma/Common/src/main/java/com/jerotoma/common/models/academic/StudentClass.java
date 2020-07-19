@@ -40,6 +40,10 @@ public class StudentClass {
 	private AcademicYear academicYear;
 	
 	@ManyToOne
+	@JoinColumn(name="academic_level_id")
+	private AcademicLevel academicLevel;
+	
+	@ManyToOne
 	@JoinColumn(name="student_id")
 	@JsonBackReference
 	private Student student;
@@ -117,20 +121,30 @@ public class StudentClass {
 	public void setClasses(Set<Class> classes) {
 		this.classes = classes;
 	}
+	
+	public AcademicLevel getAcademicLevel() {
+		return academicLevel;
+	}
+
+	public void setAcademicLevel(AcademicLevel academicLevel) {
+		this.academicLevel = academicLevel;
+	}
 
 	public static class Fields {
 		Integer Id;
 		List<Integer> studentIds;
 		List<Integer> classIds;
 		Integer academicYearId;
+		Integer academicLevelId;
 			
 		
-		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer academicYearId) {
+		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer academicYearId, Integer academicLevelId) {
 			super();
 			Id = id;
 			this.studentIds = studentIds;
 			this.classIds = classIds;
 			this.academicYearId = academicYearId;
+			this.academicLevelId = academicLevelId;
 		}
 		public Integer getId() {
 			return Id;
@@ -161,6 +175,13 @@ public class StudentClass {
 		
 		public void setAcademicYearId(Integer academicYearId) {
 			this.academicYearId = academicYearId;
+		}
+		
+		public void setAcademicLevelId(Integer academicLevelId) {
+			this.academicLevelId = academicLevelId;
+		}
+		public Integer getAcademicLevelId() {			
+			return academicLevelId;
 		}		
 	}
 	

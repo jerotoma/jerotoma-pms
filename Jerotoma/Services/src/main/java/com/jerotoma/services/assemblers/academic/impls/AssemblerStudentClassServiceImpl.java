@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.StudentClassVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerStudentClassDao;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
@@ -49,8 +50,19 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 	}
 
 	@Override
-	public List<StudentClassVO> findStudentClassesByStudentId(Integer studentId) throws SQLException {
+	public StudentClassVO findStudentClassesByStudentId(Integer studentId) throws SQLException {
 		return assemblerStudentClassDao.findStudentClassesByStudentId(studentId);
+	}
+
+	@Override
+	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId,
+			Integer academicLevelId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassesByStudentIdAndAndAcademicLevelID(studentId, academicLevelId);
+	}
+
+	@Override
+	public List<ClassVO> findTeacherClassesByTeacherId(Integer teacherID) throws SQLException {
+		return assemblerStudentClassDao.findTeacherClassesByTeacherId(teacherID);
 	}
 
 }

@@ -1,8 +1,15 @@
-<div class="row" *ngIf="hasResult && (isStudent || isTeacher)">
-  <div class="col-xxxl-12 col-md-12" >
-    <app-my-course
-      [userId]="auth?.userId"
-      [userType]="auth?.userType"
-    ></app-my-course>
-  </div>
-</div>
+<nb-card>
+  <nb-card-header>{{title}}</nb-card-header>
+  <nb-card-body>
+    <div class="row" *ngIf="hasResult && (isStudent || isTeacher)">
+      <div class="col-xxxl-12 col-md-12" >
+        <app-my-course
+          *ngIf="auth"
+          [userId]="auth?.userId"
+          [userType]="auth?.userType"
+        ></app-my-course>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+

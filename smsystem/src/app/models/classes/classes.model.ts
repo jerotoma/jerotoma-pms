@@ -1,4 +1,4 @@
-import { Room, AcademicYear, Teacher, Student, Course, MeetingTime } from 'app/models';
+import { Room, AcademicYear, AcademicLevel, Teacher, Student, Course, MeetingTime } from 'app/models';
 
 
 export interface ClassView {
@@ -26,8 +26,9 @@ export interface StudentClass {
   id: number;
   student: Student;
   academicYear: AcademicYear;
+  academicLevel: AcademicLevel;
   jClasses: ClassView[];
-  numberOfCourse: number;
+  classesCount: number;
 }
 
 
@@ -36,4 +37,5 @@ export interface StudentClassAdmission {
   studentId: number;
   classIds: number[];
   academicYearId: number;
+  academicLevelId: number;
 }

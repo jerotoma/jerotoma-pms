@@ -754,7 +754,8 @@
 	CREATE TABLE IF NOT EXISTS public.student_classes(
 	    id bigserial NOT NULL,
 	    student_id bigint NOT NULL,
-	    academic_year_id bigint NOT NULL,	    
+	    academic_year_id bigint NOT NULL,
+	    academic_level_id bigint NOT NULL,	 
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
@@ -763,7 +764,11 @@
 	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
 	        REFERENCES public.academic_years (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,	   	
+	        ON DELETE CASCADE,	
+	    CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id)
+	        REFERENCES public.academic_levels (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	
 	    CONSTRAINT student_fkey FOREIGN KEY (student_id)
 	        REFERENCES public.students (id) MATCH SIMPLE
 	        ON UPDATE CASCADE

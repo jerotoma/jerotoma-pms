@@ -35,6 +35,7 @@ import {
   NbUserModule,
   NbCheckboxModule,
   NbAlertModule,
+  NbSpinnerModule,
   NbProgressBarModule,
 } from '@nebular/theme';
 
@@ -108,6 +109,7 @@ const MODULES = [
   NbAccordionModule,
   NbUserModule,
   NbProgressBarModule,
+  NbSpinnerModule,
   NbActionsModule,
   NbIconModule,
   MatTableModule,

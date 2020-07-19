@@ -22,8 +22,18 @@ export class StudentClassService {
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  getStudentClassesByStudentId(studentId: number): Observable<StudentClass[]> {
+  getStudentClassByUserId(userId: number): Observable<StudentClass> {
+    return this.http.get(`${API_END_POINTS.studentClasses}/users/${userId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  getStudentClassByStudentId(studentId: number): Observable<StudentClass> {
     return this.http.get(`${API_END_POINTS.studentClasses}/students/${studentId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadClassesByStudentIDAndAcademicLevelID(academicLevelId: number, studentId: number) {
+    return this.http.get(`${API_END_POINTS.studentClasses}/students/${studentId}/academic-levels/${academicLevelId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

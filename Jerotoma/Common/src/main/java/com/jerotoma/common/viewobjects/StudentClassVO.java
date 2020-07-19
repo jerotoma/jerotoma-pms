@@ -11,11 +11,12 @@ public class StudentClassVO {
 	
 	private Integer id;
 	
-	private Integer numberOfClasses;
+	private Integer classesCount;
 	
 	private StudentVO student;
 	
 	private AcademicYearVO academicYear;
+	private AcademicLevelVO academicLevel;
 	
 	private List<ClassVO> jClasses;
 	
@@ -27,7 +28,7 @@ public class StudentClassVO {
 	
 	public StudentClassVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(StudentConstant.Class.ID);
-		this.numberOfClasses = rs.getInt(StudentConstant.Class.ID);
+		this.classesCount = rs.getInt(StudentConstant.Class.CLASSES_COUNT);
 		this.updatedOn = rs.getDate(StudentConstant.Class.UPDATED_ON);
 		this.createdOn = rs.getDate(StudentConstant.Class.CREATED_ON);
 		
@@ -55,7 +56,7 @@ public class StudentClassVO {
 
 	public void setJClasses(List<ClassVO> jClasses) {
 		if (jClasses != null) {
-			this.numberOfClasses = jClasses.size();
+			this.classesCount = jClasses.size();
 		}
 		this.jClasses = jClasses;
 	}
@@ -92,11 +93,23 @@ public class StudentClassVO {
 		this.id = id;
 	}
 
-	public Integer getNumberOfClasses() {
-		return numberOfClasses;
+	public Integer getClassesCount() {
+		return classesCount;
 	}
 
-	public void setNumberOfClasses(Integer numberOfClasses) {
-		this.numberOfClasses = numberOfClasses;
+	public void setClassesCount(Integer classesCount) {
+		this.classesCount = classesCount;
+	}
+
+	public AcademicLevelVO getAcademicLevel() {
+		return academicLevel;
+	}
+
+	public void setAcademicLevel(AcademicLevelVO academicLevel) {
+		this.academicLevel = academicLevel;
+	}
+
+	public void setjClasses(List<ClassVO> jClasses) {
+		this.jClasses = jClasses;
 	}
 }

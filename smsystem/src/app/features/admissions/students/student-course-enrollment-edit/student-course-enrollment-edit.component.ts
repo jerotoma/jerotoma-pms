@@ -84,7 +84,9 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    this.loadStudentClasses(this.studentClass);
+    if (this.studentClass) {
+      this.loadStudentClasses(this.studentClass);
+    }
   }
 
   dismiss() {
@@ -229,7 +231,8 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     });
   }
 
-  loadStudentClasses(studentClass: StudentClass) {
+  loadStudentClasses(sc: StudentClass) {
+    this.studentClassService.getStudentClass(sc.id).subscribe((studentClass: StudentClass) => {
       if (studentClass) {
         this.loadAcademicLevelsByProgramId(studentClass.student.programId);
         this.student = studentClass.student;
@@ -244,6 +247,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
           jClassIds: this.jClassIds,
         }, {emitEvent: false});
       }
+    });
   }
   patchStudent(student: Student) {
     this.student = student;

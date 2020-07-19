@@ -51,3 +51,12 @@ ALTER TABLE courses
 	ADD CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id) REFERENCES academic_levels (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
+        
+        
+        
+        
+ALTER TABLE student_classes
+	ADD COLUMN academic_level_id bigint NOT NULL DEFAULT 1,
+	ADD CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id) REFERENCES academic_levels (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;

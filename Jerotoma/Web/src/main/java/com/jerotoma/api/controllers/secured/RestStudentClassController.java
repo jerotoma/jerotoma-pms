@@ -28,6 +28,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.StudentClass;
@@ -37,6 +38,7 @@ import com.jerotoma.common.utils.validators.StudentClassValidator;
 import com.jerotoma.common.viewobjects.StudentClassVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
+import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.ClassService;
 import com.jerotoma.services.courses.CourseService;
@@ -50,6 +52,7 @@ public class RestStudentClassController extends BaseController {
 	@Autowired StudentClassService studentClassService;
 	@Autowired AssemblerStudentClassService assemblerStudentClassService;
 	@Autowired AcademicYearService academicYearService;
+	@Autowired AcademicLevelService academicLevelService;
 	@Autowired CourseService courseService;
 	@Autowired ClassService jClassService;
 	@Autowired StudentService studentService;
@@ -123,6 +126,7 @@ public class RestStudentClassController extends BaseController {
 		requiredFields = new ArrayList<>(
 				Arrays.asList(
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
+						StudentConstant.Class.ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_IDS
 						));
@@ -132,6 +136,7 @@ public class RestStudentClassController extends BaseController {
 		Set<Class> jClasses = new HashSet<>();
 		try {
 			UserVO authUser = getAuthenticatedUserVO();
+			AcademicLevel academicLevel = academicLevelService.findObject(jClassFields.getAcademicLevelId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
 			for (Integer classId : jClassFields.getClassIds()) {		
 				Class jClass = jClassService.findObject(classId);						
@@ -142,6 +147,7 @@ public class RestStudentClassController extends BaseController {
 				StudentClass studentClass = new StudentClass();	
 				studentClass.setClasses(jClasses);	
 				studentClass.setAcademicYear(academicYear);
+				studentClass.setAcademicLevel(academicLevel);
 				studentClass.setUpdatedBy(authUser.getUserId());
 				studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
 				studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());	
@@ -175,6 +181,7 @@ public class RestStudentClassController extends BaseController {
 				Arrays.asList(
 						StudentConstant.Class.ID,
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
+						StudentConstant.Class.ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_ID
 						));
@@ -185,8 +192,11 @@ public class RestStudentClassController extends BaseController {
 		try {
 			studentClass = studentClassService.findObject(jClassFields.getId());
 			UserVO authUser = getAuthenticatedUserVO();
+			AcademicLevel academicLevel = academicLevelService.findObject(jClassFields.getAcademicLevelId());
 			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
+			
 			studentClass.setAcademicYear(academicYear);
+			studentClass.setAcademicLevel(academicLevel);
 			studentClass.setUpdatedBy(authUser.getId());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());	
 			for (Integer classId : jClassFields.getClassIds()) {		
@@ -218,6 +228,57 @@ public class RestStudentClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		try {
 			response.setData(assemblerStudentClassService.findStudentClassesByStudentId(studentId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
+	
+	@GetMapping(value = {"users/{userId}", "/users/{userId}/"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> loadStudentClassByUserId(Authentication auth, @PathVariable("userId") Integer userId) {
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		try {
+			
+			UserVO user = userService.getUserByUserId(userId);
+			
+			switch(user.getUserType()) {
+			case STUDENT:
+				response.setData(assemblerStudentClassService.findStudentClassesByStudentId(user.getId()));
+				break;
+			case TEACHER:
+				response.setData(assemblerStudentClassService.findTeacherClassesByTeacherId(user.getId()));
+				break;
+			default:
+				throw new RuntimeException("Invalid user type: " + user.getUserType());
+			}			
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
+	
+	@GetMapping(value = {
+			"students/{studentId}/academic-levels/{academicLevelId}", 
+			"/students/{studentId}/academic-levels/{academicLevelId}/"
+			})
+	@ResponseBody
+	protected HttpResponseEntity<Object> loadClassesByStudentIDAndAcademicLevelID(
+			Authentication auth, 
+			@PathVariable("studentId") Integer studentId, 
+			@PathVariable("academicLevelId") Integer academicLevelId) {
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		try {
+			response.setData(assemblerStudentClassService.findStudentClassesByStudentIdAndAndAcademicLevelID(studentId, academicLevelId));
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

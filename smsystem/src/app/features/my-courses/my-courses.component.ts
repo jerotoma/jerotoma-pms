@@ -9,6 +9,7 @@ import { AuthService, SecurityClearanceService } from 'app/services';
 })
 export class MyCoursesComponent implements OnInit {
   auth: Auth;
+  title: string = 'My Courses';
 
   constructor(
     private authService: AuthService,

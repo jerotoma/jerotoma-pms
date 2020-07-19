@@ -110,7 +110,8 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		public ClassVO extractData(ResultSet rs) throws SQLException, DataAccessException {
 			ClassVO jClass = null;
 			if(rs.next()) {
-				jClass = mapJClassResult(rs);			
+				jClass = mapJClassResult(rs);
+				jClass.setStudents(loadStudentsByJClassID(jClass.getId()));
 			}
 			return jClass;
 		}				
@@ -159,8 +160,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		jClass.setRoom(loadClassRoom(rs.getInt(ClassConstant.CLASS_ROOM_ID)));
 		jClass.setCourse(loadCourse(rs.getInt(ClassConstant.CLASS_COURSE_ID)));
 		jClass.setTeacher(loadTeacher(rs.getInt(ClassConstant.CLASS_TEACHER_ID)));
-		jClass.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));
-		jClass.setStudents(loadStudentsByJClassID(jClass.getId()));
+		jClass.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));		
 		return jClass;
 	}
 	

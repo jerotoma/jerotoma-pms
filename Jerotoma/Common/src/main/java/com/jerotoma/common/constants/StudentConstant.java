@@ -16,6 +16,8 @@ public class StudentConstant {
 		public static final String JCLASS_IDS = "jClassIds";
 		public static final String UPDATED_ON = "updatedOn";
 		public static final String CREATED_ON = "createdOn";
-		public static final String COUNT =  "count";		
+		public static final String COUNT =  "count";
+		public static final String ACADEMIC_LEVEL_ID = "academicLevelId";
+		public static final String CLASSES_COUNT = "classesCount";
 	}
 }
