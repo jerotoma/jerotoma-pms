@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
@@ -61,6 +62,11 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 	public List<TeacherVO> search(QueryParam queryParam) throws SQLException {
 		
 		return assemblerTeacherDao.search(queryParam);
+	}
+
+	@Override
+	public ResultBuilder<TeacherVO> loadTeacherMapListByStudentID(QueryParam queryParam, Integer studentId) throws SQLException {		
+		return assemblerTeacherDao.loadTeacherMapListByStudentID(queryParam, studentId);
 	}
 
 }

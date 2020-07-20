@@ -3,8 +3,10 @@ package com.jerotoma.database.assemblers.dao.impls;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -20,8 +22,10 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.viewobjects.AddressVO;
 import com.jerotoma.common.viewobjects.ParentVO;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerParentDao;
@@ -130,15 +134,23 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 				.append(" FROM public.parents pa ")
 				.append(" INNER JOIN users u ON u.id = pa.user_id ")
 				.append(" LEFT JOIN user_media um ON um.id = pa.profile_image_id ")
-				.append(" LEFT JOIN media m ON m.id = um.media_id ");
-		
+				.append(" LEFT JOIN media m ON m.id = um.media_id ");		
 	}
-
+		
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.parents");
+		return countObject(null, null);
+	}
+	
+	public Long countObject(String extraQuery, Object[] paramList) throws SQLException {
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.parents pa ");
+		if (!StringUtility.isEmpty(extraQuery)) {
+			queryBuilder.append(extraQuery);
+			return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor(), paramList);
+		}		
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
+	
 	
 	private AddressVO loadAddress(Integer primaryKey) throws SQLException {
 		return this.addressDao.findAddressByParentId(primaryKey);
@@ -182,6 +194,34 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	public List<ParentVO> findParentsByStudentId(Integer studentId) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery().append(" INNER JOIN student_parents sp ON sp.parent_id = pa.id WHERE sp.student_id = ? ");
 		return this.jdbcTemplate.query(builder.toString(), new ParentResultProcessor(), studentId);
+	}
+
+	@Override
+	public ResultBuilder<ParentVO> loadParentMapListByStudentID(QueryParam queryParam, Integer studentId)
+			throws SQLException {
+		
+		ResultBuilder<ParentVO> resultBuilder = new ResultBuilder<>();
+		
+		StringBuilder joins = new StringBuilder().append(" INNER JOIN student_parents sp ON sp.parent_id = pa.id WHERE sp.student_id = ? ");
+		StringBuilder builder = getBaseSelectQuery().append(joins).append("limit ? offset ?");
+		
+		Long countResults = countObject(joins.toString(), new Object[] {studentId});
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {studentId, limit, offset};		
+		List<ParentVO> parents = jdbcTemplate.query(builder.toString(), new ParentResultProcessor(), paramList);
+		
+		Set<ParentVO> parentSet = new HashSet<>();
+		parents.stream().forEach(parent -> {
+			parentSet.add(parent);
+		});
+		resultBuilder.setDataList(parentSet);
+		resultBuilder.setPageCount(pageCount);
+		resultBuilder.setCount(countResults.intValue());
+		resultBuilder.setPageSize(limit);		
+		return resultBuilder;
 	}
 
 }

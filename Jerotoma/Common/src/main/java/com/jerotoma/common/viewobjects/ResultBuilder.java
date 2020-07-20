@@ -1,13 +1,13 @@
 package com.jerotoma.common.viewobjects;
 
-import java.util.List;
+import java.util.Set;
 
 public class ResultBuilder<T> {
 	private Integer count;
 	private Integer pageCount;
 	private Integer pageSize;
 	private Integer currentPage;
-	private List<T> dataList;
+	private Set<T> dataList;
 	
 	public Integer getCount() {
 		return count;
@@ -41,11 +41,11 @@ public class ResultBuilder<T> {
 		this.currentPage = currentPage;
 	}
 	
-	public List<T> getDataList() {
+	public Set<T> getDataList() {
 		return dataList;
 	}
 	
-	public void setDataList(List<T> dataList) {
+	public void setDataList(Set<T> dataList) {
 		this.dataList = dataList;
 	}	
 }

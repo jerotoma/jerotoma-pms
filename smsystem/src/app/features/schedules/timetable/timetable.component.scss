@@ -24,6 +24,7 @@ $timetable-success-color: #00d68F;
 $timetable-info-color: #0095FF;
 $timetable-warning-color: #FFAA00;
 $timetable-danger-color: #FF3D71;
+$timetable-anchor-color: #3366ff;
 
 $timetable-grid-color: #E5E5E5 !default;
 $timetable-grid: 1px solid $timetable-grid-color !default;
@@ -92,7 +93,7 @@ $timetable-font-size: 12px !default;
 
 a, a:hover, a:focus, a:visited {
   text-decoration: none;
-  color: $timetable-entry-text-color;
+  color: $timetable-anchor-color;
 }
 
 .timetable {

@@ -103,7 +103,7 @@ export class UserService {
 
   search(param: QueryParam): Observable<User[]> {
     return this.http
-    .get(`${API_END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType}`)
+    .get(`${API_END_POINTS.users}/search?searchTerm=${param.search}&page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}&userType=${param.userType.toLowerCase()}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

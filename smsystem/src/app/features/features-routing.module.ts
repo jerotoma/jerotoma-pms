@@ -7,6 +7,7 @@ import { NotFoundComponent } from './miscellaneous/not-found/not-found.component
 import { AuthGuard } from 'app/services';
 import {
   ALL_ROLES,
+  USER_ROLE,
   ADMINS_AND_EXECUTIVES_ROLES,
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
@@ -39,7 +40,7 @@ const routes: Routes = [{
     },
     {
       path: 'my-schedules',
-      data: { roles: STUDENT_AND_TEACHER_ROLES },
+      data: { roles: [USER_ROLE.STUDENT], },
       canActivateChild: [AuthGuard],
       loadChildren: () => import('./my-schedules/my-schedules.module')
         .then(m => m.MySchedulesModule ),

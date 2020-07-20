@@ -27,15 +27,15 @@ export class ParentsViewComponent implements OnInit {
   secondForm: FormGroup;
   thirdForm: FormGroup;
 
-  hidePageSize: boolean = false;
+  hidePageSize: boolean = true;
   isLoading: boolean = false;
-  totalNumberOfItems: number = 20;
+  totalNumberOfItems: number = 0;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
   dataSource: MatTableDataSource<Parent> = new MatTableDataSource<Parent>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
 
   param: QueryParam = {
     page: 1,
@@ -115,6 +115,7 @@ export class ParentsViewComponent implements OnInit {
         if (result) {
           this.totalNumberOfItems = result.count;
           this.dataSource = new MatTableDataSource<Parent>(result.parents);
+          this.dataSource.sort = this.sort;
         }
     });
   }

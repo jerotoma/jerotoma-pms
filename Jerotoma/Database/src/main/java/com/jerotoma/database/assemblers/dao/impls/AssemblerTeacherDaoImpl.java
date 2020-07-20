@@ -3,8 +3,10 @@ package com.jerotoma.database.assemblers.dao.impls;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -21,9 +23,11 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
 import com.jerotoma.common.constants.UserConstant;
+import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.viewobjects.AddressVO;
 import com.jerotoma.common.viewobjects.DepartmentVO;
 import com.jerotoma.common.viewobjects.PositionVO;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerAddressDao;
 import com.jerotoma.database.assemblers.dao.AssemblerPositionDao;
@@ -137,7 +141,15 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.teachers");
+		return countObject(null, null);
+	}
+	
+	public Long countObject(String extraQuery, Object[] paramList) throws SQLException {
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.teachers t ");
+		if (!StringUtility.isEmpty(extraQuery)) {
+			queryBuilder.append(extraQuery);
+			return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor(), paramList);
+		}		
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
@@ -201,6 +213,41 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 				offset
 		};
 		return this.jdbcTemplate.query(queryBuilder.toString(), new TeacherResultProcessor(), paramList);
+	}
+
+	@Override
+	public ResultBuilder<TeacherVO> loadTeacherMapListByStudentID(QueryParam queryParam, Integer studentId)
+			throws SQLException {
+		ResultBuilder<TeacherVO> resultBuilder = new ResultBuilder<>();
+		StringBuilder builder = getBaseSelectQuery();
+				
+		StringBuilder joins = new StringBuilder().append(" INNER JOIN public.classes cl ON cl.teacher_id = t.id ")
+				.append(" INNER JOIN student_registered_classes srcc ON srcc.class_id = cl.id ")
+				.append(" INNER JOIN student_classes scc ON scc.id = srcc.student_class_id")
+				.append(" WHERE scc.student_id = ? ");		
+		
+		builder.append(joins);
+		builder.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby(), "t"))
+		.append(" ")
+		.append("limit ? offset ?");
+
+		Long countResults = countObject(joins.toString(), new Object[] {studentId});
+		int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
+		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
+		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
+		
+		Object[] paramList = new Object[] {studentId, limit, offset};
+		
+		List<TeacherVO> teachers = this.jdbcTemplate.query(builder.toString(), new TeacherResultProcessor(), paramList);
+		Set<TeacherVO> teacherSet = new HashSet<>();
+		teachers.stream().forEach(teacher -> {
+			teacherSet.add(teacher);
+		});
+		resultBuilder.setDataList(teacherSet);
+		resultBuilder.setPageCount(pageCount);
+		resultBuilder.setCount(countResults.intValue());
+		resultBuilder.setPageSize(limit);		
+		return resultBuilder;
 	}
 
 

@@ -30,8 +30,12 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.constants.TeacherConstant;
 import com.jerotoma.common.constants.UserConstant;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
@@ -50,6 +54,7 @@ import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.ParentVO;
+import com.jerotoma.common.viewobjects.ResultBuilder;
 import com.jerotoma.common.viewobjects.StaffVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
@@ -114,13 +119,21 @@ public class RestUserController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(page, pageSize, fieldName, orderby);
-		
+		UserVO user = getAuthenticatedUserVO();
 		
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
 		try {
 			switch(type) {
 			case TEACHER:
-				mapVOs = assemblerTeacherService.loadMapList(queryParam);	
+				if (user.getUserType().equals(USER_TYPE.STUDENT)) {
+					ResultBuilder<TeacherVO> resultBuilder = assemblerTeacherService.loadTeacherMapListByStudentID(queryParam, user.getId());	
+					mapVOs.put(TeacherConstant.TEACHERS, resultBuilder.getDataList());
+					mapVOs.put(TeacherConstant.TEACHER_COUNT, resultBuilder.getCount());
+					mapVOs.put(SystemConstant.PAGE_COUNT, resultBuilder.getPageCount());
+				
+				} else {
+					mapVOs = assemblerTeacherService.loadMapList(queryParam);	
+				}
 				break;
 			case STUDENT:
 				mapVOs = assemblerStudentService.loadMapList(queryParam);
@@ -129,7 +142,15 @@ public class RestUserController extends BaseController {
 				mapVOs = assemblerStaffService.loadMapList(queryParam);
 				break;
 			case PARENT:
-				mapVOs = assemblerParentService.loadMapList(queryParam);
+				if (user.getUserType().equals(USER_TYPE.STUDENT)) {
+					ResultBuilder<ParentVO> resultBuilder =  assemblerParentService.loadParentMapListByStudentID(queryParam, user.getId());	
+					mapVOs.put(ParentConstant.PARENTS, resultBuilder.getDataList());
+					mapVOs.put(ParentConstant.PARENT_COUNT, resultBuilder.getCount());
+					mapVOs.put(SystemConstant.PAGE_COUNT, resultBuilder.getPageCount());
+				
+				} else {
+					mapVOs = assemblerParentService.loadMapList(queryParam);
+				}				
 				break;
 			default:
 				throw new JDataAccessException("User type not found");

@@ -21,9 +21,9 @@ import { Teacher } from 'app/models/users';
 export class TeachersViewComponent implements OnInit {
   title: string = 'Teacher\'s List';
   baseURL: string = '/dashboard/users/teachers/';
-  hidePageSize: boolean = false;
+  hidePageSize: boolean = true;
   isLoading: boolean = false;
-  totalNumberOfItems: number = 20;
+  totalNumberOfItems: number = 0;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'department', 'position', 'action'];
   dataSource: MatTableDataSource<Teacher> = new MatTableDataSource<Teacher>();
@@ -105,6 +105,7 @@ export class TeachersViewComponent implements OnInit {
     this.userService.loadUsers(this.param).subscribe((result: any) => {
       this.isLoading = false;
       if (result) {
+        this.hidePageSize = result.teachers.length < 10;
         this.totalNumberOfItems = result.count;
         this.dataSource = new MatTableDataSource<Teacher>(result.teachers);
       }

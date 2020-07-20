@@ -3,8 +3,10 @@ package com.jerotoma.database.assemblers.dao.media.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -204,7 +206,11 @@ public class AssemblerMediaDaoImpl extends JdbcDaoSupport implements AssemblerMe
 		List<MediaVO> mediaList = this.jdbcTemplate.query(builder.toString(), new MediaResultProcessor(), paramList);
 		result = new ResultBuilder<MediaVO>();
 		result.setCount(countResults.intValue());
-		result.setDataList(mediaList);
+		Set<MediaVO> mediaSet = new HashSet<>();
+		mediaList.stream().forEach(media -> {
+			mediaSet.add(media);
+		});
+		result.setDataList(mediaSet);
 		result.setCurrentPage(queryParam.getPage());
 		result.setPageSize(queryParam.getPageSize());
 		result.setPageCount(pageCount);			

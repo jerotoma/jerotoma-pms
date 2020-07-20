@@ -81,7 +81,6 @@ const MODULES = [
 const SERVICES = [
 ];
 
-
 @NgModule({
 imports: [
   ...MODULES,
@@ -95,5 +94,8 @@ providers: [
 entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
+exports: [
+  TimetableComponent,
+]
 })
 export class SchedulesModule { }

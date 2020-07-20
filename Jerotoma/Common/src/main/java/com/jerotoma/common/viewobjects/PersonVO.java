@@ -309,6 +309,28 @@ public abstract class PersonVO {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + 45;
+		result = prime * result +  23 * 45;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PersonVO other = (PersonVO) obj;		
+		if (id != other.id || userType != other.userType || userId != other.userId) {
+			return false;			
+		}
+		return true;
+	}
 }

@@ -21,6 +21,8 @@ import {
   NbListModule,
 } from '@nebular/theme';
 
+import { SchedulesModule } from '../schedules/schedules.module';
+
 import { MySchedulesRoutingModule } from './my-schedules-routing.module';
 import { MySchedulesComponent } from './my-schedules.component';
 
@@ -51,6 +53,7 @@ const MODULES = [
   MatPaginatorModule,
   MatIconModule,
   MatMenuModule,
+  SchedulesModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,
     hasScroll: false,

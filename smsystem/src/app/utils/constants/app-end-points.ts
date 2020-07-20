@@ -1,5 +1,6 @@
 import {
   ALL_ROLES,
+  USER_ROLE,
   ADMINS_AND_EXECUTIVES_ROLES,
   ADMINS_TEACHER_AND_EXECUTIVES_ROLES,
   ADMINS_STUDENT_TEACHER_AND_EXECUTIVES_ROLES,
@@ -122,7 +123,7 @@ export const FRONTEND_ENDPOINTS = {
   },
   schedules: {
     path: '/dashboard/schedules',
-    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+    allowedRoles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
   },
   scheduleMeetingTimes: {
     path: '/dashboard/schedules/meeting-times',
@@ -134,11 +135,11 @@ export const FRONTEND_ENDPOINTS = {
   },
   scheduleTimetables: {
     path: '/dashboard/schedules/timetable',
-    allowedRoles: ALL_ROLES,
+    allowedRoles: ADMINS_STAFF_TEACHER_AND_EXECUTIVES_ROLES,
   },
   myschedules: {
     path: '/dashboard/my-schedules',
-    allowedRoles: STUDENT_AND_TEACHER_ROLES,
+    allowedRoles: [USER_ROLE.STUDENT],
   },
   mycourses: {
     path: '/dashboard/my-courses',
