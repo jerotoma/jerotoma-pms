@@ -8,8 +8,8 @@ import { DeleteModalComponent } from 'app/shared';
 
 import { ClassAttendenceCreateComponent } from '../classes/class-attendance-create/class-attendance-create.component';
 
-import { MeetingTime, ClassAttendance, ResponseWrapper } from 'app/models';
-import { MeetingTimeService, ClassAttendanceService } from 'app/services';
+import { ClassAttendance, ResponseWrapper } from 'app/models';
+import { ClassAttendanceService } from 'app/services';
 import { QueryParam, APP_ACTION_TYPE} from 'app/utils';
 
 @Component({

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -54,7 +55,7 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		return response;
 	}
 	
-	@GetMapping({"", "/"})	
+	@GetMapping
 	public HttpResponseEntity<Object> getAll(Authentication auth) {
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ATTENDANCE_STATUS_CONTROLLER.BASE);
@@ -80,7 +81,7 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		return null;
 	}
 
-	@PutMapping(value = {"", "/"})
+	@PutMapping
 	@ResponseBody
 	@Override
 	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {
@@ -107,7 +108,7 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		return response;
 	}
 
-	@PostMapping(value = {"", "/"})
+	@PostMapping
 	@ResponseBody
 	@Override
 	public HttpResponseEntity<Object> create(Authentication auth, Map<String, Object> params) {
@@ -136,14 +137,17 @@ public class RestAttendanceStatusController extends RestAttendanceController imp
 		return null;
 	}
 
-	@PostMapping(value = {"/{entityId}", "/"})
+	@DeleteMapping("/{entityId}")
 	@ResponseBody
 	@Override
 	public HttpResponseEntity<Object> delete(Authentication auth, Integer entityId) {
-		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_ATTENDANCE_CONTROLLER.BASE);
+		this.logRequestDetail("DELTE : " + EndPointConstants.REST_STUDENT_ATTENDANCE_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);				
 		try {
+			
+			this.userSecurityClearance.checkGeneralEntityDeletionPermission();
+			
 			AttendanceStatus attendanceStatus = attendanceStatusService.findObject(entityId);	
 			response.setData(attendanceStatusService.deleteObject(attendanceStatus));
 			response.setSuccess(true);

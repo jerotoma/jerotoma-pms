@@ -20,6 +20,12 @@ public class UserVO extends PersonVO implements Serializable {
 	private PositionVO position;	
 	private DepartmentVO department;
 	private Integer studentNumber;
+	
+	private Integer programId;
+	private String programName;
+	
+	private Integer academicLevelId;
+	private String currentAcademicLevelName;
 
 	public UserVO(User authUser, PersonVO person) {
 		super(person);		
@@ -40,7 +46,10 @@ public class UserVO extends PersonVO implements Serializable {
 		if (person instanceof StudentVO) {
 			StudentVO student = (StudentVO)person;
 			this.studentNumber = student.getStudentNumber();
-			
+			this.programId = student.getProgramId();
+			this.programName = student.getProgramName();
+			this.academicLevelId = student.getAcademicLevelId();
+			this.currentAcademicLevelName = student.getCurrentAcademicLevelName();			
 		}
 		
 		if (person instanceof ParentVO) {
@@ -114,5 +123,21 @@ public class UserVO extends PersonVO implements Serializable {
 
 	public void setStudentNumber(Integer studentNumber) {
 		this.studentNumber = studentNumber;
+	}
+
+	public Integer getProgramId() {
+		return programId;
+	}
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public Integer getAcademicLevelId() {
+		return academicLevelId;
+	}
+
+	public String getCurrentAcademicLevelName() {
+		return currentAcademicLevelName;
 	}
 }

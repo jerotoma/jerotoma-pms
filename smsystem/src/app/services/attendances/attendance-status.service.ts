@@ -33,4 +33,8 @@ export class AttendanceStatusService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  deleteStatus(statusID: number): Observable<boolean> {
+    return this.http.delete(`${API_END_POINTS.attendances}/statuses/${statusID}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 }

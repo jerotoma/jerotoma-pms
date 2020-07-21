@@ -103,6 +103,13 @@ export class AttendanceStatusesComponent implements OnInit {
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
+        this.deleteStatus(result.id);
+      }
+    });
+  }
+  deleteStatus(statusID: number) {
+    this.attendanceStatusService.deleteStatus(statusID).subscribe((success: boolean) => {
+      if (success) {
         this.loadAttendanceStatuses();
       }
     });

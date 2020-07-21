@@ -21,7 +21,7 @@ import {
   NbListModule,
 } from '@nebular/theme';
 
-import { SchedulesModule } from '../schedules/schedules.module';
+import { SchedulesModule } from '../../schedules/schedules.module';
 
 import { MySchedulesRoutingModule } from './my-schedules-routing.module';
 import { MySchedulesComponent } from './my-schedules.component';

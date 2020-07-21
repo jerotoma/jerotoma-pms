@@ -1,0 +1,33 @@
+<nb-card>
+  <nb-card-header>{{title}}</nb-card-header>
+  <nb-card-body>
+    <div class="row" *ngIf="hasResult && (isStudent || isTeacher)">
+        <div class="col-md-12 col-lg-12 col-xxxl-12"
+          [nbSpinner]="isLoading"
+          nbSpinnerStatus="success"
+          nbSpinnerSize="large"
+          nbSpinnerMessage="Loading courses....">
+            <form [formGroup]="studentClassForm" class="step-container">
+                  <div class="row">
+                      <div class="col-md-6">
+                          <div class="form-control-group">
+                              <label for="class-academicLevel" class="label">Academic Level</label>
+                              <nb-select
+                                fullWidth
+                                placeholder="Academic Level"
+                                formControlName="academicLevelId"
+                                id="class-academicLevel">
+                                <nb-option
+                                    *ngFor='let acad of academicLevels'
+                                    [value]="acad.id">
+                                    {{acad.name}} - {{acad.code}}
+                                </nb-option>
+                              </nb-select>
+                          </div>
+                      </div>
+                  </div>
+            </form>
+        </div>
+    </div>
+  </nb-card-body>
+</nb-card>

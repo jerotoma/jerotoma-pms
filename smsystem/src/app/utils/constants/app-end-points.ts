@@ -141,6 +141,10 @@ export const FRONTEND_ENDPOINTS = {
     path: '/dashboard/my-schedules',
     allowedRoles: [USER_ROLE.STUDENT],
   },
+  myattendances: {
+    path: '/dashboard/my-attendances',
+    allowedRoles: [USER_ROLE.STUDENT],
+  },
   mycourses: {
     path: '/dashboard/my-courses',
     allowedRoles: STUDENT_AND_TEACHER_ROLES,

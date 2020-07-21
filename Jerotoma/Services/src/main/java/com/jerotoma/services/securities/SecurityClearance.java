@@ -29,9 +29,7 @@ public class SecurityClearance {
 		}
 		
 		if (currentUser.getUserId() != userId) {			
-			if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-				throw unAuthorizedAccess;
-			}
+			checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);	
 		}		
 	}
 
@@ -41,10 +39,7 @@ public class SecurityClearance {
 		if (currentUser == null) {
 			throw unAuthorizedAccess;
 		}
-		
-		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-			throw unAuthorizedAccess;
-		}	
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);	
 	}
 	
 	public void checkGeneralEntityCreationPermission() {
@@ -53,10 +48,7 @@ public class SecurityClearance {
 		if (currentUser == null) {
 			throw unAuthorizedAccess;
 		}
-		
-		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-			throw unAuthorizedAccess;
-		}	
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);		
 	}
 
 	public void checkGeneralEntityModificationPermission() {
@@ -65,11 +57,7 @@ public class SecurityClearance {
 		if (currentUser == null) {
 			throw unAuthorizedAccess;
 		}
-		
-		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-			throw unAuthorizedAccess;
-		}
-		
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);			
 	}
 
 	public void checkGeneralEntityDeletionPermission() {
@@ -77,12 +65,8 @@ public class SecurityClearance {
 		UnAuthorizedAccessException unAuthorizedAccess = new UnAuthorizedAccessException(String.format(ExceptionMessageConstant.UN_AUTHORIZED_ACCESS_MESSAGE, "create new program"));
 		if (currentUser == null) {
 			throw unAuthorizedAccess;
-		}
-		
-		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-			throw unAuthorizedAccess;
-		}
-		
+		}		
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);		
 	}
 
 	public void checkStudentCreationPermission() {
@@ -91,11 +75,7 @@ public class SecurityClearance {
 		if (currentUser == null) {
 			throw unAuthorizedAccess;
 		}
-		
-		if (!currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN)) {
-			throw unAuthorizedAccess;
-		}
-		
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);			
 	}
 
 	public void checkRoleAssignationPermission() {
@@ -106,6 +86,10 @@ public class SecurityClearance {
 			throw unAuthorizedAccess;
 		}
 		
+		checkAdminsAndExecutiveAuthorization(currentUser, unAuthorizedAccess);		
+	}
+
+	protected void checkAdminsAndExecutiveAuthorization(UserVO currentUser, UnAuthorizedAccessException unAuthorizedAccess) {
 		boolean allowedAccess = 
 				currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_ADMIN) 
 				|| currentUser.getRoles().contains(RoleConstant.USER_ROLES.ROLE_DIRECTOR) 
@@ -114,6 +98,6 @@ public class SecurityClearance {
 		
 		if (!allowedAccess) {
 			throw unAuthorizedAccess;
-		}		
+		}
 	}
 }

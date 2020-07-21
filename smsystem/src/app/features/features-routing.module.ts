@@ -42,14 +42,21 @@ const routes: Routes = [{
       path: 'my-schedules',
       data: { roles: [USER_ROLE.STUDENT], },
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./my-schedules/my-schedules.module')
+      loadChildren: () => import('./students/my-schedules/my-schedules.module')
         .then(m => m.MySchedulesModule ),
+    },
+    {
+      path: 'my-attendances',
+      data: { roles: STUDENT_AND_TEACHER_ROLES },
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./students/my-attendances/my-attendances.module')
+        .then(m => m.MyAttendancesModule),
     },
     {
       path: 'my-courses',
       data: { roles: STUDENT_AND_TEACHER_ROLES },
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./my-courses/my-courses.module')
+      loadChildren: () => import('./students/my-courses/my-courses.module')
         .then(m => m.MyCoursesModule),
     },
     {
