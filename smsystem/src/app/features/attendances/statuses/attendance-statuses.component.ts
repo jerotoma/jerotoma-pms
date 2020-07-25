@@ -6,7 +6,7 @@ import { NbDialogService } from '@nebular/theme';
 import { MatTableDataSource} from '@angular/material/table';
 import { DeleteModalComponent } from 'app/shared';
 
-import { AttendanceStatusesCreateComponent } from './attendance-statuses-create/attendance-statuses-create.component';
+import { AttendanceStatusesCreateComponent } from './create/attendance-statuses-create.component';
 
 import {AttendanceStatus, ResponseWrapper } from 'app/models';
 import { AttendanceStatusService } from 'app/services';

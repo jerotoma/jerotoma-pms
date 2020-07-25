@@ -4,7 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { AttendanceStatus } from 'app/models';
 import { ModalService, AttendanceStatusService } from 'app/services';
-import { APP_ACTION_TYPE }  from 'app/utils';
+import { APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-attendance-statuses-create',

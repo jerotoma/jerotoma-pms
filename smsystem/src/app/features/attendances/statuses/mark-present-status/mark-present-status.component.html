@@ -1,0 +1,24 @@
+<div class="row mb-3 mt-2">
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <form [formGroup]="attendancePresentStatusForm" class="step-container">
+      <div class="row">
+        <div class="col-md-12">
+            <div class="form-control-group">
+                <label for="class-attendanceStatus" class="label">{{title}}</label>
+                <nb-select
+                  fullWidth
+                  [placeholder]="statusLabel"
+                  formControlName="attendanceStatusId"
+                  id="class-attendanceStatus">
+                  <nb-option
+                      *ngFor="let attendanceStatus of attendanceStatuses"
+                      [value]="attendanceStatus.id">
+                      {{attendanceStatus.name}}
+                  </nb-option>
+                </nb-select>
+            </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

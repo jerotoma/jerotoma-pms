@@ -23,17 +23,20 @@ import {
 } from '@nebular/theme';
 
 import { AttendanceStatusesComponent } from './attendance-statuses.component';
-import { AttendanceStatusesCreateComponent} from './attendance-statuses-create/attendance-statuses-create.component';
+import { AttendanceStatusesCreateComponent} from './create/attendance-statuses-create.component';
+import { MarkPresentStatusComponent } from './mark-present-status/mark-present-status.component';
 
 
 
 const COMPONENTS = [
   AttendanceStatusesComponent,
   AttendanceStatusesCreateComponent,
+  MarkPresentStatusComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   AttendanceStatusesCreateComponent,
+  MarkPresentStatusComponent,
 ];
 
 const MODULES = [
