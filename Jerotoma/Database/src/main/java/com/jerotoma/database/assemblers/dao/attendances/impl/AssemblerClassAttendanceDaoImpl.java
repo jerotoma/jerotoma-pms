@@ -22,6 +22,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AttendanceConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AttendanceReport;
 import com.jerotoma.common.viewobjects.ClassAttendanceVO;
 import com.jerotoma.common.viewobjects.StudentAttendanceVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
@@ -150,6 +151,17 @@ public class AssemblerClassAttendanceDaoImpl extends JdbcDaoSupport implements A
 	public List<ClassAttendanceVO> getAll() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();
 		return this.jdbcTemplate.query(builder.toString(), new ClassAttendanceResultProcessor());
+	}
+
+	@Override
+	public List<AttendanceReport> loadAttendanceReportsByStudentID(Integer studentId, Integer academicLevelId) throws SQLException {
+		StringBuilder builder = AssemblerAttendanceConstant.getAttendedReportBaseSelectQuery();
+		return this.jdbcTemplate.query(builder.toString(), new RowMapper<AttendanceReport>() {
+
+			@Override
+			public AttendanceReport mapRow(ResultSet rs, int rowNum) throws SQLException {
+				return new AttendanceReport(rs);
+			}});
 	}
 	
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,13 +46,15 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 	@Autowired AssemblerStudentAttendanceService assemblerStudentAttendanceService;
 	@Autowired AttendanceStatusService attendanceStatusService;
 	@Autowired StudentService studentService;
-
 	
 	@GetMapping
 	@ResponseBody
-	@Override
-	public HttpResponseEntity<Object> index(Authentication auth, String search, Integer page, Integer pageSize,
-			String fieldName, String orderby) {
+	public HttpResponseEntity<Object> index(Authentication auth,
+			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize,
+			@RequestParam(value="fieldName", required=false) String fieldName,
+			@RequestParam(value="orderby", required=false) String orderby) {
 		this.securityCheckAccessByRoles(auth);
 		QueryParam queryParam = this.setParams(page, pageSize, fieldName, orderby);
 		try {
@@ -67,16 +70,10 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 		return response;
 	}
 
-	@Override
-	public HttpResponseEntity<Object> show(Authentication auth, Integer entityId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@PutMapping(value = {"", "/"})
+	
+	@PutMapping
 	@ResponseBody
-	@Override
-	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {
+	public HttpResponseEntity<Object> update(Authentication auth, @RequestBody Map<String, Object> params) {
 		this.logRequestDetail("PUT : " + EndPointConstants.REST_STUDENT_ATTENDANCE_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
@@ -115,9 +112,8 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 		return response;
 	}
 
-	@PostMapping(value = {"", "/"})
+	@PostMapping
 	@ResponseBody
-	@Override
 	public HttpResponseEntity<Object> create(Authentication auth, @RequestBody Map<String, Object> params) {
 		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_ATTENDANCE_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
@@ -174,17 +170,4 @@ public class RestStudentAttendanceController extends RestAttendanceController {
 		}		
 		return studentAttendance;
 	}
-
-	@Override
-	public HttpResponseEntity<Object> edit(Authentication auth, Map<String, Object> params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public HttpResponseEntity<Object> delete(Authentication auth, Integer entityId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

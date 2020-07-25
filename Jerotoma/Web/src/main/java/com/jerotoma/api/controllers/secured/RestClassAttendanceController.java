@@ -36,9 +36,12 @@ public class RestClassAttendanceController extends RestAttendanceController {
 	
 	
 	@GetMapping(value = {"", "/"})
-	@Override
-	public HttpResponseEntity<Object> index(Authentication auth, String search, Integer page, Integer pageSize,
-			String fieldName, String orderby) {
+	public HttpResponseEntity<Object> index(Authentication auth,
+			@RequestParam(value="searchTerm", required=false) String search,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize,
+			@RequestParam(value="fieldName", required=false) String fieldName,
+			@RequestParam(value="orderby", required=false) String orderby) {
 		try {
 			response.setData(assemblerClassAttendanceService.getAll());		
 		} catch (SQLException e) {
@@ -52,22 +55,8 @@ public class RestClassAttendanceController extends RestAttendanceController {
 		return response;
 	}
 	
-	
-	@Override
-	public HttpResponseEntity<Object> show(Authentication auth, Integer entityId) {
-		
-		return null;
-	}
-
-	@Override
-	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {
-		
-		return null;
-	}
-
 	@PostMapping
 	@ResponseBody
-	@Override
 	public HttpResponseEntity<Object> create(Authentication auth, @RequestBody Map<String, Object> params) {
 		
 		this.logRequestDetail("POST : " + EndPointConstants.REST_ATTENDANCE_CONTROLLER.BASE + "/classes");
@@ -97,18 +86,6 @@ public class RestClassAttendanceController extends RestAttendanceController {
 		return response;
 	}
 
-	@Override
-	public HttpResponseEntity<Object> edit(Authentication auth, Map<String, Object> params) {
-		
-		return null;
-	}
-
-	@Override
-	public HttpResponseEntity<Object> delete(Authentication auth, Integer entityId) {
-		
-		return null;
-	}
-	
 	@GetMapping("/paginated")	
 	@ResponseBody
 	public HttpResponseEntity<Object> getClassAttendances(Authentication auth, 

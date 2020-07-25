@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.viewobjects.AttendanceReport;
 import com.jerotoma.common.viewobjects.ClassAttendanceVO;
 import com.jerotoma.database.assemblers.dao.attendances.AssemblerClassAttendanceDao;
 import com.jerotoma.services.assemblers.attendances.AssemblerClassAttendanceService;
@@ -45,6 +46,12 @@ public class AssemblerClassAttendanceServiceImpl implements AssemblerClassAttend
 	@Override
 	public List<ClassAttendanceVO> getAll() throws SQLException {		
 		return assemblerClassAttendanceDao.getAll();
+	}
+
+	@Override
+	public List<AttendanceReport> loadAttendanceReportsByStudentID(Integer studentId, Integer academicLevelId)
+			throws SQLException {
+		return assemblerClassAttendanceDao.loadAttendanceReportsByStudentID(studentId, academicLevelId);
 	}
 
 }

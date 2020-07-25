@@ -2,32 +2,71 @@
   <nb-card-header>{{title}}</nb-card-header>
   <nb-card-body>
     <div class="row" *ngIf="hasResult && (isStudent || isTeacher)">
-        <div class="col-md-12 col-lg-12 col-xxxl-12"
-          [nbSpinner]="isLoading"
-          nbSpinnerStatus="success"
-          nbSpinnerSize="large"
-          nbSpinnerMessage="Loading courses....">
-            <form [formGroup]="studentClassForm" class="step-container">
-                  <div class="row">
-                      <div class="col-md-6">
-                          <div class="form-control-group">
-                              <label for="class-academicLevel" class="label">Academic Level</label>
-                              <nb-select
-                                fullWidth
-                                placeholder="Academic Level"
-                                formControlName="academicLevelId"
-                                id="class-academicLevel">
-                                <nb-option
-                                    *ngFor='let acad of academicLevels'
-                                    [value]="acad.id">
-                                    {{acad.name}} - {{acad.code}}
-                                </nb-option>
-                              </nb-select>
+      <div class="col-xxxl-12 col-md-12" >
+        <nb-card>
+          <form [formGroup]="studentClassForm" class="step-container">
+            <nb-card-body>
+              <div class="row">
+                  <div class="col-md-12 col-lg-12 col-xxxl-12"
+                    [nbSpinner]="isLoading"
+                    nbSpinnerStatus="success"
+                    nbSpinnerSize="large"
+                    nbSpinnerMessage="Loading courses....">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-control-group">
+                                  <label for="class-academicLevel" class="label">Academic Level</label>
+                                  <nb-select
+                                    fullWidth
+                                    placeholder="Academic Level"
+                                    formControlName="academicLevelId"
+                                    id="class-academicLevel">
+                                    <nb-option
+                                        *ngFor='let acad of academicLevels'
+                                        [value]="acad.id">
+                                        {{acad.name}} - {{acad.code}}
+                                    </nb-option>
+                                  </nb-select>
+                              </div>
                           </div>
                       </div>
                   </div>
-            </form>
-        </div>
+              </div>
+              <div class="lists row">
+                <div class="col-md-12">
+                    <div class="form-control-group">
+                      <nb-card class="list-card" accent="success">
+                        <nb-card-body style="padding: 0;" *ngIf="jClasses">
+                          <h5>List of classes for {{academicLevel.name}} - {{academicLevel.code}}</h5>
+                          <nb-list class="list-group">
+                            <nb-list-item class="list-group-item active" >
+                                <div class="row">
+                                    <div class="col-md-5">Course Name</div>
+                                    <div class="col-md-3">Teacher</div>
+                                    <div class="col-md-2">Att. Average</div>
+                                    <div class="col-md-2">Action</div>
+                                </div>
+                            </nb-list-item>
+                            <nb-list-item class="list-group-item" *ngFor="let jClass of jClasses">
+                              <a href="#" (click)="preventDefaultJClass($event)">
+                                  <div class="row">
+                                    <div class="col-md-5">{{jClass.course.name}} ({{jClass.course.code}})</div>
+                                    <div class="col-md-3">{{jClass.teacher.fullName}}</div>
+                                    <div class="col-md-2">45%</div>
+                                    <div class="col-md-2 text-success">View Report<span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                                  </div>
+                              </a>
+                            </nb-list-item>
+                          </nb-list>
+                        </nb-card-body>
+                      </nb-card>
+                    </div>
+                </div>
+              </div>
+            </nb-card-body>
+          </form>
+        </nb-card>
+      </div>
     </div>
   </nb-card-body>
 </nb-card>

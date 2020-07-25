@@ -33,7 +33,7 @@ export class MyAttendancesComponent implements OnInit {
   academicLevels: AcademicLevel[];
   studentClassForm: FormGroup;
 
-  title: string = 'My Courses';
+  title: string = 'My Attendance Records';
   student: Student;
   constructor(
     private formBuilder: FormBuilder,
@@ -43,8 +43,8 @@ export class MyAttendancesComponent implements OnInit {
     private securityClearanceService: SecurityClearanceService) { }
 
   ngOnInit(): void {
+    this.loadForm();
     this.loadCurrentUser();
-    this.loadAcademicLevels();
   }
 
   loadClassesByAcademicLevel(academicLevelId: number, studentId: number) {
@@ -60,24 +60,25 @@ export class MyAttendancesComponent implements OnInit {
     this.userService.getCurrentUser().subscribe((student: Student) => {
       this.student = student;
       this.loadClassesByAcademicLevel(student.academicLevelId, student.id);
+      this.loadAcademicLevels(student);
     });
   }
 
   loadForm() {
     this.studentClassForm = this.formBuilder.group({
-      id: [null],
-      academicLevelId: ['', Validators.required],
+      academicLevelId: [null, Validators.required],
     });
     this.onChanges();
   }
 
-  loadAcademicLevels() {
+  loadAcademicLevels(student: Student) {
     this.academicLevelService.loadAcademicLevelList()
     .subscribe((academicLevels: AcademicLevel[]) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;
+        this.setCurrentAcademicLevel(student.academicLevelId);
         this.studentClassForm.patchValue({
-          academicLevelId:  this.student.academicLevelId,
+          academicLevelId: student.academicLevelId,
         }, {emitEvent: false});
       }
     });
@@ -100,6 +101,10 @@ export class MyAttendancesComponent implements OnInit {
         this.academicLevel = academicLevel;
       }
     });
+  }
+
+  preventDefaultJClass(event: any) {
+    event.preventDefault();
   }
 
   get hasResult() {
