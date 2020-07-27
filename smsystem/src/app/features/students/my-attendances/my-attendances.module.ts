@@ -23,9 +23,13 @@ import {
 
 import { MyAttendancesRoutingModule } from './my-attendances-routing.module';
 import { MyAttendancesComponent } from './my-attendances.component';
+import { AttendanceSummaryComponent } from './attendance-summary/attendance-summary.component';
+import { AttendanceReportDetailsComponent } from './attendance-report-details/attendance-report-details.component';
 
 const COMPONENTS = [
   MyAttendancesComponent,
+  AttendanceSummaryComponent,
+  AttendanceReportDetailsComponent,
 ];
 
 const ENTRY_COMPONENTS = [

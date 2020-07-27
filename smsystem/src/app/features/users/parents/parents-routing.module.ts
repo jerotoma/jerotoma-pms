@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // Service
-import { AuthGuard } from 'app/services/guards/auth-guard.service';
+import { AuthGuard } from 'app/services';
+import { ALL_ROLES } from 'app/models';
 
 // Components
 import { ParentsComponent } from './parents.component';
@@ -16,15 +17,20 @@ import { ParentsViewComponent } from './views/parents-view.component';
 const routes: Routes = [
   {
     path: '',
+    data: { roles: ALL_ROLES },
     canActivateChild: [AuthGuard],
     component: ParentsComponent,
     children: [
         {
           path: '',
+          data: { roles: ALL_ROLES },
+          canActivateChild: [AuthGuard],
           component: ParentsViewComponent,
         },
         {
           path: ':id',
+          data: { roles: ALL_ROLES },
+          canActivateChild: [AuthGuard],
           component: ParentShowComponent,
         },
     ],

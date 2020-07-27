@@ -54,6 +54,10 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/attendances";	
 	}
 	
+	public static interface REST_ATTENDANCE_REPORT_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/attendance-reports";	
+	}
+	
 	public static interface REST_CLASS_ATTENDANCE_CONTROLLER {
 		public static final String BASE =   REST_ATTENDANCE_CONTROLLER.BASE  + "/classes";	
 	}

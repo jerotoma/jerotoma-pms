@@ -33,7 +33,8 @@ public class SystemConfigConstant {
 	public static enum GENERAL_CONFIG {
 		CURRENT_THEME("currentTheme", "system.config.current_theme"),
 		OVERRIDE_USER_THEME("overrideUserTheme", "system.config.override_user_theme"),
-		CURRENT_ACADEMIC_YEAR("currentAcademicYear", "system.config.current_academic_year");
+		CURRENT_ACADEMIC_YEAR("currentAcademicYear", "system.config.current_academic_year"),
+		ATTENDANCE_STATUS_MARKED_AS_PRESENT("attendanceStatusMarkedAsPresent", "system.config.attendanceStatusMarkedAsPresent");
 		
 		String name;
 		String dbName;

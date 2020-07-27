@@ -3,3 +3,4 @@ export * from './staff-attendance.model';
 export * from './student-attendance.model';
 export * from './teacher-attendance.model';
 export * from './attendance-status.model';
+export * from './attendance-report.model';

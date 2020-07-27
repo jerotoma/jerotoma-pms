@@ -44,6 +44,7 @@ export const API_END_POINTS = {
   pubUserPreferences: '/api/public/user-preferences',
   restDashboard: '/api/secured/dashboard',
   attendances: '/api/secured/attendances',
+  attendanceReports: '/api/secured/attendance-reports',
   academicLevels: '/api/secured/academic-levels',
 };
 

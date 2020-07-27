@@ -36,8 +36,8 @@
                 <div class="col-md-12">
                     <div class="form-control-group">
                       <nb-card class="list-card" accent="success">
-                        <nb-card-body style="padding: 0;" *ngIf="jClasses">
-                          <h5>List of classes for {{academicLevel.name}} - {{academicLevel.code}}</h5>
+                        <nb-card-body style="padding: 0;" *ngIf="attendanceReports">
+                          <h5>Summary of Classes Attendance Report for {{academicLevel.name}} - {{academicLevel.code}}</h5>
                           <nb-list class="list-group">
                             <nb-list-item class="list-group-item active" >
                                 <div class="row">
@@ -47,13 +47,13 @@
                                     <div class="col-md-2">Action</div>
                                 </div>
                             </nb-list-item>
-                            <nb-list-item class="list-group-item" *ngFor="let jClass of jClasses">
+                            <nb-list-item class="list-group-item" *ngFor="let attendanceReport of attendanceReports">
                               <a href="#" (click)="preventDefaultJClass($event)">
                                   <div class="row">
-                                    <div class="col-md-5">{{jClass.course.name}} ({{jClass.course.code}})</div>
-                                    <div class="col-md-3">{{jClass.teacher.fullName}}</div>
-                                    <div class="col-md-2">45%</div>
-                                    <div class="col-md-2 text-success">View Report<span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                                    <div class="col-md-5">{{attendanceReport.courseName}} ({{attendanceReport.courseCode}})</div>
+                                    <div class="col-md-3">{{attendanceReport.teacherFullName}}</div>
+                                    <div class="col-md-2">{{attendanceReport.avarage}}%</div>
+                                    <div class="col-md-2 text-success" (click)="onViewDetails($event, attendanceReport)">View Details<span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
                                   </div>
                               </a>
                             </nb-list-item>

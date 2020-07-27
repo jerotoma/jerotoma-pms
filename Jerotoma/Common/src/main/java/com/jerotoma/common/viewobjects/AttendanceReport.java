@@ -18,6 +18,10 @@ public class AttendanceReport {
 	private Integer classId;
 	private Integer courseId;
 	private String courseName;
+	private String courseCode;
+	private Integer academicLevelId;
+	
+	private Integer avarage;
 	
 	public AttendanceReport(ResultSet rs) throws SQLException {
 		
@@ -33,7 +37,10 @@ public class AttendanceReport {
 		
 		this.classId = rs.getInt("classId");
 		this.courseName = rs.getString("courseName");
-		this.courseId = rs.getInt("courseId");		
+		this.courseId = rs.getInt("courseId");	
+		this.courseCode = rs.getString("courseCode");
+		this.academicLevelId = rs.getInt("academicLevelId");		
+		this.avarage = rs.getInt("avarage");
 	}
 
 	public Integer getTeacherId() {
@@ -110,9 +117,33 @@ public class AttendanceReport {
 	
 	public String getCourseName() {
 		return courseName;
+	}	
+	
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 	
+	public Integer getAcademicLevelId() {
+		return academicLevelId;
+	}
+
+	public void setAcademicLevelId(Integer academicLevelId) {
+		this.academicLevelId = academicLevelId;
+	}
+
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
+	}
+
+	public Integer getAvarage() {
+		return avarage;
+	}
+
+	public void setAvarage(Integer avarage) {
+		this.avarage = avarage;
 	}
 }

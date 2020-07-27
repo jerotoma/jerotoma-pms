@@ -134,8 +134,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return this.securityClearanceService.hasResult;
   }
 
-  get isAdminAndExecutive() {
-    return this.userRoles && (this.userRoles.indexOf(USER_ROLE.ADMIN) || this.userRoles.indexOf(USER_ROLE.PRINCIPAL));
+  get isAdminsOrExecutive(): boolean {
+    return this.securityClearanceService.isAdminsOrExecutive;
   }
 
   get isAdmin() {

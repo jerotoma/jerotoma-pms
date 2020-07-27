@@ -36,6 +36,12 @@ export class SecurityClearanceService {
     return this.userRoles && this.userRoles.indexOf(USER_ROLE.TEACHER) !== -1;
   }
 
+  get isAdminsOrExecutive(): boolean {
+    return this.userRoles && (this.userRoles.indexOf(USER_ROLE.ADMIN) !== -1
+      || this.userRoles.indexOf(USER_ROLE.SUPER_ADMIN)  !== -1
+      || this.userRoles.indexOf(USER_ROLE.PRINCIPAL)  !== -1 );
+  }
+
   loadCurrentUser() {
     this.authService.getAuthenticatedUser().subscribe((auth: Auth) => {
       this.userRoles = auth.roles;

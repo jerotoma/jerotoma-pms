@@ -2,8 +2,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-// Service
-import { AuthGuard } from 'app/services/guards/auth-guard.service';
+import { AuthGuard } from 'app/services';
+import { ALL_ROLES } from 'app/models';
 
 // Components
 import { StaffsComponent } from './staffs.component';
@@ -16,19 +16,26 @@ import { StaffShowComponent } from './show/staff-show.component';
 const routes: Routes = [
   {
     path: '',
+    data: { roles: ALL_ROLES },
     canActivateChild: [AuthGuard],
     component: StaffsComponent,
     children: [
         {
           path: '',
+          data: { roles: ALL_ROLES },
+          canActivateChild: [AuthGuard],
           component: StaffsViewComponent,
         },
         {
           path: 'create',
+          data: { roles: ALL_ROLES },
+          canActivateChild: [AuthGuard],
           component: StaffCreateComponent,
         },
         {
           path: ':id',
+          data: { roles: ALL_ROLES },
+          canActivateChild: [AuthGuard],
           component: StaffShowComponent,
         },
     ],

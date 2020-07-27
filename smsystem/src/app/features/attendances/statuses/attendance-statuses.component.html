@@ -1,8 +1,10 @@
 <div class="row">
   <div class="col-md-12">
-    <nb-card>
+    <nb-card *ngIf="hasResult">
       <nb-card-body>
-        <app-mark-present-status></app-mark-present-status>
+        <app-mark-present-status
+          [allowUpdate]="hasResult && isAdminsOrExecutive"
+        ></app-mark-present-status>
       </nb-card-body>
     </nb-card>
     <nb-card>

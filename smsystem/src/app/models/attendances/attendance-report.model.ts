@@ -1,8 +1,15 @@
 export interface AttendanceReport {
+  academicYearId: number;
+  academicYearName: string;
+  avarage: number;
   classId: number;
   courseId: number;
   courseName: string;
-  fullName: string;
+  courseCode: string;
+  academicLevelId: number;
+  studentFullName: string;
+  studentId: number;
+  teacherFullName: string;
   teacherId: number;
-  avarage: number;
+  yearOfStudy: string;
 }

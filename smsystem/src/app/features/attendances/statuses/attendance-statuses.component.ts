@@ -8,9 +8,9 @@ import { DeleteModalComponent } from 'app/shared';
 
 import { AttendanceStatusesCreateComponent } from './create/attendance-statuses-create.component';
 
-import {AttendanceStatus, ResponseWrapper } from 'app/models';
-import { AttendanceStatusService } from 'app/services';
-import { QueryParam, APP_ACTION_TYPE} from 'app/utils';
+import {AttendanceStatus, ResponseWrapper, USER_ROLE } from 'app/models';
+import { AttendanceStatusService, SecurityClearanceService } from 'app/services';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-attendance-statuses',
@@ -22,6 +22,8 @@ export class AttendanceStatusesComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
+  private userRole: USER_ROLE;
+  private userRoles: USER_ROLE[];
   baseURL: string = '/dashboard/attendances/students';
   hidePageSize: boolean = false;
   isLoading: boolean = false;
@@ -43,13 +45,27 @@ export class AttendanceStatusesComponent implements OnInit {
 
   constructor(
     private attendanceStatusService: AttendanceStatusService,
+    private securityClearanceService: SecurityClearanceService,
     private dialogService: NbDialogService,
     private router: Router,
     ) {
   }
 
   ngOnInit() {
+    this.loadCurrentUser();
     this.loadAttendanceStatuses();
+  }
+
+  loadCurrentUser() {
+    this.securityClearanceService.loadCurrentUser();
+  }
+
+  get hasResult() {
+    return this.securityClearanceService.hasResult;
+  }
+
+  get isAdminsOrExecutive(): boolean {
+    return this.securityClearanceService.isAdminsOrExecutive;
   }
 
 
@@ -58,7 +74,7 @@ export class AttendanceStatusesComponent implements OnInit {
       context: {
         title: 'Add New Attendance Status',
         action: APP_ACTION_TYPE.create,
-      }
+      },
     }).onClose.subscribe(_data => {
       this.loadAttendanceStatuses();
     });
@@ -88,7 +104,7 @@ export class AttendanceStatusesComponent implements OnInit {
         title: 'Edit Attendance Status',
         action: APP_ACTION_TYPE.edit,
         attendanceStatus: attendanceStatus,
-      }
+      },
     }).onClose.subscribe(_data => {
       this.loadAttendanceStatuses();
     });

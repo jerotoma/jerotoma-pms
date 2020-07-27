@@ -41,6 +41,7 @@ export class MarkPresentStatusComponent implements OnInit {
 
   onFormChanges(): void {
     this.attendancePresentStatusForm.get('attendanceStatusId').valueChanges.subscribe((attendanceStatusId: number) => {
+      window.console.log(' Status ID:' + attendanceStatusId, ' Allow Update:' + this.allowUpdate);
       if (attendanceStatusId) {
         const systemConfig: SystemConfig = {
             id: null,

@@ -1,5 +1,7 @@
 package com.jerotoma.common.models.attendances;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -61,6 +63,15 @@ public class AttendanceStatus {
 		this.addedBy = addedBy;
 		this.createdOn = createdOn;
 		this.updatedOn = updatedOn;
+	}
+
+	public AttendanceStatus(ResultSet rs) throws SQLException {
+		this.id = rs.getInt("id");
+		this.name = rs.getString("name");
+		this.description = rs.getString("description");
+		this.addedBy = rs.getInt("addedBy");
+		this.createdOn = rs.getDate("createdOn");
+		this.updatedOn = rs.getDate("updatedOn");
 	}
 
 	public Integer getId() {
