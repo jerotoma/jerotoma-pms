@@ -119,5 +119,12 @@ public class AssemblerStudentAttendanceDaoImpl extends JdbcDaoSupport implements
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.student_attendances ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
+
+	@Override
+	public List<StudentAttendanceVO> loadStudentClassAttendanceReportsByStudentID(Integer studentId, Integer classId)
+			throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE sa.student_id = ? AND ca.class_id = ? ");
+		return this.jdbcTemplate.query(builder.toString(), new ClassAttendanceResultProcessor(), studentId, classId);
+	}
 	
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { ClassAttendance, AcademicLevel, Student} from 'app/models';
+import { ClassAttendance, Student, ClassView, AttendanceReport} from 'app/models';
 import { UserService, SecurityClearanceService, AttendanceReportService, AcademicLevelService } from 'app/services';
 import { USER_TYPE } from 'app/utils';
 
@@ -15,9 +15,10 @@ export class AttendanceReportDetailsComponent implements OnInit {
 
   isLoading: boolean = false;
   classAttendances: ClassAttendance[];
-  academicLevel: AcademicLevel;
-  academicLevels: AcademicLevel[];
-  studentClassForm: FormGroup;
+  attendanceReports: AttendanceReport[];
+  classView: ClassView;
+  classViews: ClassView[];
+  studentAttendanceReportForm: FormGroup;
 
   classId: number = null;
   studentId: number = null;
@@ -38,14 +39,49 @@ export class AttendanceReportDetailsComponent implements OnInit {
       this.classId = params['classId'];
       this.academicLevelId = params['academicLevelId'];
       this.studentId = params['studentId'];
+      this.loadStudentAttendanceReportByClass(this.classId, this.studentId);
+    });
+    this.loadForm();
+  }
 
+  loadStudentAttendanceReportByClass(classId: number, studentId: number) {
+    this.isLoading = true;
+    this.attendanceReportService.loadStudentClassAttendanceReportByClass(classId, studentId).subscribe((classAttendances: ClassAttendance[]) => {
+      this.classAttendances = classAttendances;
+      this.isLoading = false;
     });
   }
 
-  loadStudentAttendanceReportByClass(classId: number, studentId: number, academicLevelId: number) {
+  loadForm() {
+    this.studentAttendanceReportForm = this.formBuilder.group({
+      classId: [null, Validators.required],
+    });
+    this.onChanges();
+  }
+
+  onChanges() {
+    this.studentAttendanceReportForm.get('classId').valueChanges.subscribe((classId: number) => {
+      if (classId != null) {
+        this.setCurrentClass(classId);
+        if (this.classId) {
+          this.loadStudentAttendanceReportByClass(this.classId, this.studentId);
+        }
+      }
+    });
+  }
+
+  setCurrentClass(classId: number) {
+    this.classViews.forEach(classView => {
+      if (classView.id === classId) {
+        this.classView = classView;
+      }
+    });
+  }
+
+  loadClassesByAcademicLevel(academicLevelId: number, studentId: number) {
     this.isLoading = true;
-    this.attendanceReportService.loadStudentClassAttendanceReportByClass(classId, studentId, academicLevelId).subscribe((classAttendances: ClassAttendance[]) => {
-      this.classAttendances = classAttendances;
+    this.attendanceReportService.getAttendanceReports(studentId, academicLevelId).subscribe((attendanceReports: AttendanceReport[]) => {
+      this.attendanceReports = attendanceReports;
       this.isLoading = false;
     });
   }

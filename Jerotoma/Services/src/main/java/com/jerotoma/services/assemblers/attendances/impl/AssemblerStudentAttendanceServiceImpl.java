@@ -42,4 +42,10 @@ public class AssemblerStudentAttendanceServiceImpl implements AssemblerStudentAt
 		return assemblerStudentAttendanceDao.countObject();
 	}
 
+	@Override
+	public List<StudentAttendanceVO> loadStudentClassAttendanceReportsByStudentID(Integer studentId, Integer classId)
+			throws SQLException {
+		return assemblerStudentAttendanceDao.loadStudentClassAttendanceReportsByStudentID(studentId, classId);
+	}
+
 }

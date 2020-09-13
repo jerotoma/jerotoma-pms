@@ -22,8 +22,8 @@ export class AttendanceReportService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadStudentClassAttendanceReportByClass(classId: number, studentId: number, academicLevelId: number): Observable<ClassAttendance[]> {
-    return this.http.get(`${API_END_POINTS.attendanceReports}/classes/${classId}/students/${studentId}/academic-levels/${academicLevelId}`)
+  loadStudentClassAttendanceReportByClass(classId: number, studentId: number): Observable<ClassAttendance[]> {
+    return this.http.get(`${API_END_POINTS.attendanceReports}/classes/${classId}/students/${studentId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

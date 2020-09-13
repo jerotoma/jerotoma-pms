@@ -71,9 +71,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
       this.modalService.openSnackBar(MESSAGE.ERROR.notAuthorized, 'danger');
       navigationExtras.replaceUrl = false;
       this.router.navigate([FRONTEND_ENDPOINTS.dashboard.path], navigationExtras);
-    }  else {
-      this.router.navigate([FRONTEND_ENDPOINTS.login.path], navigationExtras);
+      return observableOf(false);
     }
-    return observableOf(false);
+    return observableOf(true);
   }
 }

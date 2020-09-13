@@ -17,6 +17,7 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.attendances.AttendanceStatus;
 import com.jerotoma.services.assemblers.attendances.AssemblerAttendanceReportService;
 import com.jerotoma.services.assemblers.attendances.AssemblerAttendanceStatusService;
+import com.jerotoma.services.assemblers.attendances.AssemblerStudentAttendanceService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ATTENDANCE_REPORT_CONTROLLER.BASE)
@@ -24,6 +25,7 @@ public class RestAttendanceReportController extends BaseController {
 	
 	@Autowired AssemblerAttendanceReportService assemblerAttendanceReportService;
 	@Autowired AssemblerAttendanceStatusService assemblerAttendanceStatusService;
+	@Autowired AssemblerStudentAttendanceService assemblerStudentAttendanceService;
 	
 	@GetMapping(value = "/students/{studentId}/academic-levels/{academicLevelId}")
 	public HttpResponseEntity<Object> loadAttendanceReportsByStudentID(
@@ -51,22 +53,17 @@ public class RestAttendanceReportController extends BaseController {
 		return response;
 	}
 	
-	@GetMapping(value = "/students/{studentId}/academic-levels/{academicLevelId}/classes/{classId}")
+	@GetMapping(value = "/classes/{classId}/students/{studentId}")
 	public HttpResponseEntity<Object> loadAttendanceReportDetailsByStudentID(
 			Authentication auth,			
-			@PathVariable("classId") Integer classId,
-			@PathVariable("academicLevelId") Integer academicLevelId,
+			@PathVariable("classId") Integer classId,		
 			@PathVariable("studentId") Integer studentId) {
 		
 		this.logRequestDetail("POST : " + EndPointConstants.REST_ATTENDANCE_REPORT_CONTROLLER.BASE + "/attendance-reports");
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
 		try {
-			AttendanceStatus attendanceStatus = assemblerAttendanceStatusService.loadAttendanceStatusMarkedAsPresent();
-			if (attendanceStatus == null) {
-				throw new RuntimeException("Attendance Status Marked as Present is required to continue");
-			}
-			response.setData(assemblerAttendanceReportService.loadAttendanceReportsByStudentID(studentId, academicLevelId, attendanceStatus.getId()));		
+			response.setData(assemblerStudentAttendanceService.loadStudentClassAttendanceReportsByStudentID(studentId, classId));		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
