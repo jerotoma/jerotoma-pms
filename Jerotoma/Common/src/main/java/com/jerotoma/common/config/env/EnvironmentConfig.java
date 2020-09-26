@@ -1,4 +1,4 @@
-package com.jerotoma.config.env;
+package com.jerotoma.common.config.env;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -15,7 +15,7 @@ public class EnvironmentConfig {
 	private static final String DEV_PROPS_FILE_NAME = "application-dev.properties";
 	
 	private static Properties loadConfigFile(String fileName) {
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		try{
 			properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName));
 		}catch(IOException e) {			

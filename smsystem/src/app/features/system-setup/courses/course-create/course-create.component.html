@@ -5,24 +5,6 @@
             <nb-card-header>{{ title }}</nb-card-header>
             <nb-card-body>
               <div class="row">
-                <div class="col-md-12">
-                  <div class="form-control-group">
-                      <label for="course-department" class="label">Department</label>
-                      <nb-select
-                          fullWidth
-                          placeholder="Department"
-                          formControlName="departmentId"
-                          id="course-department">
-                          <nb-option
-                              *ngFor='let department of departments'
-                              [value]="department.id">
-                              {{department.name}}
-                          </nb-option>
-                        </nb-select>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
                   <div class="col-md-6">
                     <div class="form-control-group">
                         <label for="course-program" class="label">Program</label>
@@ -55,6 +37,24 @@
                         </nb-select>
                     </div>
                   </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-control-group">
+                      <label for="course-department" class="label">Department</label>
+                      <nb-select
+                          fullWidth
+                          placeholder="Department"
+                          formControlName="departmentId"
+                          id="course-department">
+                          <nb-option
+                              *ngFor='let department of departments'
+                              [value]="department.id">
+                              {{department.name}}
+                          </nb-option>
+                        </nb-select>
+                  </div>
+                </div>
               </div>
               <div class="row">
                   <div class="col-md-6">

@@ -16,9 +16,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
+import com.jerotoma.common.config.env.EnvironmentConfig;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.config.auth.common.AuthProcessor;
-import com.jerotoma.config.env.EnvironmentConfig;
 
 @Configuration
 @ComponentScan

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 
+import com.jerotoma.common.config.env.EnvironmentConfig;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.utils.StringUtility;
 
@@ -26,7 +27,12 @@ public class CookieServiceImpl implements CookieService{
 			int cookieAge = SystemConstant.COOKIE_LIFE_TIME;
 			if(maxAge != null) {
 				cookieAge = maxAge;
-			}	
+			}
+			
+			if (EnvironmentConfig.isProd()) {
+				
+			}
+			
 			cookieToken.setHttpOnly(true);
 			cookieToken.setMaxAge(cookieAge);
 			cookieToken.setPath(rootURL);

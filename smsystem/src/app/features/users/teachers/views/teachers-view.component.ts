@@ -94,6 +94,10 @@ export class TeachersViewComponent implements OnInit {
     });
   }
 
+  assignClassesToTeacher(teacher: Teacher) {
+
+  }
+
   onPageChange(pageEvent: PageEvent) {
     this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
     this.param.pageSize = pageEvent.pageSize;
