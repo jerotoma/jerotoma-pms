@@ -214,5 +214,15 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 		queryBuilder.append("WHERE pr.id = ? AND  al.id = ? ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new StudentResultProcessor(), programId, academicLevelId);
 	}
+
+	@Override
+	public List<StudentVO> findStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(Integer programId,
+			Integer academicLevelId) throws SQLException {
+		
+		
+		
+		
+		return null;
+	}
 	
 }

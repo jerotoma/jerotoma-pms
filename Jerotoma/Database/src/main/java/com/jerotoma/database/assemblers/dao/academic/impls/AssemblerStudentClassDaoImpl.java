@@ -68,7 +68,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	@Override
 	public StudentClassVO findObject(Integer primaryKey) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE sc.id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE sal.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), primaryKey);
 	}
 
@@ -88,7 +88,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		
 		map = new HashMap<>();
 		StringBuilder builder = getBaseSelectQuery()
-		.append(DaoUtil.getOrderBy(" sc.student_id, " + queryParam.getFieldName(), queryParam.getOrderby()))
+		.append(DaoUtil.getOrderBy(" sal.student_id, " + queryParam.getFieldName(), queryParam.getOrderby()))
 		.append(" ")
 		.append("limit ? offset ?");
 
@@ -138,15 +138,15 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT sc.id, sc.student_id AS studentId, sc.academic_year_id AS academicYearId, ")
-				.append(" (SELECT COUNT(*) FROM public.student_registered_classes src WHERE src.student_class_id = sc.id) AS classesCount, ")
-				.append(" sc.academic_level_id AS academicLevelId, sc.updated_by AS updatedBy, sc.created_on AS createdOn, sc.updated_on AS updatedOn FROM public.student_classes sc ");
+		return new StringBuilder("SELECT sal.id, sal.student_id AS studentId, sal.completion_status_id AS completionStatusId, ")
+				.append(" (SELECT COUNT(*) FROM public.student_classes sc WHERE sc.student_academic_level_id = sal.id) AS classesCount, ")
+				.append(" sal.academic_level_id AS academicLevelId, sal.updated_by AS updatedBy, sal.created_on AS createdOn, sal.updated_on AS updatedOn FROM public.student_academic_levels sal ");
 		
 	}
 
 	@Override
 	public Long countObject() throws SQLException {
-		StringBuilder queryBuilder = new StringBuilder("SELECT count(DISTINCT student_id) FROM public.student_classes ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT count(DISTINCT student_academic_level_id) FROM public.student_classes ");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
 	}
 	
@@ -154,9 +154,9 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	public StudentClassVO mapStudentClassResult(ResultSet rs) throws SQLException {
 		StudentClassVO jClass = new StudentClassVO(rs);
 		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);
-		int academicYearId = rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID);
-		int academiLevelId = rs.getInt(StudentConstant.Class.ACADEMIC_LEVEL_ID);
-		jClass.setAcademicYear(loadAcademicYear(academicYearId));
+		//int academicYearId = rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID);
+		int academiLevelId = rs.getInt(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
+		//jClass.setAcademicYear(loadAcademicYear(academicYearId));
 		jClass.setAcademicLevel(loadAcademicLevel(academiLevelId));		
 		jClass.setStudent(loadStudentsByStudentID(studentId));
 		return jClass;

@@ -14,7 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import com.jerotoma.common.models.users.Student;
+import com.jerotoma.common.models.students.Student;
 
 public class ReadExcel {
 	private FileInputStream fileInputStream = null;

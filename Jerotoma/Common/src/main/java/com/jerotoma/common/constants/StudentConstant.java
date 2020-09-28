@@ -12,12 +12,14 @@ public class StudentConstant {
 		public static final String STUDENT_ID = "studentId";
 		public static final String STUDENT_IDS = "studentIds";
 		public static final String ACADEMIC_YEAR_ID = "academicYearId";
+		public static final String ACADEMIC_LEVEL_ID = "academicLevelId";
 		public static final String JCLASS_ID = "jClassId";
 		public static final String JCLASS_IDS = "jClassIds";
 		public static final String UPDATED_ON = "updatedOn";
 		public static final String CREATED_ON = "createdOn";
 		public static final String COUNT =  "count";
-		public static final String ACADEMIC_LEVEL_ID = "academicLevelId";
+		public static final String STUDENT_ACADEMIC_LEVEL_ID = "studentAcademicLevelId";
 		public static final String CLASSES_COUNT = "classesCount";
+		public static final String COMPLETION_STATUS_ID = "completionStatusId";
 	}
 }

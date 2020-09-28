@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.users.Student;
+import com.jerotoma.common.models.students.Student;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_ADDRESSES)

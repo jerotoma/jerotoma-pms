@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.users.Student;
+import com.jerotoma.common.models.students.Student;
 import com.jerotoma.database.dao.users.StudentDao;
 
 @Repository

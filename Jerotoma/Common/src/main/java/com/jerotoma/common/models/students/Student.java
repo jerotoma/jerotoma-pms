@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.users;
+package com.jerotoma.common.models.students;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.common.models.academic.StudentClass;
+import com.jerotoma.common.models.academic.StudentAcademicLevel;
+import com.jerotoma.common.models.users.Parent;
+import com.jerotoma.common.models.users.Person;
 
 
 @Entity
@@ -80,7 +82,7 @@ public class Student extends Person implements Serializable{
 	
 	@OneToMany(mappedBy ="student")
 	@JsonManagedReference
-	private Set<StudentClass> studentClasses;
+	private Set<StudentAcademicLevel> studentClasses;
 	
 	
 	public Integer getId() {
@@ -107,11 +109,11 @@ public class Student extends Person implements Serializable{
 		this.studentNumber = studentNumber;
 	}
 
-	public Set<StudentClass> getStudentClases() {
+	public Set<StudentAcademicLevel> getStudentClases() {
 		return studentClasses;
 	}
 
-	public void setStudentClases(Set<StudentClass> studentClases) {
+	public void setStudentClases(Set<StudentAcademicLevel> studentClases) {
 		this.studentClasses = studentClases;
 	}
 
@@ -147,11 +149,11 @@ public class Student extends Person implements Serializable{
 		this.currentAcademicLevel = currentAcademicLevel;
 	}
 
-	public Set<StudentClass> getStudentClasses() {
+	public Set<StudentAcademicLevel> getStudentClasses() {
 		return studentClasses;
 	}
 
-	public void setStudentClasses(Set<StudentClass> studentClasses) {
+	public void setStudentClasses(Set<StudentAcademicLevel> studentClasses) {
 		this.studentClasses = studentClasses;
 	}
 

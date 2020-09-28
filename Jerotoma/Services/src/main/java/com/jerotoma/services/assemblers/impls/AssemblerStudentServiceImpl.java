@@ -59,4 +59,9 @@ public class AssemblerStudentServiceImpl  implements AssemblerStudentService{
 		return assemblerStudentDao.loadStudentsByProgramAndAcademicLevelIDs(programId, academicLevelId);
 	}
 
+	@Override
+	public List<StudentVO> findStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(Integer programId,
+			Integer academicLevelId) throws SQLException {
+		return assemblerStudentDao.findStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(programId,academicLevelId);
+	}	
 }

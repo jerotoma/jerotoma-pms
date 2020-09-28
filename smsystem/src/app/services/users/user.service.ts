@@ -67,7 +67,6 @@ export class UserService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-
   loadUserDetails(username: string): Observable<User> {
     return this.http
     .post(`${API_END_POINTS.users}/profile`, {username: username})

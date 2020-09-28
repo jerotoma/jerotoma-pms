@@ -134,6 +134,11 @@ public class EndPointConstants {
 		public static final String CURRENT_USER_ROLES = CURRENT_USER + "/roles";
 	}
 	
+	public static interface REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/student-academic-levels";
+		public static final String INDEX = "/";
+	}
+	
 	public static interface REST_PROGRAM_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/programs";
 		public static final String INDEX = "/";

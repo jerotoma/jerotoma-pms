@@ -9,6 +9,7 @@ import {
   AcademicYearService,
   ProgramService,
   AcademicLevelService,
+  StudentAcademicLevelService,
   UserService,
   ModalService,
  } from 'app/services';
@@ -84,6 +85,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     private academicYearService: AcademicYearService,
     private classService: ClassService,
     private studentClassService: StudentClassService,
+    private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentCourseEnrollmentCreateComponent>) {}
 
@@ -201,7 +203,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   }
 
   loadStudentsByProgramAndAcademicLevelIDs(academicLevelId: number, programId: number) {
-    this.userService.loadStudentsByProgramAndAcademicLevelIDs(academicLevelId, programId).subscribe((students: Student[]) => {
+    this.studentAcademicLevelService.loadStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(academicLevelId, programId).subscribe((students: Student[]) => {
       this.students = students;
       this.isLoading = false;
     });

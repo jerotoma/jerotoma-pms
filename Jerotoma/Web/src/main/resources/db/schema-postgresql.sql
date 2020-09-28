@@ -747,24 +747,20 @@
     /**************************************************************
 	 * 															  *
 	 * 															  *
-	 * 		STUDENT_CLASSES RELATED TABLES                        *
+	 * 		STUDENT ACADEMIC LEVEL RELATED TABLES                 *
 	 * 															  *
 	 *************************************************************/
 	    
-	CREATE TABLE IF NOT EXISTS public.student_classes(
+	CREATE TABLE IF NOT EXISTS public.student_academic_levels(
 	    id bigserial NOT NULL,
-	    student_id bigint NOT NULL,
-	    academic_year_id bigint NOT NULL,
-	    academic_level_id bigint NOT NULL,	 
+	    student_id bigint NOT NULL,	    
+	    academic_level_id bigint NOT NULL,
+	    completion_status_id bigint NOT NULL,
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
-	    UNIQUE(student_id, academic_year_id),
-	   	CONSTRAINT class_list_pkey PRIMARY KEY(id),
-	   	CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
-	        REFERENCES public.academic_years (id) MATCH SIMPLE
-	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,	
+	    UNIQUE(student_id, academic_level_id),
+	   	CONSTRAINT student_academic_levels_pkey PRIMARY KEY(id),	   		
 	    CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id)
 	        REFERENCES public.academic_levels (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
@@ -775,16 +771,24 @@
 	        ON DELETE CASCADE
 	    );
 	    
-	CREATE TABLE IF NOT EXISTS public.student_registered_classes(	    
+	CREATE TABLE IF NOT EXISTS public.student_classes(
+		id bigserial NOT NULL,
 	    class_id bigint NOT NULL,
-	    student_class_id bigint NOT NULL,	    
-	   	CONSTRAINT class_pkey PRIMARY KEY(class_id, student_class_id),	   
+	    student_academic_level_id bigint NOT NULL,
+	    academic_year_id bigint NOT NULL,
+	    completion_status_id bigint NOT NULL,
+	    CONSTRAINT student_classes_pkey PRIMARY KEY(id),
+	   	UNIQUE(class_id, student_academic_level_id, academic_year_id),	   
 	   	CONSTRAINT classes_fkey FOREIGN KEY (class_id)
 	        REFERENCES public.classes (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
-	    CONSTRAINT student_classes_fkey FOREIGN KEY (student_class_id)
-	        REFERENCES public.student_classes (id) MATCH SIMPLE
+	    CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)
+	        REFERENCES public.academic_years (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	    CONSTRAINT student_academic_levels_fkey FOREIGN KEY (student_academic_level_id)
+	        REFERENCES public.student_academic_levels (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );

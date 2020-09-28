@@ -15,7 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.users.Student;
+import com.jerotoma.common.models.students.Student;
 
 
 	

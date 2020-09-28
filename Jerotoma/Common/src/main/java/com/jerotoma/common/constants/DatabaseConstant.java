@@ -6,8 +6,8 @@ public class DatabaseConstant {
 		public static final String USERS  = "users";
 		public static final String ACADEMIC_YEARS = "academic_years";
 		public static final String ROOMS = "rooms";
+		public static final String STUDENT_ACADEMIC_LEVELS = "student_academic_levels";
 		public static final String STUDENT_CLASSES = "student_classes";
-		public static final String STUDENT_REGISTERED_CLASSES = "student_registered_classes";
 		public static final String ROOM_RESOURCES = "room_resources";
 		public static final String ACADEMIC_DISCIPLINE = "academic_disciplines";
 		public static final String POSITIONS = "positions";
@@ -49,6 +49,8 @@ public class DatabaseConstant {
 		
 		public static final String MEDIA = "media";
 		public static final String USER_MEDIA = "user_media";
+		
+		public static final String ORDER_OF_COMPLETIONS = "order_of_completions";
 	}
 	
 	

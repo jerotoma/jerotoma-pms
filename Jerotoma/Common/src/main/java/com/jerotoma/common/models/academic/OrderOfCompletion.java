@@ -7,41 +7,31 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.viewobjects.AcademicLevelVO;
 
 @Entity
-@Table(name = DatabaseConstant.TABLES.ACADEMIC_LEVELS)
-public class AcademicLevel {
+@Table(name = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS)
+public class OrderOfCompletion {
 	
 	@Id
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE, 
-			generator = DatabaseConstant.TABLES.ACADEMIC_LEVELS + "_generator")
+			generator = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_generator")
 	@SequenceGenerator(
-			name = DatabaseConstant.TABLES.ACADEMIC_LEVELS + "_generator", 
-			sequenceName = DatabaseConstant.TABLES.ACADEMIC_LEVELS + "_id_seq", 
+			name = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_id_seq", 
 			allocationSize=1)
 	@Column
 	private Integer id;
 	
 	@Column
-	private String code;
+	private Integer completionOrder;
 	
 	@Column
 	private String name;
-	
-	@Column
-	private String description;
-	
-	@OneToOne
-	@JoinColumn(name="order_of_completion_id")
-	private	OrderOfCompletion orderOfCompletion;
 	
 	@Column(name="created_on")
 	private Date createdOn;
@@ -49,15 +39,7 @@ public class AcademicLevel {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	public AcademicLevel(AcademicLevelVO academicLevel) {
-		this.id = academicLevel.getId();
-		this.code = academicLevel.getCode();
-		this.name = academicLevel.getName();
-		this.createdOn = academicLevel.getCreatedOn();
-		this.updatedOn = academicLevel.getUpdatedOn();
-	}
-
-	public AcademicLevel() {}
+	public OrderOfCompletion() {}
 
 	public Integer getId() {
 		return id;
@@ -66,13 +48,13 @@ public class AcademicLevel {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	public String getCode() {
-		return code;
+	
+	public Integer getCompletionOrder() {
+		return completionOrder;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setCompletionOrder(Integer completionOrder) {
+		this.completionOrder = completionOrder;
 	}
 
 	public String getName() {
@@ -81,14 +63,6 @@ public class AcademicLevel {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Date getCreatedOn() {

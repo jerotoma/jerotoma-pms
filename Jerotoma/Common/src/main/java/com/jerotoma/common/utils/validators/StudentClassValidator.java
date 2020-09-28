@@ -15,7 +15,7 @@ public class StudentClassValidator {
 		
 		
 		Integer academicYearId = null;
-		Integer academicLevelId = null;
+		Integer studentAcademicLevelId = null;
 		List<Integer> jClassIds = null;
 		List<Integer> studentIds = null;
 		Integer id = null;	
@@ -30,8 +30,8 @@ public class StudentClassValidator {
 			academicYearId  = (Integer)params.get(StudentConstant.Class.ACADEMIC_YEAR_ID);
 		}
 		
-		if(params.containsKey(StudentConstant.Class.ACADEMIC_LEVEL_ID)) {
-			academicLevelId  = (Integer)params.get(StudentConstant.Class.ACADEMIC_LEVEL_ID);
+		if(params.containsKey(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID)) {
+			studentAcademicLevelId  = (Integer)params.get(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
 		}
 		
 		if(params.containsKey(StudentConstant.Class.ID)) {
@@ -55,11 +55,11 @@ public class StudentClassValidator {
 			throw new FieldRequiredException("Academic Year ID is required to continue");
 		}
 		
-		if (academicLevelId == null && requiredFields.contains(StudentConstant.Class.ACADEMIC_LEVEL_ID)) {
+		if (studentAcademicLevelId == null && requiredFields.contains(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID)) {
 			throw new FieldRequiredException("Academic Level ID is required to continue");
 		}
 		
 		
-		return new StudentClass.Fields(id, studentIds, jClassIds, academicYearId, academicLevelId);
+		return new StudentClass.Fields(id, studentIds, jClassIds, academicYearId, studentAcademicLevelId);
 	}
 }

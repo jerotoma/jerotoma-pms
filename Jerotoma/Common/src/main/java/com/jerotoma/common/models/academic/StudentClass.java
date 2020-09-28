@@ -2,7 +2,6 @@ package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,15 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.users.Student;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_CLASSES)
@@ -36,26 +32,20 @@ public class StudentClass {
 	private Integer id;
 	
 	@ManyToOne
+	@JoinColumn(name="student_academic_level_id")
+	@JsonBackReference
+	private StudentAcademicLevel studentAcademicLevel;
+	
+	@ManyToOne
 	@JoinColumn(name="academic_year_id")
 	private AcademicYear academicYear;
 	
 	@ManyToOne
-	@JoinColumn(name="academic_level_id")
-	private AcademicLevel academicLevel;
-	
-	@ManyToOne
-	@JoinColumn(name="student_id")
-	@JsonBackReference
-	private Student student;
-	
-	
-	@ManyToMany
-	@JoinTable(
-    	name = DatabaseConstant.TABLES.STUDENT_REGISTERED_CLASSES,
-        joinColumns = @JoinColumn(name = "student_class_id"),
-        inverseJoinColumns = @JoinColumn(name = "class_id"))
 	@JoinColumn(name="class_id")
-	private Set<Class> classes;
+	private Class mClass;
+	
+	@Column(name="completion_status_id")
+	private Integer completionStatusId;
 	
 	@Column(name="updated_by")
 	private Integer updatedBy;
@@ -65,13 +55,37 @@ public class StudentClass {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
-
+		
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public StudentAcademicLevel getStudentAcademicLevel() {
+		return studentAcademicLevel;
+	}
+
+	public void setStudentAcademicLevel(StudentAcademicLevel studentAcademicLevel) {
+		this.studentAcademicLevel = studentAcademicLevel;
+	}
+
+	public AcademicYear getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYear academicYear) {
+		this.academicYear = academicYear;
+	}
+		
+	public Class getmClass() {
+		return mClass;
+	}
+
+	public void setmClass(Class mClass) {
+		this.mClass = mClass;
 	}
 	
 	public Integer getUpdatedBy() {
@@ -97,38 +111,6 @@ public class StudentClass {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-	
-	public AcademicYear getAcademicYear() {
-		return academicYear;
-	}
-
-	public void setAcademicYear(AcademicYear academicYear) {
-		this.academicYear = academicYear;
-	}
-
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
-	}
-	
-	public Set<Class> getClasses() {
-		return classes;
-	}
-
-	public void setClasses(Set<Class> classes) {
-		this.classes = classes;
-	}
-	
-	public AcademicLevel getAcademicLevel() {
-		return academicLevel;
-	}
-
-	public void setAcademicLevel(AcademicLevel academicLevel) {
-		this.academicLevel = academicLevel;
-	}
 
 	public static class Fields {
 		Integer Id;
@@ -136,7 +118,6 @@ public class StudentClass {
 		List<Integer> classIds;
 		Integer academicYearId;
 		Integer academicLevelId;
-			
 		
 		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer academicYearId, Integer academicLevelId) {
 			super();
@@ -177,11 +158,12 @@ public class StudentClass {
 			this.academicYearId = academicYearId;
 		}
 		
+		public Integer getAcademicLevelId() {
+			return academicLevelId;
+		}
+		
 		public void setAcademicLevelId(Integer academicLevelId) {
 			this.academicLevelId = academicLevelId;
-		}
-		public Integer getAcademicLevelId() {			
-			return academicLevelId;
 		}		
 	}
 	
