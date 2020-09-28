@@ -63,7 +63,7 @@ export class SearchUserComponent implements OnInit {
       this.onUserSelected.emit(this.user);
       this.userForm.patchValue({
          searchKey: user.fullName,
-      });
+      }, {emitEvent: false});
     }
 
   }
@@ -89,8 +89,8 @@ export class SearchUserComponent implements OnInit {
     const param = this.getParam();
     param.search = value;
     this.userService.search(param).subscribe((users: User[]) => {
-      this.users = [];
-      if (users) {
+      this.users = null;
+      if (users && users.length > 0) {
         this.users = users;
         this.listDisplay = 'block';
       }

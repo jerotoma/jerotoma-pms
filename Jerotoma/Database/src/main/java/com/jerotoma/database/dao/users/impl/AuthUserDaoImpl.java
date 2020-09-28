@@ -28,7 +28,6 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.security.Role;
 import com.jerotoma.common.models.users.User;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.roles.RoleDao;
 import com.jerotoma.database.dao.users.AuthUserDao;
@@ -197,14 +196,31 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 			}
 		}, userId);
 	}
-	
 	private StringBuilder commonSelectQuery(boolean removePassword) {		
-		StringBuilder builder = new StringBuilder("SELECT id, username, password, user_type, enabled, account_non_expired, credentials_non_expired, account_non_locked, created_on, updated_on FROM public.users ");
+		return commonSelectQuery(removePassword, false);
+	}
+	
+	private StringBuilder commonSelectQuery(boolean removePassword, boolean isSearch) {	
+		StringBuilder unionBuilder = new StringBuilder("");
+		StringBuilder builder = new StringBuilder("SELECT ");
+		builder.append("u.id, u.username, u.password, u.user_type, u.enabled, u.account_non_expired, u.credentials_non_expired, u.account_non_locked, u.created_on, u.updated_on ");
+		if (isSearch) {
+			builder.append(" ,first_name, last_name, email_address ");
+		}		
+		builder.append("FROM public.users u ");
+		
 		if(removePassword) {
 			builder.toString().replace("password,", "");
 		}
 		
-		return builder;
+		if (isSearch) {
+			String studentSQL = new StringBuilder(builder.toString()).append(" INNER JOIN students st ON st.user_id = u.id ").toString();
+			String teacherSQL = new StringBuilder(builder.toString()).append(" INNER JOIN teachers te ON te.user_id = u.id ").toString();
+			String parentSQL = new StringBuilder(builder.toString()).append(" INNER JOIN parents pa ON pa.user_id = u.id ").toString();
+			String staffSQL = new StringBuilder(builder.toString()).append(" INNER JOIN staffs sta ON sta.user_id = u.id ").toString();			
+			unionBuilder.append(studentSQL).append(" UNION ").append(teacherSQL).append(" UNION ").append(parentSQL).append(" UNION ").append(staffSQL);
+		}				
+		return isSearch ? unionBuilder : builder;
 	}
 	
 	private StringBuilder commonInsertQuery() {		
@@ -256,7 +272,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 
 	@Override
 	public List<User> search(QueryParam queryParam) throws SQLException {
-		StringBuilder queryBuilder = commonSelectQuery(true);
+		StringBuilder queryBuilder = commonSelectQuery(true, true);
 		queryBuilder.append(" WHERE LOWER(first_name) like ? OR LOWER(last_name) like ? OR LOWER(username) like ? ")
 				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
 				.append(" ")
@@ -281,35 +297,5 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 	public Long countObject() throws SQLException {
 		StringBuilder queryBuilder = new StringBuilder("SELECT count(*) FROM public.users");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new LongResultProcessor());
-	}
-
-	@Override
-	public List<UserVO> searchUser(QueryParam  queryParam) throws SQLException {
-		StringBuilder queryBuilder = commonSelectQuery(true);
-		queryBuilder.append(" WHERE LOWER(first_name) like ? OR LOWER(last_name) like ? OR LOWER(username) like ? ")
-				.append(DaoUtil.getOrderBy(queryParam.getFieldName(), queryParam.getOrderby()))
-				.append(" ")
-				.append("limit ? offset ?");
-		
-		Long countResults = countObject();
-		//int pageCount = DaoUtil.getPageCount(queryParam.getPageSize(), countResults);
-		Integer limit = DaoUtil.getPageSize(queryParam.getPageSize(),countResults);
-		Integer offset = (queryParam.getPage() - 1) * queryParam.getPageSize();
-		
-		Object[] paramList = new Object[] {				
-				DaoUtil.addPercentBothSide(queryParam.getSearch()),
-				DaoUtil.addPercentBothSide(queryParam.getSearch()),
-				DaoUtil.addPercentBothSide(queryParam.getSearch()),
-				limit, 
-				offset
-		};
-		return this.jdbcTemplate.query(queryBuilder.toString(), new RowMapper<UserVO>(){
-			@Override
-			public UserVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-				// User role = mapAuthUserResult(rs);			
-				return null;
-			}
-		}, paramList);
-	}
-	
+	}	
 }

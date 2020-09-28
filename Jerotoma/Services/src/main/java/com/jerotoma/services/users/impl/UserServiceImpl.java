@@ -3,6 +3,7 @@ package com.jerotoma.services.users.impl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -124,9 +125,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserVO> searchUser(QueryParam param) {		
+	public List<UserVO> searchUser(QueryParam param) {	
+		List<UserVO>  userVOs = new ArrayList<>();
 		try {
-			return authUserService.searchUser(param);
+			List<User>  users = authUserService.search(param);
+			if (users != null) {
+				return users.stream().map(user -> getUserDetails(user)).collect(Collectors.toList());
+			}			
+			return userVOs;
 		} catch (SQLException e) {			
 			e.printStackTrace();
 		}

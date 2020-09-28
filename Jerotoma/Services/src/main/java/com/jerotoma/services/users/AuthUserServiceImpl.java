@@ -96,11 +96,4 @@ public class AuthUserServiceImpl implements AuthUserService {
 		}
 		return loadUserByUsername(username) != null;
 	}
-
-	@Override
-	public List<UserVO> searchUser(QueryParam param) throws SQLException {		
-		return authUserDao.searchUser(param);
-	}
-
-
 }

@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.User;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.BaseService;
 
 public interface AuthUserService extends UserDetailsService, BaseService<User> {
@@ -20,7 +19,5 @@ public interface AuthUserService extends UserDetailsService, BaseService<User> {
 	
 	public boolean doesUserExist(String username);
 
-	public User createUserLoginAccount(User authUser);
-
-	public List<UserVO> searchUser(QueryParam param) throws SQLException;
+	public User createUserLoginAccount(User authUser);	
 }

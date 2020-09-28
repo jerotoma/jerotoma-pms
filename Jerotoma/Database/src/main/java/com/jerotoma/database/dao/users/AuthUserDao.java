@@ -13,6 +13,5 @@ import com.jerotoma.database.dao.BaseDao;
 public interface AuthUserDao extends BaseDao<User>{
 	public User loadUserByUsername(String username) throws UsernameNotFoundException;
 	public List<User> search(QueryParam queryParam) throws SQLException;
-	public Long countObject() throws SQLException;
-	public List<UserVO> searchUser(QueryParam param) throws SQLException;
+	public Long countObject() throws SQLException;	
 }

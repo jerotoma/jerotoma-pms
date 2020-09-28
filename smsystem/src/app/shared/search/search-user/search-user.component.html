@@ -14,7 +14,7 @@
                   [placeholder]="title">
             </div>
             <nb-card [ngStyle]="{'display': listDisplay}">
-              <nb-list *ngIf="users && users.length > 0">
+              <nb-list *ngIf="users">
                 <nb-list-item *ngFor="let user of users" (click)="pickUser($event, user)">
                   {{user?.fullName}}
                 </nb-list-item>
