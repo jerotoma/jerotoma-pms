@@ -19,12 +19,12 @@ import {
   NbAlertModule,
 } from '@nebular/theme';
 
-import { AdmissionsRoutingModule } from './admissions-routing.module';
-import { AdmissionsComponent } from './admissions.component';
+import { EnrollmentsRoutingModule } from './enrollments-routing.module';
+import { EnrollmentsComponent } from './enrollments.component';
 
 
 const COMPONENTS = [
-  AdmissionsComponent,
+  EnrollmentsComponent,
 
 ];
 
@@ -51,7 +51,7 @@ const MODULES = [
     hasScroll: false,
     dialogClass: 'global-dialog-container',
   }),
-  AdmissionsRoutingModule,
+  EnrollmentsRoutingModule,
 ];
 
 const SERVICES = [
@@ -72,4 +72,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class AdmissionsModule { }
+export class EnrollmentsModule { }

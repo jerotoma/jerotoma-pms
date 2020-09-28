@@ -111,16 +111,16 @@ export const FRONTEND_ENDPOINTS = {
     path: '/dashboard/attendances/statuses',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
-  admission: {
-    path: '/dashboard/admissions',
+  enrollments: {
+    path: '/dashboard/enrollments',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
-  admissionStudents: {
-    path: '/dashboard/admissions/students',
+  enrollmentStudents: {
+    path: '/dashboard/enrollments/students',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
-  admissionClasses: {
-    path: '/dashboard/admissions/classes',
+  enrollmentClasses: {
+    path: '/dashboard/enrollments/classes',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
   schedules: {

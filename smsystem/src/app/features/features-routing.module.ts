@@ -74,11 +74,11 @@ const routes: Routes = [{
         .then(m => m.HeaderModule),
     },
     {
-      path: 'admissions',
+      path: 'enrollments',
       data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES },
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./admissions/admissions.module')
-        .then(m => m.AdmissionsModule),
+      loadChildren: () => import('./enrollments/enrollments.module')
+        .then(m => m.EnrollmentsModule),
     },
     {
       path: 'miscellaneous',

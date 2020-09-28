@@ -26,9 +26,9 @@ import {
 } from 'app/models';
 
 @Component({
-  selector: 'app-student-course-enrollment-create',
-  styleUrls: ['./student-course-enrollment-create.component.scss'],
-  templateUrl: './student-course-enrollment-create.component.html',
+  selector: 'app-student-academic-level-enrollment-create',
+  styleUrls: ['./student-academic-level-enrollment-create.component.scss'],
+  templateUrl: './student-academic-level-enrollment-create.component.html',
 })
 export class StudentCourseEnrollmentCreateComponent implements OnInit {
   @Input() title: string;

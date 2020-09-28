@@ -30,24 +30,24 @@ import {
   NbCheckboxModule,
 } from '@nebular/theme';
 
-import { StudentCourseEnrollmentsRoutingModule } from './student-course-enrollments-routing.module';
-import { StudentCourseEnrollmentsComponent } from './student-course-enrollments.component';
-import { StudentCourseEnrollmentsViewComponent } from './student-course-enrollments-view/student-course-enrollments-view.component';
-import { StudentCourseEnrollmentCreateComponent } from './student-course-enrollment-create/student-course-enrollment-create.component';
-import { StudentCourseEnrollmentEditComponent } from './student-course-enrollment-edit/student-course-enrollment-edit.component';
-import { StudentCourseEnrollmentShowComponent } from './student-course-enrollment-show/student-course-enrollment-show.component';
+import { StudentAcademicLevelEnrollmentsRoutingModule } from './student-academic-level-enrollments-routing.module';
+import { StudentCourseEnrollmentsComponent } from './student-academic-level-enrollments.component';
+import { StudentAcademicLevelEnrollmentsViewComponent } from './student-academic-level-enrollments-view/student-academic-level-enrollments-view.component';
+import { StudentCourseEnrollmentCreateComponent } from './student-academic-level-enrollment-create/student-academic-level-enrollment-create.component';
+import { StudentAcademicLevelEnrollmentEditComponent } from './student-academic-level-enrollment-edit/student-academic-level-enrollment-edit.component';
+import { StudentAcademicLevelEnrollmentShowComponent } from './student-academic-level-enrollment-show/student-academic-level-enrollment-show.component';
 
 const COMPONENTS = [
   StudentCourseEnrollmentsComponent,
-  StudentCourseEnrollmentsViewComponent,
+  StudentAcademicLevelEnrollmentsViewComponent,
   StudentCourseEnrollmentCreateComponent,
-  StudentCourseEnrollmentEditComponent,
-  StudentCourseEnrollmentShowComponent,
+  StudentAcademicLevelEnrollmentEditComponent,
+  StudentAcademicLevelEnrollmentShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [
   StudentCourseEnrollmentCreateComponent,
-  StudentCourseEnrollmentEditComponent,
+  StudentAcademicLevelEnrollmentEditComponent,
 
 ];
 
@@ -82,7 +82,7 @@ const MODULES = [
     hasScroll: false,
     dialogClass: 'global-dialog-container',
   }),
-  StudentCourseEnrollmentsRoutingModule,
+  StudentAcademicLevelEnrollmentsRoutingModule,
 ];
 
 const SERVICES = [
@@ -103,4 +103,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class StudentCourseEnrollmentsModule { }
+export class StudentAcademicLevelEnrollmentsModule { }

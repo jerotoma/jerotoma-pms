@@ -7,11 +7,11 @@ import { StudentClassService, AcademicYearService, ClassService } from 'app/serv
 import { QueryParam } from 'app/utils';
 
 @Component({
-  selector: 'app-student-course-enrollment-show',
-  styleUrls: ['./student-course-enrollment-show.component.scss'],
-  templateUrl: './student-course-enrollment-show.component.html',
+  selector: 'app-student-academic-level-enrollment-show',
+  styleUrls: ['./student-academic-level-enrollment-show.component.scss'],
+  templateUrl: './student-academic-level-enrollment-show.component.html',
 })
-export class StudentCourseEnrollmentShowComponent implements OnInit {
+export class StudentAcademicLevelEnrollmentShowComponent implements OnInit {
   param: QueryParam = {
     page: 1,
     pageSize: 10,

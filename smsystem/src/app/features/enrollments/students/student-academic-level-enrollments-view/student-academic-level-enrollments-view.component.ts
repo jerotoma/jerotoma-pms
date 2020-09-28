@@ -7,21 +7,21 @@ import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import { DeleteModalComponent } from 'app/shared';
 
-import { StudentCourseEnrollmentCreateComponent } from '../student-course-enrollment-create/student-course-enrollment-create.component';
-import { StudentCourseEnrollmentEditComponent } from '../student-course-enrollment-edit/student-course-enrollment-edit.component';
+import { StudentCourseEnrollmentCreateComponent } from '../student-academic-level-enrollment-create/student-academic-level-enrollment-create.component';
+import { StudentAcademicLevelEnrollmentEditComponent } from '../student-academic-level-enrollment-edit/student-academic-level-enrollment-edit.component';
 
 import { StudentClass, ResponseWrapper } from 'app/models';
 import { StudentClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
 @Component({
-  selector: 'app-student-course-enrollments-view',
-  styleUrls: ['./student-course-enrollments-view.component.scss'],
-  templateUrl: './student-course-enrollments-view.component.html',
+  selector: 'app-student-academic-level-enrollments-view',
+  styleUrls: ['./student-academic-level-enrollments-view.component.scss'],
+  templateUrl: './student-academic-level-enrollments-view.component.html',
 })
-export class StudentCourseEnrollmentsViewComponent implements OnInit {
+export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
 
-  baseURL: string = '/dashboard/admissions/students/';
+  baseURL: string = '/dashboard/enrollments/students/';
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -87,7 +87,7 @@ export class StudentCourseEnrollmentsViewComponent implements OnInit {
   }
 
   edit(studentClass: StudentClass) {
-    this.dialogService.open(StudentCourseEnrollmentEditComponent, {
+    this.dialogService.open(StudentAcademicLevelEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
         studentClass: studentClass,

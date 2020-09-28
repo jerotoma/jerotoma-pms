@@ -89,17 +89,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: FRONTEND_ENDPOINTS.myschedules.path,
   },
   {
-    title: 'Admission',
+    title: 'Enrollments',
     icon: 'book-open-outline',
-    link: FRONTEND_ENDPOINTS.admission.path,
+    link: FRONTEND_ENDPOINTS.enrollments.path,
     children: [
       {
         title: 'Students',
-        link: FRONTEND_ENDPOINTS.admissionStudents.path,
+        link: FRONTEND_ENDPOINTS.enrollmentStudents.path,
       },
       {
         title: 'Classes',
-        link: FRONTEND_ENDPOINTS.admissionClasses.path,
+        link: FRONTEND_ENDPOINTS.enrollmentClasses.path,
       },
     ],
   },

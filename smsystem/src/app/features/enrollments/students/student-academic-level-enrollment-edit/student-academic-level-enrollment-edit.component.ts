@@ -24,12 +24,12 @@ import {
 import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
 @Component({
-  selector: 'app-student-course-enrollment-edit',
+  selector: 'app-student-academic-level-enrollment-edit',
   animations: OPEN_CLOSE_ANIMATION,
-  styleUrls: ['./student-course-enrollment-edit.component.scss'],
-  templateUrl: './student-course-enrollment-edit.component.html',
+  styleUrls: ['./student-academic-level-enrollment-edit.component.scss'],
+  templateUrl: './student-academic-level-enrollment-edit.component.html',
 })
-export class StudentCourseEnrollmentEditComponent implements OnInit {
+export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   @Input() title: string;
   @Input() studentClass: StudentClass;
   @Output() onCreationSuccess = new EventEmitter();
@@ -79,7 +79,7 @@ export class StudentCourseEnrollmentEditComponent implements OnInit {
     private modalService: ModalService,
     private studentClassService: StudentClassService,
     private formBuilder: FormBuilder,
-    protected ref: NbDialogRef<StudentCourseEnrollmentEditComponent>) {}
+    protected ref: NbDialogRef<StudentAcademicLevelEnrollmentEditComponent>) {}
 
   ngOnInit() {
     this.loadData();
