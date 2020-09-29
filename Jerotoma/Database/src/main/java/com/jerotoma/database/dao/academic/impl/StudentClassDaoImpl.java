@@ -1,4 +1,4 @@
-package com.jerotoma.database.dao.courses.impl;
+package com.jerotoma.database.dao.academic.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import com.jerotoma.common.constants.AcademicConstants;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.StudentClass;
 import com.jerotoma.database.dao.DaoUtil;
-import com.jerotoma.database.dao.courses.StudentClassDao;
+import com.jerotoma.database.dao.academic.StudentClassDao;
 
 @Repository
 @Transactional

@@ -22,7 +22,6 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.users.Parent;
@@ -57,10 +56,7 @@ public class Student extends Person implements Serializable{
 	
 	@Transient
 	Integer programId;
-	
-	@Transient
-	Integer academicLevelId;
-	
+		
 	@Column(name="student_number")
 	private Integer studentNumber;
 	
@@ -68,9 +64,8 @@ public class Student extends Person implements Serializable{
 	@JoinColumn(name="program_id", referencedColumnName="id")	
 	private Program program;
 	
-	@OneToOne
-	@JoinColumn(name="current_academic_level_id", referencedColumnName="id")
-	private AcademicLevel currentAcademicLevel;
+	@Column(name="current_academic_level_id")
+	private Integer academicLevelId;
 	
 	@ManyToMany
     @JoinTable(
@@ -82,7 +77,7 @@ public class Student extends Person implements Serializable{
 	
 	@OneToMany(mappedBy ="student")
 	@JsonManagedReference
-	private Set<StudentAcademicLevel> studentClasses;
+	private Set<StudentAcademicLevel> studentAcademicLevels;
 	
 	
 	public Integer getId() {
@@ -109,12 +104,12 @@ public class Student extends Person implements Serializable{
 		this.studentNumber = studentNumber;
 	}
 
-	public Set<StudentAcademicLevel> getStudentClases() {
-		return studentClasses;
+	public Set<StudentAcademicLevel> getStudentAcademicLevels() {
+		return studentAcademicLevels;
 	}
 
-	public void setStudentClases(Set<StudentAcademicLevel> studentClases) {
-		this.studentClasses = studentClases;
+	public void setStudentAcademicLevels(Set<StudentAcademicLevel> StudentAcademicLevels) {
+		this.studentAcademicLevels = StudentAcademicLevels;
 	}
 
 	public List<Integer> getParentIds() {
@@ -140,21 +135,13 @@ public class Student extends Person implements Serializable{
 	public void setProgram(Program program) {
 		this.program = program;
 	}
-
-	public AcademicLevel getCurrentAcademicLevel() {
-		return currentAcademicLevel;
-	}
-
-	public void setCurrentAcademicLevel(AcademicLevel currentAcademicLevel) {
-		this.currentAcademicLevel = currentAcademicLevel;
-	}
-
+	
 	public Set<StudentAcademicLevel> getStudentClasses() {
-		return studentClasses;
+		return studentAcademicLevels;
 	}
 
 	public void setStudentClasses(Set<StudentAcademicLevel> studentClasses) {
-		this.studentClasses = studentClasses;
+		this.studentAcademicLevels = studentClasses;
 	}
 
 	public Integer getProgramId() {

@@ -41,7 +41,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'fullName', 'studentNumber', 'classesCount',  'academicYearTerm', 'academicYear', 'action'];
+  displayedColumns: string[] = ['id', 'fullName', 'studentNumber', 'classesCount',  'academicLevel', 'academicYear', 'action'];
   dataSource: MatTableDataSource<StudentClass> = new MatTableDataSource<StudentClass >();
 
   constructor(

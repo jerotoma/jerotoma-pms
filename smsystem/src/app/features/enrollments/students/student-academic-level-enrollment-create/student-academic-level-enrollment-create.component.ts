@@ -43,7 +43,6 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   programId: number;
   academicLevelId: number;
   jClassIds: number[] = [];
-  studentIds: number[] = [];
   teacherId: number;
   isLoading: boolean = false;
   confirmed: boolean = false;
@@ -109,6 +108,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     this.checkAllCourses = checked;
   }
 
+  setSelectedUser(student: Student) {
+    this.studentClassForm.patchValue({
+      studentId: student.id,
+    });
+    this.programId = student.programId;
+    this.loadAvailableAcademicLevelsByStudentId(student.id);
+  }
+
   onSubmit() {
     this.confirmed = false;
     this.studentClassAdmission = this.studentClassForm.value;
@@ -120,20 +127,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       this.dismiss();
     });
   }
-  studentCheckedChange(checked: boolean, student: Student) {
-    if (checked) {
-      this.studentIds.push(student.id);
-    } else {
-      for (let i = 0; i < this.studentIds.length; i++) {
-        if ( this.studentIds[i] === student.id) {
-          this.studentIds.splice(i, 1);
-        }
-     }
-    }
-    this.studentClassForm.patchValue({
-      studentIds: this.studentIds,
-    });
-  }
+
   checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {
       this.jClassIds.push(jClass.id);
@@ -152,30 +146,17 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   loadForm() {
     this.studentClassForm = this.formBuilder.group({
       id: [null],
+      studentId: ['', Validators.required],
       academicYearId: ['', Validators.required],
       academicLevelId: ['', Validators.required],
-      programId: ['', Validators.required],
       jClassIds: [[], Validators.required],
-      studentIds: [[], Validators.required],
     });
     this.onChanges();
   }
 
   onChanges() {
-    this.studentClassForm.get('programId').valueChanges.subscribe(programId => {
-      if (programId) {
-        this.programId = programId;
-        this.academicLevelId = null;
-        this.students = [];
-        this.jClasses = [];
-        this.studentClassForm.patchValue({
-            academicLevelId: null,
-        });
-        this.loadAcademicLevelsByProgramId(programId);
-      }
-    });
     this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
-      const programId = this.studentClassForm.get('programId').value;
+      const programId = this.programId;
       this.academicYearId = null;
       this.studentClassForm.patchValue({
         academicYearId: null,
@@ -260,9 +241,9 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
     return jClassesIds;
   }
 
-  loadAcademicLevelsByProgramId(programId: number) {
+  loadAvailableAcademicLevelsByStudentId(studentId: number) {
     this.academicLevels = [];
-    this.academicLevelService.loadAcademicLevelsByProgramId(programId)
+    this.academicLevelService.loadAvailableAcademicLevelsByStudentId(studentId)
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.academic.Department;
-import com.jerotoma.database.dao.courses.DepartmentDao;
+import com.jerotoma.database.dao.academic.DepartmentDao;
 import com.jerotoma.services.assemblers.academic.DepartmentService;
 
 @Transactional

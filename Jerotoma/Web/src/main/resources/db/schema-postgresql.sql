@@ -793,6 +793,34 @@
 	        ON DELETE CASCADE
 	    );
 	    
+	     /**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			COMPLETED_ACADEMIC_LEVELS RELATED TABLES		  *
+		 * 															  *
+		 *************************************************************/
+		
+		  -- Tables for menus
+		  
+	CREATE TABLE IF NOT EXISTS public.completed_academic_levels(
+	    id bigserial NOT NULL,
+	    student_id bigint NOT NULL,	    
+	    academic_level_id bigint NOT NULL,	    
+	   	updated_by bigint NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    UNIQUE(student_id, academic_level_id),
+	   	CONSTRAINT completed_academic_levels_pkey PRIMARY KEY(id),	   		
+	    CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id)
+	        REFERENCES public.academic_levels (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	
+	    CONSTRAINT student_fkey FOREIGN KEY (student_id)
+	        REFERENCES public.students (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE
+	    );
+	    
 	    
 	    /**************************************************************
 		 * 															  *

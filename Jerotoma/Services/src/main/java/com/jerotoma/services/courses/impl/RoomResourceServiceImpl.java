@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.academic.RoomResource;
-import com.jerotoma.database.dao.courses.RoomResourceDao;
+import com.jerotoma.database.dao.academic.RoomResourceDao;
 import com.jerotoma.services.courses.RoomResourceService;
 
 

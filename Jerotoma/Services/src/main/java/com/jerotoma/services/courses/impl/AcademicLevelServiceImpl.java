@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.academic.AcademicLevel;
-import com.jerotoma.database.dao.courses.AcademicLevelDao;
+import com.jerotoma.database.dao.academic.AcademicLevelDao;
 import com.jerotoma.services.courses.AcademicLevelService;
 
 @Transactional

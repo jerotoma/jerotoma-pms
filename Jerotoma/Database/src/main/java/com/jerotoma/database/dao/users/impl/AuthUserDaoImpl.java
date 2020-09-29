@@ -218,7 +218,7 @@ public class AuthUserDaoImpl extends JdbcDaoSupport implements AuthUserDao {
 			String teacherSQL = new StringBuilder(builder.toString()).append(" INNER JOIN teachers te ON te.user_id = u.id ").toString();
 			String parentSQL = new StringBuilder(builder.toString()).append(" INNER JOIN parents pa ON pa.user_id = u.id ").toString();
 			String staffSQL = new StringBuilder(builder.toString()).append(" INNER JOIN staffs sta ON sta.user_id = u.id ").toString();			
-			unionBuilder.append(studentSQL).append(" UNION ").append(teacherSQL).append(" UNION ").append(parentSQL).append(" UNION ").append(staffSQL);
+			unionBuilder.append("SELECT * FROM ( ").append("(").append(studentSQL).append(") UNION (").append(teacherSQL).append(") UNION (").append(parentSQL).append(") UNION (").append(staffSQL).append(") ").append(") temp ");
 		}				
 		return isSearch ? unionBuilder : builder;
 	}

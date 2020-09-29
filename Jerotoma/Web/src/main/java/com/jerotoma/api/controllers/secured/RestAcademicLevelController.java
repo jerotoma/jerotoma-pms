@@ -27,6 +27,8 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.utils.validators.AcademicLevelValidator;
+import com.jerotoma.common.viewobjects.StudentVO;
+import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.courses.AcademicLevelService;
 
@@ -36,6 +38,7 @@ public class RestAcademicLevelController extends BaseController implements Contr
 	
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
+	@Autowired AssemblerStudentService assemblerStudentService;
 
 	@GetMapping
 	@Override
@@ -120,7 +123,26 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		}
 		return response;
 	}
-
+	
+	@GetMapping("/students/{studentId}")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadAvailableAcademicLevelsByStudentId(Authentication auth, @PathVariable(required = true, value = "studentId") Integer studentId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			StudentVO student = assemblerStudentService.findObject(studentId);
+			response.setData(assemblerAcademicLevelService.loadAvailableAcademicLevelsByStudentId(student.getProgramId(), studentId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
 	
 	@PutMapping
 	@Override

@@ -15,7 +15,8 @@ export class SearchUserComponent implements OnInit {
 
   @Input('userType') userType: string =  USER_TYPE.ALL;
   @Input('user') user: User  = null;
-  @Input('title') title: string = 'Login Cridentials';
+  @Input('title') title: string = 'Search for User';
+  @Input('placeholder') placeholder: string = 'Search for User';
   @Output() onUserSelected: EventEmitter<User> = new EventEmitter();
 
   userForm: FormGroup;

@@ -12,4 +12,6 @@ public interface AssemblerAcademicLevelService extends AssemblerService<Academic
 	public List<AcademicLevelVO> loadUnAddedAcademicLevelByProgram(Integer programId) throws SQLException;
 
 	public List<AcademicLevelVO> loadAcademicLevelByProgram(Integer programId) throws SQLException;
+
+	public List<AcademicLevelVO> loadAvailableAcademicLevelsByStudentId(Integer programId, Integer studentId) throws SQLException;
 }

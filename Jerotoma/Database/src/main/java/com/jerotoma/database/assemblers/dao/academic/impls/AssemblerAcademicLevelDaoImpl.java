@@ -140,4 +140,14 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 		StringBuilder queryBuilder  = getBaseSelectQuery().append("WHERE al.id IN (SELECT pal.academic_level_id FROM program_academic_levels pal WHERE pal.program_id = ?)");		
 		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(), programId);
 	}
+
+	@Override
+	public List<AcademicLevelVO> loadAvailableAcademicLevelsByStudentId(Integer programId, Integer studentId) {
+		StringBuilder queryBuilder  = getBaseSelectQuery()
+				.append("WHERE al.id IN (")
+				.append("SELECT pal.academic_level_id FROM program_academic_levels pal ")
+				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id <> pal.academic_level_id ")				
+				.append(" WHERE pal.program_id = ? AND sal.student_id = ? )");		
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(), programId, studentId);
+	}
 }

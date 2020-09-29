@@ -1,4 +1,4 @@
-package com.jerotoma.database.dao.courses.impl;
+package com.jerotoma.database.dao.academic.impl;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import com.jerotoma.common.constants.AcademicConstants;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.database.dao.DaoUtil;
-import com.jerotoma.database.dao.courses.AcademicYearDao;
+import com.jerotoma.database.dao.academic.AcademicYearDao;
 
 @Repository
 @Transactional

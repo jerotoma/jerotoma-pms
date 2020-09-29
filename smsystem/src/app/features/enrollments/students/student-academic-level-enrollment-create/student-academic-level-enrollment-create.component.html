@@ -4,25 +4,18 @@
       <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
         <nb-card-header status="danger">{{ title }}</nb-card-header>
         <nb-card-body>
-          <app-search-user></app-search-user>
           <div class="row">
-            <div class="col-md-6">
-              <div class="form-control-group">
-                  <label for="course-program" class="label">Program</label>
-                  <nb-select
-                      fullWidth
-                      placeholder="Program"
-                      formControlName="programId"
-                      id="course-program">
-                      <nb-option
-                          *ngFor='let program of programs'
-                          [value]="program.id">
-                          {{program.name}}
-                      </nb-option>
-                    </nb-select>
-              </div>
+            <div class="col-md-12">
+              <app-search-user
+                [title]="'Search for Student'"
+                [placeholder]="'Type Student Initial'"
+                [userType]="userType"
+                (onUserSelected)="setSelectedUser($event)"
+              ></app-search-user>
             </div>
-            <div class="col-md-6">
+          </div>
+          <div class="row">
+            <div class="col-md-12">
               <div class="form-control-group">
                   <label for="class-academicLevel" class="label">Academic Level</label>
                   <nb-select
@@ -37,37 +30,6 @@
                     </nb-option>
                   </nb-select>
               </div>
-            </div>
-          </div>
-          <div class="lists row">
-            <div class="col-md-12">
-                <div class="form-control-group">
-                  <nb-card class="list-card" accent="success" *ngIf="students && students.length > 0 ">
-                    <nb-card-header>Choose Students
-                      <nb-checkbox
-                      (checkedChange)="checkAllStudentBoxes($event)"
-                      status="success"
-                      class="push-right">Check All</nb-checkbox>
-                    </nb-card-header>
-                    <nb-card-body
-                      [nbSpinner]="isLoading"
-                      nbSpinnerStatus="success"
-                      nbSpinnerSize="large"
-                      nbSpinnerMessage="Loading Scheduled Students....">
-                      <nb-list>
-                        <nb-list-item *ngFor="let student of students">
-                          <nb-checkbox
-                          [id]="'student-'+ student?.id"
-                          [checked]="checkAllStudents"
-                          (checkedChange)="studentCheckedChange($event, student) "
-                          status="success">
-                          {{student?.fullName}}
-                        </nb-checkbox>
-                        </nb-list-item>
-                      </nb-list>
-                    </nb-card-body>
-                  </nb-card>
-                </div>
             </div>
           </div>
           <div class="row">

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
+import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ParentConstant;
@@ -39,7 +40,9 @@ import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Department;
+import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
@@ -71,6 +74,7 @@ import com.jerotoma.services.assemblers.academic.DepartmentService;
 import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.ProgramService;
 import com.jerotoma.services.positions.PositionService;
+import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.ParentAddressService;
 import com.jerotoma.services.users.ParentService;
 import com.jerotoma.services.users.StaffAddressService;
@@ -103,6 +107,7 @@ public class RestUserController extends BaseController {
 	@Autowired DepartmentService departmentService;
 	@Autowired ProgramService programService;
 	@Autowired AcademicLevelService academicLevelService;
+	@Autowired StudentAcademicLevelService studentAcademicLevelService;
 	@Autowired AssemblerProgramService assemblerProgramService;
 		
 	@GetMapping(value= {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
@@ -348,10 +353,14 @@ public class RestUserController extends BaseController {
 				if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
 					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
 				}
-				student.setProgram(programService.findObject(student.getProgramId()));	
-				student.setCurrentAcademicLevel(academicLevelService.findObject(student.getAcademicLevelId()));
+				student.setProgram(programService.findObject(student.getProgramId()));
+				
+				AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
+				student.setAcademicLevelId(academicLevel.getId());
 				
 				student = studentService.createObject(student);
+				
+				studentAcademicLevelService.createObject(new StudentAcademicLevel(student, academicLevel, CompletionStatus.IN_PROGRESS));
 								
 				address.setUpdatedBy(authUser.getId());
 				address = addressService.createObject(address);
@@ -587,9 +596,14 @@ public class RestUserController extends BaseController {
 					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
 				}
 				mStudent.setProgram(programService.findObject(student.getProgramId()));	
-				mStudent.setCurrentAcademicLevel(academicLevelService.findObject(student.getAcademicLevelId()));
+				
+				AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
+				mStudent.setAcademicLevelId(academicLevel.getId());
 				
 				address = mStudent.getAddress();
+				
+				Set<StudentAcademicLevel>  studentAcademicLevels = mStudent.getStudentAcademicLevels();
+				student.setStudentAcademicLevels(studentAcademicLevels);
 				
 				if (mStudent.getParentIds() != null) {
 					Set<Parent> parents = new HashSet<>();

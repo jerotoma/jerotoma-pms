@@ -15,7 +15,6 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.users.AuthUserDao;
 
 @Service

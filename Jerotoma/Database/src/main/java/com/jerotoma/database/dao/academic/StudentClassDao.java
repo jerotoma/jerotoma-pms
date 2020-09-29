@@ -1,4 +1,4 @@
-package com.jerotoma.database.dao.courses;
+package com.jerotoma.database.dao.academic;
 
 import java.sql.SQLException;
 import java.util.List;

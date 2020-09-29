@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.viewobjects.StudentVO;
-import com.jerotoma.database.dao.courses.StudentAcademicLevelDao;
+import com.jerotoma.database.dao.academic.StudentAcademicLevelDao;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 
 @Service
