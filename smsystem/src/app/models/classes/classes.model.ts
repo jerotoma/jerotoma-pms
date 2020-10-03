@@ -22,7 +22,7 @@ export interface ClassAdmission {
   capacity: number;
 }
 
-export interface StudentClass {
+export interface StudentAcademicLevel {
   id: number;
   student: Student;
   academicYear: AcademicYear;

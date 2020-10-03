@@ -50,7 +50,7 @@ public class DatabaseConstant {
 		public static final String MEDIA = "media";
 		public static final String USER_MEDIA = "user_media";
 		
-		public static final String ORDER_OF_COMPLETIONS = "order_of_completions";
+		public static final String COMPLETION_ORDERS = "completion_orders";
 	}
 	
 	

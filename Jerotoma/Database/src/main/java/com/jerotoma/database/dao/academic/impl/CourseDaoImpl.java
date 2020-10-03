@@ -33,7 +33,7 @@ public class CourseDaoImpl implements CourseDao {
 
 	@Override
 	public Course findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return entityManager.createQuery("FROM Course WHERE code := ?", Course.class).setParameter("code", uniqueKey).getSingleResult();
+		return entityManager.createQuery("FROM Course WHERE code = :code ", Course.class).setParameter("code", uniqueKey).getSingleResult();
 	}
 
 	@Override

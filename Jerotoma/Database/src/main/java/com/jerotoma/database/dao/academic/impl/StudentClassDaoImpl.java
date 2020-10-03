@@ -107,4 +107,36 @@ public class StudentClassDaoImpl implements StudentClassDao {
 		}
 		return studentClassList;
 	}
+
+	@Override
+	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId, Integer academicYearId)
+			throws SQLException {
+		return entityManager.createQuery("FROM StudentClass WHERE mClas.id = :classId AND studentAcademicLevel.id = :studentAcademicLevelId AND academicYear.id = :academicYearId", StudentClass.class)
+				.setParameter("classId", classId)
+				.setParameter("studentAcademicLevelId", studentAcademicLevelId)
+				.setParameter("academicYearId", academicYearId)
+				.getSingleResult();
+	}
+
+	@Override
+	public List<StudentClass> updateBatchObject(List<StudentClass> studentClasses) throws SQLException {
+		List<StudentClass> studentClassList = new ArrayList<>();
+		int i = 0;
+		for (StudentClass studentClass : studentClasses) {
+			
+			if (studentClass.getId() == null) {
+				entityManager.persist(studentClass);				
+			} else {
+				entityManager.merge(studentClass);
+			}
+			studentClassList.add(studentClass);
+			i++;
+		    if (i % batchSize == 0) {
+		      // Flush a batch of inserts and release memory.
+		      entityManager.flush();
+		      entityManager.clear();
+		    }
+		}
+		return studentClassList;
+	}
 }

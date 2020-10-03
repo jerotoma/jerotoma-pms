@@ -27,7 +27,7 @@ import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
 import com.jerotoma.common.viewobjects.RoomVO;
-import com.jerotoma.common.viewobjects.StudentClassVO;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelVO;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
@@ -37,12 +37,12 @@ import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerStudentClassDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerStudentAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.schedules.AssemblerMeetingTimeDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 @Repository
-public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements AssemblerStudentClassDao {
+public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport implements AssemblerStudentAcademicLevelDao {
 	
 	
 	private JdbcTemplate jdbcTemplate;
@@ -67,18 +67,18 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		this.jdbcTemplate = getJdbcTemplate();
 	}
 	@Override
-	public StudentClassVO findObject(Integer primaryKey) throws SQLException {
+	public StudentAcademicLevelVO findObject(Integer primaryKey) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE sal.id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), primaryKey);
 	}
 
 	@Override
-	public StudentClassVO findObjectUniqueKey(String uniqueKey) throws SQLException {
+	public StudentAcademicLevelVO findObjectUniqueKey(String uniqueKey) throws SQLException {
 		throw new RuntimeException("findObjectUniqueKey has not been implemented yet");
 	}
 
 	@Override
-	public List<StudentClassVO> loadList() throws SQLException {
+	public List<StudentAcademicLevelVO> loadList() throws SQLException {
 		StringBuilder builder = getBaseSelectQuery();				
 		return this.jdbcTemplate.query(builder.toString(), new StudentClassResultProcessor());
 	}
@@ -99,7 +99,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		
 		Object[] paramList = new Object[] {limit, offset};
 		
-		List<StudentClassVO> classes = this.jdbcTemplate.query(builder.toString(), new StudentClassResultProcessor(), paramList);
+		List<StudentAcademicLevelVO> classes = this.jdbcTemplate.query(builder.toString(), new StudentClassResultProcessor(), paramList);
 		map.put(StudentConstant.Class.STUDENT_CLASSES, classes);
 		map.put(StudentConstant.Class.COUNT, countResults);
 		map.put(SystemConstant.PAGE_COUNT, pageCount);
@@ -107,17 +107,17 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		return map;
 	}
 	
-	public class StudentClassResultProcessor implements RowMapper<StudentClassVO>{
+	public class StudentClassResultProcessor implements RowMapper<StudentAcademicLevelVO>{
 		@Override
-		public StudentClassVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public StudentAcademicLevelVO mapRow(ResultSet rs, int rowNum) throws SQLException {
 			return mapStudentClassResult(rs);
 		}		
 	}
 	
-	public class StudentClassSingleResultProcessor implements ResultSetExtractor<StudentClassVO>{
+	public class StudentClassSingleResultProcessor implements ResultSetExtractor<StudentAcademicLevelVO>{
 		@Override
-		public StudentClassVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			StudentClassVO jClass = null;
+		public StudentAcademicLevelVO extractData(ResultSet rs) throws SQLException, DataAccessException {
+			StudentAcademicLevelVO jClass = null;
 			if(rs.next()) {
 				jClass = mapStudentClassResult(rs);	
 				jClass.setJClasses(findStudentClassesByStudentIdAndAndAcademicLevelID(jClass.getStudent().getId(), jClass.getAcademicLevel().getId()));
@@ -139,8 +139,9 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	
 	private StringBuilder getBaseSelectQuery() {		
 		return new StringBuilder("SELECT sal.id, sal.student_id AS studentId, sal.completion_status_id AS completionStatusId, ")
-				.append(" (SELECT COUNT(*) FROM public.student_classes sc WHERE sc.student_academic_level_id = sal.id) AS classesCount, ")
-				.append(" sal.academic_level_id AS academicLevelId, sal.updated_by AS updatedBy, sal.created_on AS createdOn, sal.updated_on AS updatedOn FROM public.student_academic_levels sal ");
+				.append("(SELECT COUNT(*) FROM public.student_classes sc WHERE sc.student_academic_level_id = sal.id) AS classesCount, ")
+				.append("sal.academic_level_id AS academicLevelId, sal.updated_by AS updatedBy, sal.created_on AS createdOn, sal.updated_on AS updatedOn ")
+				.append("FROM public.student_academic_levels sal ");
 		
 	}
 
@@ -151,8 +152,8 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	
-	public StudentClassVO mapStudentClassResult(ResultSet rs) throws SQLException {
-		StudentClassVO jClass = new StudentClassVO(rs);
+	public StudentAcademicLevelVO mapStudentClassResult(ResultSet rs) throws SQLException {
+		StudentAcademicLevelVO jClass = new StudentAcademicLevelVO(rs);
 		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);		
 		int academiLevelId = rs.getInt(StudentConstant.Class.ACADEMIC_LEVEL_ID);		
 		jClass.setAcademicLevel(loadAcademicLevel(academiLevelId));		
@@ -171,14 +172,14 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 		return assemblerAcademicYearDao.findObject(academicYearId);
 	}
 	@Override
-	public StudentClassVO findStudentClassByParams(Integer studentId, Integer classId) {
+	public StudentAcademicLevelVO findStudentClassByParams(Integer studentId, Integer classId) {
 		String query = getBaseSelectQuery()
-				.append("INNER JOIN public.student_registered_classes src ON src.student_class_id = sc.id")
+				.append("INNER JOIN public.student_classes src ON sc.student_academic_level_id = sal.id")
 				.append("WHERE sc.student_id = ? AND src.class_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId, classId);
 	}
 	@Override
-	public StudentClassVO findStudentClassesByStudentId(Integer studentId) throws SQLException {
+	public StudentAcademicLevelVO findStudentClassesByStudentId(Integer studentId) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE sc.student_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
 	}
@@ -191,9 +192,9 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 				.append(" cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, ")
 				.append(" cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn ")
 				.append("FROM public.classes cl ")
-				.append("INNER JOIN public.student_registered_classes src ON src.class_id = cl.id ")
-				.append("INNER JOIN public.student_classes sc ON sc.id = src.student_class_id ")
-				.append("WHERE sc.student_id = ? AND sc.academic_level_id = ? ");
+				.append("INNER JOIN public.student_classes sc ON sc.class_id = cl.id ")
+				.append("INNER JOIN public.student_academic_levels sal ON sal.id = sc.student_academic_level_id ")				
+				.append("WHERE sal.student_id = ? AND sal.academic_level_id = ? ");
 		
 		return this.jdbcTemplate.query(builder.toString(), new RowMapper<ClassVO>() {
 			@Override

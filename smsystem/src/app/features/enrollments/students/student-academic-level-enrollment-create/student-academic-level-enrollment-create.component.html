@@ -1,95 +1,99 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="studentClassForm" class="step-container" (ngSubmit)="onSubmit()">
-      <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
-        <nb-card-header status="danger">{{ title }}</nb-card-header>
-        <nb-card-body>
-          <div class="row">
-            <div class="col-md-12">
-              <app-search-user
-                [title]="'Search for Student'"
-                [placeholder]="'Type Student Initial'"
-                [userType]="userType"
-                (onUserSelected)="setSelectedUser($event)"
-              ></app-search-user>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-control-group">
-                  <label for="class-academicLevel" class="label">Academic Level</label>
-                  <nb-select
-                    fullWidth
-                    placeholder="Course Academic Level"
-                    formControlName="academicLevelId"
-                    id="class-academicLevel">
-                    <nb-option
-                        *ngFor='let acad of academicLevels'
-                        [value]="acad?.id">
-                        {{acad?.name}} - {{acad?.code}}
-                    </nb-option>
-                  </nb-select>
+        <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+          <nb-card-header status="danger">{{ title }}</nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div class="col-md-12">
+                  <div class="form-control-group" *ngIf="currentAcademicYear">
+                      <label for="class-academicYear" class="label">Current Academic Year</label>
+                      <p>{{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}</p>
+                  </div>
+                  <nb-alert status="warning" *ngIf="!currentAcademicYear">
+                    The system user theme override is OFF
+                  </nb-alert>
               </div>
             </div>
-          </div>
-          <div class="row">
+            <div class="row">
               <div class="col-md-12">
+                <app-search-user
+                  [title]="'Search for Student'"
+                  [placeholder]="'Type Student Initial'"
+                  [userType]="userType"
+                  (onUserSelected)="setSelectedUser($event)"
+                ></app-search-user>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-control-group">
+                  <div class="form-control-group" *ngIf="currentAcademicYear">
+                    <label for="student-program" class="label">Student Program</label>
+                    <p>{{student?.programName}}</p>
+                  </div>
+                </div>
+                <nb-alert status="warning" *ngIf="!currentAcademicYear">
+                  The system user theme override is OFF
+                </nb-alert>
+              </div>
+              <div class="col-md-6">
                   <div class="form-control-group">
-                      <label for="class-academicYear" class="label">Class Academic Year</label>
+                      <label for="class-academicLevel" class="label">Academic Level</label>
                       <nb-select
                         fullWidth
-                        placeholder="Class Academic Year"
-                        formControlName="academicYearId"
-                        id="class-academicYear">
+                        placeholder="Course Academic Level"
+                        formControlName="academicLevelId"
+                        id="class-academicLevel">
                         <nb-option
-                            *ngFor='let acad of academicYears'
+                            *ngFor='let acad of academicLevels'
                             [value]="acad?.id">
-                            {{acad?.name}} - {{acad?.yearOfStudy}}
+                            {{acad?.name}} - {{acad?.code}}
                         </nb-option>
                       </nb-select>
                   </div>
               </div>
-          </div>
-          <div class="lists row">
-            <div class="col-md-12">
-                <div class="form-control-group">
-                  <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && academicYear">
-                    <nb-card-header>
-                      Choose courses from a list of available courses for {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
-                      <nb-checkbox
-                      (checkedChange)="checkAllCourseBoxes($event)"
-                      status="success"
-                      class="push-right">Check All</nb-checkbox>
-                    </nb-card-header>
-                    <nb-card-body
-                      [nbSpinner]="isLoading"
-                      nbSpinnerStatus="success"
-                      nbSpinnerSize="large"
-                      nbSpinnerMessage="Loading Scheduled Courses....">
-                      <nb-list>
-                        <nb-list-item *ngFor="let jClass of jClasses">
-                          <nb-checkbox
-                          [id]="'jClass-'+ jClass?.id"
-                          [checked]="checkAllCourses"
-                          status="success"
-                          (checkedChange)="checkedChange($event, jClass)"
-                          >{{jClass.course.name}}
-                        </nb-checkbox>
-                        </nb-list-item>
-                      </nb-list>
-                    </nb-card-body>
-                  </nb-card>
-                </div>
             </div>
-          </div>
-        </nb-card-body>
-        <nb-card-footer>
-          <div class="form-control-group">
-            <button class='push-right' [disabled]="!studentClassForm.valid" type="submit" nbButton hero status="success">Create Class</button>
-            <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
-          </div>
-        </nb-card-footer>
-      </nb-card>
+            <div class="lists row">
+              <div class="col-md-12">
+                  <div class="form-control-group">
+                    <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && academicYear">
+                      <nb-card-header>
+                        Choose courses from a list of available courses for {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
+                        <nb-checkbox
+                        (checkedChange)="checkAllCourseBoxes($event)"
+                        status="success"
+                        class="push-right">Check All</nb-checkbox>
+                      </nb-card-header>
+                      <nb-card-body
+                        [nbSpinner]="isLoading"
+                        nbSpinnerStatus="success"
+                        nbSpinnerSize="large"
+                        nbSpinnerMessage="Loading Scheduled Courses....">
+                        <nb-list>
+                          <nb-list-item *ngFor="let jClass of jClasses">
+                            <nb-checkbox
+                            [id]="'jClass-'+ jClass?.id"
+                            [checked]="checkAllCourses"
+                            status="success"
+                            (checkedChange)="checkedChange($event, jClass)"
+                            >{{jClass.course.name}}
+                          </nb-checkbox>
+                          </nb-list-item>
+                        </nb-list>
+                      </nb-card-body>
+                    </nb-card>
+                  </div>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer>
+            <div class="form-control-group">
+              <button class='push-right' [disabled]="!studentClassForm.valid" type="submit" nbButton hero status="success">Create Class</button>
+              <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            </div>
+          </nb-card-footer>
+        </nb-card>
   </form>
 </div>
 </div>

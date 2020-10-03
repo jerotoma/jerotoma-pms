@@ -137,6 +137,26 @@
 	   	CONSTRAINT programs_pkey PRIMARY KEY (id)
 	    );
 	    
+	    
+	     /**************************************************************
+		 * 															  *
+		 * 															  *
+		 * 			COMPLETED_ACADEMIC_LEVELS RELATED TABLES		  *
+		 * 															  *
+		 *************************************************************/
+		
+		  -- Tables for menus
+		  
+	CREATE TABLE IF NOT EXISTS public.completion_orders(
+	    id bigserial NOT NULL,
+	    completion_order bigint NOT NULL,	    
+	    name character varying,	    
+	   	updated_by bigint NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    UNIQUE(completion_order),
+	   	CONSTRAINT completion_orders_pkey PRIMARY KEY(id));
+	    
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -148,7 +168,21 @@
 	 	id bigserial NOT NULL,
     	program_id BIGINT NOT NULL,
     	academic_level_id BIGINT NOT NULL,
-    	UNIQUE(program_id, academic_level_id)
+    	completion_order_id BIGINT NOT NULL,
+    	UNIQUE(program_id, academic_level_id, completion_order_id),
+	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
+        	REFERENCES public.programs (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id)
+        	REFERENCES public.users (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        CONSTRAINT completion_orders_fkey FOREIGN KEY (completion_order_id)
+        	REFERENCES public.completion_orders (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+	        
     );
 	    
 	    
@@ -771,12 +805,15 @@
 	        ON DELETE CASCADE
 	    );
 	    
-	CREATE TABLE IF NOT EXISTS public.student_classes(
+	CREATE TABLE IF NOT EXISTS public.student_classes( 
 		id bigserial NOT NULL,
 	    class_id bigint NOT NULL,
 	    student_academic_level_id bigint NOT NULL,
 	    academic_year_id bigint NOT NULL,
 	    completion_status_id bigint NOT NULL,
+	    created_on timestamp with time zone NOT NULL default now(),
+	    updated_on timestamp with time zone NOT NULL,
+	    updated_by bigint NOT NULL,
 	    CONSTRAINT student_classes_pkey PRIMARY KEY(id),
 	   	UNIQUE(class_id, student_academic_level_id, academic_year_id),	   
 	   	CONSTRAINT classes_fkey FOREIGN KEY (class_id)
@@ -820,7 +857,6 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
-	    
 	    
 	    /**************************************************************
 		 * 															  *

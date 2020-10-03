@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.jerotoma.common.constants.StudentConstant;
 
-public class StudentClassVO {
+public class StudentAcademicLevelVO {
 	
 	private Integer id;
 	
@@ -26,7 +26,7 @@ public class StudentClassVO {
 	
 	private Date updatedOn;
 	
-	public StudentClassVO(ResultSet rs) throws SQLException {
+	public StudentAcademicLevelVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(StudentConstant.Class.ID);
 		this.classesCount = rs.getInt(StudentConstant.Class.CLASSES_COUNT);
 		this.updatedOn = rs.getDate(StudentConstant.Class.UPDATED_ON);

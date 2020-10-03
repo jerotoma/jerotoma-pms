@@ -60,4 +60,15 @@ public class StudentClassServiceImpl implements StudentClassService {
 		return studenClassDao.createBatchObject(studentClasses);
 	}
 
+	@Override
+	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId, Integer academicYearId)
+			throws SQLException {
+		return studenClassDao.findStudentClass(classId, studentAcademicLevelId, academicYearId);
+	}
+
+	@Override
+	public List<StudentClass> updateBatchObject(List<StudentClass> studentClasses) throws SQLException {
+		return studenClassDao.updateBatchObject(studentClasses);
+	}
+
 }

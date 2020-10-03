@@ -13,21 +13,21 @@ import javax.persistence.Table;
 import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
-@Table(name = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS)
-public class OrderOfCompletion {
+@Table(name = DatabaseConstant.TABLES.COMPLETION_ORDERS)
+public class CompletionOrder {
 	
 	@Id
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE, 
-			generator = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_generator")
+			generator = DatabaseConstant.TABLES.COMPLETION_ORDERS + "_generator")
 	@SequenceGenerator(
-			name = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_generator", 
-			sequenceName = DatabaseConstant.TABLES.ORDER_OF_COMPLETIONS + "_id_seq", 
+			name = DatabaseConstant.TABLES.COMPLETION_ORDERS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.COMPLETION_ORDERS + "_id_seq", 
 			allocationSize=1)
 	@Column
 	private Integer id;
 	
-	@Column
+	@Column(name="completion_order")
 	private Integer completionOrder;
 	
 	@Column
@@ -39,7 +39,7 @@ public class OrderOfCompletion {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	public OrderOfCompletion() {}
+	public CompletionOrder() {}
 
 	public Integer getId() {
 		return id;

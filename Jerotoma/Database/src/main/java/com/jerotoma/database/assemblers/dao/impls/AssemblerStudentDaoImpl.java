@@ -162,7 +162,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 
 	@Override
 	public List<StudentVO> loadStudentsByJClassID(Integer classId) {
-		String query = "SELECT sc.student_id FROM public.student_classes sc INNER JOIN public.student_registered_classes src ON src.student_class_id = sc.id WHERE class_id = ?";
+		String query = "SELECT sal.student_id FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id WHERE sc.class_id = ?";
 		
 		return this.jdbcTemplate.query(query, new Object[] {classId}, new RowMapper<StudentVO>() {
 			@Override

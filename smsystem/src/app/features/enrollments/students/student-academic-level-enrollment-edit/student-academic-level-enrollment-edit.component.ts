@@ -6,7 +6,7 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 
 import { NbDialogRef } from '@nebular/theme';
 import {
-  StudentClassService,
+  StudentAcademicLevelService,
   ClassService,
   ModalService,
   AcademicYearService,
@@ -19,7 +19,7 @@ import {
   Student,
   AcademicYear,
   AcademicLevel,
-  StudentClass,
+  StudentAcademicLevel,
 } from 'app/models';
 import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
@@ -31,7 +31,7 @@ import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 })
 export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   @Input() title: string;
-  @Input() studentClass: StudentClass;
+  @Input() studentClass: StudentAcademicLevel;
   @Output() onCreationSuccess = new EventEmitter();
 
   userType: string = USER_TYPE.STUDENT;
@@ -59,12 +59,12 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     userType: this.userType,
   };
 
-  registeredJClasses: ClassView[];
-  jClasses: ClassView[];
+  registeredClasses: ClassView[];
+  classViews: ClassView[];
   academicYears: AcademicYear[];
   student: Student;
   students: Student[];
-  studentClassForm: FormGroup;
+  studentAcademicLevelForm: FormGroup;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -77,7 +77,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     private academicLevelService: AcademicLevelService,
     private classService: ClassService,
     private modalService: ModalService,
-    private studentClassService: StudentClassService,
+    private studentClassService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentAcademicLevelEnrollmentEditComponent>) {}
 
@@ -97,29 +97,29 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
 
   onSubmit() {
     this.confirmed = false;
-    this.studentClassAdmission = this.studentClassForm.value;
+    this.studentClassAdmission = this.studentAcademicLevelForm.value;
     this.updateStudentClass();
   }
   updateStudentClass() {
-    this.studentClassService.updateStudentClass(this.studentClassAdmission)
+    this.studentClassService.updateStudentAcademicLevel(this.studentClassAdmission)
           .subscribe((result: StudentClassAdmission) => {
             if (result) {
               const resp = result;
               this.confirmed = true;
-              this.studentClassForm.reset();
+              this.studentAcademicLevelForm.reset();
               this.dismiss();
               this.modalService.openSnackBar('Student Class has been updated', 'success');
             }
           });
   }
-  removeJClass(event: any, jClass: ClassView, isRemoveJClass: boolean) {
+  removeJClass(event: any, classView: ClassView, isRemoveJClass: boolean) {
     event.preventDefault();
     event.stopPropagation();
     if (isRemoveJClass) {
-      this.checkedChange(false, jClass);
-      for (let i = 0; i < this.registeredJClasses.length; i++) {
-        if ( this.registeredJClasses[i].id === jClass.id) {
-          this.registeredJClasses.splice(i, 1);
+      this.checkedChange(false, classView);
+      for (let i = 0; i < this.registeredClasses.length; i++) {
+        if ( this.registeredClasses[i].id === classView.id) {
+          this.registeredClasses.splice(i, 1);
         }
      }
     }
@@ -134,30 +134,30 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
         }
      }
     }
-    this.studentClassForm.patchValue({
+    this.studentAcademicLevelForm.patchValue({
       jClassIds: this.jClassIds,
     });
   }
   loadForm() {
-    this.studentClassForm = this.formBuilder.group({
+    this.studentAcademicLevelForm = this.formBuilder.group({
       id: [null],
       academicYearId: ['', Validators.required],
       academicLevelId: ['', Validators.required],
       jClassIds: [[], Validators.required],
-      studentIds: ['', Validators.required],
+      studentId: ['', Validators.required],
       fullName: ['', Validators.required],
     });
     this.onChanges();
   }
 
   onChanges() {
-    this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
+    this.studentAcademicLevelForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
       if (academicLevelId) {
         this.setCurrentAcademicLevel(academicLevelId);
       }
     });
 
-    this.studentClassForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
+    this.studentAcademicLevelForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
       if (academicYearId != null) {
         this.academicYears.forEach(academicYear => {
           if (academicYear.id === academicYearId) {
@@ -187,7 +187,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
       if (academicLevels) {
         this.academicLevels = academicLevels;
         this.setCurrentAcademicLevel(this.studentClass.student.academicLevelId);
-        this.studentClassForm.patchValue({
+        this.studentAcademicLevelForm.patchValue({
           academicLevelId: this.studentClass.student.academicLevelId,
         }, {emitEvent: false});
       }
@@ -206,7 +206,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     this.isLoading = true;
     this.classService.loadUnregisteredClassesByStudent(studentId, academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
       if (jClassViews && jClassViews.length > 0) {
-        this.jClasses = jClassViews;
+        this.classViews = jClassViews;
       } else {
         this.modalService.openSnackBar('No more classes were found', 'success');
       }
@@ -217,7 +217,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   loadJClassesByAcademicYear(academicYearId: number) {
     this.isLoading = true;
     this.classService.loadJClassesByAcademicYear(academicYearId).subscribe((jClassViews: ClassView[]) => {
-      this.jClasses = jClassViews;
+      this.classViews = jClassViews;
       this.isLoading = false;
     });
   }
@@ -231,18 +231,17 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     });
   }
 
-  loadStudentClasses(sc: StudentClass) {
-    this.studentClassService.getStudentClass(sc.id).subscribe((studentClass: StudentClass) => {
-      if (studentClass) {
-        this.loadAcademicLevelsByProgramId(studentClass.student.programId);
-        this.student = studentClass.student;
-        this.academicYear = studentClass.academicYear;
-        this.registeredJClasses = studentClass.jClasses;
-        this.jClassIds =  this.pushJClasses(this.registeredJClasses),
-        this.studentClassForm.patchValue({
-          id: studentClass.id,
-          studentIds: [this.student.id],
-          academicYearId: this.academicYear.id,
+  loadStudentClasses(sc: StudentAcademicLevel) {
+    this.studentClassService.getStudentAcademicLevel(sc.id).subscribe((studentAcademicLevel: StudentAcademicLevel) => {
+      if (studentAcademicLevel) {
+        this.loadAcademicLevelsByProgramId(studentAcademicLevel.student.programId);
+        this.student = studentAcademicLevel.student;
+        this.academicYear = studentAcademicLevel.academicYear;
+        this.registeredClasses = studentAcademicLevel.jClasses;
+        this.jClassIds =  this.pushJClasses(this.registeredClasses),
+        this.studentAcademicLevelForm.patchValue({
+          id: studentAcademicLevel.id,
+          studentId: this.student.id,
           fullName: this.student.fullName,
           jClassIds: this.jClassIds,
         }, {emitEvent: false});
@@ -251,7 +250,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   }
   patchStudent(student: Student) {
     this.student = student;
-    this.studentClassForm.patchValue({
+    this.studentAcademicLevelForm.patchValue({
       studentId: student.id,
     });
   }
@@ -265,9 +264,9 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   }
 
   removeItemFromArray(jClasses: ClassView[], jClass: ClassView) {
-    for (let i = 0; i < this.jClasses.length; i++) {
-      if ( this.jClasses[i].id === jClass.id) {
-        this.jClasses.splice(i, 1);
+    for (let i = 0; i < this.classViews.length; i++) {
+      if ( this.classViews[i].id === jClass.id) {
+        this.classViews.splice(i, 1);
       }
    }
    return jClasses;

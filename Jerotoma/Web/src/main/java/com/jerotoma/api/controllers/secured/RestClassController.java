@@ -282,13 +282,13 @@ public class RestClassController extends BaseController {
 						));
 		Class mClass = new Class();
 		Class.ClassFields classFields = ClassValidator.validate(params, requiredFields);
-		
+		MeetingTime meetingTime = null;
+		Room room = null;
+		Program program = null;
+		AcademicLevel academicLevel = null;
 		
 		try {
-			MeetingTime meetingTime = null;
-			Room room = null;
-			Program program = null;
-			AcademicLevel academicLevel = null;
+			
 			User authUser = authUserService.loadUserByUsername(userContext.getUsername());
 			Teacher teacher = teacherService.findObject(classFields.getTeacherId());
 			Course course = courseService.findObject(classFields.getCourseId());

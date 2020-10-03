@@ -98,18 +98,18 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	}
 	
 	private AcademicLevelVO mapAcademicLevel(ResultSet rs) throws SQLException {
-		AcademicLevelVO program = new AcademicLevelVO(rs);		
-		return program;		
+		AcademicLevelVO academicLevel = new AcademicLevelVO(rs);		
+		return academicLevel;		
 	}
 	
 	public class AcademicLevelSingleResultProcessor implements ResultSetExtractor<AcademicLevelVO>{
 		@Override
 		public AcademicLevelVO extractData(ResultSet rs) throws SQLException, DataAccessException {
-			AcademicLevelVO program = null;
+			AcademicLevelVO academicLevel = null;
 			if(rs.next()) {
-				program = mapAcademicLevel(rs);		
+				academicLevel = mapAcademicLevel(rs);		
 			}
-			return program;
+			return academicLevel;
 		}				
 	}
 	

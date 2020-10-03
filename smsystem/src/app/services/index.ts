@@ -24,4 +24,3 @@ export * from './academic-levels';
 export * from './programs';
 export * from './storage';
 export * from './securities';
-export * from './student-academic-levels';

@@ -44,4 +44,10 @@ export class AcademicYearService {
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || 'Server error');
   }
+
+  getCurrentAcademicYear(): Observable<AcademicYear> {
+    return this.http
+      .get(`${API_END_POINTS.academicYears}/currentAcademicYear`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 }

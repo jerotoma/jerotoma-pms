@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { StudentClass, Student, AcademicYear, StudentClassAdmission, ClassView } from 'app/models';
-import { StudentClassService, AcademicYearService, ClassService } from 'app/services';
+import { StudentAcademicLevel, Student, AcademicYear, StudentClassAdmission, ClassView } from 'app/models';
+import { StudentAcademicLevelService, AcademicYearService, ClassService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
 @Component({
@@ -23,7 +23,7 @@ export class StudentAcademicLevelEnrollmentShowComponent implements OnInit {
   };
 
   title: string = 'List of Scheduled Courses';
-  studentClass: StudentClass;
+  studentClass: StudentAcademicLevel;
   student: Student;
   academicYearId: number;
   courseId: number;
@@ -39,7 +39,7 @@ export class StudentAcademicLevelEnrollmentShowComponent implements OnInit {
   constructor(
     private academicYearService: AcademicYearService,
     private classService: ClassService,
-    private studentClassService: StudentClassService,
+    private studentClassService: StudentAcademicLevelService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -59,8 +59,8 @@ export class StudentAcademicLevelEnrollmentShowComponent implements OnInit {
   }
 
   loadStudentClass(studentId: number) {
-    this.studentClassService.getStudentClass(studentId)
-      .subscribe((studentClass: StudentClass ) => {
+    this.studentClassService.getStudentAcademicLevel(studentId)
+      .subscribe((studentClass: StudentAcademicLevel ) => {
         if (studentClass) {
           this.studentClass = studentClass;
           this.student = this.studentClass.student;

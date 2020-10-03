@@ -22,15 +22,21 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
                 <td mat-cell *matCellDef="let element"> {{element.code}} </td>
               </ng-container>
+
+               <!-- Program Column -->
+               <ng-container matColumnDef="program">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Program </th>
+                <td mat-cell *matCellDef="let element"> {{element?.program?.name}} </td>
+              </ng-container>
                <!-- academicLevel Column -->
                <ng-container matColumnDef="academicLevel">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Level </th>
-                <td mat-cell *matCellDef="let element"> {{element.academicLevel.name}} - {{element.academicLevel.code}} </td>
+                <td mat-cell *matCellDef="let element"> {{element?.academicLevel?.name}} - {{element?.academicLevel?.code}} </td>
               </ng-container>
               <!-- description Column -->
-              <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
-                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              <ng-container matColumnDef="department">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Department </th>
+                <td mat-cell *matCellDef="let element"> {{element?.department?.name}} </td>
               </ng-container>
                <!-- action Column -->
               <ng-container matColumnDef="action">

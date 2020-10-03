@@ -4,14 +4,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.jerotoma.common.viewobjects.ClassVO;
-import com.jerotoma.common.viewobjects.StudentClassVO;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelVO;
 import com.jerotoma.services.AssemblerService;
 
-public interface AssemblerStudentClassService extends AssemblerService<StudentClassVO> {
+public interface AssemblerStudentAcademicLevelService extends AssemblerService<StudentAcademicLevelVO> {
 
-	public StudentClassVO findStudentClassIdByParams(Integer studentId, Integer classId) throws SQLException;
+	public StudentAcademicLevelVO findStudentClassIdByParams(Integer studentId, Integer classId) throws SQLException;
 
-	public StudentClassVO findStudentClassesByStudentId(Integer studentId) throws SQLException;
+	public StudentAcademicLevelVO findStudentClassesByStudentId(Integer studentId) throws SQLException;
 
 	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId) throws SQLException;
 

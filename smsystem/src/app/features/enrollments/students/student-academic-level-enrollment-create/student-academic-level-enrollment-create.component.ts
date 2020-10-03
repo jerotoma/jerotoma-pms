@@ -4,23 +4,22 @@ import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@ang
 
 import { NbDialogRef } from '@nebular/theme';
 import {
-  StudentClassService,
+  StudentAcademicLevelService,
   ClassService,
   AcademicYearService,
   ProgramService,
   AcademicLevelService,
-  StudentAcademicLevelService,
   UserService,
   ModalService,
  } from 'app/services';
-import { QueryParam, USER_TYPE } from 'app/utils';
+import { QueryParam, USER_TYPE, APP_CONSTANTS } from 'app/utils';
 import {
   ShowMessage,
   ClassView,
   StudentClassAdmission,
   Student,
   AcademicYear,
-  StudentClass,
+  StudentAcademicLevel,
   AcademicLevel,
   Program,
 } from 'app/models';
@@ -35,6 +34,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   @Input() action: string = 'create';
   @Input() studentId: string = '0';
   @Output() onCreationSuccess = new EventEmitter();
+  currentAcademicYearKey: string = APP_CONSTANTS.currentAcademicYear;
 
   userType: string = USER_TYPE.STUDENT;
 
@@ -49,6 +49,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   checkAllStudents: boolean = false;
   checkAllCourses: boolean = false;
   academicYear: AcademicYear;
+  currentAcademicYear: AcademicYear = null;
   studentClassAdmission: StudentClassAdmission;
 
   param: QueryParam =  {
@@ -64,7 +65,6 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   jClasses: ClassView[];
   academicYears: AcademicYear[];
   student: Student;
-  students: Student[];
   studentClassForm: FormGroup;
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
@@ -78,12 +78,11 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
 
   constructor(
     private modalService: ModalService,
-    private userService: UserService,
     private programService: ProgramService,
     private academicLevelService: AcademicLevelService,
     private academicYearService: AcademicYearService,
     private classService: ClassService,
-    private studentClassService: StudentClassService,
+    private studentClassService: StudentAcademicLevelService,
     private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentCourseEnrollmentCreateComponent>) {}
@@ -113,13 +112,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       studentId: student.id,
     });
     this.programId = student.programId;
+    this.student = student;
     this.loadAvailableAcademicLevelsByStudentId(student.id);
   }
 
   onSubmit() {
     this.confirmed = false;
     this.studentClassAdmission = this.studentClassForm.value;
-    this.studentClassService.createStudentClass(this.studentClassAdmission)
+    this.studentClassService.createStudentAcademicLevel(this.studentClassAdmission)
     .subscribe((result: StudentClassAdmission) => {
       const resp = result;
       this.confirmed = true;
@@ -164,42 +164,23 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       if (academicLevelId && programId) {
         this.academicLevelId = academicLevelId;
         this.jClasses = [];
-        this.loadStudentsByProgramAndAcademicLevelIDs(academicLevelId, programId);
-      }
-    });
-    this.studentClassForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-      if (academicYearId != null) {
-        this.academicYears.forEach(academicYear => {
-          if (academicYear.id === academicYearId) {
-            this.academicYear = academicYear;
-          }
-        });
-        this.loadJClassesByAcademicYear(academicYearId);
+        this.loadJClassesByAcademicYear(programId, academicLevelId, this.currentAcademicYear.id);
       }
     });
   }
 
   loadData() {
+    this.getCurrentAcademicYear();
     this.loadAcademicYears();
   }
 
-  loadStudentsByProgramAndAcademicLevelIDs(academicLevelId: number, programId: number) {
-    this.studentAcademicLevelService.loadStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(academicLevelId, programId).subscribe((students: Student[]) => {
-      this.students = students;
-      this.isLoading = false;
-    });
-  }
-
-  loadJClassesByAcademicYear(academicYearId: number) {
-    if (!this.programId || !this.academicLevelId) {
-        this.studentClassForm.patchValue({
-          academicYearId: null,
-        }, {emitEvent: false});
+  loadJClassesByAcademicYear(programId: number, academicLevelId: number, academicYearId: number) {
+    if (!programId || !academicLevelId || !academicYearId) {
         this.modalService.openSnackBar('Program or Academic Level can not be empty', 'info');
         return;
     }
     this.isLoading = true;
-    this.classService.loadJClassesByParams(this.programId, this.academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
+    this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });
@@ -210,26 +191,6 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
       if (academicYears) {
         this.academicYears = academicYears;
       }
-    });
-  }
-  loadStudentClass(studentClassId: number) {
-    this.studentClassService.getStudentClass(studentClassId).subscribe((studentClass: StudentClass) => {
-      this.student = studentClass.student;
-      this.academicYear = studentClass.academicYear;
-      this.loadJClassesByAcademicYear(studentClass.academicYear.id);
-      this.jClasses = studentClass.jClasses;
-      this.studentClassForm.patchValue({
-        id: studentClass.id,
-        studentId: this.student.id,
-        academicYearId: this.academicYear.id,
-        jClassIds: this.pushJClasses(this.jClasses),
-      }, {emitEvent: false});
-    });
-  }
-  patchStudent(student: Student) {
-    this.student = student;
-    this.studentClassForm.patchValue({
-      studentId: student.id,
     });
   }
 
@@ -258,5 +219,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
           this.programs = programs;
         }
       });
+  }
+
+  getCurrentAcademicYear() {
+    this.academicYearService.getCurrentAcademicYear()
+    .subscribe((academicYear: AcademicYear) => {
+      if (academicYear) {
+        this.currentAcademicYear = academicYear;
+      }
+    });
   }
 }

@@ -29,12 +29,10 @@ export class LogoutComponent implements OnInit {
     });
   }
   checkAuthenticationStatusAndLogout() {
-    this.service.isAuthenticated().subscribe((isAuthenticated: boolean) => {
-      if (!isAuthenticated) {
+      if (!this.service.isAuthenticated()) {
         this.router.navigate([this.redirectUrl]);
         return;
       }
       this.logout();
-    });
   }
 }

@@ -52,6 +52,12 @@ ALTER TABLE courses
         ON UPDATE CASCADE
         ON DELETE CASCADE;
         
+ALTER TABLE program_academic_levels 
+	ADD COLUMN completion_order_id bigint NOT NULL DEFAULT 1,
+	ADD CONSTRAINT completion_orders_fkey FOREIGN KEY (completion_order_id) REFERENCES completion_orders (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+        
         
         
         

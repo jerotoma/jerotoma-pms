@@ -12,14 +12,14 @@ import { UserService } from 'app/services/users';
 import { ModalService } from 'app/services/modals';
 import { Role, USER_ROLE } from 'app/models/securities';
 import { Observable, of as observableOf } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap,} from 'rxjs/operators';
 
 import { FRONTEND_ENDPOINTS, MESSAGE } from 'app/utils';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AuthGuard implements CanActivate, CanActivateChild {
 
   isAuthenticated: boolean = false;
 
@@ -31,28 +31,20 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    const url: string = state.url;
-    return this.checkLogin(url) && this.checkRoles(route, state);
+    return this.checkAuthAndAuthorization(route, state);
   }
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(route, state);
   }
 
-  canLoad(route: Route): Observable<boolean> {
-     return this.checkLogin(`/${route.path}`);
-  }
-
-  checkLogin(url: string): Observable<boolean> {
+  checkAuthAndAuthorization(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     // Store the attempted URL for redirecting
-    this.authService.redirectUrl = url;
-    return this.authService.isAuthenticated().pipe(
-      tap(authenticated => {
-        this.isAuthenticated = authenticated;
-        if (!authenticated) {
-          this.router.navigate([FRONTEND_ENDPOINTS.login.path]);
-        }
-      }),
-    );
+    this.authService.redirectUrl = state.url;;
+    if (!this.authService.isAuthenticated()) {
+        this.router.navigate([FRONTEND_ENDPOINTS.login.path]);
+        return observableOf(false);
+    }
+    return this.checkRoles(route, state);
   }
 
   checkRoles(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {

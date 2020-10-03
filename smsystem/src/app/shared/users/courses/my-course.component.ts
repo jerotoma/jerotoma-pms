@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
-  StudentClassService,
+  StudentAcademicLevelService,
   ClassService,
   AcademicLevelService,
  } from 'app/services';
@@ -11,7 +11,7 @@ import {
   ClassView,
   Student,
   AcademicLevel,
-  StudentClass,
+  StudentAcademicLevel,
 } from 'app/models';
 
 @Component({
@@ -51,7 +51,7 @@ export class MyCourseComponent implements OnInit {
   constructor(
     private academicLevelService: AcademicLevelService,
     private classService: ClassService,
-    private studentClassService: StudentClassService,
+    private studentClassService: StudentAcademicLevelService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder) { }
@@ -104,7 +104,7 @@ export class MyCourseComponent implements OnInit {
 
   loadStudentClasses(userId: number) {
     this.isLoading = true;
-    this.studentClassService.getStudentClassByUserId(userId).subscribe((studentClass: StudentClass) => {
+    this.studentClassService.getStudentAcademicLevelByUserId(userId).subscribe((studentClass: StudentAcademicLevel) => {
       this.isLoading = false;
       if (studentClass) {
         this.student = studentClass.student;

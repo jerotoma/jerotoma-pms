@@ -37,7 +37,7 @@ export class CoursesViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'name', 'code', 'academicLevel', 'description', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'code', 'program', 'academicLevel', 'department', 'action'];
   dataSource: MatTableDataSource<Course> = new MatTableDataSource<Course>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

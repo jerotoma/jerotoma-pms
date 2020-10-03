@@ -4,49 +4,48 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, StudentClassAdmission, StudentClass } from 'app/models';
+import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StudentClassService {
+export class StudentAcademicLevelService {
   constructor(private http: HttpClient) { }
 
-  getStudentClass(classId: number): Observable<StudentClass> {
-    return this.http.get(`${API_END_POINTS.studentClasses}/${classId}`)
+  getStudentAcademicLevel(classId: number): Observable<StudentAcademicLevel> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/${classId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
-  getStudentClasses(param: QueryParam): Observable<ResponseWrapper> {
-    return this.http.get<any>(
-        `${API_END_POINTS.studentClasses}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
+  getStudentAcademicLevels(param: QueryParam): Observable<ResponseWrapper> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}?page=${param.page}&pageSize=${param.pageSize}&orderby=${param.orderby}`)
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  getStudentClassByUserId(userId: number): Observable<StudentClass> {
-    return this.http.get(`${API_END_POINTS.studentClasses}/users/${userId}`)
+  getStudentAcademicLevelByUserId(userId: number): Observable<StudentAcademicLevel> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/users/${userId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  getStudentClassByStudentId(studentId: number): Observable<StudentClass> {
-    return this.http.get(`${API_END_POINTS.studentClasses}/students/${studentId}`)
+  getStudentAcademicLevelByStudentId(studentId: number): Observable<StudentAcademicLevel> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   loadClassesByStudentIDAndAcademicLevelID(academicLevelId: number, studentId: number) {
-    return this.http.get(`${API_END_POINTS.studentClasses}/students/${studentId}/academic-levels/${academicLevelId}`)
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}/academic-levels/${academicLevelId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  createStudentClass(data?: any): Observable<StudentClassAdmission> {
-    return this.http.post(`${API_END_POINTS.studentClasses}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+  createStudentAcademicLevel(data?: any): Observable<StudentClassAdmission> {
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  deleteStudentClass(classId: number): Observable<boolean> {
-    return this.http.delete<any>(`${API_END_POINTS.studentClasses}/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+  deleteStudentAcademicLevel(classId: number): Observable<boolean> {
+    return this.http.delete<any>(`${API_END_POINTS.studentAcademicLevels}/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateStudentClass(data?: any): Observable<StudentClassAdmission> {
-    return this.http.put<any>(`${API_END_POINTS.studentClasses}`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
+  updateStudentAcademicLevel(data?: any): Observable<StudentClassAdmission> {
+    return this.http.put<any>(`${API_END_POINTS.studentAcademicLevels}`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   errorHandler(error: HttpErrorResponse) {

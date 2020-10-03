@@ -57,12 +57,12 @@ export class AuthService {
    * Returns true if auth token is present in the token storage
    * @returns {Observable<boolean>}
    */
-  isAuthenticated(): Observable<boolean> {
+  isAuthenticated(): boolean {
     if (!this.tokenService.isTokenValid()) {
         this.storageService.clear();
-        return observableOf(false);
+        return false;
     }
-    return observableOf(this.tokenService.isTokenValid());
+    return this.tokenService.isTokenValid();
   }
 
   /**

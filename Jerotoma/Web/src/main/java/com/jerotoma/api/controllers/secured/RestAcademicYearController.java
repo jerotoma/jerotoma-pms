@@ -33,13 +33,15 @@ import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.validators.AcademicYearValidator;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.courses.AcademicYearService;
+import com.jerotoma.services.schedules.ScheduleDataService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE)
 public class RestAcademicYearController extends BaseController {
 		
 	@Autowired AcademicYearService academicYearService;
-	@Autowired AssemblerAcademicYearService assemblercademicYearService;
+	@Autowired AssemblerAcademicYearService assemblerAcademicYearService;
+	@Autowired ScheduleDataService scheduleDataService;
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
@@ -49,11 +51,25 @@ public class RestAcademicYearController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		
 		try {
-			response.setData(assemblercademicYearService.loadAllList());
+			response.setData(assemblerAcademicYearService.loadAllList());
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
+
+	@GetMapping(value = "/currentAcademicYear")
+	@ResponseBody
+	protected HttpResponseEntity<Object> getCurrentAcademicYear(Authentication auth) {
+		
+		this.securityCheckAccessByRoles(auth);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
+		response.setData(assemblerAcademicYearService.getCurrentAcademicYear());				
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
 		response.setHttpStatus(HttpStatus.OK);
@@ -75,7 +91,7 @@ public class RestAcademicYearController extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_ACADEMIC_YEAR_CONTROLLER.BASE);
 		
 		try {
-			response.setData(assemblercademicYearService.loadMapList(queryParam));
+			response.setData(assemblerAcademicYearService.loadMapList(queryParam));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

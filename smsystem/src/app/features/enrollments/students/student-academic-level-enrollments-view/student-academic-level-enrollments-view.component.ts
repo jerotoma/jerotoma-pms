@@ -10,8 +10,8 @@ import { DeleteModalComponent } from 'app/shared';
 import { StudentCourseEnrollmentCreateComponent } from '../student-academic-level-enrollment-create/student-academic-level-enrollment-create.component';
 import { StudentAcademicLevelEnrollmentEditComponent } from '../student-academic-level-enrollment-edit/student-academic-level-enrollment-edit.component';
 
-import { StudentClass, ResponseWrapper } from 'app/models';
-import { StudentClassService } from 'app/services';
+import { StudentAcademicLevel, ResponseWrapper } from 'app/models';
+import { StudentAcademicLevelService } from 'app/services';
 import { QueryParam } from 'app/utils';
 
 @Component({
@@ -36,16 +36,16 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
   };
 
   title: string = 'List of Scheduled Courses';
-  studentClasses: StudentClass[] = [];
+  studentClasses: StudentAcademicLevel[] = [];
   hidePageSize: boolean = false;
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
   displayedColumns: string[] = ['id', 'fullName', 'studentNumber', 'classesCount',  'academicLevel', 'academicYear', 'action'];
-  dataSource: MatTableDataSource<StudentClass> = new MatTableDataSource<StudentClass >();
+  dataSource: MatTableDataSource<StudentAcademicLevel> = new MatTableDataSource<StudentAcademicLevel >();
 
   constructor(
-    private studentClassService: StudentClassService,
+    private studentClassService: StudentAcademicLevelService,
     private dialogService: NbDialogService,
     private router: Router,
     ) {
@@ -58,7 +58,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
 
   loadStudentClasses() {
     this.isLoading = true;
-    this.studentClassService.getStudentClasses(this.param)
+    this.studentClassService.getStudentAcademicLevels(this.param)
       .subscribe((result: ResponseWrapper) => {
         const resp = result;
         this.isLoading = false;
@@ -66,7 +66,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
           const data = resp.data;
           this.studentClasses = data.studentClasses;
           this.totalNumberOfItems = data.count;
-          this.dataSource = new MatTableDataSource<StudentClass>(data.studentClasses);
+          this.dataSource = new MatTableDataSource<StudentAcademicLevel>(data.studentClasses);
         }
       }, error => {
 
@@ -86,7 +86,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
     });
   }
 
-  edit(studentClass: StudentClass) {
+  edit(studentClass: StudentAcademicLevel) {
     this.dialogService.open(StudentAcademicLevelEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
@@ -99,7 +99,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
     });
   }
 
-  delete(studentClass: StudentClass) {
+  delete(studentClass: StudentAcademicLevel) {
     this.dialogService.open(DeleteModalComponent, {
       context: {
         title: 'Delete Class',
@@ -113,7 +113,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
     });
   }
 
-  view(studentClass: StudentClass) {
+  view(studentClass: StudentAcademicLevel) {
     this.router.navigate([this.baseURL + '/' + studentClass.id ]);
   }
 
@@ -123,7 +123,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
       this.loadStudentClasses();
   }
   deleteEnrolledStudent(studentClassId: number) {
-    this.studentClassService.deleteStudentClass(studentClassId).subscribe((result: boolean ) => {
+    this.studentClassService.deleteStudentAcademicLevel(studentClassId).subscribe((result: boolean ) => {
       if (result) {
         this.loadStudentClasses();
       }

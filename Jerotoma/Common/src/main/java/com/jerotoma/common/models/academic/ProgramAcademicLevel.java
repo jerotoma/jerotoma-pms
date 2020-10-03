@@ -38,6 +38,10 @@ public class ProgramAcademicLevel {
 	@JoinColumn(name="academic_level_id")
 	private AcademicLevel academicLevel;
 	
+	@OneToOne
+	@JoinColumn(name="completion_order_id")
+	private	CompletionOrder completionOrder;
+	
 	public ProgramAcademicLevel() {}
 
 	public ProgramAcademicLevel(Program program, AcademicLevel academicLevel) {
