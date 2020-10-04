@@ -1,5 +1,6 @@
 package com.jerotoma.common.utils.validators;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,13 +10,20 @@ import com.jerotoma.common.models.academic.StudentAcademicLevel;
 
 public class StudentAcadmicLevelValidator {
 	
+	@SuppressWarnings("unchecked")
 	public static StudentAcademicLevel.Fields validate(Map<String, Object> params, List<String> requiredFields) {
 		
 		
 		Integer studentId = null;
 		Integer academicLevelId = null;
-		Integer commpletionStatusId = null;		
+		Integer commpletionStatusId = null;	
+		Integer academicYearId = null;
+		List<Integer> jClassIds = null;
 		Integer id = null;	
+		
+		if(params.containsKey(StudentConstant.Class.ID)) {
+			id  = (Integer)params.get(StudentConstant.Class.ID);
+		}
 		
 		if(params.containsKey(StudentConstant.Class.STUDENT_ID)) {
 			studentId  = (Integer)params.get(StudentConstant.Class.STUDENT_ID);
@@ -25,12 +33,16 @@ public class StudentAcadmicLevelValidator {
 			commpletionStatusId  = (Integer)params.get(StudentConstant.Class.COMPLETION_STATUS_ID);
 		}
 		
+		if(params.containsKey(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
+			academicYearId  = (Integer)params.get(StudentConstant.Class.ACADEMIC_YEAR_ID);
+		}
+		
 		if(params.containsKey(StudentConstant.Class.ACADEMIC_LEVEL_ID)) {
 			academicLevelId = (Integer)params.get(StudentConstant.Class.ACADEMIC_LEVEL_ID);
 		}
 		
-		if(params.containsKey(StudentConstant.Class.ID)) {
-			id  = (Integer)params.get(StudentConstant.Class.ID);
+		if(params.containsKey(StudentConstant.Class.JCLASS_IDS)) {
+			jClassIds  = (ArrayList<Integer>)params.get(StudentConstant.Class.JCLASS_IDS);
 		}
 		
 		if (id == null && requiredFields.contains(StudentConstant.Class.ID)) {
@@ -54,7 +66,14 @@ public class StudentAcadmicLevelValidator {
 			throw new FieldRequiredException("Academic Level ID is required to continue");
 		}
 		
+		if (academicYearId == null && requiredFields.contains(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
+			throw new FieldRequiredException("Academic Year ID is required to continue");
+		}
 		
-		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId);
+		if (jClassIds == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
+			throw new FieldRequiredException("Class ID is required to continue");
+		}
+		
+		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, jClassIds);
 	}
 }

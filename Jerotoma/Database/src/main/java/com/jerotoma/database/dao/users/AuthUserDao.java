@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.models.users.User;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.BaseDao;
 
 public interface AuthUserDao extends BaseDao<User>{

@@ -1,6 +1,7 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -44,6 +45,10 @@ public class StudentAcademicLevel {
 	@JsonBackReference
 	private Student student;
 	
+	@ManyToOne
+	@JoinColumn(name="academic_year_id")
+	private AcademicYear academicYear;
+	
 	@Column(name="completion_status_id")
 	private Integer completionStatusId;
 	
@@ -62,6 +67,8 @@ public class StudentAcademicLevel {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+	
+	public StudentAcademicLevel() {}
 	
 	public StudentAcademicLevel(Student student, AcademicLevel academicLevel, CompletionStatus completionStatus) {
 		super();
@@ -144,19 +151,29 @@ public class StudentAcademicLevel {
 		this.studentClasses = studentClasses;
 	}
 
+	public AcademicYear getAcademicYear() {
+		return academicYear;
+	}
 
+	public void setAcademicYear(AcademicYear academicYear) {
+		this.academicYear = academicYear;
+	}
 
 	public static class Fields {
 		Integer studentId = null;
 		Integer academicLevelId = null;
-		Integer commpletionStatusId = null;		
+		Integer academicYearId = null;
+		Integer commpletionStatusId = null;
+		List<Integer> classIds;	
 		Integer id = null;
 			
-		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId) {
+		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer academicYearId, List<Integer> classIds) {
 			this.id = id;
 			this.studentId = studentId;
 			this.commpletionStatusId = commpletionStatusId;			
 			this.academicLevelId = academicLevelId;
+			this.academicYearId = academicYearId;
+			this.classIds = classIds;
 		}
 		
 		public Integer getId() {
@@ -189,6 +206,22 @@ public class StudentAcademicLevel {
 		
 		public void setCommpletionStatusId(Integer commpletionStatusId) {
 			this.commpletionStatusId = commpletionStatusId;
+		}
+
+		public Integer getAcademicYearId() {
+			return academicYearId;
+		}
+
+		public void setAcademicYearId(Integer academicYearId) {
+			this.academicYearId = academicYearId;
+		}
+
+		public List<Integer> getClassIds() {
+			return classIds;
+		}
+
+		public void setClassIds(List<Integer> classIds) {
+			this.classIds = classIds;
 		}
 	}
 	

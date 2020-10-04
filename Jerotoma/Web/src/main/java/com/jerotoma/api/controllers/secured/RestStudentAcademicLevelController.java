@@ -22,20 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academic.AcademicLevel;
-import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.academic.StudentClass;
-import com.jerotoma.common.models.students.Student;
-import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.StudentAcadmicLevelValidator;
-import com.jerotoma.common.utils.validators.StudentClassValidator;
 import com.jerotoma.common.viewobjects.StudentAcademicLevelVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentAcademicLevelService;
@@ -52,7 +45,7 @@ import com.jerotoma.services.users.StudentService;
 public class RestStudentAcademicLevelController  extends BaseController {
 	
 	@Autowired StudentClassService studentClassService;
-	@Autowired AssemblerStudentAcademicLevelService assemblerStudentClassService;
+	@Autowired AssemblerStudentAcademicLevelService assemblerStudentAcademicLevelService;
 	@Autowired AcademicYearService academicYearService;
 	@Autowired StudentAcademicLevelService studentAcademicLevelService;
 	@Autowired AcademicLevelService academicLevelService;
@@ -75,7 +68,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);
 		
 		try {
-			map = assemblerStudentClassService.loadMapList(queryParam);		
+			map = assemblerStudentAcademicLevelService.loadMapList(queryParam);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -103,7 +96,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);
 		try {
-			studentClasses = assemblerStudentClassService.loadList();		
+			studentClasses = assemblerStudentAcademicLevelService.loadList();		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
@@ -131,32 +124,13 @@ public class RestStudentAcademicLevelController  extends BaseController {
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
-						StudentConstant.Class.JCLASS_IDS
+						StudentConstant.Class.JCLASS_ID
 						));
 		
-		StudentClass.Fields jClassFields = StudentClassValidator.validate(params, requiredFields);		
-		List<StudentClass> studentClasses = new ArrayList<>();		
+		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);
 		try {
-			UserVO authUser = getAuthenticatedUserVO();
-			AcademicLevel academicLevel = academicLevelService.findObject(jClassFields.getAcademicLevelId());
-			AcademicYear academicYear = academicYearService.findObject(jClassFields.getAcademicYearId());
-			
-			for (Integer classId : jClassFields.getClassIds()) {		
-				Class jClass = jClassService.findObject(classId);				
-				for (Integer studentId: jClassFields.getStudentIds()) {
-					StudentAcademicLevel studentAcademicLevel = studentAcademicLevelService.findStudentAcademicLevel(studentId, academicLevel.getId());
-					
-					StudentClass studentClass = new StudentClass();	
-					studentClass.setmClass(jClass);	
-					studentClass.setAcademicYear(academicYear);
-					studentClass.setStudentAcademicLevel(studentAcademicLevel);
-					studentClass.setUpdatedBy(authUser.getUserId());
-					studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-					studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-					studentClasses.add(studentClass);							
-				}
-			}						
-			response.setData(studentClassService.createBatchObject(studentClasses));
+			UserVO authUser = getAuthenticatedUserVO();			
+			response.setData(studentAcademicLevelService.createStudentAcademicLevel(studentAcademicLevelField, authUser));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -184,42 +158,11 @@ public class RestStudentAcademicLevelController  extends BaseController {
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_ID
-						));
-		
-		StudentAcademicLevel.Fields studentAcademicLevelFields = StudentAcadmicLevelValidator.validate(params, requiredFields);
-		requiredFields.remove(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
-		StudentClass.Fields studentClassFields = StudentClassValidator.validate(params, requiredFields);
-		StudentClass studentClass;
-		List<StudentClass> studentClasses = new ArrayList<>();		
+						));		
+		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);		
 		try {
-			UserVO authUser = getAuthenticatedUserVO();
-			Student student = studentService.findObject(studentAcademicLevelFields.getStudentId());
-			AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelFields.getAcademicLevelId());
-			CompletionStatus completionStatus = CompletionStatus.getCompletionStatusfromID(studentAcademicLevelFields.getAcademicLevelId());
-			
-			StudentAcademicLevel studentAcademicLevel = studentAcademicLevelService.findObject(studentAcademicLevelFields.getId());
-			studentAcademicLevel.setAcademicLevel(academicLevel);
-			studentAcademicLevel.setCompletionStatus(completionStatus);
-			studentAcademicLevel.setStudent(student);
-			
-			studentAcademicLevel = studentAcademicLevelService.updateObject(studentAcademicLevel);			
-			AcademicYear academicYear = academicYearService.findObject(studentClassFields.getAcademicYearId());
-			
-			for (Integer classId : studentClassFields.getClassIds()) {		
-				Class jClass = jClassService.findObject(classId);				
-				studentClass  = studentClassService.findStudentClass(classId, studentAcademicLevel.getId(), academicYear.getId());
-				if (studentClass == null) {
-					studentClass = new StudentClass();
-				}				
-				studentClass.setmClass(jClass);	
-				studentClass.setAcademicYear(academicYear);
-				studentClass.setStudentAcademicLevel(studentAcademicLevel);
-				studentClass.setUpdatedBy(authUser.getUserId());
-				studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-				studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-				studentClasses.add(studentClass);				
-			}
-			response.setData(studentClassService.updateBatchObject(studentClasses));				
+			UserVO authUser = getAuthenticatedUserVO();			
+			response.setData(studentAcademicLevelService.updateStudentAcademicLevel(studentAcademicLevelField, authUser));				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}			
@@ -234,7 +177,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
-			response.setData(assemblerStudentClassService.findStudentClassesByStudentId(studentId));
+			response.setData(assemblerStudentAcademicLevelService.findStudentClassesByStudentId(studentId));
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
@@ -255,10 +198,10 @@ public class RestStudentAcademicLevelController  extends BaseController {
 			
 			switch(user.getUserType()) {
 			case STUDENT:
-				response.setData(assemblerStudentClassService.findStudentClassesByStudentId(user.getId()));
+				response.setData(assemblerStudentAcademicLevelService.findStudentClassesByStudentId(user.getId()));
 				break;
 			case TEACHER:
-				response.setData(assemblerStudentClassService.findTeacherClassesByTeacherId(user.getId()));
+				response.setData(assemblerStudentAcademicLevelService.findTeacherClassesByTeacherId(user.getId()));
 				break;
 			default:
 				throw new RuntimeException("Invalid user type: " + user.getUserType());
@@ -285,7 +228,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
-			response.setData(assemblerStudentClassService.findStudentClassesByStudentIdAndAndAcademicLevelID(studentId, academicLevelId));
+			response.setData(assemblerStudentAcademicLevelService.findStudentClassesByStudentIdAndAndAcademicLevelID(studentId, academicLevelId));
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
@@ -295,16 +238,16 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		return response;
 	}
 	
-	@GetMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
+	@GetMapping(value = {"/{studentAcademicLevelId}", "/{studentAcademicLevelId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> loadStudentClassByStudentClassId(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
+	protected HttpResponseEntity<Object> loadStudentClassByStudentClassId(Authentication auth, @PathVariable("studentAcademicLevelId") Integer studentAcademicLevelId) {
 		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
-		StudentAcademicLevelVO studentClassVO;
+		StudentAcademicLevelVO studentAcademicLevelVO;
 		try {
-			studentClassVO = assemblerStudentClassService.findObject(studentClassId);
-			response.setData(studentClassVO);
+			studentAcademicLevelVO = assemblerStudentAcademicLevelService.findObject(studentAcademicLevelId);
+			response.setData(studentAcademicLevelVO);
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			
@@ -314,16 +257,16 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		return response;
 	}
 
-	@DeleteMapping(value = {"/{studentClassId}", "/{studentClassId}/"})
+	@DeleteMapping(value = {"/{studentAcademicLevelId}", "/{studentAcademicLevelId}/"})
 	@ResponseBody
-	protected HttpResponseEntity<Object> deleteStudentClass(Authentication auth, @PathVariable("studentClassId") Integer studentClassId) {
+	protected HttpResponseEntity<Object> deleteStudentClass(Authentication auth, @PathVariable("studentAcademicLevelId") Integer studentAcademicLevelId) {
 		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		StudentClass studentClass;
 		
 		try {
-			studentClass = studentClassService.findObject(studentClassId);	
+			studentClass = studentClassService.findObject(studentAcademicLevelId);	
 			if (studentClass == null) {
 				response.setSuccess(false);
 				response.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));

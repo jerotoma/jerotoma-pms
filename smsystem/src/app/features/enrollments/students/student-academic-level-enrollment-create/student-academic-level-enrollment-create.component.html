@@ -57,9 +57,9 @@
             <div class="lists row">
               <div class="col-md-12">
                   <div class="form-control-group">
-                    <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && academicYear">
+                    <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && currentAcademicYear">
                       <nb-card-header>
-                        Choose courses from a list of available courses for {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
+                        Choose courses from a list of available courses for {{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}
                         <nb-checkbox
                         (checkedChange)="checkAllCourseBoxes($event)"
                         status="success"

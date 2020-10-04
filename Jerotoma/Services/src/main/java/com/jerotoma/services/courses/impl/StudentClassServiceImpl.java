@@ -61,9 +61,9 @@ public class StudentClassServiceImpl implements StudentClassService {
 	}
 
 	@Override
-	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId, Integer academicYearId)
+	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId)
 			throws SQLException {
-		return studenClassDao.findStudentClass(classId, studentAcademicLevelId, academicYearId);
+		return studenClassDao.findStudentClass(classId, studentAcademicLevelId);
 	}
 
 	@Override

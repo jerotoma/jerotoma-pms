@@ -55,9 +55,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	@Autowired AssemblerTeacherDao assemblerTeacherDao;	
 	@Autowired AssemblerMeetingTimeDao assemblerMeetingTimeDao;	
 	@Autowired AssemblerCourseDao assemblerCourseDao;
-	@Autowired AssemblerRoomDao assemblerClassRoomDao;
-	
-	
+	@Autowired AssemblerRoomDao assemblerClassRoomDao;	
 	
 	Map<String, Object> map;
 	
@@ -138,7 +136,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT sal.id, sal.student_id AS studentId, sal.completion_status_id AS completionStatusId, ")
+		return new StringBuilder("SELECT sal.id, sal.student_id AS studentId, sal.academic_year_id AS academicYearId, sal.completion_status_id AS completionStatusId, ")
 				.append("(SELECT COUNT(*) FROM public.student_classes sc WHERE sc.student_academic_level_id = sal.id) AS classesCount, ")
 				.append("sal.academic_level_id AS academicLevelId, sal.updated_by AS updatedBy, sal.created_on AS createdOn, sal.updated_on AS updatedOn ")
 				.append("FROM public.student_academic_levels sal ");
@@ -153,12 +151,14 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	
 	
 	public StudentAcademicLevelVO mapStudentClassResult(ResultSet rs) throws SQLException {
-		StudentAcademicLevelVO jClass = new StudentAcademicLevelVO(rs);
+		StudentAcademicLevelVO studentAcademicLevel = new StudentAcademicLevelVO(rs);
 		Integer studentId = rs.getInt(StudentConstant.Class.STUDENT_ID);		
-		int academiLevelId = rs.getInt(StudentConstant.Class.ACADEMIC_LEVEL_ID);		
-		jClass.setAcademicLevel(loadAcademicLevel(academiLevelId));		
-		jClass.setStudent(loadStudentsByStudentID(studentId));
-		return jClass;
+		int academiLevelId = rs.getInt(StudentConstant.Class.ACADEMIC_LEVEL_ID);
+		int academicYearId = rs.getInt(StudentConstant.Class.ACADEMIC_YEAR_ID);
+		studentAcademicLevel.setAcademicYear(loadAcademicYear(academicYearId));
+		studentAcademicLevel.setAcademicLevel(loadAcademicLevel(academiLevelId));		
+		studentAcademicLevel.setStudent(loadStudentsByStudentID(studentId));
+		return studentAcademicLevel;
 	}	
 	
 	private AcademicLevelVO loadAcademicLevel(Integer academiLevelId) throws SQLException {

@@ -157,14 +157,14 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   onChanges() {
     this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
       const programId = this.programId;
-      this.academicYearId = null;
+      this.academicYearId = this.currentAcademicYear.id;
       this.studentClassForm.patchValue({
-        academicYearId: null,
+        academicYearId: this.academicYearId,
       }, {emitEvent: false});
       if (academicLevelId && programId) {
         this.academicLevelId = academicLevelId;
         this.jClasses = [];
-        this.loadJClassesByAcademicYear(programId, academicLevelId, this.currentAcademicYear.id);
+        this.loadJClassesByAcademicYear(programId, academicLevelId, this.academicYearId);
       }
     });
   }
@@ -180,8 +180,8 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
         return;
     }
     this.isLoading = true;
-    this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
-      this.jClasses = jClassViews;
+    this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
+      this.jClasses = classViews;
       this.isLoading = false;
     });
   }

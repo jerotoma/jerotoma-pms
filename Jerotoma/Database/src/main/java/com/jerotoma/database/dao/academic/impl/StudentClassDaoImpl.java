@@ -109,12 +109,11 @@ public class StudentClassDaoImpl implements StudentClassDao {
 	}
 
 	@Override
-	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId, Integer academicYearId)
+	public StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId)
 			throws SQLException {
-		return entityManager.createQuery("FROM StudentClass WHERE mClas.id = :classId AND studentAcademicLevel.id = :studentAcademicLevelId AND academicYear.id = :academicYearId", StudentClass.class)
+		return entityManager.createQuery("FROM StudentClass WHERE mClass.id = :classId AND studentAcademicLevel.id = :studentAcademicLevelId", StudentClass.class)
 				.setParameter("classId", classId)
-				.setParameter("studentAcademicLevelId", studentAcademicLevelId)
-				.setParameter("academicYearId", academicYearId)
+				.setParameter("studentAcademicLevelId", studentAcademicLevelId)				
 				.getSingleResult();
 	}
 

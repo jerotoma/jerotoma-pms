@@ -31,7 +31,7 @@ import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 })
 export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   @Input() title: string;
-  @Input() studentClass: StudentAcademicLevel;
+  @Input() studentAcademicLevel: StudentAcademicLevel;
   @Output() onCreationSuccess = new EventEmitter();
 
   userType: string = USER_TYPE.STUDENT;
@@ -84,8 +84,8 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
   ngOnInit() {
     this.loadData();
     this.loadForm();
-    if (this.studentClass) {
-      this.loadStudentClasses(this.studentClass);
+    if (this.studentAcademicLevel) {
+      this.loadStudentClasses(this.studentAcademicLevel);
     }
   }
 
@@ -186,9 +186,9 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;
-        this.setCurrentAcademicLevel(this.studentClass.student.academicLevelId);
+        this.setCurrentAcademicLevel(this.studentAcademicLevel.student.academicLevelId);
         this.studentAcademicLevelForm.patchValue({
-          academicLevelId: this.studentClass.student.academicLevelId,
+          academicLevelId: this.studentAcademicLevel.student.academicLevelId,
         }, {emitEvent: false});
       }
     });
@@ -241,6 +241,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
         this.jClassIds =  this.pushJClasses(this.registeredClasses),
         this.studentAcademicLevelForm.patchValue({
           id: studentAcademicLevel.id,
+          academicYearId: studentAcademicLevel.academicYear.id,
           studentId: this.student.id,
           fullName: this.student.fullName,
           jClassIds: this.jClassIds,

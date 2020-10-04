@@ -37,10 +37,6 @@ public class StudentClass {
 	private StudentAcademicLevel studentAcademicLevel;
 	
 	@ManyToOne
-	@JoinColumn(name="academic_year_id")
-	private AcademicYear academicYear;
-	
-	@ManyToOne
 	@JoinColumn(name="class_id")
 	private Class mClass;
 	
@@ -71,15 +67,7 @@ public class StudentClass {
 	public void setStudentAcademicLevel(StudentAcademicLevel studentAcademicLevel) {
 		this.studentAcademicLevel = studentAcademicLevel;
 	}
-
-	public AcademicYear getAcademicYear() {
-		return academicYear;
-	}
-
-	public void setAcademicYear(AcademicYear academicYear) {
-		this.academicYear = academicYear;
-	}
-		
+	
 	public Class getmClass() {
 		return mClass;
 	}
@@ -87,7 +75,15 @@ public class StudentClass {
 	public void setmClass(Class mClass) {
 		this.mClass = mClass;
 	}
-	
+		
+	public Integer getCompletionStatusId() {
+		return completionStatusId;
+	}
+
+	public void setCompletionStatusId(Integer completionStatusId) {
+		this.completionStatusId = completionStatusId;
+	}
+
 	public Integer getUpdatedBy() {
 		return updatedBy;
 	}
@@ -114,18 +110,16 @@ public class StudentClass {
 
 	public static class Fields {
 		Integer Id;
+		Integer completionStatusId;
 		List<Integer> studentIds;
-		List<Integer> classIds;
-		Integer academicYearId;
-		Integer academicLevelId;
+		List<Integer> classIds;		
 		
-		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer academicYearId, Integer academicLevelId) {
+		public Fields(Integer id, List<Integer> studentIds, List<Integer> classIds, Integer completionStatusId) {
 			super();
 			Id = id;
 			this.studentIds = studentIds;
-			this.classIds = classIds;
-			this.academicYearId = academicYearId;
-			this.academicLevelId = academicLevelId;
+			this.classIds = classIds;			
+			this.completionStatusId = completionStatusId;
 		}
 		public Integer getId() {
 			return Id;
@@ -148,23 +142,7 @@ public class StudentClass {
 		
 		public void setClassIds(List<Integer> classIds) {
 			this.classIds = classIds;
-		}
-		
-		public Integer getAcademicYearId() {
-			return academicYearId;
-		}
-		
-		public void setAcademicYearId(Integer academicYearId) {
-			this.academicYearId = academicYearId;
-		}
-		
-		public Integer getAcademicLevelId() {
-			return academicLevelId;
-		}
-		
-		public void setAcademicLevelId(Integer academicLevelId) {
-			this.academicLevelId = academicLevelId;
-		}		
+		}			
 	}
 	
 }

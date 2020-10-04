@@ -217,10 +217,10 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	}
 	
 	@Override
-	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId)
+	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()				
 				.append(" WHERE co.program_id = ? AND co.academic_level_id = ? AND  cl.academic_year_id = ?");
-		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), programId, academicLevelrId, academicYearId);
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), programId, academicLevelId, academicYearId);
 	}
 }

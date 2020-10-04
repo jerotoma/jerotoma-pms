@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicLevelConstant;
+import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
@@ -144,10 +145,11 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	@Override
 	public List<AcademicLevelVO> loadAvailableAcademicLevelsByStudentId(Integer programId, Integer studentId) {
 		StringBuilder queryBuilder  = getBaseSelectQuery()
-				.append("WHERE al.id IN (")
+				.append("WHERE al.id NOT IN (")
 				.append("SELECT pal.academic_level_id FROM program_academic_levels pal ")
-				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id <> pal.academic_level_id ")				
-				.append(" WHERE pal.program_id = ? AND sal.student_id = ? )");		
-		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(), programId, studentId);
+				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id = pal.academic_level_id ")				
+				.append(" WHERE sal.completion_status_id <> ? AND sal.completion_status_id <> ? AND pal.program_id = ? AND sal.student_id = ? )");		
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(), 
+				CompletionStatus.COMPLETED.getID(), CompletionStatus.IN_PROGRESS.getID(), programId, studentId);
 	}
 }

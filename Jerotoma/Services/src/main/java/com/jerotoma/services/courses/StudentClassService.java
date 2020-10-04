@@ -10,7 +10,7 @@ public interface StudentClassService extends BaseService<StudentClass> {
 
 	List<StudentClass> createBatchObject(List<StudentClass> studentClasses) throws SQLException;
 
-	StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId, Integer academicYearId) throws SQLException;
+	StudentClass findStudentClass(Integer classId, Integer studentAcademicLevelId) throws SQLException;
 
 	List<StudentClass> updateBatchObject(List<StudentClass> studentClasses) throws SQLException;
 

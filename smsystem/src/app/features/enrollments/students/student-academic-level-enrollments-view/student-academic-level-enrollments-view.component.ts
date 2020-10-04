@@ -90,7 +90,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
     this.dialogService.open(StudentAcademicLevelEnrollmentEditComponent, {
       context: {
         title: 'Edit Enrolled Student',
-        studentClass: studentClass,
+        studentAcademicLevel: studentClass,
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
