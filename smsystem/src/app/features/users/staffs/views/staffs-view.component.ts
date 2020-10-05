@@ -82,14 +82,14 @@ export class StaffsViewComponent implements OnInit {
       context: {
         title: 'Edit Staff',
         action: APP_ACTION_TYPE.edit,
-        staffId: staff.id,
+        userId: staff.userId,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
     });
   }
   view(staff: Staff) {
-    this.router.navigate([this.baseURL + '/' + staff.id ]);
+    this.router.navigate([this.baseURL + '/' + staff.userId ]);
   }
 
   delete(staff: Staff) {
@@ -98,7 +98,7 @@ export class StaffsViewComponent implements OnInit {
         title: 'Delete Staff',
         action: 'delete',
         userType: 'staff',
-        userId: staff.id,
+        userId: staff.userId,
         name: staff.fullName,
       },
     }).onClose.subscribe(_data => {

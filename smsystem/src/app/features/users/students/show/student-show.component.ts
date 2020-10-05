@@ -10,7 +10,7 @@ import { USER_TYPE } from 'app/utils';
   template: `<app-user-details
               *ngIf='student'
               [userDatail]="student"
-              [userType]="'student'"
+              [userType]="userType"
               (onImageChangeSuccess)="reloadParentDetails($event)"
               ></app-user-details>`,
 })
@@ -22,6 +22,8 @@ export class StudentShowComponent implements OnInit {
     success: false,
     message: '',
   };
+
+  userType: string = USER_TYPE.STUDENT;
 
   constructor(
     private userService: UserService,
@@ -45,8 +47,8 @@ export class StudentShowComponent implements OnInit {
     this.loadStudentDetails(data.id);
   }
 
-  loadStudentDetails(studentId: number) {
-      this.userService.loadUser(studentId, USER_TYPE.STUDENT).subscribe((user: Student) => {
+  loadStudentDetails(userId: number) {
+      this.userService.loadUser(userId).subscribe((user: Student) => {
        if (user) {
           this.student = user;
         }

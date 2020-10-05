@@ -259,6 +259,28 @@ public class RestClassController extends BaseController {
 		super.response.setHttpStatus(HttpStatus.OK);
 		return super.response;
 	}
+	
+	@GetMapping(value ="/users/{userId}")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadTeacherClassList(
+			Authentication auth, @PathVariable("userId") Integer userId) {
+		
+		List<ClassVO> mClasses = new ArrayList<>();
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_CLASS_CONTROLLER.BASE + "/list");
+		this.securityCheckAccessByRoles(auth);		
+		try {
+			mClasses = assemblerClassService.loadTeacherClassList(userId);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		super.response.setSuccess(true);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		super.response.setData(mClasses);
+		super.response.setHttpStatus(HttpStatus.OK);
+		return super.response;
+	}
 
 	@PostMapping(value = {"", "/"})
 	@ResponseBody

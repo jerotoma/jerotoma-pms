@@ -180,7 +180,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	}
 	@Override
 	public StudentAcademicLevelVO findStudentClassesByStudentId(Integer studentId) throws SQLException {
-		String query = getBaseSelectQuery().append("WHERE sc.student_id = ? ").toString();
+		String query = getBaseSelectQuery().append("WHERE sal.student_id = ? ").toString();
 		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
 	}
 	

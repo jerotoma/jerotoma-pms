@@ -41,23 +41,8 @@ export class UserService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadUser(userId: number, userType: string): Observable<User> {
-    switch (userType) {
-        case USER_TYPE.PARENT:
-          userType = 'parents';
-        break;
-        case USER_TYPE.STAFF:
-          userType = 'staffs';
-        break;
-        case USER_TYPE.TEACHER:
-          userType = 'teachers';
-        break;
-        case USER_TYPE.STUDENT:
-          userType = 'students';
-        break;
-    }
-    return this.http
-    .get(`${API_END_POINTS.users}/${userType}/${userId}`)
+  loadUser(userId: number): Observable<User> {
+    return this.http.get(`${API_END_POINTS.users}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

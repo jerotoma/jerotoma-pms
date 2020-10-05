@@ -202,7 +202,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 				break;
 			case TEACHER:
 				response.setData(assemblerStudentAcademicLevelService.findTeacherClassesByTeacherId(user.getId()));
-				break;
+				break;			
 			default:
 				throw new RuntimeException("Invalid user type: " + user.getUserType());
 			}			

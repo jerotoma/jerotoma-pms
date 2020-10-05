@@ -35,7 +35,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   academicYears: AcademicYear[] = [];
   programs: Program[] = [];
   parentIds: number[]  = [];
-  studentId: number;
+  userId: number;
   parentFullName: string;
   showMessage: ShowMessage = {
     error: false,
@@ -62,7 +62,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadStudent(this.studentId);
+      this.loadStudent(this.userId);
     }
   }
   dismiss() {
@@ -154,8 +154,8 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     };
   }
 
-  loadStudent(studentId: number) {
-    this.userService.loadUser(studentId, USER_TYPE.STUDENT).subscribe((student: Student) => {
+  loadStudent(userId: number) {
+    this.userService.loadUser(userId).subscribe((student: Student) => {
        if (student) {
         this.student = student;
         this.updateUseInput();

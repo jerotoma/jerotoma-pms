@@ -8,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
+import com.jerotoma.services.users.UserService;
 
 @Service
 public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	
 	@Autowired AssemblerJClassDao assemblerClassDao;
+	@Autowired UserService userService;
 	
 	@Override
 	public ClassVO findObject(Integer primaryKey) throws SQLException {
@@ -69,6 +73,15 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId)
 			throws SQLException {
 		return assemblerClassDao.loadClassesByParams(programId, academicLevelrId, academicYearId);
+	}
+
+	@Override
+	public List<ClassVO> loadTeacherClassList(Integer userId) throws SQLException {
+		UserVO user = userService.getUserByUserId(userId);
+		if (user.getUserType() == USER_TYPE.TEACHER) {
+			return assemblerClassDao.loadTeacherClassListByTeacherId(user.getId());
+		}
+		return null;		
 	}
 
 }

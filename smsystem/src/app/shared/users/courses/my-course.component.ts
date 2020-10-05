@@ -32,7 +32,7 @@ export class MyCourseComponent implements OnInit {
   isLoading: boolean = false;
   confirmed: boolean = false;
   academicLevel: AcademicLevel;
-  jClasses: ClassView[];
+  classViews: ClassView[];
   academicLevels: AcademicLevel[];
   student: Student;
   students: Student[];
@@ -51,16 +51,22 @@ export class MyCourseComponent implements OnInit {
   constructor(
     private academicLevelService: AcademicLevelService,
     private classService: ClassService,
-    private studentClassService: StudentAcademicLevelService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.loadForm();
     if (this.userId && this.userType === USER_TYPE.STUDENT) {
       this.loadStudentClasses(this.userId);
+    } else if (this.userId && this.userType === USER_TYPE.TEACHER) {
+      this.loadTeacherClasses(this.userId);
     }
+  }
+
+  loadTeacherClasses(userId: number) {
+    this.classService.loadTeacherClassesByUserId(userId).subscribe((classViews: ClassView[]) => {
+      this.classViews = classViews;
+    });
   }
 
   loadForm() {
@@ -104,13 +110,13 @@ export class MyCourseComponent implements OnInit {
 
   loadStudentClasses(userId: number) {
     this.isLoading = true;
-    this.studentClassService.getStudentAcademicLevelByUserId(userId).subscribe((studentClass: StudentAcademicLevel) => {
+    this.studentAcademicLevelService.getStudentAcademicLevelByUserId(userId).subscribe((studentClass: StudentAcademicLevel) => {
       this.isLoading = false;
       if (studentClass) {
         this.student = studentClass.student;
         this.academicLevel = studentClass.academicLevel;
         this.loadAcademicLevelsByProgramId(this.student.programId);
-        this.jClasses = studentClass.jClasses;
+        this.classViews = studentClass.jClasses;
         this.studentClassForm.patchValue({
           id: studentClass.id,
           studentId: this.student.id,
@@ -143,13 +149,21 @@ export class MyCourseComponent implements OnInit {
 
   loadJClassesByAcademicLevel(academicLevelId: number, studentId: number) {
     this.isLoading = true;
-    this.studentClassService.loadClassesByStudentIDAndAcademicLevelID(academicLevelId, studentId).subscribe((jClassViews: ClassView[]) => {
-      this.jClasses = jClassViews;
+    this.studentAcademicLevelService.loadClassesByStudentIDAndAcademicLevelID(academicLevelId, studentId).subscribe((jClassViews: ClassView[]) => {
+      this.classViews = jClassViews;
       this.isLoading = false;
     });
   }
 
   preventDefaultJClass(event: any) {
     event.preventDefault();
+  }
+
+  get isUserTeacher() {
+    return this.userType === USER_TYPE.TEACHER;
+  }
+
+  get isUserStudent() {
+    return this.userType === USER_TYPE.STUDENT;
   }
 }

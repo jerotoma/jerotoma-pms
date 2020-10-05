@@ -173,44 +173,19 @@ public class RestUserController extends BaseController {
 		
 	}
 	
-	@GetMapping(value= {"/{userTypeByPath}/{userId}","/{userTypeByPath}/{userId}/", })
+	@GetMapping(value="/{userId}")
 	@ResponseBody
 	public HttpResponseEntity<Object> getUser(Authentication auth,
-			@PathVariable(value="userId", required = true) Integer primaryKey,
-			@PathVariable(value="userTypeByPath", required = true) String userTypeByPath
+			@PathVariable(value="userId", required = true) Integer userId			
 			) throws UsernameNotFoundException, JDataAccessException{
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userTypeByPath + "/" + primaryKey);
-		this.securityCheckAccessByRoles(auth);
-		
-		UserConstant.userTypeByPath type = UserConstant.processUserTypeByPath(userTypeByPath);
-		try {
-			switch(type) {
-			case TEACHERS:
-				response.setData(assemblerTeacherService.findObject(primaryKey));				
-				break;
-			case STUDENTS:
-				response.setData(assemblerStudentService.findObject(primaryKey));
-				break;
-			case STAFFS:
-				response.setData(assemblerStaffService.findObject(primaryKey));
-				break;
-			case PARENTS:
-				response.setData(assemblerParentService.findObject(primaryKey));
-				break;
-			default:
-				throw new UsernameNotFoundException("User type not found");
-			}
-		
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}	
-				
+		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userId);
+		this.securityCheckAccessByRoles(auth);		
+		response.setData(userService.getUserByUserId(userId));
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		response.setHttpStatus(HttpStatus.OK);
-		return response;
-		
+		response.setHttpStatus(HttpStatus.OK);		
+		return response;		
 	}
 	
 	@PostMapping(value= {"/profile","/profile/", })

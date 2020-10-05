@@ -32,7 +32,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   address: Address;
   userLoginInput: UserLoginInput;
   parent: Parent;
-  staffId: number;
+  userId: number;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -60,7 +60,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadStaff(this.staffId);
+      this.loadStaff(this.userId);
     }
   }
 
@@ -141,8 +141,8 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
     };
   }
 
-  loadStaff(staffId: number) {
-    this.userService.loadUser(staffId, USER_TYPE.STAFF).subscribe((staff: Staff ) => {
+  loadStaff(userId: number) {
+    this.userService.loadUser(userId).subscribe((staff: Staff ) => {
       if (staff) {
         this.staff = staff;
         this.staffForm.patchValue({

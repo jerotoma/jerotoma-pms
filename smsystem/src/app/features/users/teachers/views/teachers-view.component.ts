@@ -69,7 +69,7 @@ export class TeachersViewComponent implements OnInit {
       context: {
         title: 'Edit Teacher',
         action: 'edit',
-        teacherId: teacher.id,
+        userId: teacher.userId,
       },
     }).onClose.subscribe(_data => {
       this.loadUsers();
@@ -77,7 +77,7 @@ export class TeachersViewComponent implements OnInit {
   }
 
   view(teacher: Teacher) {
-    this.router.navigate([this.baseURL + '/' + teacher.id ]);
+    this.router.navigate([this.baseURL + '/' + teacher.userId ]);
   }
 
   delete(teacher: Teacher) {
@@ -86,7 +86,7 @@ export class TeachersViewComponent implements OnInit {
         title: 'Delete Teacher',
         action: 'delete',
         userType: 'teacher',
-        userId: teacher.id,
+        userId: teacher.userId,
         name: teacher.fullName,
       },
     }).onClose.subscribe(_data => {

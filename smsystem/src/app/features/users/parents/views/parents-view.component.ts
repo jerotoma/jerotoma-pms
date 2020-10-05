@@ -77,7 +77,7 @@ export class ParentsViewComponent implements OnInit {
       context: {
         title: 'Edit ' + parent.fullName + '\'s Details',
         action: APP_ACTION_TYPE.edit,
-        parentId: parent.id,
+        userId: parent.userId,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -85,7 +85,7 @@ export class ParentsViewComponent implements OnInit {
   }
 
   view(parent: Parent) {
-    this.router.navigate([this.baseURL + '/' + parent.id ]);
+    this.router.navigate([this.baseURL + '/' + parent.userId ]);
   }
 
   delete(parent: Parent) {

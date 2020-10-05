@@ -36,7 +36,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   teacherForm: FormGroup;
   userLoginInput: UserLoginInput;
   teacher: Teacher;
-  teacherId: number;
+  userId: number;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -63,7 +63,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadTeacher(this.teacherId);
+      this.loadTeacher(this.userId);
     }
   }
   dismiss() {
@@ -136,8 +136,8 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     this.updateUseInput();
   }
 
-  loadTeacher(teacherId: number) {
-    this.userService.loadUser(teacherId, USER_TYPE.TEACHER).subscribe((teacher: Teacher) => {
+  loadTeacher(userId: number) {
+    this.userService.loadUser(userId).subscribe((teacher: Teacher) => {
        if (teacher) {
         this.teacher = teacher;
         this.position = this.teacher.position.id;

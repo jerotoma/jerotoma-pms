@@ -10,6 +10,7 @@ import { ResponseWrapper, ClassView } from 'app/models';
   providedIn: 'root',
 })
 export class ClassService {
+
   constructor(private http: HttpClient) { }
 
   getClass(classId: number): Observable<ClassView>  {
@@ -68,6 +69,10 @@ export class ClassService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadTeacherClassesByUserId(userId: number): Observable<ClassView[]> {
+    return this.http.get(`${API_END_POINTS.classes}/users/${userId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || 'Server error');
   }

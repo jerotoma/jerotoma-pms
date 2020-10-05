@@ -38,7 +38,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   selectedStudents: Student[] = [];
   studentIds: number[]  = [];
   parent: Parent;
-  parentId: number;
+  userId: number;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -61,7 +61,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit() {
     if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadParent(this.parentId);
+      this.loadParent(this.userId);
     }
   }
   dismiss() {
@@ -103,8 +103,8 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadParent(parentId: number) {
-    this.userService.loadUser(parentId, USER_TYPE.PARENT).subscribe((parent: Parent) => {
+  loadParent(userId: number) {
+    this.userService.loadUser(userId).subscribe((parent: Parent) => {
       if (parent) {
         this.parent = parent;
         this.updateUseInput();

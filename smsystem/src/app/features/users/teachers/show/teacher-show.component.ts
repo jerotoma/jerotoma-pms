@@ -44,8 +44,8 @@ export class TeacherShowComponent implements OnInit {
     this.loadTeacherDetails(data.id);
   }
 
-  loadTeacherDetails(teacherId: number) {
-      this.userService.loadUser(teacherId, this.userType).subscribe((teacher: Teacher ) => {
+  loadTeacherDetails(userId: number) {
+      this.userService.loadUser(userId).subscribe((teacher: Teacher ) => {
         if (teacher) {
           this.teacher = teacher;
         }

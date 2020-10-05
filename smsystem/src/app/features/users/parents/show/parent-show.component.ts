@@ -48,8 +48,8 @@ export class ParentShowComponent implements OnInit {
   reloadParentDetails(data: any) {
     this.loadParentDetails(data.id);
   }
-  loadParentDetails(parentId: number) {
-      this.userService.loadUser(parentId, this.userType).subscribe((parent: Parent) => {
+  loadParentDetails(userId: number) {
+      this.userService.loadUser(userId).subscribe((parent: Parent) => {
         if (parent) {
           this.parent = parent;
         }

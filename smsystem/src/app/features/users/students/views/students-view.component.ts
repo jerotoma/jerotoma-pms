@@ -110,7 +110,7 @@ export class StudentsViewComponent implements OnInit {
       context: {
         title: 'Edit ' + student.fullName + '\'s Details',
         action: 'edit',
-        studentId: student.id,
+        userId: student.userId,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -118,10 +118,10 @@ export class StudentsViewComponent implements OnInit {
   }
 
   view(student: Student) {
-    this.router.navigate([this.baseURL + '/' + student.id ]);
+    this.router.navigate([this.baseURL + '/' + student.userId ]);
   }
   viewParent(student: Student) {
-    this.router.navigate([this.baseURL + '/' + student.id ]);
+    this.router.navigate([this.baseURL + '/' + student.userId ]);
   }
 
   delete(student: Student) {
@@ -130,7 +130,7 @@ export class StudentsViewComponent implements OnInit {
         title: 'Delete Student',
         action: 'delete',
         userType: 'student',
-        userId: student.id,
+        userId: student.userId,
         name: student.fullName,
       },
     }).onClose.subscribe(_data => {
