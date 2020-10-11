@@ -10,6 +10,10 @@ import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel } from 'ap
   providedIn: 'root',
 })
 export class StudentAcademicLevelService {
+
+  deleteStudentClass(data: { studentId: number; academicLevelId: number; academicYearId: number; jClassId: number; }): Observable<boolean> {
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/delete-student-class`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   constructor(private http: HttpClient) { }
 
   getStudentAcademicLevel(classId: number): Observable<StudentAcademicLevel> {

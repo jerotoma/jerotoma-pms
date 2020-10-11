@@ -77,11 +77,18 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 
 	@Override
 	public List<ClassVO> loadTeacherClassList(Integer userId) throws SQLException {
-		UserVO user = userService.getUserByUserId(userId);
+		UserVO user = userService.getUserVOByUserId(userId);
 		if (user.getUserType() == USER_TYPE.TEACHER) {
 			return assemblerClassDao.loadTeacherClassListByTeacherId(user.getId());
 		}
 		return null;		
+	}
+
+	@Override
+	public List<ClassVO> loadStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId)
+			throws SQLException {
+		
+		return assemblerClassDao.loadStudentClasses(studentId, academicLevelId, academicYearId);
 	}
 
 }

@@ -71,4 +71,9 @@ public class StudentClassServiceImpl implements StudentClassService {
 		return studenClassDao.updateBatchObject(studentClasses);
 	}
 
+	@Override
+	public boolean deleteStudentClass(Integer studentAcademicLevelId, Integer jClassId) throws SQLException {
+		return studenClassDao.deleteStudentClass(studentAcademicLevelId, jClassId);
+	}
+
 }

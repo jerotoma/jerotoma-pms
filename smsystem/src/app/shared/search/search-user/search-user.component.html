@@ -16,7 +16,11 @@
             <nb-card [ngStyle]="{'display': listDisplay}">
               <nb-list *ngIf="users">
                 <nb-list-item *ngFor="let user of users" (click)="pickUser($event, user)">
-                  {{user?.fullName}}
+                  <nb-user
+                      [color]="noImageColor"
+                      [name]="user?.fullName"
+                      [title]="user?.username">
+                  </nb-user>
                 </nb-list-item>
               </nb-list>
             </nb-card>

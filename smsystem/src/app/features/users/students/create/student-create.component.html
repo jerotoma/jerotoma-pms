@@ -5,39 +5,6 @@
           <nb-card-header status="danger" >{{ title }}</nb-card-header>
           <nb-card-body>
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-control-group">
-                        <label for="parent-full-name" class="label">Search Parent Full Name</label>
-                        <input
-                            type="text"
-                            nbInput fullWidth
-                            name="parentFullName"
-                            autocomplete="new-password"
-                            id="parent-full-name"
-                            formControlName="parentFullName"
-                            placeholder="Search Parent Full Name">
-                      </div>
-                      <nb-card [ngStyle]="{'display': listDisplay}">
-                        <nb-list>
-                          <nb-list-item *ngFor="let parent of parents" (click)="pickUser($event, parent)">
-                                <nb-user
-                                    [name]="parent.fullName"
-                                    [title]="parent.username">
-                                </nb-user>
-                          </nb-list-item>
-                        </nb-list>
-                      </nb-card>
-                      <div class="form-control-group accept-group" *ngIf="selectedParents">
-                        <nb-checkbox
-                          [checked]="true"
-                          *ngFor="let parent of selectedParents"
-                          (checkedChange)="selectedParentChanged($event, parent)">
-                          {{parent.fullName}}
-                        </nb-checkbox>
-                      </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-md-12">
                     <h4 class="text-primary">Basic Information</h4>
                 </div>
@@ -144,7 +111,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                  <h4 class="text-primary mt-4">Address</h4>
+                  <h4 class="text-primary mt-3">Address</h4>
                 </div>
             </div>
             <app-address
@@ -152,11 +119,35 @@
               (onChanges)="onStudentAddressChange($event)">
             </app-address>
             <div class="row">
-                <div class="col-md-12">
-                    <h4 class="text-primary mt-4">Program and Current Academic Level</h4>
-                </div>
+              <div class="col-md-12">
+                <h4 class="text-primary mt-3">Student Parent(s)</h4>
+              </div>
             </div>
             <div class="row">
+              <div class="col-md-6">
+                <app-search-user
+                  [title]="'Search for Parent'"
+                  [placeholder]="'Type Parent Initial'"
+                  [userType]="userType"
+                  [isClearTextAfter]="true"
+                  (onUserSelected)="pickUser($event)"
+                ></app-search-user>
+                <div class="form-control-group accept-group" *ngIf="selectedParents">
+                  <nb-checkbox
+                    [checked]="true"
+                    *ngFor="let parent of selectedParents"
+                    (checkedChange)="selectedParentChanged($event, parent)">
+                    {{parent.fullName}}
+                  </nb-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4 class="text-primary mt-4">Program and Academic Level</h4>
+                </div>
+            </div>
+            <div class="row mb-5">
               <div class="col-md-6">
                   <div class="form-control-group">
                       <label for="student-program" class="label">Program</label>

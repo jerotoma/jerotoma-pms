@@ -55,7 +55,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		
 		if (message != null && message.contains(stringPattern)) {
 			//String field = message.substring((stringPattern + " ").length());			
-			message = "The entry you are trying to add already exists in the system";
+			message = "The record you are trying to add already exists in the system";
 		}
 		
 		if(map.containsKey(SystemConstant.CONSTRAINT_NAME)) {

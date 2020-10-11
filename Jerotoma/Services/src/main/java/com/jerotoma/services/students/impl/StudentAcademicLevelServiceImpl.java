@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
@@ -24,6 +23,7 @@ import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.academic.StudentAcademicLevelDao;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentAcademicLevelService;
+import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
 import com.jerotoma.services.courses.AcademicLevelService;
 import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.courses.ClassService;
@@ -38,6 +38,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	
 	@Autowired StudentAcademicLevelDao studentAcademicLevelDao;
 	@Autowired StudentClassService studentClassService;
+	@Autowired AssemblerStudentClassService assemblerstudentClassService;
 	@Autowired AssemblerStudentAcademicLevelService assemblerStudentClassService;
 	@Autowired AcademicYearService academicYearService;	
 	@Autowired AcademicLevelService academicLevelService;
@@ -86,14 +87,14 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	}
 
 	@Override
-	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId) throws SQLException {
-		return studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId);
+	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException {
+		return studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
 	}
 
 	@Override
 	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
 		
-		StudentClass studentClass;
+		
 		List<StudentClass> studentClasses = new ArrayList<>();		
 		
 		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
@@ -117,12 +118,14 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		for (Integer classId : studentAcademicLevelField.getClassIds()) {		
 			Class jClass = jClassService.findObject(classId);
 			
-			try {
-				studentClass  = studentClassService.findStudentClass(classId, studentAcademicLevel.getId());					
-			} catch (EmptyResultDataAccessException e) {
-				studentClass = null;		
+			if (!academicYear.getId().equals(jClass.getAcademicYear().getId())) {
+				throw new RuntimeException("Course : " + jClass.getCourse().getName() + " is not available for Academic Year : " + academicYear.getYearOfStudy() + " - " + academicYear.getName());
 			}
-			
+			StudentClass studentClass = null;
+			if (assemblerstudentClassService.doesStudentClassRecordExist(classId, studentAcademicLevel.getId())) {
+				studentClass  = studentClassService.findStudentClass(classId, studentAcademicLevel.getId());
+			}
+						
 			if (studentClass == null) {
 				studentClass = new StudentClass();
 			}
@@ -173,6 +176,17 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		}
 		studentClassService.createBatchObject(studentClasses);
 		return studentAcademicLevel;
+	}
+
+	@Override
+	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException {
+		Integer studentId = studentAcademicLevelField.getStudentId(); 
+		Integer academicLevelId = studentAcademicLevelField.getAcademicLevelId(); 
+		Integer academicYearId = studentAcademicLevelField.getAcademicYearId(); 
+		Integer jClassId = studentAcademicLevelField.getClassIds().get(0);
+		
+		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
+		return studentClassService.deleteStudentClass(studentAcademicLevel.getId(), jClassId);
 	}
 
 }

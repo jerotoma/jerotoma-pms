@@ -2,5 +2,12 @@
 .nb-theme-corporate nb-card,
 .nb-theme-dark nb-card,
 .nb-theme-default nb-card {
-  max-height: 90vh !important;
+  max-height: 95vh !important;
+  min-width: 50vw !important;
+}
+
+.nb-theme-default nb-card-footer,
+.nb-theme-dark nb-card-footer,
+.nb-theme-corporate nb-card-footer {
+  padding: 0.5rem 1.5rem !important;
 }

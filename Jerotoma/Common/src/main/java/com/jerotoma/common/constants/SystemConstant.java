@@ -44,6 +44,7 @@ public class SystemConstant {
 	public static final String HTTP_STATUS = "httpStatus";
 	public static final String STORED_OBJECTS = "stored_objects";
 	public static final String CONSTRAINT_NAME = "constraintName";
+	public static final String UPDATED_BY = "updatedBy";
 			
 	public static enum cronTrigger{
 		EXPIRED_TOKENS("*/2 * * * * ?"),

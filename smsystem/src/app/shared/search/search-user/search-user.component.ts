@@ -15,13 +15,14 @@ export class SearchUserComponent implements OnInit {
 
   @Input('userType') userType: string =  USER_TYPE.ALL;
   @Input('user') user: User  = null;
+  @Input('isClearTextAfter') isClearTextAfter: boolean = false;
   @Input('title') title: string = 'Search for User';
   @Input('placeholder') placeholder: string = 'Search for User';
   @Output() onUserSelected: EventEmitter<User> = new EventEmitter();
 
   userForm: FormGroup;
   listDisplay: string = 'none';
-
+  noImageColor: string = '#3F51B5';
   users: User[] = [];
 
   constructor(
@@ -63,7 +64,7 @@ export class SearchUserComponent implements OnInit {
       this.listDisplay = 'none';
       this.onUserSelected.emit(this.user);
       this.userForm.patchValue({
-         searchKey: user.fullName,
+         searchKey: !this.isClearTextAfter ? user.fullName : '',
       }, {emitEvent: false});
     }
 

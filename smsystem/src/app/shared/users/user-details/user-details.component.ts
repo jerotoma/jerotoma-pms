@@ -2,6 +2,7 @@ import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { UploadAvatarDialogComponent } from 'app/shared/users/uploads';
 import { NbDialogService } from '@nebular/theme';
 
+import { UserService } from 'app/services';
 import { User, Student, Parent, Teacher, Staff } from 'app/models';
 import { USER_TYPE, API_END_POINTS } from 'app/utils';
 
@@ -15,11 +16,24 @@ export class UserDetailsComponent implements OnInit {
     @Input('userType') userType: string = USER_TYPE.TEACHER;
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = API_END_POINTS.baseURL;
+    parents: Parent[] = [];
 
-    constructor(private dialogService: NbDialogService) {}
+    constructor(private dialogService: NbDialogService,
+      private userService: UserService) {}
 
     ngOnInit() {
-      // window.console.log(this.userDatail);
+     this.loadData();
+    }
+
+    loadData() {
+     if (this.isUserStudent) {
+       this.loadStudentParents()
+     }
+    }
+    loadStudentParents() {
+      this.userService.loadParentsByStudentID(this.userDatail.id).subscribe((parents: Parent[]) => {
+        this.parents = parents;
+      });
     }
 
     onSubmit() {

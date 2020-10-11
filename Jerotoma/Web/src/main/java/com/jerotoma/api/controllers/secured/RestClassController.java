@@ -32,6 +32,7 @@ import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.academic.Course;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.Room;
+import com.jerotoma.common.models.students.Student;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.schedules.MeetingTime;
@@ -51,6 +52,7 @@ import com.jerotoma.services.courses.ProgramService;
 import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.schedules.MeetingTimeService;
 import com.jerotoma.services.schedules.ScheduleDataService;
+import com.jerotoma.services.users.StudentService;
 import com.jerotoma.services.users.TeacherService;
 
 @RestController
@@ -68,6 +70,7 @@ public class RestClassController extends BaseController {
 	@Autowired MeetingTimeService meetingTimeService;
 	@Autowired RoomService roomService;
 	@Autowired TeacherService teacherService;
+	@Autowired StudentService studentService;
 	@Autowired ScheduleDataService scheduleDataService;
 	
 	int generationNumber = 0;
@@ -186,6 +189,29 @@ public class RestClassController extends BaseController {
 		return response;
 	}
 	
+	@GetMapping(value = {"/students/{studentId}/academic-levels/{academicLevelId}/academic-years/{academicYearId}"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadStudentJClasses(
+			Authentication auth, 
+			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("academicLevelId") Integer academicLevelId,
+			@PathVariable("studentId") Integer studentId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			response.setData(assemblerClassService.loadStudentClasses(studentId, academicLevelId, academicYearId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
 	@GetMapping(value = {
 			"academic-years/{academicYearId}/students/{studentId}", 
 			"/academic-years/{academicYearId}/students/{studentId}"
@@ -200,7 +226,8 @@ public class RestClassController extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		
 		try {
-			response.setData(assemblerClassService.loadStudentClassesByAcademicYear(studentId, academicYearId));
+			Student student = studentService.findObject(studentId);			
+			response.setData(assemblerClassService.loadStudentClasses(studentId, student.getAcademicLevelId(), academicYearId));
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	

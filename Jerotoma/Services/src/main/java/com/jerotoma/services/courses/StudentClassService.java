@@ -14,4 +14,6 @@ public interface StudentClassService extends BaseService<StudentClass> {
 
 	List<StudentClass> updateBatchObject(List<StudentClass> studentClasses) throws SQLException;
 
+	boolean deleteStudentClass(Integer studentAcademicLevelId, Integer jClassId) throws SQLException;
+
 }

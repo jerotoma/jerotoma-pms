@@ -170,6 +170,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   }
 
   loadData() {
+    this.isLoading = true;
     this.getCurrentAcademicYear();
     this.loadAcademicYears();
   }
@@ -188,6 +189,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   loadAcademicYears() {
     this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[]) => {
+      this.isLoading = false;
       if (academicYears) {
         this.academicYears = academicYears;
       }
@@ -224,6 +226,7 @@ export class StudentCourseEnrollmentCreateComponent implements OnInit {
   getCurrentAcademicYear() {
     this.academicYearService.getCurrentAcademicYear()
     .subscribe((academicYear: AcademicYear) => {
+      this.isLoading = false;
       if (academicYear) {
         this.currentAcademicYear = academicYear;
       }

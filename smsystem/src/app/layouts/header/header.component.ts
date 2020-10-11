@@ -20,7 +20,7 @@ import { USER_DROPDOWN_ITEMS } from './header-menu';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
-  userPictureOnly: boolean = false;
+  userPictureOnly: boolean = true;
   overrideUserTheme: boolean = false;
   user: User;
   themes = THEMES;

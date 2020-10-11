@@ -10,6 +10,5 @@ public interface StudentAcademicLevelDao extends BaseDao<StudentAcademicLevel> {
 
 	List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevels) throws SQLException;
 
-	StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId) throws SQLException;
-
+	StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
 }

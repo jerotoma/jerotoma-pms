@@ -210,7 +210,7 @@ public class RestMediaController extends BaseController {
 	private FileUploadWrapper saveUpload(FileUploadWrapper  fileUploadWrapper, Integer userId, boolean isForProfile) {
 		
 		try {		
-			UserVO userVO = userService.getUserByUserId(userId);			
+			UserVO userVO = userService.getUserVOByUserId(userId);			
 			if (fileUploadWrapper.getSuccess()) {
 				Media media = fileUploadWrapper.getMedia();
 				media.setAddedBy(getAuthenticatedUserVO().getUserId());

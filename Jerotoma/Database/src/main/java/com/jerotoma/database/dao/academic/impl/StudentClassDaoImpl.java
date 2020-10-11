@@ -138,4 +138,9 @@ public class StudentClassDaoImpl implements StudentClassDao {
 		}
 		return studentClassList;
 	}
+
+	@Override
+	public boolean deleteStudentClass(Integer studentAcademicLevelId, Integer classId) throws SQLException {
+		return deleteObject(findStudentClass(classId, studentAcademicLevelId));
+	}
 }

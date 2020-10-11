@@ -41,6 +41,11 @@ export class UserService {
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadParentsByStudentID(studentId: number): Observable<User[]>  {
+    return this.http.get(`${API_END_POINTS.users}/students/${studentId}/parents`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   loadUser(userId: number): Observable<User> {
     return this.http.get(`${API_END_POINTS.users}/${userId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));

@@ -120,9 +120,24 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
       for (let i = 0; i < this.registeredClasses.length; i++) {
         if ( this.registeredClasses[i].id === classView.id) {
           this.registeredClasses.splice(i, 1);
+          this.deleteStudentClass(classView.id);
         }
      }
     }
+  }
+
+  deleteStudentClass(classId: number) {
+    const data = {
+      studentId: this.student.id,
+      academicLevelId: this.student.academicLevelId,
+      academicYearId: this.academicYear.id,
+      jClassId: classId,
+    }
+    this.studentClassService.deleteStudentClass(data).subscribe((isDeleted: boolean) => {
+      if (isDeleted) {
+        this.modalService.openSnackBar('Student Class has been deleted', 'success');
+      }
+    });
   }
   checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {

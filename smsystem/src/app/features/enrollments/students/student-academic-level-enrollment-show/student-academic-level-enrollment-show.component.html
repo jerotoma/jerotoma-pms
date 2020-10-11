@@ -11,11 +11,23 @@
                   <p>{{student.fullName}}</p>
                 </div>
               </div>
+              <div class='col-md-6'>
+                <div class="form-control-group" *ngIf="student && student.programName">
+                  <label for="student-programName" class="label">Program</label>
+                  <p>{{student.programName}}</p>
+                </div>
+              </div>
             </div>
             <div class="row">
+                <div class='col-md-6'>
+                  <div class="form-control-group" *ngIf="student && student.currentAcademicLevelName">
+                    <label for="student-currentAcademicLevelName" class="label">Academic Level</label>
+                    <p>{{student.currentAcademicLevelName}}</p>
+                  </div>
+                </div>
                 <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="class-academicYear" class="label">Class Academic Year</label>
+                        <label for="class-academicYear" class="label">Academic Year</label>
                         <nb-select
                           fullWidth
                           placeholder="Class Academic Year"

@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicDisciplineConstant;
-import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ParentConstant;
@@ -45,13 +44,11 @@ import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
 import com.jerotoma.common.models.addresses.Address;
-import com.jerotoma.common.models.addresses.ParentAddress;
 import com.jerotoma.common.models.addresses.StaffAddress;
-import com.jerotoma.common.models.addresses.StudentAddress;
-import com.jerotoma.common.models.addresses.TeacherAddress;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.students.Student;
 import com.jerotoma.common.models.users.Parent;
+import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
@@ -181,7 +178,7 @@ public class RestUserController extends BaseController {
 		
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE + "/" + userId);
 		this.securityCheckAccessByRoles(auth);		
-		response.setData(userService.getUserByUserId(userId));
+		response.setData(userService.getUserVOByUserId(userId));
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setHttpStatus(HttpStatus.OK);		
@@ -231,6 +228,27 @@ public class RestUserController extends BaseController {
 		return response;
 	}
 	
+	@GetMapping(value = {"/students/{studentId}/parents"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> getParentsByStudentID(Authentication auth,
+			@PathVariable(value="studentId", required=true)Integer studentId) {		
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		try {
+			response.setData(assemblerStudentService.loadParentsByStudentId(studentId));	
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
@@ -241,12 +259,8 @@ public class RestUserController extends BaseController {
 		User newUser;
 		Teacher teacher;
 		Student student;		
-		Address address;
-		Position position;
-		StudentAddress studentAddress;
-		ParentAddress parentAddress;
-		Department department;
-		
+		Position position;		
+		Department department;		
 		
 		requiredFields =  new ArrayList<>(Arrays.asList(
 						UserConstant.FIRST_NAME, 
@@ -272,7 +286,7 @@ public class RestUserController extends BaseController {
 			throw new FieldRequiredException("User type can not be empty");
 		}
 		UserConstant.USER_TYPE type = UserConstant.processUserType(userType);
-					
+		Person person;		
 		try {
 			switch(type) {
 			case TEACHER:
@@ -281,72 +295,21 @@ public class RestUserController extends BaseController {
 				position = processPosition(params, requiredFields);			
 				department = processDepartment(params, requiredFields);
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
-				
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
-				newUser = authUserService.createUserLoginAccount(newUser);
-								
-				teacher.setUserId(newUser.getId());
 				teacher.setPosition(position);
 				teacher.setDepartment(department);
 				teacher.setUpdatedBy(authUser.getId());
-				address = teacher.getAddress();				
 				
-				teacher = teacherService.createObject(teacher);	
-				
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
-				TeacherAddress teacherAddress = new TeacherAddress();
-				teacherAddress.setAddress(address);
-				teacherAddress.setTeacher(teacher);
-				teacherAddress.setCreatedOn(today);
-				teacherAddress.setUpdatedOn(today);
-				teacherAddressService.createObject(teacherAddress);
-				response.setData(teacher);
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
+				person = userService.createUser(teacher, newUser);				
+				response.setData(userService.getUserVOByUserId(person.getUserId()));	
 				break;
-			case STUDENT:
-				studentAddress = new StudentAddress();
+			case STUDENT:				
 				requiredFields.add(UserConstant.ACADEMIC_LEVEL_ID);
-				requiredFields.add(UserConstant.PROGRAM_ID);
-				
+				requiredFields.add(UserConstant.PROGRAM_ID);				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);				
-				newUser = authUserService.createUserLoginAccount(newUser);	
-								
-				student.setUpdatedBy(authUser.getId());
-				if (student.getParentIds() != null) {
-					Set<Parent> parents = new HashSet<>();
-					for (Integer parentId: student.getParentIds()) {
-						parent = parentService.findObject(parentId);
-						parents.add(parent);
-					}										
-					student.setParents(parents);
-				}
-				student.setUserId(newUser.getId());
-				student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());
-				address = student.getAddress();
-				if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
-					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
-				}
-				student.setProgram(programService.findObject(student.getProgramId()));
-				
-				AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
-				student.setAcademicLevelId(academicLevel.getId());
-				
-				student = studentService.createObject(student);
-				
-				studentAcademicLevelService.createObject(new StudentAcademicLevel(student, academicLevel, CompletionStatus.IN_PROGRESS));
-								
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
-				studentAddress.setStudent(student);
-				studentAddress.setAddress(address);
-				studentAddress.setCreatedOn(today);
-				studentAddress.setUpdatedOn(today);
-				studentAddressService.createObject(studentAddress);	
-				
-				response.setData(student);				
+				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);			
+				person = userService.createUser(student, newUser);				
+				response.setData(userService.getUserVOByUserId(person.getUserId()));					
 				
 				break;
 			case STAFF:
@@ -356,47 +319,16 @@ public class RestUserController extends BaseController {
 				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
 				staff.setPosition(position);
 				staff.setUpdatedBy(authUser.getId());
-				address = staff.getAddress();
-				
 				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STAFF);				
-				newUser = authUserService.createUserLoginAccount(newUser);	
-				
-				staff.setUserId(newUser.getId());
-				staff = staffService.createObject(staff);
-							
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
-				StaffAddress staffAddress = new StaffAddress();
-				staffAddress.setAddress(address);
-				staffAddress.setStaff(staff);
-				staffAddress.setCreatedOn(today);
-				staffAddress.setUpdatedOn(today);
-				staffAddressService.createObject(staffAddress);
-				response.setData(staff);
+				person = userService.createUser(staff, newUser);				
+				response.setData(userService.getUserVOByUserId(person.getUserId()));	
 				break;
 			case PARENT:
 				requiredFields.remove(UserConstant.BIRTH_DATE);
-				parentAddress = new ParentAddress();
-				parent = UserValidator.validateParentInputInfo(params, requiredFields);
-				
+				parent = UserValidator.validateParentInputInfo(params, requiredFields);				
 				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_PARENT);				
-				newUser = authUserService.createUserLoginAccount(newUser);
-				
-				parent.setUserId(newUser.getId());
-				parent.setUpdatedBy(authUser.getId());
-				address = parent.getAddress();
-				parent = parentService.createObject(parent);
-								
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.createObject(address);
-				
-				parentAddress.setAddress(address);
-				parentAddress.setParent(parent);
-				parentAddress.setCreatedOn(today);
-				parentAddress.setUpdatedOn(today);
-				parentAddressService.createObject(parentAddress);				
-				response.setData(parent);
+				person = userService.createUser(parent, newUser);				
+				response.setData(userService.getUserVOByUserId(person.getUserId()));				
 				break;				
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -786,7 +718,7 @@ public class RestUserController extends BaseController {
 				teachers = assemblerTeacherService.search(queryParam);	
 				if(users != null) {
 					for(TeacherVO teacher: teachers) {
-						users.add(userService.getUserByUserId(teacher.getUserId()));
+						users.add(userService.getUserVOByUserId(teacher.getUserId()));
 					}
 				}				
 				break;
@@ -794,7 +726,7 @@ public class RestUserController extends BaseController {
 				students = assemblerStudentService.search(queryParam);
 				if(users != null) {
 					for(StudentVO student: students) {
-						users.add(userService.getUserByUserId(student.getUserId()));
+						users.add(userService.getUserVOByUserId(student.getUserId()));
 					}
 				}
 				break;
@@ -802,7 +734,7 @@ public class RestUserController extends BaseController {
 				staffs = assemblerStaffService.search(queryParam);
 				if(users != null) {
 					for(StaffVO staff: staffs) {
-						users.add(userService.getUserByUserId(staff.getUserId()));
+						users.add(userService.getUserVOByUserId(staff.getUserId()));
 					}
 				}									
 				break;
@@ -810,7 +742,7 @@ public class RestUserController extends BaseController {
 				parents = assemblerParentService.search(queryParam);
 				if(users != null) {
 					for(ParentVO parent: parents) {
-						users.add(userService.getUserByUserId(parent.getUserId()));
+						users.add(userService.getUserVOByUserId(parent.getUserId()));
 					}
 				}				
 				break;

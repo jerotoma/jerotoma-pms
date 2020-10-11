@@ -109,12 +109,12 @@ public class StudentAcademicLevelDaoImpl implements StudentAcademicLevelDao {
 	}
 
 	@Override
-	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId)
+	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
-		return entityManager.createQuery("FROM StudentAcademicLevel WHERE academicLevel.id =:academicLevelId AND student.id =:studentId", StudentAcademicLevel.class)
+		return entityManager.createQuery("FROM StudentAcademicLevel WHERE academicLevel.id =:academicLevelId AND student.id =:studentId AND academicYear.id =:academicYearId", StudentAcademicLevel.class)
 				.setParameter("academicLevelId", academicLevelId)
 				.setParameter("studentId", studentId)
+				.setParameter("academicYearId", academicYearId)
 				.getSingleResult();
 	}
-
 }

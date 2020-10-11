@@ -64,6 +64,11 @@ export class ClassService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadStudentRegisteredClasses(studentId: number, academicLevelId: number, academicYearId: number): Observable<ClassView[]> {
+    return this.http.get(`${API_END_POINTS.classes}/students/${studentId}/academic-levels/${academicLevelId}/academic-years/${academicYearId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   loadStudentClassesByAcademicYear(academicYearId: number, studentId: number) {
     return this.http.get(`${API_END_POINTS.classes}/academic-years/${academicYearId}/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));

@@ -21,8 +21,9 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
+  userType: string = USER_TYPE.PARENT;
   action: string = 'create';
-
+  linearMode: boolean = true;
   studentForm: FormGroup;
   addressForm: FormGroup;
   userLoginInput: UserLoginInput;
@@ -190,8 +191,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     }
   }
 
-  pickUser(event: any, parent: Parent) {
-    event.preventDefault();
+  pickUser(parent: Parent) {
     let parentFound = false;
     this.listDisplay = 'none';
     if (this.selectedParents.length === 0) {

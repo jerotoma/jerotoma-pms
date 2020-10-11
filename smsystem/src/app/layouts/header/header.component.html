@@ -12,7 +12,7 @@
       <nb-user
           *ngIf="user"
           [nbContextMenu]="userMenu"
-          [onlyPicture]="userPictureOnly"
+          onlyPicture
           [name]="user?.fullName"
           [picture]="baseURL + user?.picture">
       </nb-user>

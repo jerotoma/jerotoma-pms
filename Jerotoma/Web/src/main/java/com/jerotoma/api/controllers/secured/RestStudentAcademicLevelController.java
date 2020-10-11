@@ -119,13 +119,12 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		userSecurityClearance.checkStudentCreationPermission();
 		
-		requiredFields = new ArrayList<>(
-				Arrays.asList(
+		requiredFields = Arrays.asList(
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_ID
-						));
+						);
 		
 		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);
 		try {
@@ -151,18 +150,48 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);		
 				
-		requiredFields = new ArrayList<>(
-				Arrays.asList(
+		requiredFields = Arrays.asList(
 						StudentConstant.Class.ID,
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
 						StudentConstant.Class.JCLASS_ID
-						));		
+						);		
 		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);		
 		try {
 			UserVO authUser = getAuthenticatedUserVO();			
 			response.setData(studentAcademicLevelService.updateStudentAcademicLevel(studentAcademicLevelField, authUser));				
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}			
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		return response;
+	}
+	
+	@PostMapping(value = "/delete-student-class")
+	@ResponseBody
+	protected HttpResponseEntity<Object> deleteStudentClass(
+		Authentication auth, 
+		@RequestBody Map<String, Object> params) throws JDataAccessException {
+	
+		List<String> requiredFields;
+		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/delete-student-class");
+		this.securityCheckAccessByRoles(auth);	
+		userSecurityClearance.checkStudentClassDeletionPermission();
+				
+		requiredFields = Arrays.asList(
+				StudentConstant.Class.ACADEMIC_YEAR_ID,
+				StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
+				StudentConstant.Class.STUDENT_ID,
+				StudentConstant.Class.JCLASS_ID
+				);
+		
+		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);		
+		Integer classId = (Integer) params.get(StudentConstant.Class.JCLASS_ID);		
+		studentAcademicLevelField.setClassIds(Arrays.asList(classId));		
+		try {				
+			response.setData(studentAcademicLevelService.deleteStudentClass(studentAcademicLevelField));				
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}			
@@ -194,7 +223,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		try {
 			
-			UserVO user = userService.getUserByUserId(userId);
+			UserVO user = userService.getUserVOByUserId(userId);
 			
 			switch(user.getUserType()) {
 			case STUDENT:

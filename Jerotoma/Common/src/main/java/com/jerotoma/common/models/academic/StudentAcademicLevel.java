@@ -1,5 +1,6 @@
 package com.jerotoma.common.models.academic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -70,12 +71,13 @@ public class StudentAcademicLevel {
 	
 	public StudentAcademicLevel() {}
 	
-	public StudentAcademicLevel(Student student, AcademicLevel academicLevel, CompletionStatus completionStatus) {
+	public StudentAcademicLevel(Student student, AcademicLevel academicLevel, AcademicYear academicYear, CompletionStatus completionStatus) {
 		super();
 		this.student = student;
 		this.academicLevel = academicLevel;
 		this.completionStatus = completionStatus;
 		this.completionStatusId = completionStatus.getID();
+		this.academicYear = academicYear;
 	}
 
 	public Integer getId() {
@@ -164,7 +166,7 @@ public class StudentAcademicLevel {
 		Integer academicLevelId = null;
 		Integer academicYearId = null;
 		Integer commpletionStatusId = null;
-		List<Integer> classIds;	
+		List<Integer> classIds = new ArrayList<>();	
 		Integer id = null;
 			
 		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer academicYearId, List<Integer> classIds) {

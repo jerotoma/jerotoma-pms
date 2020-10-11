@@ -35,7 +35,7 @@ export class StudentAcademicLevelEnrollmentsViewComponent implements OnInit {
     userType: 'teacher',
   };
 
-  title: string = 'List of Scheduled Courses';
+  title: string = 'List of Enrolled Students';
   studentClasses: StudentAcademicLevel[] = [];
   hidePageSize: boolean = false;
   isLoading: boolean = false;

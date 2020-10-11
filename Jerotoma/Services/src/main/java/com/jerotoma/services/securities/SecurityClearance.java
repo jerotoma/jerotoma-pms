@@ -22,7 +22,7 @@ public class SecurityClearance {
 	
 	public void checkChangeUserProfileImageClearance(Integer userId) {	
 		UserVO currentUser = userService.loadCurrentUser();
-		UserVO userVO = userService.getUserByUserId(userId);
+		UserVO userVO = userService.getUserVOByUserId(userId);
 		UnAuthorizedAccessException unAuthorizedAccess = new UnAuthorizedAccessException(String.format(ExceptionMessageConstant.UN_AUTHORIZED_ACCESS_MESSAGE, "change profile image"));
 		if (userVO == null) {
 			throw unAuthorizedAccess;
@@ -99,5 +99,9 @@ public class SecurityClearance {
 		if (!allowedAccess) {
 			throw unAuthorizedAccess;
 		}
+	}
+
+	public void checkStudentClassDeletionPermission() {
+		checkGeneralEntityDeletionPermission();	
 	}
 }

@@ -28,7 +28,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   action: string = 'create';
-
+  userType: string = USER_TYPE.STUDENT;
   parentForm: FormGroup;
   addressForm: FormGroup;
   student: Student;
@@ -174,8 +174,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     }
   }
 
-  pickUser(event: any, student: Student) {
-    event.preventDefault();
+  pickUser(student: Student) {
     this.listDisplay = 'none';
     let studentFound = false;
     if (this.selectedStudents.length === 0) {
