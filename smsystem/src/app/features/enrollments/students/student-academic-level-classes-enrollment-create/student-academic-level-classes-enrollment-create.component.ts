@@ -26,10 +26,10 @@ import {
 
 @Component({
   selector: 'app-student-academic-level-classes-enrollment-create',
-  styleUrls: ['./student-academic-level-enrollment-create.component.scss'],
-  templateUrl: './student-academic-level-enrollment-create.component.html',
+  styleUrls: ['./student-academic-level-classes-enrollment-create.component.scss'],
+  templateUrl: './student-academic-level-classes-enrollment-create.component.html',
 })
-export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
+export class StudentAcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Input() studentId: string = '0';
@@ -42,8 +42,15 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
   courseId: number;
   programId: number;
   academicLevelId: number;
+  jClassIds: number[] = [];
+  teacherId: number;
   isLoading: boolean = false;
+  confirmed: boolean = false;
+  checkAllStudents: boolean = false;
+  checkAllCourses: boolean = false;
+  academicYear: AcademicYear;
   currentAcademicYear: AcademicYear = null;
+  studentClassAdmission: StudentClassAdmission;
 
   param: QueryParam =  {
     page: 1,
@@ -55,11 +62,18 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
     userType:  this.userType,
   };
 
-  confirmed: boolean = false;
+  jClasses: ClassView[];
+  academicYears: AcademicYear[];
   student: Student;
-  studentAcademicLevelForm: FormGroup;
+  studentClassForm: FormGroup;
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
+  programs: Program[];
+  showMessage: ShowMessage = {
+    error: false,
+    success: false,
+    message: '',
+  };
   listDisplay: string = 'none';
 
   constructor(
@@ -71,11 +85,12 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
     private studentClassService: StudentAcademicLevelService,
     private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
-    protected ref: NbDialogRef<StudentAcademicLevelEnrollmentCreateComponent>) {}
+    protected ref: NbDialogRef<StudentAcademicLevelClassesEnrollmentCreateComponent>) {}
 
   ngOnInit() {
     this.loadData();
     this.loadForm();
+    this.loadPrograms();
   }
 
   dismiss() {
@@ -83,8 +98,17 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
       confirmed: this.confirmed,
     });
   }
+
+  checkAllStudentBoxes(checked: boolean) {
+    this.checkAllStudents = checked;
+  }
+
+  checkAllCourseBoxes(checked: boolean) {
+    this.checkAllCourses = checked;
+  }
+
   setSelectedUser(student: Student) {
-    this.studentAcademicLevelForm.patchValue({
+    this.studentClassForm.patchValue({
       studentId: student.id,
     });
     this.programId = student.programId;
@@ -94,39 +118,90 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
 
   onSubmit() {
     this.confirmed = false;
-    this.studentAcademicLevelService.createStudentAcademicLevel(this.studentAcademicLevelForm.value)
-    .subscribe((result: StudentAcademicLevel) => {
+    this.studentClassAdmission = this.studentClassForm.value;
+    this.studentClassService.createStudentAcademicLevelClasses(this.studentClassAdmission)
+    .subscribe((result: StudentClassAdmission) => {
       const resp = result;
       this.confirmed = true;
-      this.studentAcademicLevelForm.reset();
+      this.studentClassForm.reset();
       this.dismiss();
     });
   }
 
+  checkedChange(checked: boolean, jClass: ClassView) {
+    if (checked) {
+      this.jClassIds.push(jClass.id);
+    } else {
+      for (let i = 0; i < this.jClassIds.length; i++) {
+        if ( this.jClassIds[i] === jClass.id) {
+          this.jClassIds.splice(i, 1);
+        }
+     }
+    }
+    this.studentClassForm.patchValue({
+      jClassIds: this.jClassIds,
+    });
+  }
+
   loadForm() {
-    this.studentAcademicLevelForm = this.formBuilder.group({
+    this.studentClassForm = this.formBuilder.group({
       id: [null],
       studentId: ['', Validators.required],
       academicYearId: ['', Validators.required],
       academicLevelId: ['', Validators.required],
+      jClassIds: [[], Validators.required],
     });
     this.onChanges();
   }
 
   onChanges() {
-    this.studentAcademicLevelForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
+    this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
       const programId = this.programId;
       this.academicYearId = this.currentAcademicYear.id;
-      this.studentAcademicLevelForm.patchValue({
+      this.studentClassForm.patchValue({
         academicYearId: this.academicYearId,
-        studentId: this.student.id,
       }, {emitEvent: false});
+      if (academicLevelId && programId) {
+        this.academicLevelId = academicLevelId;
+        this.jClasses = [];
+        this.loadJClassesByAcademicYear(programId, academicLevelId, this.academicYearId);
+      }
     });
   }
 
   loadData() {
     this.isLoading = true;
     this.getCurrentAcademicYear();
+    this.loadAcademicYears();
+  }
+
+  loadJClassesByAcademicYear(programId: number, academicLevelId: number, academicYearId: number) {
+    if (!programId || !academicLevelId || !academicYearId) {
+        this.modalService.openSnackBar('Program or Academic Level can not be empty', 'info');
+        return;
+    }
+    this.isLoading = true;
+    this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
+      this.jClasses = classViews;
+      this.isLoading = false;
+    });
+  }
+  loadAcademicYears() {
+    this.academicYearService.getAcademicYears()
+    .subscribe((academicYears: AcademicYear[]) => {
+      this.isLoading = false;
+      if (academicYears) {
+        this.academicYears = academicYears;
+      }
+    });
+  }
+
+  pushJClasses(jClasses: ClassView[]) {
+    const jClassesIds  = [];
+    jClasses.forEach((jClass) => {
+      jClassesIds.push(jClass.id);
+    });
+    return jClassesIds;
   }
 
   loadAvailableAcademicLevelsByStudentId(studentId: number) {
@@ -137,6 +212,15 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
         this.academicLevels = academicLevels;
       }
     });
+  }
+
+  loadPrograms() {
+    this.programService.loadProgramList()
+      .subscribe((programs: Program[]) => {
+        if (programs) {
+          this.programs = programs;
+        }
+      });
   }
 
   getCurrentAcademicYear() {

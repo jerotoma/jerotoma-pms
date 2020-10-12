@@ -4,6 +4,7 @@ table {
 button {
   cursor: pointer;
   margin: 0;
+  margin-left: 3px;
   border: none;
 }
 
@@ -11,5 +12,5 @@ button:focus {
   outline: none;
 }
 button:hover {
-  background-color: rgba(0, 0, 0, 0.03);;
+  background-color: rgba(0, 0, 0, 0.03);
 }

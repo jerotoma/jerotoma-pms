@@ -15,8 +15,11 @@ public interface StudentAcademicLevelService extends BaseService<StudentAcademic
 	List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevel) throws SQLException;
 
 	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
+	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
 
-	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
+	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
 
-	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException;;
+	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException;
+
+	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;;
 }

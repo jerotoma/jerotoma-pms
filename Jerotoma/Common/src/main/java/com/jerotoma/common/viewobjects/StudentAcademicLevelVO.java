@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.StudentConstant;
 
 public class StudentAcademicLevelVO {
@@ -17,6 +18,9 @@ public class StudentAcademicLevelVO {
 	
 	private AcademicYearVO academicYear;
 	private AcademicLevelVO academicLevel;
+	
+	private CompletionStatus completionStatus;
+	private String completionStatusName;
 	
 	private List<ClassVO> jClasses;
 	
@@ -31,6 +35,8 @@ public class StudentAcademicLevelVO {
 		this.classesCount = rs.getInt(StudentConstant.Class.CLASSES_COUNT);
 		this.updatedOn = rs.getDate(StudentConstant.Class.UPDATED_ON);
 		this.createdOn = rs.getDate(StudentConstant.Class.CREATED_ON);
+		this.completionStatus = CompletionStatus.getCompletionStatusfromID(rs.getInt(StudentConstant.Class.COMPLETION_STATUS_ID));
+		this.completionStatusName = this.completionStatus != null ? this.completionStatus.getDescription() : null;
 		
 	}
 
@@ -112,4 +118,22 @@ public class StudentAcademicLevelVO {
 	public void setjClasses(List<ClassVO> jClasses) {
 		this.jClasses = jClasses;
 	}
+
+	public CompletionStatus getCompletionStatus() {
+		return completionStatus;
+	}
+
+	public void setCompletionStatus(CompletionStatus completionStatus) {
+		this.completionStatus = completionStatus;
+	}
+
+	public String getCompletionStatusName() {
+		return completionStatusName;
+	}
+
+	public void setCompletionStatusName(String completionStatusName) {
+		this.completionStatusName = completionStatusName;
+	}
+	
+	
 }

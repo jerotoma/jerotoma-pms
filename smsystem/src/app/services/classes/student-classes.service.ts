@@ -40,16 +40,28 @@ export class StudentAcademicLevelService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  createStudentAcademicLevel(data?: any): Observable<StudentClassAdmission> {
+  createStudentAcademicLevel(data?: any): Observable<StudentAcademicLevel> {
     return this.http.post(`${API_END_POINTS.studentAcademicLevels}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  deleteStudentAcademicLevel(classId: number): Observable<boolean> {
-    return this.http.delete<any>(`${API_END_POINTS.studentAcademicLevels}/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+  createStudentAcademicLevelClasses(data?: any): Observable<StudentClassAdmission> {
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/classes`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  updateStudentAcademicLevel(data?: any): Observable<StudentClassAdmission> {
-    return this.http.put<any>(`${API_END_POINTS.studentAcademicLevels}`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
+  deleteStudentAcademicLevel(studentAcademicLevelId: number): Observable<boolean> {
+    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  deleteStudentAcademicLevelClass(classId: number, studentAcademicLevelId: number): Observable<boolean> {
+    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}/classes/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  updateStudentAcademicLevel(data?: any): Observable<StudentAcademicLevel> {
+    return this.http.put(`${API_END_POINTS.studentAcademicLevels}`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  updateStudentAcademicLevelClasses(data?: any): Observable<StudentClassAdmission> {
+    return this.http.put(`${API_END_POINTS.studentAcademicLevels}/classes`, data) .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   errorHandler(error: HttpErrorResponse) {

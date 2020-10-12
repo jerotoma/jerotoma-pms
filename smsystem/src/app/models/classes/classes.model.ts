@@ -28,7 +28,16 @@ export interface StudentAcademicLevel {
   academicYear: AcademicYear;
   academicLevel: AcademicLevel;
   jClasses: ClassView[];
+  completionStatus: CompletionStatus;
+  completionStatusName: string;
   classesCount: number;
+}
+
+export enum CompletionStatus {
+  IN_PROGRESS = 'In Progress',
+  PENDING = 'Pending',
+  NO_STATUS = 'No status',
+  COMPLETED = 'Completed',
 }
 
 

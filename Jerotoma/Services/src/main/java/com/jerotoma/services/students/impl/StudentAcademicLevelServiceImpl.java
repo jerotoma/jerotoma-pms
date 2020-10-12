@@ -92,7 +92,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	}
 
 	@Override
-	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
+	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
 		
 		
 		List<StudentClass> studentClasses = new ArrayList<>();		
@@ -143,7 +143,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	}
 
 	@Override
-	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser)
+	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser)
 			throws SQLException {
 		StudentClass studentClass;
 		List<StudentClass> studentClasses = new ArrayList<>();		
@@ -187,6 +187,49 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		
 		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
 		return studentClassService.deleteStudentClass(studentAcademicLevel.getId(), jClassId);
+	}
+
+	@Override
+	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
+		
+		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
+		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
+		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
+		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
+		
+		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel();
+		studentAcademicLevel.setAcademicLevel(academicLevel);
+		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
+		studentAcademicLevel.setAcademicYear(academicYear);
+		studentAcademicLevel.setStudent(student);
+		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
+		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel = createObject(studentAcademicLevel);
+		
+		return createObject(studentAcademicLevel);	
+	}
+
+	@Override
+	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser)
+			throws SQLException {
+		
+		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
+		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
+		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
+		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
+		
+		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(student.getId(), academicLevel.getId(), academicYear.getId());
+		studentAcademicLevel.setAcademicLevel(academicLevel);
+		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
+		studentAcademicLevel.setAcademicYear(academicYear);
+		studentAcademicLevel.setStudent(student);
+		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
+		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel = createObject(studentAcademicLevel);
+		
+		return updateObject(studentAcademicLevel);	
 	}
 
 }

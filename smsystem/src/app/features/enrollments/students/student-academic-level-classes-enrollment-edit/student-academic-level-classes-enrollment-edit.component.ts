@@ -24,12 +24,12 @@ import {
 import { QueryParam, USER_TYPE, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
 @Component({
-  selector: 'app-student-academic-level-enrollment-edit',
+  selector: 'app-student-academic-level-classes-enrollment-edit',
   animations: OPEN_CLOSE_ANIMATION,
-  styleUrls: ['./student-academic-level-enrollment-edit.component.scss'],
-  templateUrl: './student-academic-level-enrollment-edit.component.html',
+  styleUrls: ['./student-academic-level-classes-enrollment-edit.component.scss'],
+  templateUrl: './student-academic-level-classes-enrollment-edit.component.html',
 })
-export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
+export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnInit {
   @Input() title: string;
   @Input() studentAcademicLevel: StudentAcademicLevel;
   @Output() onCreationSuccess = new EventEmitter();
@@ -79,7 +79,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     private modalService: ModalService,
     private studentClassService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
-    protected ref: NbDialogRef<StudentAcademicLevelEnrollmentEditComponent>) {}
+    protected ref: NbDialogRef<StudentAcademicLevelClassesEnrollmentEditComponent>) {}
 
   ngOnInit() {
     this.loadData();
@@ -101,7 +101,7 @@ export class StudentAcademicLevelEnrollmentEditComponent implements OnInit {
     this.updateStudentClass();
   }
   updateStudentClass() {
-    this.studentClassService.updateStudentAcademicLevel(this.studentClassAdmission)
+    this.studentClassService.updateStudentAcademicLevelClasses(this.studentClassAdmission)
           .subscribe((result: StudentClassAdmission) => {
             if (result) {
               const resp = result;
