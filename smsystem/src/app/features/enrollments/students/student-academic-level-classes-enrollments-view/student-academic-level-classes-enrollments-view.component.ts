@@ -38,7 +38,6 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
 
   title: string = 'List of Student Classes';
   studentClasses: StudentAcademicLevel[] = [];
-  completionStatus: CompletionStatus = CompletionStatus.IN_PROGRESS;
   hidePageSize: boolean = false;
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
@@ -143,5 +142,16 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
         this.loadStudentClasses();
       }
     });
+  }
+
+  getCompletionStatus(completionStatus: string): string {
+    if (CompletionStatus.IN_PROGRESS === completionStatus) {
+      return 'info';
+    } else if (CompletionStatus.COMPLETED === completionStatus) {
+      return 'success';
+    } else if (CompletionStatus.NOT_STARTED === completionStatus) {
+      return 'warning';
+    }
+    return 'danger';
   }
 }

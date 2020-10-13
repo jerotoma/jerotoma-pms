@@ -16,7 +16,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-12">
+              <div class="col-md-6">
                 <app-search-user
                   [title]="'Search for Student'"
                   [placeholder]="'Type Student Initial'"
@@ -24,19 +24,17 @@
                   (onUserSelected)="setSelectedUser($event)"
                 ></app-search-user>
               </div>
-            </div>
-            <div class="row">
               <div class="col-md-6">
-                <div class="form-control-group">
-                  <div class="form-control-group" *ngIf="currentAcademicYear">
-                    <label for="student-program" class="label">Student Program</label>
-                    <p>{{student?.programName}}</p>
-                  </div>
+                <div class="form-control-group" *ngIf="currentAcademicYear">
+                  <label for="student-program" class="label">Student Program</label>
+                  <p>{{student?.programName}}</p>
                 </div>
                 <nb-alert status="warning" *ngIf="student && !student.programName">
                   Sorry student must be registered to one of the School Program
                 </nb-alert>
               </div>
+            </div>
+            <div class="row">
               <div class="col-md-6">
                   <div class="form-control-group">
                       <label for="class-academicLevel" class="label">Academic Level</label>
@@ -52,6 +50,17 @@
                         </nb-option>
                       </nb-select>
                   </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                  <label for="is-current-student-academic-level" class="label">Is this current Student Academic Level</label>
+                  <p>
+                    <nb-checkbox
+                    id="is-current-student-academic-level"
+                    formControlName="isCurrentAcademicLevel"
+                    status="primary"> If checked, the level becomes current Student Academic Level</nb-checkbox>
+                  </p>
+                </div>
               </div>
             </div>
           </nb-card-body>

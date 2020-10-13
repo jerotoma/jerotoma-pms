@@ -36,7 +36,7 @@ export interface StudentAcademicLevel {
 export enum CompletionStatus {
   IN_PROGRESS = 'In Progress',
   PENDING = 'Pending',
-  NO_STATUS = 'No status',
+  NOT_STARTED = 'Not Started',
   COMPLETED = 'Completed',
 }
 

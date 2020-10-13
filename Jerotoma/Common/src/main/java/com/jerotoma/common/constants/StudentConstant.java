@@ -8,6 +8,7 @@ public class StudentConstant {
 	public static interface Class {
 		public static final String ID = "id";
 		public static final String STUDENT_CLASS = "studentClass";
+		public static final String IS_CURRENT_STUDENT_ACADEMIC_LEVEL = "isCurrentStudentAcademicLevel";
 		public static final String STUDENT_CLASSES = "studentClasses";
 		public static final String STUDENT_ID = "studentId";
 		public static final String STUDENT_IDS = "studentIds";

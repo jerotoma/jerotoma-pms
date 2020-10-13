@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.models.academic.StudentClass;
+import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.database.dao.academic.StudentClassDao;
 import com.jerotoma.services.courses.StudentClassService;
 

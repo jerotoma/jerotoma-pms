@@ -172,16 +172,16 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 		return assemblerAcademicYearDao.findObject(academicYearId);
 	}
 	@Override
-	public StudentAcademicLevelVO findStudentClassByParams(Integer studentId, Integer classId) {
+	public List<StudentAcademicLevelVO> findStudentClassByParams(Integer studentId, Integer classId) {
 		String query = getBaseSelectQuery()
 				.append("INNER JOIN public.student_classes src ON sc.student_academic_level_id = sal.id")
 				.append("WHERE sc.student_id = ? AND src.class_id = ? ").toString();
-		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId, classId);
+		return this.jdbcTemplate.query(query, new StudentClassResultProcessor(), studentId, classId);
 	}
 	@Override
-	public StudentAcademicLevelVO findStudentClassesByStudentId(Integer studentId) throws SQLException {
+	public List<StudentAcademicLevelVO> findStudentAcademicLevelsByStudentId(Integer studentId) throws SQLException {
 		String query = getBaseSelectQuery().append("WHERE sal.student_id = ? ").toString();
-		return this.jdbcTemplate.query(query, new StudentClassSingleResultProcessor(), studentId);
+		return this.jdbcTemplate.query(query, new StudentClassResultProcessor(), studentId);
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.students;
+package com.jerotoma.common.models.users.students;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 

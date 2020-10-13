@@ -14,7 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.students.Student;
+import com.jerotoma.common.models.users.students.Student;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_COURSE_ADMISSIONS)

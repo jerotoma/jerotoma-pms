@@ -30,7 +30,7 @@ import com.jerotoma.common.models.attendances.ClassAttendance;
 import com.jerotoma.common.models.attendances.StudentAttendance;
 import com.jerotoma.common.models.attendances.StudentAttendance.StudentAttendanceParam;
 import com.jerotoma.common.models.attendances.StudentAttendance.StudentAttendanceStatusParam;
-import com.jerotoma.common.models.students.Student;
+import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.validators.AttendanceValidator;
 import com.jerotoma.services.assemblers.attendances.AssemblerStudentAttendanceService;

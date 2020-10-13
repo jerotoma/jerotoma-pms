@@ -23,20 +23,21 @@ import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
 import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
-import com.jerotoma.common.models.students.Student;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
+import com.jerotoma.common.models.users.students.Student;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.common.utils.CalendarUtil;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.PersonVO;
 import com.jerotoma.common.viewobjects.UserVO;
@@ -47,6 +48,7 @@ import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
+import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 import com.jerotoma.services.assemblers.academic.DepartmentService;
@@ -90,6 +92,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired AcademicDisciplineService academicDisciplineService;
 	@Autowired DepartmentService departmentService;
 	@Autowired ProgramService programService;
+	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired StudentAcademicLevelService studentAcademicLevelService;
 	@Autowired AssemblerProgramService assemblerProgramService;
@@ -321,11 +324,7 @@ public class UserServiceImpl implements UserService {
 		Address address = student.getAddress();
 		
 		student = studentService.createObject(student);	
-		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel(student, academicLevel, academicYear, CompletionStatus.IN_PROGRESS);
-		studentAcademicLevel.setUpdatedBy(loggedInUser.getId());
-		studentAcademicLevel.setCreatedOn(today);
-		studentAcademicLevel.setUpdatedOn(today);
-		studentAcademicLevelService.createObject(studentAcademicLevel);
+		createStudentAcademicLevel(student, academicYear, loggedInUser, academicLevel);
 						
 		address.setUpdatedBy(loggedInUser.getId());
 		address = addressService.createObject(address);
@@ -336,6 +335,15 @@ public class UserServiceImpl implements UserService {
 		studentAddress.setUpdatedOn(today);
 		studentAddressService.createObject(studentAddress);
 		return student;
+	}
+
+	protected void createStudentAcademicLevel(Student student, AcademicYear academicYear, UserVO loggedInUser,
+			AcademicLevel academicLevel) throws SQLException {
+		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel(student, academicLevel, academicYear, CompletionStatus.IN_PROGRESS);
+		studentAcademicLevel.setUpdatedBy(loggedInUser.getId());
+		studentAcademicLevel.setCreatedOn(today);
+		studentAcademicLevel.setUpdatedOn(today);
+		studentAcademicLevelService.createObject(studentAcademicLevel);
 	}
 
 }

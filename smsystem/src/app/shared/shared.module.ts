@@ -55,6 +55,7 @@ import {
   CurrentAcademicYearComponent,
   LogoComponent,
   UploadAvatarDialogComponent,
+  ProgressComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -72,6 +73,7 @@ const COMPONENTS = [
   TinyMCEComponent,
   LogoComponent,
   UploadAvatarDialogComponent,
+  ProgressComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -84,6 +86,7 @@ const ENTRY_COMPONENTS = [
   TimepickerComponent,
   CurrentAcademicYearComponent,
   UploadAvatarDialogComponent,
+  ProgressComponent,
 ];
 
 const MODULES = [

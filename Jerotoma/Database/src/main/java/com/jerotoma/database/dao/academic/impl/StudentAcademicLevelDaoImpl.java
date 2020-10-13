@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicConstants;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.database.dao.DaoUtil;
 import com.jerotoma.database.dao.academic.StudentAcademicLevelDao;
 

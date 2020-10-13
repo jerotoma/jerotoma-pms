@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.academic;
+package com.jerotoma.common.models.users.students;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.academic.Class;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_CLASSES)

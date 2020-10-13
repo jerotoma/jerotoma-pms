@@ -15,10 +15,10 @@ import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
-import com.jerotoma.common.models.academic.StudentAcademicLevel.Fields;
-import com.jerotoma.common.models.academic.StudentClass;
-import com.jerotoma.common.models.students.Student;
+import com.jerotoma.common.models.users.students.Student;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
+import com.jerotoma.common.models.users.students.StudentClass;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel.Fields;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.academic.StudentAcademicLevelDao;
@@ -102,7 +102,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
 		
 		CompletionStatus completionStatus = CompletionStatus.getCompletionStatusfromID(studentAcademicLevelField.getAcademicLevelId());
-		if (completionStatus.equals(CompletionStatus.NO_STATUS)) {
+		if (completionStatus.equals(CompletionStatus.NOT_STARTED)) {
 			completionStatus = CompletionStatus.IN_PROGRESS;
 		}
 		
@@ -207,7 +207,13 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
 		studentAcademicLevel = createObject(studentAcademicLevel);
 		
-		return createObject(studentAcademicLevel);	
+		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
+			student.setAcademicLevelId(academicLevel.getId());
+			student = studentService.updateObject(student);
+			studentAcademicLevel.setStudent(student);
+		}
+		
+		return studentAcademicLevel;	
 	}
 
 	@Override
@@ -227,9 +233,15 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
 		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
 		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel = createObject(studentAcademicLevel);
+		studentAcademicLevel = updateObject(studentAcademicLevel);
 		
-		return updateObject(studentAcademicLevel);	
+		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
+			student.setAcademicLevelId(academicLevel.getId());
+			student = studentService.updateObject(student);
+			studentAcademicLevel.setStudent(student);
+		}
+		
+		return studentAcademicLevel;	
 	}
 
 }

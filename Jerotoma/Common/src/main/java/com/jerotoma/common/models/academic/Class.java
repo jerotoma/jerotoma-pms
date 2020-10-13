@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.schedules.MeetingTime;
 
 

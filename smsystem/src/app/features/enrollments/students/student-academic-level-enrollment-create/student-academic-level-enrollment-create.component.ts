@@ -109,6 +109,7 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
       studentId: ['', Validators.required],
       academicYearId: ['', Validators.required],
       academicLevelId: ['', Validators.required],
+      isCurrentAcademicLevel: [false],
     });
     this.onChanges();
   }

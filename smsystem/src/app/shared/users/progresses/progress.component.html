@@ -1,0 +1,43 @@
+<nb-card>
+  <nb-card-body>
+    <div class="lists row mb-2">
+      <div class="col-md-12">
+        <div class="form-control-group">
+          <label for="academic-progress" class="label">My Academic Level Progress</label>
+          <nb-progress-bar [value]="studentAcademicLevelsCompletionAvarage" status="success">
+            {{studentProgress?.completedLevels}} completed out of {{studentProgress?.requiredLevels}}
+          </nb-progress-bar>
+        </div>
+      </div>
+    </div>
+    <div class="lists row">
+      <div class="col-md-12">
+          <div class="form-control-group">
+            <nb-card class="list-card" accent="success">
+              <nb-card-body style="padding: 0;">
+                <h5>List of Student Academic Levels</h5>
+                <nb-list class="list-group">
+                  <nb-list-item class="list-group-item" >
+                      <div class="row">
+                          <div class="col-md-5">Name</div>
+                          <div class="col-md-4">Academic Year</div>
+                          <div class="col-md-3">Status</div>
+                      </div>
+                  </nb-list-item>
+                  <nb-list-item class="list-group-item" *ngFor="let studentAcademicLevelProgresse of studentProgress?.studentAcademicLevelProgresses">
+                    <a href="#" (click)="preventDefaultEvent($event)">
+                        <div class="row">
+                          <div class="col-md-5">{{studentAcademicLevelProgresse?.academicLevel?.name}} ({{studentAcademicLevelProgresse?.academicLevel?.code}})</div>
+                          <div class="col-md-4">{{studentAcademicLevelProgresse?.academicLevel?.name}}</div>
+                          <div class="col-md-3">{{studentAcademicLevelProgresse?.completionStatusName}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                        </div>
+                    </a>
+                  </nb-list-item>
+                </nb-list>
+              </nb-card-body>
+            </nb-card>
+          </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

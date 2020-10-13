@@ -6,14 +6,14 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 
 public class StudentAcadmicLevelValidator {
 	
 	@SuppressWarnings("unchecked")
 	public static StudentAcademicLevel.Fields validate(Map<String, Object> params, List<String> requiredFields) {
 		
-		
+		Boolean isCurrentStudentAcademicLevel = Boolean.FALSE;
 		Integer studentId = null;
 		Integer academicLevelId = null;
 		Integer commpletionStatusId = null;	
@@ -31,6 +31,10 @@ public class StudentAcadmicLevelValidator {
 		
 		if(params.containsKey(StudentConstant.Class.COMPLETION_STATUS_ID)) {
 			commpletionStatusId  = (Integer)params.get(StudentConstant.Class.COMPLETION_STATUS_ID);
+		}
+		
+		if(params.containsKey(StudentConstant.Class.IS_CURRENT_STUDENT_ACADEMIC_LEVEL)) {
+			isCurrentStudentAcademicLevel  = (Boolean)params.get(StudentConstant.Class.IS_CURRENT_STUDENT_ACADEMIC_LEVEL);
 		}
 		
 		if(params.containsKey(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
@@ -70,10 +74,14 @@ public class StudentAcadmicLevelValidator {
 			throw new FieldRequiredException("Academic Year ID is required to continue");
 		}
 		
+		if (isCurrentStudentAcademicLevel == null && requiredFields.contains(StudentConstant.Class.IS_CURRENT_STUDENT_ACADEMIC_LEVEL)) {
+			throw new FieldRequiredException("Current Student Academic Level is required to continue");
+		}
+		
 		if (jClassIds == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
 			throw new FieldRequiredException("Class ID is required to continue");
 		}
 		
-		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, jClassIds);
+		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, jClassIds, isCurrentStudentAcademicLevel);
 	}
 }

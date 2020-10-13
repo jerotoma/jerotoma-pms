@@ -1,4 +1,4 @@
-package com.jerotoma.common.models.academic;
+package com.jerotoma.common.models.users.students;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +20,8 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.models.students.Student;
+import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.AcademicYear;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_ACADEMIC_LEVELS)
@@ -166,16 +167,18 @@ public class StudentAcademicLevel {
 		Integer academicLevelId = null;
 		Integer academicYearId = null;
 		Integer commpletionStatusId = null;
+		Boolean isCurrentStudentAcademicLevel = Boolean.FALSE;
 		List<Integer> classIds = new ArrayList<>();	
 		Integer id = null;
 			
-		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer academicYearId, List<Integer> classIds) {
+		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer academicYearId, List<Integer> classIds, Boolean isCurrentStudentAcademicLevel) {
 			this.id = id;
 			this.studentId = studentId;
 			this.commpletionStatusId = commpletionStatusId;			
 			this.academicLevelId = academicLevelId;
 			this.academicYearId = academicYearId;
 			this.classIds = classIds;
+			this.isCurrentStudentAcademicLevel = isCurrentStudentAcademicLevel;
 		}
 		
 		public Integer getId() {
@@ -224,6 +227,14 @@ public class StudentAcademicLevel {
 
 		public void setClassIds(List<Integer> classIds) {
 			this.classIds = classIds;
+		}
+
+		public Boolean getIsCurrentStudentAcademicLevel() {
+			return isCurrentStudentAcademicLevel;
+		}
+
+		public void setIsCurrentStudentAcademicLevel(Boolean isCurrentStudentAcademicLevel) {
+			this.isCurrentStudentAcademicLevel = isCurrentStudentAcademicLevel;
 		}
 	}
 	

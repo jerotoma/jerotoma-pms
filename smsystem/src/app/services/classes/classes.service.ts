@@ -74,7 +74,7 @@ export class ClassService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadTeacherClassesByUserId(userId: number): Observable<ClassView[]> {
+  loadClassesByUserId(userId: number): Observable<ClassView[]> {
     return this.http.get(`${API_END_POINTS.classes}/users/${userId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }

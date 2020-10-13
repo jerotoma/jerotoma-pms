@@ -3,6 +3,8 @@ export * from './user.model';
 export * from './password';
 export * from './teachers/teacher.model';
 export * from './students/student.model';
+export * from './students/student-progress.model';
+export * from './students/student-academic-level-progress.model';
 export * from './parents/parent.model';
 export * from './staffs/staff.model';
 export * from './user-context';

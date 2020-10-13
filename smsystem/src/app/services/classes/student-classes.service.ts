@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel } from 'app/models';
+import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel, StudentProgress } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class StudentAcademicLevelService {
         .pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  getStudentAcademicLevelByUserId(userId: number): Observable<StudentAcademicLevel> {
+  getStudentAcademicLevelByUserId(userId: number): Observable<StudentAcademicLevel[]> {
     return this.http.get(`${API_END_POINTS.studentAcademicLevels}/users/${userId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
@@ -34,6 +34,13 @@ export class StudentAcademicLevelService {
     return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  loadStudentProgressByStudentId(studentId: number): Observable<StudentProgress> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/progresses/students/${studentId}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+
 
   loadClassesByStudentIDAndAcademicLevelID(academicLevelId: number, studentId: number) {
     return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}/academic-levels/${academicLevelId}`)

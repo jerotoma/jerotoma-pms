@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.addresses.ParentAddress;
-import com.jerotoma.common.models.students.Student;
+import com.jerotoma.common.models.users.students.Student;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.PARENTS)

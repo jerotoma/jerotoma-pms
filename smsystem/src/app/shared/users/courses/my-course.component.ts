@@ -3,7 +3,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
   StudentAcademicLevelService,
+  AcademicYearService,
   ClassService,
+  UserService,
   AcademicLevelService,
  } from 'app/services';
 import { USER_TYPE, QueryParam } from 'app/utils';
@@ -11,6 +13,7 @@ import {
   ClassView,
   Student,
   AcademicLevel,
+  AcademicYear,
   StudentAcademicLevel,
 } from 'app/models';
 
@@ -50,6 +53,8 @@ export class MyCourseComponent implements OnInit {
 
   constructor(
     private academicLevelService: AcademicLevelService,
+    private academicYearService: AcademicYearService,
+    private userService: UserService,
     private classService: ClassService,
     private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder) { }
@@ -57,14 +62,14 @@ export class MyCourseComponent implements OnInit {
   ngOnInit() {
     this.loadForm();
     if (this.userId && this.userType === USER_TYPE.STUDENT) {
-      this.loadStudentClasses(this.userId);
+      this.loadStudent();
     } else if (this.userId && this.userType === USER_TYPE.TEACHER) {
       this.loadTeacherClasses(this.userId);
     }
   }
 
   loadTeacherClasses(userId: number) {
-    this.classService.loadTeacherClassesByUserId(userId).subscribe((classViews: ClassView[]) => {
+    this.classService.loadClassesByUserId(userId).subscribe((classViews: ClassView[]) => {
       this.classViews = classViews;
     });
   }
@@ -78,6 +83,32 @@ export class MyCourseComponent implements OnInit {
       fullName: ['', Validators.required],
     });
     this.onChanges();
+  }
+
+  loadStudent() {
+    this.userService.loadUser(this.userId).subscribe((student: Student) => {
+      this.student = student;
+      this.loadAcademicLevelsByProgramId(this.student.programId);
+      this.getCurrentAcademicYear();
+    });
+  }
+
+  getCurrentAcademicYear() {
+    this.academicYearService.getCurrentAcademicYear()
+    .subscribe((academicYear: AcademicYear) => {
+      this.isLoading = false;
+      if (academicYear) {
+        this.loadStudentClasses(this.student.id, this.student.academicLevelId, academicYear.id);
+      }
+    });
+  }
+
+  loadStudentClasses(studentId: number, academicLevelId: number, academicYearId: number) {
+    this.isLoading = true;
+    this.classService.loadStudentRegisteredClasses(studentId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
+      this.classViews = classViews;
+      this.isLoading = false;
+    });
   }
 
   loadAcademicLevels() {
@@ -104,24 +135,6 @@ export class MyCourseComponent implements OnInit {
     this.academicLevels.forEach(academicLevel => {
       if (academicLevel.id === academicLevelId) {
         this.academicLevel = academicLevel;
-      }
-    });
-  }
-
-  loadStudentClasses(userId: number) {
-    this.isLoading = true;
-    this.studentAcademicLevelService.getStudentAcademicLevelByUserId(userId).subscribe((studentClass: StudentAcademicLevel) => {
-      this.isLoading = false;
-      if (studentClass) {
-        this.student = studentClass.student;
-        this.academicLevel = studentClass.academicLevel;
-        this.loadAcademicLevelsByProgramId(this.student.programId);
-        this.classViews = studentClass.jClasses;
-        this.studentClassForm.patchValue({
-          id: studentClass.id,
-          studentId: this.student.id,
-          academicLevelId: this.academicLevel.id,
-        }, {emitEvent: false});
       }
     });
   }

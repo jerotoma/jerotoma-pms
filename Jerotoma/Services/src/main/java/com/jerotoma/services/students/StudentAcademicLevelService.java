@@ -3,8 +3,8 @@ package com.jerotoma.services.students;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.jerotoma.common.models.academic.StudentAcademicLevel;
-import com.jerotoma.common.models.academic.StudentAcademicLevel.Fields;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel.Fields;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.BaseService;
 

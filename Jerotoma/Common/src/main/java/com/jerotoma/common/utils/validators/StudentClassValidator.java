@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
-import com.jerotoma.common.models.academic.StudentClass;
+import com.jerotoma.common.models.users.students.StudentClass;
 
 public class StudentClassValidator {
 	

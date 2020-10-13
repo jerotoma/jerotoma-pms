@@ -1,7 +1,7 @@
 package com.jerotoma.common.constants;
 
 public enum CompletionStatus {
-	NO_STATUS(1, "No Status"),
+	NOT_STARTED(1, "Not Started"),
 	IN_PROGRESS(2, "In Progress"),
 	PENDING(3, "Pending"),
 	COMPLETED(4, "Completed");

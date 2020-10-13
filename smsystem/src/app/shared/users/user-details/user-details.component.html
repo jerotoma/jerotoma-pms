@@ -152,6 +152,11 @@
                                   [userId]="userDatail.userId"
                                 ></app-my-course>
                             </nb-tab>
+                            <nb-tab *ngIf="isUserStudent" tabTitle="My Progress">
+                              <app-my-progress
+                                [student]="userDatail"
+                              ></app-my-progress>
+                          </nb-tab>
                           </nb-tabset>
                         </nb-card-body>
                     </nb-card>
