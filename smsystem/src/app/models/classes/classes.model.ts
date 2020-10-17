@@ -48,3 +48,9 @@ export interface StudentClassAdmission {
   academicYearId: number;
   academicLevelId: number;
 }
+
+export interface StudentAcademicLevelClass {
+  student: Student;
+  academicLevel: AcademicLevel;
+  classes: ClassView[];
+}

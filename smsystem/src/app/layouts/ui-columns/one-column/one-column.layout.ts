@@ -16,12 +16,10 @@ import { WindowModeBlockScrollService } from 'app/services';
         <app-sidebar-userpanel></app-sidebar-userpanel>
         <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
-
       <nb-layout-column>
         <ng-content select="router-outlet"></ng-content>
       </nb-layout-column>
-
-      <nb-layout-footer fixed>
+      <nb-layout-footer>
         <app-footer></app-footer>
       </nb-layout-footer>
     </nb-layout>

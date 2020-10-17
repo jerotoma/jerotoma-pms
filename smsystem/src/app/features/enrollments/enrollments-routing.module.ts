@@ -13,7 +13,7 @@ const routes: Routes = [
     component: EnrollmentsComponent,
     children: [
       {
-        path: 'students',
+        path: 'student-academic-levels',
         data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES },
         canActivateChild: [AuthGuard],
         loadChildren: () => import('./students/student-academic-level-enrollments.module')

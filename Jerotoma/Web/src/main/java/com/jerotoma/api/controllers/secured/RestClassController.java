@@ -41,6 +41,7 @@ import com.jerotoma.common.utils.validators.ClassValidator;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 import com.jerotoma.services.configs.SystemConfigService;
@@ -290,21 +291,27 @@ public class RestClassController extends BaseController {
 	@GetMapping(value ="/users/{userId}")
 	@ResponseBody
 	public HttpResponseEntity<Object> loadTeacherClassList(
-			Authentication auth, @PathVariable("userId") Integer userId) {
-		
-		List<ClassVO> mClasses = new ArrayList<>();
-		
+			Authentication auth, @PathVariable("userId") Integer userId) {		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_CLASS_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);		
 		try {
-			mClasses = assemblerClassService.loadTeacherClassList(userId);		
+			UserVO user = userService.getUserVOByUserId(userId);
+			switch(user.getUserType()) {
+			case STUDENT:
+				super.response.setData(assemblerClassService.loadAllStudentAcademicLevelsClassList(userId));
+				break;
+			case TEACHER:
+				super.response.setData(assemblerClassService.loadTeacherClassList(userId));
+				break;
+			default:
+				break;			
+			}	
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}	
 				
 		super.response.setSuccess(true);
-		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-		super.response.setData(mClasses);
+		super.response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
 		super.response.setHttpStatus(HttpStatus.OK);
 		return super.response;
 	}

@@ -17,6 +17,7 @@ export class UserDetailsComponent implements OnInit {
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = API_END_POINTS.baseURL;
     parents: Parent[] = [];
+    students: Student[] = [];
 
     constructor(private dialogService: NbDialogService,
       private userService: UserService) {}
@@ -27,12 +28,21 @@ export class UserDetailsComponent implements OnInit {
 
     loadData() {
      if (this.isUserStudent) {
-       this.loadStudentParents()
+       this.loadStudentParents();
+     } else if (this.isUserParent) {
+       this.loadParentStudents();
      }
     }
+
     loadStudentParents() {
       this.userService.loadParentsByStudentID(this.userDatail.id).subscribe((parents: Parent[]) => {
         this.parents = parents;
+      });
+    }
+
+    loadParentStudents() {
+      this.userService.loadStudentsByParentID(this.userDatail.id).subscribe((students: Student[]) => {
+        this.students = students;
       });
     }
 

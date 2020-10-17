@@ -40,8 +40,6 @@ export class StudentAcademicLevelService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-
-
   loadClassesByStudentIDAndAcademicLevelID(academicLevelId: number, studentId: number) {
     return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}/academic-levels/${academicLevelId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));

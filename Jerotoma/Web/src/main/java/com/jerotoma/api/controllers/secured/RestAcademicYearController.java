@@ -201,5 +201,21 @@ public class RestAcademicYearController extends BaseController {
 		}
 		return instance;
 	}
+	
+	
+	@GetMapping(value = "/students/{studentId}/academic-levels/{academicLevelId}")
+	@ResponseBody
+	protected HttpResponseEntity<Object> loadAcademicYearByStudentLevel(
+			Authentication auth, 
+			@PathVariable("studentId") Integer studentId,
+			@PathVariable("academicLevelId") Integer academicLevelId) {		
+		this.securityCheckAccessByRoles(auth);		
+		try {
+			response.setData(assemblerAcademicYearService.findAcademicYears(studentId, academicLevelId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
 
 }

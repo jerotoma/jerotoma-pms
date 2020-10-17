@@ -29,6 +29,12 @@ export class AcademicYearService {
         `${API_END_POINTS.academicYears}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  findAcademicYearsByStudentLevel(studentId: number, academicLevelId: number): Observable<AcademicYear[]> {
+    return this.http
+      .get<any>(`${API_END_POINTS.academicYears}/students/${studentId}/academic-levels/${academicLevelId}`)
+      .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
   createAcademicYear(data?: any): Observable<HttpResponse<any> | HttpErrorResponse> {
     return this.http.post<any>(`${API_END_POINTS.academicYears}`, data, {observe: 'response'});
   }

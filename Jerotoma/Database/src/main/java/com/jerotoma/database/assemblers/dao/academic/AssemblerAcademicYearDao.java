@@ -8,5 +8,7 @@ import com.jerotoma.database.assemblers.AssemblerDao;
 
 public interface AssemblerAcademicYearDao extends AssemblerDao<AcademicYearVO>{
 	public List<AcademicYearVO> loadAllList() throws SQLException;
+
+	public List<AcademicYearVO> findAcademicYears(Integer studentId, Integer academicLevelId) throws SQLException;
 	
 }

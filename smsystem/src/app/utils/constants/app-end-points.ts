@@ -116,7 +116,7 @@ export const FRONTEND_ENDPOINTS = {
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
   enrollmentStudents: {
-    path: '/dashboard/enrollments/students',
+    path: '/dashboard/enrollments/student-academic-levels',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
   enrollmentClasses: {

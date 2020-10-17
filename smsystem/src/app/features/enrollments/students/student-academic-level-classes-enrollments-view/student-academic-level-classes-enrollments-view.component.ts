@@ -22,7 +22,7 @@ import { QueryParam } from 'app/utils';
 })
 export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnInit {
 
-  baseURL: string = '/dashboard/enrollments/students/';
+  baseURL: string = '/dashboard/enrollments/student-academic-levels/';
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -100,11 +100,11 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
     });
   }
 
-  edit(studentClass: StudentAcademicLevel) {
+  edit(studentAcademicLevel: StudentAcademicLevel) {
     this.dialogService.open(StudentAcademicLevelClassesEnrollmentEditComponent , {
       context: {
         title: 'Edit Enrolled Student',
-        studentAcademicLevel: studentClass,
+        studentAcademicLevel: studentAcademicLevel,
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
@@ -113,12 +113,12 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
     });
   }
 
-  delete(studentClass: StudentAcademicLevel) {
+  delete(studentAcademicLevel: StudentAcademicLevel) {
     this.dialogService.open(DeleteModalComponent, {
       context: {
         title: 'Delete Class',
         action: 'delete',
-        id: studentClass.id.toString(),
+        id: studentAcademicLevel.id.toString(),
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
@@ -127,8 +127,8 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
     });
   }
 
-  view(studentClass: StudentAcademicLevel) {
-    this.router.navigate([this.baseURL + '/' + studentClass.id ]);
+  view(studentAcademicLevel: StudentAcademicLevel) {
+    this.router.navigate([this.baseURL + '/' + studentAcademicLevel.id ]);
   }
 
   onPageChange(pageEvent: PageEvent) {

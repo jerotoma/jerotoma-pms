@@ -95,53 +95,67 @@
                             </nb-tab>
                             <nb-tab
                               *ngIf="isUserStudent || isUserParent"
-                              [tabTitle]="isUserStudent ? 'Parents' : 'Children'">
+                              [tabTitle]="isUserStudent ? 'My Parents' : 'My Students'">
                               <div class="row">
                                   <div class="col-md-12">
-                                    <div class="table-responsive"  *ngIf="isUserStudent && parents">
-                                      <table
-                                        *ngFor="let user of parents"
-                                        class="table table-striped table-hover">
-                                          <tbody>
-                                            <tr>
-                                              <th class="user-details">Full Name: </th>
-                                              <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
-                                            </tr>
-                                            <tr>
-                                              <th class="user-details">Email Address: </th>
-                                              <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
-                                            </tr>
-                                            <tr>
-                                              <th class="user-details">Phone Number: </th>
-                                              <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
-                                            </tr>
-                                          </tbody>
-                                      </table>
+                                    <div class="row">
+                                      <div class="col-md-12">
+                                        <div class="table-responsive"  *ngIf="isUserStudent && parents">
+                                          <table
+                                            *ngFor="let user of parents"
+                                            class="table table-striped table-hover">
+                                              <tbody>
+                                                <tr>
+                                                  <th class="user-details">Full Name: </th>
+                                                  <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Email Address: </th>
+                                                  <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Phone Number: </th>
+                                                  <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                                </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="table-responsive"  *ngIf="isUserParent && userDatail.students">
-                                      <table *ngFor="let user of userDatail.students" class="table table-striped table-hover">
-                                          <tbody>
-                                            <tr>
-                                              <th class="user-details">Full Name: </th>
-                                              <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
-                                            </tr>
-                                            <tr>
-                                              <th class="user-details">Email Address: </th>
-                                              <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
-                                            </tr>
-                                            <tr *ngIf="user.studentNumber">
-                                              <th class="user-details">Student Number: </th>
-                                              <td><span>{{user.studentNumber}}</span></td>
-                                            </tr>
-                                            <tr *ngIf="user.birthDate">
-                                              <th class="user-details">Date of Birth: </th><td><span>{{user.birthDate | date:'longDate'}}</span></td>
-                                            </tr>
-                                            <tr>
-                                              <th class="user-details">Phone Number: </th>
-                                              <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
-                                            </tr>
-                                          </tbody>
-                                      </table>
+                                    <div class="row" *ngIf="isUserParent && students">
+                                      <div class="col-md-12">
+                                        <div class="row mt-3">
+                                          <div class="col-md-12">
+                                            <nb-alert outline="info">Number of students: {{students.length}}</nb-alert>
+                                          </div>
+                                        </div>
+                                        <div class="table-responsive mb-2" *ngFor="let user of students; index as i;">
+                                          <div class="circle-shape text-center">{{i + 1}}</div>
+                                          <table class="table table-striped table-hover">
+                                              <tbody>
+                                                <tr>
+                                                  <th class="user-details">Full Name: </th>
+                                                  <td><span *ngIf="user.fullName">{{user.fullName}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Email Address: </th>
+                                                  <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
+                                                </tr>
+                                                <tr *ngIf="user.studentNumber">
+                                                  <th class="user-details">Student Number: </th>
+                                                  <td><span>{{user.studentNumber}}</span></td>
+                                                </tr>
+                                                <tr *ngIf="user.birthDate">
+                                                  <th class="user-details">Date of Birth: </th><td><span>{{user.birthDate | date:'longDate'}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Phone Number: </th>
+                                                  <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                                </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
                               </div>

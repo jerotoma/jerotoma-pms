@@ -13,6 +13,7 @@ import {
   StudentProgress,
   AcademicLevel,
   StudentAcademicLevel,
+  CompletionStatus,
 } from 'app/models';
 
 @Component({
@@ -56,5 +57,16 @@ export class ProgressComponent implements OnInit {
 
   preventDefaultEvent(event: any) {
     event.preventDefault();
+  }
+
+  getCompletionStatus(completionStatus: string): string {
+    if (CompletionStatus.IN_PROGRESS === completionStatus) {
+      return 'info';
+    } else if (CompletionStatus.COMPLETED === completionStatus) {
+      return 'success';
+    } else if (CompletionStatus.NOT_STARTED === completionStatus) {
+      return 'warning';
+    }
+    return 'danger';
   }
 }

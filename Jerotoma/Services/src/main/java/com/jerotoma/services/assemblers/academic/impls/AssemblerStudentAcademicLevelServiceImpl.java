@@ -96,6 +96,7 @@ public class AssemblerStudentAcademicLevelServiceImpl implements AssemblerStuden
 					studentAcademicLevelProgress.setAcademicLevel(academicLevel);
 					studentAcademicLevelProgress.setCompletionStatus(studentAcademicLevel.getCompletionStatus());
 					studentAcademicLevelProgress.setCompletionStatusName(studentAcademicLevel.getCompletionStatusName());
+					studentAcademicLevelProgress.setAcademicYear(studentAcademicLevel.getAcademicYear());
 					hasStatus = true;
 					
 					if (CompletionStatus.COMPLETED.equals(studentAcademicLevelProgress.getCompletionStatus())) {

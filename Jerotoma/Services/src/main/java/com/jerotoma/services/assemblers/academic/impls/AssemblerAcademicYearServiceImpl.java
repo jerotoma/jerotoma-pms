@@ -80,4 +80,9 @@ public class AssemblerAcademicYearServiceImpl implements AssemblerAcademicYearSe
 		return academicYear;
 	}
 
+	@Override
+	public List<AcademicYearVO> findAcademicYears(Integer studentId, Integer academicLevelId) throws SQLException {
+		return assemblerAcademicYearDao.findAcademicYears(studentId, academicLevelId);
+	}
+
 }

@@ -22,7 +22,7 @@ export class StudentAcademicLevelClassesEnrollmentShowComponent implements OnIni
     userType: 'teacher',
   };
 
-  title: string = 'List of Scheduled Courses';
+  title: string = 'List of Scheduled Classes';
   studentClass: StudentAcademicLevel;
   student: Student;
   academicYearId: number;
@@ -39,7 +39,7 @@ export class StudentAcademicLevelClassesEnrollmentShowComponent implements OnIni
   constructor(
     private academicYearService: AcademicYearService,
     private classService: ClassService,
-    private studentClassService: StudentAcademicLevelService,
+    private studentAcademicLevelService: StudentAcademicLevelService,
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -47,28 +47,25 @@ export class StudentAcademicLevelClassesEnrollmentShowComponent implements OnIni
   }
   ngOnInit() {
     this.loadForm();
-    this.loadAcademicYears();
     // For one time load
     // let id = this.route.snapshot.paramMap.get('id');
     this.route.params.subscribe(routeParam => {
-        this.loadStudentClass(routeParam.id);
+        this.loadStudentAcademicLevel(routeParam.id);
     });
     this.route.queryParams.subscribe(queryParams => {
       // do something with the query params
     });
   }
 
-  loadStudentClass(studentId: number) {
-    this.studentClassService.getStudentAcademicLevel(studentId)
-      .subscribe((studentClass: StudentAcademicLevel ) => {
-        if (studentClass) {
-          this.studentClass = studentClass;
+  loadStudentAcademicLevel(studentAcademicLevelId: number) {
+    this.studentAcademicLevelService.getStudentAcademicLevel(studentAcademicLevelId)
+      .subscribe((studentAcademicLevel: StudentAcademicLevel ) => {
+        if (studentAcademicLevel) {
+          this.studentClass = studentAcademicLevel;
           this.student = this.studentClass.student;
           this.jClasses = this.studentClass.jClasses;
           this.academicYear = this.studentClass.academicYear;
-          this.studentClassForm.patchValue({
-              academicYearId: studentClass.academicYear.id,
-          }, {emitEvent: false});
+          this.loadAcademicYears(studentAcademicLevel.student.id, studentAcademicLevel.academicLevel.id);
         }
       });
   }
@@ -88,11 +85,14 @@ export class StudentAcademicLevelClassesEnrollmentShowComponent implements OnIni
     this.onChanges();
   }
 
-  loadAcademicYears() {
-    this.academicYearService.getAcademicYears()
+  loadAcademicYears(studentId: number, academicLevelId: number) {
+    this.academicYearService.findAcademicYearsByStudentLevel(studentId, academicLevelId)
     .subscribe((academicYears: AcademicYear[] ) => {
       if (academicYears) {
         this.academicYears = academicYears;
+        this.studentClassForm.patchValue({
+          academicYearId:  this.academicYear.id,
+      }, {emitEvent: false});
       }
     });
   }
@@ -106,15 +106,15 @@ export class StudentAcademicLevelClassesEnrollmentShowComponent implements OnIni
           }
         });
         if (this.academicYear) {
-          this.loadStudentClassesByAcademicYear(this.academicYear.id, this.student.id);
+          this.loadStudentClassesByAcademicYear(this.student.id, this.student.academicLevelId, this.academicYear.id);
         }
       }
     });
   }
 
-  loadStudentClassesByAcademicYear(academicYearId: number, studentId: number) {
+  loadStudentClassesByAcademicYear(studentId: number, academicLevelId: number, academicYearId: number) {
     this.isLoading = true;
-    this.classService.loadStudentClassesByAcademicYear(academicYearId, studentId).subscribe((jClassViews: ClassView[]) => {
+    this.classService.loadStudentRegisteredClasses(studentId, academicLevelId, academicYearId).subscribe((jClassViews: ClassView[]) => {
       this.jClasses = jClassViews;
       this.isLoading = false;
     });

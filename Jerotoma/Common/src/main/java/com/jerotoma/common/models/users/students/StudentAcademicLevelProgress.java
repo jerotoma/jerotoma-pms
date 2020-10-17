@@ -2,9 +2,11 @@ package com.jerotoma.common.models.users.students;
 
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.common.viewobjects.AcademicYearVO;
 
 public class StudentAcademicLevelProgress {	
 	private AcademicLevelVO academicLevel;
+	private AcademicYearVO academicYear;
 	private CompletionStatus completionStatus;
 	private String completionStatusName;
 	
@@ -16,6 +18,14 @@ public class StudentAcademicLevelProgress {
 		this.academicLevel = academicLevel;
 	}
 	
+	public AcademicYearVO getAcademicYear() {
+		return academicYear;
+	}
+
+	public void setAcademicYear(AcademicYearVO academicYear) {
+		this.academicYear = academicYear;
+	}
+
 	public CompletionStatus getCompletionStatus() {
 		return completionStatus;
 	}

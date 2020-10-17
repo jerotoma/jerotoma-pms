@@ -125,4 +125,15 @@ public class AssemblerAcademicYearDaoImpl extends JdbcDaoSupport implements Asse
 	public List<AcademicYearVO> loadAllList() throws SQLException {		
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new AcademicYearResultProcessor());
 	}
+
+	@Override
+	public List<AcademicYearVO> findAcademicYears(Integer studentId, Integer academicLevelId) throws SQLException {
+		String query = "SELECT sal.academic_year_id FROM public.student_academic_levels sal WHERE sal.student_id = ? AND sal.academic_level_id = ?";		
+		return this.jdbcTemplate.query(query,new Object[] {studentId, academicLevelId}, new RowMapper<AcademicYearVO>() {
+			@Override
+			public AcademicYearVO mapRow(ResultSet rs, int rowNum) throws SQLException {			
+				return findObject(rs.getInt("academic_year_id"));
+			}			
+		});
+	}
 }

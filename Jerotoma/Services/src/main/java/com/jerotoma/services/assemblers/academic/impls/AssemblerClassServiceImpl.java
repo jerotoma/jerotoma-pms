@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelClassList;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
+import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 import com.jerotoma.services.users.UserService;
 
@@ -20,6 +22,7 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	
 	@Autowired AssemblerJClassDao assemblerClassDao;
 	@Autowired UserService userService;
+	@Autowired AssemblerStudentService assemblerStudentService;
 	
 	@Override
 	public ClassVO findObject(Integer primaryKey) throws SQLException {
@@ -89,6 +92,16 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 			throws SQLException {
 		
 		return assemblerClassDao.loadStudentClasses(studentId, academicLevelId, academicYearId);
+	}
+
+	@Override
+	public List<StudentAcademicLevelClassList> loadAllStudentAcademicLevelsClassList(Integer userId)
+			throws SQLException {		
+		UserVO user = userService.getUserVOByUserId(userId);
+		if (user.getUserType() == USER_TYPE.STUDENT) {			
+			return assemblerClassDao.loadAllStudentAcademicLevelsClassList(user.getId());
+		}		
+		return null;		
 	}
 
 }

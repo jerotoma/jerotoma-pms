@@ -37,7 +37,6 @@ import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.common.utils.CalendarUtil;
-import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.PersonVO;
 import com.jerotoma.common.viewobjects.UserVO;

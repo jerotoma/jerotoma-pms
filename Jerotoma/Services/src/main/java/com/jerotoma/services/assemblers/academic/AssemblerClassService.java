@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.jerotoma.common.viewobjects.ClassVO;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelClassList;
 import com.jerotoma.services.AssemblerService;
 
 public interface AssemblerClassService  extends AssemblerService<ClassVO> {
@@ -15,4 +16,6 @@ public interface AssemblerClassService  extends AssemblerService<ClassVO> {
 	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId) throws SQLException;
 	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId) throws SQLException;
 	public List<ClassVO> loadTeacherClassList(Integer userId) throws SQLException;
+	
+	public List<StudentAcademicLevelClassList> loadAllStudentAcademicLevelsClassList(Integer userId) throws SQLException;
 }

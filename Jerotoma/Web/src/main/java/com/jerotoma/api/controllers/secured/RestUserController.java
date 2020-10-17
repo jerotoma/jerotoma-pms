@@ -249,6 +249,27 @@ public class RestUserController extends BaseController {
 		return response;
 	}
 	
+	@GetMapping(value = {"/parents/{parentId}/students"})
+	@ResponseBody
+	protected HttpResponseEntity<Object> gettudentsByParentID(Authentication auth,
+			@PathVariable(value="parentId", required=true)Integer parentId) {		
+		
+		this.logRequestDetail("GET : " + EndPointConstants.REST_COURSE_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		this.proccessLoggedInUser(auth);
+		
+		try {
+			response.setData(assemblerStudentService.loadStudentsByParentId(parentId));	
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}	
+				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));		
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
 	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
@@ -262,7 +283,7 @@ public class RestUserController extends BaseController {
 		Position position;		
 		Department department;		
 		
-		requiredFields =  new ArrayList<>(Arrays.asList(
+		requiredFields =  Arrays.asList(
 						UserConstant.FIRST_NAME, 
 						UserConstant.LAST_NAME,
 						UserConstant.USERNAME,
@@ -270,7 +291,7 @@ public class RestUserController extends BaseController {
 						UserConstant.BIRTH_DATE,
 						UserConstant.GENDER,
 						UserConstant.PHONE_NUMBER
-						));
+						);
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
@@ -405,13 +426,12 @@ public class RestUserController extends BaseController {
 	@PutMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> updateUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
-		List<String> requiredFields = new ArrayList<>(
-				Arrays.asList(
+		List<String> requiredFields = Arrays.asList(
 						UserConstant.ID,
 						UserConstant.USER_ID,
 						UserConstant.FIRST_NAME,						
 						UserConstant.LAST_NAME,
-						UserConstant.GENDER));
+						UserConstant.GENDER);
 		Staff staff;
 		Parent parent;
 		Teacher teacher;

@@ -1,8 +1,14 @@
+.nb-theme-cosmic nb-card.dialog-card,
+.nb-theme-corporate nb-card.dialog-card,
+.nb-theme-dark nb-card.dialog-card,
+.nb-theme-default nb-card.dialog-card {
+  max-height: 95vh !important;
+}
+
 .nb-theme-cosmic nb-card,
 .nb-theme-corporate nb-card,
 .nb-theme-dark nb-card,
 .nb-theme-default nb-card {
-  max-height: 95vh !important;
   min-width: 50vw !important;
 }
 

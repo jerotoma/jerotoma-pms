@@ -20,8 +20,10 @@ import org.springframework.stereotype.Repository;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.ClassConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.RoomVO;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelClassList;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
@@ -29,6 +31,7 @@ import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
@@ -47,6 +50,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	@Autowired AssemblerMeetingTimeDao assemblerMeetingTimeDao;	
 	@Autowired AssemblerCourseDao assemblerCourseDao;
 	@Autowired AssemblerStudentDao assemblerStudentDao;	
+	@Autowired AssemblerAcademicLevelDao assemblerAcademicLevelDao;
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
 	@Autowired AssemblerRoomDao assemblerClassRoomDao;
 	
@@ -237,5 +241,24 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 			.append(" INNER JOIN student_academic_levels sal ON sal.id = src.student_academic_level_id")
 			.append(" WHERE sal.student_id = ? AND  sal.academic_level_id = ? AND cl.academic_year_id = ? ");				
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), studentId, academicLevelId, academicYearId);
+	}
+	@Override
+	public List<StudentAcademicLevelClassList> loadAllStudentAcademicLevelsClassList(Integer studentId)
+			throws SQLException {
+		
+		String query = "SELECT sal.student_id, sal.academic_level_id, sal.academic_year_id FROM public.student_academic_levels sal WHERE sal.student_id = ?";
+		
+		return this.jdbcTemplate.query(query,new Object[] {studentId}, new RowMapper<StudentAcademicLevelClassList>() {
+			@Override
+			public StudentAcademicLevelClassList mapRow(ResultSet rs, int rowNum) throws SQLException {				
+				
+				List<ClassVO> classes = loadStudentClasses(studentId, rs.getInt("academic_level_id"), rs.getInt("academic_year_id"));
+				StudentVO student = assemblerStudentDao.findObject(studentId);
+				AcademicLevelVO academicLevel = assemblerAcademicLevelDao.findObject(rs.getInt("academic_level_id"));
+				
+				return new StudentAcademicLevelClassList(student, academicLevel, classes);
+			}
+			
+		});
 	}
 }

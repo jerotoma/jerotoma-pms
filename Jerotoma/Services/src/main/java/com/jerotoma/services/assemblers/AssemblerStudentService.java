@@ -15,5 +15,6 @@ public interface AssemblerStudentService extends AssemblerService<StudentVO>{
 	
 	public List<StudentVO> findStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(Integer programId,
 			Integer academicLevelId) throws SQLException;
+	public List<StudentVO> loadStudentsByParentId(Integer parentId) throws SQLException;
 
 }

@@ -9,4 +9,6 @@ import com.jerotoma.services.AssemblerService;
 public interface AssemblerAcademicYearService extends AssemblerService<AcademicYearVO> {
 	public List<AcademicYearVO> loadAllList() throws SQLException;
 	public AcademicYearVO getCurrentAcademicYear();
+	
+	public List<AcademicYearVO> findAcademicYears(Integer studentId, Integer academicLevelId) throws SQLException;
 }
