@@ -29,4 +29,8 @@ public class StringUtility {
 		}
 		return null;
 	}
+
+	public static boolean isNumeric(Object object) {	
+		return isNumeric(getString(object)) ;
+	}
 }

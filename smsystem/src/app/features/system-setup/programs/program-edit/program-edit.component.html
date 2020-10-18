@@ -88,23 +88,42 @@
               <div class="lists row">
                 <div class="col-md-12">
                     <div class="form-control-group" [@openClose]="isAddMore ? 'open' : 'closed'">
-                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels && academicLevels.length > 0">
+                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels && academicLevels.length > 0 && completionOrders" >
                         <nb-card-header>Add more Academic Levels </nb-card-header>
                         <nb-card-body
                           [nbSpinner]="isLoading"
                           nbSpinnerStatus="success"
                           nbSpinnerSize="large"
                           nbSpinnerMessage="Loading unadded levels....">
-                          <nb-list>
-                            <nb-list-item *ngFor="let academicLevel of academicLevels">
-                              <nb-checkbox
-                              [id]="'academicLevel-'+ academicLevel.id"
-                              status="success"
-                              (checkedChange)="checkedChange($event, academicLevel)"
-                              >{{academicLevel.name}}
-                            </nb-checkbox>
-                            </nb-list-item>
-                          </nb-list>
+                          <ng-container *ngFor="let academicLevel of academicLevels">
+                            <div class="row">
+                              <div class='col-md-5'>
+                                <div class="form-control-group">
+                                  <nb-checkbox
+                                    [id]="'academicLevel-'+ academicLevel.id"
+                                    status="success"
+                                    (checkedChange)="checkedChange($event, academicLevel)"
+                                    >{{academicLevel.name}}
+                                  </nb-checkbox>
+                                </div>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="form-control-group">
+                                <nb-select
+                                  fullWidth
+                                  placeholder="Select completion order"
+                                  (selectedChange)="onCompletionOrderSelectedChange($event, academicLevel)"
+                                  id="class-completionOrder">
+                                  <nb-option
+                                      *ngFor='let completionOrder of completionOrders'
+                                      [value]="completionOrder.id">
+                                      {{completionOrder?.completionOrder}}
+                                  </nb-option>
+                                </nb-select>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
                         </nb-card-body>
                       </nb-card>
                     </div>

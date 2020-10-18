@@ -47,6 +47,13 @@ const routes: Routes = [{
         .then(m => m.CoursesModule),
     },
     {
+      path: 'completion-orders',
+      data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES},
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./completion-orders/completion-orders.module')
+        .then(m => m.CompletionOrdersModule),
+    },
+    {
       path: 'departments',
       data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES},
       canActivateChild: [AuthGuard],

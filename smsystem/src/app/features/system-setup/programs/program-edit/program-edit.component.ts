@@ -2,10 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Program, AcademicLevel } from 'app/models';
+import { Program, AcademicLevel, AcademicLevelCompletionOrder,  CompletionOrder} from 'app/models';
 import {
   ProgramService,
   AcademicLevelService,
+  CompletionOrderService,
   ModalService,
 } from 'app/services';
 import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
@@ -24,6 +25,9 @@ export class ProgramEditComponent implements OnInit {
 
   academicLevels: AcademicLevel[];
   academicLevelIDs: number[] = [];
+  academicLevelCompletionOrders: AcademicLevelCompletionOrder[] = [];
+  academicLevelCompletionOrder: AcademicLevelCompletionOrder;
+  completionOrders: CompletionOrder[];
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
   isLoading: boolean = false;
@@ -33,10 +37,12 @@ export class ProgramEditComponent implements OnInit {
     private academicLevelService: AcademicLevelService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
+    private completionOrderService: CompletionOrderService,
     protected ref: NbDialogRef<ProgramEditComponent>) {}
 
   ngOnInit() {
     this.loadForm();
+    this.loadCompletionOrders();
     this.patchProgram();
   }
   patchProgram() {
@@ -80,9 +86,25 @@ export class ProgramEditComponent implements OnInit {
       id: [null],
       name: ['', Validators.required ],
       code: ['', Validators.required ],
-      academicLevelIDs: [[], Validators.required ],
+      academicLevelIDs: ['', Validators.required ],
+      academicLevelCompletionOrders: [null, Validators.required ],
       description: [''],
     });
+  }
+
+  onCompletionOrderSelectedChange(completionOrderId: number, academicLevel: AcademicLevel) {
+    this.academicLevelCompletionOrder = {
+      completionOrderId: completionOrderId,
+      academicLevelId: academicLevel.id,
+    };
+
+    if (!this.academicLevelCompletionOrders.find(academicLevelCompletionOrder => academicLevelCompletionOrder.academicLevelId === academicLevel.id &&
+      academicLevelCompletionOrder.completionOrderId === completionOrderId)) {
+      this.academicLevelCompletionOrders.push(this.academicLevelCompletionOrder);
+      this.programForm.patchValue({
+        academicLevelCompletionOrders: this.academicLevelCompletionOrders,
+      }, {emitEvent: false});
+    }
   }
 
 
@@ -158,5 +180,16 @@ export class ProgramEditComponent implements OnInit {
       fieldName: '',
       userType: 'program',
     };
+  }
+
+  loadCompletionOrders() {
+    this.isLoading = true;
+    this.completionOrderService.getCompletionOrders()
+      .subscribe((completionOrders: CompletionOrder[]) => {
+        this.isLoading = false;
+        if (completionOrders) {
+          this.completionOrders = completionOrders;
+        }
+      });
   }
 }

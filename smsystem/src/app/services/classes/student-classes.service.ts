@@ -16,8 +16,8 @@ export class StudentAcademicLevelService {
   }
   constructor(private http: HttpClient) { }
 
-  getStudentAcademicLevel(classId: number): Observable<StudentAcademicLevel> {
-    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/${classId}`)
+  getStudentAcademicLevel(studentAcademicLevelId: number): Observable<StudentAcademicLevel> {
+    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}`)
       .pipe(map((resp: ResponseWrapper) => resp.data));
   }
   getStudentAcademicLevels(param: QueryParam): Observable<ResponseWrapper> {

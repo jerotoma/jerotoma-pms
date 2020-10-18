@@ -7,6 +7,7 @@ public class ProgramConstant {
 	public static final String NAME = "name";
 	public static final String CODE = "code";
 	public static final String DESCRIPTION = "description";
+	public static final String ACADEMIC_LEVEL_COMPLETION_ORDERS = "academicLevelCompletionOrders";
 	public static final String TOTAL_ACADEMIC_LEVELS_REQUIRED = "totalAcademicLevelsRequired";
 	public static final String ACADEMIC_LEVEL_IDS = "academicLevelIDs";
 

@@ -167,25 +167,40 @@
 	CREATE TABLE IF NOT EXISTS public.program_academic_levels(
 	 	id bigserial NOT NULL,
     	program_id BIGINT NOT NULL,
-    	academic_level_id BIGINT NOT NULL,
-    	completion_order_id BIGINT NOT NULL,
-    	UNIQUE(program_id, academic_level_id, completion_order_id),
+    	academic_level_id BIGINT NOT NULL,    	
+    	UNIQUE(program_id, academic_level_id),
+    	CONSTRAINT program_academic_levels_pkey PRIMARY KEY (id),
 	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
         	REFERENCES public.programs (id) MATCH SIMPLE
         	ON UPDATE CASCADE
         	ON DELETE CASCADE,
         CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id)
-        	REFERENCES public.users (id) MATCH SIMPLE
+        	REFERENCES public.academic_levels (id) MATCH SIMPLE
         	ON UPDATE CASCADE
-        	ON DELETE CASCADE,
+        	ON DELETE CASCADE
+    ); 
+	    
+    
+    /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * PROGRAM ACADEMIC LEVEL COMPLETION ORDER RELATED TABLES	  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.pal_completion_orders(
+    	pal_id BIGINT NOT NULL,
+    	completion_order_id BIGINT NOT NULL,
+    	UNIQUE(pal_id, completion_order_id),
+	 	CONSTRAINT program_academic_levels_fkey FOREIGN KEY (pal_id)
+        	REFERENCES public.program_academic_levels(id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,        
         CONSTRAINT completion_orders_fkey FOREIGN KEY (completion_order_id)
         	REFERENCES public.completion_orders (id) MATCH SIMPLE
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
-	        
-    );
-	    
-	    
+	    );
 	       
 	 /**************************************************************
 	 * 															  *

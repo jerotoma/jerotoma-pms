@@ -118,7 +118,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 			StudentAcademicLevelVO jClass = null;
 			if(rs.next()) {
 				jClass = mapStudentClassResult(rs);	
-				jClass.setJClasses(findStudentClassesByStudentIdAndAndAcademicLevelID(jClass.getStudent().getId(), jClass.getAcademicLevel().getId()));
+				jClass.setJClasses(findStudentClassesByStudentIdAndAndAcademicLevelID(jClass.getStudent().getId(), jClass.getAcademicLevel().getId(), jClass.getAcademicYear().getId()));
 			}
 			return jClass;
 		}				
@@ -185,16 +185,11 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	}
 	
 	@Override
-	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId)
+	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
 		
-		StringBuilder builder = new StringBuilder("SELECT ")
-				.append(" cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, ")
-				.append(" cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn ")
-				.append("FROM public.classes cl ")
-				.append("INNER JOIN public.student_classes sc ON sc.class_id = cl.id ")
-				.append("INNER JOIN public.student_academic_levels sal ON sal.id = sc.student_academic_level_id ")				
-				.append("WHERE sal.student_id = ? AND sal.academic_level_id = ? ");
+		StringBuilder builder = getBaseClassesSQL()			
+				.append("WHERE sal.student_id = ? AND sal.academic_level_id = ? AND sal.academic_year_id = ? ");
 		
 		return this.jdbcTemplate.query(builder.toString(), new RowMapper<ClassVO>() {
 			@Override
@@ -207,7 +202,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 				classVO.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));
 				return classVO;
 			}			
-		}, studentId, academicLevelId);
+		}, studentId, academicLevelId, academicYearId);
 	}
 	
 	private MeetingTimeVO loadMeetingTime(int meetingTimeID) throws SQLException {		
@@ -246,5 +241,31 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 				return classVO;
 			}			
 		}, teacherID);
+	}
+	@Override
+	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId,
+			Integer academicLevelId) {
+		StringBuilder builder = getBaseClassesSQL().append("WHERE sal.student_id = ? AND sal.academic_level_id = ? ");;
+		
+		return this.jdbcTemplate.query(builder.toString(), new RowMapper<ClassVO>() {
+			@Override
+			public ClassVO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				ClassVO classVO = new ClassVO(rs);
+				classVO.setAcademicYear(loadAcademicYear(rs.getInt(ClassConstant.CLASS_ACADEMIC_YEAR_ID)));
+				classVO.setRoom(loadClassRoom(rs.getInt(ClassConstant.CLASS_ROOM_ID)));
+				classVO.setCourse(loadCourse(rs.getInt(ClassConstant.CLASS_COURSE_ID)));
+				classVO.setTeacher(loadTeacher(rs.getInt(ClassConstant.CLASS_TEACHER_ID)));
+				classVO.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));
+				return classVO;
+			}			
+		}, studentId, academicLevelId);
+	}
+	protected StringBuilder getBaseClassesSQL() {
+		return new StringBuilder("SELECT ")
+				.append(" cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, ")
+				.append(" cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn ")
+				.append("FROM public.classes cl ")
+				.append("INNER JOIN public.student_classes sc ON sc.class_id = cl.id ")
+				.append("INNER JOIN public.student_academic_levels sal ON sal.id = sc.student_academic_level_id ");			
 	}
 }

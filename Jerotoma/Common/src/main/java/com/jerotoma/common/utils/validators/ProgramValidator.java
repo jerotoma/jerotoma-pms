@@ -2,12 +2,14 @@ package com.jerotoma.common.utils.validators;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.ProgramConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.Program;
+import com.jerotoma.common.models.academic.Program.AcademicLevelCompletionOrder;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class ProgramValidator {
@@ -20,6 +22,8 @@ public class ProgramValidator {
 		String name = null;
 		String description = null;		
 		List<Integer> academicLevelIDs = null;
+		List<AcademicLevelCompletionOrder> academicLevelCompletionOrders = null;
+		List<LinkedHashMap<String, Integer>> academicLevelCompletionOrdersMap = null;
 		
 		if (params.containsKey(ProgramConstant.ID)) {
 			id = (Integer) params.get(ProgramConstant.ID);
@@ -39,6 +43,10 @@ public class ProgramValidator {
 		
 		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_IDS)) {
 			academicLevelIDs = (ArrayList<Integer>) params.get(ProgramConstant.ACADEMIC_LEVEL_IDS);
+		}
+		
+		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
+			academicLevelCompletionOrdersMap = (ArrayList<LinkedHashMap<String, Integer>>) params.get(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS);
 		}
 		
 		
@@ -67,8 +75,16 @@ public class ProgramValidator {
 		}
 		program.setAcademicLevelIDs(academicLevelIDs);
 		
-		Date today = CalendarUtil.getTodaysDate();
+		if (academicLevelCompletionOrdersMap == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
+			throw new FieldRequiredException("Academic Level Completion Orders are required to continue");
+		}
+		academicLevelCompletionOrders = new ArrayList<>();		
+		for (LinkedHashMap<String, Integer> map: academicLevelCompletionOrdersMap) {
+			academicLevelCompletionOrders.add(new AcademicLevelCompletionOrder(map.get("completionOrderId"), map.get("academicLevelId")));
+		}		
+		program.setAcademicLevelCompletionOrders(academicLevelCompletionOrders);		
 		
+		Date today = CalendarUtil.getTodaysDate();		
 		program.setCreatedOn(today);
 		program.setUpdatedOn(today);
 		

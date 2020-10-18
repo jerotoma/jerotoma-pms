@@ -33,13 +33,13 @@ import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.utils.validators.CourseValidator;
 import com.jerotoma.common.viewobjects.CourseVO;
+import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.AcademicYearService;
+import com.jerotoma.services.academic.CourseService;
+import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.academic.AssemblerCourseService;
 import com.jerotoma.services.assemblers.academic.DepartmentService;
-import com.jerotoma.services.courses.AcademicLevelService;
-import com.jerotoma.services.courses.AcademicYearService;
-import com.jerotoma.services.courses.CourseService;
-import com.jerotoma.services.courses.ProgramService;
 
 
 @RestController

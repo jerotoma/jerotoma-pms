@@ -237,9 +237,9 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	public List<ClassVO> loadStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery()
-			.append(" INNER JOIN student_classes src ON src.class_id = cl.id ")
-			.append(" INNER JOIN student_academic_levels sal ON sal.id = src.student_academic_level_id")
-			.append(" WHERE sal.student_id = ? AND  sal.academic_level_id = ? AND cl.academic_year_id = ? ");				
+			.append(" INNER JOIN student_classes sc ON sc.class_id = cl.id ")
+			.append(" INNER JOIN student_academic_levels sal ON sal.id = sc.student_academic_level_id")
+			.append(" WHERE sal.student_id = ? AND  sal.academic_level_id = ? AND sal.academic_year_id = ? ");				
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), studentId, academicLevelId, academicYearId);
 	}
 	@Override

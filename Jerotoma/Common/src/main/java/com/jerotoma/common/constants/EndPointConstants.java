@@ -96,7 +96,9 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/work-days";	
 	}
 	
-	
+	public static interface REST_COMPLETION_ORDER_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/completion-orders";	
+	}
 	
 	public static interface REST_LOGIN_CONTROLLER {
 		public static final String BASE =  API_SECURED_ROOT + "/auth/login";		

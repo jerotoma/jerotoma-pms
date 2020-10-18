@@ -36,6 +36,9 @@ public class CompletionOrder {
 	@Column(name="created_on")
 	private Date createdOn;
 	
+	@Column(name="updated_by")
+	private Integer updatedBy;
+	
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
@@ -79,5 +82,13 @@ public class CompletionOrder {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 }

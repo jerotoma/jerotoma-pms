@@ -60,6 +60,8 @@ import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.AddressService;
+import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.AssemblerParentService;
 import com.jerotoma.services.assemblers.AssemblerSequenceGeneratorService;
@@ -68,8 +70,6 @@ import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 import com.jerotoma.services.assemblers.academic.DepartmentService;
-import com.jerotoma.services.courses.AcademicLevelService;
-import com.jerotoma.services.courses.ProgramService;
 import com.jerotoma.services.positions.PositionService;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.ParentAddressService;
@@ -426,12 +426,13 @@ public class RestUserController extends BaseController {
 	@PutMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
 	@ResponseBody
 	public HttpResponseEntity<Object> updateUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
-		List<String> requiredFields = Arrays.asList(
+		List<String> requiredFields = new ArrayList<>(
+				Arrays.asList(
 						UserConstant.ID,
 						UserConstant.USER_ID,
 						UserConstant.FIRST_NAME,						
 						UserConstant.LAST_NAME,
-						UserConstant.GENDER);
+						UserConstant.GENDER));
 		Staff staff;
 		Parent parent;
 		Teacher teacher;

@@ -6,12 +6,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 
 @Entity
@@ -39,7 +41,11 @@ public class ProgramAcademicLevel {
 	private AcademicLevel academicLevel;
 	
 	@OneToOne
-	@JoinColumn(name="completion_order_id")
+	@JoinTable(
+	    	name = DatabaseConstant.TABLES.PROGRAM_ACADEMIC_LEVEL_COMPLETION_ORDERS,
+	        joinColumns = @JoinColumn(name="pal_id"),
+	        inverseJoinColumns = @JoinColumn(name = "completion_order_id"))
+	@JsonManagedReference
 	private	CompletionOrder completionOrder;
 	
 	public ProgramAcademicLevel() {}
@@ -71,5 +77,13 @@ public class ProgramAcademicLevel {
 
 	public void setAcademicLevel(AcademicLevel academicLevel) {
 		this.academicLevel = academicLevel;
+	}
+
+	public CompletionOrder getCompletionOrder() {
+		return completionOrder;
+	}
+
+	public void setCompletionOrder(CompletionOrder completionOrder) {
+		this.completionOrder = completionOrder;
 	}
 }

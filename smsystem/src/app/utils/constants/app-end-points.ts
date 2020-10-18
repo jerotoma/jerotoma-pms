@@ -1,3 +1,4 @@
+
 import {
   ALL_ROLES,
   USER_ROLE,
@@ -27,6 +28,7 @@ export const API_END_POINTS = {
   rooms: '/api/secured/rooms',
   courses: '/api/secured/courses',
   programs: '/api/secured/programs',
+  completionOrders: '/api/secured/completion-orders',
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',
   workDays: '/api/secured/work-days',
@@ -173,6 +175,10 @@ export const FRONTEND_ENDPOINTS = {
   },
   systemSetupAppearances: {
     path: '/dashboard/system-setup/appearances',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
+  systemSetupCompletionOrders: {
+    path: '/dashboard/system-setup/completion-orders',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
   systemSetupPositions: {

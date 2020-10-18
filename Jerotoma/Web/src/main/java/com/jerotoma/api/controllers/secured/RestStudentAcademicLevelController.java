@@ -31,13 +31,13 @@ import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.utils.validators.StudentAcadmicLevelValidator;
 import com.jerotoma.common.viewobjects.StudentAcademicLevelVO;
 import com.jerotoma.common.viewobjects.UserVO;
+import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.AcademicYearService;
+import com.jerotoma.services.academic.ClassService;
+import com.jerotoma.services.academic.CourseService;
+import com.jerotoma.services.academic.StudentClassService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
-import com.jerotoma.services.courses.AcademicLevelService;
-import com.jerotoma.services.courses.AcademicYearService;
-import com.jerotoma.services.courses.ClassService;
-import com.jerotoma.services.courses.CourseService;
-import com.jerotoma.services.courses.StudentClassService;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.StudentService;
 

@@ -32,8 +32,8 @@ import com.jerotoma.common.models.academic.Room;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.utils.validators.SchoolClassValidator;
 import com.jerotoma.config.auth.interfaces.IAuthenticationFacade;
+import com.jerotoma.services.academic.RoomService;
 import com.jerotoma.services.assemblers.academic.AssemblerRoomService;
-import com.jerotoma.services.courses.RoomService;
 import com.jerotoma.services.users.AuthUserService;
 
 

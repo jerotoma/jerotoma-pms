@@ -96,8 +96,19 @@ export class ProgramListComponent implements OnInit {
         name: program.name,
       },
     }).onClose.subscribe(_data => {
-      this.loadPrograms();
+      if (_data.confirmed) {
+        this.deleteProgram(_data.id);
+      }
     });
+  }
+
+  deleteProgram(programId: number) {
+    this.programService.deleteProgram(programId)
+        .subscribe((success: boolean ) => {
+          if (success) {
+            this.loadPrograms();
+          }
+      });
   }
 
   view(program: Program) {

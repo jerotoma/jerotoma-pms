@@ -6,3 +6,8 @@ export interface AcademicLevel {
   createdOn?: Date;
   updatedOn?: Date;
 }
+
+export interface AcademicLevelCompletionOrder {
+  academicLevelId: number;
+  completionOrderId: number;
+}

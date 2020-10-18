@@ -31,8 +31,8 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.utils.validators.AcademicYearValidator;
+import com.jerotoma.services.academic.AcademicYearService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
-import com.jerotoma.services.courses.AcademicYearService;
 import com.jerotoma.services.schedules.ScheduleDataService;
 
 @RestController

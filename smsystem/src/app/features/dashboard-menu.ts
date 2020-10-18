@@ -168,6 +168,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: FRONTEND_ENDPOINTS.systemSetupCourses.path,
       },
       {
+        title: 'Completion Orders',
+        link: FRONTEND_ENDPOINTS.systemSetupCompletionOrders.path,
+      },
+      {
         title: 'Departments',
         link: FRONTEND_ENDPOINTS.systemSetupDepartments.path,
       },

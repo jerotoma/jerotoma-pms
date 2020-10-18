@@ -27,17 +27,16 @@ import com.jerotoma.common.constants.ProgramConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.ProgramAcademicLevel;
 import com.jerotoma.common.utils.validators.ProgramValidator;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.ProgramVO;
+import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.ProgramAcademicLevelService;
+import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
-import com.jerotoma.services.courses.AcademicLevelService;
-import com.jerotoma.services.courses.ProgramAcademicLevelService;
-import com.jerotoma.services.courses.ProgramService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_PROGRAM_CONTROLLER.BASE)
@@ -123,29 +122,15 @@ public class RestProgramController extends BaseController implements Controller 
 						ProgramConstant.NAME,
 						ProgramConstant.CODE,
 						ProgramConstant.DESCRIPTION,						
-						ProgramConstant.ACADEMIC_LEVEL_IDS
+						ProgramConstant.ACADEMIC_LEVEL_IDS,
+						ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS
 						));
-		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
 		Program program = ProgramValidator.validate(params, requiredFields);
 		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
 		userSecurityClearance.checkProgramCreationPermission();
 		
 		try {
-			program = programService.updateObject(program);	
-			for (Integer academicLevelID: academicLevelIDs) {
-				AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
-				ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
-				if (assemblerProgramService.doesProgramAcademicLevelExist(program.getId(), academicLevel.getId())) {
-					programAcademicLevel  = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
-					programAcademicLevel.setAcademicLevel(academicLevel);
-					programAcademicLevel.setProgram(program);
-					programAcademicLevelService.updateObject(programAcademicLevel);
-				} else {
-					programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
-				}			
-				programAcademicLevels.add(programAcademicLevel);				
-			}
-			program.setProgramAcademicLevels(programAcademicLevels);
+			program =  programService.updateProgramAndAssociateAcademicLevels(program, academicLevelIDs);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -170,19 +155,12 @@ public class RestProgramController extends BaseController implements Controller 
 						ProgramConstant.DESCRIPTION,						
 						ProgramConstant.ACADEMIC_LEVEL_IDS
 						));
-		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
+		
 		Program program = ProgramValidator.validate(params, requiredFields);
 		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
 		userSecurityClearance.checkProgramCreationPermission();		
 		try {
-			program = programService.createObject(program);	
-			for (Integer academicLevelID: academicLevelIDs) {
-				AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
-				ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
-				programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
-				programAcademicLevels.add(programAcademicLevel);				
-			}
-			program.setProgramAcademicLevels(programAcademicLevels);			
+			program = programService.createProgramAndAssociateAcademicLevels(program, academicLevelIDs);			
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -192,6 +170,8 @@ public class RestProgramController extends BaseController implements Controller 
 		response.setData(program);
 		return response;
 	}
+
+	
 
 	@DeleteMapping(value = {"/{entityId}"})
 	@Override

@@ -28,9 +28,9 @@ import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.utils.validators.AcademicLevelValidator;
 import com.jerotoma.common.viewobjects.StudentVO;
+import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
-import com.jerotoma.services.courses.AcademicLevelService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE)

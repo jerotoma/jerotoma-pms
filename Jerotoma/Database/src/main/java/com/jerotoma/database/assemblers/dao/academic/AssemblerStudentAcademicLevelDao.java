@@ -11,7 +11,9 @@ public interface AssemblerStudentAcademicLevelDao extends AssemblerDao<StudentAc
 
 	public List<StudentAcademicLevelVO> findStudentClassByParams(Integer studentId, Integer classId) throws SQLException;
 	public List<StudentAcademicLevelVO> findStudentAcademicLevelsByStudentId(Integer studentId) throws SQLException;
-	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId) throws SQLException;
+	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
 	public List<ClassVO> findTeacherClassesByTeacherId(Integer teacherID) throws SQLException;
+	
+	public List<ClassVO> findStudentClassesByStudentIdAndAndAcademicLevelID(Integer studentId, Integer academicLevelId);
 
 }

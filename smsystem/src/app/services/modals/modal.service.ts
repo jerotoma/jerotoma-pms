@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { DialogComponent, SnackbarComponent } from 'app/shared/modals';
+import { APP_CONSTANTS } from 'app/utils';
 
 @Injectable()
 export class ModalService {
@@ -43,7 +44,7 @@ export class ModalService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         panelClass: panelClass,
-        duration: 4000,
+        duration: APP_CONSTANTS.popupTimeout,
       });
     }
 

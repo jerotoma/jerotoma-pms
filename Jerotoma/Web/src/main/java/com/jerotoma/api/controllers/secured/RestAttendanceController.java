@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.services.academic.AcademicYearService;
+import com.jerotoma.services.academic.ClassService;
 import com.jerotoma.services.assemblers.attendances.AssemblerClassAttendanceService;
 import com.jerotoma.services.attendances.ClassAttendanceService;
-import com.jerotoma.services.courses.AcademicYearService;
-import com.jerotoma.services.courses.ClassService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_ATTENDANCE_CONTROLLER.BASE)

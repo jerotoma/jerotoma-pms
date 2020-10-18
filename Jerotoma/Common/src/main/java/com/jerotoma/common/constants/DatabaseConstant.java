@@ -51,6 +51,7 @@ public class DatabaseConstant {
 		public static final String USER_MEDIA = "user_media";
 		
 		public static final String COMPLETION_ORDERS = "completion_orders";
+		public static final String PROGRAM_ACADEMIC_LEVEL_COMPLETION_ORDERS = "pal_completion_orders";
 	}
 	
 	

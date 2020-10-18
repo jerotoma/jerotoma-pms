@@ -34,6 +34,7 @@ import com.jerotoma.common.viewobjects.MeetingTimeVO;
 import com.jerotoma.common.viewobjects.RoomVO;
 import com.jerotoma.common.viewobjects.TeacherVO;
 import com.jerotoma.common.viewobjects.WorkDayVO;
+import com.jerotoma.services.academic.ClassService;
 import com.jerotoma.services.assemblers.AssemblerTeacherService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
@@ -42,7 +43,6 @@ import com.jerotoma.services.assemblers.academic.AssemblerDepartmentService;
 import com.jerotoma.services.assemblers.academic.AssemblerMeetingTimeService;
 import com.jerotoma.services.assemblers.academic.AssemblerRoomService;
 import com.jerotoma.services.assemblers.academic.AssemblerWorkDayService;
-import com.jerotoma.services.courses.ClassService;
 
 @Service
 public class ScheduleDataServiceImpl implements ScheduleDataService {

@@ -6,6 +6,7 @@ export const APP_CONSTANTS = {
   overrideUserTheme: 'overrideUserTheme',
   currentAcademicYear: 'currentAcademicYear',
   attendancePresentStatus: 'attendanceStatusMarkedAsPresent',
+  popupTimeout: 10000,
 
 };
 

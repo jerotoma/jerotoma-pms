@@ -37,6 +37,9 @@ public class Program {
 	@Column
 	private String name;
 	
+	@Transient
+	private List<AcademicLevelCompletionOrder> academicLevelCompletionOrders;
+	
 	@Column
 	private String description;
 	
@@ -117,6 +120,42 @@ public class Program {
 	public void setProgramAcademicLevels(List<ProgramAcademicLevel> programAcademicLevels) {
 		this.programAcademicLevels = programAcademicLevels;
 	}
-	
+		
+	public List<AcademicLevelCompletionOrder> getAcademicLevelCompletionOrders() {
+		return academicLevelCompletionOrders;
+	}
+
+	public void setAcademicLevelCompletionOrders(List<AcademicLevelCompletionOrder> academicLevelCompletionOrders) {
+		this.academicLevelCompletionOrders = academicLevelCompletionOrders;
+	}
+
+
+
+
+	public static class AcademicLevelCompletionOrder {
+		private Integer completionOrderId;
+		private Integer academicLevelId;
+		
+		public AcademicLevelCompletionOrder(Integer completionOrderId, Integer academicLevelId) {			
+			this.completionOrderId = completionOrderId;
+			this.academicLevelId = academicLevelId;
+		}
+		
+		public Integer getCompletionOrderId() {
+			return completionOrderId;
+		}
+		
+		public void setCompletionOrderId(Integer completionOrderId) {
+			this.completionOrderId = completionOrderId;
+		}
+		
+		public Integer getAcademicLevelId() {
+			return academicLevelId;
+		}
+		
+		public void setAcademicLevelId(Integer academicLevelId) {
+			this.academicLevelId = academicLevelId;
+		}
+	}
 	
 }
