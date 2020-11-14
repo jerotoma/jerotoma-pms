@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.CompletionOrder;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.Program.AcademicLevelCompletionOrder;
 import com.jerotoma.common.models.academic.ProgramAcademicLevel;
@@ -21,6 +22,7 @@ import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.academic.CompletionOrderService;
 import com.jerotoma.services.academic.ProgramAcademicLevelService;
 import com.jerotoma.services.academic.ProgramService;
+import com.jerotoma.services.assemblers.academic.AssemblerCompletionOrderService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 
 
@@ -34,6 +36,7 @@ public class ProgramServiceImpl implements ProgramService {
 	@Autowired ProgramAcademicLevelService programAcademicLevelService;
 	@Autowired CompletionOrderService completionOrderService;
 	@Autowired AcademicLevelService academicLevelService;
+	@Autowired AssemblerCompletionOrderService assemblerCompletionOrderService;
 
 	@Override
 	public Program findObject(Integer primaryKey) throws SQLException {
@@ -74,7 +77,7 @@ public class ProgramServiceImpl implements ProgramService {
 	public Program createProgramAndAssociateAcademicLevels(Program program, List<Integer> academicLevelIDs) throws SQLException {
 		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
 		
-		program = createObject(program);
+		Program programCreated = createObject(program);
 				
 		for (Integer academicLevelID: academicLevelIDs) {			
 			boolean found = false;
@@ -88,17 +91,23 @@ public class ProgramServiceImpl implements ProgramService {
 			}
 			AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
 			
-			if (!found) {
-				throw new FieldRequiredException("Academic Level: " + academicLevel.getName() + " (" + academicLevel.getId() + ")" + " requires Completion Order to continue");
-			}
+			wasAcademicLevelFound(found, academicLevel);
 			
-			ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
+			validateCompletionOrderExistance(programCreated, completionOrderId, academicLevel);
+			
+			ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(programCreated, academicLevel);
 			programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
 			programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
 			programAcademicLevels.add(programAcademicLevel);				
 		}
-		program.setProgramAcademicLevels(programAcademicLevels);
-		return program;
+		programCreated.setProgramAcademicLevels(programAcademicLevels);
+		return programCreated;
+	}
+
+	protected void wasAcademicLevelFound(boolean found, AcademicLevel academicLevel) {
+		if (!found) {
+			throw new FieldRequiredException("Academic Level: " + academicLevel.getName() + " (" + academicLevel.getId() + ")" + " requires Completion Order to continue");
+		}
 	}
 
 	@Override
@@ -106,35 +115,47 @@ public class ProgramServiceImpl implements ProgramService {
 			throws SQLException {
 		List<ProgramAcademicLevel> programAcademicLevels = new ArrayList<ProgramAcademicLevel>();
 		
-		program = updateObject(program);	
+		Program programUpdated = updateObject(program);	
 		for (Integer academicLevelID: academicLevelIDs) {
 			boolean found = false;
 			Integer completionOrderId = null;
-			for (AcademicLevelCompletionOrder acOrder: program.getAcademicLevelCompletionOrders()) {
-				if (acOrder.getAcademicLevelId().equals(academicLevelID)) {
+			for (AcademicLevelCompletionOrder academicLevelOrder: program.getAcademicLevelCompletionOrders()) {
+				if (academicLevelOrder.getAcademicLevelId().equals(academicLevelID)) {
 					found = true;
-					completionOrderId = acOrder.getCompletionOrderId();
+					completionOrderId = academicLevelOrder.getCompletionOrderId();
 					break;
 				}
 			}
 			AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
 			
-			if (!found) {
-				throw new FieldRequiredException("Academic Level: " + academicLevel.getName() + " (" + academicLevel.getId() + ")" + " requires Completion Order to continue");
-			}
-			ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(program, academicLevel);
-			if (assemblerProgramService.doesProgramAcademicLevelExist(program.getId(), academicLevel.getId())) {
-				programAcademicLevel  = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
+			wasAcademicLevelFound(found, academicLevel);
+			validateCompletionOrderExistance(programUpdated, completionOrderId, academicLevel);
+			
+			ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(programUpdated, academicLevel);
+			if (assemblerProgramService.doesProgramAcademicLevelExist(programUpdated.getId(), academicLevel.getId())) {
+				programAcademicLevel = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
 				programAcademicLevel.setAcademicLevel(academicLevel);
-				programAcademicLevel.setProgram(program);
+				programAcademicLevel.setProgram(programUpdated);
 				programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
 				programAcademicLevelService.updateObject(programAcademicLevel);
 			} else {
-				programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
+				programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
+				programAcademicLevel = programAcademicLevelService.createObject(programAcademicLevel);
 			}			
 			programAcademicLevels.add(programAcademicLevel);				
 		}
-		program.setProgramAcademicLevels(programAcademicLevels);
-		return null;
+		programUpdated.setProgramAcademicLevels(programAcademicLevels);
+		return programUpdated;
+	}
+
+	protected void validateCompletionOrderExistance(Program program, Integer completionOrderId,
+			AcademicLevel academicLevel) {
+		List<CompletionOrder> completionOrders = assemblerCompletionOrderService.getCompletionOrders(program.getId());
+		for (CompletionOrder completionOrder : completionOrders) {
+			if (completionOrderId.equals(completionOrder.getId())) {
+				throw new FieldRequiredException("Academic Level: " + academicLevel.getName() + " (" + academicLevel.getId() + ")" + " has Completion Order that have been added on other levels");
+			}
+		}
+		
 	}
 }

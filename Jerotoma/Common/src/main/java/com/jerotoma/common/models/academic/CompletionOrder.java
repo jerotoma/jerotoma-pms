@@ -1,5 +1,7 @@
 package com.jerotoma.common.models.academic;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.jerotoma.common.constants.CompletionOrderConstant;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.constants.SystemConstant;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.COMPLETION_ORDERS)
@@ -43,6 +47,15 @@ public class CompletionOrder {
 	private Date updatedOn;
 	
 	public CompletionOrder() {}
+
+	public CompletionOrder(ResultSet rs) throws SQLException {
+		this.id = rs.getInt(CompletionOrderConstant.ID);
+		this.name = rs.getString(CompletionOrderConstant.NAME);
+		this.completionOrder = rs.getInt(CompletionOrderConstant.COMPLETION_ORDER);
+		this.updatedBy = rs.getInt(SystemConstant.UPDATED_BY);
+		this.createdOn = rs.getDate("createdOn");
+		this.updatedOn = rs.getDate("updatedOn");		
+	}
 
 	public Integer getId() {
 		return id;
