@@ -2,14 +2,15 @@
 .nb-theme-corporate nb-card.dialog-card,
 .nb-theme-dark nb-card.dialog-card,
 .nb-theme-default nb-card.dialog-card {
-  max-height: 95vh !important;
+  max-height: 91vh !important;
 }
 
 .nb-theme-cosmic nb-card,
 .nb-theme-corporate nb-card,
 .nb-theme-dark nb-card,
 .nb-theme-default nb-card {
-  min-width: 50vw !important;
+  /* min-width: 40vw !important; */
+  font-size: inherit;
 }
 
 .nb-theme-default nb-card-footer,

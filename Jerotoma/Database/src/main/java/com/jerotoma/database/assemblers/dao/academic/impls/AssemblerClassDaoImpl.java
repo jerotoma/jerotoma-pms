@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -141,7 +142,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	public List<ClassVO> loadJClassesByStudentId(Integer studentId) {		
 		String query = "SELECT src.class_id FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id  WHERE sc.student_id = ?";
 		
-		return this.jdbcTemplate.query(query,new Object[] {studentId}, new RowMapper<ClassVO>() {
+		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId}), new RowMapper<ClassVO>() {
 			@Override
 			public ClassVO mapRow(ResultSet rs, int rowNum) throws SQLException {				
 				return findObject(rs.getInt("class_id"));
@@ -248,7 +249,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		
 		String query = "SELECT sal.student_id, sal.academic_level_id, sal.academic_year_id FROM public.student_academic_levels sal WHERE sal.student_id = ?";
 		
-		return this.jdbcTemplate.query(query,new Object[] {studentId}, new RowMapper<StudentAcademicLevelClassList>() {
+		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId}), new RowMapper<StudentAcademicLevelClassList>() {
 			@Override
 			public StudentAcademicLevelClassList mapRow(ResultSet rs, int rowNum) throws SQLException {				
 				

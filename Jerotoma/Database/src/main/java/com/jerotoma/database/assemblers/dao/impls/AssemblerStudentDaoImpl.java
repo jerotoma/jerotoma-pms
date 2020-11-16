@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -164,14 +165,12 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	public List<StudentVO> loadStudentsByJClassID(Integer classId) {
 		String query = "SELECT sal.student_id FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id WHERE sc.class_id = ?";
 		
-		return this.jdbcTemplate.query(query, new Object[] {classId}, new RowMapper<StudentVO>() {
+		return this.jdbcTemplate.query(query, new ArgumentPreparedStatementSetter(new Object[] {classId}), new RowMapper<StudentVO>() {
 			@Override
 			public StudentVO mapRow(ResultSet rs, int rowNum) throws SQLException {				
 				return findObject(rs.getInt("student_id"));
-			}
-			
-		});
-		
+			}			
+		});		
 	}
 
 	@Override
@@ -218,10 +217,6 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	@Override
 	public List<StudentVO> findStudentsWhoAreUnenrolledAndQualifiedForThisProgramAndAcademicLevel(Integer programId,
 			Integer academicLevelId) throws SQLException {
-		
-		
-		
-		
 		return null;
 	}
 	

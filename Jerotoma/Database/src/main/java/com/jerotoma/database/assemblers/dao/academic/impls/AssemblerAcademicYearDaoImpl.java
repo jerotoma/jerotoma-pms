@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -129,7 +130,7 @@ public class AssemblerAcademicYearDaoImpl extends JdbcDaoSupport implements Asse
 	@Override
 	public List<AcademicYearVO> findAcademicYears(Integer studentId, Integer academicLevelId) throws SQLException {
 		String query = "SELECT sal.academic_year_id FROM public.student_academic_levels sal WHERE sal.student_id = ? AND sal.academic_level_id = ?";		
-		return this.jdbcTemplate.query(query,new Object[] {studentId, academicLevelId}, new RowMapper<AcademicYearVO>() {
+		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId, academicLevelId}), new RowMapper<AcademicYearVO>() {
 			@Override
 			public AcademicYearVO mapRow(ResultSet rs, int rowNum) throws SQLException {			
 				return findObject(rs.getInt("academic_year_id"));

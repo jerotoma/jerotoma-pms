@@ -113,7 +113,7 @@ public class RestProgramController extends BaseController implements Controller 
 	@Override
 	public HttpResponseEntity<Object> update(Authentication auth, Integer entityId, Map<String, Object> params) {
 		List<String> requiredFields;
-		this.logRequestDetail("PUT : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE);
+		this.logRequestDetail("PUT : " + EndPointConstants.REST_PROGRAM_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		requiredFields = new ArrayList<>(

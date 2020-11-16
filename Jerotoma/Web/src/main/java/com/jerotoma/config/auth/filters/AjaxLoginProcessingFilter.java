@@ -18,10 +18,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jerotoma.common.exceptions.AuthMethodNotSupportedException;
+import com.jerotoma.common.utils.StringUtility;
 import com.jerotoma.common.utils.WebUtil;
 import com.jerotoma.config.auth.common.LoginRequest;
 
@@ -56,7 +56,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
         LoginRequest loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
         
-        if (StringUtils.isEmpty(loginRequest.getUsername()) || StringUtils.isEmpty(loginRequest.getPassword())) {
+        if (StringUtility.isEmpty(loginRequest.getUsername()) || StringUtility.isEmpty(loginRequest.getPassword())) {
             throw new AuthenticationServiceException("Username or Password not provided");
         }
 

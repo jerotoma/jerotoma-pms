@@ -17,9 +17,11 @@ import com.jerotoma.common.models.academic.CompletionOrder;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.Program.AcademicLevelCompletionOrder;
 import com.jerotoma.common.models.academic.ProgramAcademicLevel;
+import com.jerotoma.common.models.academic.ProgramAcademicLevelCompletionOrder;
 import com.jerotoma.database.dao.academic.ProgramDao;
 import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.academic.CompletionOrderService;
+import com.jerotoma.services.academic.ProgramAcademicLevelCompletionOrderService;
 import com.jerotoma.services.academic.ProgramAcademicLevelService;
 import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.assemblers.academic.AssemblerCompletionOrderService;
@@ -37,6 +39,8 @@ public class ProgramServiceImpl implements ProgramService {
 	@Autowired CompletionOrderService completionOrderService;
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired AssemblerCompletionOrderService assemblerCompletionOrderService;
+	
+	@Autowired ProgramAcademicLevelCompletionOrderService programAcademicLevelCompletionOrderService;
 
 	@Override
 	public Program findObject(Integer primaryKey) throws SQLException {
@@ -94,14 +98,25 @@ public class ProgramServiceImpl implements ProgramService {
 			wasAcademicLevelFound(found, academicLevel);
 			
 			validateCompletionOrderExistance(programCreated, completionOrderId, academicLevel);
-			
+						
 			ProgramAcademicLevel programAcademicLevel = new ProgramAcademicLevel(programCreated, academicLevel);
-			programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
 			programAcademicLevel  = programAcademicLevelService.createObject(programAcademicLevel);
+			
+			createProgramAcademicCompletionOrder(completionOrderId, programAcademicLevel);		
+			
 			programAcademicLevels.add(programAcademicLevel);				
 		}
 		programCreated.setProgramAcademicLevels(programAcademicLevels);
 		return programCreated;
+	}
+
+	protected void createProgramAcademicCompletionOrder(Integer completionOrderId,
+			ProgramAcademicLevel programAcademicLevel) throws SQLException {
+		ProgramAcademicLevelCompletionOrder programAcademicLevelCompletionOrder = new ProgramAcademicLevelCompletionOrder();
+		programAcademicLevelCompletionOrder.setPalId(programAcademicLevel.getId());
+		programAcademicLevelCompletionOrder.setCompletionOrder(completionOrderService.findObject(completionOrderId));
+		programAcademicLevelCompletionOrder.setProgram(programAcademicLevel.getProgram());
+		programAcademicLevelCompletionOrder = programAcademicLevelCompletionOrderService.save(programAcademicLevelCompletionOrder);
 	}
 
 	protected void wasAcademicLevelFound(boolean found, AcademicLevel academicLevel) {
@@ -127,6 +142,11 @@ public class ProgramServiceImpl implements ProgramService {
 				}
 			}
 			AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
+			CompletionOrder completionOrder = assemblerCompletionOrderService.getCompletionOrder(programUpdated.getId(), academicLevel.getId());
+			if (completionOrder != null && completionOrderId == null) {
+				completionOrderId = completionOrder.getId();
+				found = true;
+			}
 			
 			wasAcademicLevelFound(found, academicLevel);
 			validateCompletionOrderExistance(programUpdated, completionOrderId, academicLevel);
@@ -136,12 +156,9 @@ public class ProgramServiceImpl implements ProgramService {
 				programAcademicLevel = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
 				programAcademicLevel.setAcademicLevel(academicLevel);
 				programAcademicLevel.setProgram(programUpdated);
-				programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
-				programAcademicLevelService.updateObject(programAcademicLevel);
-			} else {
-				programAcademicLevel.setCompletionOrder(completionOrderService.findObject(completionOrderId));
-				programAcademicLevel = programAcademicLevelService.createObject(programAcademicLevel);
-			}			
+			}
+			programAcademicLevel = programAcademicLevelService.updateObject(programAcademicLevel);
+			createProgramAcademicCompletionOrder(completionOrderId, programAcademicLevel);		
 			programAcademicLevels.add(programAcademicLevel);				
 		}
 		programUpdated.setProgramAcademicLevels(programAcademicLevels);

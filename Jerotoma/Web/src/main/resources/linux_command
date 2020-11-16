@@ -11,8 +11,8 @@ scp Web/target/jerotoma.war root@jerotoma.com:/opt/tomcat/webapps
 scp dist/jerotoma-blog/index.html root@jerotoma.com:/var/www/blog.jerotoma
 
 rm -rf /opt/tomcat/jerotoma && mv /opt/tomcat/webapps/jerotoma /opt/tomcat/
-#RESTART
 
+#RESTART LINUX
 sudo reboot 
 
 #Restart Nginx Service

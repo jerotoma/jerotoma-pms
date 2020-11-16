@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import {CdkDragDrop, moveItemInArray, CdkDragStart} from '@angular/cdk/drag-drop';
 
 import { NbDialogRef } from '@nebular/theme';
 import { Program, AcademicLevel, AcademicLevelCompletionOrder,  CompletionOrder} from 'app/models';
@@ -10,6 +11,7 @@ import {
   ModalService,
 } from 'app/services';
 import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
+import { Element } from '@angular/compiler';
 
 @Component({
   selector: 'app-program-edit',
@@ -37,6 +39,7 @@ export class ProgramEditComponent implements OnInit {
     private academicLevelService: AcademicLevelService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
+    private element: ElementRef,
     private completionOrderService: CompletionOrderService,
     protected ref: NbDialogRef<ProgramEditComponent>) {}
 
@@ -90,6 +93,21 @@ export class ProgramEditComponent implements OnInit {
       academicLevelCompletionOrders: [null, Validators.required ],
       description: [''],
     });
+  }
+
+  onDragDropChange(event: CdkDragDrop<string[]>) {
+    this.changeZIndexValue('1040');
+    moveItemInArray(this.academicLevels, event.previousIndex, event.currentIndex);
+    window.console.log(this.academicLevels);
+  }
+
+  onDragItemStarted(event: CdkDragStart) {
+    this.changeZIndexValue('1000');
+  }
+
+  changeZIndexValue(value: string) {
+   const el: HTMLDivElement = this.element.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    el.style.zIndex = value;
   }
 
   onCompletionOrderSelectedChange(completionOrderId: number, academicLevel: AcademicLevel) {

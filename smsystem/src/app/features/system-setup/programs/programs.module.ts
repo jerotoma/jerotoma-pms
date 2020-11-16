@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 import { SharedModule } from 'app/shared/shared.module';
 
 import {MatTableModule} from '@angular/material/table';
@@ -57,6 +58,7 @@ const MODULES = [
   MatTableModule,
   MatPaginatorModule,
   MatIconModule,
+  DragDropModule,
   MatMenuModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,

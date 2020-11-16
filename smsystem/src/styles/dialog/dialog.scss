@@ -10,34 +10,35 @@
 .cdk-overlay-pane.global-dialog-container,
 .global-dialog-container .mat-dialog-container {
   position: absolute !important;
-  top: 4% !important;
+  top: 6.5% !important;
+  bottom: 2% !important;
 }
 
 @include media-breakpoint-up(sm) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 30vw;
+    min-width: 70vw;
   }
 }
 
 @include media-breakpoint-up(md) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 40vw;
+    min-width: 60vw;
   }
 }
 
 @include media-breakpoint-down(lg) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 45vw;
+    min-width: 50vw;
   }
 }
 
 @include media-breakpoint-down(is) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 30vw;
+    min-width: 80vw;
   }
 }
 

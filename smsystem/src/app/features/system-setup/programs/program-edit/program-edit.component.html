@@ -1,7 +1,7 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form  autocomplete="off" [formGroup]="programForm" (ngSubmit)="onSubmit()">
-          <nb-card accent="success">
+          <nb-card accent="success" class="dialog-card">
             <nb-card-header>Edit Program</nb-card-header>
             <nb-card-body>
               <div class="row">
@@ -95,35 +95,23 @@
                           nbSpinnerStatus="success"
                           nbSpinnerSize="large"
                           nbSpinnerMessage="Loading unadded levels....">
-                          <ng-container *ngFor="let academicLevel of academicLevels">
-                            <div class="row">
-                              <div class='col-md-5'>
-                                <div class="form-control-group">
-                                  <nb-checkbox
+                          <div cdkDropList class="drag-drop-list"
+                            (cdkDropListDropped)="onDragDropChange($event)">
+                            <div
+                              class="drag-drop-box"
+                              *ngFor="let academicLevel of academicLevels"
+                              cdkDrag
+                              (cdkDragStarted)="onDragItemStarted($event)"
+                              >
+                              <div class="drag-drop-custom-placeholder" *cdkDragPlaceholder></div>
+                                <nb-checkbox
                                     [id]="'academicLevel-'+ academicLevel.id"
                                     status="success"
                                     (checkedChange)="checkedChange($event, academicLevel)"
                                     >{{academicLevel.name}}
                                   </nb-checkbox>
-                                </div>
-                              </div>
-                              <div class="col-md-6">
-                                <div class="form-control-group">
-                                <nb-select
-                                  fullWidth
-                                  placeholder="Select completion order"
-                                  (selectedChange)="onCompletionOrderSelectedChange($event, academicLevel)"
-                                  id="class-completionOrder">
-                                  <nb-option
-                                      *ngFor='let completionOrder of completionOrders'
-                                      [value]="completionOrder.id">
-                                      {{completionOrder?.completionOrder}}
-                                  </nb-option>
-                                </nb-select>
-                                </div>
-                              </div>
                             </div>
-                          </ng-container>
+                          </div>
                         </nb-card-body>
                       </nb-card>
                     </div>
