@@ -133,20 +133,20 @@ public class Program {
 
 
 	public static class AcademicLevelCompletionOrder {
-		private Integer completionOrderId;
+		private Integer completionOrder;
 		private Integer academicLevelId;
 		
-		public AcademicLevelCompletionOrder(Integer completionOrderId, Integer academicLevelId) {			
-			this.completionOrderId = completionOrderId;
+		public AcademicLevelCompletionOrder(Integer completionOrder, Integer academicLevelId) {			
+			this.completionOrder = completionOrder;
 			this.academicLevelId = academicLevelId;
 		}
 		
-		public Integer getCompletionOrderId() {
-			return completionOrderId;
+		public Integer getCompletionOrder() {
+			return completionOrder;
 		}
 		
-		public void setCompletionOrderId(Integer completionOrderId) {
-			this.completionOrderId = completionOrderId;
+		public void setCompletionOrder(Integer completionOrder) {
+			this.completionOrder = completionOrder;
 		}
 		
 		public Integer getAcademicLevelId() {

@@ -47,46 +47,42 @@
                       </div>
                 </div>
               </div>
-              <div class="lists row">
+<!--              <div class="lists row">
                 <div class="col-md-12">
                     <div class="form-control-group">
                       <nb-card class="list-card" accent="success" *ngIf="academicLevels && completionOrders">
                         <nb-card-header>Choose Academic Level(s) required for the Program </nb-card-header>
                         <nb-card-body>
-                            <ng-container *ngFor="let academicLevel of academicLevels">
-                              <div class="row">
-                                <div class='col-md-5'>
-                                  <div class="form-control-group">
-                                    <nb-checkbox
-                                      [id]="'academicLevel-'+ academicLevel.id"
-                                      status="success"
-                                      (checkedChange)="checkedChange($event, academicLevel)"
-                                      >{{academicLevel.name}}
-                                    </nb-checkbox>
-                                  </div>
+                          <div class="row">
+                            <div class="col-md-8">
+                              Academic Level
+                            </div>
+                            <div class="col-md-4">
+                                Completion Order
+                            </div>
+                          </div>
+                          <div cdkDropList class="row drag-drop-list" (cdkDropListDropped)="onDragDropChange($event)">
+                            <div class="row drag-drop-box" *ngFor="let academicLevel of academicLevels; index as i;" cdkDrag
+                              (cdkDragStarted)="onDragItemStarted($event)">
+                               <div class="drag-drop-custom-placeholder" *cdkDragPlaceholder></div>
+                                <div class="col-md-8">
+                                  <nb-checkbox
+                                    [id]="'academicLevel-'+ academicLevel.id"
+                                    status="success"
+                                    (checkedChange)="checkedChange($event, academicLevel, i)">
+                                    {{academicLevel.name}}
+                                  </nb-checkbox>
                                 </div>
-                                <div class="col-md-6">
-                                  <div class="form-control-group">
-                                  <nb-select
-                                    fullWidth
-                                    placeholder="Select completion order"
-                                    (selectedChange)="onCompletionOrderSelectedChange($event, academicLevel)"
-                                    id="class-completionOrder">
-                                    <nb-option
-                                        *ngFor='let completionOrder of completionOrders'
-                                        [value]="completionOrder.id">
-                                        {{completionOrder?.completionOrder}}
-                                    </nb-option>
-                                  </nb-select>
-                                  </div>
+                                <div class="col-md-4">
+                                    {{ i + 1 }}
                                 </div>
                               </div>
-                            </ng-container>
+                          </div>
                         </nb-card-body>
                       </nb-card>
                     </div>
                 </div>
-              </div>
+              </div> -->
             </nb-card-body>
             <nb-card-footer>
               <button class='push-right'

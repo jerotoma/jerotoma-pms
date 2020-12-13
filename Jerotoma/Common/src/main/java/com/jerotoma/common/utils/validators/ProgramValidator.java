@@ -20,8 +20,8 @@ public class ProgramValidator {
 		Integer id = null;
 		String code = null;
 		String name = null;
-		String description = null;		
-		List<Integer> academicLevelIDs = null;
+		String description = null;	
+	
 		List<AcademicLevelCompletionOrder> academicLevelCompletionOrders = null;
 		List<LinkedHashMap<String, Integer>> academicLevelCompletionOrdersMap = null;
 		
@@ -40,11 +40,7 @@ public class ProgramValidator {
 		if (params.containsKey(ProgramConstant.DESCRIPTION)) {
 			description = (String) params.get(ProgramConstant.DESCRIPTION);
 		}
-		
-		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_IDS)) {
-			academicLevelIDs = (ArrayList<Integer>) params.get(ProgramConstant.ACADEMIC_LEVEL_IDS);
-		}
-		
+				
 		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
 			academicLevelCompletionOrdersMap = (ArrayList<LinkedHashMap<String, Integer>>) params.get(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS);
 		}
@@ -69,20 +65,15 @@ public class ProgramValidator {
 			throw new FieldRequiredException("Description is required to continue");
 		}
 		program.setDescription(description);		
-		
-		if (academicLevelIDs == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_IDS)) {
-			throw new FieldRequiredException("Academic Level IDs are required to continue");
-		}
-		program.setAcademicLevelIDs(academicLevelIDs);
-		
-		if (academicLevelCompletionOrdersMap == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
-			throw new FieldRequiredException("Academic Level Completion Orders are required to continue");
-		}
-		academicLevelCompletionOrders = new ArrayList<>();		
-		for (LinkedHashMap<String, Integer> map: academicLevelCompletionOrdersMap) {
-			academicLevelCompletionOrders.add(new AcademicLevelCompletionOrder(map.get("completionOrderId"), map.get("academicLevelId")));
-		}		
-		program.setAcademicLevelCompletionOrders(academicLevelCompletionOrders);		
+				
+//		if (academicLevelCompletionOrdersMap == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
+//			throw new FieldRequiredException("Academic Level Completion Orders are required to continue");
+//		}
+//		academicLevelCompletionOrders = new ArrayList<>();		
+//		for (LinkedHashMap<String, Integer> map: academicLevelCompletionOrdersMap) {
+//			academicLevelCompletionOrders.add(new AcademicLevelCompletionOrder(map.get("completionOrderId"), map.get("academicLevelId")));
+//		}		
+//		program.setAcademicLevelCompletionOrders(academicLevelCompletionOrders);		
 		
 		Date today = CalendarUtil.getTodaysDate();		
 		program.setCreatedOn(today);

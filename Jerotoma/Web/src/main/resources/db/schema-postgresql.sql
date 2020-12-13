@@ -136,27 +136,7 @@
 	    CONSTRAINT programs_ukey UNIQUE (code),
 	   	CONSTRAINT programs_pkey PRIMARY KEY (id)
 	    );
-	    
-	    
-	     /**************************************************************
-		 * 															  *
-		 * 															  *
-		 * 			COMPLETED_ACADEMIC_LEVELS RELATED TABLES		  *
-		 * 															  *
-		 *************************************************************/
-		
-		  -- Tables for menus
-		  
-	CREATE TABLE IF NOT EXISTS public.completion_orders(
-	    id bigserial NOT NULL,
-	    completion_order bigint NOT NULL,	    
-	    name character varying,	    
-	   	updated_by bigint NOT NULL,
-	    created_on timestamp with time zone NOT NULL,
-	    updated_on timestamp with time zone NOT NULL,
-	    UNIQUE(completion_order),
-	   	CONSTRAINT completion_orders_pkey PRIMARY KEY(id));
-	    
+	   	    
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -167,8 +147,10 @@
 	CREATE TABLE IF NOT EXISTS public.program_academic_levels(
 	 	id bigserial NOT NULL,
     	program_id BIGINT NOT NULL,
-    	academic_level_id BIGINT NOT NULL,    	
+    	academic_level_id BIGINT NOT NULL,
+    	completion_order bigint NOT NULL,
     	UNIQUE(program_id, academic_level_id),
+    	UNIQUE(program_id, completion_order),
     	CONSTRAINT program_academic_levels_pkey PRIMARY KEY (id),
 	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
         	REFERENCES public.programs (id) MATCH SIMPLE
@@ -179,36 +161,9 @@
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
     ); 
-	    
+	
     
     /**************************************************************
-	 * 															  *
-	 * 															  *
-	 * PROGRAM ACADEMIC LEVEL COMPLETION ORDER RELATED TABLES	  *
-	 * 															  *
-	 *************************************************************/
-	    
-	CREATE TABLE IF NOT EXISTS public.pal_completion_orders(
-    	pal_id BIGINT NOT NULL,
-    	program_id BIGINT NOT NULL,
-    	completion_order_id BIGINT NOT NULL,
-    	CONSTRAINT pal_completion_orders_pkey PRIMARY KEY (pal_id),
-    	UNIQUE(program_id, completion_order_id),
-	 	CONSTRAINT program_academic_levels_fkey FOREIGN KEY (pal_id)
-        	REFERENCES public.program_academic_levels(id) MATCH SIMPLE
-        	ON UPDATE CASCADE
-        	ON DELETE CASCADE,        	
-        CONSTRAINT programs_fkey FOREIGN KEY (program_id)
-        	REFERENCES public.programs(id) MATCH SIMPLE
-        	ON UPDATE CASCADE
-        	ON DELETE CASCADE, 
-        CONSTRAINT completion_orders_fkey FOREIGN KEY (completion_order_id)
-        	REFERENCES public.completion_orders (id) MATCH SIMPLE
-        	ON UPDATE CASCADE
-        	ON DELETE CASCADE
-	    );
-	       
-	 /**************************************************************
 	 * 															  *
 	 * 															  *
 	 * 			DEPARTMENT RELATED TABLES					  	  *

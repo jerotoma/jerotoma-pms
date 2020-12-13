@@ -37,12 +37,17 @@ public class ProgramAcademicLevel {
 	@OneToOne
 	@JoinColumn(name="academic_level_id")
 	private AcademicLevel academicLevel;
+	
+	
+	@Column(name="completion_order")
+	private Integer completionOrder;
 		
 	public ProgramAcademicLevel() {}
 
-	public ProgramAcademicLevel(Program program, AcademicLevel academicLevel) {
+	public ProgramAcademicLevel(Program program, AcademicLevel academicLevel, Integer completionOrder) {
 		this.program = program;
 		this.academicLevel = academicLevel;
+		this.completionOrder = completionOrder;
 	}
 	
 	public Integer getId() {
@@ -68,4 +73,13 @@ public class ProgramAcademicLevel {
 	public void setAcademicLevel(AcademicLevel academicLevel) {
 		this.academicLevel = academicLevel;
 	}
+
+	public Integer getCompletionOrder() {
+		return completionOrder;
+	}
+
+	public void setCompletionOrder(Integer completionOrder) {
+		this.completionOrder = completionOrder;
+	}
+	
 }

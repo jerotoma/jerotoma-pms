@@ -152,15 +152,14 @@ public class RestProgramController extends BaseController implements Controller 
 				Arrays.asList(
 						ProgramConstant.NAME,
 						ProgramConstant.CODE,
-						ProgramConstant.DESCRIPTION,						
-						ProgramConstant.ACADEMIC_LEVEL_IDS
+						ProgramConstant.DESCRIPTION
 						));
 		
 		Program program = ProgramValidator.validate(params, requiredFields);
-		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
+		//List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
 		userSecurityClearance.checkProgramCreationPermission();		
 		try {
-			program = programService.createProgramAndAssociateAcademicLevels(program, academicLevelIDs);			
+			program = programService.createObject(program);		
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}

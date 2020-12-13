@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import {CdkDragDrop, moveItemInArray, CdkDragStart} from '@angular/cdk/drag-drop';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
@@ -44,6 +45,7 @@ export class ProgramCreateComponent implements OnInit {
     private academicLevelService: AcademicLevelService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
+    private element: ElementRef,
     private completionOrderService: CompletionOrderService,
     protected ref: NbDialogRef<ProgramCreateComponent>) {}
 
@@ -105,28 +107,40 @@ export class ProgramCreateComponent implements OnInit {
     }
   }
 
-  onCompletionOrderSelectedChange(completionOrderId: number, academicLevel: AcademicLevel) {
-    this.academicLevelCompletionOrder = {
-      completionOrderId: completionOrderId,
-      academicLevelId: academicLevel.id,
-    };
-
-    if (!this.academicLevelCompletionOrders.find(academicLevelCompletionOrder => academicLevelCompletionOrder.academicLevelId === academicLevel.id &&
-      academicLevelCompletionOrder.completionOrderId === completionOrderId)) {
-      this.academicLevelCompletionOrders.push(this.academicLevelCompletionOrder);
+  onDragDropChange(event: CdkDragDrop<string[]>) {
+    this.changeZIndexValue('1040');
+    moveItemInArray(this.academicLevels, event.previousIndex, event.currentIndex);
+    if (this.academicLevelCompletionOrders) {
+      const academicLevelCompletionOrders = this.academicLevelCompletionOrders;
+      this.academicLevelCompletionOrders = [];
+      academicLevelCompletionOrders.forEach((alCompletionOrder: AcademicLevelCompletionOrder) => {
+        if (alCompletionOrder.completionOrderId === event.previousIndex) {
+          alCompletionOrder.completionOrderId = event.currentIndex;
+        } else if (alCompletionOrder.completionOrderId === event.currentIndex) {
+          alCompletionOrder.completionOrderId = event.previousIndex;
+        }
+        this.academicLevelCompletionOrders.push(alCompletionOrder);
+      });
       this.programForm.patchValue({
         academicLevelCompletionOrders: this.academicLevelCompletionOrders,
       }, {emitEvent: false});
     }
   }
 
+  onDragItemStarted(event: CdkDragStart) {
+    this.changeZIndexValue('1000');
+  }
+
+  changeZIndexValue(value: string) {
+   const el: HTMLDivElement = this.element.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    el.style.zIndex = value;
+  }
   loadForm() {
     this.programForm = this.formBuilder.group({
       id: [null],
       name: ['', Validators.required ],
       code: ['', Validators.required ],
-      academicLevelIDs: ['', Validators.required ],
-      academicLevelCompletionOrders: [null, Validators.required ],
+     //academicLevelCompletionOrders: [null, Validators.required ],
       description: [''],
     });
   }
@@ -140,19 +154,24 @@ export class ProgramCreateComponent implements OnInit {
     });
   }
 
-  checkedChange(checked: boolean, academicLevel: AcademicLevel) {
+  checkedChange(checked: boolean, academicLevel: AcademicLevel, completionOrder: number) {
+    this.academicLevelCompletionOrder = {
+      completionOrderId: completionOrder,
+      academicLevelId: academicLevel.id,
+    };
+
     if (checked) {
-      this.academicLevelIDs.push(academicLevel.id);
+      this.academicLevelCompletionOrders.push(this.academicLevelCompletionOrder);
     } else {
-      for (let i = 0; i < this.academicLevelIDs.length; i++) {
-        if ( this.academicLevelIDs[i] === academicLevel.id) {
-          this.academicLevelIDs.splice(i, 1);
+      for (let i = 0; i < this.academicLevelCompletionOrders.length; i++) {
+        if ( this.academicLevelCompletionOrders[i].academicLevelId === academicLevel.id) {
+          this.academicLevelCompletionOrders.splice(i, 1);
         }
      }
     }
     this.programForm.patchValue({
-      academicLevelIDs: this.academicLevelIDs,
-    });
+      academicLevelCompletionOrders: this.academicLevelCompletionOrders,
+    }, {emitEvent: false});
   }
 
   loadAcademicLevels() {

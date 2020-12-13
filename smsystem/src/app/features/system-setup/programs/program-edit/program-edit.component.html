@@ -88,29 +88,37 @@
               <div class="lists row">
                 <div class="col-md-12">
                     <div class="form-control-group" [@openClose]="isAddMore ? 'open' : 'closed'">
-                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels && academicLevels.length > 0 && completionOrders" >
+                      <nb-card class="list-card" accent="primary" *ngIf="academicLevels && academicLevels.length > 0" >
                         <nb-card-header>Add more Academic Levels </nb-card-header>
                         <nb-card-body
                           [nbSpinner]="isLoading"
                           nbSpinnerStatus="success"
                           nbSpinnerSize="large"
                           nbSpinnerMessage="Loading unadded levels....">
-                          <div cdkDropList class="drag-drop-list"
-                            (cdkDropListDropped)="onDragDropChange($event)">
-                            <div
-                              class="drag-drop-box"
-                              *ngFor="let academicLevel of academicLevels"
-                              cdkDrag
-                              (cdkDragStarted)="onDragItemStarted($event)"
-                              >
-                              <div class="drag-drop-custom-placeholder" *cdkDragPlaceholder></div>
-                                <nb-checkbox
+                          <div class="row">
+                            <div class="col-md-8">
+                              Academic Level
+                            </div>
+                            <div class="col-md-4">
+                                Completion Order
+                            </div>
+                          </div>
+                          <div cdkDropList class="row drag-drop-list" (cdkDropListDropped)="onDragDropChange($event)">
+                            <div class="row drag-drop-box" *ngFor="let academicLevel of academicLevels; index as i;" cdkDrag
+                              (cdkDragStarted)="onDragItemStarted($event)">
+                               <div class="drag-drop-custom-placeholder" *cdkDragPlaceholder></div>
+                                <div class="col-md-8">
+                                  <nb-checkbox
                                     [id]="'academicLevel-'+ academicLevel.id"
                                     status="success"
-                                    (checkedChange)="checkedChange($event, academicLevel)"
-                                    >{{academicLevel.name}}
+                                    (checkedChange)="checkedChange($event, academicLevel, i)">
+                                    {{academicLevel.name}}
                                   </nb-checkbox>
-                            </div>
+                                </div>
+                                <div class="col-md-4">
+                                    {{ i + 1 }}
+                                </div>
+                              </div>
                           </div>
                         </nb-card-body>
                       </nb-card>

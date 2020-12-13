@@ -89,7 +89,6 @@ export class ProgramEditComponent implements OnInit {
       id: [null],
       name: ['', Validators.required ],
       code: ['', Validators.required ],
-      academicLevelIDs: ['', Validators.required ],
       academicLevelCompletionOrders: [null, Validators.required ],
       description: [''],
     });
@@ -98,7 +97,21 @@ export class ProgramEditComponent implements OnInit {
   onDragDropChange(event: CdkDragDrop<string[]>) {
     this.changeZIndexValue('1040');
     moveItemInArray(this.academicLevels, event.previousIndex, event.currentIndex);
-    window.console.log(this.academicLevels);
+    if (this.academicLevelCompletionOrders) {
+      const academicLevelCompletionOrders = this.academicLevelCompletionOrders;
+      this.academicLevelCompletionOrders = [];
+      academicLevelCompletionOrders.forEach((alCompletionOrder: AcademicLevelCompletionOrder) => {
+        if (alCompletionOrder.completionOrderId === event.previousIndex) {
+          alCompletionOrder.completionOrderId = event.currentIndex;
+        } else if (alCompletionOrder.completionOrderId === event.currentIndex) {
+          alCompletionOrder.completionOrderId = event.previousIndex;
+        }
+        this.academicLevelCompletionOrders.push(alCompletionOrder);
+      });
+      this.programForm.patchValue({
+        academicLevelCompletionOrders: this.academicLevelCompletionOrders,
+      }, {emitEvent: false});
+    }
   }
 
   onDragItemStarted(event: CdkDragStart) {
@@ -126,13 +139,13 @@ export class ProgramEditComponent implements OnInit {
   }
 
 
-  removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {
+  removeAcademicLevel(event: any, academicLevel: AcademicLevel, completionOrder: number,  isRemoveLevel: boolean) {
     event.preventDefault();
     event.stopPropagation();
     if (isRemoveLevel) {
       this.programService.removeAcademicLevelFromProgram(this.program.id, academicLevel.id).subscribe((success: boolean) => {
         if (success) {
-          this.checkedChange(false, academicLevel);
+          this.checkedChange(false, academicLevel, completionOrder);
             for (let i = 0; i < this.program.academicLevels.length; i++) {
               if ( this.program.academicLevels[i].id === academicLevel.id) {
                 this.program.academicLevels.splice(i, 1);
@@ -143,19 +156,24 @@ export class ProgramEditComponent implements OnInit {
     }
   }
 
-  checkedChange(checked: boolean, academicLevel: AcademicLevel) {
+  checkedChange(checked: boolean, academicLevel: AcademicLevel, completionOrder: number) {
+    this.academicLevelCompletionOrder = {
+      completionOrderId: completionOrder,
+      academicLevelId: academicLevel.id,
+    };
+
     if (checked) {
-      this.academicLevelIDs.push(academicLevel.id);
+      this.academicLevelCompletionOrders.push(this.academicLevelCompletionOrder);
     } else {
-      for (let i = 0; i < this.academicLevelIDs.length; i++) {
-        if ( this.academicLevelIDs[i] === academicLevel.id) {
-          this.academicLevelIDs.splice(i, 1);
+      for (let i = 0; i < this.academicLevelCompletionOrders.length; i++) {
+        if ( this.academicLevelCompletionOrders[i].academicLevelId === academicLevel.id) {
+          this.academicLevelCompletionOrders.splice(i, 1);
         }
      }
     }
     this.programForm.patchValue({
-      academicLevelIDs: this.academicLevelIDs,
-    });
+      academicLevelCompletionOrders: this.academicLevelCompletionOrders,
+    }, {emitEvent: false});
   }
 
   addMoreAcademicLevel() {
