@@ -199,12 +199,7 @@
 	    <groupId>commons-logging</groupId>
 	    <artifactId>commons-logging</artifactId>
 	    <version>1.2</version>
-	</dependency>
-	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
-	<dependency>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-log4j12</artifactId>	    
-	</dependency>		
+	</dependency>			
 	<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 	<dependency>
 	    <groupId>commons-fileupload</groupId>
@@ -288,6 +283,19 @@
     		<artifactId>maven-war-plugin</artifactId>
     		<version>3.3.1</version>
         </plugin>
+        <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-dependency-plugin</artifactId>
+	      <version>3.1.2</version>
+	      <executions>
+            <execution>
+              <id>default-cli</id>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+            </execution>
+          </executions>
+	    </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>

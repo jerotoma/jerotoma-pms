@@ -1,0 +1,9 @@
+logs/*
+!logs/readme
+jerotoma/app/*
+jerotoma/resources/*
+!jerotoma/app/readme
+!jerotoma/resources/readme
+work/*
+!work/readme
+conf/Catalina/*

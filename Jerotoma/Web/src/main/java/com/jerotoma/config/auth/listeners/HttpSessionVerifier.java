@@ -5,11 +5,14 @@ import java.util.Date;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 
 public class HttpSessionVerifier implements HttpSessionListener {
 	
-	private final static Logger LOGGER = Logger.getLogger(HttpSessionVerifier.class.getName());
+	private final static Logger LOGGER = LoggerFactory.getLogger(HttpSessionVerifier.class);
 
 	public void sessionCreated(HttpSessionEvent event) {
       Date sessionCreationTime = new Date(event.getSession().getCreationTime());
