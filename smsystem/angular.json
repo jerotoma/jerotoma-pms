@@ -14,7 +14,7 @@
           "options": {
             "preserveSymlinks": true,
             "rebaseRootRelativeCssUrls": true,
-            "outputPath": "../Jerotoma/Web/src/main/resources/public",
+            "outputPath": "../tomcat/jerotoma/resources",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",

@@ -7,3 +7,5 @@ jerotoma/resources/*
 work/*
 !work/readme
 conf/Catalina/*
+
+conf/.DS_Store
