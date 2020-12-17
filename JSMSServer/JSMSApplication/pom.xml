@@ -10,12 +10,10 @@
 	</parent>
 	<artifactId>JSMSApplication</artifactId>
 	<name>JSMSApplication</name>
-	<description>Jerotoma Application Project for Spring Boot</description>
+	<description>Jerotoma School Management System Application Project for Spring Boot</description>
 	<packaging>war</packaging>
 	<properties>
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-		<tomcat.version>9.0.5</tomcat.version>
-		<start-class>com.vimmak.PMSApplication</start-class>
+		<failOnMissingWebXml>false</failOnMissingWebXml>		
 	</properties>
 	<dependencies>
 		<dependency>
@@ -121,18 +119,18 @@
 		</dependency>
 		<dependency>
 			<groupId>com.jerotoma</groupId>
-			<artifactId>jerotoma-services</artifactId>
+			<artifactId>JSMSServices</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jerotoma</groupId>
-			<artifactId>jerotoma-common</artifactId>
+			<artifactId>JSMSCommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>jerotoma</finalName>
+		<finalName>jerotomasms</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -143,7 +141,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
-					<warName>jerotoma</warName>
+					<warName>jerotomasms</warName>
 				</configuration>
 			</plugin>
 			<plugin>

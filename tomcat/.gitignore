@@ -1,9 +1,9 @@
 logs/*
 !logs/readme
-jerotoma/app/*
-jerotoma/resources/*
-!jerotoma/app/readme
-!jerotoma/resources/readme
+jerotomasms/app/*
+jerotomasms/resources/*
+!jerotomasms/app/readme
+!jerotomasms/resources/readme
 work/*
 !work/readme
 conf/Catalina/*

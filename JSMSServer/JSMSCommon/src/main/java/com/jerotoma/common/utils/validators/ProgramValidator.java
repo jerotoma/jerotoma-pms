@@ -1,20 +1,16 @@
 package com.jerotoma.common.utils.validators;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.jerotoma.common.constants.ProgramConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.common.models.academic.Program.AcademicLevelCompletionOrder;
 import com.jerotoma.common.utils.CalendarUtil;
 
 public class ProgramValidator {
 
-	@SuppressWarnings("unchecked")
 	public static Program validate(Map<String, Object> params, List<String> requiredFields) {
 		Program program = new Program();
 		Integer id = null;
@@ -22,9 +18,6 @@ public class ProgramValidator {
 		String name = null;
 		String description = null;	
 	
-		List<AcademicLevelCompletionOrder> academicLevelCompletionOrders = null;
-		List<LinkedHashMap<String, Integer>> academicLevelCompletionOrdersMap = null;
-		
 		if (params.containsKey(ProgramConstant.ID)) {
 			id = (Integer) params.get(ProgramConstant.ID);
 		}
@@ -41,11 +34,6 @@ public class ProgramValidator {
 			description = (String) params.get(ProgramConstant.DESCRIPTION);
 		}
 				
-		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
-			academicLevelCompletionOrdersMap = (ArrayList<LinkedHashMap<String, Integer>>) params.get(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS);
-		}
-		
-		
 		if (id == null && requiredFields.contains(ProgramConstant.ID)) {
 			throw new FieldRequiredException("ID is required to continue");
 		}

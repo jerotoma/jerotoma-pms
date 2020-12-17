@@ -18,12 +18,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jerotoma</groupId>
-			<artifactId>jerotoma-common</artifactId>
+			<artifactId>JSMSCommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.jerotoma</groupId>
-			<artifactId>jerotoma-database</artifactId>
+			<artifactId>JSMSDatabase</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

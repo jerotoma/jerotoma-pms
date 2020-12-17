@@ -18,7 +18,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jerotoma</groupId>
-			<artifactId>jerotoma-common</artifactId>
+			<artifactId>JSMSCommon</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -48,6 +48,6 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>jerotoma-database</finalName>
+		<finalName>JSMSDatabase</finalName>
 	</build>
 </project>

@@ -7,7 +7,7 @@
 	<artifactId>jsms-parent</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Jerotoma Project Manager System</name>
+	<name>Jerotoma School Management System</name>
 	<url>https://jerotoma.com</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

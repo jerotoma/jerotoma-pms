@@ -18,10 +18,10 @@
 <Context reloadable="true">
   <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>          
   <Resources cacheMaxSize="52187770" cachingAllowed="true">
-       <JarResources base="${catalina.base}/../Jerotoma/Web/target/dependency"
+       <JarResources base="${catalina.base}/../JSMSServer/JSMSApplication/target/dependency"
                       className="org.apache.catalina.webresources.DirResourceSet"
                       webAppMount="/WEB-INF/lib"/>
-       <PostResources base="${catalina.base}/../Jerotoma/Web/target/classes"
+       <PostResources base="${catalina.base}/../JSMSServer/JSMSApplication/target/classes"
                       className="org.apache.catalina.webresources.DirResourceSet"
                       webAppMount="/WEB-INF/classes"/>
   </Resources>          
