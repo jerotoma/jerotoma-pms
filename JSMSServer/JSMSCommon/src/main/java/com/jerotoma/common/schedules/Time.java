@@ -7,6 +7,7 @@ import java.time.temporal.ChronoField;
 
 import org.json.JSONObject;
 
+
 public class Time {
 	private LocalTime local;
 	private Integer hour;
@@ -111,6 +112,7 @@ public class Time {
 		if (objectString.contains("stringTime")) {
 			objectString = objectString.substring(0, objectString.lastIndexOf(",")) + "}";
 		}
+		
 		JSONObject jsonEndTime = new JSONObject(objectString.replace("=", ":"));
 		int hour = jsonEndTime.getInt("hour");
 		int minute = jsonEndTime.getInt("minute");
