@@ -153,8 +153,8 @@
              Documentation at: /docs/config/valve.html
              Note: The pattern used is equivalent to using pattern="common" -->
           <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".log"/>
-          <Context docBase="${catalina.base}/jerotomasms/app" path="" allowCasualMultipartParsing="true" reloadable="true"/>
-          <Context docBase="${catalina.base}/jerotomasms/resources" path="/resources" reloadable="true"/>   
+          <Context docBase="${catalina.base}/jerotoma_sms/app" path="" allowCasualMultipartParsing="true" reloadable="true"/>
+          <Context docBase="${catalina.base}/jerotoma_sms/resources" path="/resources" reloadable="true"/>   
       </Host>
     </Engine>
   </Service>

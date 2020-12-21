@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  jerotoma_sms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+

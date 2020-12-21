@@ -14,7 +14,7 @@
           "options": {
             "preserveSymlinks": true,
             "rebaseRootRelativeCssUrls": true,
-            "outputPath": "../tomcat/jerotomasms/resources",
+            "outputPath": "../tomcat/jerotoma_sms/resources",
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
