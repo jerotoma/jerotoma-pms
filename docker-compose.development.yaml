@@ -1,13 +1,13 @@
 version: "3.7"
 services:
   jerotoma_sms:
-    container_name: jerotoma_sms
+    container_name: jerotoma_sms    
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.Development
     image: jerotoma_sms
     ports:
-      - "8081:8080"
+      - "8082:8080"
     networks:
       - jerotoma_sms_net
 networks:

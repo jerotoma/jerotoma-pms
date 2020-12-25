@@ -1,3 +1,4 @@
+JSMSServer
+!JSMSServer/JSMSApplication/target/*
 kafka
-smsystem/node_modules
-smsystem/.vscode
+smsystem
