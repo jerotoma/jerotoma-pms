@@ -1,16 +1,21 @@
 version: "3.7"
 services:
   jerotoma_sms:
-    container_name: jerotoma_sms    
+    container_name: jerotoma_sms_dev   
     build:
       context: .
       dockerfile: Dockerfile.Development
-    image: jerotoma_sms
+    image: jerotoma_sms_dev
     ports:
       - "8082:8080"
     networks:
-      - jerotoma_sms_net
+      - jerotoma_sms_dev_net
+    volumes:
+      - type: bind
+        source: ./tomcat/logs
+        target: /usr/local/app/logs
+        consistency: cached
 networks:
-  jerotoma_sms_net:
-    name: jerotoma_sms_net
+  jerotoma_sms_dev_net:
+    name: jerotoma_sms_dev_net
 
