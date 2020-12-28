@@ -13,7 +13,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "preserveSymlinks": true,
-            "rebaseRootRelativeCssUrls": true,
             "outputPath": "../tomcat/jerotoma_sms/resources",
             "index": "src/index.html",
             "main": "src/main.ts",
