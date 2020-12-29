@@ -1,9 +1,7 @@
 version: "3.7"
 services:
   jerotoma_sms:
-    container_name: jerotoma_sms_dev
-    env_file:
-      - .env
+    container_name: jerotoma_sms_dev   
     build:
       context: .
       dockerfile: Dockerfile.Development
