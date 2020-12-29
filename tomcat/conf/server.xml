@@ -145,7 +145,7 @@
           -->       
       </Realm>
 
-      <Host appBase="jerotomasms/app" autoDeploy="true" name="localhost" unpackWARs="true">
+      <Host appBase="jerotoma_sms/app" autoDeploy="true" name="localhost" unpackWARs="true">
 
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
