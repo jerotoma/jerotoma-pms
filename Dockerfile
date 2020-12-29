@@ -2,18 +2,20 @@ FROM tomcat:jdk8-corretto
 
 #You can find the values for these variables inside .env file
 #Host machine directories paths
-ARG LOCAL_RESOURCE_DIR
-ARG LOCAL_TARGET_DIR
-ARG LOCAL_LOGS_DIR
+ARG LOCAL_RESOURCE_DIR=tomcat/jerotoma_sms/resources
+ARG LOCAL_TARGET_DIR=JSMSServer/JSMSApplication/target
+ARG LOCAL_LOGS_DIR=tomcat/logs
+
 
 #Container directories paths
-ARG USER_LOCAL_DIR
-ARG WORKING_DIR
-ARG CATALINA_HOME
-ARG CATALINA_BASE
-ARG CATALINA_TMPDIR
-ARG APP_HOME_DIR
-ARG APP_DIR
+ARG USER_LOCAL_DIR=/usr/local
+ARG WORKING_DIR=${USER_LOCAL_DIR}/app
+ARG CATALINA_HOME=${USER_LOCAL_DIR}/tomcat
+ARG CATALINA_BASE=${USER_LOCAL_DIR}/app
+ARG CATALINA_TMPDIR=${USER_LOCAL_DIR}/tomcat/temp
+ARG JRE_HOME=/usr
+ARG APP_HOME_DIR=${CATALINA_BASE}/jerotoma_sms
+ARG APP_DIR=${APP_HOME_DIR}/app
 
 WORKDIR ${WORKING_DIR}
 

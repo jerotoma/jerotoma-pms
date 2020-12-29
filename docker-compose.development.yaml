@@ -14,17 +14,17 @@ services:
       - jerotoma_sms_dev_net
     volumes:
       - type: bind
-        source: ${LOCAL_TARGET_DIR}/classes
-        target: ${APP_DIR}/classes    
+        source: ./JSMSServer/JSMSApplication/target/classes
+        target: /usr/local/app/jeretoma_sms/app/classes    
       - type: bind
-        source: ${LOCAL_TARGET_DIR}/dependency
-        target: ${APP_DIR}/lib
+        source: ./JSMSServer/JSMSApplication/target/dependency
+        target: /usr/local/app/jeretoma_sms/app/lib
       - type: bind
-        source: ${LOCAL_LOGS_DIR}
-        target: ${USER_LOCAL_DIR}/app/logs       
+        source: ./tomcat/logs
+        target: /usr/local/app/logs       
       - type: bind
-        source: ${LOCAL_RESOURCE_DIR}
-        target: ${APP_HOME_DIR}/resources   
+        source: ./tomcat/jerotoma_sms/resources
+        target: /usr/local/app/jeretoma_sms/resources   
 networks:
   jerotoma_sms_dev_net:
     name: jerotoma_sms_dev_net
