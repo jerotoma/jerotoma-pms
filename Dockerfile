@@ -15,7 +15,7 @@ ARG CATALINA_BASE=${USER_LOCAL_DIR}/app
 ARG CATALINA_TMPDIR=${USER_LOCAL_DIR}/tomcat/temp
 ARG JRE_HOME=/usr
 ARG APP_HOME_DIR=${CATALINA_BASE}/jerotoma_sms
-ARG APP_DIR=${APP_HOME_DIR}/app
+ARG JSMS_SERVER_DIR=${APP_HOME_DIR}/JSMSServer
 
 WORKDIR ${WORKING_DIR}
 
@@ -26,9 +26,9 @@ ENV JRE_HOME=${JRE_HOME}
 ENV CLASSPATH=${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar
 
 COPY tomcat .
-COPY ${LOCAL_TARGET_DIR}/dependency ${APP_DIR}/lib
-COPY ${LOCAL_TARGET_DIR}/classes ${APP_DIR}/classes
-COPY ${LOCAL_RESOURCE_DIR}/index.html ${APP_DIR}/classes/public
+COPY ${LOCAL_TARGET_DIR}/dependency ${JSMS_SERVER_DIR}/lib
+COPY ${LOCAL_TARGET_DIR}/classes ${JSMS_SERVER_DIR}/classes
+COPY ${LOCAL_RESOURCE_DIR}/index.html ${JSMS_SERVER_DIR}/classes/public
 
 EXPOSE 8080
 
