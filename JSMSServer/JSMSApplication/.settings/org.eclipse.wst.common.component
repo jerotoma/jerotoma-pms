@@ -5,13 +5,13 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="JSMSServices-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSServices/JSMSServices">
+        <dependent-module archiveName="JSMSServices-0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSServices/JSMSServices">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="JSMSDatabase-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSDatabase/JSMSDatabase">
+        <dependent-module archiveName="JSMSDatabase-0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSDatabase/JSMSDatabase">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="JSMSCommon-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSCommon/JSMSCommon">
+        <dependent-module archiveName="JSMSCommon-0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/JSMSCommon/JSMSCommon">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/JerotomaWeb/target/classes"/>

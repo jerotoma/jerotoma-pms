@@ -5,11 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jerotoma</groupId>
 	<artifactId>jsms-parent</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>${revision}${sha1}</version>
 	<packaging>pom</packaging>
 	<name>Jerotoma School Management System</name>
 	<url>https://jerotoma.com</url>
 	<properties>
+		<revision>0.1</revision>
+    	<sha1></sha1>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
