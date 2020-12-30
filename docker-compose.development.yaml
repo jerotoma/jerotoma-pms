@@ -1,5 +1,5 @@
 version: "3.7"
-services:  
+services:
   jerotoma_sms:
     container_name: jerotoma_sms  
     build:
