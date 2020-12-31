@@ -29,8 +29,8 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.utils.validators.DepartmentValidator;
+import com.jerotoma.services.academic.DepartmentService;
 import com.jerotoma.services.assemblers.academic.AssemblerDepartmentService;
-import com.jerotoma.services.assemblers.academic.DepartmentService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_DEPARTMENT_CONTROLLER.BASE)

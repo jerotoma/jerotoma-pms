@@ -24,16 +24,11 @@ import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ProgramConstant;
-import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.common.models.academic.ProgramAcademicLevel;
 import com.jerotoma.common.utils.validators.ProgramValidator;
-import com.jerotoma.common.viewobjects.AcademicLevelVO;
-import com.jerotoma.common.viewobjects.ProgramVO;
 import com.jerotoma.services.academic.AcademicLevelService;
-import com.jerotoma.services.academic.ProgramAcademicLevelService;
 import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
@@ -45,7 +40,6 @@ public class RestProgramController extends BaseController implements Controller 
 	@Autowired ProgramService programService;
 	@Autowired AssemblerProgramService assemblerProgramService;
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
-	@Autowired ProgramAcademicLevelService programAcademicLevelService;
 	@Autowired AcademicLevelService academicLevelService;
 
 	@GetMapping
@@ -199,22 +193,7 @@ public class RestProgramController extends BaseController implements Controller 
 		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE + "/" + programId + "/academic-levels/" + academicLevelId);
 		this.securityCheckAccessByRoles(auth);
 		userSecurityClearance.checkGeneralEntityDeletionPermission();
-		try {
-			ProgramVO program = assemblerProgramService.findObject(programId);	
-			AcademicLevelVO academicLevel = assemblerAcademicLevelService.findObject(academicLevelId);
-			if (program == null || academicLevel == null) {
-				throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
-			}
-			if (assemblerProgramService.doesProgramAcademicLevelExist(program.getId(), academicLevel.getId())) {
-				ProgramAcademicLevel programAcademicLevel  = programAcademicLevelService.findProgramAcademicLevelByIDs(program.getId(), academicLevel.getId());
-				response.setData(programAcademicLevelService.deleteObject(programAcademicLevel));
-			} else {
-				throw new FieldRequiredException("Program academic level does not exist.");
-			}		
-			
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}	
+		
 				
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));

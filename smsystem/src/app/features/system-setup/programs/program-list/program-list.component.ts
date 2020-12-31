@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
@@ -8,12 +9,11 @@ import {MatTableDataSource} from '@angular/material/table';
 import { DeleteModalComponent } from 'app/shared';
 import { Program, ResponseWrapper } from 'app/models';
 import { ProgramService } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam , FRONTEND_ENDPOINTS} from 'app/utils';
 
 
 import { ProgramCreateComponent } from '../program-create/program-create.component';
 import { ProgramEditComponent } from '../program-edit/program-edit.component';
-import { ProgramShowComponent } from '../program-show/program-show.component';
 
 @Component({
   selector: 'app-program-list',
@@ -47,6 +47,7 @@ export class ProgramListComponent implements OnInit {
    constructor(
     private programService: ProgramService,
     private dialogService: NbDialogService,
+    private router: Router,
     ) {
   }
   ngOnInit() {
@@ -112,13 +113,7 @@ export class ProgramListComponent implements OnInit {
   }
 
   view(program: Program) {
-    this.dialogService.open(ProgramShowComponent, {
-      context: {
-        program: program,
-      },
-    }).onClose.subscribe(_data => {
-      this.loadPrograms();
-    });
+    this.router.navigate([FRONTEND_ENDPOINTS.systemSetupPrograms.path + '/' + program.id]);
   }
   onPageChange(pageEvent: PageEvent) {
     this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;

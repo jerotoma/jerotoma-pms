@@ -36,10 +36,10 @@ import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.academic.AcademicYearService;
 import com.jerotoma.services.academic.CourseService;
+import com.jerotoma.services.academic.DepartmentService;
 import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.academicdisciplines.AcademicDisciplineService;
 import com.jerotoma.services.assemblers.academic.AssemblerCourseService;
-import com.jerotoma.services.assemblers.academic.DepartmentService;
 
 
 @RestController

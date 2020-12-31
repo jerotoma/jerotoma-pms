@@ -1,8 +1,13 @@
 package com.jerotoma.database.dao.academic;
 
-import com.jerotoma.common.models.academic.AcademicYear;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface AcademicYearDao extends BaseDao<AcademicYear> {
+import com.jerotoma.common.models.academic.AcademicYear;
+
+public interface AcademicYearDao extends JpaRepository<AcademicYear, Integer> {
+
+	@Query("SELECT ay from AcademicYear ay where ay.code = ?1")
+	AcademicYear findObjectUniqueKey(String uniqueKey);
 
 }

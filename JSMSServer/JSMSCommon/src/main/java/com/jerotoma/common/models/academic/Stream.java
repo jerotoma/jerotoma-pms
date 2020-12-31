@@ -1,31 +1,31 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
-import com.jerotoma.common.viewobjects.RoomVO;
-
 
 @Entity
-@Table(name = DatabaseConstant.TABLES.ROOMS)
-public class Room {
+@Table(name = DatabaseConstant.TABLES.STREAMS)
+public class Stream {
+	
 	@Id
 	@GeneratedValue(
 			strategy = GenerationType.SEQUENCE, 
-			generator = DatabaseConstant.TABLES.ROOMS + "_generator")
+			generator = DatabaseConstant.TABLES.STREAMS + "_generator")
 	@SequenceGenerator(
-			name = DatabaseConstant.TABLES.ROOMS + "_generator", 
-			sequenceName = DatabaseConstant.TABLES.ROOMS + "_id_seq", 
+			name = DatabaseConstant.TABLES.STREAMS + "_generator", 
+			sequenceName = DatabaseConstant.TABLES.STREAMS + "_id_seq", 
 			allocationSize=1)
 	@Column
 	private Integer id;
@@ -37,36 +37,17 @@ public class Room {
 	private String name;
 	
 	@Column
-	private Integer capacity;
-	
-	@Column
 	private String description;
 	
-	@Column(name="updated_by")
-	private Integer updatedBy;
-		
 	@Column(name="created_on")
 	private Date createdOn;
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	@OneToMany(mappedBy = "room")
-	private List<RoomResource> roomResources;
-	
-	public Room(RoomVO room) {
-		this.id = room.getId();
-		this.code = room.getCode();
-		this.name = room.getName();
-		this.capacity = room.getCapacity();
-		this.description = room.getDescription();
-		this.createdOn = room.getCreatedOn();
-		this.updatedOn = room.getUpdatedOn();
-	}
-
-	public Room() {
-		
-	}
+	@ManyToMany(mappedBy = "streams")
+	@JsonBackReference
+	private Set<AcademicLevel> academicLevels;
 
 	public Integer getId() {
 		return id;
@@ -74,6 +55,14 @@ public class Room {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getName() {
@@ -108,28 +97,11 @@ public class Room {
 		this.updatedOn = updatedOn;
 	}
 
-	public String getCode() {
-		return code;
+	public Set<AcademicLevel> getAcademicLevels() {
+		return academicLevels;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setAcademicLevels(Set<AcademicLevel> academicLevels) {
+		this.academicLevels = academicLevels;
 	}
-
-	public Integer getCapacity() {
-		return capacity;
-	}
-
-	public void setCapacity(Integer capacity) {
-		this.capacity = capacity;
-	}
-
-	public Integer getUpdatedBy() {
-		return updatedBy;
-	}
-
-	public void setUpdatedBy(Integer updatedBy) {
-		this.updatedBy = updatedBy;
-	}
-	
 }

@@ -2,9 +2,9 @@ FROM tomcat:jdk8-corretto
 
 #You can find the values for these variables inside .env file
 #Host machine directories paths
-ARG LOCAL_RESOURCE_DIR=tomcat/jerotoma_sms/resources
-ARG LOCAL_TARGET_DIR=JSMSServer/JSMSApplication/target
-ARG LOCAL_LOGS_DIR=tomcat/logs
+ARG LOCAL_RESOURCE_DIR=./tomcat/jerotoma_sms/resources
+ARG LOCAL_TARGET_DIR=./JSMSServer/JSMSApplication/target
+ARG LOCAL_LOGS_DIR=./tomcat/logs
 
 
 #Container directories paths
@@ -29,7 +29,6 @@ COPY tomcat .
 COPY nginx ${WORKING_DIR}/nginx
 COPY ${LOCAL_TARGET_DIR}/dependency ${JSMS_SERVER_DIR}/lib
 COPY ${LOCAL_TARGET_DIR}/classes ${JSMS_SERVER_DIR}/classes
-COPY ${LOCAL_RESOURCE_DIR}/index.html ${JSMS_SERVER_DIR}/classes/public
 COPY ${LOCAL_RESOURCE_DIR}/index.html ${JSMS_SERVER_DIR}/classes/public
 
 EXPOSE 8080

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
-import { NbDialogRef } from '@nebular/theme';
+import {NbDialogService } from '@nebular/theme';
 import { Program, AcademicLevel } from 'app/models';
 import {
   ProgramService,
@@ -10,6 +10,8 @@ import {
 } from 'app/services';
 import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
 
+import { CreateAcademicLevelComponent } from './create-academic-levels/create-academic-level.component';
+
 @Component({
   selector: 'app-program-show',
   animations: OPEN_CLOSE_ANIMATION,
@@ -17,13 +19,36 @@ import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
   styleUrls: [`./program-show.component.scss`],
 })
 export class ProgramShowComponent implements OnInit {
-  @Input('program')  program: Program;
-  constructor(protected ref: NbDialogRef<ProgramShowComponent>) {}
 
-  ngOnInit() { }
+  program: Program;
+  programId: number;
+  constructor(
+    private programService: ProgramService,
+    private dialogService: NbDialogService,
+    private route: ActivatedRoute,
+    private router: Router,) {}
 
-  dismiss() {
-    this.ref.close();
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      console.log(params);
+      this.programId = params['id'];
+      this.programService.getProgram(this.programId).subscribe((program: Program) => {
+        this.program = program;
+      })
+
+    });
+  }
+
+
+  addNewAcademicLevel() {
+    this.dialogService.open(CreateAcademicLevelComponent, {
+      context: {
+        title: 'Add New Academic Level',
+        program: this.program,
+      },
+    }).onClose.subscribe(_data => {
+
+    });
   }
 
   removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {

@@ -5,12 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Component;
 
 import com.jerotoma.common.constants.RoleConstant.USER_ROLES;
@@ -46,6 +52,11 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
     @Autowired UserRoleService userRoleService;
     @Autowired SystemConfigService systemConfigService;
     
+    @Value("classpath:db/database-functions.sql")
+	Resource databaseFunctionResource;
+	
+	@Autowired DataSource dataSource;
+    
     
     @Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -53,6 +64,7 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
             return;
         }
 		logger.debug(event.getApplicationContext().getApplicationName());
+		runDatabaseResources(dataSource, databaseFunctionResource);	
         addDefaultAccountsIfNotExists(); 
         addDefaultAppTheme();
         alreadySetup = true;
@@ -200,4 +212,19 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		return systemConfig;
 	}
 	
+	private void runDatabaseResources(DataSource dataSource, Resource resource) {		
+		try {        	      
+   	     ScriptUtils.executeSqlScript(
+   	    		 dataSource.getConnection(),
+   	    		 new EncodedResource(resource, "UTF-8"), 
+   	    		 false, 
+   	    		 false, 
+   	    		 ScriptUtils.DEFAULT_COMMENT_PREFIX, 
+   	    		 ScriptUtils.DEFAULT_STATEMENT_SEPARATOR + ';',
+   	    		 ScriptUtils.DEFAULT_BLOCK_COMMENT_START_DELIMITER, 
+   	    		 ScriptUtils.DEFAULT_BLOCK_COMMENT_END_DELIMITER);
+   	    } catch (Exception e) {
+   	      e.printStackTrace();
+   	    }
+	}
 }

@@ -1,8 +1,9 @@
 package com.jerotoma.database.dao.academic;
 
-import com.jerotoma.common.models.academic.Class;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClassDao extends BaseDao<Class> {
+import com.jerotoma.common.models.academic.Class;
+
+public interface ClassDao extends JpaRepository<Class, Integer> {
 
 }

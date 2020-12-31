@@ -2,13 +2,16 @@ package com.jerotoma.common.models.academic;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -49,9 +52,13 @@ public class Program {
 	@Column(name="updated_on")
 	private Date updatedOn;
 	
-	@OneToMany(mappedBy = "program")
+	@ManyToMany
+	@JoinTable(
+			  name = DatabaseConstant.TABLES.PROGRAM_ACADEMIC_LEVELS, 
+			  joinColumns = @JoinColumn(name = "program_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "academic_level_id"))
 	@JsonManagedReference
-	private List<ProgramAcademicLevel> programAcademicLevels;
+	private Set<AcademicLevel> academicLevels;
 	
 	@Transient
 	private List<Integer> academicLevelIDs;
@@ -112,15 +119,15 @@ public class Program {
 	public List<Integer> getAcademicLevelIDs() {
 		return academicLevelIDs;
 	}
-
-	public List<ProgramAcademicLevel> getProgramAcademicLevels() {
-		return programAcademicLevels;
+	
+	public Set<AcademicLevel> getAcademicLevels() {
+		return academicLevels;
 	}
 
-	public void setProgramAcademicLevels(List<ProgramAcademicLevel> programAcademicLevels) {
-		this.programAcademicLevels = programAcademicLevels;
+	public void setAcademicLevels(Set<AcademicLevel> academicLevels) {
+		this.academicLevels = academicLevels;
 	}
-		
+
 	public List<AcademicLevelCompletionOrder> getAcademicLevelCompletionOrders() {
 		return academicLevelCompletionOrders;
 	}

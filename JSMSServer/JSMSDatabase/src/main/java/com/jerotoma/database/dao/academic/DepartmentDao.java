@@ -1,8 +1,10 @@
 package com.jerotoma.database.dao.academic;
 
-import com.jerotoma.common.models.academic.Department;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface DepartmentDao extends BaseDao<Department>{
+import com.jerotoma.common.models.academic.Department;
+
+public interface DepartmentDao extends JpaRepository<Department, Integer> {
 
 }

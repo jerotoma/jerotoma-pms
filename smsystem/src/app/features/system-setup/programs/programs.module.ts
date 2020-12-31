@@ -27,6 +27,7 @@ import { ProgramListComponent } from './program-list/program-list.component';
 import { ProgramCreateComponent } from './program-create/program-create.component';
 import { ProgramEditComponent } from './program-edit/program-edit.component';
 import { ProgramShowComponent } from './program-show/program-show.component';
+import { CreateAcademicLevelComponent } from './program-show/create-academic-levels/create-academic-level.component';
 
 const COMPONENTS = [
   ProgramsComponent,
@@ -34,12 +35,14 @@ const COMPONENTS = [
   ProgramListComponent,
   ProgramEditComponent,
   ProgramShowComponent,
+  CreateAcademicLevelComponent
 ];
 
 const ENTRY_COMPONENTS = [
   ProgramCreateComponent,
   ProgramEditComponent,
   ProgramShowComponent,
+  CreateAcademicLevelComponent
 ];
 
 const MODULES = [

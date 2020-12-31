@@ -1,15 +1,21 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 
@@ -42,6 +48,18 @@ public class AcademicLevel {
 	
 	@Column(name="updated_on")
 	private Date updatedOn;
+	
+	@ManyToMany
+	@JoinTable(
+			  name = DatabaseConstant.TABLES.ACADEMIC_LEVEL_STREAMS, 
+			  joinColumns = @JoinColumn(name = "academic_level_id"), 
+			  inverseJoinColumns = @JoinColumn(name = "stream_id"))
+	@JsonManagedReference
+	private Set<Stream> streams;
+	
+	@ManyToMany(mappedBy = "academicLevels")
+	@JsonBackReference
+	private Set<Program> programs;
 	
 	public AcademicLevel(AcademicLevelVO academicLevel) {
 		this.id = academicLevel.getId();
@@ -99,5 +117,21 @@ public class AcademicLevel {
 
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
+	}
+
+	public Set<Program> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(Set<Program> programs) {
+		this.programs = programs;
+	}
+
+	public Set<Stream> getStreams() {
+		return streams;
+	}
+
+	public void setStreams(Set<Stream> streams) {
+		this.streams = streams;
 	}
 }

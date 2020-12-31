@@ -119,6 +119,47 @@
 	    );
 	    
 	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ACADEMIC LEVEL RELATED TABLES					  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.streams(
+	    id bigserial NOT NULL,
+	    name character varying(255) NOT NULL,
+	    code character varying(255) NOT NULL,
+	    description text NOT NULL,
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	    CONSTRAINT streams_ukey UNIQUE (code),
+	   	CONSTRAINT streams_pkey PRIMARY KEY (id)
+	    );
+	    
+	    
+	 /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			ACADEMIC LEVEL STREAMS RELATED TABLES		      *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.academic_level_streams(
+	    stream_id BIGINT NOT NULL,
+    	academic_level_id BIGINT NOT NULL,
+    	UNIQUE(stream_id, academic_level_id),
+	    CONSTRAINT streams_fkey FOREIGN KEY (stream_id)
+        	REFERENCES public.streams (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id)
+        	REFERENCES public.academic_levels (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+	    );
+	    
+	    
 	/**************************************************************
 	 * 															  *
 	 * 															  *
@@ -144,13 +185,10 @@
 	 * 															  *
 	 *************************************************************/
 	    
-	CREATE TABLE IF NOT EXISTS public.program_academic_levels(
-	 	id bigserial NOT NULL,
+	CREATE TABLE IF NOT EXISTS public.program_academic_levels(	 	
     	program_id BIGINT NOT NULL,
-    	academic_level_id BIGINT NOT NULL,
-    	completion_order bigint NOT NULL,
-    	UNIQUE(program_id, academic_level_id),
-    	UNIQUE(program_id, completion_order),
+    	academic_level_id BIGINT NOT NULL,    	
+    	UNIQUE(program_id, academic_level_id),    	
     	CONSTRAINT program_academic_levels_pkey PRIMARY KEY (id),
 	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
         	REFERENCES public.programs (id) MATCH SIMPLE
@@ -765,15 +803,21 @@
 	    id bigserial NOT NULL,
 	    student_id bigint NOT NULL,	    
 	    academic_level_id bigint NOT NULL,
+	    stream_id bigint NOT NULL,
 	    completion_status_id bigint NOT NULL,
 	    academic_year_id bigint NOT NULL,
 	   	updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
+	    UNIQUE(student_id, academic_level_id, stream_id),
 	    UNIQUE(student_id, academic_level_id, academic_year_id),
 	   	CONSTRAINT student_academic_levels_pkey PRIMARY KEY(id),	   		
 	    CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id)
 	        REFERENCES public.academic_levels (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	    CONSTRAINT streams_fkey FOREIGN KEY (stream_id)
+	        REFERENCES public.streams (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
 	    CONSTRAINT academic_year_fkey FOREIGN KEY (academic_year_id)

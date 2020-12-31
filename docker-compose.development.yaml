@@ -13,7 +13,7 @@ services:
     volumes:
       - type: bind
         source: ./JSMSServer/JSMSApplication/target/classes
-        target: /usr/local/app/jerotoma_sms/JSMSServer/classes    
+        target: /usr/local/app/jerotoma_sms/JSMSServer/classes 
       - type: bind
         source: ./JSMSServer/JSMSApplication/target/dependency
         target: /usr/local/app/jerotoma_sms/JSMSServer/lib

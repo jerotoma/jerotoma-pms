@@ -1,12 +1,18 @@
 package com.jerotoma.database.dao.academic;
 
-import java.sql.SQLException;
 import java.util.List;
 
-import com.jerotoma.common.models.academic.AcademicLevel;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface AcademicLevelDao extends BaseDao<AcademicLevel> {
-	List<AcademicLevel> getAllAcademicLevels() throws SQLException;
+import com.jerotoma.common.models.academic.AcademicLevel;
+
+public interface AcademicLevelDao extends JpaRepository<AcademicLevel, Integer> {
+	
+	@Query("SELECT al FROM AcademicLevel al")
+	List<AcademicLevel> getAllAcademicLevels();
+
+	@Query("SELECT al FROM AcademicLevel al WHERE al.code = ?1")
+	AcademicLevel findObjectUniqueKey(String uniqueKey);
 
 }

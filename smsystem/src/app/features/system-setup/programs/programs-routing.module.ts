@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-
-
 import {ProgramsComponent } from './programs.component';
 import {ProgramListComponent } from './program-list/program-list.component';
+import {ProgramShowComponent } from './program-show/program-show.component';
 
 const routes: Routes = [{
   path: '',
@@ -13,6 +11,10 @@ const routes: Routes = [{
     {
       path: '',
       component: ProgramListComponent,
+    },
+    {
+      path: ':id',
+      component: ProgramShowComponent,
     },
   ],
 }];
