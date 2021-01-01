@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -60,6 +61,10 @@ public class AcademicLevel {
 	@ManyToMany(mappedBy = "academicLevels")
 	@JsonBackReference
 	private Set<Program> programs;
+	
+	@OneToMany(mappedBy = "academicLevel")
+	@JsonBackReference
+	private Set<ProgramAcademicLevelPrerequisite> prerequisites;
 	
 	public AcademicLevel(AcademicLevelVO academicLevel) {
 		this.id = academicLevel.getId();
@@ -134,4 +139,12 @@ public class AcademicLevel {
 	public void setStreams(Set<Stream> streams) {
 		this.streams = streams;
 	}
+
+	public Set<ProgramAcademicLevelPrerequisite> getPrerequisites() {
+		return prerequisites;
+	}
+
+	public void setPrerequisites(Set<ProgramAcademicLevelPrerequisite> prerequisites) {
+		this.prerequisites = prerequisites;
+	}	
 }

@@ -12,10 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 
@@ -40,9 +42,6 @@ public class Program {
 	@Column
 	private String name;
 	
-	@Transient
-	private List<AcademicLevelCompletionOrder> academicLevelCompletionOrders;
-	
 	@Column
 	private String description;
 	
@@ -59,6 +58,10 @@ public class Program {
 			  inverseJoinColumns = @JoinColumn(name = "academic_level_id"))
 	@JsonManagedReference
 	private Set<AcademicLevel> academicLevels;
+	
+	@OneToMany(mappedBy = "program")
+	@JsonBackReference
+	private Set<ProgramAcademicLevelPrerequisite> prerequisites;
 	
 	@Transient
 	private List<Integer> academicLevelIDs;
@@ -128,41 +131,48 @@ public class Program {
 		this.academicLevels = academicLevels;
 	}
 
-	public List<AcademicLevelCompletionOrder> getAcademicLevelCompletionOrders() {
-		return academicLevelCompletionOrders;
+	public Set<ProgramAcademicLevelPrerequisite> getPrerequisites() {
+		return prerequisites;
 	}
 
-	public void setAcademicLevelCompletionOrders(List<AcademicLevelCompletionOrder> academicLevelCompletionOrders) {
-		this.academicLevelCompletionOrders = academicLevelCompletionOrders;
+	public void setPrerequisites(Set<ProgramAcademicLevelPrerequisite> prerequisites) {
+		this.prerequisites = prerequisites;
 	}
 
-
-
-
-	public static class AcademicLevelCompletionOrder {
-		private Integer completionOrder;
+	public static class ProgramAcademicLevel {
+		private Integer programId;
 		private Integer academicLevelId;
+		private List<Integer> academicLevelPrerequisiteIds;
 		
-		public AcademicLevelCompletionOrder(Integer completionOrder, Integer academicLevelId) {			
-			this.completionOrder = completionOrder;
+		public ProgramAcademicLevel(Integer programId, Integer academicLevelId, List<Integer> academicLevelPrerequisiteIds) {			
+			this.programId = programId;
 			this.academicLevelId = academicLevelId;
+			this.academicLevelPrerequisiteIds = academicLevelPrerequisiteIds;
 		}
-		
-		public Integer getCompletionOrder() {
-			return completionOrder;
+
+		public Integer getProgramId() {
+			return programId;
 		}
-		
-		public void setCompletionOrder(Integer completionOrder) {
-			this.completionOrder = completionOrder;
+
+		public void setProgramId(Integer programId) {
+			this.programId = programId;
 		}
-		
+
 		public Integer getAcademicLevelId() {
 			return academicLevelId;
 		}
-		
+
 		public void setAcademicLevelId(Integer academicLevelId) {
 			this.academicLevelId = academicLevelId;
 		}
+
+		public List<Integer> getAcademicLevelPrerequisiteIds() {
+			return academicLevelPrerequisiteIds;
+		}
+
+		public void setAcademicLevelPrerequisiteIds(List<Integer> academicLevelPrerequisiteIds) {
+			this.academicLevelPrerequisiteIds = academicLevelPrerequisiteIds;
+		}		
 	}
 	
 }

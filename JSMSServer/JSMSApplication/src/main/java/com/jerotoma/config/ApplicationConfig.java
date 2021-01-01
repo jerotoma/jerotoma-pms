@@ -51,7 +51,7 @@ public class ApplicationConfig {
 				
         return builder
         		.dataSource(dataSource)
-        		.properties(mapProperties)
+        		//.properties(mapProperties)
         		.jta(false)
         		.packages(SystemConstant.PACKAGES_TO_SCAN)
         		.build();

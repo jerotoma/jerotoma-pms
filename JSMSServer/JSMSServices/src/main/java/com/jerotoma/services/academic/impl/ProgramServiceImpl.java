@@ -1,8 +1,10 @@
 package com.jerotoma.services.academic.impl;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -10,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Program;
+import com.jerotoma.common.models.academic.ProgramAcademicLevelPrerequisite;
+import com.jerotoma.common.models.academic.Program.ProgramAcademicLevel;
 import com.jerotoma.database.dao.academic.ProgramDao;
 import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.ProgramAcademicLevelPrerequisiteService;
 import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 
@@ -21,12 +27,10 @@ import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 @Service
 public class ProgramServiceImpl implements ProgramService {
 	
-	@Autowired ProgramDao programDao;
-	
-	@Autowired AssemblerProgramService assemblerProgramService;
-	
+	@Autowired ProgramDao programDao;	
+	@Autowired AssemblerProgramService assemblerProgramService;	
 	@Autowired AcademicLevelService academicLevelService;
-	
+	@Autowired ProgramAcademicLevelPrerequisiteService programAcademicLevelPrerequisiteService;
 	
 	@Override
 	public Program findObject(Integer primaryKey) throws SQLException {
@@ -64,10 +68,26 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	@Override
-	public Program createProgramAndAssociateAcademicLevels(Program program, List<Integer> academicLevelIDs)
+	public Program createProgramAndAssociateAcademicLevels(Integer programId, ProgramAcademicLevel programAcademicLevel)
 			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		ProgramAcademicLevelPrerequisite prerequisite = null;
+		Set<AcademicLevel> academicLevels = new HashSet<>();
+		Set<ProgramAcademicLevelPrerequisite> prerequisites = new HashSet<>();
+		
+		Program program = findObject(programId);			
+		AcademicLevel academicLevel = academicLevelService.findObject(programAcademicLevel.getAcademicLevelId());
+		
+		for (Integer academicLevelId: programAcademicLevel.getAcademicLevelPrerequisiteIds()) {
+			AcademicLevel academicLevelPrerequisite = academicLevelService.findObject(academicLevelId);
+			prerequisite = new ProgramAcademicLevelPrerequisite();
+			prerequisite.setAcademicLevel(academicLevelPrerequisite);
+			prerequisite.setProgram(program);				
+			prerequisites.add(programAcademicLevelPrerequisiteService.createObject(prerequisite));
+		}
+		academicLevel.setPrerequisites(prerequisites);			
+		academicLevels.add(academicLevel);
+		program.setAcademicLevels(academicLevels);			
+		return updateObject(program);
 	}
 
 	@Override

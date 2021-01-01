@@ -189,7 +189,6 @@
     	program_id BIGINT NOT NULL,
     	academic_level_id BIGINT NOT NULL,    	
     	UNIQUE(program_id, academic_level_id),    	
-    	CONSTRAINT program_academic_levels_pkey PRIMARY KEY (id),
 	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
         	REFERENCES public.programs (id) MATCH SIMPLE
         	ON UPDATE CASCADE
@@ -199,6 +198,30 @@
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
     ); 
+    
+    /**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 	PROGRAM ACADEMIC LEVEL PRE REQUISITES RELATED TABLES	  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.program_academic_level_prerequisites(	
+		id bigserial NOT NULL,
+    	program_id BIGINT NOT NULL,
+    	academic_level_id BIGINT NOT NULL,    	
+    	UNIQUE(program_id, academic_level_id),    	
+    	CONSTRAINT program_academic_level_prerequisites_pkey PRIMARY KEY (id),
+	 	CONSTRAINT programs_fkey FOREIGN KEY (program_id)
+        	REFERENCES public.programs (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        CONSTRAINT academic_levels_fkey FOREIGN KEY (academic_level_id)
+        	REFERENCES public.academic_levels (id) MATCH SIMPLE
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+    ); 
+    
 	
     
     /**************************************************************

@@ -42,6 +42,10 @@ export class ProgramService {
     return this.http.delete(`${API_END_POINTS.programs}/${programId}/academic-levels/${academicLeveId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+  addAcademicLevelToProgram(data: any): Observable<Program> {
+    return this.http.post(`${API_END_POINTS.programs}/academic-levels`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 
   updateProgram(data?: any): Observable<Program> {
     return this.http.put(`${API_END_POINTS.programs}`, data)

@@ -1,5 +1,6 @@
 package com.jerotoma.common.utils.validators;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -53,21 +54,46 @@ public class ProgramValidator {
 			throw new FieldRequiredException("Description is required to continue");
 		}
 		program.setDescription(description);		
-				
-//		if (academicLevelCompletionOrdersMap == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS)) {
-//			throw new FieldRequiredException("Academic Level Completion Orders are required to continue");
-//		}
-//		academicLevelCompletionOrders = new ArrayList<>();		
-//		for (LinkedHashMap<String, Integer> map: academicLevelCompletionOrdersMap) {
-//			academicLevelCompletionOrders.add(new AcademicLevelCompletionOrder(map.get("completionOrderId"), map.get("academicLevelId")));
-//		}		
-//		program.setAcademicLevelCompletionOrders(academicLevelCompletionOrders);		
-		
+	
 		Date today = CalendarUtil.getTodaysDate();		
 		program.setCreatedOn(today);
 		program.setUpdatedOn(today);
 		
 		return program;
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public static Program.ProgramAcademicLevel validateProgramAcademicLevel(Map<String, Object> params, List<String> requiredFields) {
+		Integer programId = null;
+		Integer academicLevelId = null;
+		List<Integer> academicLevelPrerequisiteIds = null;	
+	
+		if (params.containsKey(ProgramConstant.PROGRAM_ID)) {
+			programId = (Integer)params.get(ProgramConstant.PROGRAM_ID);
+		}
+		
+		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_ID)) {
+			academicLevelId = (Integer)params.get(ProgramConstant.ACADEMIC_LEVEL_ID);
+		}
+		
+		if (params.containsKey(ProgramConstant.ACADEMIC_LEVEL_PREREQUISITE_IDS)) {
+			academicLevelPrerequisiteIds = (ArrayList<Integer>) params.get(ProgramConstant.ACADEMIC_LEVEL_PREREQUISITE_IDS);
+		}		
+					
+		if (programId == null && requiredFields.contains(ProgramConstant.ID)) {
+			throw new FieldRequiredException("Program ID is required to continue");
+		}
+				
+		if (academicLevelId == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_ID)) {
+			throw new FieldRequiredException("Academic Level ID is required to continue");
+		}		
+		
+		if (academicLevelPrerequisiteIds == null && requiredFields.contains(ProgramConstant.ACADEMIC_LEVEL_PREREQUISITE_IDS)) {
+			throw new FieldRequiredException("Pre-requisite IDs is required to continue");
+		}
+		
+		return new Program.ProgramAcademicLevel(programId, academicLevelId, academicLevelPrerequisiteIds);
 	}
 
 }

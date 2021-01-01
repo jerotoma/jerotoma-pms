@@ -27,8 +27,10 @@ import com.jerotoma.common.constants.ProgramConstant;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Program;
+import com.jerotoma.common.models.academic.Program.ProgramAcademicLevel;
 import com.jerotoma.common.utils.validators.ProgramValidator;
 import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.ProgramAcademicLevelPrerequisiteService;
 import com.jerotoma.services.academic.ProgramService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
@@ -41,6 +43,7 @@ public class RestProgramController extends BaseController implements Controller 
 	@Autowired AssemblerProgramService assemblerProgramService;
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 	@Autowired AcademicLevelService academicLevelService;
+	@Autowired ProgramAcademicLevelPrerequisiteService programAcademicLevelPrerequisiteService;
 
 	@GetMapping
 	@Override
@@ -154,6 +157,33 @@ public class RestProgramController extends BaseController implements Controller 
 		userSecurityClearance.checkProgramCreationPermission();		
 		try {
 			program = programService.createObject(program);		
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+			
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setData(program);
+		return response;
+	}
+	
+	@PostMapping("/{programId}/academic-levels")
+	public HttpResponseEntity<Object> addAcademicLevelToProgram(Authentication auth, Map<String, Object> params, @PathVariable(required=true, value="programId") Integer programId) {
+		List<String> requiredFields;
+		this.logRequestDetail("POST : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		requiredFields = new ArrayList<>(
+				Arrays.asList(
+						ProgramConstant.PROGRAM_ID,
+						ProgramConstant.ACADEMIC_LEVEL_ID,
+						ProgramConstant.ACADEMIC_LEVEL_PREREQUISITE_IDS
+						));
+		Program program = null;		
+		ProgramAcademicLevel programAcademicLevel = ProgramValidator.validateProgramAcademicLevel(params, requiredFields);
+		userSecurityClearance.checkProgramCreationPermission();		
+		try {			
+			program = programService.createProgramAndAssociateAcademicLevels(programId, programAcademicLevel);					
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}

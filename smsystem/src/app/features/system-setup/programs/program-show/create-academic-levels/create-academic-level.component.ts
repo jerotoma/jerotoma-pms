@@ -18,8 +18,12 @@ import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
 })
 export class CreateAcademicLevelComponent implements OnInit {
 
+  isLoading: boolean;
   title: string;
   program: Program;
+  academicLevels: AcademicLevel[];
+  academicLevelPrerequisiteIds: number[] = [];
+
   programId: number;
   isSubmitting: boolean = false;
   programAcademicLevelForm: FormGroup;
@@ -27,34 +31,45 @@ export class CreateAcademicLevelComponent implements OnInit {
     private programService: ProgramService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
+    private academicLevelService: AcademicLevelService,
     protected ref: NbDialogRef<CreateAcademicLevelComponent>) {}
 
   ngOnInit() {
     this.loadForm();
+    this.loadAcademicLevels();
   }
 
   addNewAcademicLevel() {
 
   }
 
-  removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {
-    event.preventDefault();
-    event.stopPropagation();
+  checkedChange(checked: boolean, academicLevel: AcademicLevel) {
+    if (checked) {
+      this.academicLevelPrerequisiteIds.push(academicLevel.id);
+    } else {
+      for (let i = 0; i < this.academicLevelPrerequisiteIds.length; i++) {
+        if ( this.academicLevelPrerequisiteIds[i] === academicLevel.id) {
+          this.academicLevelPrerequisiteIds.splice(i, 1);
+        }
+     }
+    }
+    this.programAcademicLevelForm.patchValue({
+      academicLevelPrerequisiteIds: this.academicLevelPrerequisiteIds,
+    }, {emitEvent: false});
+
   }
 
   loadForm() {
     this.programAcademicLevelForm = this.formBuilder.group({
-      id: [null],
-      name: ['', Validators.required ],
-      code: ['', Validators.required ],
-      description: [''],
+      programId: [this.program.id, Validators.required],
+      academicLevelId: [null, Validators.required ],
+      academicLevelPrerequisiteIds: [[], Validators.required ],
     });
   }
 
   onSubmit() {
     this.isSubmitting = true;
-    this.program = this.programAcademicLevelForm.value;
-    this.programService.createProgram(this.program)
+    this.programService.addAcademicLevelToProgram(this.programAcademicLevelForm.value)
         .subscribe((program: Program ) => {
           this.isSubmitting = false;
             if (program) {
@@ -66,5 +81,16 @@ export class CreateAcademicLevelComponent implements OnInit {
 
   dismiss() {
     this.ref.close();
+  }
+
+  loadAcademicLevels() {
+    this.isLoading = true;
+    this.academicLevelService.loadAcademicLevelList()
+      .subscribe((academicLevels: AcademicLevel[]) => {
+        this.isLoading = false;
+        if (academicLevels) {
+          this.academicLevels = academicLevels;
+        }
+      });
   }
 }

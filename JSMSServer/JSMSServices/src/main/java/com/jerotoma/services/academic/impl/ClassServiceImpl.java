@@ -32,7 +32,7 @@ public class ClassServiceImpl implements ClassService{
 
 	@Override
 	public Class findObjectUniqueKey(String uniqueKey) throws SQLException {
-		throw new RuntimeException("Methon not implemented yet");
+		throw new RuntimeException("Method not implemented yet");
 	}
 
 	@Override
