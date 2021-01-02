@@ -10,3 +10,10 @@ export interface Program {
   createdOn?: Date;
   updatedOn?: Date;
 }
+
+
+export interface ProgramaAcademicLevelPrerequisiteParam {
+  programId: number;
+  academicLevelId: number;
+  academicLevelPrerequisiteIds: number[];
+}

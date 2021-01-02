@@ -1,9 +1,14 @@
 package com.jerotoma.database.dao.academic;
 
-import com.jerotoma.common.models.academic.Program;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface ProgramDao extends BaseDao<Program>{
+import com.jerotoma.common.models.academic.Program;
+
+public interface ProgramDao extends JpaRepository<Program, Integer>{
+
+	@Query("select p from Program p where p.code = ?1")
+	Program findObjectUniqueKey(String uniqueKey);
 
 
 }

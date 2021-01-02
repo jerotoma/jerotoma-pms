@@ -1,0 +1,30 @@
+version: "3.7"
+services:
+  jerotoma_sms_nginx:
+    container_name: jerotoma_sms_nginx
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-available/jerotoma_sms.conf:/etc/nginx/sites-enabled/jerotoma_sms.conf
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/common_params.conf:/etc/nginx/common_params.conf
+      - ./nginx/common_params_location.conf:/etc/nginx/common_params_location.conf
+      - ./nginx/ssl.conf:/etc/nginx/ssl.conf
+  jerotoma_sms:
+    container_name: jerotoma_sms
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jerotoma_sms
+    ports:
+      - "8081:8080"
+    networks:
+      - jerotoma_sms_net
+networks:
+  jerotoma_sms_net:
+    name: jerotoma_sms_net

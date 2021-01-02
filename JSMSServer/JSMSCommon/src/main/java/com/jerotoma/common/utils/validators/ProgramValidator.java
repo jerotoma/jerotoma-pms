@@ -81,7 +81,7 @@ public class ProgramValidator {
 			academicLevelPrerequisiteIds = (ArrayList<Integer>) params.get(ProgramConstant.ACADEMIC_LEVEL_PREREQUISITE_IDS);
 		}		
 					
-		if (programId == null && requiredFields.contains(ProgramConstant.ID)) {
+		if (programId == null && requiredFields.contains(ProgramConstant.PROGRAM_ID)) {
 			throw new FieldRequiredException("Program ID is required to continue");
 		}
 				

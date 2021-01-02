@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -31,9 +32,13 @@ public class ProgramAcademicLevelPrerequisite {
 	@JoinColumn(name = "program_id")
 	private Program program;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "academic_level_id")
 	private AcademicLevel academicLevel;
+	
+	@ManyToOne
+	@JoinColumn(name = "prerequisite_academic_level_id")
+	private AcademicLevel prerequisiteAcademicLevel;
 
 	public Integer getId() {
 		return id;
@@ -58,4 +63,12 @@ public class ProgramAcademicLevelPrerequisite {
 	public void setAcademicLevel(AcademicLevel academicLevel) {
 		this.academicLevel = academicLevel;
 	}
+
+	public AcademicLevel getPrerequisiteAcademicLevel() {
+		return prerequisiteAcademicLevel;
+	}
+
+	public void setPrerequisiteAcademicLevel(AcademicLevel prerequisiteAcademicLevel) {
+		this.prerequisiteAcademicLevel = prerequisiteAcademicLevel;
+	}	
 }

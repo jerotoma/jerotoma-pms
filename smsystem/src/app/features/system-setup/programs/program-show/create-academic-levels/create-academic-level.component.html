@@ -23,10 +23,14 @@
                   </div>
               </div>
               <div class="lists row">
-                <div class="col-md-12">
+                <div class="col-md-12"
+                    [nbSpinner]="isLoading"
+                    nbSpinnerStatus="success"
+                    nbSpinnerSize="large"
+                    [nbSpinnerMessage]="'Loading academic level......'">
                     <div class="form-control-group">
                       <nb-card class="list-card" accent="success" *ngIf="academicLevels">
-                        <nb-card-header>Choose Academic Level(s) required for the Program </nb-card-header>
+                        <nb-card-header>Choose Pre-requisite for this Academic Level </nb-card-header>
                         <nb-card-body>
                           <nb-list-item class="list-group-item" *ngFor="let academicLevel of academicLevels; index as i;">
                             <div class="row">
@@ -51,11 +55,7 @@
                   [disabled]="!programAcademicLevelForm.valid"
                   type="submit"
                   nbButton hero
-                  status="success"
-                  [nbSpinner]="isSubmitting"
-                  nbSpinnerStatus="success"
-                  nbSpinnerSize="large"
-                  [nbSpinnerMessage]="'Adding academic level......'">
+                  status="success">
                    Submit Academic Level
               </button>
               <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>

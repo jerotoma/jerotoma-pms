@@ -50,8 +50,7 @@ public class ParentAddressDaoImpl implements ParentAddressDao {
 	}
 
 	@Override
-	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
+	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {		
 		return null;
 	}
 
@@ -61,8 +60,7 @@ public class ParentAddressDaoImpl implements ParentAddressDao {
 	}
 
 	@Override
-	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
+	public Long countObject() throws SQLException {		
 		return null;
 	}
 

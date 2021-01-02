@@ -15,7 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><!-- The contents of this file will be loaded for each web application -->
-<Context reloadable="true">
+<Context reloadable="true" allowCasualMultipartParsing="true">
   <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>          
   <Resources cacheMaxSize="52187770" cachingAllowed="true">
        <JarResources base="${catalina.base}/jerotoma_sms/JSMSServer/lib"

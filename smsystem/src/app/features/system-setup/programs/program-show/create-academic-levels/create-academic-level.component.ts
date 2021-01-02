@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { Program, AcademicLevel } from 'app/models';
+import { Program, ProgramaAcademicLevelPrerequisiteParam, AcademicLevel } from 'app/models';
 import {
   ProgramService,
   AcademicLevelService,
@@ -23,6 +23,7 @@ export class CreateAcademicLevelComponent implements OnInit {
   program: Program;
   academicLevels: AcademicLevel[];
   academicLevelPrerequisiteIds: number[] = [];
+  academicLevelPrerequisiteParam: ProgramaAcademicLevelPrerequisiteParam;
 
   programId: number;
   isSubmitting: boolean = false;
@@ -63,24 +64,29 @@ export class CreateAcademicLevelComponent implements OnInit {
     this.programAcademicLevelForm = this.formBuilder.group({
       programId: [this.program.id, Validators.required],
       academicLevelId: [null, Validators.required ],
-      academicLevelPrerequisiteIds: [[], Validators.required ],
+      academicLevelPrerequisiteIds: [],
+    });
+
+    this.programAcademicLevelForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
+      this.loadAndFilterAcademicLevelsByAcademicLevelId(academicLevelId);
     });
   }
 
   onSubmit() {
     this.isSubmitting = true;
-    this.programService.addAcademicLevelToProgram(this.programAcademicLevelForm.value)
+    this.academicLevelPrerequisiteParam = this.programAcademicLevelForm.value;
+    this.programService.addAcademicLevelToProgram(this.academicLevelPrerequisiteParam)
         .subscribe((program: Program ) => {
           this.isSubmitting = false;
             if (program) {
               this.program = program;
-              this.modalService.openSnackBar('Program ' + program.name + ' has been created', 'success');
+              this.modalService.openSnackBar('Academic Level has been added to', 'success');
+              this.ref.close({confirmed: true});
             }
         });
   }
-
   dismiss() {
-    this.ref.close();
+    this.ref.close({confirmed: false});
   }
 
   loadAcademicLevels() {
@@ -90,6 +96,17 @@ export class CreateAcademicLevelComponent implements OnInit {
         this.isLoading = false;
         if (academicLevels) {
           this.academicLevels = academicLevels;
+        }
+      });
+  }
+
+  loadAndFilterAcademicLevelsByAcademicLevelId(academicLevelId: number) {
+    this.isLoading = true;
+    this.academicLevelService.loadAcademicLevelList()
+      .subscribe((academicLevels: AcademicLevel[]) => {
+        this.isLoading = false;
+        if (academicLevels) {
+          this.academicLevels = academicLevels.filter((academicLevel: AcademicLevel) => academicLevel.id != academicLevelId);
         }
       });
   }

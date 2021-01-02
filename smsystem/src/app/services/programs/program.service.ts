@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, Program } from 'app/models';
+import { ResponseWrapper, Program, ProgramaAcademicLevelPrerequisiteParam } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -42,8 +42,9 @@ export class ProgramService {
     return this.http.delete(`${API_END_POINTS.programs}/${programId}/academic-levels/${academicLeveId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
-  addAcademicLevelToProgram(data: any): Observable<Program> {
-    return this.http.post(`${API_END_POINTS.programs}/academic-levels`, data)
+
+  addAcademicLevelToProgram(data: ProgramaAcademicLevelPrerequisiteParam): Observable<Program> {
+    return this.http.post(`${API_END_POINTS.programs}/${data.programId}/academic-levels`, data)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

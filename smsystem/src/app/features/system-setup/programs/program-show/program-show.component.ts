@@ -32,10 +32,7 @@ export class ProgramShowComponent implements OnInit {
     this.route.params.subscribe(params => {
       console.log(params);
       this.programId = params['id'];
-      this.programService.getProgram(this.programId).subscribe((program: Program) => {
-        this.program = program;
-      })
-
+      this.loadProgram();
     });
   }
 
@@ -46,11 +43,18 @@ export class ProgramShowComponent implements OnInit {
         title: 'Add New Academic Level',
         program: this.program,
       },
-    }).onClose.subscribe(_data => {
-
+    }).onClose.subscribe(data => {
+          if (data.confirmed) {
+            this.loadProgram();
+          }
     });
   }
 
+  loadProgram() {
+    this.programService.getProgram(this.programId).subscribe((program: Program) => {
+      this.program = program;
+    })
+  }
   removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {
     event.preventDefault();
     event.stopPropagation();

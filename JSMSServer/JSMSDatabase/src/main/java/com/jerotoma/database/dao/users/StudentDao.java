@@ -1,8 +1,11 @@
 package com.jerotoma.database.dao.users;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.jerotoma.common.models.users.students.Student;
-import com.jerotoma.database.dao.BaseDao;
 
-public interface StudentDao extends BaseDao<Student> {
-
+@Repository
+public interface StudentDao extends JpaRepository<Student, Integer> {
+	
 }

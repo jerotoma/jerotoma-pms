@@ -1,8 +1,13 @@
 package com.jerotoma.database.dao.academic;
 
-import com.jerotoma.common.models.users.CompletedAcademicLevel;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CompletedAcademicLevelDao  extends BaseDao<CompletedAcademicLevel> {
+import com.jerotoma.common.models.users.CompletedAcademicLevel;
+
+@Repository
+public interface CompletedAcademicLevelDao  extends JpaRepository<CompletedAcademicLevel, Integer> {
+
+	CompletedAcademicLevel findObjectUniqueKey(String uniqueKey);
 
 }
