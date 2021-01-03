@@ -62,7 +62,7 @@ public class AcademicLevel {
 	@JsonBackReference
 	private Set<Program> programs;
 	
-	@OneToMany(mappedBy = "prerequisiteAcademicLevel")
+	@OneToMany(mappedBy = "academicLevel")
 	@JsonBackReference
 	private Set<ProgramAcademicLevelPrerequisite> prerequisites;
 	

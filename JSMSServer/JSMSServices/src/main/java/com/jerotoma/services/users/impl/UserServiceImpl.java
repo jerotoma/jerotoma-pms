@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CompletionStatus;
+import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
@@ -55,6 +56,7 @@ import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicYearService;
 import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 import com.jerotoma.services.positions.PositionService;
+import com.jerotoma.services.securities.EnrollementPrerequisiteClearance;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.AuthUserService;
 import com.jerotoma.services.users.ParentAddressService;
@@ -95,6 +97,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired StudentAcademicLevelService studentAcademicLevelService;
 	@Autowired AssemblerProgramService assemblerProgramService;
+	@Autowired EnrollementPrerequisiteClearance prerequisiteClearance;
+	
 	
 	Date today = CalendarUtil.getTodaysDate();
 
@@ -295,12 +299,12 @@ public class UserServiceImpl implements UserService {
 	protected Student createStudent(User newUser, Student student) throws SQLException {
 		AcademicYearVO academicYearVO = assemblerAcademicYearService.getCurrentAcademicYear();		
 		if (academicYearVO == null) {
-			throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+			throw new FieldRequiredException("Current Academic Year is required to continue.");
 		}
 		AcademicYear academicYear = academicYearService.findObject(academicYearVO.getId());	
 		
 		if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
-			throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+			throw new FieldRequiredException("Program or Academic Level is required to continue.");
 		}
 		student.setProgram(programService.findObject(student.getProgramId()));
 				
@@ -338,6 +342,10 @@ public class UserServiceImpl implements UserService {
 
 	protected void createStudentAcademicLevel(Student student, AcademicYear academicYear, UserVO loggedInUser,
 			AcademicLevel academicLevel) throws SQLException {
+		
+		if (!prerequisiteClearance.hasMetPrerequisite(academicLevel, student)) {
+			throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
+		}		
 		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel(student, academicLevel, academicYear, CompletionStatus.IN_PROGRESS);
 		studentAcademicLevel.setUpdatedBy(loggedInUser.getId());
 		studentAcademicLevel.setCreatedOn(today);

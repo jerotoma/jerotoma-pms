@@ -8,6 +8,4 @@ import com.jerotoma.common.models.users.CompletedAcademicLevel;
 @Repository
 public interface CompletedAcademicLevelDao  extends JpaRepository<CompletedAcademicLevel, Integer> {
 
-	CompletedAcademicLevel findObjectUniqueKey(String uniqueKey);
-
 }

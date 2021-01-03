@@ -53,20 +53,46 @@
               </div>
               <div class="col-md-6">
                 <div class="form-control-group">
-                  <label for="is-current-student-academic-level" class="label">Is this current Student Academic Level</label>
+                  <label for="is-current-student-academic-level" class="label">Check the box if this is current Academic Level</label>
                   <p>
                     <nb-checkbox
                     id="is-current-student-academic-level"
                     formControlName="isCurrentAcademicLevel"
-                    status="primary"> If checked, the level becomes current Student Academic Level</nb-checkbox>
+                    status="primary"> Current Student Academic Level</nb-checkbox>
                   </p>
                 </div>
               </div>
             </div>
+            <div class="lists row"  *ngIf="academicLevelPrerequisites && academicLevelPrerequisites.length > 0">
+                <div class="col-md-12">
+                    <div class="form-control-group">
+                      <nb-card class="list-card" accent="success">
+                        <nb-card-header>List of Pre-requisite for the selected Academic Level </nb-card-header>
+                        <nb-card-body style="padding: 0;">
+                          <nb-list class="list-group">
+                            <nb-list-item class="list-group-item" *ngFor="let academicLevelPrerequisite of academicLevelPrerequisites; index as i;">
+                              <a href="#" (click)="removeAcademicLevel($event)">
+                                <div class="row">
+                                  <div class="col-md-1">{{i + 1}}</div>
+                                  <div class="col-md-10">{{academicLevelPrerequisite?.academicLevel?.name}}</div>
+                                  <div class="col-md-1">
+                                    <span class="push-right">
+                                      <nb-icon icon="checkmark-outline"></nb-icon>
+                                    </span>
+                                  </div>
+                                </div>
+                              </a>
+                            </nb-list-item>
+                          </nb-list>
+                        </nb-card-body>
+                      </nb-card>
+                    </div>
+                </div>
+            </div>
           </nb-card-body>
           <nb-card-footer>
             <div class="form-control-group">
-              <button class='push-right' [disabled]="!studentAcademicLevelForm.valid" type="submit" nbButton hero status="success">Create Student Academic Level</button>
+              <button class='push-right' [disabled]="!studentAcademicLevelForm.valid" type="submit" nbButton hero status="success">Enroll Student Academic Level</button>
               <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
             </div>
           </nb-card-footer>

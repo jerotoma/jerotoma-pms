@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Program;
+import com.jerotoma.common.models.users.CompletedAcademicLevel;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 
@@ -77,6 +78,10 @@ public class Student extends Person implements Serializable{
 	@OneToMany(mappedBy ="student")
 	@JsonManagedReference
 	private Set<StudentAcademicLevel> studentAcademicLevels;
+	
+	@OneToMany(mappedBy ="student")
+	@JsonManagedReference
+	private Set<CompletedAcademicLevel> completedAcademicLevels;
 	
 	
 	public Integer getId() {
@@ -157,5 +162,13 @@ public class Student extends Person implements Serializable{
 
 	public void setAcademicLevelId(Integer academicLevelId) {
 		this.academicLevelId = academicLevelId;
+	}
+
+	public Set<CompletedAcademicLevel> getCompletedAcademicLevels() {
+		return completedAcademicLevels;
+	}
+
+	public void setCompletedAcademicLevels(Set<CompletedAcademicLevel> completedAcademicLevels) {
+		this.completedAcademicLevels = completedAcademicLevels;
 	}
 }

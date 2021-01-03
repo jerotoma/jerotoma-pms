@@ -21,6 +21,7 @@ import {
   AcademicYear,
   StudentAcademicLevel,
   AcademicLevel,
+  AcademicLevelPrerequisite,
   Program,
 } from 'app/models';
 
@@ -60,6 +61,7 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
   studentAcademicLevelForm: FormGroup;
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
+  academicLevelPrerequisites: AcademicLevelPrerequisite[];
   listDisplay: string = 'none';
 
   constructor(
@@ -96,7 +98,6 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
     this.confirmed = false;
     this.studentAcademicLevelService.createStudentAcademicLevel(this.studentAcademicLevelForm.value)
     .subscribe((result: StudentAcademicLevel) => {
-      const resp = result;
       this.confirmed = true;
       this.studentAcademicLevelForm.reset();
       this.dismiss();
@@ -116,7 +117,12 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
 
   onChanges() {
     this.studentAcademicLevelForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
-      const programId = this.programId;
+      this.academicLevelPrerequisites = [];
+      for (let i = 0; i < this.academicLevels.length; i++) {
+        if (this.academicLevels[i].id === academicLevelId) {
+          this.academicLevelPrerequisites = this.academicLevels[i].prerequisites;
+        }
+      }
       this.academicYearId = this.currentAcademicYear.id;
       this.studentAcademicLevelForm.patchValue({
         academicYearId: this.academicYearId,
@@ -148,5 +154,10 @@ export class StudentAcademicLevelEnrollmentCreateComponent implements OnInit {
         this.currentAcademicYear = academicYear;
       }
     });
+  }
+
+  removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 }

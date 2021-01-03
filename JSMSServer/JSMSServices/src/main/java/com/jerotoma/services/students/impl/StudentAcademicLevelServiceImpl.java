@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CompletionStatus;
+import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
@@ -29,6 +30,7 @@ import com.jerotoma.services.academic.CourseService;
 import com.jerotoma.services.academic.StudentClassService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
+import com.jerotoma.services.securities.EnrollementPrerequisiteClearance;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.StudentService;
 
@@ -45,6 +47,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	@Autowired CourseService courseService;
 	@Autowired ClassService jClassService;
 	@Autowired StudentService studentService;
+	@Autowired EnrollementPrerequisiteClearance prerequisiteClearance;
 
 	@Override
 	public StudentAcademicLevel findObject(Integer primaryKey) throws SQLException {
@@ -58,11 +61,18 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel createObject(StudentAcademicLevel object) throws SQLException {
+		
+		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
+			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
+		}		
 		return studentAcademicLevelDao.createObject(object);
 	}
 
 	@Override
 	public StudentAcademicLevel updateObject(StudentAcademicLevel object) throws SQLException {
+		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
+			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
+		}
 		return studentAcademicLevelDao.updateObject(object);
 	}
 

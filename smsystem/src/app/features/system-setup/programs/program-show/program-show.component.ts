@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import {NbDialogService } from '@nebular/theme';
-import { Program, AcademicLevel } from 'app/models';
+import { Program, AcademicLevel, AcademicLevelPrerequisite } from 'app/models';
 import {
   ProgramService,
   AcademicLevelService,
@@ -22,6 +22,9 @@ export class ProgramShowComponent implements OnInit {
 
   program: Program;
   programId: number;
+  academicLevelPrerequisites: AcademicLevelPrerequisite[];
+
+
   constructor(
     private programService: ProgramService,
     private dialogService: NbDialogService,
@@ -55,8 +58,9 @@ export class ProgramShowComponent implements OnInit {
       this.program = program;
     })
   }
-  removeAcademicLevel(event: any, academicLevel: AcademicLevel, isRemoveLevel: boolean) {
+  removeAcademicLevel(event: any, academicLevel: AcademicLevel) {
     event.preventDefault();
     event.stopPropagation();
+    this.academicLevelPrerequisites = academicLevel.prerequisites;
   }
 }

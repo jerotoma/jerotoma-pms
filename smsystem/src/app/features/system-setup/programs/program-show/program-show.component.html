@@ -35,8 +35,11 @@
                   <nb-card-header>List of Required Levels to graduate the program <button class="push-right" nbButton hero status='success' (click)="addNewAcademicLevel()">Add New Academic Level</button></nb-card-header>
                   <nb-card-body style="padding: 0;">
                     <nb-list class="list-group">
-                      <nb-list-item class="list-group-item" *ngFor="let academicLevel of program.academicLevels; index as i;">
-                        <a href="#" (click)="removeAcademicLevel($event, academicLevel, false)">
+                      <nb-list-item
+                        class="list-group-item"
+                        *ngFor="let academicLevel of program.academicLevels; index as i;"
+                        (click)="removeAcademicLevel($event, academicLevel)">
+                        <a href="#" (click)="removeAcademicLevel($event, academicLevel)">
                           <div class="row">
                             <div class="col-md-1">{{i + 1}}</div>
                             <div class="col-md-10">{{academicLevel.name}}</div>
@@ -54,6 +57,32 @@
               </div>
           </div>
         </div>
+        <div class="lists row"  *ngIf="academicLevelPrerequisites && academicLevelPrerequisites.length > 0">
+          <div class="col-md-12">
+              <div class="form-control-group">
+                <nb-card class="list-card" accent="success">
+                  <nb-card-header>List of Pre-requisite for the selected Academic Level </nb-card-header>
+                  <nb-card-body style="padding: 0;">
+                    <nb-list class="list-group">
+                      <nb-list-item class="list-group-item" *ngFor="let academicLevelPrerequisite of academicLevelPrerequisites; index as i;">
+                        <a href="#" (click)="removeAcademicLevel($event)">
+                          <div class="row">
+                            <div class="col-md-1">{{i + 1}}</div>
+                            <div class="col-md-10">{{academicLevelPrerequisite?.academicLevel?.name}}</div>
+                            <div class="col-md-1">
+                              <span class="push-right">
+                                <nb-icon icon="checkmark-outline"></nb-icon>
+                              </span>
+                            </div>
+                          </div>
+                        </a>
+                      </nb-list-item>
+                    </nb-list>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+          </div>
+      </div>
       </nb-card-body>
     </nb-card>
   </div>

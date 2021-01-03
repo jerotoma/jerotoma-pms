@@ -5,10 +5,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.users.students.Student;
 
 
 @Entity
@@ -27,8 +30,9 @@ public class CompletedAcademicLevel {
 	@Column
 	private Integer id;
 	
-	@Column(name="student_id")
-	private Integer studentId;
+	@ManyToOne
+	@JoinColumn(name="student_id")
+	private Student student;
 	
 	@Column(name="academic_level_id")
 	private Integer academicLevelId;
@@ -41,12 +45,12 @@ public class CompletedAcademicLevel {
 		this.id = id;
 	}
 
-	public Integer getStudentId() {
-		return studentId;
+	public Student getStudent() {
+		return student;
 	}
 
-	public void setStudentId(Integer studentId) {
-		this.studentId = studentId;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 	public Integer getAcademicLevelId() {

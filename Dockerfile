@@ -1,4 +1,5 @@
-FROM tomcat:jdk8-corretto
+#8.5.61-jdk8-corretto 10-jdk8-corretto
+FROM tomcat:9.0.41-jdk8-corretto
 
 #You can find the values for these variables inside .env file
 #Host machine directories paths
@@ -26,7 +27,7 @@ ENV CATALINA_TMPDIR=${CATALINA_TMPDIR}
 ENV JRE_HOME=${JRE_HOME}
 ENV CLASSPATH=${CATALINA_HOME}/bin/bootstrap.jar:${CATALINA_HOME}/bin/tomcat-juli.jar
 
-# add tomcat jpda debugging environmental variables
+#Add tomcat jpda debugging environmental variables
 #ENV JPDA_OPTS="-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n"
 ENV JPDA_ADDRESS="8000"
 ENV JPDA_TRANSPORT="dt_socket"

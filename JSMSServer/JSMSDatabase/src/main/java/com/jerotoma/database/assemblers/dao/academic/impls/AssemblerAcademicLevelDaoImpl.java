@@ -3,8 +3,10 @@ package com.jerotoma.database.assemblers.dao.academic.impls;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -22,6 +24,7 @@ import com.jerotoma.common.constants.AcademicLevelConstant;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.viewobjects.AcademicLevelPrerequisiteVO;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.dao.DaoUtil;
@@ -92,15 +95,31 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	}
 	
 	public class AcademicLevelResultProcessor implements RowMapper<AcademicLevelVO>{
+		
+		private Integer programId;
+		
+		public AcademicLevelResultProcessor(Integer programId) {
+			this.programId = programId;
+		}
+		
+		public AcademicLevelResultProcessor() {	}
+		
 		@Override
 		public AcademicLevelVO mapRow(ResultSet rs, int rowNum) throws SQLException {
-			return mapAcademicLevel(rs);
-		}		
+			AcademicLevelVO academicLevel = mapAcademicLevel(rs);;
+			if (getProgramId() != null && academicLevel != null) {				
+				academicLevel.setPrerequisites(findAcademicLevelPrerequisitesByAcademicLevelId(getProgramId(), academicLevel.getId()));
+			}
+			return academicLevel;
+		}	
+		
+		private Integer getProgramId() {
+			return programId;
+		}
 	}
 	
 	private AcademicLevelVO mapAcademicLevel(ResultSet rs) throws SQLException {
-		AcademicLevelVO academicLevel = new AcademicLevelVO(rs);		
-		return academicLevel;		
+		return new AcademicLevelVO(rs);	
 	}
 	
 	public class AcademicLevelSingleResultProcessor implements ResultSetExtractor<AcademicLevelVO>{
@@ -149,7 +168,25 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 				.append("SELECT pal.academic_level_id FROM program_academic_levels pal ")
 				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id = pal.academic_level_id ")				
 				.append(" WHERE sal.completion_status_id <> ? AND sal.completion_status_id <> ? AND pal.program_id = ? AND sal.student_id = ? )");		
-		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(), 
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(programId), 
 				CompletionStatus.COMPLETED.getID(), CompletionStatus.IN_PROGRESS.getID(), programId, studentId);
+	}
+	
+	public Set<AcademicLevelPrerequisiteVO> findAcademicLevelPrerequisitesByAcademicLevelId(Integer programId, Integer academicLevelId) throws SQLException {
+		StringBuilder builder = new StringBuilder("SELECT pap.id, pap.program_id, pap.academic_level_id, pap.prerequisite_academic_level_id FROM ")
+				.append(DatabaseConstant.TABLES.PROGRAM_ACADEMIC_LEVEL_PREREQUISITES).append(" pap ")				
+				.append(" WHERE pap.academic_level_id = ? AND pap.program_id = ? ");		
+		return new HashSet<>(this.jdbcTemplate.query(builder.toString(), new AcademicLevelPrerequisiteResultProcessor(), academicLevelId, programId));		
+	}
+	
+	private class AcademicLevelPrerequisiteResultProcessor implements RowMapper<AcademicLevelPrerequisiteVO>{
+		@Override
+		public AcademicLevelPrerequisiteVO mapRow(ResultSet rs, int rowNum) throws SQLException {		
+			AcademicLevelPrerequisiteVO prerequisiteVO = new AcademicLevelPrerequisiteVO();
+			prerequisiteVO.setId(rs.getInt("id"));
+			prerequisiteVO.setProgramId(rs.getInt("program_id"));
+			prerequisiteVO.setAcademicLevel(findObject(rs.getInt("prerequisite_academic_level_id")));			
+			return prerequisiteVO;
+		}	
 	}
 }
