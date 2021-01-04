@@ -52,7 +52,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

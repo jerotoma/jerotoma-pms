@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -63,9 +62,6 @@ public class Program {
 	@JsonBackReference
 	private Set<ProgramAcademicLevelPrerequisite> prerequisites;
 	
-	@Transient
-	private List<Integer> academicLevelIDs;
-
 	public Integer getId() {
 		return id;
 	}
@@ -114,15 +110,6 @@ public class Program {
 		this.updatedOn = updatedOn;
 	}
 
-	public void setAcademicLevelIDs(List<Integer> academicLevelIDs) {
-		this.academicLevelIDs = academicLevelIDs;
-		
-	}
-
-	public List<Integer> getAcademicLevelIDs() {
-		return academicLevelIDs;
-	}
-	
 	public Set<AcademicLevel> getAcademicLevels() {
 		return academicLevels;
 	}

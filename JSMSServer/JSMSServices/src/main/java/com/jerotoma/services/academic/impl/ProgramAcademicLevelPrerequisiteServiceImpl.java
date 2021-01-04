@@ -70,4 +70,9 @@ public class ProgramAcademicLevelPrerequisiteServiceImpl implements ProgramAcade
 		return map;
 	}
 
+	@Override
+	public ProgramAcademicLevelPrerequisite getProgramAcademicLevelPrerequisite(Integer programId,	Integer academicLevelID) {		
+		return prerequisiteDao.getProgramAcademicLevelPrerequisite(programId, academicLevelID);
+	}
+
 }

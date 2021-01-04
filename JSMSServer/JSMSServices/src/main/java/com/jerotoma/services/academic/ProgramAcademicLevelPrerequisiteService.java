@@ -5,4 +5,6 @@ import com.jerotoma.services.BaseService;
 
 public interface ProgramAcademicLevelPrerequisiteService extends BaseService<ProgramAcademicLevelPrerequisite>{
 
+	ProgramAcademicLevelPrerequisite getProgramAcademicLevelPrerequisite(Integer programId, Integer academicLevelID);
+
 }

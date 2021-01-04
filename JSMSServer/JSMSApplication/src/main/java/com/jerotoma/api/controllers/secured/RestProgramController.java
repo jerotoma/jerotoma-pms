@@ -29,6 +29,7 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.Program;
 import com.jerotoma.common.models.academic.Program.ProgramAcademicLevel;
+import com.jerotoma.common.models.academic.ProgramAcademicLevelPrerequisite;
 import com.jerotoma.common.utils.validators.ProgramValidator;
 import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.academic.ProgramAcademicLevelPrerequisiteService;
@@ -119,16 +120,13 @@ public class RestProgramController extends BaseController implements Controller 
 						ProgramConstant.ID,
 						ProgramConstant.NAME,
 						ProgramConstant.CODE,
-						ProgramConstant.DESCRIPTION,						
-						ProgramConstant.ACADEMIC_LEVEL_IDS,
-						ProgramConstant.ACADEMIC_LEVEL_COMPLETION_ORDERS
+						ProgramConstant.DESCRIPTION					
 						));
-		Program program = ProgramValidator.validate(params, requiredFields);
-		List<Integer> academicLevelIDs = program.getAcademicLevelIDs();
+		Program program = ProgramValidator.validate(params, requiredFields);		
 		userSecurityClearance.checkProgramCreationPermission();
 		
 		try {
-			program =  programService.updateProgramAndAssociateAcademicLevels(program, academicLevelIDs);
+			program =  programService.updateObject(program);
 		} catch (SQLException e) {
 			throw new JDataAccessException(e.getMessage(), e);			
 		}
@@ -194,7 +192,31 @@ public class RestProgramController extends BaseController implements Controller 
 		return response;
 	}
 
-	
+	@DeleteMapping("/{programId}/academic-levels/{academicLevelId}/pre-requisites/{prerequisiteId}")
+	public HttpResponseEntity<Object> removeProgramAcademicLevelPrerequisite(
+			Authentication auth, 
+			@PathVariable(required=true, value="programId") Integer programId,
+			@PathVariable(required=true, value="academicLevelId") Integer academicLevelId,
+			@PathVariable(required=true, value="prerequisiteId") Integer prerequisiteId) {
+		
+		this.logRequestDetail("POST : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE);
+		this.securityCheckAccessByRoles(auth);
+		
+		ProgramAcademicLevelPrerequisite prerequisite = null;
+			
+		userSecurityClearance.checkProgramCreationPermission();		
+		try {	
+			prerequisite = programAcademicLevelPrerequisiteService.findObject(prerequisiteId);
+			response.setData(programAcademicLevelPrerequisiteService.deleteObject(prerequisite));					
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+			
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		
+		return response;
+	}	
 
 	@DeleteMapping(value = {"/{entityId}"})
 	@Override
@@ -223,7 +245,11 @@ public class RestProgramController extends BaseController implements Controller 
 		this.logRequestDetail("DELETE : "+ EndPointConstants.REST_PROGRAM_CONTROLLER.BASE + "/" + programId + "/academic-levels/" + academicLevelId);
 		this.securityCheckAccessByRoles(auth);
 		userSecurityClearance.checkGeneralEntityDeletionPermission();
-		
+		try {
+			response.setData(programService.deleteAcademicLevelFromProgram(programId, academicLevelId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
 				
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));

@@ -3,10 +3,8 @@ package com.jerotoma.database.assemblers.dao.academic.impls;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -23,7 +21,6 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.ProgramConstant;
 import com.jerotoma.common.constants.SystemConstant;
-import com.jerotoma.common.viewobjects.AcademicLevelPrerequisiteVO;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.ProgramVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;

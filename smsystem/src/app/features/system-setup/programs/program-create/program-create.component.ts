@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import {CdkDragDrop, moveItemInArray, CdkDragStart} from '@angular/cdk/drag-drop';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { NbDialogRef } from '@nebular/theme';
 import {
@@ -11,11 +12,9 @@ import {
 } from 'app/models';
 import {
   ProgramService,
-  AcademicLevelService,
-  CompletionOrderService,
   ModalService,
 } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, FRONTEND_ENDPOINTS } from 'app/utils';
 
 @Component({
   selector: 'app-program-create',
@@ -42,26 +41,18 @@ export class ProgramCreateComponent implements OnInit {
 
   constructor(
     private programService:  ProgramService,
-    private academicLevelService: AcademicLevelService,
     private formBuilder: FormBuilder,
     private modalService: ModalService,
-    private element: ElementRef,
-    private completionOrderService: CompletionOrderService,
+    private router: Router,
     protected ref: NbDialogRef<ProgramCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
-    this.loadAcademicLevels();
-    this.loadCompletionOrders();
-    if (this.action === 'edit') {
-        this.loadProgram();
-    }
   }
   patchProgram() {
     this.programForm.patchValue({
       name: this.program.name,
       code: this.program.code,
-      academicLevelIDs: this.program.academicLevelIDs,
       description: this.program.description,
       id: this.program.id,
     });
@@ -73,40 +64,30 @@ export class ProgramCreateComponent implements OnInit {
   onSubmit() {
     this.isSubmitting = true;
     this.program = this.programForm.value;
-        if (this.action === 'edit') {
-            this.updateProgram();
-        } else {
-          this.programService.createProgram(this.program)
-              .subscribe((program: Program ) => {
-                this.isSubmitting = false;
-                  if (program) {
-                    this.program = program;
-                    this.modalService.openSnackBar('Program ' + program.name + ' has been created', 'success');
-                    this.dismiss();
-                  }
-              });
-        }
+    this.programService.createProgram(this.program)
+      .subscribe((program: Program ) => {
+        this.isSubmitting = false;
+          if (program) {
+            this.program = program;
+            this.modalService.openSnackBar('Program ' + program.name + ' has been created', 'success');
+            this.dismiss();
+            this.router.navigate([FRONTEND_ENDPOINTS.systemSetupPrograms.path + '/' + program.id]);
+          }
+      });
 
   }
   updateProgram() {
     this.programService.updateProgram(this.program)
-        .subscribe((program: Program ) => {
-          this.isSubmitting = false;
-          if (program) {
-            this.program = program;
-            this.modalService.openSnackBar('Program ' + program.name + ' has been updated', 'success');
-            this.dismiss();
-          }
-      });
-    }
-  getDescriptionContent(description: string) {
-   if (description) {
-      this.programForm.patchValue({
-        description: description,
-      });
-    }
+      .subscribe((program: Program ) => {
+        this.isSubmitting = false;
+        if (program) {
+          this.program = program;
+          this.modalService.openSnackBar('Program ' + program.name + ' has been updated', 'success');
+          this.dismiss();
+        }
+    });
   }
-
+/*
   onDragDropChange(event: CdkDragDrop<string[]>) {
     this.changeZIndexValue('1040');
     moveItemInArray(this.academicLevels, event.previousIndex, event.currentIndex);
@@ -135,6 +116,7 @@ export class ProgramCreateComponent implements OnInit {
    const el: HTMLDivElement = this.element.nativeElement.parentElement.parentElement.parentElement.parentElement;
     el.style.zIndex = value;
   }
+  */
   loadForm() {
     this.programForm = this.formBuilder.group({
       id: [null],
@@ -152,48 +134,6 @@ export class ProgramCreateComponent implements OnInit {
         this.patchProgram();
       }
     });
-  }
-
-  checkedChange(checked: boolean, academicLevel: AcademicLevel, completionOrder: number) {
-    this.academicLevelCompletionOrder = {
-      completionOrderId: completionOrder,
-      academicLevelId: academicLevel.id,
-    };
-
-    if (checked) {
-      this.academicLevelCompletionOrders.push(this.academicLevelCompletionOrder);
-    } else {
-      for (let i = 0; i < this.academicLevelCompletionOrders.length; i++) {
-        if ( this.academicLevelCompletionOrders[i].academicLevelId === academicLevel.id) {
-          this.academicLevelCompletionOrders.splice(i, 1);
-        }
-     }
-    }
-    this.programForm.patchValue({
-      academicLevelCompletionOrders: this.academicLevelCompletionOrders,
-    }, {emitEvent: false});
-  }
-
-  loadAcademicLevels() {
-    this.isLoading = true;
-    this.academicLevelService.loadAcademicLevelList()
-      .subscribe((academicLevels: AcademicLevel[]) => {
-        this.isLoading = false;
-        if (academicLevels) {
-          this.academicLevels = academicLevels;
-        }
-      });
-  }
-
-  loadCompletionOrders() {
-    this.isLoading = true;
-    this.completionOrderService.getCompletionOrders()
-      .subscribe((completionOrders: CompletionOrder[]) => {
-        this.isLoading = false;
-        if (completionOrders) {
-          this.completionOrders = completionOrders;
-        }
-      });
   }
 
   getParam(): QueryParam {

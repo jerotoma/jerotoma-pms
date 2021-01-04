@@ -26,21 +26,21 @@ import com.jerotoma.database.dao.academic.ProgramDao;
 import com.jerotoma.services.academic.AcademicLevelService;
 import com.jerotoma.services.academic.ProgramAcademicLevelPrerequisiteService;
 import com.jerotoma.services.academic.ProgramService;
-import com.jerotoma.services.assemblers.academic.AssemblerProgramService;
 import com.jerotoma.services.utils.ServiceUtil;
-
 
 @Transactional
 @Service
 public class ProgramServiceImpl implements ProgramService {
-	
-	@Autowired ProgramDao programDao;	
-	@Autowired AssemblerProgramService assemblerProgramService;	
-	@Autowired AcademicLevelService academicLevelService;
-	@Autowired ProgramAcademicLevelPrerequisiteService programAcademicLevelPrerequisiteService;
-	
+
+	@Autowired
+	ProgramDao programDao;	
+	@Autowired
+	AcademicLevelService academicLevelService;
+	@Autowired
+	ProgramAcademicLevelPrerequisiteService programAcademicLevelPrerequisiteService;
+
 	private static final String INVALID_PREREQUISITE = "Invalid Pre-requisite, academic level can not pre-requisite to it self";
-	
+
 	@Override
 	public Program findObject(Integer primaryKey) throws SQLException {
 		return programDao.getOne(primaryKey);
@@ -57,8 +57,11 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	@Override
-	public Program updateObject(Program object) throws SQLException {
-		return programDao.save(object);
+	public Program updateObject(Program program) throws SQLException {
+		Program dbProgram =  findObject(program.getId());
+		program.setAcademicLevels(dbProgram.getAcademicLevels());
+		program.setPrerequisites(dbProgram.getPrerequisites());
+		return programDao.save(program);
 	}
 
 	@Override
@@ -71,17 +74,17 @@ public class ProgramServiceImpl implements ProgramService {
 	public List<Program> loadList(@Nullable QueryParam queryParam) throws SQLException {
 		if (queryParam == null) {
 			return programDao.findAll();
-		}		
+		}
 		return programDao.findAll(ServiceUtil.getPageable(queryParam)).toList();
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		Map<String, Object> map = new HashMap<>();
-		Page<Program> pageProgram = programDao.findAll(ServiceUtil.getPageable(queryParam));		
+		Page<Program> pageProgram = programDao.findAll(ServiceUtil.getPageable(queryParam));
 		map.put(ProgramConstant.PROGRAMS, pageProgram.toList());
 		map.put(SystemConstant.COUNT, pageProgram.getTotalElements());
-		map.put(SystemConstant.PAGE_COUNT, pageProgram.getTotalPages());			
+		map.put(SystemConstant.PAGE_COUNT, pageProgram.getTotalPages());
 		return map;
 	}
 
@@ -91,11 +94,11 @@ public class ProgramServiceImpl implements ProgramService {
 		ProgramAcademicLevelPrerequisite prerequisite = null;
 		Set<AcademicLevel> academicLevels = new HashSet<>();
 		Set<ProgramAcademicLevelPrerequisite> prerequisites = new HashSet<>();
-		
-		Program program = findObject(programId);			
+
+		Program program = findObject(programId);
 		AcademicLevel academicLevel = academicLevelService.findObject(programAcademicLevel.getAcademicLevelId());
 		if (programAcademicLevel.getAcademicLevelPrerequisiteIds() != null) {
-			for (Integer academicLevelPrerequisiteId: programAcademicLevel.getAcademicLevelPrerequisiteIds()) {
+			for (Integer academicLevelPrerequisiteId : programAcademicLevel.getAcademicLevelPrerequisiteIds()) {
 				if (academicLevelPrerequisiteId.equals(academicLevel.getId())) {
 					throw new FieldRequiredException(INVALID_PREREQUISITE);
 				}
@@ -103,22 +106,27 @@ public class ProgramServiceImpl implements ProgramService {
 				prerequisite = new ProgramAcademicLevelPrerequisite();
 				prerequisite.setAcademicLevel(academicLevel);
 				prerequisite.setPrerequisiteAcademicLevel(academicLevelPrerequisite);
-				prerequisite.setProgram(program);				
+				prerequisite.setProgram(program);
 				prerequisites.add(programAcademicLevelPrerequisiteService.createObject(prerequisite));
 			}
 			academicLevel.setPrerequisites(prerequisites);
-		}		
+		}
 		academicLevels.addAll(program.getAcademicLevels());
 		academicLevels.add(academicLevel);
-		program.setAcademicLevels(academicLevels);			
+		program.setAcademicLevels(academicLevels);
 		return updateObject(program);
 	}
 
 	@Override
-	public Program updateProgramAndAssociateAcademicLevels(Program program, List<Integer> academicLevelIDs)
-			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deleteAcademicLevelFromProgram(Integer programId, Integer academicLevelID) throws SQLException {
+		Program program = findObject(programId);
+		AcademicLevel academicLevel = academicLevelService.findObject(academicLevelID);
+		ProgramAcademicLevelPrerequisite programAcademicLevelPrerequisite = programAcademicLevelPrerequisiteService.getProgramAcademicLevelPrerequisite(programId, academicLevelID);
+		boolean isDeleted = program.getAcademicLevels().remove(academicLevel);
+		if (programAcademicLevelPrerequisite != null && isDeleted) {
+			programAcademicLevelPrerequisiteService.deleteObject(programAcademicLevelPrerequisite);
+		}		
+		return isDeleted;
 	}
-	
+
 }

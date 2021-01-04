@@ -34,18 +34,22 @@
                 <nb-card class="list-card" accent="success" *ngIf="program && program.academicLevels">
                   <nb-card-header>List of Required Levels to graduate the program <button class="push-right" nbButton hero status='success' (click)="addNewAcademicLevel()">Add New Academic Level</button></nb-card-header>
                   <nb-card-body style="padding: 0;">
-                    <nb-list class="list-group">
+                    <nb-list class="list-group"
+                      [nbSpinner]="isLoadingAcademicLevel"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      [nbSpinnerMessage]="'Loading Academic Levels......'">
                       <nb-list-item
                         class="list-group-item"
                         *ngFor="let academicLevel of program.academicLevels; index as i;"
-                        (click)="removeAcademicLevel($event, academicLevel)">
-                        <a href="#" (click)="removeAcademicLevel($event, academicLevel)">
+                        (click)="showAcademicLevelPrerequisite($event, academicLevel)">
+                        <a href="#" (click)="showAcademicLevelPrerequisite($event, academicLevel)">
                           <div class="row">
                             <div class="col-md-1">{{i + 1}}</div>
-                            <div class="col-md-10">{{academicLevel.name}}</div>
-                            <div class="col-md-1">
-                              <span class="push-right">
-                                <nb-icon icon="checkmark-outline"></nb-icon>
+                            <div class="col-md-9">{{academicLevel.name}}</div>
+                            <div class="col-md-2">
+                              <span class="push-right text-danger" (click)="removeAcademicLevel($event, academicLevel)">
+                                <nb-icon icon="trash-2-outline"></nb-icon> Remove
                               </span>
                             </div>
                           </div>
@@ -63,15 +67,21 @@
                 <nb-card class="list-card" accent="success">
                   <nb-card-header>List of Pre-requisite for the selected Academic Level </nb-card-header>
                   <nb-card-body style="padding: 0;">
-                    <nb-list class="list-group">
-                      <nb-list-item class="list-group-item" *ngFor="let academicLevelPrerequisite of academicLevelPrerequisites; index as i;">
-                        <a href="#" (click)="removeAcademicLevel($event)">
+                    <nb-list class="list-group"
+                      [nbSpinner]="isLoadingPrerequisite"
+                      nbSpinnerStatus="success"
+                      nbSpinnerSize="large"
+                      [nbSpinnerMessage]="'Loading Academic Level Pre-requisites......'">
+                      <nb-list-item
+                        class="list-group-item"
+                        *ngFor="let academicLevelPrerequisite of academicLevelPrerequisites; index as i;">
+                        <a href="#" (click)="removeDefaultEvent($event)">
                           <div class="row">
                             <div class="col-md-1">{{i + 1}}</div>
-                            <div class="col-md-10">{{academicLevelPrerequisite?.academicLevel?.name}}</div>
-                            <div class="col-md-1">
-                              <span class="push-right">
-                                <nb-icon icon="checkmark-outline"></nb-icon>
+                            <div class="col-md-9">{{academicLevelPrerequisite?.academicLevel?.name}}</div>
+                            <div class="col-md-2">
+                              <span class="push-right text-danger" (click)="removeAcademicLevelPrerequisite($event, academicLevelPrerequisite)">
+                                <nb-icon icon="trash-2-outline"></nb-icon> Remove
                               </span>
                             </div>
                           </div>

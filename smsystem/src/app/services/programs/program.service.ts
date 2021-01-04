@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, Program, ProgramaAcademicLevelPrerequisiteParam } from 'app/models';
+import { ResponseWrapper, Program, ProgramaAcademicLevelPrerequisiteParam, AcademicLevelPrerequisite } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProgramService {
-    constructor(private http: HttpClient) { }
+
+  constructor(private http: HttpClient) { }
 
   getProgram(programId: number): Observable<Program> {
     return this.http
@@ -50,6 +51,11 @@ export class ProgramService {
 
   updateProgram(data?: any): Observable<Program> {
     return this.http.put(`${API_END_POINTS.programs}`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  removeProgramAcademicLevelPrerequisite(prerequisite: AcademicLevelPrerequisite) {
+    return this.http.delete(`${API_END_POINTS.programs}/${prerequisite.programId}/academic-levels/${prerequisite.academicLevel.id}/pre-requisites/${prerequisite.id}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }

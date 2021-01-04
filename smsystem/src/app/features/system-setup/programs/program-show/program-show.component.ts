@@ -23,11 +23,14 @@ export class ProgramShowComponent implements OnInit {
   program: Program;
   programId: number;
   academicLevelPrerequisites: AcademicLevelPrerequisite[];
-
+  showRemoveAction: boolean = false;
+  isLoadingAcademicLevel: boolean = false;
+  isLoadingPrerequisite: boolean = false;
 
   constructor(
     private programService: ProgramService,
     private dialogService: NbDialogService,
+    private modalService: ModalService,
     private route: ActivatedRoute,
     private router: Router,) {}
 
@@ -61,6 +64,41 @@ export class ProgramShowComponent implements OnInit {
   removeAcademicLevel(event: any, academicLevel: AcademicLevel) {
     event.preventDefault();
     event.stopPropagation();
+    this.isLoadingAcademicLevel = true;
+    this.programService.removeAcademicLevelFromProgram(this.programId, academicLevel.id)
+      .subscribe((success: boolean) => {
+          if (success) {
+            this.modalService.openSnackBar('Academic Level has been removed', 'success');
+            this.academicLevelPrerequisites = [];
+            this.loadProgram();
+            this.isLoadingAcademicLevel = false;
+          }
+      });
+  }
+
+  showAcademicLevelPrerequisite(event: any, academicLevel: AcademicLevel) {
+    event.preventDefault();
+    event.stopPropagation();
     this.academicLevelPrerequisites = academicLevel.prerequisites;
+  }
+
+  removeAcademicLevelPrerequisite(event: any, prerequisite: AcademicLevelPrerequisite) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isLoadingPrerequisite = true;
+    this.programService.removeProgramAcademicLevelPrerequisite(prerequisite)
+      .subscribe((success: boolean) => {
+          if (success) {
+            this.modalService.openSnackBar('Academic Level has been removed', 'success');
+            this.academicLevelPrerequisites = [];
+            this.loadProgram();
+            this.isLoadingPrerequisite = false;
+          }
+      });
+  }
+
+  removeDefaultEvent(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 }

@@ -86,7 +86,7 @@ public class TeacherAddressDaoImpl implements TeacherAddressDao {
 
 	@Override
 	public Long countObject() throws SQLException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

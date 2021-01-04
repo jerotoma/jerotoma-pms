@@ -9,6 +9,4 @@ public interface ProgramDao extends JpaRepository<Program, Integer>{
 
 	@Query("select p from Program p where p.code = ?1")
 	Program findObjectUniqueKey(String uniqueKey);
-
-
 }
