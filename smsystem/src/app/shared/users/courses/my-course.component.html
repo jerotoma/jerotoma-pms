@@ -1,3 +1,65 @@
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-12">
+        <nb-card class="list-card" accent="success">
+          <nb-card-body style="padding: 0;" *ngIf="studentAcademicLevelClasses && isUserStudent">
+            <ng-container *ngFor="let studentAcademicLevelClass of studentAcademicLevelClasses">
+              <h5 class="mt-2">List of courses for {{studentAcademicLevelClass?.academicLevel?.name}} - {{studentAcademicLevelClass?.academicLevel?.code}}</h5>
+              <nb-list class="list-group">
+                <nb-list-item class="list-group-item bg-primary text-white" >
+                    <div class="row">
+                        <div class="col-md-4">Course Name</div>
+                        <div class="col-md-3">Teacher</div>
+                        <div class="col-md-3">Room</div>
+                        <div class="col-md-2">Meeting Time</div>
+                    </div>
+                </nb-list-item>
+                <nb-list-item class="list-group-item" *ngFor="let classView of studentAcademicLevelClass.classes">
+                  <a href="#" (click)="preventDefaultJClass($event)">
+                      <div class="row">
+                        <div class="col-md-4">{{classView.course.name}} ({{classView.course.code}})</div>
+                        <div class="col-md-3">{{classView.teacher.fullName}}</div>
+                        <div class="col-md-3">{{classView.room.name}}</div>
+                        <div class="col-md-2">{{classView.meetingTime.time}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                      </div>
+                  </a>
+                </nb-list-item>
+              </nb-list>
+            </ng-container>
+          </nb-card-body>
+          <nb-card-body style="padding: 0;" *ngIf="classViews && isUserTeacher">
+            <h5 *ngIf="isUserTeacher">List of courses <span>for all academic level</span></h5>
+            <nb-list class="list-group">
+              <nb-list-item class="list-group-item" >
+                  <div class="row">
+                      <div class="col-md-4">Course Name</div>
+                      <div class="col-md-3">Academic Level</div>
+                      <div class="col-md-3">Room</div>
+                      <div class="col-md-2">Meeting Time</div>
+                  </div>
+              </nb-list-item>
+              <nb-list-item class="list-group-item" *ngFor="let classView of classViews">
+                <a href="#" (click)="preventDefaultJClass($event)">
+                    <div class="row">
+                      <div class="col-md-4">{{classView.course.name}} ({{classView.course.code}})</div>
+                      <div class="col-md-3">{{classView?.course?.academicLevel?.name}} - {{classView?.course?.academicLevel?.code}}</div>
+                      <div class="col-md-3">{{classView.room.name}}</div>
+                      <div class="col-md-2">{{classView.meetingTime.time}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
+                    </div>
+                </a>
+              </nb-list-item>
+            </nb-list>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+
+
+
 <div class="row">
   <div class="col-md-12 col-lg-12 col-xxxl-12"
     [nbSpinner]="isLoading"
@@ -7,56 +69,7 @@
       <div class="lists row mt-2">
         <div class="col-md-12">
             <div class="form-control-group">
-              <nb-card class="list-card" accent="success">
-                <nb-card-body style="padding: 0;" *ngIf="studentAcademicLevelClasses && isUserStudent">
-                  <ng-container *ngFor="let studentAcademicLevelClass of studentAcademicLevelClasses">
-                    <h5 class="mt-2">List of courses for {{studentAcademicLevelClass?.academicLevel?.name}} - {{studentAcademicLevelClass?.academicLevel?.code}}</h5>
-                    <nb-list class="list-group">
-                      <nb-list-item class="list-group-item bg-primary text-white" >
-                          <div class="row">
-                              <div class="col-md-4">Course Name</div>
-                              <div class="col-md-3">Teacher</div>
-                              <div class="col-md-3">Room</div>
-                              <div class="col-md-2">Meeting Time</div>
-                          </div>
-                      </nb-list-item>
-                      <nb-list-item class="list-group-item" *ngFor="let classView of studentAcademicLevelClass.classes">
-                        <a href="#" (click)="preventDefaultJClass($event)">
-                            <div class="row">
-                              <div class="col-md-4">{{classView.course.name}} ({{classView.course.code}})</div>
-                              <div class="col-md-3">{{classView.teacher.fullName}}</div>
-                              <div class="col-md-3">{{classView.room.name}}</div>
-                              <div class="col-md-2">{{classView.meetingTime.time}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
-                            </div>
-                        </a>
-                      </nb-list-item>
-                    </nb-list>
-                </ng-container>
-                </nb-card-body>
-                <nb-card-body style="padding: 0;" *ngIf="classViews && isUserTeacher">
-                  <h5 *ngIf="isUserTeacher">List of courses <span>for all academic level</span></h5>
-                  <nb-list class="list-group">
-                    <nb-list-item class="list-group-item" >
-                        <div class="row">
-                            <div class="col-md-4">Course Name</div>
-                            <div class="col-md-3">Academic Level</div>
-                            <div class="col-md-3">Room</div>
-                            <div class="col-md-2">Meeting Time</div>
-                        </div>
-                    </nb-list-item>
-                    <nb-list-item class="list-group-item" *ngFor="let classView of classViews">
-                      <a href="#" (click)="preventDefaultJClass($event)">
-                          <div class="row">
-                            <div class="col-md-4">{{classView.course.name}} ({{classView.course.code}})</div>
-                            <div class="col-md-3">{{classView?.course?.academicLevel?.name}} - {{classView?.course?.academicLevel?.code}}</div>
-                            <div class="col-md-3">{{classView.room.name}}</div>
-                            <div class="col-md-2">{{classView.meetingTime.time}} <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
-                          </div>
-                      </a>
-                    </nb-list-item>
-                  </nb-list>
-                </nb-card-body>
-              </nb-card>
+
             </div>
         </div>
       </div>

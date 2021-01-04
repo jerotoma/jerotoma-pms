@@ -9,12 +9,8 @@ import { Teacher  } from 'app/models';
 
 @Component({
   selector: 'app-teacher-show',
-  template: `<app-user-details
-              *ngIf='teacher'
-              [userDatail]="teacher"
-              [userType]="userType"
-              (onImageChangeSuccess)="reloadParentDetails($event)"
-              ></app-user-details>`,
+  templateUrl: 'teacher-show.component.html',
+  styleUrls: ['teacher-show.component.scss'],
 })
 export class TeacherShowComponent implements OnInit {
 
@@ -40,7 +36,7 @@ export class TeacherShowComponent implements OnInit {
     });
   }
 
-  reloadParentDetails(data: any) {
+  reloadTeacherDetails(data: any) {
     this.loadTeacherDetails(data.id);
   }
 

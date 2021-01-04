@@ -48,8 +48,6 @@ export class ProgressComponent implements OnInit {
       this.studentAcademicLevelsCompletionAvarage = (studentProgress.completedLevels / studentProgress.requiredLevels) * 100;
 
     });
-
-
     this.academicLevelService.loadAcademicLevelsByProgramId(this.student.programId).subscribe((academicLevels: AcademicLevel[]) => {
       this.academicLevels = academicLevels;
     });

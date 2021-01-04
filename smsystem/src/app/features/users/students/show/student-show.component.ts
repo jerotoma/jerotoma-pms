@@ -7,12 +7,8 @@ import { USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-student-show',
-  template: `<app-user-details
-              *ngIf='student'
-              [userDatail]="student"
-              [userType]="userType"
-              (onImageChangeSuccess)="reloadParentDetails($event)"
-              ></app-user-details>`,
+  templateUrl: 'student-show.component.html',
+  styleUrls: ['student-show.component.scss'],
 })
 export class StudentShowComponent implements OnInit {
 

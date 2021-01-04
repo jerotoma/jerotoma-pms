@@ -5,6 +5,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { NbMomentDateModule } from '@nebular/moment';
 import {
@@ -72,6 +73,7 @@ const MODULES = [
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
+    MatTabsModule,
     MatMenuModule,
     MatSelectModule,
     NbDialogModule.forRoot({

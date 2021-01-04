@@ -1,0 +1,36 @@
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="student-tab-icon text-primary">person</mat-icon> Student Profile
+    </ng-template>
+    <div class="row">
+      <div class="col-md-12">
+        <app-user-details
+        *ngIf='student'
+        [userDatail]="student"
+        [userType]="userType"
+        (onImageChangeSuccess)="reloadParentDetails($event)"
+      ></app-user-details>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="student-tab-icon text-primary">menu_book</mat-icon> Student Courses
+    </ng-template>
+    <app-my-course
+      *ngIf='student'
+      [userType]="student?.userType"
+      [userId]="student?.userId"
+    ></app-my-course>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="student-tab-icon text-primary">autorenew</mat-icon> Student Progress
+    </ng-template>
+      <app-my-progress
+      *ngIf="student"
+      [student]="student"
+    ></app-my-progress>
+  </mat-tab>
+</mat-tab-group>
