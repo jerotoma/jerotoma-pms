@@ -1,5 +1,5 @@
 export interface UserLoginInput {
-  email: string;
+  username: string;
   password: string;
   confirmPassword: string;
 }

@@ -182,9 +182,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
     if (userLoginInputWrapper.isValid) {
         this.userLoginInput = userLoginInputWrapper.userLoginInput;
         this.staffForm.patchValue({
-          username: this.userLoginInput.email,
-          password: this.userLoginInput.password,
-          confirmPassword: this.userLoginInput.confirmPassword,
+          userLoginInput: userLoginInputWrapper.userLoginInput
         });
        // window.console.log(userLoginInputWrapper);
     }

@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AddressComponent, UserLoginInputComponent } from 'app/shared';
+import { AddressComponent } from 'app/shared/addresses';
+import { UserLoginInputComponent } from 'app/shared/user-logins';
+
 import {
   Student,
   Address,
@@ -128,9 +130,7 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       middleNames: [null],
       occupation: [null],
       phoneNumber: [null, Validators.required],
-      username: [null],
-      password: [null],
-      confirmPassword: [null],
+      userLoginInput:[null],
       gender: ['', Validators.required],
       userId: [null],
       picture: [''],
@@ -161,16 +161,13 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
   }
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.isValid) {
-        this.userLoginInput = userLoginInputWrapper.userLoginInput;
         this.parentForm.patchValue({
-          username: this.userLoginInput.email,
-          password: this.userLoginInput.password,
-          confirmPassword: this.userLoginInput.confirmPassword,
+          userLoginInput:userLoginInputWrapper.userLoginInput,
         });
-        this.parentForm.controls['username'].setErrors(null);
+        this.parentForm.controls['userLoginInput'].setErrors(null);
         // window.console.log(userLoginInputWrapper);
     } else {
-      this.parentForm.controls['username'].setErrors({ invalidUsername: true });
+      this.parentForm.controls['userLoginInput'].setErrors({ invalidUsername: true });
     }
   }
 

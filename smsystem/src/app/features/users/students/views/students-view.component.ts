@@ -29,7 +29,7 @@ export class StudentsViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'studentNumber', 'fullName', 'gender', 'emailAddress', 'phoneNumber', 'createdOn', 'action'];
+  displayedColumns: string[] = ['id', 'fullName', 'emailAddress', 'phoneNumber', 'program', 'currentAcademicLevel',  'createdOn', 'action'];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

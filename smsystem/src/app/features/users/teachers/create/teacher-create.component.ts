@@ -108,9 +108,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       picture: [''],
       middleNames: [null],
       phoneNumber: ['', Validators.required],
-      username: [null],
-      password: [null],
-      confirmPassword: [null],
+      userLoginInput:[null],
       userId: [null],
       birthDate: ['', DateValidator()],
       userType: [USER_TYPE.TEACHER],
@@ -132,7 +130,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   onUserSelected(teacher: Teacher) {
     this.teacher = teacher;
-    this.appUserLoginInput.patchPasswordValue({email: teacher.username, password: '', confirmPassword: ''});
+    this.appUserLoginInput.patchPasswordValue({username: teacher.username, password: '', confirmPassword: ''});
     this.updateUseInput();
   }
 
@@ -174,15 +172,13 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   }
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.isValid) {
-        this.userLoginInput = userLoginInputWrapper.userLoginInput;
+        this.teacherForm.controls['userLoginInput'].setErrors(null);
         this.teacherForm.patchValue({
-          username: this.userLoginInput.email,
-          password: this.userLoginInput.password,
-          confirmPassword: this.userLoginInput.confirmPassword,
+          userLoginInput: userLoginInputWrapper.userLoginInput
         });
-        this.teacherForm.controls['username'].setErrors(null);
+
     } else {
-      this.teacherForm.controls['username'].setErrors({ invalidUsername: true });
+      this.teacherForm.controls['userLoginInput'].setErrors({ invalidAddress: true });
     }
   }
   resetForms() {
@@ -206,7 +202,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
       phoneNumber: this.teacher.phoneNumber,
       emailAddress: this.teacher.username,
       birthDate: DateFormatter(this.teacher.birthDate, 'YYYY/MM/DD', false),
-      userType: 'teacher',
+      userType: USER_TYPE.TEACHER,
       department: this.teacher.department ? this.teacher.department.id : null,
       address: this.teacher.address ? this.teacher.address : null,
     });

@@ -172,7 +172,7 @@ export class EditUserComponent implements OnInit {
       this.appAddress.patchAddressValue(user.address);
     }
    this.userLoginInput = {
-     email: user.username,
+     username: user.username,
      password: '',
      confirmPassword: '',
    };

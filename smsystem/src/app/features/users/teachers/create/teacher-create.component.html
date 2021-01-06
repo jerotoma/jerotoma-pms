@@ -4,6 +4,11 @@
             <nb-card size="giant" class="dialog-card" status="primary">
               <nb-card-header>{{ title }}</nb-card-header>
               <nb-card-body>
+                  <app-user-login-input
+                    *ngIf="action === 'create'"
+                    [userLoginInput]="userLoginInput"
+                    (onChanges)="onUserLoginInputChange($event)">
+                  </app-user-login-input>
                   <div class="row">
                       <div class="col-md-12">
                           <h4 class="text-primary">Basic Information</h4>
@@ -75,11 +80,6 @@
                       </div>
                     </div>
                   </div>
-                  <app-user-login-input
-                    *ngIf="action === 'create'"
-                    [userLoginInput]="userLoginInput"
-                    (onChanges)="onUserLoginInputChange($event)">
-                  </app-user-login-input>
                   <div class="row">
                       <div class="col-md-6">
                           <div class="form-control-group">

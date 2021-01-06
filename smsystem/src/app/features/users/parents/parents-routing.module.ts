@@ -8,7 +8,6 @@ import { ALL_ROLES } from 'app/models';
 
 // Components
 import { ParentsComponent } from './parents.component';
-import { ParentCreateComponent } from './create/parent-create.component';
 import { ParentShowComponent } from './show/parent-show.component';
 import { ParentsViewComponent } from './views/parents-view.component';
 

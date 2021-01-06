@@ -6,6 +6,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { NbMomentDateModule } from '@nebular/moment';
 import {
@@ -78,6 +80,7 @@ const MODULES = [
     MatMenuModule,
     MatSelectModule,
     MatTabsModule,
+    MatStepperModule,
     NbDialogModule.forRoot({
       closeOnBackdropClick: false,
       hasScroll: false,

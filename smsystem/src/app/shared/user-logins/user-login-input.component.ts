@@ -32,7 +32,7 @@ export class UserLoginInputComponent implements OnInit {
 loadPasswordForm() {
   this.userLoginInputForm = this.formBuilder.group({
     canUserLogin: [false, Validators.required],
-    email: [
+    username: [
       '',
       Validators.compose([
         Validators.required,
@@ -76,7 +76,7 @@ resetForm() {
 }
 patchPasswordValue(userLoginInput: UserLoginInput) {
   this.userLoginInputForm.patchValue({
-    email: userLoginInput.email,
+    username: userLoginInput.username,
     password: userLoginInput.password,
     confirmPassword: userLoginInput.confirmPassword,
     canUserLogin: this.canUserLogin,

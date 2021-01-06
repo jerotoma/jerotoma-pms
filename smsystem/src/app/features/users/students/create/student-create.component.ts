@@ -25,6 +25,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   action: string = 'create';
   linearMode: boolean = true;
   studentForm: FormGroup;
+  parentForm: FormGroup;
   addressForm: FormGroup;
   userLoginInput: UserLoginInput;
   student: Student;
@@ -58,6 +59,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.loadStudentForm();
+    this.loadParentForm();
     this.onCredentialInputChanges();
     this.loadPrograms();
   }
@@ -120,10 +122,14 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       lastName: ['', Validators.required],
       studentNumber: [null],
       middleNames: [null],
+      email: ['',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+        ]),
+      ],
       phoneNumber: ['', Validators.required],
-      username: [null],
-      password: [null],
-      confirmPassword: [null],
+      userLoginInput:[null],
       gender: ['', Validators.required],
       picture: [''],
       userType: [USER_TYPE.STUDENT],
@@ -135,13 +141,46 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       programId: [null, Validators.required],
       academicLevelId: [null, Validators.required],
     });
-
     this.studentForm.get('programId').valueChanges.subscribe(programId => {
       if (programId) {
         this.loadAcademicLevelByProgram(programId);
       }
     });
   }
+
+  loadParentForm() {
+    this.parentForm = this.formBuilder.group({
+      id: [null],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      studentNumber: [null],
+      middleNames: [null],
+      email: ['',
+        Validators.compose([
+          Validators.required,
+          Validators.email,
+        ]),
+      ],
+      phoneNumber: ['', Validators.required],
+      userLoginInput:[null],
+      gender: ['', Validators.required],
+      picture: [''],
+      userType: [USER_TYPE.STUDENT],
+      birthDate: ['', DateValidator()],
+      address: [null, Validators.required],
+      parentFullName: [''],
+      selectedParents: [''],
+      userId: [null],
+      programId: [null, Validators.required],
+      academicLevelId: [null, Validators.required],
+    });
+    this.studentForm.get('programId').valueChanges.subscribe(programId => {
+      if (programId) {
+        this.loadAcademicLevelByProgram(programId);
+      }
+    });
+  }
+
 
   getParam(): QueryParam {
     return {
@@ -178,16 +217,16 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     }
   }
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
-    if (userLoginInputWrapper.isValid) {
+    if (userLoginInputWrapper.canUserLogin) {
+      if (userLoginInputWrapper.isValid) {
         this.userLoginInput = userLoginInputWrapper.userLoginInput;
         this.studentForm.patchValue({
-          username: this.userLoginInput.email,
-          password: this.userLoginInput.password,
-          confirmPassword: this.userLoginInput.confirmPassword,
+          userLoginInput: userLoginInputWrapper.userLoginInput,
         });
-        this.studentForm.controls['username'].setErrors(null);
-    } else {
-      this.studentForm.controls['username'].setErrors({ invalidUsername: true });
+        this.studentForm.controls['userLoginInput'].setErrors(null);
+      } else {
+        this.studentForm.controls['userLoginInput'].setErrors({ invalidAddress: true });
+      }
     }
   }
 
@@ -256,7 +295,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       userId: this.student.userId,
       middleNames: this.student.middleNames,
       phoneNumber: this.student.phoneNumber,
-      emailAddress: this.student.username,
+      email: this.student.emailAddress,
       birthDate: DateFormatter(this.student.birthDate, 'YYYY/MM/DD', false),
       userType: USER_TYPE.STUDENT,
       academicDiscipline: this.student.academicDiscipline ? this.student.academicDiscipline.id : null,

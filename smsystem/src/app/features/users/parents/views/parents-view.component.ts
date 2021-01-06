@@ -8,8 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { UserDeleteComponent } from 'app/shared';
-import { ParentCreateComponent } from '../create/parent-create.component';
+import { UserDeleteComponent, ParentCreateComponent } from 'app/shared';
 
 import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { UserService } from 'app/services';

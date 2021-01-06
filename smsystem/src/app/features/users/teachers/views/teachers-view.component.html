@@ -15,7 +15,7 @@
             <!-- Full Column -->
             <ng-container matColumnDef="fullName">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Full Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
+              <td mat-cell *matCellDef="let element"> <span class="text-primary">{{element.fullName}}</span> </td>
             </ng-container>
              <!-- Gender Column -->
             <ng-container matColumnDef="gender">

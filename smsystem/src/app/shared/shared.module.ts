@@ -56,6 +56,7 @@ import {
   LogoComponent,
   UploadAvatarDialogComponent,
   ProgressComponent,
+  ParentCreateComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -74,6 +75,7 @@ const COMPONENTS = [
   LogoComponent,
   UploadAvatarDialogComponent,
   ProgressComponent,
+  ParentCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -87,6 +89,7 @@ const ENTRY_COMPONENTS = [
   CurrentAcademicYearComponent,
   UploadAvatarDialogComponent,
   ProgressComponent,
+  ParentCreateComponent,
 ];
 
 const MODULES = [

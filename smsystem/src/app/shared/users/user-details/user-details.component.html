@@ -65,21 +65,21 @@
                                       </tr>
 
                                       <tr *ngIf="userDatail.programName">
-                                        <th class="user-details">Program Enrolled: </th><td><span>{{userDatail.programName}}</span></td>
+                                        <th class="user-details">Program Enrolled: </th><td><span>{{userDatail?.programName}}</span></td>
                                       </tr>
                                       <tr *ngIf="userDatail.currentAcademicLevelName">
-                                        <th class="user-details">Current Academic Level: </th><td><span>{{userDatail.currentAcademicLevelName}}</span></td>
+                                        <th class="user-details">Current Academic Level: </th><td><span>{{userDatail?.currentAcademicLevelName}}</span></td>
                                       </tr>
                                       <tr *ngIf="userDatail.birthDate">
-                                        <th class="user-details">Date of Birth: </th><td><span>{{userDatail.birthDate | date:'longDate'}}</span></td>
+                                        <th class="user-details">Date of Birth: </th><td><span>{{userDatail?.birthDate | date:'longDate'}}</span></td>
                                       </tr>
                                       <tr>
                                         <th class="user-details">Email Address: </th>
-                                        <td><span *ngIf="userDatail.emailAddress">{{userDatail.emailAddress}}</span></td>
+                                        <td><span *ngIf="userDatail.emailAddress">{{userDatail?.emailAddress}}</span></td>
                                       </tr>
                                       <tr>
                                         <th class="user-details">Phone Number: </th>
-                                        <td><span *ngIf="userDatail.phoneNumber">{{userDatail.phoneNumber}}</span></td>
+                                        <td><span *ngIf="userDatail.phoneNumber">{{userDatail?.phoneNumber}}</span></td>
                                       </tr>
                                       <tr *ngIf="userDatail.occupation">
                                         <th class="user-details">Profession: </th>

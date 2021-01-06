@@ -17,21 +17,21 @@
 @include media-breakpoint-up(sm) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 70vw;
+    min-width: 80vw;
   }
 }
 
 @include media-breakpoint-up(md) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 60vw;
+    min-width: 70vw;
   }
 }
 
 @include media-breakpoint-down(lg) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 50vw;
+    min-width: 60vw;
   }
 }
 
@@ -45,7 +45,7 @@
 @include media-breakpoint-up(xl) {
   .dialog-card {
     max-width: 90vw;
-    min-width: 50vw;
+    min-width: 60vw;
   }
 }
 

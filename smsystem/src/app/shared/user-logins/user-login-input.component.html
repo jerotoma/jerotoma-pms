@@ -1,25 +1,10 @@
   <form [formGroup]="userLoginInputForm">
     <div class="row">
-      <div class="col-md-6">
-        <div class="form-control-group">
-          <label class="label" for="input-email">Email Address:</label>
-          <input nbInput
-                 id="input-email"
-                 formControlName="email"
-                 placeholder="Email Address"
-                 fullWidth
-                 [status]="userLoginInputForm.controls['email'].invalid && userLoginInputForm.controls['email'].touched ? 'danger' : 'basic'"
-                 [attr.aria-invalid]="userLoginInputForm.controls['email'].invalid && userLoginInputForm.controls['email'].touched ? true : null">
-          <ng-container *ngIf="userLoginInputForm.controls['email']?.invalid && userLoginInputForm.controls['email']?.touched">
-            <p class="error-message" *ngIf="userLoginInputForm.controls['email']?.errors?.required">
-              Email is required!
-            </p>
-            <p class="error-message" *ngIf="userLoginInputForm.controls['email']?.errors?.pattern">
-              Username should be the real one!
-            </p>
-          </ng-container>
-        </div>
+      <div class="col-md-12">
+          <h4 class="text-primary">Login Information</h4>
       </div>
+    </div>
+    <div class="row">
       <div class="col-md-6">
         <div class="form-control-group can-login">
           <nb-checkbox
@@ -29,6 +14,26 @@
             [status]="userLoginInputForm.controls['canUserLogin'].invalid && userLoginInputForm.controls['canUserLogin'].touched ? 'danger' : 'basic'">
             Check the box if this user can login
           </nb-checkbox>
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="canUserLogin">
+        <div class="form-control-group">
+          <label class="label" for="input-username">Username:</label>
+          <input nbInput
+                 id="input-username"
+                 formControlName="username"
+                 placeholder="username Address"
+                 fullWidth
+                 [status]="userLoginInputForm.controls['username'].invalid && userLoginInputForm.controls['username'].touched ? 'danger' : 'basic'"
+                 [attr.aria-invalid]="userLoginInputForm.controls['username'].invalid && userLoginInputForm.controls['username'].touched ? true : null">
+          <ng-container *ngIf="userLoginInputForm.controls['username']?.invalid && userLoginInputForm.controls['username']?.touched">
+            <p class="error-message" *ngIf="userLoginInputForm.controls['username']?.errors?.required">
+              Username is required!
+            </p>
+            <p class="error-message" *ngIf="userLoginInputForm.controls['username']?.errors?.pattern">
+              Username should be the real one!
+            </p>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -43,7 +48,7 @@
                   formControlName="password"
                   placeholder="Password"
                   fullWidth
-                  [status]="userLoginInputForm.controls['password'].invalid && userLoginInputForm.controls['password'].touched ? 'danger' : ''"
+                  [status]="userLoginInputForm.controls['password'].invalid && userLoginInputForm.controls['password'].touched ? 'danger' : 'basic'"
                   [attr.aria-invalid]="userLoginInputForm.controls['password'].invalid && userLoginInputForm.controls['password'].touched ? true : null">
             <ng-container *ngIf="userLoginInputForm.controls['password'].invalid && userLoginInputForm.controls['password'].touched">
               <p class="error-message" *ngIf="userLoginInputForm.controls['password']?.errors?.required">
@@ -61,7 +66,7 @@
                   formControlName="confirmPassword"
                   placeholder="Confirm Password"
                   fullWidth
-                  [status]="userLoginInputForm.controls['confirmPassword'].invalid && userLoginInputForm.controls['confirmPassword'].touched ? 'danger' : ''"
+                  [status]="userLoginInputForm.controls['confirmPassword'].invalid && userLoginInputForm.controls['confirmPassword'].touched ? 'danger' : 'basic'"
                   [attr.aria-invalid]="userLoginInputForm.controls['confirmPassword'].invalid && userLoginInputForm.controls['confirmPassword'].touched ? true : null">
             <ng-container *ngIf="userLoginInputForm.controls['confirmPassword'].invalid && userLoginInputForm.controls['confirmPassword'].touched">
               <p class="error-message" *ngIf="userLoginInputForm.controls['confirmPassword']?.errors?.required">
