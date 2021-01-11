@@ -28,6 +28,7 @@ export class StaffCreateComponent implements OnInit, AfterViewInit {
   staffForm: FormGroup;
   parentForm: FormGroup;
   addressForm: FormGroup;
+  userType: string = USER_TYPE.STAFF;
   staff: Staff;
   address: Address;
   userLoginInput: UserLoginInput;

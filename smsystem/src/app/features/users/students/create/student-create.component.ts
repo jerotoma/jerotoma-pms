@@ -4,7 +4,16 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { NbDialogRef } from '@nebular/theme';
 import { AddressComponent, UserLoginInputComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
-import { Address, AddressWrapper, UserLoginInput, UserLoginInputWrapper, ResponseWrapper, Program, AcademicLevel, AcademicYear } from 'app/models';
+import {
+  Address,
+  AddressWrapper,
+  UserLoginInput,
+  UserLoginInputWrapper,
+  ResponseWrapper,
+  Program,
+  AcademicLevel,
+  AcademicYear,
+  ParentWrapper } from 'app/models';
 import { PositionService, UserService, ModalService, ProgramService, AcademicLevelService } from 'app/services';
 import { AcademicDisciplineService } from 'app/services/academic-disciplines';
 import { QueryParam , DateValidator, DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
@@ -21,7 +30,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   @Output() onUserCreationSuccess = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
-  userType: string = USER_TYPE.PARENT;
+  userType: string = USER_TYPE.STUDENT;
   action: string = 'create';
   linearMode: boolean = true;
   studentForm: FormGroup;
@@ -73,21 +82,27 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       confirmed: true,
     });
   }
-  onSubmit() {
-    this.parentIds = [];
+
+  onSubmitStudentForm() {
    if (!this.studentForm.valid ) {
       return;
     }
     this.student = this.studentForm.value;
-    for (let i = 0; i < this.selectedParents.length; i++) {
-      this.parentIds.push(this.selectedParents[i].id);
+  }
+
+  onSubmitParentForm() {
+    if (!this.parentForm.valid ) {
+      return;
     }
-    this.student.parentIds = this.parentIds;
-    if (this.action === APP_ACTION_TYPE.edit) {
-      this.updateData(this.student);
-    } else {
-      this.postData(this.student);
+    this.parent = this.parentForm.value;
+  }
+
+  onSubmit() {
+   if (!this.studentForm.valid && !this.parentForm.valid) {
+      return;
     }
+    window.console.log(this.studentForm.value);
+    this.postData(this.studentForm.value);
   }
 
   postData(data: Student) {
@@ -129,7 +144,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
         ]),
       ],
       phoneNumber: ['', Validators.required],
-      userLoginInput:[null],
+      userLoginInput: [null],
       gender: ['', Validators.required],
       picture: [''],
       userType: [USER_TYPE.STUDENT],
@@ -138,49 +153,38 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       parentFullName: [''],
       selectedParents: [''],
       userId: [null],
+      parent: [null],
       programId: [null, Validators.required],
       academicLevelId: [null, Validators.required],
     });
+
     this.studentForm.get('programId').valueChanges.subscribe(programId => {
       if (programId) {
         this.loadAcademicLevelByProgram(programId);
       }
     });
+  }
+
+  onParentFormChanges(parentWrapper: ParentWrapper) {
+    if (!parentWrapper) {
+      return;
+    }
+    if (!parentWrapper.valid) {
+      this.parentForm.controls['parent'].setErrors({ invalidAddress: true });
+    } else {
+      this.parentForm.controls['parent'].setErrors(null);
+      this.studentForm.patchValue({parent: parentWrapper.parent});
+      this.parentForm.patchValue({parent: parentWrapper.parent});
+    }
+
   }
 
   loadParentForm() {
     this.parentForm = this.formBuilder.group({
       id: [null],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      studentNumber: [null],
-      middleNames: [null],
-      email: ['',
-        Validators.compose([
-          Validators.required,
-          Validators.email,
-        ]),
-      ],
-      phoneNumber: ['', Validators.required],
-      userLoginInput:[null],
-      gender: ['', Validators.required],
-      picture: [''],
-      userType: [USER_TYPE.STUDENT],
-      birthDate: ['', DateValidator()],
-      address: [null, Validators.required],
-      parentFullName: [''],
-      selectedParents: [''],
-      userId: [null],
-      programId: [null, Validators.required],
-      academicLevelId: [null, Validators.required],
-    });
-    this.studentForm.get('programId').valueChanges.subscribe(programId => {
-      if (programId) {
-        this.loadAcademicLevelByProgram(programId);
-      }
+      parent: ['', Validators.required],
     });
   }
-
 
   getParam(): QueryParam {
     return {
@@ -216,6 +220,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
     }
   }
+
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.canUserLogin) {
       if (userLoginInputWrapper.isValid) {

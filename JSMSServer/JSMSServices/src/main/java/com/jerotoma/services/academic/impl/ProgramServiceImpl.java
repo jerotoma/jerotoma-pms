@@ -42,8 +42,8 @@ public class ProgramServiceImpl implements ProgramService {
 	private static final String INVALID_PREREQUISITE = "Invalid Pre-requisite, academic level can not pre-requisite to it self";
 
 	@Override
-	public Program findObject(Integer primaryKey) throws SQLException {
-		return programDao.getOne(primaryKey);
+	public Program findObject(Integer primaryKey) throws SQLException {		
+		return ServiceUtil.getEntity(programDao.findById(primaryKey));
 	}
 
 	@Override

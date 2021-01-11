@@ -27,7 +27,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department findObject(Integer primaryKey) throws SQLException {
-		return departmentDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(departmentDao.findById(primaryKey));
 	}
 
 	@Override

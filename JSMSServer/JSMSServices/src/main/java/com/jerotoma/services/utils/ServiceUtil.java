@@ -1,5 +1,7 @@
 package com.jerotoma.services.utils;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -67,5 +69,13 @@ public class ServiceUtil {
 					sort);			
 		}		
 		return pageable;		
+	}
+	
+	public static <T> T getEntity(Optional<T> optionalEntity) {
+		
+		if (optionalEntity != null) {
+			return optionalEntity.get();
+		}
+		return null;
 	}
 }

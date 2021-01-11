@@ -76,7 +76,7 @@ export class ParentsViewComponent implements OnInit {
       context: {
         title: 'Edit ' + parent.fullName + '\'s Details',
         action: APP_ACTION_TYPE.edit,
-        userId: parent.userId,
+        parent: parent,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();

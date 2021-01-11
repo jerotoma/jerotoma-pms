@@ -27,7 +27,7 @@ public class ClassServiceImpl implements ClassService{
 
 	@Override
 	public Class findObject(Integer primaryKey) throws SQLException {
-		return classDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(classDao.findById(primaryKey));
 	}
 
 	@Override

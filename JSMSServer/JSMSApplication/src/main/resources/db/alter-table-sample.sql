@@ -8,6 +8,9 @@ ALTER TABLE parents
 	ADD CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id) REFERENCES user_media (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
+        
+ALTER TABLE parents ADD COLUMN relationship_type character varying(255),
+	
 ALTER TABLE teachers 
 	ADD COLUMN profile_image_id bigint,
 	ADD CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id) REFERENCES user_media (id) MATCH SIMPLE
@@ -21,6 +24,12 @@ ALTER TABLE staffs
 ALTER TABLE students 
 	ADD COLUMN profile_image_id bigint,
 	ADD CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id) REFERENCES user_media (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+        
+ALTER TABLE students 
+	ADD COLUMN primary_parent_id bigint,
+	ADD CONSTRAINT parents_fkey FOREIGN KEY (primary_parent_id) REFERENCES parents (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
         

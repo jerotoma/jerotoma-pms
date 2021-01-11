@@ -36,12 +36,21 @@ public class Parent extends Person implements Serializable{
 	@Column
 	private Integer id;
 	
+	@Column(name="relationship_type")
+	private String relationshipType;
+	
 	@Transient
 	List<Integer> studentIds;
+	
+	@Transient
+	Integer studentId;
 	
 	@ManyToMany(mappedBy="parents")
 	@JsonManagedReference
 	private Set<Student> students = new HashSet<>();
+	
+	@OneToMany(mappedBy ="primaryParent")
+	private Set<Student> primaryStudents = new HashSet<>();
 	
 	@OneToMany(mappedBy ="parent")
 	@JsonManagedReference
@@ -99,6 +108,28 @@ public class Parent extends Person implements Serializable{
 		}
 		return super.equals(obj);
 	}
-	
-	
+
+	public String getRelationshipType() {
+		return relationshipType;
+	}
+
+	public void setRelationshipType(String relationshipType) {
+		this.relationshipType = relationshipType;
+	}
+
+	public Integer getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(Integer studentId) {
+		this.studentId = studentId;
+	}
+
+	public Set<Student> getPrimaryStudents() {
+		return primaryStudents;
+	}
+
+	public void setPrimaryStudents(Set<Student> primaryStudents) {
+		this.primaryStudents = primaryStudents;
+	}
 }

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { UploadAvatarDialogComponent } from 'app/shared/users/uploads';
 import { NbDialogService } from '@nebular/theme';
+import { AddParentComponent } from '../parents/add-parent/add-parent.component';
 
 import { UserService } from 'app/services';
 import { User, Student, Parent, Teacher, Staff } from 'app/models';
@@ -14,6 +15,7 @@ import { USER_TYPE, API_END_POINTS } from 'app/utils';
 export class UserDetailsComponent implements OnInit {
     @Input('userDatail') userDatail: Student | Teacher | Parent | Staff | any = {};
     @Input('userType') userType: string = USER_TYPE.TEACHER;
+    @Input('userLabel') userLabel: string = 'User';
     @Output() onImageChangeSuccess: EventEmitter<any> = new EventEmitter<any>();
     baseURL: string = API_END_POINTS.baseURL;
     parents: Parent[] = [];
@@ -46,13 +48,10 @@ export class UserDetailsComponent implements OnInit {
       });
     }
 
-    onSubmit() {
-
-    }
-
     changeProfilePic() {
      this.openDialog();
     }
+
     openDialog(): void {
       this.dialogService.open(UploadAvatarDialogComponent, {
         context: {
@@ -75,6 +74,16 @@ export class UserDetailsComponent implements OnInit {
       }
     }
 
+    addParent(student: Student) {
+      this.dialogService.open(AddParentComponent, {
+        context: {
+          title: 'Add New Parent',
+          student: student,
+        },
+      }).onClose.subscribe(data => {
+        this.loadData();
+      });
+    }
     get isUserTeacher() {
       return this.userType === USER_TYPE.TEACHER;
     }

@@ -126,7 +126,7 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 		return new StringBuilder("SELECT st.id, st.user_id AS userId, st.student_number AS studentNumber,")
 				.append(" st.first_name AS firstName, st.last_name AS lastName, st.middle_names AS middleNames, st.email_address AS emailAddress,")
 				.append(" st.phone_number as phoneNumber, st.user_code AS userCode, st.occupation, st.gender, st.position, st.birth_date AS birthDate, ")
-				.append(" st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn, ")
+				.append(" st.primary_parent_id as primaryParentId, st.updated_by AS updatedBy, st.created_on AS createdOn, st.updated_on AS updatedOn, ")
 				.append(" u.username, u.user_type AS userType, ")
 				.append(" pr.name AS programName, pr.id AS programId, ")
 				.append(" al.name AS academicLevelName, al.id AS academicLevelId, ")
@@ -152,9 +152,14 @@ public class AssemblerStudentDaoImpl extends JdbcDaoSupport implements Assembler
 	
 	public StudentVO mapStudentResult(ResultSet rs) throws SQLException {
 		StudentVO student = new StudentVO(rs);
+		student.setPrimaryParent(loadParent(rs.getInt("primaryParentId")));
 		student.setAddress(loadAddress(student.getId()));
 		student.setParents(loadParents(student.getId()));
 		return student;
+	}
+
+	private ParentVO loadParent(Integer primaryParentId) throws SQLException {
+		return parentDao.findObject(primaryParentId);
 	}
 
 	private List<ParentVO> loadParents(Integer studentId) throws SQLException {

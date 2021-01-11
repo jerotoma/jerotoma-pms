@@ -33,6 +33,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
   position: number;
   department: number;
 
+  userType: string = USER_TYPE.TEACHER;
   teacherForm: FormGroup;
   userLoginInput: UserLoginInput;
   teacher: Teacher;
@@ -130,7 +131,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
 
   onUserSelected(teacher: Teacher) {
     this.teacher = teacher;
-    this.appUserLoginInput.patchPasswordValue({username: teacher.username, password: '', confirmPassword: ''});
+    this.appUserLoginInput.patchPasswordValue({username: teacher.username, password: '', confirmPassword: '', userType: USER_TYPE.TEACHER});
     this.updateUseInput();
   }
 
@@ -174,7 +175,7 @@ export class TeacherCreateComponent implements OnInit, AfterViewInit {
     if (userLoginInputWrapper.isValid) {
         this.teacherForm.controls['userLoginInput'].setErrors(null);
         this.teacherForm.patchValue({
-          userLoginInput: userLoginInputWrapper.userLoginInput
+          userLoginInput: userLoginInputWrapper.userLoginInput,
         });
 
     } else {

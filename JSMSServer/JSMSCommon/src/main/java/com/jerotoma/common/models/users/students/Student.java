@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -63,6 +64,10 @@ public class Student extends Person implements Serializable{
 	@OneToOne
 	@JoinColumn(name="program_id", referencedColumnName="id")	
 	private Program program;
+	
+	@ManyToOne
+	@JoinColumn(name="primary_parent_id", referencedColumnName="id")	
+	private Parent primaryParent;
 	
 	@Column(name="current_academic_level_id")
 	private Integer academicLevelId;
@@ -170,5 +175,13 @@ public class Student extends Person implements Serializable{
 
 	public void setCompletedAcademicLevels(Set<CompletedAcademicLevel> completedAcademicLevels) {
 		this.completedAcademicLevels = completedAcademicLevels;
+	}
+
+	public Parent getPrimaryParent() {
+		return primaryParent;
+	}
+
+	public void setPrimaryParent(Parent primaryParent) {
+		this.primaryParent = primaryParent;
 	}
 }

@@ -2,13 +2,13 @@
   <div class="row">
       <div class="col-md-6">
           <div class="form-control-group">
-              <label for="address-street" class="label">Street</label>
+              <label [for]="identifierPrefix + '-address-street'" class="label">Street</label>
               <input
                     type="text"
                     nbInput fullWidth
                     autocomplete="new-password"
                     required
-                    id="address-street"
+                    [id]="identifierPrefix + '-address-street'"
                     [status]="addressForm.controls['street'].invalid && addressForm.controls['street'].touched ? 'danger' : 'basic'"
                     formControlName="street"
                     placeholder="Street">
@@ -21,13 +21,13 @@
       </div>
       <div class="col-md-6">
           <div class="form-control-group">
-              <label for="address-unit" class="label">Unit </label>
+              <label [for]="identifierPrefix + '-address-unit'" class="label">Unit </label>
               <input
                     required
                     type="text"
                     autocomplete="new-password"
                     nbInput fullWidth
-                    id="address-unit"
+                    [id]="identifierPrefix + '-address-unit'"
                     [status]="addressForm.controls['unit'].invalid && addressForm.controls['unit'].touched ? 'danger' : 'basic'"
                     formControlName="unit"
                     placeholder="Unit/Apartment/Suite">
@@ -40,13 +40,13 @@
       </div>
   </div>
   <div class="form-control-group">
-    <label for="address-city" class="label">City</label>
+    <label [for]="identifierPrefix + '-address-city'" class="label">City</label>
     <input
           required
           type="text"
           autocomplete="new-password"
           nbInput fullWidth
-          id="address-city"
+          [id]="identifierPrefix + '-address-city'"
           [status]="addressForm.controls['city'].invalid && addressForm.controls['city'].touched ? 'danger' : 'basic'"
           formControlName="city"
           placeholder="City">
@@ -59,13 +59,13 @@
   <div class="row">
       <div class="col-md-6">
           <div class="form-control-group">
-              <label for="address-state" class="label">State</label>
+              <label [for]="identifierPrefix + '-address-state'" class="label">State</label>
               <input
                     required
                     type="text"
                     autocomplete="new-password"
                     nbInput fullWidth
-                    id="address-state"
+                    [id]="identifierPrefix + '-address-state'"
                     [status]="addressForm.controls['state'].invalid && addressForm.controls['state'].touched ? 'danger' : 'basic'"
                     formControlName="state"
                     placeholder="State">
@@ -78,13 +78,13 @@
       </div>
       <div class="col-md-6">
           <div class="form-control-group">
-              <label for="address-state" class="label">Postal Code</label>
+              <label [for]="identifierPrefix + '-address-state'" class="label">Postal Code</label>
               <input
                     required
                     type="text"
                     autocomplete="new-password"
                     nbInput fullWidth
-                    id="address-postalCode"
+                    [id]="identifierPrefix + '-address-postalCode'"
                     [status]="addressForm.controls['postalCode'].invalid && addressForm.controls['postalCode'].touched ? 'danger' : 'basic'"
                     formControlName="postalCode"
                     placeholder="Postal Code">
@@ -97,13 +97,13 @@
       </div>
   </div>
   <div class="form-control-group">
-    <label for="address-country" class="label">Country</label>
+    <label [for]="identifierPrefix + '-address-country'" class="label">Country</label>
     <input
           type="text"
           nbInput fullWidth
           autocomplete="new-password"
           required
-          id="address-country"
+          [id]="identifierPrefix + '-address-country'"
           [status]="addressForm.controls['country'].invalid && addressForm.controls['country'].touched ? 'danger' : 'basic'"
           formControlName="country"
           placeholder="Country">

@@ -17,6 +17,8 @@ public class StudentVO extends PersonVO {
 	private Integer academicLevelId;
 	private String currentAcademicLevelName;
 	
+	private ParentVO primaryParent;
+	
 	private List<ParentVO> parents;
 	
 	public StudentVO(ResultSet rs) throws SQLException {
@@ -83,5 +85,13 @@ public class StudentVO extends PersonVO {
 
 	public void setCurrentAcademicLevelName(String currentAcademicLevelName) {
 		this.currentAcademicLevelName = currentAcademicLevelName;
+	}
+
+	public ParentVO getPrimaryParent() {
+		return primaryParent;
+	}
+
+	public void setPrimaryParent(ParentVO primaryParent) {
+		this.primaryParent = primaryParent;
 	}
 }

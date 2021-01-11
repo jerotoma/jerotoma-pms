@@ -7,6 +7,7 @@
                 <app-user-login-input
                     *ngIf="action === 'create'"
                     [userLoginInput]="userLoginInput"
+                    [userType]="userType"
                     (onChanges)="onUserLoginInputChange($event)">
                 </app-user-login-input>
                 <div class='row'>

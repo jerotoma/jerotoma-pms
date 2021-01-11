@@ -1,8 +1,9 @@
 package com.jerotoma.database.dao.users;
 
-import com.jerotoma.common.models.users.Staff;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StaffDao extends BaseDao<Staff> {
+import com.jerotoma.common.models.users.Staff;
+
+public interface StaffDao extends JpaRepository<Staff, Integer> {
 
 }

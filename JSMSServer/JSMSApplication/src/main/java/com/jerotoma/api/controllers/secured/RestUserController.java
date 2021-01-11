@@ -31,7 +31,6 @@ import com.jerotoma.common.constants.AcademicDisciplineConstant;
 import com.jerotoma.common.constants.DepartmentConstant;
 import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.constants.ParentConstant;
-import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.constants.TeacherConstant;
 import com.jerotoma.common.constants.UserConstant;
@@ -49,7 +48,6 @@ import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
-import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.common.utils.validators.UserValidator;
@@ -276,14 +274,13 @@ public class RestUserController extends BaseController {
 		
 		List<String> requiredFields;
 		Staff staff;
-		Parent parent;
-		User newUser;
+		Parent parent;	
 		Teacher teacher;
 		Student student;		
 		Position position;		
 		Department department;		
 		
-		requiredFields =  Arrays.asList(
+		requiredFields = new ArrayList<>(Arrays.asList(
 						UserConstant.FIRST_NAME, 
 						UserConstant.LAST_NAME,
 						UserConstant.USERNAME,
@@ -291,7 +288,7 @@ public class RestUserController extends BaseController {
 						UserConstant.BIRTH_DATE,
 						UserConstant.GENDER,
 						UserConstant.PHONE_NUMBER
-						);
+						));
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
@@ -318,20 +315,16 @@ public class RestUserController extends BaseController {
 				teacher  = UserValidator.validateTeacherInputInfo(params, requiredFields);
 				teacher.setPosition(position);
 				teacher.setDepartment(department);
-				teacher.setUpdatedBy(authUser.getId());
-				
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_TEACHER);				
-				person = userService.createUser(teacher, newUser);				
+				teacher.setUpdatedBy(authUser.getId());											
+				person = userService.createUser(teacher);				
 				response.setData(userService.getUserVOByUserId(person.getUserId()));	
 				break;
 			case STUDENT:				
 				requiredFields.add(UserConstant.ACADEMIC_LEVEL_ID);
 				requiredFields.add(UserConstant.PROGRAM_ID);				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STUDENT);			
-				person = userService.createUser(student, newUser);				
-				response.setData(userService.getUserVOByUserId(person.getUserId()));					
-				
+				person = userService.createUser(student);				
+				response.setData(userService.getUserVOByUserId(person.getUserId()));				
 				break;
 			case STAFF:
 				requiredFields.remove(UserConstant.BIRTH_DATE);
@@ -339,16 +332,14 @@ public class RestUserController extends BaseController {
 				position = processPosition(params, requiredFields);	
 				staff = UserValidator.validateOtherStaffInputInfo(params, requiredFields);
 				staff.setPosition(position);
-				staff.setUpdatedBy(authUser.getId());
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_STAFF);				
-				person = userService.createUser(staff, newUser);				
+				staff.setUpdatedBy(authUser.getId());							
+				person = userService.createUser(staff);				
 				response.setData(userService.getUserVOByUserId(person.getUserId()));	
 				break;
 			case PARENT:
 				requiredFields.remove(UserConstant.BIRTH_DATE);
 				parent = UserValidator.validateParentInputInfo(params, requiredFields);				
-				newUser = User.validateAndMapAuthUser(params, RoleConstant.USER_ROLES.ROLE_PARENT);				
-				person = userService.createUser(parent, newUser);				
+				person = userService.createUser(parent);				
 				response.setData(userService.getUserVOByUserId(person.getUserId()));				
 				break;				
 			default:

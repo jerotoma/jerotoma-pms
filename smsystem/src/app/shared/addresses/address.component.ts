@@ -13,7 +13,9 @@ export class AddressComponent implements OnInit {
 
   @Input() isResetForm: boolean = false;
   @Input('address') address: Address = null;
+  @Input('identifierPrefix') identifierPrefix: string = 'user';
   @Output() onChanges: EventEmitter<AddressWrapper> = new EventEmitter();
+
 
   addressForm: FormGroup;
   addressWrapper: AddressWrapper;
@@ -50,6 +52,7 @@ export class AddressComponent implements OnInit {
   resetForm() {
     this.addressForm.reset();
   }
+
   patchAddressValue(address: Address) {
     this.addressForm.patchValue({
       id: address.id,

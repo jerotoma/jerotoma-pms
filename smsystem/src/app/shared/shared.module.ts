@@ -57,6 +57,7 @@ import {
   UploadAvatarDialogComponent,
   ProgressComponent,
   ParentCreateComponent,
+  AddParentComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -76,6 +77,7 @@ const COMPONENTS = [
   UploadAvatarDialogComponent,
   ProgressComponent,
   ParentCreateComponent,
+  AddParentComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -90,6 +92,7 @@ const ENTRY_COMPONENTS = [
   UploadAvatarDialogComponent,
   ProgressComponent,
   ParentCreateComponent,
+  AddParentComponent,
 ];
 
 const MODULES = [

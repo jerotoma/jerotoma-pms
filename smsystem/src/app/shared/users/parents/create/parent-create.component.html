@@ -1,27 +1,28 @@
 <div class='row'>
     <div class="col-md-12 col-lg-12 col-xxxl-12">
-      <form [formGroup]="parentForm" class="step-container" (ngSubmit)="onSubmit()">
+      <form [formGroup]="parentForm" class="step-container">
           <app-user-login-input
             *ngIf="action === 'create'"
             [userLoginInput]="userLoginInput"
+            [userType]="userType"
             (onChanges)="onUserLoginInputChange($event)">
           </app-user-login-input>
           <div class="row">
             <div class="col-md-12">
-              <h4 class="text-primary mt-3">Basic Information</h4>
+              <h5 class="text-primary mt-3">Basic Information</h5>
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <div class="form-control-group">
-                <label for="student-first-name" class="label">First Name</label>
+                <label for="parent-first-name" class="label">First Name</label>
                 <input
                   type="text"
                   nbInput fullWidth
                   autocomplete="new-password"
                   required
-                  id="student-first-name"
-                  [status]="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched ? 'danger' : ''"
+                  id="parent-first-name"
+                  [status]="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched ? 'danger' : 'basic'"
                   formControlName="firstName"
                   placeholder="First Name">
                 <ng-container *ngIf="parentForm.controls['firstName'].invalid && parentForm.controls['firstName'].touched">
@@ -33,14 +34,14 @@
             </div>
             <div class="col-md-6">
               <div class="form-control-group">
-                <label for="student-last-name" class="label">Last Name</label>
+                <label for="parent-last-name" class="label">Last Name</label>
                 <input
                   required
                   type="text"
                   autocomplete="new-password"
                   nbInput fullWidth
-                  id="student-last-name"
-                  [status]="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched ? 'danger' : ''"
+                  id="parent-last-name"
+                  [status]="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched ? 'danger' : 'basic'"
                   formControlName="lastName"
                   placeholder="Last Name">
                 <ng-container *ngIf="parentForm.controls['lastName'].invalid && parentForm.controls['lastName'].touched">
@@ -54,26 +55,26 @@
           <div class="row">
             <div class="col-md-6">
               <div class="form-control-group">
-                <label for="student-middle-names" class="label">Other Names</label>
+                <label for="parent-middle-names" class="label">Middle Name(s)</label>
                 <input
                   type="text"
                   nbInput fullWidth
                   autocomplete="new-password"
                   required
-                  id="student-middle-names"
+                  id="parent-middle-names"
                   formControlName="middleNames"
-                  placeholder="Other  Names">
+                  placeholder="Middle  Name(s)">
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-control-group">
-                <label for="student-phone-number" class="label">Emergency Phone Number</label>
+                <label for="parent-phone-number" class="label">Phone Number</label>
                 <input
                   type="text"
                   nbInput fullWidth
                   autocomplete="new-password"
                   required
-                  id="student-phone-number"
+                  id="parent-phone-number"
                   formControlName="phoneNumber"
                   placeholder="Emergency Phone Number">
               </div>
@@ -82,8 +83,8 @@
           <div class="row">
               <div class="col-md-6">
                   <div class="form-control-group">
-                      <label for="student-gender" class="label">Gender</label>
-                      <nb-radio-group formControlName="gender">
+                      <label for="parent-gender" class="label">Gender</label>
+                      <nb-radio-group formControlName="gender" id="parent-gender">
                         <nb-radio [value]="'male'">Male</nb-radio>
                         <nb-radio [value]="'female'">Female</nb-radio>
                       </nb-radio-group>
@@ -91,49 +92,59 @@
               </div>
               <div class="col-md-6">
                   <div class="form-control-group">
-                    <label for="student-occupation" class="label">Occupation</label>
+                    <label for="parent-occupation" class="label">Occupation</label>
                     <input
                       nbInput fullWidth
-                      id="student-occupation"
+                      id="parent-occupation"
                       formControlName="occupation"
-                      [status]="parentForm.controls['occupation'].invalid && parentForm.controls['occupation'].touched ? 'danger' : ''"
+                      [status]="parentForm.controls['occupation'].invalid && parentForm.controls['occupation'].touched ? 'danger' : 'basic'"
                       placeholder="Occupation">
                   </div>
               </div>
           </div>
           <div class="row">
+            <div class="col-md-6">
+              <div class="form-control-group">
+                <label class="label" for="parent-email-address">Email Address:</label>
+                <input nbInput
+                       id="parent-email-address"
+                       formControlName="emailAddress"
+                       placeholder="Email Address"
+                       fullWidth
+                       [status]="parentForm.controls['emailAddress'].invalid && parentForm.controls['emailAddress'].touched ? 'danger' : 'basic'"
+                       [attr.aria-invalid]="parentForm.controls['emailAddress'].invalid && parentForm.controls['emailAddress'].touched ? true : null">
+                <ng-container *ngIf="parentForm.controls['emailAddress']?.invalid && parentForm.controls['emailAddress']?.touched">
+                  <p class="error-message" *ngIf="parentForm.controls['emailAddress']?.errors?.required">
+                    Email is required!
+                  </p>
+                  <p class="error-message" *ngIf="parentForm.controls['emailAddress']?.errors?.pattern">
+                    Email should be the real one!
+                  </p>
+                </ng-container>
+              </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-control-group">
+                  <label for="parent-relationship-type" class="label">Relationship Type</label>
+                  <input
+                    nbInput fullWidth
+                    id="parent-relationship-type"
+                    formControlName="relationshipType"
+                    [status]="parentForm.controls['relationshipType'].invalid && parentForm.controls['relationshipType'].touched ? 'danger' : 'basic'"
+                    placeholder="Relationship Type">
+                </div>
+            </div>
+        </div>
+          <div class="row">
             <div class="col-md-12">
-              <h4 class="text-primary mt-3">Address</h4>
+              <h5 class="text-primary mt-3">Address</h5>
             </div>
           </div>
           <app-address
+              [identifierPrefix]="'parent'"
               [address]="parent?.address ? parent?.address : null"
               (onChanges)="onParentAddressChange($event)">
           </app-address>
-          <div class="row">
-            <div class="col-md-12">
-              <h4 class="text-primary mt-3">Student(s)</h4>
-            </div>
-          </div>
-          <div class="row mb-5">
-            <div class="col-md-6">
-              <app-search-user
-                [title]="'Search for Parent'"
-                [placeholder]="'Type Parent Initial'"
-                [userType]="userType"
-                [isClearTextAfter]="true"
-                (onUserSelected)="pickUser($event)"
-              ></app-search-user>
-              <div class="form-control-group accept-group" *ngIf="selectedStudents">
-                <nb-checkbox
-                  [checked]="true"
-                  *ngFor="let student of selectedStudents"
-                  (checkedChange)="selectedParentChanged($event, student)">
-                  {{student.fullName}}
-                </nb-checkbox>
-              </div>
-            </div>
-          </div>
       </form>
   </div>
 </div>

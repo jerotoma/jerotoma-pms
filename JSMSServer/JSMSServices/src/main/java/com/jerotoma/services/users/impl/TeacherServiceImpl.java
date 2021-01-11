@@ -1,137 +1,77 @@
 package com.jerotoma.services.users.impl;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.TransactionRequiredException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.exceptions.JDataAccessException;
+import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.database.dao.users.TeacherDao;
-import com.jerotoma.services.exceptions.ServiceException;
 import com.jerotoma.services.users.TeacherService;
+import com.jerotoma.services.utils.ServiceUtil;
 
 @Service
 @Transactional
-public class TeacherServiceImpl implements TeacherService{
+public class TeacherServiceImpl implements TeacherService {
 	
 	@Autowired TeacherDao teacherDao;
 	Teacher teacher;
 
 	@Override
 	public Teacher findObject(Integer primaryKey) throws SQLException {
-		try {
-			return teacherDao.findObject(primaryKey);			
-		} catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);
-		}
+		return ServiceUtil.getEntity(teacherDao.findById(primaryKey));
 		
 	}
 
 	@Override
 	public Teacher findObjectUniqueKey(String uniqueKey) throws SQLException {
-		try {
-			teacher =  teacherDao.findObjectUniqueKey(uniqueKey);	
-		} catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return teacher;	
+		throw new RuntimeException("Methon not implemented yet");
 	}
 
 	@Override
-	public Teacher createObject(Teacher object) throws SQLException {
-		try {
-			teacher =  teacherDao.createObject(object);		
-		} catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return teacher;
+	public Teacher createObject(Teacher object) throws SQLException {		
+		return teacherDao.save(object);
 		
 	}
 
 	@Override
 	public Teacher updateObject(Teacher object) throws SQLException {
-		try {
-			teacher =  teacherDao.updateObject(object);		
-		} catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return teacher;	
+		return teacherDao.save(object);
 	}
 
 	@Override
 	public Boolean deleteObject(Teacher object) throws SQLException {
-		try {
-			return teacherDao.deleteObject(object);	
-		} catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return false;	
+		teacherDao.delete(object);
+		return true;	
 	}
 
 	@Override
 	public List<Teacher> loadList(QueryParam queryParam) throws SQLException {
-		try {
-			return teacherDao.loadList(queryParam);			
-		}  catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return null;	
+		if (queryParam == null) {
+			return teacherDao.findAll();
+		}		
+		return teacherDao.findAll(ServiceUtil.getPageable(queryParam)).toList();
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
 		
+		Map<String, Object> map = new HashMap<>();		
+		Page<Teacher> pageTeacher = teacherDao.findAll(ServiceUtil.getPageable(queryParam));
+		map.put(UserConstant.USERS, pageTeacher.toList());
+		map.put(SystemConstant.COUNT, pageTeacher.getTotalElements());
+		map.put(SystemConstant.PAGE_COUNT, pageTeacher.getTotalPages());	
 		
-		try {
-			return teacherDao.loadMapList(queryParam);	
-		}  catch (ServiceException  e) {
-			throw new JDataAccessException(e.getMessage(), e);		
-		} catch (EntityExistsException e) {
-			new JDataAccessException(e.getMessage(), e);
-	    } catch(IllegalArgumentException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    } catch(TransactionRequiredException e){
-	    	new JDataAccessException(e.getMessage(), e);
-	    }
-		return null;
+		return map;
 	}
 
 }

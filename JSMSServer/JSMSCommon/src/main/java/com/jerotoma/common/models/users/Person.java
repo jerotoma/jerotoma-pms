@@ -43,6 +43,10 @@ public abstract class Person {
 	protected Address address;
 	
 	@Transient
+	@JsonIgnore
+	protected User user;
+	
+	@Transient
 	protected Integer age;
 	
 	@Column(name = "updated_by")
@@ -244,5 +248,13 @@ public abstract class Person {
 
 	public void setProfileImageId(Integer profileImageId) {
 		this.profileImageId = profileImageId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

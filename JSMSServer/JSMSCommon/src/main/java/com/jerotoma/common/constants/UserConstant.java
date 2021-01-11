@@ -44,7 +44,11 @@ public class UserConstant {
 	public static final String ACADEMIC_LEVEL_ID =  "academicLevelId";
 	public static final String PROGRAM_ID =  "programId";
 	public static final String PROGRAM_NAME =  "programName";
-	public static final String ACADEMIC_LEVEL_NAME = "academicLevelName";;
+	public static final String ACADEMIC_LEVEL_NAME = "academicLevelName";
+	public static final String USER_LOGIN_INPUT = "userLoginInput";
+	public static final String RELATIONSHIP_TYPE = "relationshipType";
+	public static final String STUDENT_ID = "studentId";
+	public static final String USERS = "users";
 	
 	public static enum USER_TYPE {
 		ALL("all"),

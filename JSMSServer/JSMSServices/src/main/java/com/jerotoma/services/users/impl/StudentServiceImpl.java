@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.users.students.Student;
@@ -27,12 +28,12 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student findObject(Integer primaryKey) throws SQLException {
-		return studentDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(studentDao.findById(primaryKey));
 	}
 
 	@Override
 	public Student findObjectUniqueKey(String uniqueKey) throws SQLException {
-		throw new RuntimeException("This methond has not been implemented yet");
+		throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
 	}
 
 	@Override

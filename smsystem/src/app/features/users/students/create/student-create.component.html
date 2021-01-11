@@ -1,19 +1,20 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
           <nb-card class="dialog-card" status="primary">
-          <nb-card-header status="danger" >{{ title }}</nb-card-header>
+          <nb-card-header status="danger" >{{ title }} <span class="push-right text-white close-icon" (click)="dismiss()">&times;</span></nb-card-header>
           <nb-card-body>
             <mat-horizontal-stepper [linear]="linearMode" #stepper>
               <mat-step [stepControl]="studentForm">
-                <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onSubmit()">
+                <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onSubmitStudentForm()">
                   <ng-template matStepLabel>Fill out Student Details</ng-template>
                   <app-user-login-input
                       [userLoginInput]="userLoginInput"
+                      [userType]="userType"
                       (onChanges)="onUserLoginInputChange($event)">
                   </app-user-login-input>
                   <div class="row">
                     <div class="col-md-12">
-                        <h4 class="text-primary">Basic Information</h4>
+                        <h5 class="text-primary">Basic Information</h5>
                     </div>
                   </div>
                   <div class="row">
@@ -81,10 +82,10 @@
                                [attr.aria-invalid]="studentForm.controls['email'].invalid && studentForm.controls['email'].touched ? true : null">
                         <ng-container *ngIf="studentForm.controls['email']?.invalid && studentForm.controls['email']?.touched">
                           <p class="error-message" *ngIf="studentForm.controls['email']?.errors?.required">
-                            email is required!
+                            Email is required!
                           </p>
                           <p class="error-message" *ngIf="studentForm.controls['email']?.errors?.pattern">
-                            email should be the real one!
+                            Email should be the real one!
                           </p>
                         </ng-container>
                       </div>
@@ -134,16 +135,17 @@
                   </div>
                   <div class="row">
                       <div class="col-md-12">
-                        <h4 class="text-primary mt-3">Address</h4>
+                        <h5 class="text-primary mt-3">Address</h5>
                       </div>
                   </div>
                   <app-address
+                    [identifierPrefix]="'student'"
                     [address]="studentForm.controls['address'].value"
                     (onChanges)="onStudentAddressChange($event)">
                   </app-address>
                   <div class="row">
                       <div class="col-md-12">
-                          <h4 class="text-primary mt-4">Program and Academic Level</h4>
+                          <h5 class="text-primary mt-4">Program and Academic Level</h5>
                       </div>
                   </div>
                   <div class="row mb-5">
@@ -186,16 +188,18 @@
                 </form>
               </mat-step>
               <mat-step [stepControl]="parentForm" label="Fill out Parent Details">
-                <form [formGroup]="parentForm">
+                <form [formGroup]="parentForm" (ngSubmit)="onSubmitParentForm()">
                   <div class="row">
                     <div class="col-md-12">
-                      <h4 class="text-primary mt-3">Primary Parent/Guardian</h4>
+                      <h3 class="text-secondary mt-3">Primary Parent/Guardian</h3>
                     </div>
                   </div>
-                  <app-parent-create></app-parent-create>
+                  <app-parent-create
+                    (onChanges)="onParentFormChanges($event)"
+                  ></app-parent-create>
                   <div>
                     <div class="form-control-group">
-                      <button matStepperNext class='push-right mr-1' [disabled]="!parentForm.valid" type="submit" nbButton hero status="success">Finish</button>
+                      <button matStepperNext class='push-right mr-1' [disabled]="!parentForm.valid" type="submit" nbButton hero status="success">Next</button>
                       <button matStepperPrevious class='push-right mr-1' nbButton hero status="success">Back</button>
                       <button type='button' class='push-right mr-1' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
                     </div>
@@ -203,11 +207,14 @@
                 </form>
               </mat-step>
               <mat-step>
-                <ng-template matStepLabel>Done</ng-template>
-                <p>You are now done.</p>
+                <ng-template matStepLabel>Finish</ng-template>
+                <nb-alert status="success">You are almost done, click the submit button to register a new Student</nb-alert>
                 <div>
-                  <button mat-button matStepperPrevious>Back</button>
-                  <button mat-button (click)="stepper.reset()">Reset</button>
+                  <div class="form-control-group">
+                    <button class='push-right mr-1' type="submit" nbButton hero status="success" (click)="onSubmit()">Submit</button>
+                    <button matStepperPrevious class='push-right mr-1' nbButton hero status="success">Back</button>
+                    <button type='button' class='push-right mr-1' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+                  </div>
                 </div>
               </mat-step>
           </mat-horizontal-stepper>

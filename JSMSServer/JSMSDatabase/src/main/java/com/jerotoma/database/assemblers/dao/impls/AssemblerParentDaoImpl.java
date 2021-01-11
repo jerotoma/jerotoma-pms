@@ -127,7 +127,7 @@ public class AssemblerParentDaoImpl extends JdbcDaoSupport implements AssemblerP
 	
 	private StringBuilder getBaseSelectQuery() {		
 		return new StringBuilder("SELECT pa.id, pa.user_id AS userId, pa.first_name AS firstName, pa.last_name AS lastName, pa.middle_names AS middleNames,")
-				.append(" pa.email_address AS emailAddress, pa.phone_number AS phoneNumber, pa.user_code AS userCode, pa.occupation, pa.gender, ")
+				.append(" pa.email_address AS emailAddress, pa.phone_number AS phoneNumber, pa.user_code AS userCode, pa.occupation, pa.gender, pa.relationship_type AS relationshipType, ")
 				.append(" pa.birth_date AS birthDate, pa.updated_by AS updatedBy, pa.created_on AS createdOn, pa.updated_on AS updatedOn, ")
 				.append(" u.username, u.user_type AS userType, ")
 				.append(" m.src AS avatar, pa.profile_image_id AS profileImageId ")				

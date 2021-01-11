@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -28,9 +27,7 @@ public class AcademicLevelServiceImpl implements AcademicLevelService {
 
 	@Override
 	public AcademicLevel findObject(Integer primaryKey) throws SQLException {
-		
-		Optional<AcademicLevel> optionAcademicLevel = academicLevelDao.findById(primaryKey);
-		return optionAcademicLevel != null ? optionAcademicLevel.get() : null;
+		return ServiceUtil.getEntity(academicLevelDao.findById(primaryKey));
 	}
 
 	@Override

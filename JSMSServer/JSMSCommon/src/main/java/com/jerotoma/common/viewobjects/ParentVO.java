@@ -10,11 +10,14 @@ public class ParentVO extends PersonVO {
 	
 	private Integer id;	
 	
+	private String relationshipType;
+	
 	private List<StudentVO> students;
 
 	public ParentVO(ResultSet rs) throws SQLException {
 		super(rs, UserConstant.USER_TYPE.PARENT.getType());
 		this.id = rs.getInt(UserConstant.ID);
+		this.relationshipType = rs.getString(UserConstant.RELATIONSHIP_TYPE);
 	}
 
 	public Integer getId() {
@@ -31,7 +34,13 @@ public class ParentVO extends PersonVO {
 
 	public void setStudents(List<StudentVO> students) {
 		this.students = students;
+	}
+
+	public String getRelationshipType() {
+		return relationshipType;
+	}
+
+	public void setRelationshipType(String relationshipType) {
+		this.relationshipType = relationshipType;
 	}	
-	
-	
 }

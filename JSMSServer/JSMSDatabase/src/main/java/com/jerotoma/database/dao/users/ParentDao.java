@@ -1,8 +1,9 @@
 package com.jerotoma.database.dao.users;
 
-import com.jerotoma.common.models.users.Parent;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ParentDao extends BaseDao<Parent> {
+import com.jerotoma.common.models.users.Parent;
+
+public interface ParentDao extends JpaRepository<Parent, Integer> {
 
 }

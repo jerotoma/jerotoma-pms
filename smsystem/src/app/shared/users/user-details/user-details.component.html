@@ -1,5 +1,8 @@
 <nb-card>
-  <nb-card-header><h2 class="text-info">User Details</h2></nb-card-header>
+  <nb-card-header>
+    {{userLabel}} Details
+    <button *ngIf="userDatail && isUserStudent" class="push-right" nbButton hero status='success' (click)="addParent(userDatail)">Add New Parent</button>
+  </nb-card-header>
   <nb-card-body style="padding: 0;">
     <div class="container emp-profile" *ngIf="userDatail">
           <div class="row">
@@ -33,14 +36,14 @@
             <div class="row mt-3"  *ngIf="isUserStudent">
               <div class="col-md-12">
                 <nb-alert outline="info">
-                  <div>Program Enrolled : <span class="text-info">{{userDatail?.programName}}</span> and current Academic Level : <span class="text-info">{{userDatail?.currentAcademicLevelName}}</span></div>
+                  <div>Program Enrolled : <span class="text-primary">{{userDatail?.programName}}</span> and current Academic Level : <span class="text-primary">{{userDatail?.currentAcademicLevelName}}</span></div>
                 </nb-alert>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
                   <div class="profile-tab">
-                    <nb-card accent="warning">
+                    <nb-card accent="success">
                         <nb-card-body style="padding: 0;">
                           <nb-tabset>
                             <nb-tab tabTitle="Base Details">
@@ -103,11 +106,10 @@
                               <div class="row">
                                   <div class="col-md-12">
                                     <div class="row">
-                                      <div class="col-md-12">
-                                        <div class="table-responsive"  *ngIf="isUserStudent && parents">
-                                          <table
-                                            *ngFor="let user of parents"
-                                            class="table table-striped table-hover">
+                                      <div class="col-md-12" *ngIf="isUserStudent && parents">
+                                        <div class="table-responsive mb-2" *ngFor="let user of parents; index as i;" >
+                                          <div class="circle-shape text-center">{{i + 1}}</div>
+                                          <table class="table table-striped table-hover">
                                               <tbody>
                                                 <tr>
                                                   <th class="user-details">Full Name: </th>
@@ -120,6 +122,14 @@
                                                 <tr>
                                                   <th class="user-details">Phone Number: </th>
                                                   <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Email Address: </th>
+                                                  <td><span *ngIf="user.emailAddress">{{user.emailAddress}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Relationship Type: </th>
+                                                  <td><span *ngIf="user.relationshipType">{{user.relationshipType}}</span></td>
                                                 </tr>
                                               </tbody>
                                           </table>
@@ -155,6 +165,10 @@
                                                 <tr>
                                                   <th class="user-details">Phone Number: </th>
                                                   <td><span *ngIf="user.phoneNumber">{{user.phoneNumber}}</span></td>
+                                                </tr>
+                                                <tr>
+                                                  <th class="user-details">Current Academic Level: </th>
+                                                  <td><span *ngIf="user.currentAcademicLevelName">{{user.currentAcademicLevelName}}</span></td>
                                                 </tr>
                                               </tbody>
                                           </table>

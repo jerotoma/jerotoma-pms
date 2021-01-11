@@ -4,4 +4,5 @@ export * from './courses/my-course.component';
 export * from './uploads';
 export * from './progresses';
 export * from './parents/create/parent-create.component';
+export * from './parents/add-parent/add-parent.component';
 

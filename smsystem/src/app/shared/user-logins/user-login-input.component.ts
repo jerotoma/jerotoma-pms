@@ -2,7 +2,7 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { UserLoginInput, UserLoginInputWrapper } from 'app/models';
-import { CheckBoxValidator, MustMatch } from 'app/utils';
+import { CheckBoxValidator, MustMatch, USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-user-login-input',
@@ -13,6 +13,7 @@ export class UserLoginInputComponent implements OnInit {
 
   @Input() isResetForm: boolean = false;
   @Input('userLoginInput') userLoginInput: UserLoginInput;
+  @Input('userType') userType: string = USER_TYPE.ALL;
   @Input('showCheckBox') showCheckBox: boolean = true;
   @Output() onChanges: EventEmitter<UserLoginInputWrapper> = new EventEmitter();
 
@@ -32,6 +33,7 @@ export class UserLoginInputComponent implements OnInit {
 loadPasswordForm() {
   this.userLoginInputForm = this.formBuilder.group({
     canUserLogin: [false, Validators.required],
+    userType: [this.userType, Validators.required],
     username: [
       '',
       Validators.compose([
@@ -80,6 +82,7 @@ patchPasswordValue(userLoginInput: UserLoginInput) {
     password: userLoginInput.password,
     confirmPassword: userLoginInput.confirmPassword,
     canUserLogin: this.canUserLogin,
+    userType: userLoginInput.userType,
   });
 }
 

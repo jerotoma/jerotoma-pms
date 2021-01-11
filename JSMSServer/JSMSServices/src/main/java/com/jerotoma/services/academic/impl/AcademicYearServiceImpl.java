@@ -27,7 +27,7 @@ public class AcademicYearServiceImpl implements AcademicYearService {
 	
 	@Override
 	public AcademicYear findObject(Integer primaryKey) throws SQLException {
-		return academicYearDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(academicYearDao.findById(primaryKey));
 	}
 
 	@Override

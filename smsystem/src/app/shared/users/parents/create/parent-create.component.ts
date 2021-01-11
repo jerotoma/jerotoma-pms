@@ -1,117 +1,48 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { NbDialogRef } from '@nebular/theme';
 import { AddressComponent } from 'app/shared/addresses';
 import { UserLoginInputComponent } from 'app/shared/user-logins';
 
 import {
-  Student,
   Address,
   AddressWrapper,
   Parent,
+  ParentWrapper,
   UserLoginInput,
   UserLoginInputWrapper,
-  ResponseWrapper,
 } from 'app/models';
-import { AcademicDisciplineService, ModalService , PositionService, UserService} from 'app/services';
-import { QueryParam , DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
-import { ShowMessage } from 'app/models/messages/show-message.model';
-
+import { AcademicDisciplineService, PositionService } from 'app/services';
+import { DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-parent-create',
   templateUrl: 'parent-create.component.html',
   styleUrls: ['parent-create.component.scss'],
 })
-export class ParentCreateComponent implements OnInit, AfterViewInit {
+export class ParentCreateComponent implements OnInit {
   title: string = 'Create New Parent';
-  @Output() onUserCreationSuccess = new EventEmitter();
+  @Output() onChanges: EventEmitter<ParentWrapper> = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
-  action: string = 'create';
-  userType: string = USER_TYPE.STUDENT;
+  action: string = APP_ACTION_TYPE.create;
+  userType: string = USER_TYPE.PARENT;
   parentForm: FormGroup;
   addressForm: FormGroup;
-  student: Student;
   address: Address;
   userLoginInput: UserLoginInput;
-  students: Student[] = [];
-  selectedStudents: Student[] = [];
   studentIds: number[]  = [];
   parent: Parent;
-  userId: number;
-  showMessage: ShowMessage = {
-    error: false,
-    success: false,
-    message: '',
-  };
-  listDisplay: string = 'none';
+  parentWrapper: ParentWrapper;
 
   constructor(
     protected positionService: PositionService,
     protected academicDisciplineService: AcademicDisciplineService,
-    protected ref: NbDialogRef<ParentCreateComponent>,
-    private userService:  UserService,
-    private modalService: ModalService,
     private formBuilder: FormBuilder,
     ) {}
 
   ngOnInit() {
     this.loadParentForm();
-    this.onStudentFullInputChanges();
-  }
-  ngAfterViewInit() {
-    if (this.action === APP_ACTION_TYPE.edit) {
-      this.loadParent(this.userId);
-    }
-  }
-  dismiss() {
-    this.ref.close();
-  }
-  onSubmit() {
-    this.studentIds = [];
-    // window.console.log(this.parentForm, this.parentForm);
-   if (this.parentForm.valid ) {
-      this.parent = this.parentForm.value;
-      for (let i = 0; i < this.selectedStudents.length; i++) {
-        this.studentIds.push(this.selectedStudents[i].id);
-      }
-      this.parent.studentIds = this.studentIds;
-      this.postData(this.parent);
-    }
-  }
-
-  postData(data: Parent) {
-    this.showMessage.success = false;
-    this.showMessage.error = false;
-    if (this.action === APP_ACTION_TYPE.edit) {
-      this.updateData(data);
-    } else {
-      this.userService.addUser(data).subscribe((resp: ResponseWrapper ) => {
-        if (resp && resp.success) {
-          this.modalService.openSnackBar('New Parent has been created', 'success');
-          this.resetForms();
-        }
-      });
-    }
-  }
-  updateData(data: Parent) {
-    this.userService.updateUser(data).subscribe((resp: ResponseWrapper) => {
-      if (resp && resp.success) {
-        this.modalService.openSnackBar('Parent has been updated', 'success');
-        this.resetForms();
-      }
-    });
-  }
-
-  loadParent(userId: number) {
-    this.userService.loadUser(userId).subscribe((parent: Parent) => {
-      if (parent) {
-        this.parent = parent;
-        this.updateUseInput();
-      }
-    });
   }
 
   resetForms() {
@@ -120,8 +51,8 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     if (this.action === APP_ACTION_TYPE.create) {
       this.appPassword.resetForm();
     }
-    this.ref.close();
   }
+
   loadParentForm() {
     this.parentForm = this.formBuilder.group({
       id: [null],
@@ -130,7 +61,11 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       middleNames: [null],
       occupation: [null],
       phoneNumber: [null, Validators.required],
-      userLoginInput:[null],
+      emailAddress: [null, Validators.compose([
+        Validators.email,
+      ])],
+      relationshipType: [null, Validators.required],
+      userLoginInput: [null],
       gender: ['', Validators.required],
       userId: [null],
       picture: [''],
@@ -139,18 +74,13 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       studentIDs: [''],
       studentFullName: [''],
     });
+
+    this.parentForm.valueChanges.subscribe((parent: Parent) => {
+      this.parentWrapper = {parent: parent, valid: this.parentForm.valid};
+      this.onChanges.emit(this.parentWrapper);
+    });
   }
-  getParam(): QueryParam {
-    return {
-      page: 1,
-      pageSize: 10,
-      orderby: 'DESC',
-      status: '',
-      search: '',
-      fieldName: '',
-      userType: USER_TYPE.PARENT,
-    };
-  }
+
   onParentAddressChange(addressWrapper: AddressWrapper ) {
     if (!addressWrapper.isValid) {
       this.parentForm.controls['address'].setErrors({ invalidAddress: true });
@@ -159,10 +89,11 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
       this.parentForm.patchValue({address: addressWrapper.address});
     }
   }
+
   onUserLoginInputChange(userLoginInputWrapper: UserLoginInputWrapper) {
     if (userLoginInputWrapper.isValid) {
         this.parentForm.patchValue({
-          userLoginInput:userLoginInputWrapper.userLoginInput,
+          userLoginInput: userLoginInputWrapper.userLoginInput,
         });
         this.parentForm.controls['userLoginInput'].setErrors(null);
         // window.console.log(userLoginInputWrapper);
@@ -171,81 +102,30 @@ export class ParentCreateComponent implements OnInit, AfterViewInit {
     }
   }
 
-  pickUser(student: Student) {
-    this.listDisplay = 'none';
-    let studentFound = false;
-    if (this.selectedStudents.length === 0) {
-      this.selectedStudents.push(student);
-    } else {
-      this.selectedStudents.forEach(p => {
-          if (p.id === student.id) {
-           studentFound = true;
-          }
-      });
-      if (!studentFound) {
-        this.selectedStudents.push(student);
-      }
-    }
+  updateUseInput(parent: Parent) {
     this.parentForm.patchValue({
-      studentIds: this.studentIds,
-      studentFullName: '',
-    });
-  }
-  search(value: string) {
-    const param = this.getParam();
-    param.userType = 'student';
-    param.search = value;
-    this.userService.search(param).subscribe((students: Student[]) => {
-      this.students = [];
-      if (students) {
-        this.students = students;
-        this.listDisplay = 'block';
-      }
-    });
-  }
-  onStudentFullInputChanges() {
-    this.parentForm.get('studentFullName').valueChanges.subscribe(value => {
-      if (value) {
-        this.search(value);
-      }
-    });
-  }
-
-  selectedParentChanged(event: any, student: Student) {
-    if (!event) {
-      for (let i = 0; i < this.selectedStudents.length; i++) {
-        if (this.selectedStudents[i].id === student.id) {
-          this.selectedStudents.splice(i, 1);
-        }
-     }
-    } else {
-      this.selectedStudents.push(student);
-    }
-  }
-
-  updateUseInput() {
-    this.parentForm.patchValue({
-      id: this.parent.id,
-      firstName: this.parent.firstName,
-      lastName: this.parent.lastName,
-      position: this.parent.position ? this.parent.position.id : null,
-      occupation: this.parent.occupation ? this.parent.occupation : 'Parent',
-      employmentCode: this.parent.userCode,
-      gender: this.parent.gender,
-      picture: this.parent.picture,
-      userId: this.parent.userId,
-      middleNames: this.parent.middleNames,
-      phoneNumber: this.parent.phoneNumber,
-      emailAddress: this.parent.username,
-      birthDate: DateFormatter(this.parent.birthDate, 'YYYY/MM/DD', false),
+      id: parent.id,
+      firstName: parent.firstName,
+      lastName: parent.lastName,
+      position: parent.position ? this.parent.position.id : null,
+      occupation: parent.occupation ? this.parent.occupation : 'Parent',
+      employmentCode: parent.userCode,
+      gender: parent.gender,
+      picture: parent.picture,
+      userId: parent.userId,
+      middleNames: parent.middleNames,
+      phoneNumber: parent.phoneNumber,
+      emailAddress: parent.emailAddress,
+      relationshipType: parent.relationshipType,
+      birthDate: DateFormatter(parent.birthDate, 'YYYY/MM/DD', false),
       userType: USER_TYPE.PARENT,
-      academicDiscipline: this.parent.academicDiscipline ? this.parent.academicDiscipline.id : null,
-      fullName: this.parent.fullName,
-      address: this.parent.address ? this.parent.address : null,
+      academicDiscipline: parent.academicDiscipline ? parent.academicDiscipline.id : null,
+      fullName: parent.fullName,
+      address: parent.address ? parent.address : null,
     });
 
-    if (this.parent.address) {
-      this.appAddress.patchAddressValue(this.parent.address);
+    if (parent.address) {
+      this.appAddress.patchAddressValue(parent.address);
     }
   }
 }

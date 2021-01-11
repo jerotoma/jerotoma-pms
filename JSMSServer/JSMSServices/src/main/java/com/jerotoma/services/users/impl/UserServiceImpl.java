@@ -139,26 +139,26 @@ public class UserServiceImpl implements UserService {
 		return getUserDetails(authUser);
 	}
 
-	private UserVO getUserDetails(User authUser) {
+	private UserVO getUserDetails(User user) {
 		PersonVO person = null;
 		
-		if (authUser == null) {
+		if (user == null) {
 			return null;
 		}
 		
 		try {
-			switch (authUser.getUserType()) {
+			switch (user.getUserType()) {
 			case TEACHER:
-				person = assemblerTeacherService.findObjectUniqueKey(authUser.getUsername());
+				person = assemblerTeacherService.findObjectUniqueKey(user.getUsername());
 				break;
 			case STUDENT:
-				person = assemblerStudentService.findObjectUniqueKey(authUser.getUsername());
+				person = assemblerStudentService.findObjectUniqueKey(user.getUsername());
 				break;
 			case STAFF:
-				person = assemblerStaffService.findObjectUniqueKey(authUser.getUsername());
+				person = assemblerStaffService.findObjectUniqueKey(user.getUsername());
 				break;
 			case PARENT:
-				person = assemblerParentService.findObjectUniqueKey(authUser.getUsername());
+				person = assemblerParentService.findObjectUniqueKey(user.getUsername());
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -171,13 +171,13 @@ public class UserServiceImpl implements UserService {
 		if (person == null) {
 			return null;
 		}		
-		return new UserVO(authUser, person);
+		return new UserVO(user, person);
 	}
 
 	@Override
 	public UserVO getUserVOByUserId(Integer userId) {
-		User authUser = getUserById(userId);
-		return getUserDetails(authUser);
+		User user = getUserById(userId);
+		return getUserDetails(user);
 	}
 	
 	
@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserVO> searchUser(QueryParam param) {	
-		List<UserVO>  userVOs = new ArrayList<>();
+		List<UserVO> userVOs = new ArrayList<>();
 		try {
 			List<User>  users = authUserService.search(param);
 			if (users != null) {
@@ -207,24 +207,26 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	@Override
-	public Person createUser(Person person, User newUser) throws SQLException {
+	public Person createUser(Person person) throws SQLException {
 		
-		switch (newUser.getUserType()) {
+		Parent parent = null;
+		
+		switch (person.getUser().getUserType()) {
 		case STUDENT:
-			Student student = (Student)person;
-			student = createStudent(newUser, student);				
+			Student student = (Student)person;			
+			student = createStudent(student.getUser(), student);			
 			return student;
 		case TEACHER:
 			Teacher teacher = (Teacher)person;
-			teacher = createTeacher(newUser, teacher);				
+			teacher = createTeacher(person.getUser(), teacher);				
 			return teacher;
 		case PARENT:
-			Parent parent = (Parent)person;
-			parent = createParent(newUser, parent);				
+			parent = (Parent)person;			
+			parent = createParent(parent.getUser(), parent);				
 			return parent;
 		case STAFF:
 			Staff staff = (Staff)person;
-			staff = createStaff(newUser, staff);				
+			staff = createStaff(person.getUser(), staff);				
 			return staff;
 		default:
 			break;
@@ -255,8 +257,25 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	private Parent createParent(User newUser, Parent parent) throws SQLException {
-						
+		
+		Set<Parent> parents = new HashSet<>();
+		Integer studentId = parent.getStudentId();		
+		
+		if (studentId == null) {
+			throw new FieldRequiredException("Student ID is required to continue.");
+		}
+		Student student = studentService.findObject(studentId);
+		
+		if (student == null) {
+			throw new FieldRequiredException("Invalid Student ID  was provided, please verify the ID.");
+		}
+		
+		if (student.getParents() != null ) {
+			parents.addAll(student.getParents());
+		}
+				
 		newUser = authUserService.createUserLoginAccount(newUser);
+		
 		UserVO loggedInUser = loadCurrentUser();
 		parent.setUserId(newUser.getId());
 		parent.setUpdatedBy(loggedInUser.getId());
@@ -265,12 +284,17 @@ public class UserServiceImpl implements UserService {
 						
 		address.setUpdatedBy(loggedInUser.getId());
 		address = addressService.createObject(address);
+		
 		ParentAddress parentAddress = new ParentAddress();
 		parentAddress.setAddress(address);
 		parentAddress.setParent(parent);
 		parentAddress.setCreatedOn(today);
 		parentAddress.setUpdatedOn(today);
 		parentAddressService.createObject(parentAddress);
+		
+		parents.add(parent);
+		student.setParents(parents);
+		student = studentService.updateObject(student);
 		
 		return parent;
 	}
@@ -298,6 +322,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	protected Student createStudent(User newUser, Student student) throws SQLException {
 		AcademicYearVO academicYearVO = assemblerAcademicYearService.getCurrentAcademicYear();		
+		
 		if (academicYearVO == null) {
 			throw new FieldRequiredException("Current Academic Year is required to continue.");
 		}
@@ -307,9 +332,14 @@ public class UserServiceImpl implements UserService {
 			throw new FieldRequiredException("Program or Academic Level is required to continue.");
 		}
 		student.setProgram(programService.findObject(student.getProgramId()));
+		
+		Set<Parent> parents = new HashSet<>();
+		Parent primaryParent = student.getPrimaryParent();
+		primaryParent = createParent(primaryParent.getUser(), primaryParent);
+		student.setPrimaryParent(primaryParent);
+		parents.add(primaryParent);
 				
-		if (student.getParentIds() != null) {
-			Set<Parent> parents = new HashSet<>();
+		if (student.getParentIds() != null) {			
 			for (Integer parentId: student.getParentIds()) {
 				final Parent parent = parentService.findObject(parentId);
 				parents.add(parent);
@@ -344,7 +374,7 @@ public class UserServiceImpl implements UserService {
 			AcademicLevel academicLevel) throws SQLException {
 		
 		if (!prerequisiteClearance.hasMetPrerequisite(academicLevel, student)) {
-			throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
+			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
 		}		
 		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel(student, academicLevel, academicYear, CompletionStatus.IN_PROGRESS);
 		studentAcademicLevel.setUpdatedBy(loggedInUser.getId());

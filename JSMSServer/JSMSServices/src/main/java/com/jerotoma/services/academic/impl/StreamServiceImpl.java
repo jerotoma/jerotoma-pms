@@ -28,7 +28,7 @@ public class StreamServiceImpl implements StreamService {
 
 	@Override
 	public Stream findObject(Integer primaryKey) throws SQLException {		
-		return streamDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(streamDao.findById(primaryKey));
 	}
 
 	@Override

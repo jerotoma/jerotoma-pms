@@ -1,0 +1,18 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card class="dialog-card" status="primary">
+      <nb-card-header status="danger" >{{ title }} <span class="push-right text-white close-icon" (click)="dismiss()">&times;</span></nb-card-header>
+      <nb-card-body>
+        <form [formGroup]="parentForm" class="step-container" (ngSubmit)="onSubmitParentForm()">
+          <app-parent-create
+            (onChanges)="onParentFormChanges($event)"
+          ></app-parent-create>
+          <div class="form-control-group">
+            <button class='push-right mr-1' [disabled]="!parentForm.valid" type="submit" nbButton hero status="success">Submit</button>
+            <button type='button' class='push-right mr-1' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+          </div>
+        </form>
+      </nb-card-body>
+    </nb-card>
+</div>
+</div>

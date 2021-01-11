@@ -21,6 +21,10 @@ public class UserVO extends PersonVO implements Serializable {
 	private DepartmentVO department;
 	private Integer studentNumber;
 	
+	private String relationshipType;
+	
+	private ParentVO primaryParent;
+	
 	private Integer programId;
 	private String programName;
 	
@@ -49,12 +53,13 @@ public class UserVO extends PersonVO implements Serializable {
 			this.programId = student.getProgramId();
 			this.programName = student.getProgramName();
 			this.academicLevelId = student.getAcademicLevelId();
-			this.currentAcademicLevelName = student.getCurrentAcademicLevelName();			
+			this.currentAcademicLevelName = student.getCurrentAcademicLevelName();
+			this.primaryParent = student.getPrimaryParent();
 		}
 		
 		if (person instanceof ParentVO) {
 			ParentVO parent = (ParentVO)person;	
-			parent.getPicture();
+			this.relationshipType = parent.getRelationshipType();
 		}
 		
 		if (person instanceof StaffVO) {
@@ -139,5 +144,13 @@ public class UserVO extends PersonVO implements Serializable {
 
 	public String getCurrentAcademicLevelName() {
 		return currentAcademicLevelName;
+	}
+
+	public String getRelationshipType() {
+		return relationshipType;
+	}
+
+	public ParentVO getPrimaryParent() {
+		return primaryParent;
 	}
 }

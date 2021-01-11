@@ -16,13 +16,17 @@
   limitations under the License.
 --><!-- The contents of this file will be loaded for each web application -->
 <Context reloadable="true" allowCasualMultipartParsing="true">
-  <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>          
+  <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>  
+  <WatchedResource>/WEB-INF/classes/</WatchedResource> 
+  <WatchedResource>/WEB-INF/lib/</WatchedResource>       
   <Resources cacheMaxSize="52187770" cachingAllowed="true">
-       <JarResources base="${catalina.base}/jerotoma_sms/JSMSServer/lib"
-                      className="org.apache.catalina.webresources.DirResourceSet"
-                      webAppMount="/WEB-INF/lib"/>
-       <PostResources base="${catalina.base}/jerotoma_sms/JSMSServer/classes"
-                      className="org.apache.catalina.webresources.DirResourceSet"
-                      webAppMount="/WEB-INF/classes"/>
+       <JarResources 
+          base="${catalina.base}/jerotoma_sms/JSMSServer/lib"
+          className="org.apache.catalina.webresources.DirResourceSet"
+          webAppMount="/WEB-INF/lib"/>
+       <PostResources 
+          base="${catalina.base}/jerotoma_sms/JSMSServer/classes"
+          className="org.apache.catalina.webresources.DirResourceSet"
+          webAppMount="/WEB-INF/classes"/>
   </Resources>          
 </Context>

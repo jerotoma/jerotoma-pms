@@ -28,7 +28,7 @@ public class CompletedAcademicLevelServiceImpl implements CompletedAcademicLevel
 
 	@Override
 	public CompletedAcademicLevel findObject(Integer primaryKey) throws SQLException {
-		return completedAcademicLevelDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(completedAcademicLevelDao.findById(primaryKey));
 	}
 
 	@Override

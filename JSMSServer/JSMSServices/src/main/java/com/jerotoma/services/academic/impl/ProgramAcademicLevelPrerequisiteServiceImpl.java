@@ -27,7 +27,7 @@ public class ProgramAcademicLevelPrerequisiteServiceImpl implements ProgramAcade
 	
 	@Override
 	public ProgramAcademicLevelPrerequisite findObject(Integer primaryKey) throws SQLException {
-		return prerequisiteDao.getOne(primaryKey);
+		return ServiceUtil.getEntity(prerequisiteDao.findById(primaryKey));
 	}
 
 	@Override

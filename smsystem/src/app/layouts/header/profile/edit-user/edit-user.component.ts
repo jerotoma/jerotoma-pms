@@ -175,6 +175,7 @@ export class EditUserComponent implements OnInit {
      username: user.username,
      password: '',
      confirmPassword: '',
+     userType: user.userType,
    };
   }
 }

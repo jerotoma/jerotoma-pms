@@ -4,12 +4,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.jerotoma.common.constants.ParentConstant;
+import com.jerotoma.common.constants.RoleConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
+import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.utils.StringUtility;
@@ -24,6 +27,7 @@ public class UserValidator {
 	static Parent parent = null;
 	static String firstName  = null;		
 	static String lastName = null;
+	static String relationshipType = null;
 	static String fullName = null;	
 	static String middleNames = null;
 	static Integer age = null;		
@@ -37,6 +41,7 @@ public class UserValidator {
 	static Date today = null;	
 	static List<Integer> parentIDs = null;
 	static List<Integer> studentIDs = null;
+	static Integer studentID = null;
 	static Integer userId = null;
 	static Integer programId = null;
 	static Integer academicLevelId = null;
@@ -177,6 +182,9 @@ public class UserValidator {
 			throw new FieldRequiredException("Phone number is required to continue");
 		}
 		teacher.setPhoneNumber(phoneNumber);
+		
+		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_TEACHER);
+		teacher.setUser(newUser);
 		
 		address = AddressValidator.validateAddress(params, requiredFields);
 		teacher.setAddress(address);
@@ -350,7 +358,14 @@ public class UserValidator {
 		}
 		student.setAcademicLevelId(academicLevelId);
 		
+		requiredFields.remove(UserConstant.BIRTH_DATE);
+		requiredFields.remove(UserConstant.PROGRAM_ID);	
+		requiredFields.remove(UserConstant.ACADEMIC_LEVEL_ID);	
+		requiredFields.add(UserConstant.RELATIONSHIP_TYPE);
+		
 		student.setId(id);
+		student.setPrimaryParent(validateParentInputInfo(UserValidator.getParams(params, ParentConstant.PARENT), requiredFields));
+		student.setUser(User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STUDENT));
 		student.setParentIds(parentIDs);
 		address = AddressValidator.validateAddress(params, requiredFields);
 		student.setAddress(address);
@@ -365,6 +380,8 @@ public class UserValidator {
 	public static Parent validateParentInputInfo(Map<String, Object> params, List<String> requiredFields) {
 		
 		parent = new Parent();
+		
+		params = getParams(params, ParentConstant.PARENT);
 		
 		if(params.containsKey(UserConstant.ID)) {
 			id  = params.get(UserConstant.ID) != null ? (Integer) params.get(UserConstant.ID) : null;
@@ -402,6 +419,11 @@ public class UserValidator {
 			occupation = (String) params.get(UserConstant.OCCUPATION);
 		}
 		
+		
+		if(params.containsKey(UserConstant.RELATIONSHIP_TYPE)) {
+			relationshipType = (String) params.get(UserConstant.RELATIONSHIP_TYPE);
+		}
+		
 		if(params.containsKey(UserConstant.BIRTH_DATE)) {
 			birthDate = params.get(UserConstant.BIRTH_DATE).toString();
 		}
@@ -424,6 +446,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.STUDENT_IDS)) {
 			studentIDs = (List<Integer>)params.get(UserConstant.STUDENT_IDS);
+		}
+		
+		if(params.containsKey(UserConstant.STUDENT_ID)) {
+			studentID = (Integer)params.get(UserConstant.STUDENT_ID);
 		}
 				
 		if (age == null && requiredFields.contains(UserConstant.AGE)) {
@@ -471,6 +497,11 @@ public class UserValidator {
 			throw new FieldRequiredException("Occupation is required to continue");
 		}
 		parent.setOccupation(occupation);
+		
+		if (relationshipType == null && requiredFields.contains(UserConstant.RELATIONSHIP_TYPE)) {
+			throw new FieldRequiredException("Relationship Type is required to continue");
+		}
+		parent.setRelationshipType(relationshipType);
 				
 		if (picture == null && requiredFields.contains(UserConstant.PICTURE)) {
 			throw new FieldRequiredException("Picture is required to continue");
@@ -488,17 +519,24 @@ public class UserValidator {
 		parent.setPhoneNumber(phoneNumber);
 		
 		if (studentIDs == null && requiredFields.contains(UserConstant.STUDENT_IDS)) {
-			throw new FieldRequiredException("Student ID is required to continue");
+			throw new FieldRequiredException("Student IDs are required to continue");
 		}
 		parent.setStudentIds(studentIDs);
+		
+		if (studentID == null && requiredFields.contains(UserConstant.STUDENT_ID)) {
+			throw new FieldRequiredException("Student ID is required to continue");
+		}
+		parent.setStudentId(studentID);
 		
 		if (id == null && requiredFields.contains(UserConstant.ID)) {
 			throw new FieldRequiredException("Parent's ID is required to continue");
 		}
 		parent.setId(id);
 		
+		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_PARENT);
 		today = CalendarUtil.getTodaysDate();
 		address = AddressValidator.validateAddress(params, requiredFields);
+		parent.setUser(newUser);
 		parent.setAddress(address);
 		parent.setCreatedOn(today);
 		parent.setUpdatedOn(today);
@@ -636,10 +674,20 @@ public class UserValidator {
 		staff.setAddress(address);
 		Date today = CalendarUtil.getTodaysDate();
 		
+		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STAFF);
+		staff.setUser(newUser);
 		staff.setCreatedOn(today);
 		staff.setUpdatedOn(today);
 		
 		return staff;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getParams(Map<String, Object> params, String key){
+		if(params.containsKey(key)) {
+			return (Map<String, Object>)params.get(key);
+		}
+		return params;		
 	}
 }
 

@@ -359,6 +359,7 @@
 	    gender character varying(25) NOT NULL,
 	    profile_image_id bigint,
 	    birth_date timestamp with time zone,
+	    relationship_type character varying(255) NOT NULL,
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
@@ -385,6 +386,7 @@
 	CREATE TABLE IF NOT EXISTS public.students(
 	    id bigserial NOT NULL,
 	    user_id bigint NOT NULL,
+	    primary_parent_id bigint NOT NULL,
 	    student_number bigint NOT NULL,
 	    first_name character varying(255) NOT NULL,
 	    last_name character varying(255) NOT NULL,
@@ -405,6 +407,10 @@
 	   	CONSTRAINT student_number UNIQUE (student_number),
 	   	CONSTRAINT user_media_fkey FOREIGN KEY (profile_image_id)
 	        REFERENCES public.user_media (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,
+	    CONSTRAINT parents_fkey FOREIGN KEY (primary_parent_id)
+	        REFERENCES public.parents (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE,
 	   	CONSTRAINT users_fkey FOREIGN KEY (user_id)
