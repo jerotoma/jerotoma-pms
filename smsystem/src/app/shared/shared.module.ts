@@ -58,6 +58,8 @@ import {
   ProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
+  AcademicLevelClassesEnrollmentCreateComponent,
+  AcademicLevelStudentEnrollmentCreateComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -78,6 +80,8 @@ const COMPONENTS = [
   ProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
+  AcademicLevelClassesEnrollmentCreateComponent,
+  AcademicLevelStudentEnrollmentCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -93,6 +97,8 @@ const ENTRY_COMPONENTS = [
   ProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
+  AcademicLevelClassesEnrollmentCreateComponent,
+  AcademicLevelStudentEnrollmentCreateComponent,
 ];
 
 const MODULES = [

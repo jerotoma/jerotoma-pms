@@ -6,11 +6,11 @@
     <div class="row">
       <div class="col-md-12">
         <app-user-details
-        *ngIf='student'
-        [userDatail]="student"
-        [userType]="userType"
-        (onImageChangeSuccess)="reloadParentDetails($event)"
-      ></app-user-details>
+          *ngIf='student'
+          [userDatail]="student"
+          [userType]="userType"
+          (onImageChangeSuccess)="reloadParentDetails($event)"
+        ></app-user-details>
       </div>
     </div>
   </mat-tab>
@@ -28,7 +28,7 @@
     <ng-template mat-tab-label>
       <mat-icon class="student-tab-icon text-primary">autorenew</mat-icon> Student Progress
     </ng-template>
-      <app-my-progress
+    <app-my-progress
       *ngIf="student"
       [student]="student"
     ></app-my-progress>

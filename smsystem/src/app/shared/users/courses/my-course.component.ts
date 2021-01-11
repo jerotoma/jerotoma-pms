@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { NbDialogService } from '@nebular/theme';
+import { AcademicLevelClassesEnrollmentCreateComponent } from 'app/shared/enrollments/classes';
 import {
   StudentAcademicLevelService,
   AcademicYearService,
@@ -24,6 +26,7 @@ export class MyCourseComponent implements OnInit {
 
   @Input('userType') userType = USER_TYPE.STUDENT;
   @Input('userId') userId: number = null;
+  @Input('title') title: string = 'Registered Courses';
   @Input('programId') programId: number = null;
 
   teacherId: number;
@@ -52,6 +55,7 @@ export class MyCourseComponent implements OnInit {
     private academicYearService: AcademicYearService,
     private userService: UserService,
     private classService: ClassService,
+    private dialogService: NbDialogService,
     private studentAcademicLevelService: StudentAcademicLevelService) { }
 
   ngOnInit() {
@@ -116,6 +120,20 @@ export class MyCourseComponent implements OnInit {
     this.studentAcademicLevelService.loadClassesByStudentIDAndAcademicLevelID(academicLevelId, studentId).subscribe((jClassViews: ClassView[]) => {
       this.classViews = jClassViews;
       this.isLoading = false;
+    });
+  }
+
+  addStudentCourse() {
+    this.dialogService.open(AcademicLevelClassesEnrollmentCreateComponent, {
+      context: {
+        title: 'Enroll New Classes',
+        action: 'create',
+        student: this.student,
+      },
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+
+      }
     });
   }
 

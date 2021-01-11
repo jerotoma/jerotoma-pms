@@ -2,6 +2,12 @@
   <nb-card-body>
     <div class="row">
       <div class="col-md-12">
+        <nb-card>
+          <nb-card-header *ngIf="isUserStudent">
+            {{ title }}
+            <button class="push-right" nbButton hero status='success' (click)="addStudentCourse()">Add New Course</button>
+          </nb-card-header>
+        </nb-card>
         <nb-card class="list-card" accent="success">
           <nb-card-body style="padding: 0;" *ngIf="studentAcademicLevelClasses && isUserStudent">
             <ng-container *ngFor="let studentAcademicLevelClass of studentAcademicLevelClasses">
@@ -56,10 +62,6 @@
     </div>
   </nb-card-body>
 </nb-card>
-
-
-
-
 <div class="row">
   <div class="col-md-12 col-lg-12 col-xxxl-12"
     [nbSpinner]="isLoading"
