@@ -24,7 +24,7 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.RoomVO;
-import com.jerotoma.common.viewobjects.StudentAcademicLevelClassList;
+import com.jerotoma.common.viewobjects.StudentAcademicLevelClass;
 import com.jerotoma.common.viewobjects.CourseVO;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.MeetingTimeVO;
@@ -244,20 +244,22 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), studentId, academicLevelId, academicYearId);
 	}
 	@Override
-	public List<StudentAcademicLevelClassList> loadAllStudentAcademicLevelsClassList(Integer studentId)
+	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer studentId)
 			throws SQLException {
 		
 		String query = "SELECT sal.student_id, sal.academic_level_id, sal.academic_year_id FROM public.student_academic_levels sal WHERE sal.student_id = ?";
 		
-		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId}), new RowMapper<StudentAcademicLevelClassList>() {
+		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId}), new RowMapper<StudentAcademicLevelClass>() {
 			@Override
-			public StudentAcademicLevelClassList mapRow(ResultSet rs, int rowNum) throws SQLException {				
+			public StudentAcademicLevelClass mapRow(ResultSet rs, int rowNum) throws SQLException {				
 				
 				List<ClassVO> classes = loadStudentClasses(studentId, rs.getInt("academic_level_id"), rs.getInt("academic_year_id"));
+				
 				StudentVO student = assemblerStudentDao.findObject(studentId);
 				AcademicLevelVO academicLevel = assemblerAcademicLevelDao.findObject(rs.getInt("academic_level_id"));
+				AcademicYearVO academicYear = loadAcademicYear(rs.getInt("academic_year_id"));
 				
-				return new StudentAcademicLevelClassList(student, academicLevel, classes);
+				return new StudentAcademicLevelClass(student, academicLevel, academicYear, classes);
 			}
 			
 		});

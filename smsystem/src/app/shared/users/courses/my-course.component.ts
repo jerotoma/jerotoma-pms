@@ -26,7 +26,7 @@ export class MyCourseComponent implements OnInit {
 
   @Input('userType') userType = USER_TYPE.STUDENT;
   @Input('userId') userId: number = null;
-  @Input('title') title: string = 'Registered Courses';
+  @Input('title') title: string = 'Registered Classes';
   @Input('programId') programId: number = null;
 
   teacherId: number;

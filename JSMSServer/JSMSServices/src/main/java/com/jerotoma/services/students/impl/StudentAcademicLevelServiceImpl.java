@@ -2,24 +2,28 @@ package com.jerotoma.services.students.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
+import com.jerotoma.common.constants.ClassConstant;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.ErrorMessageConstant;
+import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.models.users.students.StudentAcademicLevel;
-import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.models.users.students.StudentAcademicLevel.Fields;
+import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.dao.academic.StudentAcademicLevelDao;
@@ -33,6 +37,7 @@ import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
 import com.jerotoma.services.securities.EnrollementPrerequisiteClearance;
 import com.jerotoma.services.students.StudentAcademicLevelService;
 import com.jerotoma.services.users.StudentService;
+import com.jerotoma.services.utils.ServiceUtil;
 
 @Service
 @Transactional
@@ -51,12 +56,12 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel findObject(Integer primaryKey) throws SQLException {
-		return studentAcademicLevelDao.findObject(primaryKey);
+		return ServiceUtil.getEntity(studentAcademicLevelDao.findById(primaryKey));
 	}
 
 	@Override
 	public StudentAcademicLevel findObjectUniqueKey(String uniqueKey) throws SQLException {
-		return studentAcademicLevelDao.findObjectUniqueKey(uniqueKey);
+		throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
 	}
 
 	@Override
@@ -65,7 +70,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
 			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
 		}		
-		return studentAcademicLevelDao.createObject(object);
+		return studentAcademicLevelDao.save(object);
 	}
 
 	@Override
@@ -73,27 +78,43 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
 			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
 		}
-		return studentAcademicLevelDao.updateObject(object);
+		return studentAcademicLevelDao.save(object);
 	}
 
 	@Override
 	public Boolean deleteObject(StudentAcademicLevel object) throws SQLException {
-		return studentAcademicLevelDao.deleteObject(object);
+		studentAcademicLevelDao.delete(object);
+		return true;
 	}
 
 	@Override
 	public List<StudentAcademicLevel> loadList(QueryParam queryParam) throws SQLException {
-		return studentAcademicLevelDao.loadList(queryParam);
+		if (queryParam == null) {
+			return studentAcademicLevelDao.findAll();
+		}		
+		return studentAcademicLevelDao.findAll(ServiceUtil.getPageable(queryParam)).toList();
 	}
 
 	@Override
 	public Map<String, Object> loadMapList(QueryParam queryParam) throws SQLException {
-		return studentAcademicLevelDao.loadMapList(queryParam);
+		
+		Map<String, Object> map = new HashMap<>();		
+		Page<StudentAcademicLevel> pagestudentAcademicLevel = studentAcademicLevelDao.findAll(ServiceUtil.getPageable(queryParam));
+		map.put(ClassConstant.CLASSES, pagestudentAcademicLevel.toList());
+		map.put(SystemConstant.COUNT, pagestudentAcademicLevel.getTotalElements());
+		map.put(SystemConstant.PAGE_COUNT, pagestudentAcademicLevel.getTotalPages());		
+		return map;
 	}
 
 	@Override
-	public List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentClasses) throws SQLException {
-		return studentAcademicLevelDao.createBatchObject(studentClasses);
+	public List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevels) throws SQLException {
+		
+		List<StudentAcademicLevel> studentAcademicLevelList = new ArrayList<>();		
+		for (StudentAcademicLevel studentAcademicLevel : studentAcademicLevels) {
+			StudentAcademicLevel sal = createObject(studentAcademicLevel);
+			studentAcademicLevelList.add(sal);			
+		}
+		return studentAcademicLevelList;
 	}
 
 	@Override
@@ -103,8 +124,6 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
-		
-		
 		List<StudentClass> studentClasses = new ArrayList<>();		
 		
 		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
@@ -163,7 +182,8 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
 		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
 		
-		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel();
+		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(student.getId(), academicLevel.getId(), academicYear.getId());
+		studentAcademicLevel = studentAcademicLevel != null ? studentAcademicLevel : new StudentAcademicLevel();
 		studentAcademicLevel.setAcademicLevel(academicLevel);
 		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
 		studentAcademicLevel.setAcademicYear(academicYear);

@@ -32,7 +32,7 @@ import {
 export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
-  @Input() studentId: string = '0';
+  @Input('student') student: Student = null;
   @Output() onCreationSuccess = new EventEmitter();
   currentAcademicYearKey: string = APP_CONSTANTS.currentAcademicYear;
 
@@ -64,7 +64,6 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
 
   jClasses: ClassView[];
   academicYears: AcademicYear[];
-  student: Student;
   studentClassForm: FormGroup;
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
@@ -88,8 +87,8 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     protected ref: NbDialogRef<AcademicLevelClassesEnrollmentCreateComponent>) {}
 
   ngOnInit() {
-    this.loadData();
     this.loadForm();
+    this.loadData();
     this.loadPrograms();
   }
 
@@ -105,6 +104,20 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
 
   checkAllCourseBoxes(checked: boolean) {
     this.checkAllCourses = checked;
+    if (checked) {
+      this.jClassIds = [];
+      this.jClasses.forEach((classView: ClassView) => {
+        this.jClassIds.push(classView.id);
+      });
+      this.studentClassForm.patchValue({
+        jClassIds: this.jClassIds,
+      });
+    } else {
+      this.jClassIds = [];
+      this.studentClassForm.patchValue({
+        jClassIds: this.jClassIds,
+      });
+    }
   }
 
   setSelectedUser(student: Student) {
@@ -171,6 +184,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
 
   loadData() {
     this.isLoading = true;
+    this.setSelectedUser(this.student);
     this.getCurrentAcademicYear();
     this.loadAcademicYears();
   }
@@ -183,6 +197,9 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     this.isLoading = true;
     this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
       this.jClasses = classViews;
+      if (classViews && classViews.length === 0) {
+        this.modalService.openSnackBar('No classes for the selected school year', 'info');
+      }
       this.isLoading = false;
     });
   }
@@ -224,6 +241,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   }
 
   getCurrentAcademicYear() {
+    this.isLoading = true;
     this.academicYearService.getCurrentAcademicYear()
     .subscribe((academicYear: AcademicYear) => {
       this.isLoading = false;

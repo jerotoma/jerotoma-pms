@@ -1,14 +1,14 @@
 package com.jerotoma.database.dao.academic;
 
 import java.sql.SQLException;
-import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.jerotoma.common.models.users.students.StudentAcademicLevel;
-import com.jerotoma.database.dao.BaseDao;
 
-public interface StudentAcademicLevelDao extends BaseDao<StudentAcademicLevel> {
+public interface StudentAcademicLevelDao extends JpaRepository<StudentAcademicLevel, Integer> {
 
-	List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevels) throws SQLException;
-
+	@Query("SELECT sal FROM StudentAcademicLevel sal WHERE sal.student.id = ?1 AND sal.academicLevel.id = ?2 AND sal.academicYear.id = ?3")
 	StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
 }

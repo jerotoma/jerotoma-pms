@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.ClassConstant;
+import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.Class;
 import com.jerotoma.database.dao.academic.ClassDao;
@@ -32,7 +33,7 @@ public class ClassServiceImpl implements ClassService{
 
 	@Override
 	public Class findObjectUniqueKey(String uniqueKey) throws SQLException {
-		throw new RuntimeException("Method not implemented yet");
+		throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
 	}
 
 	@Override

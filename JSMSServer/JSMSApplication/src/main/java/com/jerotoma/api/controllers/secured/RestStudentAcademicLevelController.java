@@ -110,7 +110,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		return super.response;
 	}
 
-	@PostMapping(value = "/classes")
+	@PostMapping(value = "{academicLevelId}/classes")
 	@ResponseBody
 	protected HttpResponseEntity<Object> createStudentAcademicLevelClasses(
 			Authentication auth, 

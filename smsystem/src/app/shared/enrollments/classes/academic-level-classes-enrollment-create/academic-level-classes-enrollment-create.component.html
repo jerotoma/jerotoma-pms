@@ -2,29 +2,27 @@
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="studentClassForm" class="step-container" (ngSubmit)="onSubmit()">
         <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
-          <nb-card-header status="danger">{{ title }}</nb-card-header>
+          <nb-card-header>{{ title }}</nb-card-header>
           <nb-card-body>
+            <div class='row'>
+              <div class='col-md-12'>
+                <div class="form-control-group" *ngIf="student && student.fullName">
+                  <label for="student-full-name" class="label">Full Name</label>
+                  <p>{{student.fullName}}</p>
+                </div>
+              </div>
+            </div>
             <div class="row">
               <div class="col-md-12">
                   <div class="form-control-group" *ngIf="currentAcademicYear">
                       <label for="class-academicYear" class="label">Current Academic Year</label>
                       <p>{{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}</p>
                   </div>
-                  <nb-alert status="warning" *ngIf="!currentAcademicYear">
+                  <nb-alert status="warning" *ngIf="!currentAcademicYear && !isLoading">
                     Looks like current academic year isn't set.
                   </nb-alert>
               </div>
             </div>
-           <!-- <div class="row">
-              <div class="col-md-12">
-                <app-search-user
-                  [title]="'Search for Student'"
-                  [placeholder]="'Type Student Initial'"
-                  [userType]="userType"
-                  (onUserSelected)="setSelectedUser($event)"
-                ></app-search-user>
-              </div>
-            </div> -->
             <div class="row">
               <div class="col-md-6">
                 <div class="form-control-group">
@@ -33,7 +31,7 @@
                     <p>{{student?.programName}}</p>
                   </div>
                 </div>
-                <nb-alert status="warning" *ngIf="!currentAcademicYear">
+                <nb-alert status="warning" *ngIf="!currentAcademicYear && !isLoading">
                   Current Academic Year has not been set yet
                 </nb-alert>
               </div>
@@ -59,11 +57,7 @@
                   <div class="form-control-group">
                     <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && currentAcademicYear">
                       <nb-card-header>
-                        Choose courses from a list of available courses for {{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}
-                        <nb-checkbox
-                        (checkedChange)="checkAllCourseBoxes($event)"
-                        status="success"
-                        class="push-right">Check All</nb-checkbox>
+                        Choose courses for the {{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}
                       </nb-card-header>
                       <nb-card-body
                         [nbSpinner]="isLoading"
@@ -71,6 +65,12 @@
                         nbSpinnerSize="large"
                         nbSpinnerMessage="Loading Scheduled Courses....">
                         <nb-list>
+                          <nb-list-item>
+                            <nb-checkbox
+                              (checkedChange)="checkAllCourseBoxes($event)"
+                              status="success"
+                              class="push-right">Check All</nb-checkbox>
+                          </nb-list-item>
                           <nb-list-item *ngFor="let jClass of jClasses">
                             <nb-checkbox
                             [id]="'jClass-'+ jClass?.id"

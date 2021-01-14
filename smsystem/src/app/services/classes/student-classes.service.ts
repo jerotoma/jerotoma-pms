@@ -49,8 +49,8 @@ export class StudentAcademicLevelService {
     return this.http.post(`${API_END_POINTS.studentAcademicLevels}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  createStudentAcademicLevelClasses(data?: any): Observable<StudentClassAdmission> {
-    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/classes`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+  createStudentAcademicLevelClasses(data?: StudentClassAdmission): Observable<StudentClassAdmission> {
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/${data.academicLevelId}/classes`, data).pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   deleteStudentAcademicLevel(studentAcademicLevelId: number): Observable<boolean> {
