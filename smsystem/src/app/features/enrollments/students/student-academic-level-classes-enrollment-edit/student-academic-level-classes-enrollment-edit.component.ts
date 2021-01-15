@@ -197,6 +197,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
 
   loadAcademicLevelsByProgramId(programId: number) {
     this.academicLevels = [];
+    this.isLoading = true;
     this.academicLevelService.loadAcademicLevelsByProgramId(programId)
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
@@ -206,6 +207,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
           academicLevelId: this.studentAcademicLevel.student.academicLevelId,
         }, {emitEvent: false});
       }
+      this.isLoading = false;
     });
   }
 
@@ -238,15 +240,18 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
   }
 
   loadAcademicYears() {
+    this.isLoading = true;
     this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[]) => {
       if (academicYears) {
         this.academicYears = academicYears;
       }
+      this.isLoading = false;
     });
   }
 
   loadStudentClasses(sc: StudentAcademicLevel) {
+    this.isLoading = false;
     this.studentClassService.getStudentAcademicLevel(sc.id).subscribe((studentAcademicLevel: StudentAcademicLevel) => {
       if (studentAcademicLevel) {
         this.loadAcademicLevelsByProgramId(studentAcademicLevel.student.programId);
@@ -262,6 +267,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
           jClassIds: this.jClassIds,
         }, {emitEvent: false});
       }
+      this.isLoading = true;
     });
   }
   patchStudent(student: Student) {

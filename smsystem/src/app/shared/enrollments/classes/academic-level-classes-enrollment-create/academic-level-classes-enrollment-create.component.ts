@@ -204,6 +204,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     });
   }
   loadAcademicYears() {
+    this.isLoading = true;
     this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[]) => {
       this.isLoading = false;
@@ -222,12 +223,14 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   }
 
   loadAvailableAcademicLevelsByStudentId(studentId: number) {
+    this.isLoading = true;
     this.academicLevels = [];
     this.academicLevelService.loadAvailableAcademicLevelsByStudentId(studentId)
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;
       }
+      this.isLoading = false;
     });
   }
 

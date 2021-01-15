@@ -46,7 +46,7 @@
               <div class="col-md-12">
                   <div class="form-control-group">
                     <nb-card class="list-card" accent="success" *ngIf="jClasses">
-                      <nb-card-body style="padding: 0;">
+                      <nb-card-body style="padding: 0;" [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="success" nbSpinnerMessage="Loading Scheduled Courses....">
                         <h5>List of Registered courses for {{academicYear.name}} - {{academicYear.yearOfStudy}}</h5>
                         <nb-list class="list-group">
                           <nb-list-item class="list-group-item" >

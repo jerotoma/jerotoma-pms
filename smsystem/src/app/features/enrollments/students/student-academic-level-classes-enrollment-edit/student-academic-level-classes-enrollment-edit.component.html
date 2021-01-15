@@ -1,19 +1,17 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
       <form [formGroup]="studentAcademicLevelForm" class="step-container" (ngSubmit)="onSubmit()">
-      <nb-card [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="primary">
+      <nb-card class="dialog-card" [nbSpinner]="isLoading" nbSpinnerSize="giant" nbSpinnerStatus="success" nbSpinnerMessage="Loading Scheduled Courses....">
         <nb-card-header status="danger" >{{ title }}</nb-card-header>
         <nb-card-body>
           <div class='row'>
-            <div class='col-md-12'>
+            <div class='col-md-6'>
               <div class="form-control-group" *ngIf="student && student.fullName">
                 <label for="student-full-name" class="label">Full Name</label>
                 <p>{{student?.fullName}}</p>
               </div>
             </div>
-          </div>
-          <div class='row'>
-            <div class='col-md-12'>
+            <div class='col-md-6'>
               <div class="form-control-group" *ngIf="student && student.programName">
                 <label for="student-full-name" class="label">Program Name</label>
                 <p>{{student?.programName}}</p>
@@ -21,7 +19,7 @@
             </div>
           </div>
           <div class='row'>
-            <div class="col-md-12">
+            <div class="col-md-6">
               <div class="form-control-group">
                   <label for="class-academicLevel" class="label">Academic Level</label>
                   <nb-select
@@ -37,24 +35,22 @@
                   </nb-select>
               </div>
             </div>
-          </div>
-          <div class="row">
-              <div class="col-md-12">
-                  <div class="form-control-group">
-                      <label for="class-academicYear" class="label">Academic Year</label>
-                      <nb-select
-                        fullWidth
-                        placeholder="Class Academic Year"
-                        formControlName="academicYearId"
-                        id="class-academicYear">
-                        <nb-option
-                            *ngFor='let acad of academicYears'
-                            [value]="acad.id">
-                            {{acad?.name}} - {{acad?.yearOfStudy}}
-                        </nb-option>
-                      </nb-select>
-                  </div>
+            <div class="col-md-6">
+              <div class="form-control-group">
+                <label for="class-academicYear" class="label">Academic Year</label>
+                <nb-select
+                  fullWidth
+                  placeholder="Class Academic Year"
+                  formControlName="academicYearId"
+                  id="class-academicYear">
+                  <nb-option
+                      *ngFor='let acad of academicYears'
+                      [value]="acad.id">
+                      {{acad?.name}} - {{acad?.yearOfStudy}}
+                  </nb-option>
+                </nb-select>
               </div>
+            </div>
           </div>
           <div class="lists row">
             <div class="col-md-12">
@@ -99,22 +95,16 @@
                 <div class="form-control-group" [@openClose]="isAddMore ? 'open' : 'closed'">
                   <nb-card class="list-card" accent="primary" *ngIf="classViews">
                     <nb-card-header>Add more courses from a list of available courses for {{academicYear?.name}} - {{academicYear?.yearOfStudy}} </nb-card-header>
-                    <nb-card-body
-                      [nbSpinner]="isLoading"
-                      nbSpinnerStatus="success"
-                      nbSpinnerSize="large"
-                      nbSpinnerMessage="Loading Scheduled Courses....">
-                      <nb-list>
-                        <nb-list-item *ngFor="let classView of classViews">
-                          <nb-checkbox
-                            [id]="'classView-'+ classView.id"
-                            status="primary"
-                            (checkedChange)="checkedChange($event, classView)">
-                            {{classView.course.name}}
-                        </nb-checkbox>
-                        </nb-list-item>
-                      </nb-list>
-                    </nb-card-body>
+                    <nb-list>
+                      <nb-list-item *ngFor="let classView of classViews">
+                        <nb-checkbox
+                          [id]="'classView-'+ classView.id"
+                          status="primary"
+                          (checkedChange)="checkedChange($event, classView)">
+                          {{classView.course.name}}
+                      </nb-checkbox>
+                      </nb-list-item>
+                    </nb-list>
                   </nb-card>
                 </div>
             </div>

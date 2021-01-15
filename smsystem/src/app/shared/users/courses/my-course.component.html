@@ -11,7 +11,7 @@
         <nb-card class="list-card" accent="success">
           <nb-card-body style="padding: 0;" *ngIf="studentAcademicLevelClasses && studentAcademicLevelClasses.length > 0 && isUserStudent">
             <ng-container *ngFor="let studentAcademicLevelClass of studentAcademicLevelClasses">
-              <h5 class="m-2">Courses for : {{studentAcademicLevelClass?.academicYear?.name}} - {{studentAcademicLevelClass?.academicYear?.code}} </h5>
+              <h5 class="m-2 text-primary">Courses for : {{studentAcademicLevelClass?.academicYear?.name}} - {{studentAcademicLevelClass?.academicYear?.code}}</h5>
               <table class="table table-hover">
                 <tbody>
                   <tr>
