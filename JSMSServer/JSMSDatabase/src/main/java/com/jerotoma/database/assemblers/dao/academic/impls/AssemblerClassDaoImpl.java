@@ -264,4 +264,11 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 			
 		});
 	}
+	@Override
+	public List<ClassVO> loadClassesByTeacherClassParams(Integer teacherId, Integer programId, Integer academicLevelId,
+			Integer academicYearId) {
+		StringBuilder queryBuilder = getBaseSelectQuery()				
+				.append(" WHERE cl.teacher_id = ? AND co.program_id = ? AND co.academic_level_id = ? AND  cl.academic_year_id = ?");
+		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), teacherId, programId, academicLevelId, academicYearId);
+	}
 }

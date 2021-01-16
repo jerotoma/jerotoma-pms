@@ -261,6 +261,24 @@ public class RestClassController extends BaseController {
 		return response;		
 	}
 	
+	
+	@GetMapping(value= {"/teachers/{teacherId}/programs/{programId}/academic-levels/{academicLevelId}/academic-years/{academicYearId}"})
+	@ResponseBody
+	public HttpResponseEntity<Object> loadClassesByTeacherClassParams(
+			Authentication auth, 
+			@PathVariable("teacherId") Integer teacherId,
+			@PathVariable("academicYearId") Integer academicYearId,
+			@PathVariable("academicLevelId") Integer academicLevelrId,
+			@PathVariable("programId") Integer programId) {
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_DISCIPLINE_CONTROLLER.BASE + "/teachers/" + teacherId + "/programs/" + programId + "/academic-levels/" + academicLevelrId + "/academic-years/" + academicYearId);
+		this.securityCheckAccessByRoles(auth);
+		response.setData(assemblerClassService.loadClassesByTeacherClassParams(teacherId, programId, academicLevelrId, academicYearId));				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;		
+	}
+	
 	@GetMapping(value = {"/list", "/list/"})
 	@ResponseBody
 	public HttpResponseEntity<Object> loadJClassList(

@@ -1,6 +1,7 @@
 export * from './modals';
 export * from './uploads';
 export * from './users';
+export * from './classes';
 export * from './enrollments';
 export * from './modals';
 export * from './tables';

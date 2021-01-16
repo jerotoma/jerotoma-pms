@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, ClassView, StudentAcademicLevelClass } from 'app/models';
+import { ResponseWrapper, ClassView, StudentAcademicLevelClass, TeacherClassParam } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +83,12 @@ export class ClassService {
     return this.http.get(`${API_END_POINTS.classes}/users/${userId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  loadClassesByTeacherClassParam(classParam: TeacherClassParam) {
+    return this.http.get(`${API_END_POINTS.classes}/teachers/${classParam.teacherId}/programs/${classParam.programId}/academic-levels/${classParam.academicLevelId}/academic-years/${classParam.academicYearId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(error.message || 'Server error');
   }

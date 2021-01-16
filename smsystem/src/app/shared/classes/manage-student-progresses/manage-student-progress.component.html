@@ -1,0 +1,73 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="manageStudentProgressForm" class="step-container" (ngSubmit)="onSubmit()">
+        <nb-card>
+          <nb-card-header status="danger" >{{ title }}</nb-card-header>
+          <nb-card-body
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="success"
+            nbSpinnerSize="large"
+            nbSpinnerMessage="Loading....">
+            <div class="row">
+              <div class='col-md-6'>
+                <div class="form-control-group" *ngIf="teacher && teacher.fullName">
+                  <label for="teacher-full-name" class="label">Full Name</label>
+                  <p id="teacher-full-name" class="text-primary">{{teacher.fullName}}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-control-group">
+                      <label for="class-academicYear" class="label">Class Academic Year</label>
+                      <nb-select
+                        fullWidth
+                        placeholder="Class Academic Year"
+                        formControlName="academicYearId"
+                        id="class-academicYear">
+                        <nb-option
+                            *ngFor='let acad of academicYears'
+                            [value]="acad.id">
+                            {{acad.name}} - {{acad.yearOfStudy}}
+                        </nb-option>
+                      </nb-select>
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-control-group">
+                    <label for="course-program" class="label">Program</label>
+                    <nb-select
+                        fullWidth
+                        placeholder="Program"
+                        formControlName="programId"
+                        id="course-program">
+                        <nb-option
+                            *ngFor='let program of programs'
+                            [value]="program.id">
+                            {{program.name}}
+                        </nb-option>
+                      </nb-select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                    <label for="class-academicLevel" class="label">Class Academic Level</label>
+                    <nb-select
+                      fullWidth
+                      placeholder="Course Academic Level"
+                      formControlName="academicLevelId"
+                      id="class-academicLevel">
+                      <nb-option
+                          *ngFor='let acad of academicLevels'
+                          [value]="acad.id">
+                          {{acad.name}} - {{acad.code}}
+                      </nb-option>
+                    </nb-select>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </form>
+  </div>
+</div>

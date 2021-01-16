@@ -17,5 +17,7 @@ public interface AssemblerJClassDao  extends AssemblerDao<ClassVO> {
 	public List<ClassVO> loadTeacherClassListByTeacherId(Integer teacherId) throws SQLException;
 	public List<ClassVO> loadStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
 	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer studentId)  throws SQLException;
+	public List<ClassVO> loadClassesByTeacherClassParams(Integer teacherId, Integer programId, Integer academicLevelId,
+			Integer academicYearId);
 
 }

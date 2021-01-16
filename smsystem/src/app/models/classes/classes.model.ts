@@ -55,3 +55,18 @@ export interface StudentAcademicLevelClass {
   academicLevel: AcademicLevel;
   classes: ClassView[];
 }
+
+export interface StudentClassParam {
+  studentId?: number;
+  academicYearId?: number;
+  academicLevelId?: number;
+  programId?: number;
+}
+
+export interface TeacherClassParam {
+  teacherId?: number
+  academicYearId?: number;
+  academicLevelId?: number;
+  programId?: number;
+}
+

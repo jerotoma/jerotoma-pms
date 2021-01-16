@@ -104,4 +104,10 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 		return null;		
 	}
 
+	@Override
+	public List<ClassVO> loadClassesByTeacherClassParams(Integer teacherId, Integer programId, Integer academicLevelId,
+			Integer academicYearId) {
+		return assemblerClassDao.loadClassesByTeacherClassParams(teacherId, programId, academicLevelId,	academicYearId);
+	}
+
 }

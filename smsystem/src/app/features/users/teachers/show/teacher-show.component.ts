@@ -15,7 +15,7 @@ import { Teacher  } from 'app/models';
 export class TeacherShowComponent implements OnInit {
 
   teacher: Teacher = null;
-  userType: USER_TYPE = USER_TYPE.TEACHER;
+  userType: string = USER_TYPE.TEACHER;
 
   constructor(
     private userService: UserService,

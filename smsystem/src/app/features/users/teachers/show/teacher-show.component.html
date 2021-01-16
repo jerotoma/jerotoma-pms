@@ -21,6 +21,7 @@
     <div class="row">
         <div class="col-md-12">
           <app-my-course
+            *ngIf='teacher'
             [userType]="userType"
             [userId]="teacher?.userId"
           ></app-my-course>
@@ -29,9 +30,11 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="teacher-tab-icon text-primary">autorenew</mat-icon> Teacher Progress
+      <mat-icon class="teacher-tab-icon text-primary">autorenew</mat-icon> Manage Student Progress
     </ng-template>
-
-    Content 3
+    <app-manage-student-progress
+      *ngIf='teacher'
+      [teacher]="teacher"
+    ></app-manage-student-progress>
   </mat-tab>
 </mat-tab-group>
