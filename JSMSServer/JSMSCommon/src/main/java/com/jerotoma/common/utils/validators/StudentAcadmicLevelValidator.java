@@ -18,7 +18,7 @@ public class StudentAcadmicLevelValidator {
 		Integer academicLevelId = null;
 		Integer commpletionStatusId = null;	
 		Integer academicYearId = null;
-		List<Integer> jClassIds = null;
+		List<Integer> classIds = null;
 		Integer id = null;	
 		
 		if(params.containsKey(StudentConstant.Class.ID)) {
@@ -45,8 +45,8 @@ public class StudentAcadmicLevelValidator {
 			academicLevelId = (Integer)params.get(StudentConstant.Class.ACADEMIC_LEVEL_ID);
 		}
 		
-		if(params.containsKey(StudentConstant.Class.JCLASS_IDS)) {
-			jClassIds  = (ArrayList<Integer>)params.get(StudentConstant.Class.JCLASS_IDS);
+		if(params.containsKey(StudentConstant.Class.CLASS_IDS)) {
+			classIds  = (ArrayList<Integer>)params.get(StudentConstant.Class.CLASS_IDS);
 		}
 		
 		if (id == null && requiredFields.contains(StudentConstant.Class.ID)) {
@@ -58,7 +58,7 @@ public class StudentAcadmicLevelValidator {
 			throw new FieldRequiredException("Student ID is required to continue");
 		}
 		
-		if (academicLevelId == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
+		if (academicLevelId == null && requiredFields.contains(StudentConstant.Class.CLASS_IDS)) {
 			throw new FieldRequiredException("Class ID is required to continue");
 		}
 		
@@ -78,10 +78,10 @@ public class StudentAcadmicLevelValidator {
 			throw new FieldRequiredException("Current Student Academic Level is required to continue");
 		}
 		
-		if (jClassIds == null && requiredFields.contains(StudentConstant.Class.JCLASS_IDS)) {
+		if (classIds == null && requiredFields.contains(StudentConstant.Class.CLASS_IDS)) {
 			throw new FieldRequiredException("Class ID is required to continue");
 		}
 		
-		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, jClassIds, isCurrentStudentAcademicLevel);
+		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, classIds, isCurrentStudentAcademicLevel);
 	}
 }

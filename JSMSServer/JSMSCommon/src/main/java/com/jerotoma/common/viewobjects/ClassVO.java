@@ -13,6 +13,8 @@ public class ClassVO {
 	
 	private Integer capacity;
 	
+	private Integer totalStudents;
+	
 	private CourseVO course;
 	
 	private AcademicYearVO academicYear;
@@ -36,6 +38,7 @@ public class ClassVO {
 	public ClassVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(ClassConstant.CLASS_ID);
 		this.capacity = rs.getInt(ClassConstant.CLASS_CAPACITY);
+		this.totalStudents = rs.getInt(ClassConstant.CLASS_TOTAL_STUDENTS);
 		this.updatedOn = rs.getDate(ClassConstant.CLASS_UPDATED_ON);
 		this.createdOn = rs.getDate(ClassConstant.CLASS_CREATED_ON);
 		
@@ -148,5 +151,13 @@ public class ClassVO {
 
 	public void setDepartment(DepartmentVO department) {
 		this.department = department;
+	}
+
+	public void setTotalStudents(Integer totalStudents ) {
+		this.totalStudents = totalStudents;
+	}
+
+	public Integer getTotalStudents() {
+		return totalStudents;
 	}
 }

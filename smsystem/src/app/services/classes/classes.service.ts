@@ -50,6 +50,11 @@ export class ClassService {
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadClassesByTeacherID(teacherId: number): Observable<ClassView[]> {
+    return this.http.get(`${API_END_POINTS.classes}/teachers/${teacherId}}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   loadClassesByStudentIDAndAcademicLevelID(studentId: number, academicLevelId: number): Observable<ClassView[]> {
     return this.http.get(`${API_END_POINTS.classes}/students/${studentId}/academic-levels/${academicLevelId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));

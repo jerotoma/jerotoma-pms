@@ -25,3 +25,4 @@ export * from './programs';
 export * from './storage';
 export * from './securities';
 export * from './completion-orders';
+export * from './student-classes';

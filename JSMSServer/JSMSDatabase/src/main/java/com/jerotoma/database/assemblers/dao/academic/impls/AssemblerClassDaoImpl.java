@@ -36,12 +36,12 @@ import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.database.assemblers.dao.schedules.AssemblerMeetingTimeDao;
 import com.jerotoma.database.dao.DaoUtil;
 
 @Repository
-public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJClassDao {
+public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerClassDao {
 	
 	
 	private JdbcTemplate jdbcTemplate;
@@ -134,13 +134,15 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn FROM public.classes cl ")
+		return new StringBuilder("SELECT cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn, ")
+				.append("(SELECT count(sal.student_id) FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id AND sc.class_id = cl.id) AS totalStudents ")
+				.append("FROM public.classes cl ")				
 				.append("INNER JOIN courses co ON co.id = cl.course_id ");		
 	}
 	
 	@Override
-	public List<ClassVO> loadJClassesByStudentId(Integer studentId) {		
-		String query = "SELECT src.class_id FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id  WHERE sc.student_id = ?";
+	public List<ClassVO> loadClassesByStudentId(Integer studentId) {		
+		String query = "SELECT sc.class_id FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id  WHERE sal.student_id = ?";
 		
 		return this.jdbcTemplate.query(query,new ArgumentPreparedStatementSetter(new Object[] {studentId}), new RowMapper<ClassVO>() {
 			@Override
@@ -164,7 +166,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerJC
 		jClass.setAcademicYear(loadAcademicYear(rs.getInt(ClassConstant.CLASS_ACADEMIC_YEAR_ID)));
 		jClass.setRoom(loadClassRoom(rs.getInt(ClassConstant.CLASS_ROOM_ID)));
 		jClass.setCourse(loadCourse(rs.getInt(ClassConstant.CLASS_COURSE_ID)));
-		jClass.setTeacher(loadTeacher(rs.getInt(ClassConstant.CLASS_TEACHER_ID)));
+		jClass.setTeacher(loadTeacher(rs.getInt(ClassConstant.CLASS_TEACHER_ID)));		
 		jClass.setMeetingTime(loadMeetingTime(rs.getInt(ClassConstant.CLASS_MEETING_TIME_ID)));		
 		return jClass;
 	}

@@ -1,6 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild  } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
+
+import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortable } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+
 import { NbDialogRef } from '@nebular/theme';
+import { NbDialogService } from '@nebular/theme';
+
+import { ManageStudentProgressCreateComponent } from './manage-student-progress-create/manage-student-progress-create.component';
+
 import {
   StudentAcademicLevelService,
   ClassService,
@@ -34,44 +44,70 @@ export class ManageStudentProgressComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Input('teacher') teacher: Teacher = null;
-  currentAcademicYearKey: string = APP_CONSTANTS.currentAcademicYear;
-
-  userType: string = USER_TYPE.STUDENT;
-
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   academicYearId: number;
-  courseId: number;
   programId: number;
   academicLevelId: number;
-  jClassIds: number[] = [];
   teacherId: number;
   isLoading: boolean = false;
-  confirmed: boolean = false;
-  checkAllStudents: boolean = false;
-  checkAllCourses: boolean = false;
 
   classParam: TeacherClassParam
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
-  currentAcademicYear: AcademicYear = null;
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
   programs: Program[];
   jClasses: ClassView[];
-  studentClassAdmission: StudentClassAdmission;
   manageStudentProgressForm: FormGroup;
+
+  hidePageSize: boolean = false;
+  pageSize: number = 10;
+  totalNumberOfItems: number = 20;
+  pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
+  displayedColumns: string[] = ['id', 'course', 'totalStudents', 'academicYearTerm', 'academicLevel', 'program', 'department', 'action'];
+  sortableColumns: MatSortable[] = [
+    {
+      id: 'course',
+      disableClear: true,
+      start: 'asc'
+    },
+    {
+      id: 'academicLevel',
+      disableClear: true,
+      start: 'asc'
+    },
+    {
+      id: 'academicYearTerm',
+      disableClear: true,
+      start: 'asc'
+    },
+    {
+      id: 'program',
+      disableClear: true,
+      start: 'asc'
+    },
+    {
+      id: 'department',
+      disableClear: true,
+      start: 'asc'
+    }
+  ];
+  dataSource: MatTableDataSource<ClassView> = new MatTableDataSource<ClassView>();
 
   constructor(
     private modalService: ModalService,
     private programService: ProgramService,
     private academicLevelService: AcademicLevelService,
     private academicYearService: AcademicYearService,
+    private dialogService: NbDialogService,
     private formBuilder: FormBuilder,
-    private classService: ClassService,
-    private studentClassService: StudentAcademicLevelService,
-    private studentAcademicLevelService: StudentAcademicLevelService) {}
+    private classService: ClassService) {}
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
     this.loadForm();
     this.loadData();
   }
@@ -79,6 +115,7 @@ export class ManageStudentProgressComponent implements OnInit {
   loadData() {
     this.loadPrograms();
     this.loadAcademicYears();
+    this.loadJClassesByTeacherID();
   }
 
   loadForm() {
@@ -96,7 +133,7 @@ export class ManageStudentProgressComponent implements OnInit {
       this.academicYearId = academicYearId;
       if (this.programId && this.academicLevelId) {
         this.loadJClassesByParams(this.programId, this.academicLevelId, academicYearId);
-    }
+      }
      });
 
     this.manageStudentProgressForm.get('programId').valueChanges.subscribe((programId: number) => {
@@ -149,20 +186,30 @@ export class ManageStudentProgressComponent implements OnInit {
         this.isLoading = false;
       });
   }
-
+  loadJClassesByTeacherID() {
+    this.isLoading = true;
+    this.jClasses = [];
+    this.classService.loadClassesByUserId(this.teacher.userId).subscribe((classViews: ClassView[]) => {
+      this.jClasses = classViews;
+      this.dataSource.data = classViews
+      this.dataSource.sort = this.sort;
+      this.isLoading = false;
+    });
+  }
   loadJClassesByParams(programId: number, academicLevelId: number, academicYearId: number) {
+    this.academicLevelId = academicLevelId
     if (!programId || !academicLevelId || !academicYearId) {
         this.modalService.openSnackBar('Program or Academic Level can not be empty', 'info');
         return;
     }
     this.isLoading = true;
-    this.academicLevelId = academicLevelId
     this.classParam = {
       teacherId: this.teacher.id,
       programId: programId,
       academicLevelId: academicLevelId,
       academicYearId: academicYearId,
     }
+    this.jClasses = [];
     this.classService.loadClassesByTeacherClassParam(this.classParam).subscribe((classViews: ClassView[]) => {
       if (classViews && classViews.length === 0) {
         this.modalService.openSnackBar('No classes available for the selected options', 'info');
@@ -170,5 +217,27 @@ export class ManageStudentProgressComponent implements OnInit {
       this.jClasses = classViews;
       this.isLoading = false;
     });
+  }
+
+  manageProgress(classView: ClassView) {
+    this.dialogService.open(ManageStudentProgressCreateComponent, {
+      context: {
+        title: 'Manage Students Progress',
+        action: 'create',
+        classView: classView,
+      },
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+
+      }
+    });
+  }
+
+  addMoreStudent(classView: ClassView) {
+
+  }
+
+  removeStudent(classView: ClassView) {
+
   }
 }

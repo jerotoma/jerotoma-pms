@@ -95,7 +95,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		
 		List<StudentAcademicLevelVO> studentClasses = new ArrayList<>();
 		
-		this.logRequestDetail("GET : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/list");
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE + "/list");
 		this.securityCheckAccessByRoles(auth);
 		try {
 			studentClasses = assemblerStudentAcademicLevelService.loadList();		
@@ -117,7 +117,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		userSecurityClearance.checkStudentCreationPermission();
 		
@@ -125,7 +125,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
-						StudentConstant.Class.JCLASS_ID);
+						StudentConstant.Class.CLASS_ID);
 		
 		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);
 		try {
@@ -148,7 +148,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 			@RequestBody Map<String, Object> params) throws JDataAccessException {
 		
 		List<String> requiredFields;
-		this.logRequestDetail("POST : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("POST : "+ EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		userSecurityClearance.checkStudentCreationPermission();
 		
@@ -179,7 +179,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
 		List<String> requiredFields;
-		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);		
 				
 		requiredFields = Arrays.asList(
@@ -206,7 +206,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
 		List<String> requiredFields;
-		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("PUT : "+ EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);		
 				
 		requiredFields = Arrays.asList(
@@ -214,7 +214,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 						StudentConstant.Class.ACADEMIC_YEAR_ID,
 						StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 						StudentConstant.Class.STUDENT_IDS,
-						StudentConstant.Class.JCLASS_ID
+						StudentConstant.Class.CLASS_ID
 						);		
 		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);		
 		try {
@@ -235,7 +235,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		@RequestBody Map<String, Object> params) throws JDataAccessException {
 	
 		List<String> requiredFields;
-		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE + "/delete-student-class");
+		this.logRequestDetail("POST : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE + "/delete-student-class");
 		this.securityCheckAccessByRoles(auth);	
 		userSecurityClearance.checkStudentClassDeletionPermission();
 				
@@ -243,11 +243,11 @@ public class RestStudentAcademicLevelController  extends BaseController {
 				StudentConstant.Class.ACADEMIC_YEAR_ID,
 				StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID,
 				StudentConstant.Class.STUDENT_ID,
-				StudentConstant.Class.JCLASS_ID
+				StudentConstant.Class.CLASS_ID
 				);
 		
 		StudentAcademicLevel.Fields studentAcademicLevelField = StudentAcadmicLevelValidator.validate(params, requiredFields);		
-		Integer classId = (Integer) params.get(StudentConstant.Class.JCLASS_ID);		
+		Integer classId = (Integer) params.get(StudentConstant.Class.CLASS_ID);		
 		studentAcademicLevelField.setClassIds(Arrays.asList(classId));		
 		try {				
 			response.setData(studentAcademicLevelService.deleteStudentClass(studentAcademicLevelField));				
@@ -262,7 +262,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@GetMapping(value = {"students/{studentId}", "/students/{studentId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> loadStudentAcademicLevelsByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
 			response.setData(assemblerStudentAcademicLevelService.findStudentAcademicLevelsByStudentId(studentId));
@@ -278,7 +278,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@GetMapping(value = "/progresses/students/{studentId}")
 	@ResponseBody
 	protected HttpResponseEntity<Object> loadStudentProgressByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
 			response.setData(assemblerStudentAcademicLevelService.findStudentProgressByStudentId(studentId));
@@ -294,7 +294,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@GetMapping(value = {"users/{userId}", "/users/{userId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> loadStudentClassByUserId(Authentication auth, @PathVariable("userId") Integer userId) {
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
 			
@@ -329,7 +329,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 			@PathVariable("studentId") Integer studentId, 
 			@PathVariable("academicLevelId") Integer academicLevelId) {
 		
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		try {
 			response.setData(assemblerStudentAcademicLevelService.findStudentClassesByStudentIdAndAndAcademicLevelID(studentId, academicLevelId));
@@ -345,7 +345,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@GetMapping(value = {"/{studentAcademicLevelId}", "/{studentAcademicLevelId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> loadStudentClassByStudentClassId(Authentication auth, @PathVariable("studentAcademicLevelId") Integer studentAcademicLevelId) {
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		StudentAcademicLevelVO studentAcademicLevelVO;
@@ -364,7 +364,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@DeleteMapping(value = {"/{studentAcademicLevelId}", "/{studentAcademicLevelId}/"})
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteStudentClass(Authentication auth, @PathVariable("studentAcademicLevelId") Integer studentAcademicLevelId) {
-		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		
 		StudentAcademicLevel studentAcademicLevel;
@@ -395,7 +395,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	protected HttpResponseEntity<Object> deleteStudentAcademicLevelClasses(Authentication auth, 
 			@PathVariable("classId") Integer classId,
 			@PathVariable("studentAcademicLevelId") Integer studentAcademicLevelId) {
-		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_CLASS_CONTROLLER.BASE);
+		this.logRequestDetail("DELETE : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 			
 		try {

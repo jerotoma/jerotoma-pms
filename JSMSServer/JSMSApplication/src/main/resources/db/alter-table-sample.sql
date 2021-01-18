@@ -67,11 +67,12 @@ ALTER TABLE program_academic_levels
         ON UPDATE CASCADE
         ON DELETE CASCADE;
         
-        
-        
-        
 ALTER TABLE student_classes
 	ADD COLUMN academic_level_id bigint NOT NULL DEFAULT 1,
 	ADD CONSTRAINT academic_level_fkey FOREIGN KEY (academic_level_id) REFERENCES academic_levels (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE;
+      
+ALTER TABLE student_classes ADD COLUMN score bigint NOT NULL DEFAULT 0;
+
+

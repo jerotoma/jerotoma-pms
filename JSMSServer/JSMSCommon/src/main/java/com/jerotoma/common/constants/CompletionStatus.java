@@ -30,5 +30,4 @@ public enum CompletionStatus {
 		}
 		return null;
 	}
-
 }

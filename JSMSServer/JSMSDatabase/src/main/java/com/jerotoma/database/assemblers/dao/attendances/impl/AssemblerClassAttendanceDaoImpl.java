@@ -25,7 +25,7 @@ import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.viewobjects.ClassAttendanceVO;
 import com.jerotoma.common.viewobjects.StudentAttendanceVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.database.assemblers.dao.attendances.AssemblerClassAttendanceDao;
 import com.jerotoma.database.dao.DaoUtil;
 
@@ -35,7 +35,7 @@ public class AssemblerClassAttendanceDaoImpl extends JdbcDaoSupport implements A
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
-	@Autowired AssemblerJClassDao assemblerJClassDao;
+	@Autowired AssemblerClassDao assemblerJClassDao;
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
 	Map<String, Object> map;
 	

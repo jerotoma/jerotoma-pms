@@ -867,7 +867,8 @@
 	CREATE TABLE IF NOT EXISTS public.student_classes( 
 		id bigserial NOT NULL,
 	    class_id bigint NOT NULL,
-	    student_academic_level_id bigint NOT NULL,	    
+	    student_academic_level_id bigint NOT NULL,
+	    score bigint NOT NULL,	
 	    completion_status_id bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL default now(),
 	    updated_on timestamp with time zone NOT NULL,

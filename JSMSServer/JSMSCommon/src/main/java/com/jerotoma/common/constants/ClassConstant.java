@@ -15,4 +15,5 @@ public class ClassConstant {
 	public static final String CLASS_MEETING_TIME_ID = "meetingTimeId";
 	public static final String CLASS_ACADEMIC_LEVEL_ID = "academicLevelId";	
 	public static final String CLASS_PROGRAM_ID = "programId";
+	public static final String CLASS_TOTAL_STUDENTS = "totalStudents";
 }

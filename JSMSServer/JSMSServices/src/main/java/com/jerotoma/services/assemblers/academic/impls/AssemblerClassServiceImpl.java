@@ -12,7 +12,7 @@ import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.StudentAcademicLevelClass;
 import com.jerotoma.common.viewobjects.UserVO;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
 import com.jerotoma.services.users.UserService;
@@ -20,7 +20,7 @@ import com.jerotoma.services.users.UserService;
 @Service
 public class AssemblerClassServiceImpl  implements AssemblerClassService {
 	
-	@Autowired AssemblerJClassDao assemblerClassDao;
+	@Autowired AssemblerClassDao assemblerClassDao;
 	@Autowired UserService userService;
 	@Autowired AssemblerStudentService assemblerStudentService;
 	

@@ -3,6 +3,7 @@ import { Room, AcademicYear, AcademicLevel, Teacher, Student, Course, MeetingTim
 
 export interface ClassView {
   id: number;
+  totalStudents: number;
   teacher: Teacher;
   course: Course;
   meetingTime: MeetingTime;
@@ -70,3 +71,12 @@ export interface TeacherClassParam {
   programId?: number;
 }
 
+export interface StudentClass {
+  classId?: number;
+  studentAcademicLevelId?: number;
+  student?: Student;
+  status?: string;
+  statusId?: number;
+  score?: number;
+  scoreStanding?: string;
+}

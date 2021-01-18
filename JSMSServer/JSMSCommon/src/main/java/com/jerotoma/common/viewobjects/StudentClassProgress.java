@@ -8,11 +8,7 @@ import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.SystemConstant;
 
-public class StudentClassVO {
-	
-	private Integer id;
-	
-	private Integer classId;
+public class StudentClassProgress {
 	
 	private Integer studentAcademicLevelId;
 	
@@ -22,7 +18,7 @@ public class StudentClassVO {
 	
 	private String status;
 	
-	private Double score;
+	private Integer score;
 	
 	private String scoreStanding;
 	
@@ -31,36 +27,18 @@ public class StudentClassVO {
 	private Date createdOn;
 	
 	private Date updatedOn;
-			
-	public StudentClassVO(ResultSet rs) throws SQLException {
-		this.id = rs.getInt(StudentConstant.Class.ID);		
-		this.classId = rs.getInt(StudentConstant.Class.CLASS_ID);
+	
+	public StudentClassProgress(ResultSet rs) throws SQLException {		
 		this.studentAcademicLevelId = rs.getInt(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
 		this.statusId = rs.getInt(StudentConstant.Class.COMPLETION_STATUS_ID);
-		this.score = rs.getDouble(StudentConstant.Class.SCORE);
+		this.score = rs.getInt(StudentConstant.Class.SCORE);
 		CompletionStatus completionStatus = CompletionStatus.getCompletionStatusfromID(statusId);		
-		this.status = completionStatus != null ? completionStatus.getDescription() : null;
+		this.status = completionStatus != null ? completionStatus.name() : null;
 		this.updatedBy = rs.getInt(SystemConstant.UPDATED_BY);
 		this.updatedOn = rs.getDate(StudentConstant.Class.UPDATED_ON);
 		this.createdOn = rs.getDate(StudentConstant.Class.CREATED_ON);
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getClassId() {
-		return classId;
-	}
-
-	public void setClassId(Integer classId) {
-		this.classId = classId;
-	}
-	
 	public StudentVO getStudent() {
 		return student;
 	}
@@ -85,11 +63,11 @@ public class StudentClassVO {
 		this.status = status;
 	}
 
-	public Double getScore() {
+	public Integer getScore() {
 		return score;
 	}
 
-	public void setScore(Double score) {
+	public void setScore(Integer score) {
 		this.score = score;
 	}
 
@@ -132,5 +110,5 @@ public class StudentClassVO {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-	
+
 }

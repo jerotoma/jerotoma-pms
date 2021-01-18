@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { FileUploadModule } from 'ng2-file-upload';
 import { LayoutModule } from 'app/layouts/layout.module';
@@ -61,6 +62,7 @@ import {
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
+  ManageStudentProgressCreateComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -83,7 +85,8 @@ const COMPONENTS = [
   AddParentComponent,
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
-  ManageStudentProgressComponent
+  ManageStudentProgressComponent,
+  ManageStudentProgressCreateComponent
 ];
 
 const ENTRY_COMPONENTS = [
@@ -102,6 +105,7 @@ const ENTRY_COMPONENTS = [
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
+  ManageStudentProgressCreateComponent
 ];
 
 const MODULES = [
@@ -137,6 +141,7 @@ const MODULES = [
   MatSelectModule,
   MatSnackBarModule,
   MatButtonModule,
+  MatSliderModule,
   SharedCommonModule,
   NbDialogModule.forRoot({
     closeOnBackdropClick: false,

@@ -1,2 +1,2 @@
 export * from './classes.service';
-export * from './student-classes.service';
+export * from './student-academic-level.service';

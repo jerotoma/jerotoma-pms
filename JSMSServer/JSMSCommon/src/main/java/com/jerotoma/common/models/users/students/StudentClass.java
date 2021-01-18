@@ -44,6 +44,9 @@ public class StudentClass {
 	@Column(name="completion_status_id")
 	private Integer completionStatusId;
 	
+	@Column
+	private Double score;
+	
 	@Column(name="updated_by")
 	private Integer updatedBy;
 	
@@ -83,6 +86,14 @@ public class StudentClass {
 
 	public void setCompletionStatusId(Integer completionStatusId) {
 		this.completionStatusId = completionStatusId;
+	}
+	
+	public void setScore(Double score) {
+		this.score = score;		
+	}
+
+	public Double getScore() {
+		return score;
 	}
 
 	public Integer getUpdatedBy() {
@@ -146,4 +157,77 @@ public class StudentClass {
 		}			
 	}
 	
+	public static class StudentClassParam {
+		private Integer classId;	
+		
+		private List<StudentClassProgressParam> studentClassProgressParams;
+		
+		public StudentClassParam(Integer classId, List<StudentClassProgressParam> studentClassProgressParams) {			
+			this.classId = classId;
+			this.studentClassProgressParams = studentClassProgressParams;
+		}
+
+		public Integer getClassId() {
+			return classId;
+		}
+
+		public void setClassId(Integer classId) {
+			this.classId = classId;
+		}
+
+		public List<StudentClassProgressParam> getStudentClassProgressParams() {
+			return studentClassProgressParams;
+		}
+
+		public void setStudentClassProgressParams(List<StudentClassProgressParam> studentClassProgressParams) {
+			this.studentClassProgressParams = studentClassProgressParams;
+		}				
+	}
+	
+	public static class StudentClassProgressParam {
+		Double score;
+		Integer studentId;
+		Integer statusId;
+		Integer studentAcademicLevelId;
+		
+		
+		public StudentClassProgressParam(Integer studentAcademicLevelId, Integer studentId, Integer statusId, Double score) {			
+			this.score = score;
+			this.studentId = studentId;
+			this.studentAcademicLevelId = studentAcademicLevelId;
+			this.statusId = statusId;
+		}
+		
+		public Double getScore() {
+			return score;
+		}
+		
+		public void setScore(Double score) {
+			this.score = score;
+		}
+		
+		public Integer getStudentId() {
+			return studentId;
+		}
+		
+		public void setStudentId(Integer studentId) {
+			this.studentId = studentId;
+		}
+		
+		public Integer getStatusId() {
+			return statusId;
+		}
+		
+		public void setStatusId(Integer statusId) {
+			this.statusId = statusId;
+		}
+
+		public Integer getStudentAcademicLevelId() {
+			return studentAcademicLevelId;
+		}
+
+		public void setStudentAcademicLevelId(Integer studentAcademicLevelId) {
+			this.studentAcademicLevelId = studentAcademicLevelId;
+		}
+	}
 }

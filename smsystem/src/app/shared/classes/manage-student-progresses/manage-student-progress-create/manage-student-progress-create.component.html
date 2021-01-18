@@ -1,0 +1,95 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="manageStudentProgressForm" class="step-container" (ngSubmit)="onSubmit()">
+        <nb-card class="dialog-card">
+          <nb-card-header status="danger" >{{ title }} </nb-card-header>
+          <nb-card-body
+            [nbSpinner]="isLoading"
+            nbSpinnerStatus="success"
+            nbSpinnerSize="large"
+            nbSpinnerMessage="Loading....">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-control-group" *ngIf="classView">
+                  <label for="course-program" class="label">Program Name</label>
+                  <p>{{classView?.course?.program?.name}}</p>
+                  <input type="hidden" [value]="classView?.course?.program?.id"  formControlName="programId">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group" *ngIf="classView">
+                  <label for="course-program" class="label">Academic Level Name</label>
+                  <p>{{classView?.course?.academicLevel?.name}}</p>
+                  <input type="hidden" [value]="classView?.academicLevel?.id" formControlName="academicLevelId">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-control-group" *ngIf="classView">
+                    <label for="class-course-name" class="label">Academic Year</label>
+                    <p>{{classView?.academicYear.name}} ({{classView?.academicYear.yearOfStudy}})</p>
+                    <input type="hidden" [value]="classView?.academicYear?.id" formControlName="academicYearId">
+                </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-control-group" *ngIf="classView">
+                      <label for="class-course-name" class="label">Course Name</label>
+                      <p>{{classView?.course?.name}} - {{classView?.course?.code}}</p>
+                      <input type="hidden" [value]="classView?.id" formControlName="classId">
+                  </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-hover" *ngIf="studentProgressArray && studentClasses">
+                  <thead>
+                    <tr>
+                      <th scope="col">Full Name</th>
+                      <th scope="col">Score</th>
+                      <th scope="col">Standing</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="studentProgressArray">
+                    <tr *ngFor="let studentProgress of studentProgressArray.controls; let i = index" [formGroupName]="i">
+                      <th scope="row">
+                        <span class="text-primary">{{studentClasses[i]?.student?.fullName}} </span>
+                        <input type="hidden" [value]="studentClasses[i]?.student?.id" formControlName="studentId">
+                      </th>
+                      <td>
+                        <mat-slider
+                            [min]="sliderMin"
+                            [max]="sliderMax"
+                            [step]="sliderStep"
+                            [value]="studentClasses[i]?.score"
+                            [color]="sliderColor"
+                            (change)="onSliderValueChange($event, studentClasses[i])"
+                            thumbLabel>
+                        </mat-slider>
+                        <span [id]="'student-class-current-slider-value-' + studentClasses[i]?.student?.id"></span>
+                        <input type="hidden" [value]="studentClasses[i]?.score" formControlName="score">
+                      </td>
+                      <td>
+                        Good Standing
+                      </td>
+                      <td>
+                        <input type="hidden" [value]="studentClasses[i]?.statusId" formControlName="statusId">
+                        {{studentClasses[i]?.status}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer>
+            <div class="form-control-group">
+              <button class='push-right' [disabled]="!manageStudentProgressForm.valid" type="submit" nbButton hero status="success">Submit</button>
+              <button type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            </div>
+          </nb-card-footer>
+        </nb-card>
+      </form>
+  </div>
+</div>

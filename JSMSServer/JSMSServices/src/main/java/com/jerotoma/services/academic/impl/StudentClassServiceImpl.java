@@ -17,6 +17,8 @@ import com.jerotoma.common.constants.AcademicConstants;
 import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.users.students.StudentClass;
+import com.jerotoma.common.models.users.students.StudentClass.StudentClassParam;
+import com.jerotoma.common.models.users.students.StudentClass.StudentClassProgressParam;
 import com.jerotoma.database.dao.academic.StudentClassDao;
 import com.jerotoma.services.academic.StudentClassService;
 import com.jerotoma.services.utils.ServiceUtil;
@@ -96,8 +98,22 @@ public class StudentClassServiceImpl implements StudentClassService {
 	}
 
 	@Override
-	public boolean deleteStudentClass(Integer studentAcademicLevelId, Integer jClassId) throws SQLException {
-		studenClassDao.deleteStudentClass(jClassId, studentAcademicLevelId);
+	public boolean deleteStudentClass(Integer studentAcademicLevelId, Integer classId) throws SQLException {
+		studenClassDao.deleteStudentClass(classId, studentAcademicLevelId);
 		return true;
+	}
+
+	@Override
+	public List<StudentClass> createStudentClassProgress(StudentClassParam studentClassParam) throws SQLException {
+		List<StudentClass> studentClassList = new ArrayList<>();
+		
+		for (StudentClassProgressParam param: studentClassParam.getStudentClassProgressParams()) {
+			StudentClass studentClass = findStudentClass(studentClassParam.getClassId(), param.getStudentAcademicLevelId());
+			studentClass.setCompletionStatusId(param.getStatusId());
+			studentClass.setScore(param.getScore());			
+			studentClassList.add(studentClass);
+		}
+		
+		return updateBatchObject(studentClassList);
 	}
 }

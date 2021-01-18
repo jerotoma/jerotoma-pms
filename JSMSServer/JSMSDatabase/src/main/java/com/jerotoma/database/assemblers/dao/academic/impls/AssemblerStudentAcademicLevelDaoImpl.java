@@ -35,7 +35,7 @@ import com.jerotoma.database.assemblers.dao.AssemblerTeacherDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicYearDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerCourseDao;
-import com.jerotoma.database.assemblers.dao.academic.AssemblerJClassDao;
+import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerRoomDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerStudentAcademicLevelDao;
 import com.jerotoma.database.assemblers.dao.schedules.AssemblerMeetingTimeDao;
@@ -48,7 +48,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	private JdbcTemplate jdbcTemplate;
 	
 	@Autowired DataSource dataSource;
-	@Autowired AssemblerJClassDao assemblerJClasseDao;
+	@Autowired AssemblerClassDao assemblerJClasseDao;
 	@Autowired AssemblerStudentDao assemblerStudentDao;	
 	@Autowired AssemblerAcademicYearDao assemblerAcademicYearDao;
 	@Autowired AssemblerAcademicLevelDao assemblerAcademicLevelDao;

@@ -28,6 +28,7 @@ export const API_END_POINTS = {
   rooms: '/api/secured/rooms',
   courses: '/api/secured/courses',
   programs: '/api/secured/programs',
+  studentClasses: '/api/secured/student-classes',
   completionOrders: '/api/secured/completion-orders',
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',

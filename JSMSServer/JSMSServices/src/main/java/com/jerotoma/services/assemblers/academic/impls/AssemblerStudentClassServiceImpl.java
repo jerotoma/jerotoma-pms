@@ -47,4 +47,9 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 		return assemblerStudentClassDao.doesStudentClassRecordExist(classId, studentAcademicLevelId);
 	}
 
+	@Override
+	public List<StudentClassVO> findStudentClassesByClassId(Integer classId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassesByClassId(classId);
+	}
+
 }
