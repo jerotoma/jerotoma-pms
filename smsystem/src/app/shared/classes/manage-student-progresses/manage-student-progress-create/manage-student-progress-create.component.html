@@ -20,7 +20,7 @@
                 <div class="form-control-group" *ngIf="classView">
                   <label for="course-program" class="label">Academic Level Name</label>
                   <p>{{classView?.course?.academicLevel?.name}}</p>
-                  <input type="hidden" [value]="classView?.academicLevel?.id" formControlName="academicLevelId">
+                  <input type="hidden" [value]="classView?.course?.academicLevel?.id" formControlName="academicLevelId">
                 </div>
               </div>
             </div>
@@ -75,7 +75,10 @@
                       </td>
                       <td>
                         <input type="hidden" [value]="studentClasses[i]?.statusId" formControlName="statusId">
-                        {{studentClasses[i]?.status}}
+                        <button nbButton outline hero shape="round" size="tiny"
+                          [status]="getStatusClass(studentClasses[i]?.status)">
+                          {{studentClasses[i]?.status}}
+                        </button>
                       </td>
                     </tr>
                   </tbody>

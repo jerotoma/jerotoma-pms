@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import {
   StudentAcademicLevelService,
   ClassService,
+  StatusService,
   AcademicLevelService,
  } from 'app/services';
 import { USER_TYPE, QueryParam } from 'app/utils';
@@ -33,6 +34,7 @@ export class ProgressComponent implements OnInit {
   constructor(
     private academicLevelService: AcademicLevelService,
     private classService: ClassService,
+    private statusService: StatusService,
     private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder) { }
 
@@ -58,13 +60,6 @@ export class ProgressComponent implements OnInit {
   }
 
   getCompletionStatus(completionStatus: string): string {
-    if (CompletionStatus.IN_PROGRESS === completionStatus) {
-      return 'info';
-    } else if (CompletionStatus.COMPLETED === completionStatus) {
-      return 'success';
-    } else if (CompletionStatus.NOT_STARTED === completionStatus) {
-      return 'warning';
-    }
-    return 'danger';
+    return this.statusService.getCompletionStatusClass(completionStatus);
   }
 }

@@ -1,0 +1,68 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form  autocomplete="off" [formGroup]="scoreStandingForm" (ngSubmit)="onSubmit()">
+          <nb-card size="giant" status="primary">
+            <nb-card-header>{{ title }}</nb-card-header>
+            <nb-card-body
+              [nbSpinner]="isSubmitting"
+              nbSpinnerStatus="success"
+              nbSpinnerSize="large"
+              [nbSpinnerMessage]="action == 'create' ? 'Creating course......' :'Saving the changes......'"
+            >
+              <div class="row">
+                <div class="col-md-12">
+                    <div class="form-control-group">
+                        <label for="score-standing-name" class="label">Standing Name</label>
+                        <input
+                            type="text"
+                            nbInput fullWidth
+                            required
+                            id="score-standing-name"
+                            formControlName="name"
+                            placeholder="eg. Score Standing">
+                      </div>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                          <label for="score-standing-name" class="label">Minimum Score</label>
+                          <input
+                              type="number"
+                              nbInput fullWidth
+                              required
+                              id="score-standing-name"
+                              formControlName="minScore"
+                              placeholder="eg. Score Standing">
+                        </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-control-group">
+                        <label for="score-standing" class="label">Maximum Score</label>
+                        <input
+                            type="number"
+                            nbInput fullWidth
+                            autocomplete="off"
+                            required
+                            id="score-standing"
+                            formControlName="maxScore"
+                            placeholder="eg.  1">
+                      </div>
+                  </div>
+              </div>
+            </nb-card-body>
+            <nb-card-footer>
+              <button class='push-right'
+                  [disabled]="!scoreStandingForm.valid"
+                  type="submit"
+                  nbButton hero
+                  status="success">
+                    {{action == 'create' ? 'Create Course' : 'Save Changes'}}
+              </button>
+              <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
+            </nb-card-footer>
+          </nb-card>
+      </form>
+  </div>
+</div>
+

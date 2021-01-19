@@ -9,6 +9,7 @@ import { NbDialogService } from '@nebular/theme';
 import {
   StudentAcademicLevelService,
   ClassService,
+  StatusService,
   AcademicYearService,
   ProgramService,
   StudentClassService,
@@ -70,6 +71,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
     private academicYearService: AcademicYearService,
     private dialogService: NbDialogService,
     private formBuilder: FormBuilder,
+    private statusService: StatusService,
     private classService: ClassService,
     protected ref: NbDialogRef<ManageStudentProgressCreateComponent>) {}
 
@@ -171,5 +173,9 @@ export class ManageStudentProgressCreateComponent implements OnInit {
 
       }
     });
+  }
+
+  getStatusClass(statusName: string): string {
+    return this.statusService.getCompletionStatusClass(statusName);
   }
 }

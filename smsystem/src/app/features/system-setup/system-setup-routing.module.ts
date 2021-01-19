@@ -47,11 +47,11 @@ const routes: Routes = [{
         .then(m => m.CoursesModule),
     },
     {
-      path: 'completion-orders',
+      path: 'score-standings',
       data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES},
       canActivateChild: [AuthGuard],
-      loadChildren: () => import('./completion-orders/completion-orders.module')
-        .then(m => m.CompletionOrdersModule),
+      loadChildren: () => import('./score-standings/score-standings.module')
+        .then(m => m.ScoreStandingsModule),
     },
     {
       path: 'departments',

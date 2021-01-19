@@ -21,28 +21,28 @@ import {
   NbListModule,
 } from '@nebular/theme';
 
-import { CompletionOrdersRoutingModule } from './completion-orders-routing.module';
-import { CompletionOrdersComponent } from './completion-orders.component';
-import { CompletionOrdersViewComponent } from './completion-order-view/completion-orders-view.component';
-import { CompletionOrderCreateComponent } from './completion-order-create/completion-order-create.component';
-import { CompletionOrderDeleteComponent } from './completion-order-delete/completion-order-delete.component';
+import { ScoreStandingsRoutingModule } from './score-standings-routing.module';
+import { ScoreStandingsComponent } from './score-standings.component';
+import { ScoreStandingsViewComponent } from './score-standing-view/score-standings-view.component';
+import { ScoreStandingCreateComponent } from './score-standing-create/score-standing-create.component';
+import { ScoreStandingDeleteComponent } from './score-standing-delete/score-standing-delete.component';
 
 
 const COMPONENTS = [
-  CompletionOrdersComponent,
-  CompletionOrdersViewComponent,
-  CompletionOrderCreateComponent,
-  CompletionOrderDeleteComponent,
+  ScoreStandingsComponent,
+  ScoreStandingsViewComponent,
+  ScoreStandingCreateComponent,
+  ScoreStandingDeleteComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  CompletionOrderCreateComponent,
-  CompletionOrderDeleteComponent,
+  ScoreStandingCreateComponent,
+  ScoreStandingDeleteComponent,
 ];
 
 const MODULES = [
   SharedModule,
-  CompletionOrdersRoutingModule,
+  ScoreStandingsRoutingModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
@@ -82,4 +82,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class CompletionOrdersModule { }
+export class ScoreStandingsModule { }

@@ -8,7 +8,6 @@ import {
   Program,
   AcademicLevel,
   AcademicLevelCompletionOrder,
-  CompletionOrder,
 } from 'app/models';
 import {
   ProgramService,
@@ -34,7 +33,6 @@ export class ProgramCreateComponent implements OnInit {
   academicLevelIDs: number[] = [];
   academicLevelCompletionOrders: AcademicLevelCompletionOrder[] = [];
   academicLevelCompletionOrder: AcademicLevelCompletionOrder;
-  completionOrders: CompletionOrder[];
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
   isLoading: boolean = false;

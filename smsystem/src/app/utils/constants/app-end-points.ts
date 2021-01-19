@@ -29,7 +29,7 @@ export const API_END_POINTS = {
   courses: '/api/secured/courses',
   programs: '/api/secured/programs',
   studentClasses: '/api/secured/student-classes',
-  completionOrders: '/api/secured/completion-orders',
+  scoreStandings: '/api/secured/score-standings',
   departments: '/api/secured/departments',
   meetingTimes: '/api/secured/meeting-times',
   workDays: '/api/secured/work-days',
@@ -178,8 +178,8 @@ export const FRONTEND_ENDPOINTS = {
     path: '/dashboard/system-setup/appearances',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
-  systemSetupCompletionOrders: {
-    path: '/dashboard/system-setup/completion-orders',
+  systemSetupScoreStandings: {
+    path: '/dashboard/system-setup/score-standings',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
   systemSetupPositions: {

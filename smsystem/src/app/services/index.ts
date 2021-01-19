@@ -24,5 +24,6 @@ export * from './academic-levels';
 export * from './programs';
 export * from './storage';
 export * from './securities';
-export * from './completion-orders';
+export * from './score-standings';
 export * from './student-classes';
+export * from './statuses';
