@@ -42,7 +42,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <table class="table table-hover" *ngIf="studentProgressArray && studentClasses">
+                <table class="table table-hover" *ngIf="studentProgressArray && studentClasses && scoreStandings">
                   <thead>
                     <tr>
                       <th scope="col">Full Name</th>
@@ -67,11 +67,25 @@
                             (change)="onSliderValueChange($event, studentClasses[i])"
                             thumbLabel>
                         </mat-slider>
-                        <span [id]="'student-class-current-slider-value-' + studentClasses[i]?.student?.id"></span>
+                        <span [id]="'student-class-current-slider-value-' + studentClasses[i]?.student?.id"> {{studentClasses[i]?.score}} </span>
                         <input type="hidden" [value]="studentClasses[i]?.score" formControlName="score">
                       </td>
                       <td>
-                        Good Standing
+                         <div class="row">
+                          <div class="col-md-12">
+                              <nb-select
+                                fullWidth
+                                placeholder="Score Standing"
+                                formControlName="scoreStandingId"
+                                id="score-standing">
+                                <nb-option
+                                    *ngFor="let scoreStanding of scoreStandings"
+                                    [value]="scoreStanding.id">
+                                    {{scoreStanding.standing}} ({{scoreStanding.minScore}} - {{scoreStanding.maxScore}})
+                                </nb-option>
+                              </nb-select>
+                          </div>
+                        </div>
                       </td>
                       <td>
                         <input type="hidden" [value]="studentClasses[i]?.statusId" formControlName="statusId">

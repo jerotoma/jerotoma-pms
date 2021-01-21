@@ -27,7 +27,7 @@ export class ScoreStandingsViewComponent implements OnInit {
   isLoading: boolean = false;
   totalNumberOfItems: number = 20;
   pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
-  displayedColumns: string[] = ['id', 'standing', 'minScore', 'maxScore', 'createdOn', 'action'];
+  displayedColumns: string[] = ['id', 'standing', 'minScore', 'maxScore', 'standingColor', 'createdOn', 'action'];
   dataSource: MatTableDataSource<ScoreStanding> = new MatTableDataSource<ScoreStanding>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;

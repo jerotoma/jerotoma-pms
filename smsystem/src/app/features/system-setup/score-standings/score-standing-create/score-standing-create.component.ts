@@ -26,6 +26,18 @@ export class ScoreStandingCreateComponent implements OnInit {
   scoreStandingForm: FormGroup;
   listDisplay: string = 'none';
   isSubmitting: boolean = false;
+  selectedStandingColor: string = null;
+
+  standingColors: string[] = [
+    'info',
+    'success',
+    'warning',
+    'primary',
+    'secondary',
+    'danger',
+    'light',
+    'dark',
+  ];
 
   constructor(
     private scoreStandingService:  ScoreStandingService,
@@ -78,18 +90,27 @@ export class ScoreStandingCreateComponent implements OnInit {
   loadForm() {
     this.scoreStandingForm = this.formBuilder.group({
       id: [null],
-      name: ['', Validators.required],
-      minScore: ['', Validators.required],
-      maxScore: ['', Validators.required],
+      standing: ['', Validators.required],
+      minScore: [null, Validators.required],
+      maxScore: [null, Validators.required],
+      standingColor: ['', Validators.required],
+    });
+    this.onChanges();
+  }
+
+  onChanges() {
+    this.scoreStandingForm.get('standingColor').valueChanges.subscribe((value: string) => {
+      this.selectedStandingColor = value;
     });
   }
 
   patchScoreStanding() {
     this.scoreStandingForm.patchValue({
       id: this.scoreStanding.id,
-      name: this.scoreStanding.standing,
+      standing: this.scoreStanding.standing,
       minScore: this.scoreStanding.minScore,
       maxScore: this.scoreStanding.maxScore,
+      standingColor: this.scoreStanding.standingColor,
     }, {emitEvent: false});
   }
 

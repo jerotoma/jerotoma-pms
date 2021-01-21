@@ -782,6 +782,28 @@
 	        ON UPDATE CASCADE
 	        ON DELETE CASCADE
 	    );
+	    
+	    
+	/**************************************************************
+	 * 															  *
+	 * 															  *
+	 * 			SCORE_STANDINGS RELATED TABLES		  			  *
+	 * 															  *
+	 *************************************************************/
+	    
+	CREATE TABLE IF NOT EXISTS public.score_standings (
+	    id bigserial NOT NULL,
+	    standing character varying(255) NOT NULL,
+	    standing_color character varying(255) NOT NULL,
+	   	min_score double precision NOT NULL,
+	   	max_score double precision NOT NULL,
+	   	updated_by bigint NOT NULL,
+	   	UNIQUE(min_score),
+	   	UNIQUE(max_score),
+	    created_on timestamp with time zone NOT NULL,
+	    updated_on timestamp with time zone NOT NULL,
+	   	CONSTRAINT score_standings_pkey PRIMARY KEY(id)
+	    );
 	
 	
 	/**************************************************************

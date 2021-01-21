@@ -34,6 +34,12 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/uploads";	
 	}
 	
+	
+	
+	public static interface REST_SCORE_STANDING_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/score-standings";	
+	}
+	
 	public static interface REST_COURSE_CONTROLLER{
 		public static final String BASE =  API_SECURED_ROOT + "/courses";	
 	}

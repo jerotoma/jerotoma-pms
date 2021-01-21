@@ -27,6 +27,12 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Maximum Score </th>
                 <td mat-cell *matCellDef="let element"> {{element.maxScore}} </td>
               </ng-container>
+
+                <!-- standingColor Column -->
+                <ng-container matColumnDef="standingColor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Standing Color </th>
+                  <td mat-cell *matCellDef="let element"> <button type="button" [class]="'btn btn-sm btn-' + element.standingColor">{{element.standingColor}}</button> </td>
+                </ng-container>
               <!-- createdOn Column -->
               <ng-container matColumnDef="createdOn">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Created On </th>

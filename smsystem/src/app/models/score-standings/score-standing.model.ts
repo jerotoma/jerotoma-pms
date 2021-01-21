@@ -4,6 +4,7 @@ export interface ScoreStanding {
   minScore: number;
   maxScore: number;
   standing: string;
+  standingColor: string;
   createdOn?: Date;
   updatedOn?: Date;
 }

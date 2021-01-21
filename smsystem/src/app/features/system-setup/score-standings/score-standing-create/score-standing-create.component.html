@@ -7,20 +7,42 @@
               [nbSpinner]="isSubmitting"
               nbSpinnerStatus="success"
               nbSpinnerSize="large"
-              [nbSpinnerMessage]="action == 'create' ? 'Creating course......' :'Saving the changes......'"
-            >
+              [nbSpinnerMessage]="action == 'create' ? 'Creating course......' :'Saving the changes......'">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="form-control-group">
-                        <label for="score-standing-name" class="label">Standing Name</label>
-                        <input
-                            type="text"
-                            nbInput fullWidth
-                            required
-                            id="score-standing-name"
-                            formControlName="name"
-                            placeholder="eg. Score Standing">
-                      </div>
+                      <label for="score-standing-name" class="label">Standing Name</label>
+                      <input
+                          type="text"
+                          nbInput fullWidth
+                          required
+                          id="score-standing-name"
+                          formControlName="standing"
+                          placeholder="eg. Score Standing">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-control-group">
+                      <label for="standing-color" class="label">Select Standing Colour Type</label>
+                      <nb-select
+                          fullWidth
+                          placeholder="standing color"
+                          formControlName="standingColor"
+                          id="standing-color">
+                          <nb-option
+                              *ngFor='let availableColor of standingColors'
+                              [value]="availableColor">
+                              {{availableColor}}
+                          </nb-option>
+                        </nb-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-md-12">
+                  <div  *ngIf="selectedStandingColor" [class]="'alert alert-'+ selectedStandingColor" role="alert">
+                    The selected color
+                  </div>
                 </div>
               </div>
               <div class="row">

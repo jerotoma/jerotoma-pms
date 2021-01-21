@@ -7,6 +7,7 @@ import java.util.Date;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.models.academic.ScoreStanding;
 
 public class StudentClassVO {
 	
@@ -24,7 +25,7 @@ public class StudentClassVO {
 	
 	private Double score;
 	
-	private String scoreStanding;
+	private ScoreStanding scoreStanding;
 	
 	private Integer updatedBy;	
 	
@@ -93,11 +94,11 @@ public class StudentClassVO {
 		this.score = score;
 	}
 
-	public String getScoreStanding() {
+	public ScoreStanding getScoreStanding() {
 		return scoreStanding;
 	}
 
-	public void setScoreStanding(String scoreStanding) {
+	public void setScoreStanding(ScoreStanding scoreStanding) {
 		this.scoreStanding = scoreStanding;
 	}
 

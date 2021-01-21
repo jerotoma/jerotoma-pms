@@ -25,6 +25,7 @@ import com.jerotoma.database.assemblers.dao.AssemblerStudentDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerStudentClassDao;
 import com.jerotoma.database.dao.DaoUtil;
+import com.jerotoma.database.dao.academic.ScoreStandingDao;
 
 @Repository
 public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements AssemblerStudentClassDao {
@@ -33,6 +34,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	
 	@Autowired DataSource dataSource;
 	@Autowired AssemblerStudentDao assemblerStudentDao;	
+	@Autowired ScoreStandingDao scoreStandingDao;
 	@Autowired AssemblerClassDao assemblerClassDao;
 	
 	Map<String, Object> map;
@@ -93,7 +95,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	
 	private StudentClassVO mapResult(ResultSet rs) throws SQLException {
 		StudentClassVO studentClass = new StudentClassVO(rs);
-		//studentClass.setClassVO(assemblerClassDao.findObject(studentClass.getClassId()));
+		studentClass.setScoreStanding(scoreStandingDao.findScoreStandingByScore(studentClass.getScore()));
 		studentClass.setStudent(assemblerStudentDao.findObject(rs.getInt(StudentConstant.Class.STUDENT_ID)));
 		return studentClass;	
 	}

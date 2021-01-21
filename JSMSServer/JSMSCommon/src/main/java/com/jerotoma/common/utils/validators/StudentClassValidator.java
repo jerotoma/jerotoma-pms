@@ -9,6 +9,7 @@ import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.models.users.students.StudentClass.StudentClassParam;
 import com.jerotoma.common.models.users.students.StudentClass.StudentClassProgressParam;
+import com.jerotoma.common.utils.NumberUtil;
 
 public class StudentClassValidator {
 	
@@ -79,13 +80,7 @@ public class StudentClassValidator {
 			studentClassProgressParams =  new ArrayList<>();
 			for (Map<String, Object> mapStudentClassProgressParam: mapStudentClassProgressParams) {
 				Integer studentId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.STUDENT_ID);
-				Double score = null;
-				if (mapStudentClassProgressParam.get(StudentConstant.Class.SCORE) instanceof Double) {
-					score = (Double) mapStudentClassProgressParam.get(StudentConstant.Class.SCORE);
-				} else {
-					Integer sc = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.SCORE);
-					score = sc.doubleValue();
-				}				
+				Double score = NumberUtil.getDoube(mapStudentClassProgressParam, StudentConstant.Class.SCORE);				
 				Integer statusId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.STATUS_ID);
 				Integer studentAcademicLevelId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
 				studentClassProgressParams.add(new StudentClassProgressParam(studentAcademicLevelId, studentId, statusId, score));

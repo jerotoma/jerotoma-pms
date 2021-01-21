@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild  } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef  } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
 import {  ThemePalette } from '@angular/material/core';
 import { MatSliderChange } from '@angular/material/slider';
@@ -14,7 +14,7 @@ import {
   ProgramService,
   StudentClassService,
   AcademicLevelService,
-  UserService,
+  ScoreStandingService,
   ModalService,
  } from 'app/services';
 import { QueryParam, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
@@ -27,6 +27,7 @@ import {
   StudentClass,
   AcademicYear,
   StudentAcademicLevel,
+  ScoreStanding,
   AcademicLevel,
   TeacherClassParam,
   Program,
@@ -57,6 +58,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
   sliderStep: number = 1;
 
   studentClasses: StudentClass[];
+  scoreStandings: ScoreStanding[];
   classParam: TeacherClassParam
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
@@ -65,18 +67,17 @@ export class ManageStudentProgressCreateComponent implements OnInit {
 
   constructor(
     private modalService: ModalService,
+    private elementRef : ElementRef,
     private programService: ProgramService,
     private studentClassProgressService: StudentClassService,
-    private academicLevelService: AcademicLevelService,
-    private academicYearService: AcademicYearService,
-    private dialogService: NbDialogService,
+    private scoreStandingService: ScoreStandingService,
     private formBuilder: FormBuilder,
     private statusService: StatusService,
-    private classService: ClassService,
     protected ref: NbDialogRef<ManageStudentProgressCreateComponent>) {}
 
   ngOnInit() {
     this.loadForm();
+    this.loadScoreStandings();
     this.loadStudentClassesProgressByClassAttendanceId(this.classView.id);
   }
 
@@ -116,20 +117,20 @@ export class ManageStudentProgressCreateComponent implements OnInit {
   patchStudentClasses(studentClasses: StudentClass[]) {
     this.studentClasses = studentClasses;
     this.studentClasses.forEach((studentClass: StudentClass, index: number) => {
-      this.studentProgressArray.push(this.patchStudentClassValue(studentClass.studentAcademicLevelId, studentClass.student.id, studentClass.statusId, studentClass.score));
+      this.studentProgressArray.push(this.patchStudentClassValue(studentClass));
     });
   }
-  patchStudentClassValue(studentAcademicLevelId: number,studentId: number, statusId: number, score: number) {
+  patchStudentClassValue(studentClass: StudentClass) {
     return this.formBuilder.group({
-      studentAcademicLevelId: [studentAcademicLevelId, Validators.required],
-      studentId: [studentId, Validators.required],
-      statusId: [statusId, Validators.required],
-      score: [score, Validators.required],
+      studentAcademicLevelId: [studentClass.studentAcademicLevelId, Validators.required],
+      studentId: [studentClass.student.id, Validators.required],
+      statusId: [studentClass.statusId, Validators.required],
+      score: [studentClass.score, Validators.required],
+      scoreStandingId: [studentClass?.scoreStanding?.id, Validators.required],
     });
   }
 
   onSliderValueChange(matSliderChange: MatSliderChange, studentClass: StudentClass) {
-    console.log(this.manageStudentProgressForm);
     studentClass.score = matSliderChange.value;
     for (let i = 0; i < this.studentProgressArray.controls.length; i++) {
       if (this.studentProgressArray.controls[i].value.studentId === studentClass.student.id) {
@@ -141,9 +142,15 @@ export class ManageStudentProgressCreateComponent implements OnInit {
         });
       }
     }
-
+    const domElement = this.elementRef.nativeElement.querySelector('#student-class-current-slider-value-' + studentClass.student.id);
+    domElement.innerHTML = studentClass.score;
   }
 
+  loadScoreStandings() {
+    this.scoreStandingService.getScoreStandings().subscribe((scoreStandings: ScoreStanding[]) => {
+      this.scoreStandings = scoreStandings;
+    });
+  }
   loadStudentClassesProgressByClassAttendanceId(classId: number) {
     this.studentClassProgressService.loadStudentsClassProgressByClassId(classId).subscribe((studentClasses: StudentClass[]) => {
       this.patchStudentClasses(studentClasses);
