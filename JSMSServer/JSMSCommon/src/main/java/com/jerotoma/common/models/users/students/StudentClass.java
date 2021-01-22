@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.Class;
+import com.jerotoma.common.models.academic.ScoreStanding;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_CLASSES)
@@ -43,6 +44,10 @@ public class StudentClass {
 	
 	@Column(name="completion_status_id")
 	private Integer completionStatusId;
+	
+	@ManyToOne
+	@JoinColumn(name="score_standing_id")
+	private ScoreStanding scoreStanding;
 	
 	@Column
 	private Double score;
@@ -119,6 +124,14 @@ public class StudentClass {
 	public void setUpdatedOn(Date updatedOn) {
 		this.updatedOn = updatedOn;
 	}
+	
+	public ScoreStanding getScoreStanding() {
+		return scoreStanding;
+	}
+
+	public void setScoreStanding(ScoreStanding scoreStanding) {
+		this.scoreStanding = scoreStanding;
+	}
 
 	public static class Fields {
 		Integer Id;
@@ -189,13 +202,15 @@ public class StudentClass {
 		Integer studentId;
 		Integer statusId;
 		Integer studentAcademicLevelId;
+		Integer scoreStandingId;
 		
 		
-		public StudentClassProgressParam(Integer studentAcademicLevelId, Integer studentId, Integer statusId, Double score) {			
+		public StudentClassProgressParam(Integer studentAcademicLevelId, Integer studentId, Integer statusId, Double score, Integer scoreStandingId) {			
 			this.score = score;
 			this.studentId = studentId;
 			this.studentAcademicLevelId = studentAcademicLevelId;
 			this.statusId = statusId;
+			this.scoreStandingId = scoreStandingId;
 		}
 		
 		public Double getScore() {
@@ -228,6 +243,14 @@ public class StudentClass {
 
 		public void setStudentAcademicLevelId(Integer studentAcademicLevelId) {
 			this.studentAcademicLevelId = studentAcademicLevelId;
+		}
+
+		public Integer getScoreStandingId() {
+			return scoreStandingId;
+		}
+
+		public void setScoreStandingId(Integer scoreStandingId) {
+			this.scoreStandingId = scoreStandingId;
 		}
 	}
 }

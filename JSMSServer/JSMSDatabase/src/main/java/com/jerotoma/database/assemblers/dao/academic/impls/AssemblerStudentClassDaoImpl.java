@@ -95,7 +95,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	
 	private StudentClassVO mapResult(ResultSet rs) throws SQLException {
 		StudentClassVO studentClass = new StudentClassVO(rs);
-		studentClass.setScoreStanding(scoreStandingDao.findScoreStandingByScore(studentClass.getScore()));
+		studentClass.setScoreStanding(DaoUtil.getEntity(scoreStandingDao.findById(rs.getInt(StudentConstant.Class.SCORE_STANDING_ID))));
 		studentClass.setStudent(assemblerStudentDao.findObject(rs.getInt(StudentConstant.Class.STUDENT_ID)));
 		return studentClass;	
 	}
@@ -123,7 +123,7 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT sc.id, sc.class_id AS classId, sc.student_academic_level_id AS studentAcademicLevelId, sc.completion_status_id AS completionStatusId, sal.student_id AS studentId, sc.score, sc.created_on AS createdOn, sc.updated_on AS updatedOn, sc.updated_by AS updatedBy FROM public.student_classes sc INNER JOIN student_academic_levels sal ON sal.id = sc.student_academic_level_id ");		
+		return new StringBuilder("SELECT sc.id, sc.class_id AS classId, sc.student_academic_level_id AS studentAcademicLevelId, sc.completion_status_id AS completionStatusId, sal.student_id AS studentId, sc.score, sc.score_standing_id AS scoreStandingId, sc.created_on AS createdOn, sc.updated_on AS updatedOn, sc.updated_by AS updatedBy FROM public.student_classes sc INNER JOIN student_academic_levels sal ON sal.id = sc.student_academic_level_id ");		
 	}
 
 	@Override

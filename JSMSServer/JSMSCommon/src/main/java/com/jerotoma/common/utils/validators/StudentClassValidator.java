@@ -83,7 +83,8 @@ public class StudentClassValidator {
 				Double score = NumberUtil.getDoube(mapStudentClassProgressParam, StudentConstant.Class.SCORE);				
 				Integer statusId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.STATUS_ID);
 				Integer studentAcademicLevelId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
-				studentClassProgressParams.add(new StudentClassProgressParam(studentAcademicLevelId, studentId, statusId, score));
+				Integer scoreStandingId = (Integer) mapStudentClassProgressParam.get(StudentConstant.Class.SCORE_STANDING_ID);
+				studentClassProgressParams.add(new StudentClassProgressParam(studentAcademicLevelId, studentId, statusId, score, scoreStandingId));
 			}
 		}
 		

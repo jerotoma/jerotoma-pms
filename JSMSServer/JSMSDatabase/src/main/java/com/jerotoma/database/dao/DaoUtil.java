@@ -3,6 +3,7 @@ package com.jerotoma.database.dao;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Optional;
 
 import com.jerotoma.common.utils.StringUtility;
 
@@ -86,5 +87,13 @@ public class DaoUtil {
 	        }
 	    }
 	    return false;
+	}
+	
+	public static <T> T getEntity(Optional<T> optionalEntity) {
+		
+		if (optionalEntity != null) {
+			return optionalEntity.get();
+		}
+		return null;
 	}
 }

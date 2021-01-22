@@ -1,16 +1,21 @@
 package com.jerotoma.common.models.academic;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.users.students.StudentClass;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.SCORE_STANDINGS)
@@ -49,7 +54,9 @@ public class ScoreStanding {
 		@Column(name="updated_on")
 		private Date updatedOn;
 		
-		
+		@OneToMany(mappedBy="scoreStanding")
+		@JsonBackReference
+		private Set<StudentClass> studentClasses = new HashSet<>();
 
 		public Integer getId() {
 			return id;
@@ -113,5 +120,13 @@ public class ScoreStanding {
 
 		public void setUpdatedOn(Date updatedOn) {
 			this.updatedOn = updatedOn;
+		}
+
+		public Set<StudentClass> getStudentClasses() {
+			return studentClasses;
+		}
+
+		public void setStudentClasses(Set<StudentClass> studentClasses) {
+			this.studentClasses = studentClasses;
 		}
 }

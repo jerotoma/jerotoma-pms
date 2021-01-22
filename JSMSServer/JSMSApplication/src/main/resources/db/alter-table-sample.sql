@@ -75,4 +75,10 @@ ALTER TABLE student_classes
       
 ALTER TABLE student_classes ADD COLUMN score bigint NOT NULL DEFAULT 0;
 
+ALTER TABLE student_classes
+	ADD COLUMN score_standing_id bigint NOT NULL DEFAULT 1,
+	ADD CONSTRAINT score_standings_fkey FOREIGN KEY (score_standing_id) REFERENCES score_standings (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE;
+      
 

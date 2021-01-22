@@ -1,7 +1,7 @@
 <mat-tab-group>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="student-tab-icon text-primary">person</mat-icon> Student Profile
+      <mat-icon class="student-tab-icon text-primary">person</mat-icon> Profile
     </ng-template>
     <div class="row">
       <div class="col-md-12">
@@ -16,7 +16,7 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="student-tab-icon text-primary">menu_book</mat-icon> Student Courses
+      <mat-icon class="student-tab-icon text-primary">menu_book</mat-icon> Student Schedules
     </ng-template>
     <app-my-course
       *ngIf='student'
@@ -26,11 +26,21 @@
   </mat-tab>
   <mat-tab>
     <ng-template mat-tab-label>
-      <mat-icon class="student-tab-icon text-primary">autorenew</mat-icon> Student Progress
+      <mat-icon class="student-tab-icon text-primary">autorenew</mat-icon> Academic Level Progress
     </ng-template>
     <app-my-progress
       *ngIf="student"
       [student]="student"
     ></app-my-progress>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="student-tab-icon text-primary">menu_book</mat-icon> Courses Result
+    </ng-template>
+    <app-course-result
+      *ngIf='student'
+      [userType]="student?.userType"
+      [userId]="student?.userId"
+    ></app-course-result>
   </mat-tab>
 </mat-tab-group>

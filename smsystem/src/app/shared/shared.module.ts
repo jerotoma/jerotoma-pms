@@ -46,6 +46,7 @@ import {
   UserTableComponent,
   UserDetailsComponent,
   MyCourseComponent,
+  CourseResultComponent,
   AddressComponent,
   DeleteModalComponent,
   UserLoginInputComponent,
@@ -86,7 +87,8 @@ const COMPONENTS = [
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
-  ManageStudentProgressCreateComponent
+  ManageStudentProgressCreateComponent,
+  CourseResultComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -105,7 +107,8 @@ const ENTRY_COMPONENTS = [
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
-  ManageStudentProgressCreateComponent
+  ManageStudentProgressCreateComponent,
+  CourseResultComponent
 ];
 
 const MODULES = [

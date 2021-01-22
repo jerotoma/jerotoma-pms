@@ -16,10 +16,13 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicConstants;
 import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.exceptions.FieldRequiredException;
+import com.jerotoma.common.models.academic.ScoreStanding;
 import com.jerotoma.common.models.users.students.StudentClass;
 import com.jerotoma.common.models.users.students.StudentClass.StudentClassParam;
 import com.jerotoma.common.models.users.students.StudentClass.StudentClassProgressParam;
 import com.jerotoma.database.dao.academic.StudentClassDao;
+import com.jerotoma.services.academic.ScoreStandingService;
 import com.jerotoma.services.academic.StudentClassService;
 import com.jerotoma.services.utils.ServiceUtil;
 
@@ -28,6 +31,7 @@ import com.jerotoma.services.utils.ServiceUtil;
 public class StudentClassServiceImpl implements StudentClassService {
 	
 	@Autowired StudentClassDao studenClassDao;
+	@Autowired ScoreStandingService scoreStandingService;
 
 	@Override
 	public StudentClass findObject(Integer primaryKey) throws SQLException {
@@ -109,11 +113,21 @@ public class StudentClassServiceImpl implements StudentClassService {
 		
 		for (StudentClassProgressParam param: studentClassParam.getStudentClassProgressParams()) {
 			StudentClass studentClass = findStudentClass(studentClassParam.getClassId(), param.getStudentAcademicLevelId());
+			ScoreStanding scoreStanding = scoreStandingService.findObject(param.getScoreStandingId());
+			validateScoreStanding(scoreStanding, param.getScore());
+			studentClass.setScoreStanding(scoreStanding);
 			studentClass.setCompletionStatusId(param.getStatusId());
 			studentClass.setScore(param.getScore());			
 			studentClassList.add(studentClass);
 		}
 		
 		return updateBatchObject(studentClassList);
+	}
+
+	private void validateScoreStanding(ScoreStanding scoreStanding, Double score) {
+		if (scoreStanding.getMinScore() <= score && scoreStanding.getMaxScore() >= score) {
+			return;
+		}
+		throw new FieldRequiredException(String.format(ErrorMessageConstant.INVALID_SCORE_STANDING, String.valueOf(score)));		
 	}
 }

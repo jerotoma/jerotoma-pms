@@ -46,6 +46,7 @@
                   <thead>
                     <tr>
                       <th scope="col">Full Name</th>
+                      <th scope="col">Adjust Score</th>
                       <th scope="col">Score</th>
                       <th scope="col">Standing</th>
                       <th scope="col">Status</th>
@@ -65,9 +66,15 @@
                             [value]="studentClasses[i]?.score"
                             [color]="sliderColor"
                             (change)="onSliderValueChange($event, studentClasses[i])"
-                            thumbLabel>
+                            (input)="onSliderValueChange($event, studentClasses[i])">
                         </mat-slider>
-                        <span [id]="'student-class-current-slider-value-' + studentClasses[i]?.student?.id"> {{studentClasses[i]?.score}} </span>
+                      </td>
+                      <td>
+                        <span
+                          class="btn btn-sm btn-danger"
+                          [id]="'student-class-current-slider-value-' + studentClasses[i]?.student?.id">
+                          {{studentClasses[i]?.score}}%
+                        </span>
                         <input type="hidden" [value]="studentClasses[i]?.score" formControlName="score">
                       </td>
                       <td>

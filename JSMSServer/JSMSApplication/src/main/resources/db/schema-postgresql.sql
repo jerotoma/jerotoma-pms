@@ -891,6 +891,7 @@
 	    class_id bigint NOT NULL,
 	    student_academic_level_id bigint NOT NULL,
 	    score bigint NOT NULL,	
+	    score_standing_id bigint NOT NULL,	
 	    completion_status_id bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL default now(),
 	    updated_on timestamp with time zone NOT NULL,
@@ -900,7 +901,11 @@
 	   	CONSTRAINT classes_fkey FOREIGN KEY (class_id)
 	        REFERENCES public.classes (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,	    
+	        ON DELETE CASCADE,	
+	    CONSTRAINT score_standings_fkey FOREIGN KEY (score_standing_id)
+	        REFERENCES public.score_standings (id) MATCH SIMPLE
+	        ON UPDATE CASCADE
+	        ON DELETE CASCADE,	
 	    CONSTRAINT student_academic_levels_fkey FOREIGN KEY (student_academic_level_id)
 	        REFERENCES public.student_academic_levels (id) MATCH SIMPLE
 	        ON UPDATE CASCADE

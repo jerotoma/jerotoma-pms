@@ -1,36 +1,22 @@
-import { Component, OnInit, Input, ViewChild, ElementRef  } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, FormControl } from '@angular/forms';
-import {  ThemePalette } from '@angular/material/core';
+import { Component, OnInit, Input, ElementRef  } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { ThemePalette } from '@angular/material/core';
 import { MatSliderChange } from '@angular/material/slider';
-
 import { NbDialogRef } from '@nebular/theme';
-import { NbDialogService } from '@nebular/theme';
-
 import {
-  StudentAcademicLevelService,
-  ClassService,
   StatusService,
-  AcademicYearService,
-  ProgramService,
   StudentClassService,
-  AcademicLevelService,
   ScoreStandingService,
   ModalService,
  } from 'app/services';
-import { QueryParam, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
+import { APP_ACTION_TYPE } from 'app/utils';
 import {
-  ShowMessage,
   ClassView,
-  StudentClassAdmission,
-  Student,
-  Teacher,
   StudentClass,
   AcademicYear,
-  StudentAcademicLevel,
   ScoreStanding,
   AcademicLevel,
   TeacherClassParam,
-  Program,
   ResponseWrapper,
 } from 'app/models';
 
@@ -52,8 +38,8 @@ export class ManageStudentProgressCreateComponent implements OnInit {
   programId: number;
   academicLevelId: number;
   teacherId: number;
-  sliderColor: ThemePalette = 'warn';
-  sliderMin: number = 0.01;
+  sliderColor: ThemePalette = 'primary';
+  sliderMin: number = 0;
   sliderMax: number = 100;
   sliderStep: number = 1;
 
@@ -68,7 +54,6 @@ export class ManageStudentProgressCreateComponent implements OnInit {
   constructor(
     private modalService: ModalService,
     private elementRef : ElementRef,
-    private programService: ProgramService,
     private studentClassProgressService: StudentClassService,
     private scoreStandingService: ScoreStandingService,
     private formBuilder: FormBuilder,
@@ -88,10 +73,9 @@ export class ManageStudentProgressCreateComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.manageStudentProgressForm.value);
     this.studentClassProgressService.createStudentClassProgress(this.manageStudentProgressForm.value).subscribe((resp: ResponseWrapper) => {
       if (resp.success) {
-        this.modalService.openSnackBar('Student Progress has been updated', 'info');
+        this.modalService.openSnackBar('Student Progress has been updated', 'success');
         this.dismiss();
       }
     });
@@ -111,7 +95,6 @@ export class ManageStudentProgressCreateComponent implements OnInit {
       academicLevelId: this.classView.course.academicLevel.id,
       programId: this.classView.course.program.id,
     });
-    this.onChanges();
   }
 
   patchStudentClasses(studentClasses: StudentClass[]) {
@@ -120,6 +103,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
       this.studentProgressArray.push(this.patchStudentClassValue(studentClass));
     });
   }
+
   patchStudentClassValue(studentClass: StudentClass) {
     return this.formBuilder.group({
       studentAcademicLevelId: [studentClass.studentAcademicLevelId, Validators.required],
@@ -143,7 +127,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
       }
     }
     const domElement = this.elementRef.nativeElement.querySelector('#student-class-current-slider-value-' + studentClass.student.id);
-    domElement.innerHTML = studentClass.score;
+    domElement.innerHTML = studentClass.score + '%';
   }
 
   loadScoreStandings() {
@@ -152,34 +136,15 @@ export class ManageStudentProgressCreateComponent implements OnInit {
     });
   }
   loadStudentClassesProgressByClassAttendanceId(classId: number) {
+    this.isLoading = true;
     this.studentClassProgressService.loadStudentsClassProgressByClassId(classId).subscribe((studentClasses: StudentClass[]) => {
+      this.isLoading = false;
       this.patchStudentClasses(studentClasses);
     });
   }
 
   get studentProgressArray(): FormArray {
     return this.manageStudentProgressForm.get('studentProgressArray') as FormArray;
-  }
-
-  onChanges() {
-    this.manageStudentProgressForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
-      this.academicYearId = academicYearId;
-      if (this.programId && this.academicLevelId) {
-
-      }
-     });
-
-    this.manageStudentProgressForm.get('programId').valueChanges.subscribe((programId: number) => {
-     if (this.programId != programId)  {
-
-     }
-    });
-
-    this.manageStudentProgressForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
-      if (this.academicLevelId != academicLevelId)  {
-
-      }
-    });
   }
 
   getStatusClass(statusName: string): string {
