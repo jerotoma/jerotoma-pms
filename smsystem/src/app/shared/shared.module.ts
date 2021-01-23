@@ -46,7 +46,7 @@ import {
   UserTableComponent,
   UserDetailsComponent,
   MyCourseComponent,
-  CourseResultComponent,
+  StudentClassesProgressComponent,
   AddressComponent,
   DeleteModalComponent,
   UserLoginInputComponent,
@@ -57,7 +57,7 @@ import {
   CurrentAcademicYearComponent,
   LogoComponent,
   UploadAvatarDialogComponent,
-  ProgressComponent,
+  StudentAcademicLevelsProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
   AcademicLevelClassesEnrollmentCreateComponent,
@@ -81,14 +81,14 @@ const COMPONENTS = [
   TinyMCEComponent,
   LogoComponent,
   UploadAvatarDialogComponent,
-  ProgressComponent,
+  StudentAcademicLevelsProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
   ManageStudentProgressCreateComponent,
-  CourseResultComponent,
+  StudentClassesProgressComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -101,14 +101,14 @@ const ENTRY_COMPONENTS = [
   TimepickerComponent,
   CurrentAcademicYearComponent,
   UploadAvatarDialogComponent,
-  ProgressComponent,
+  StudentAcademicLevelsProgressComponent,
   ParentCreateComponent,
   AddParentComponent,
   AcademicLevelClassesEnrollmentCreateComponent,
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
   ManageStudentProgressCreateComponent,
-  CourseResultComponent
+  StudentClassesProgressComponent
 ];
 
 const MODULES = [

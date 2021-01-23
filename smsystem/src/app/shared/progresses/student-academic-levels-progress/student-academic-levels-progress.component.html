@@ -26,15 +26,15 @@
                           <div class="col-md-3">Status</div>
                       </div>
                   </nb-list-item>
-                  <nb-list-item class="list-group-item" *ngFor="let studentAcademicLevelProgresse of studentProgress?.studentAcademicLevelProgresses">
+                  <nb-list-item class="list-group-item" *ngFor="let academicLevelProgress of studentProgress?.academicLevelProgresses">
                     <a href="#" (click)="preventDefaultEvent($event)">
                         <div class="row">
-                          <div class="col-md-5">{{studentAcademicLevelProgresse?.academicLevel?.name}} ({{studentAcademicLevelProgresse?.academicLevel?.code}})</div>
-                          <div class="col-md-4">{{studentAcademicLevelProgresse?.academicYear?.name ? studentAcademicLevelProgresse?.academicYear?.name + ' - ' + studentAcademicLevelProgresse?.academicYear?.yearOfStudy  : 'Not Enrolled Yet'}}</div>
+                          <div class="col-md-5">{{academicLevelProgress?.academicLevel?.name}} ({{academicLevelProgress?.academicLevel?.code}})</div>
+                          <div class="col-md-4">{{academicLevelProgress?.academicYear?.name ? academicLevelProgress?.academicYear?.name + ' - ' + academicLevelProgress?.academicYear?.yearOfStudy  : 'Not Enrolled Yet'}}</div>
                           <div class="col-md-3">
                             <button nbButton outline hero shape="round" size="tiny"
-                            [status]="getCompletionStatus(studentAcademicLevelProgresse?.completionStatusName)">
-                              {{studentAcademicLevelProgresse?.completionStatusName}}
+                            [status]="getCompletionStatus(academicLevelProgress?.completionStatusName)">
+                              {{academicLevelProgress?.completionStatusName}}
                           </button> <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
                         </div>
                     </a>

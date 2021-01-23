@@ -20,15 +20,11 @@ import {
   UserService,
   ModalService,
  } from 'app/services';
-import { QueryParam, USER_TYPE, APP_CONSTANTS } from 'app/utils';
+import { USER_TYPE } from 'app/utils';
 import {
-  ShowMessage,
   ClassView,
-  StudentClassAdmission,
-  Student,
   Teacher,
   AcademicYear,
-  StudentAcademicLevel,
   AcademicLevel,
   TeacherClassParam,
   Program,
@@ -52,7 +48,7 @@ export class ManageStudentProgressComponent implements OnInit {
   teacherId: number;
   isLoading: boolean = false;
 
-  classParam: TeacherClassParam
+  classParam: TeacherClassParam;
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
   academicLevel: AcademicLevel;
@@ -70,28 +66,28 @@ export class ManageStudentProgressComponent implements OnInit {
     {
       id: 'course',
       disableClear: true,
-      start: 'asc'
+      start: 'asc',
     },
     {
       id: 'academicLevel',
       disableClear: true,
-      start: 'asc'
+      start: 'asc',
     },
     {
       id: 'academicYearTerm',
       disableClear: true,
-      start: 'asc'
+      start: 'asc',
     },
     {
       id: 'program',
       disableClear: true,
-      start: 'asc'
+      start: 'asc',
     },
     {
       id: 'department',
       disableClear: true,
-      start: 'asc'
-    }
+      start: 'asc',
+    },
   ];
   dataSource: MatTableDataSource<ClassView> = new MatTableDataSource<ClassView>();
 
@@ -137,13 +133,13 @@ export class ManageStudentProgressComponent implements OnInit {
      });
 
     this.manageStudentProgressForm.get('programId').valueChanges.subscribe((programId: number) => {
-     if (this.programId != programId)  {
+     if (this.programId !== programId)  {
       this.loadAcademicLevelsByProgramId(programId);
      }
     });
 
     this.manageStudentProgressForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
-      if (this.academicLevelId != academicLevelId)  {
+      if (this.academicLevelId !== academicLevelId)  {
         this.loadJClassesByParams(this.programId, academicLevelId, this.academicYearId);
       }
     });
@@ -152,7 +148,7 @@ export class ManageStudentProgressComponent implements OnInit {
   loadAcademicLevelsByProgramId(programId: number) {
     this.isLoading = true;
     this.academicLevels = [];
-    this.programId = programId
+    this.programId = programId;
     this.manageStudentProgressForm.patchValue({
       academicLevelId: null,
     }, {emitEvent: false});
@@ -191,13 +187,13 @@ export class ManageStudentProgressComponent implements OnInit {
     this.jClasses = [];
     this.classService.loadClassesByUserId(this.teacher.userId).subscribe((classViews: ClassView[]) => {
       this.jClasses = classViews;
-      this.dataSource.data = classViews
+      this.dataSource.data = classViews;
       this.dataSource.sort = this.sort;
       this.isLoading = false;
     });
   }
   loadJClassesByParams(programId: number, academicLevelId: number, academicYearId: number) {
-    this.academicLevelId = academicLevelId
+    this.academicLevelId = academicLevelId;
     if (!programId || !academicLevelId || !academicYearId) {
         this.modalService.openSnackBar('Program or Academic Level can not be empty', 'info');
         return;
@@ -208,7 +204,7 @@ export class ManageStudentProgressComponent implements OnInit {
       programId: programId,
       academicLevelId: academicLevelId,
       academicYearId: academicYearId,
-    }
+    };
     this.jClasses = [];
     this.classService.loadClassesByTeacherClassParam(this.classParam).subscribe((classViews: ClassView[]) => {
       if (classViews && classViews.length === 0) {
@@ -231,6 +227,10 @@ export class ManageStudentProgressComponent implements OnInit {
 
       }
     });
+  }
+
+  onPageChange(event: any) {
+
   }
 
   addMoreStudent(classView: ClassView) {

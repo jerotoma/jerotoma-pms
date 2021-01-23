@@ -1,10 +1,8 @@
-package com.jerotoma.common.models.users.students;
+package com.jerotoma.common.viewobjects;
 
 import com.jerotoma.common.constants.CompletionStatus;
-import com.jerotoma.common.viewobjects.AcademicLevelVO;
-import com.jerotoma.common.viewobjects.AcademicYearVO;
 
-public class StudentAcademicLevelProgress {	
+public class AcademicLevelProgress {	
 	private AcademicLevelVO academicLevel;
 	private AcademicYearVO academicYear;
 	private CompletionStatus completionStatus;

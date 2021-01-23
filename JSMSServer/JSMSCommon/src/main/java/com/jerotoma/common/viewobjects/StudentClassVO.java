@@ -15,6 +15,10 @@ public class StudentClassVO {
 	
 	private Integer classId;
 	
+	private Integer courseId;
+	
+	private String courseName;
+	
 	private Integer studentAcademicLevelId;
 	
 	private StudentVO student;
@@ -36,6 +40,8 @@ public class StudentClassVO {
 	public StudentClassVO(ResultSet rs) throws SQLException {
 		this.id = rs.getInt(StudentConstant.Class.ID);		
 		this.classId = rs.getInt(StudentConstant.Class.CLASS_ID);
+		this.courseId = rs.getInt(StudentConstant.Class.COURSE_ID);
+		this.courseName = rs.getString(StudentConstant.Class.COURSE_NAME);
 		this.studentAcademicLevelId = rs.getInt(StudentConstant.Class.STUDENT_ACADEMIC_LEVEL_ID);
 		this.statusId = rs.getInt(StudentConstant.Class.COMPLETION_STATUS_ID);
 		this.score = rs.getDouble(StudentConstant.Class.SCORE);
@@ -56,6 +62,22 @@ public class StudentClassVO {
 
 	public Integer getClassId() {
 		return classId;
+	}
+	
+	public Integer getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(Integer courseId) {
+		this.courseId = courseId;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 
 	public void setClassId(Integer classId) {

@@ -52,4 +52,20 @@ public class AssemblerStudentClassServiceImpl implements AssemblerStudentClassSe
 		return assemblerStudentClassDao.findStudentClassesByClassId(classId);
 	}
 
+	@Override
+	public List<StudentClassVO> findStudentClassesByStudentId(Integer studentId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClassesByStudentId(studentId);
+	}
+
+	@Override
+	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId) throws SQLException {
+		return assemblerStudentClassDao.findStudentClasses(studentId, academicLevelId);
+	}
+
+	@Override
+	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId)
+			throws SQLException {
+		return assemblerStudentClassDao.findStudentClasses(studentId, academicLevelId, academicYearId);
+	}
+
 }

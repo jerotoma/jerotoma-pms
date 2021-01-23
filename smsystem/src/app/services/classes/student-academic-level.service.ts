@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_END_POINTS, QueryParam } from 'app/utils';
 
-import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel, StudentProgress } from 'app/models';
+import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel, StudentAcademicLevelsProgress } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -32,11 +32,6 @@ export class StudentAcademicLevelService {
 
   getStudentAcademicLevelByStudentId(studentId: number): Observable<StudentAcademicLevel> {
     return this.http.get(`${API_END_POINTS.studentAcademicLevels}/students/${studentId}`)
-        .pipe(map((resp: ResponseWrapper) => resp.data));
-  }
-
-  loadStudentProgressByStudentId(studentId: number): Observable<StudentProgress> {
-    return this.http.get(`${API_END_POINTS.studentAcademicLevels}/progresses/students/${studentId}`)
         .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

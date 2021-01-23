@@ -45,7 +45,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
 
   studentClasses: StudentClass[];
   scoreStandings: ScoreStanding[];
-  classParam: TeacherClassParam
+  classParam: TeacherClassParam;
   academicYear: AcademicYear;
   academicYears: AcademicYear[];
   academicLevel: AcademicLevel;
@@ -53,7 +53,7 @@ export class ManageStudentProgressCreateComponent implements OnInit {
 
   constructor(
     private modalService: ModalService,
-    private elementRef : ElementRef,
+    private elementRef: ElementRef,
     private studentClassProgressService: StudentClassService,
     private scoreStandingService: ScoreStandingService,
     private formBuilder: FormBuilder,

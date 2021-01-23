@@ -56,6 +56,10 @@ public class EndPointConstants {
 		public static final String BASE =  API_SECURED_ROOT + "/student-classes";	
 	}
 	
+	public static interface REST_STUDENT_PROGRESS_CONTROLLER {
+		public static final String BASE =  API_SECURED_ROOT + "/student-progresses";	
+	}
+	
 	public static interface REST_DASHBOARD_CONTROLLER{
 		public static final String BASE =  API_SECURED_ROOT + "/dashboard";	
 	}

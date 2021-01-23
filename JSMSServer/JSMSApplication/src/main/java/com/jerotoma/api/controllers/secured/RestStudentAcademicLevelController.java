@@ -39,6 +39,7 @@ import com.jerotoma.services.academic.StudentClassService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentAcademicLevelService;
 import com.jerotoma.services.assemblers.academic.AssemblerStudentClassService;
 import com.jerotoma.services.students.StudentAcademicLevelService;
+import com.jerotoma.services.students.StudentProgressService;
 import com.jerotoma.services.users.StudentService;
 
 @RestController
@@ -54,6 +55,7 @@ public class RestStudentAcademicLevelController  extends BaseController {
 	@Autowired CourseService courseService;
 	@Autowired ClassService jClassService;
 	@Autowired StudentService studentService;
+	@Autowired StudentProgressService studentProgressService;
 	
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
@@ -266,22 +268,6 @@ public class RestStudentAcademicLevelController  extends BaseController {
 		this.securityCheckAccessByRoles(auth);
 		try {
 			response.setData(assemblerStudentAcademicLevelService.findStudentAcademicLevelsByStudentId(studentId));
-			response.setSuccess(true);
-			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
-			
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);			
-		}
-		return response;
-	}
-	
-	@GetMapping(value = "/progresses/students/{studentId}")
-	@ResponseBody
-	protected HttpResponseEntity<Object> loadStudentProgressByStudentId(Authentication auth, @PathVariable("studentId") Integer studentId) {
-		this.logRequestDetail("GET : " + EndPointConstants.REST_STUDENT_ACADEMIC_LEVEL_CONTROLLER.BASE);
-		this.securityCheckAccessByRoles(auth);
-		try {
-			response.setData(assemblerStudentAcademicLevelService.findStudentProgressByStudentId(studentId));
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

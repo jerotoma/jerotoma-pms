@@ -1,5 +1,13 @@
-import { Room, AcademicYear, AcademicLevel, Teacher, Student, Course, MeetingTime, ScoreStanding } from 'app/models';
-
+import {
+  Room,
+  AcademicYear,
+  AcademicLevel,
+  Teacher,
+  Student,
+  Course,
+  MeetingTime,
+  ScoreStanding,
+} from 'app/models';
 
 export interface ClassView {
   id: number;
@@ -65,7 +73,7 @@ export interface StudentClassParam {
 }
 
 export interface TeacherClassParam {
-  teacherId?: number
+  teacherId?: number;
   academicYearId?: number;
   academicLevelId?: number;
   programId?: number;

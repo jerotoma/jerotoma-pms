@@ -26,5 +26,7 @@ public class StudentConstant {
 		public static final String STUDENT_PROGRESS_ARRAY = "studentProgressArray";
 		public static final String STATUS_ID = "statusId";
 		public static final String SCORE_STANDING_ID = "scoreStandingId";
+		public static final String COURSE_NAME = "course";
+		public static final String COURSE_ID = "courseId";
 	}
 }

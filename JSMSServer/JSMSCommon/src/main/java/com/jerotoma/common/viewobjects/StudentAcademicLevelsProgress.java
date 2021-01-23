@@ -1,16 +1,16 @@
-package com.jerotoma.common.models.users.students;
+package com.jerotoma.common.viewobjects;
 
 import java.util.List;
 
-public class StudentProgress {
+public class StudentAcademicLevelsProgress {
 	private Integer studentID;
 	private String studentName;
 	private Integer completedLevels;
 	private Integer unCompletedLevels;
 	private Integer requiredLevels;
-	private List<StudentAcademicLevelProgress> studentAcademicLevelProgresses;
+	private List<AcademicLevelProgress> academicLevelProgresses;
 	
-	public StudentProgress() {}
+	public StudentAcademicLevelsProgress() {}
 
 	public Integer getStudentID() {
 		return studentID;
@@ -52,11 +52,11 @@ public class StudentProgress {
 		this.requiredLevels = requiredLevels;
 	}
 
-	public List<StudentAcademicLevelProgress> getStudentAcademicLevelProgresses() {
-		return studentAcademicLevelProgresses;
+	public List<AcademicLevelProgress> getAcademicLevelProgresses() {
+		return academicLevelProgresses;
 	}
 
-	public void setStudentAcademicLevelProgresses(List<StudentAcademicLevelProgress> studentAcademicLevelProgresses) {
-		this.studentAcademicLevelProgresses = studentAcademicLevelProgresses;
+	public void setAcademicLevelProgresses(List<AcademicLevelProgress> academicLevelProgresses) {
+		this.academicLevelProgresses = academicLevelProgresses;
 	}	
 }

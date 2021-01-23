@@ -123,7 +123,15 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT sc.id, sc.class_id AS classId, sc.student_academic_level_id AS studentAcademicLevelId, sc.completion_status_id AS completionStatusId, sal.student_id AS studentId, sc.score, sc.score_standing_id AS scoreStandingId, sc.created_on AS createdOn, sc.updated_on AS updatedOn, sc.updated_by AS updatedBy FROM public.student_classes sc INNER JOIN student_academic_levels sal ON sal.id = sc.student_academic_level_id ");		
+		return new StringBuilder("SELECT ")
+				.append("sc.id, sc.class_id AS classId, sc.student_academic_level_id AS studentAcademicLevelId, ")
+				.append("sc.completion_status_id AS completionStatusId,  sal.student_id AS studentId, sc.score, ")
+				.append("co.name AS courseName,  c.course_id AS courseId, ")
+				.append("sc.score_standing_id AS scoreStandingId, sc.created_on AS createdOn, sc.updated_on AS updatedOn, ")
+				.append(" sc.updated_by AS updatedBy FROM public.student_classes sc ")
+				.append("INNER JOIN classes c ON c.id =  sc.class_id ")
+				.append("INNER JOIN courses co ON co.id =  c.course_id ")
+				.append("INNER JOIN student_academic_levels sal ON sal.id = sc.student_academic_level_id ");		
 	}
 
 	@Override
@@ -142,5 +150,24 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	public List<StudentClassVO> findStudentClassesByClassId(Integer classId) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery().append(" WHERE class_id = ? ");
 		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), classId);
+	}
+	
+	@Override
+	public List<StudentClassVO> findStudentClassesByStudentId(Integer studentId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? ");
+		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId);
+	}
+
+	@Override
+	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId) throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? AND sal.academic_level_id = ?");
+		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId);
+	}
+
+	@Override
+	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId)
+			throws SQLException {
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? AND sal.academic_year_id = ? AND sal.academic_level_id = ? ");
+		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId, academicLevelId, academicYearId);
 	}
 }

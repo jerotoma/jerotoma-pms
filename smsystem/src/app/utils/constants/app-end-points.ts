@@ -38,7 +38,7 @@ export const API_END_POINTS = {
   academicYears: '/api/secured/academic-years',
   classes: '/api/secured/classes',
   studentAcademicLevels: '/api/secured/student-academic-levels',
-  studentAcademicLevel: '/api/secured/student-academic-levels',
+  studentProgresses: '/api/secured/student-progresses',
   uploads: '/api/secured/uploads',
   themes: '/api/secured/themes',
   pubThemes: '/api/public/themes',

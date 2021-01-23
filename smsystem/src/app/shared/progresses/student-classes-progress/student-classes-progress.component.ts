@@ -18,11 +18,11 @@ import {
 } from 'app/models';
 
 @Component({
-  selector: 'app-course-result',
-  templateUrl: './course-result.component.html',
-  styleUrls: ['./course-result.component.scss'],
+  selector: 'app-student-classes-progress',
+  templateUrl: './student-classes-progress.component.html',
+  styleUrls: ['./student-classes-progress.component.scss'],
 })
-export class CourseResultComponent implements OnInit {
+export class StudentClassesProgressComponent implements OnInit {
 
   @Input('userType') userType = USER_TYPE.STUDENT;
   @Input('userId') userId: number = null;
