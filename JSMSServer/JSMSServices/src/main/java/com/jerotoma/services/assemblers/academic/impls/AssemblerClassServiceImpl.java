@@ -4,14 +4,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
-import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.viewobjects.ClassVO;
 import com.jerotoma.common.viewobjects.StudentAcademicLevelClass;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerClassDao;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerClassService;
@@ -78,13 +78,10 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 		return assemblerClassDao.loadClassesByParams(programId, academicLevelrId, academicYearId);
 	}
 
+	@Transactional
 	@Override
-	public List<ClassVO> loadTeacherClassList(Integer userId) throws SQLException {
-		UserVO user = userService.getUserVOByUserId(userId);
-		if (user.getUserType() == USER_TYPE.TEACHER) {
-			return assemblerClassDao.loadTeacherClassListByTeacherId(user.getId());
-		}
-		return null;		
+	public List<ClassVO> loadTeacherClassList(Integer teacherId) throws SQLException {
+		return assemblerClassDao.loadTeacherClassListByTeacherId(teacherId);		
 	}
 
 	@Override
@@ -94,14 +91,11 @@ public class AssemblerClassServiceImpl  implements AssemblerClassService {
 		return assemblerClassDao.loadStudentClasses(studentId, academicLevelId, academicYearId);
 	}
 
+	@Transactional
 	@Override
-	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer userId)
+	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer studentId)
 			throws SQLException {		
-		UserVO user = userService.getUserVOByUserId(userId);
-		if (user.getUserType() == USER_TYPE.STUDENT) {			
-			return assemblerClassDao.loadAllStudentAcademicLevelsClassList(user.getId());
-		}		
-		return null;		
+		return assemblerClassDao.loadAllStudentAcademicLevelsClassList(studentId);		
 	}
 
 	@Override

@@ -316,10 +316,10 @@ public class RestClassController extends BaseController {
 			UserVO user = userService.getUserVOByUserId(userId);
 			switch(user.getUserType()) {
 			case STUDENT:
-				super.response.setData(assemblerClassService.loadAllStudentAcademicLevelsClassList(userId));
+				super.response.setData(assemblerClassService.loadAllStudentAcademicLevelsClassList(user.getId()));
 				break;
 			case TEACHER:
-				super.response.setData(assemblerClassService.loadTeacherClassList(userId));
+				super.response.setData(assemblerClassService.loadTeacherClassList(user.getId()));
 				break;
 			default:
 				break;			

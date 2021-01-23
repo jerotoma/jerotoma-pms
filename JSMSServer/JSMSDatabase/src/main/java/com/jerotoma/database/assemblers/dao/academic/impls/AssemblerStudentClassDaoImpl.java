@@ -161,13 +161,13 @@ public class AssemblerStudentClassDaoImpl extends JdbcDaoSupport implements Asse
 	@Override
 	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId) throws SQLException {
 		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? AND sal.academic_level_id = ?");
-		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId);
+		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId, academicLevelId);
 	}
 
 	@Override
 	public List<StudentClassVO> findStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId)
 			throws SQLException {
-		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? AND sal.academic_year_id = ? AND sal.academic_level_id = ? ");
+		StringBuilder builder = getBaseSelectQuery().append(" WHERE sal.student_id = ? AND sal.academic_level_id = ? AND sal.academic_year_id = ? ");
 		return this.jdbcTemplate.query(builder.toString(),  new StudentClassResultProcessor(), studentId, academicLevelId, academicYearId);
 	}
 }

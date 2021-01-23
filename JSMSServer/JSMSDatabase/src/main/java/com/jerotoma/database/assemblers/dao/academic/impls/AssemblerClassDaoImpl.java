@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -230,6 +231,7 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerCl
 				.append(" WHERE co.program_id = ? AND co.academic_level_id = ? AND  cl.academic_year_id = ?");
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), programId, academicLevelId, academicYearId);
 	}
+	@Transactional
 	@Override
 	public List<ClassVO> loadTeacherClassListByTeacherId(Integer teacherId) throws SQLException {
 		StringBuilder queryBuilder = getBaseSelectQuery().append( " WHERE cl.teacher_id = ? ");
@@ -245,6 +247,8 @@ public class AssemblerClassDaoImpl extends JdbcDaoSupport implements AssemblerCl
 			.append(" WHERE sal.student_id = ? AND  sal.academic_level_id = ? AND sal.academic_year_id = ? ");				
 		return this.jdbcTemplate.query(queryBuilder.toString(), new JClassResultProcessor(), studentId, academicLevelId, academicYearId);
 	}
+	
+	@Transactional
 	@Override
 	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer studentId)
 			throws SQLException {

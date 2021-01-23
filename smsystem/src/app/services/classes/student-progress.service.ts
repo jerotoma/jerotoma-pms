@@ -9,7 +9,7 @@ import { ResponseWrapper, StudentClassesProgress, StudentAcademicLevelsProgress 
 @Injectable({
   providedIn: 'root',
 })
-export class StudentAcademicLevelsProgressService {
+export class StudentProgressService {
   constructor(private http: HttpClient) { }
 
   findStudentClassesProgressByStudentId(studentId: number): Observable<StudentClassesProgress> {

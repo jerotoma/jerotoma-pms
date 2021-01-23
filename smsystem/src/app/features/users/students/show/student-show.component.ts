@@ -40,7 +40,7 @@ export class StudentShowComponent implements OnInit {
   }
 
   reloadParentDetails(data: any) {
-    this.loadStudentDetails(data.id);
+    this.loadStudentDetails(data.userId);
   }
 
   loadStudentDetails(userId: number) {

@@ -15,8 +15,8 @@ public interface AssemblerClassService  extends AssemblerService<ClassVO> {
 	public List<ClassVO> loadStudentClasses(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
 	public ClassVO findClassByUniqueParams(Integer teacherId, Integer courseId, Integer academicYearId) throws SQLException;
 	public List<ClassVO> loadClassesByParams(Integer programId, Integer academicLevelrId, Integer academicYearId) throws SQLException;
-	public List<ClassVO> loadTeacherClassList(Integer userId) throws SQLException;
+	public List<ClassVO> loadTeacherClassList(Integer teacherId) throws SQLException;
 	
-	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer userId) throws SQLException;
+	public List<StudentAcademicLevelClass> loadAllStudentAcademicLevelsClassList(Integer studentId) throws SQLException;
 	public List<ClassVO> loadClassesByTeacherClassParams(Integer teacherId, Integer programId, Integer academicLevelId, Integer academicYearId);
 }

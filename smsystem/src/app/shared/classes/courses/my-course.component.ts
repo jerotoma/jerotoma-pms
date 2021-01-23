@@ -12,6 +12,7 @@ import { USER_TYPE, QueryParam } from 'app/utils';
 import {
   ClassView,
   Student,
+  Teacher,
   AcademicLevel,
   AcademicYear,
   StudentAcademicLevelClass,
@@ -25,7 +26,7 @@ import {
 export class MyCourseComponent implements OnInit {
 
   @Input('userType') userType = USER_TYPE.STUDENT;
-  @Input('userId') userId: number = null;
+  @Input('user') user: Student | Teacher | any = {};
   @Input('title') title: string = 'Registered Classes';
   @Input('programId') programId: number = null;
 
@@ -59,11 +60,11 @@ export class MyCourseComponent implements OnInit {
     private studentAcademicLevelService: StudentAcademicLevelService) { }
 
   ngOnInit() {
-    if (this.userId && this.userType === USER_TYPE.STUDENT) {
-      this.loadAllStudentAcademicLevelsClassList(this.userId);
-      this.loadStudent();
-    } else if (this.userId && this.userType === USER_TYPE.TEACHER) {
-      this.loadTeacherClasses(this.userId);
+    if (this.user.userId && this.user.userType === USER_TYPE.STUDENT) {
+      this.loadAllStudentAcademicLevelsClassList(this.user.userId);
+      this.student = this.user;
+    } else if (this.user.userId && this.user.userType === USER_TYPE.TEACHER) {
+      this.loadTeacherClasses(this.user.userId);
     }
   }
 
@@ -73,19 +74,12 @@ export class MyCourseComponent implements OnInit {
     });
   }
 
-  loadStudent() {
-    this.userService.loadUser(this.userId).subscribe((student: Student) => {
-      this.student = student;
-    });
-  }
-
   getCurrentAcademicYear() {
     this.academicYearService.getCurrentAcademicYear()
     .subscribe((academicYear: AcademicYear) => {
       this.isLoading = false;
       if (academicYear) {
         this.academicYear = academicYear;
-        // this.loadStudentClasses(this.student.id, this.student.academicLevelId, academicYear.id);
       }
     });
   }

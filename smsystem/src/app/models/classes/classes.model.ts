@@ -81,6 +81,8 @@ export interface TeacherClassParam {
 
 export interface StudentClass {
   classId?: number;
+  courseId?: number;
+  courseName?: string;
   studentAcademicLevelId?: number;
   student?: Student;
   status?: string;

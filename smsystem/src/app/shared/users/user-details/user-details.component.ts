@@ -60,7 +60,7 @@ export class UserDetailsComponent implements OnInit {
       }).onClose.subscribe(data => {
         this.onImageChangeSuccess.emit({
           succes: true,
-          id: this.userDatail.id,
+          userId: this.userDatail.userId,
         });
       });
     }
