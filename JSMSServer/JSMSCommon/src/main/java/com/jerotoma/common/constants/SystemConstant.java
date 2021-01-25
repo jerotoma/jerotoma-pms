@@ -17,8 +17,8 @@ public class SystemConstant {
 	public static final String DIGITAL_OCEAN_CDN_URL = "https://jerotoma.sfo2.cdn.digitaloceanspaces.com";
 	
 	
-	public static final String UPLOAD_PATH =   System.getProperty("catalina.base") + "/storage/resources/uploads";
-	public static final String RESOURCE_PATH =  "/resources/uploads";
+	public static final String UPLOAD_PATH =   System.getProperty("catalina.base") + "/storage/uploads";
+	public static final String UPLOAD_BASE_PATH =  "/uploads";
 	public static final String PAGE_COUNT = "pageCount";
 		
 	public static final String JPA_JDBC_DRIVER = "javax.persistence.jdbc.driver";

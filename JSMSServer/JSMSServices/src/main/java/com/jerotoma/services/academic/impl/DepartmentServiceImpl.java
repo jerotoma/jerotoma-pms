@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.ClassConstant;
+import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.database.dao.academic.DepartmentDao;
@@ -32,7 +33,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department findObjectUniqueKey(String uniqueKey) throws SQLException {
-		throw new RuntimeException("Methon not implemented yet");
+		throw new RuntimeException(ErrorMessageConstant.METHOD_NOT_IMPLEMENTED);
 	}
 
 	@Override

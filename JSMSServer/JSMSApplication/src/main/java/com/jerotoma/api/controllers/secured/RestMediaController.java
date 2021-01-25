@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,22 +26,12 @@ import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.media.FileUploadWrapper;
 import com.jerotoma.common.models.media.Media;
-import com.jerotoma.common.models.media.UserMedia;
-import com.jerotoma.common.models.users.Parent;
-import com.jerotoma.common.models.users.Staff;
-import com.jerotoma.common.models.users.Teacher;
-import com.jerotoma.common.models.users.students.Student;
 import com.jerotoma.common.utils.FileUpload;
 import com.jerotoma.common.utils.StringUtility;
-import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.media.AssemblerMediaService;
 import com.jerotoma.services.assemblers.media.AssemblerUserMediaService;
 import com.jerotoma.services.media.MediaService;
 import com.jerotoma.services.media.UserMediaService;
-import com.jerotoma.services.users.ParentService;
-import com.jerotoma.services.users.StaffService;
-import com.jerotoma.services.users.StudentService;
-import com.jerotoma.services.users.TeacherService;
 
 @RestController
 @RequestMapping(EndPointConstants.REST_MEDIA_CONTROLLER.BASE)
@@ -50,11 +39,7 @@ public class RestMediaController extends BaseController {
 	
 	@Autowired AssemblerUserMediaService assemblerUserMediaService;
 	@Autowired AssemblerMediaService assemblerMediaService;
-	@Autowired UserMediaService userMediaService;
-	@Autowired TeacherService teacherService;
-	@Autowired StudentService studentService;
-	@Autowired StaffService staffService;
-	@Autowired ParentService parentService;
+	@Autowired UserMediaService userMediaService;	
 	@Autowired MediaService mediaService;
 	
 	
@@ -148,7 +133,7 @@ public class RestMediaController extends BaseController {
 		List<FileUploadWrapper>  fileUploadWrappers = new ArrayList<>();
 		List<FileUploadWrapper>  uploadedFiles = FileUpload.uploadMultipleFileHandler(files, context, "users");
 		for (FileUploadWrapper uploadedFile: uploadedFiles) {
-			fileUploadWrappers.add(saveUpload(uploadedFile, getAuthenticatedUserVO().getUserId(), false));		
+			fileUploadWrappers.add(mediaService.saveUpload(uploadedFile, getAuthenticatedUserVO().getUserId(), false));		
 		}	
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
@@ -167,7 +152,7 @@ public class RestMediaController extends BaseController {
 		userSecurityClearance.checkChangeUserProfileImageClearance(userId);
 		
 		FileUploadWrapper  fileUploadWrapper = FileUpload.uploadFileHandler(file, context, "users");
-		fileUploadWrapper = saveUpload(fileUploadWrapper, userId, true);
+		fileUploadWrapper = mediaService.saveUpload(fileUploadWrapper, userId, true);
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setHttpStatus(HttpStatus.OK);
@@ -192,10 +177,7 @@ public class RestMediaController extends BaseController {
 				instance.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
 				return instance;
 			} 
-			boolean isDeleted = mediaService.deleteObject(media);
-			if (isDeleted) {
-				FileUpload.deleteFile(media);
-			}						
+			boolean isDeleted = mediaService.deleteObject(media);								
 			instance.setData(isDeleted);
 			instance.setSuccess(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
@@ -205,70 +187,4 @@ public class RestMediaController extends BaseController {
 		}
 		return instance;
 	}
-	
-	
-	private FileUploadWrapper saveUpload(FileUploadWrapper  fileUploadWrapper, Integer userId, boolean isForProfile) {
-		
-		try {		
-			UserVO userVO = userService.getUserVOByUserId(userId);			
-			if (fileUploadWrapper.getSuccess()) {
-				Media media = fileUploadWrapper.getMedia();
-				media.setAddedBy(getAuthenticatedUserVO().getUserId());
-				media = mediaService.createObject(media);
-				UserMedia userMedia = new UserMedia();
-				userMedia.setMediaId(media.getId());
-				userMedia.setUserId(userId);			
-				if (assemblerUserMediaService.doesUserMediaExist(media.getId(), userId)) {
-					UserMedia um = userMediaService.findUserMediaByIDs(media.getId(), userId); 
-					userMedia.setId(um.getId());
-					userMedia = userMediaService.updateObject(userMedia);
-				} else {
-					userMedia = userMediaService.createObject(userMedia);
-				}
-				
-				if (isForProfile) {
-					updateUserProfileImage(userMedia, userVO);	
-				}				
-				fileUploadWrapper.setMedia(media);				
-			}
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);
-		}
-		return fileUploadWrapper;
-		
-	}
-
-
-	private void updateUserProfileImage(UserMedia userMedia, UserVO user) {
-		
-		try {		
-			switch(user.getUserType()) {
-			case PARENT:
-				Parent parent = parentService.findObject(user.getId());
-				parent.setProfileImageId(userMedia.getId());
-				parentService.updateObject(parent);				
-				break;
-			case TEACHER :				
-				Teacher mTeacher = teacherService.findObject(user.getId());
-				mTeacher.setProfileImageId(userMedia.getId());
-				teacherService.updateObject(mTeacher);
-				break;
-			case STUDENT :				
-				Student student = studentService.findObject(user.getId());
-				student.setProfileImageId(userMedia.getId());
-				studentService.updateObject(student);
-			break;
-			case STAFF :				
-				Staff staff = staffService.findObject(user.getId());
-				staff.setProfileImageId(userMedia.getId());
-				staffService.updateObject(staff);
-			break;
-			default:
-				throw new UsernameNotFoundException("User type not found");				
-				
-			}
-		} catch (SQLException e) {
-			throw new JDataAccessException(e.getMessage(), e);	
-		}		
-	}	
 }

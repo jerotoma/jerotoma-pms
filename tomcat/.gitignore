@@ -3,6 +3,7 @@ logs/*
 jerotoma_sms/JSMSServer/*
 jerotoma_sms/resources/*
 !jerotoma_sms/JSMSServer/readme
+!jerotoma_sms/resources/uploads
 !jerotoma_sms/resources/readme
 work/*
 !work/readme

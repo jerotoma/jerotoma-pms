@@ -4,8 +4,8 @@
     <div class="row" *ngIf="hasResult && (isStudent || isTeacher)">
       <div class="col-xxxl-12 col-md-12" >
         <app-my-course
-          *ngIf="auth"
-          [userId]="auth?.userId"
+          *ngIf="auth && (student || teacher)"
+          [user]="auth.userType === 'STUDENT' ? student : teacher"
           [userType]="auth?.userType"
         ></app-my-course>
       </div>

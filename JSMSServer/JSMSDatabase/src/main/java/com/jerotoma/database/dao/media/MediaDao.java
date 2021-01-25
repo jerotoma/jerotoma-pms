@@ -1,8 +1,9 @@
 package com.jerotoma.database.dao.media;
 
-import com.jerotoma.common.models.media.Media;
-import com.jerotoma.database.dao.BaseDao;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MediaDao extends BaseDao<Media> {
+import com.jerotoma.common.models.media.Media;
+
+public interface MediaDao extends JpaRepository<Media, Integer> {
 
 }

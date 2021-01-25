@@ -58,8 +58,7 @@ public class FileUpload {
 				
 				if(folderName == null || folderName.equals("site-images")) {
 					folderName = "images";
-				}
-				
+				}				
 				
 				String name = file.getOriginalFilename();
 				String fileExtension = FilenameUtils.getExtension(name);
@@ -84,7 +83,7 @@ public class FileUpload {
 				media.setType(file.getContentType());
 				media.setAbsolutePath(serverFile.getAbsolutePath());
 				media.setSize(file.getSize());
-				media.setSrc(context.getContextPath()+ SystemConstant.RESOURCE_PATH + SystemConstant.FORWARD_SLASH +folderName+ SystemConstant.FORWARD_SLASH + serverFile.getName());
+				media.setSrc(context.getContextPath() + SystemConstant.UPLOAD_BASE_PATH + SystemConstant.FORWARD_SLASH + folderName + SystemConstant.FORWARD_SLASH + serverFile.getName());
 				media.setDescription("");
 				media.setCreatedOn(CalendarUtil.getTodaysDate());
 				media.setUpdatedOn(CalendarUtil.getTodaysDate());
