@@ -8,6 +8,7 @@ services:
     image: jerotoma_sms
     volumes:
       - ./tomcat/jerotoma_sms/resources:/usr/local/app/jerotoma_sms/resources
+      - ./tomcat/storage:/usr/local/app/storage
       - ./tomcat/logs:/usr/local/app/logs       
     networks:
       - jerotoma_sms_net

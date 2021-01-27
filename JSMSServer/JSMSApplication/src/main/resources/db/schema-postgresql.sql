@@ -73,7 +73,7 @@
 	    id bigserial NOT NULL,
 	    name character varying(255) NOT NULL,
 	    code character varying(255) NOT NULL,
-	    description text NOT NULL,
+	    description text,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	    CONSTRAINT positions_ukey UNIQUE (code),
@@ -529,8 +529,7 @@
 	    description text NOT NULL,
 	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
-	    updated_on timestamp with time zone NOT NULL,
-	    UNIQUE(program_id, academic_level_id),
+	    updated_on timestamp with time zone NOT NULL,	   
 	    CONSTRAINT courses_ukey UNIQUE (code),
 	   	CONSTRAINT courses_pkey PRIMARY KEY (id),
 	   	CONSTRAINT departments_fkey FOREIGN KEY (department_id)

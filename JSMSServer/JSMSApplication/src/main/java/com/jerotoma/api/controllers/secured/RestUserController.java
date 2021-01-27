@@ -290,7 +290,7 @@ public class RestUserController extends BaseController {
 						UserConstant.PHONE_NUMBER
 						));
 				
-		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
+		this.logRequestDetail("POST : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
 		this.securityCheckAccessByRoles(auth);
 		this.proccessLoggedInUser(auth);
 		userSecurityClearance.checkGeneralEntityCreationPermission();

@@ -107,6 +107,7 @@ public class UserServiceImpl implements UserService {
 		return authUserService.loadUserByUsername(username);
 	}
 
+	@Transactional
 	@Override
 	public UserVO loadCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -257,30 +258,27 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	private Parent createParent(User newUser, Parent parent) throws SQLException {
-		
+		Student student = null;
 		Set<Parent> parents = new HashSet<>();
-		Integer studentId = parent.getStudentId();		
-		
-		if (studentId == null) {
-			throw new FieldRequiredException("Student ID is required to continue.");
-		}
-		Student student = studentService.findObject(studentId);
-		
-		if (student == null) {
-			throw new FieldRequiredException("Invalid Student ID  was provided, please verify the ID.");
-		}
-		
-		if (student.getParents() != null ) {
-			parents.addAll(student.getParents());
+		Integer studentId = parent.getStudentId();	
+				
+		if (studentId != null) {
+			student = studentService.findObject(studentId);
 		}
 				
-		newUser = authUserService.createUserLoginAccount(newUser);
-		
+		newUser = authUserService.createUserLoginAccount(newUser);		
 		UserVO loggedInUser = loadCurrentUser();
 		parent.setUserId(newUser.getId());
 		parent.setUpdatedBy(loggedInUser.getId());
 		Address address = parent.getAddress();
 		parent = parentService.createObject(parent);
+		
+		if (student != null && student.getParents() != null ) {
+			parents.addAll(student.getParents());
+			parents.add(parent);
+			student.setParents(parents);
+			student = studentService.updateObject(student);
+		}	
 						
 		address.setUpdatedBy(loggedInUser.getId());
 		address = addressService.createObject(address);
@@ -290,11 +288,7 @@ public class UserServiceImpl implements UserService {
 		parentAddress.setParent(parent);
 		parentAddress.setCreatedOn(today);
 		parentAddress.setUpdatedOn(today);
-		parentAddressService.createObject(parentAddress);
-		
-		parents.add(parent);
-		student.setParents(parents);
-		student = studentService.updateObject(student);
+		parentAddressService.createObject(parentAddress);		
 		
 		return parent;
 	}

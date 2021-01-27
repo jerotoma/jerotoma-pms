@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.sql.DataSource;
 
@@ -97,6 +98,8 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 			Collection<Role> roles = new ArrayList<>(Arrays.asList(roleR));
 			authUser = new User(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, roles);			
 			authUser.setUserType(USER_TYPE.STAFF);
+			authUser.setCreatedOn(CalendarUtil.getTodaysDate());
+			authUser.setUpdatedOn(CalendarUtil.getTodaysDate());
 			authUser = userService.createObject(authUser);
 			
 			UserRole mRole = new UserRole(null, authUser.getId(), roleR.getId());
@@ -166,8 +169,17 @@ public class StartUpDataLoader implements ApplicationListener<ContextRefreshedEv
 		staff.setPosition(position);
 		staff.setFirstName("John");
 		staff.setLastName("Doe");
+		staff.setGender("Male");
+		staff.setOccupation("Admin");
+		staff.setUserCode("admin-" + user.getId() + "-564");
+		staff.setBirthDate(new Date());
+		staff.setEmailAddress(user.getUsername());
+		staff.setPhoneNumber("456-465-4677");
+		staff.setUpdatedBy(user.getId());
+		staff.setCreatedOn(CalendarUtil.getTodaysDate());
+		staff.setUpdatedOn(CalendarUtil.getTodaysDate());
 		try {
-			staffService.createObject(staff);
+			staff = staffService.createObject(staff);
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage(), e); 
 		}

@@ -45,7 +45,11 @@ public class ServiceUtil {
 			String orderby = queryParam.getOrderby();
 			
 			if(StringUtility.isEmpty(fieldName)) {
-	    		fieldName = "created_on";
+	    		fieldName = "createdOn";
+			}
+			
+			if (fieldName.equals("created_on")) {
+				fieldName = "createdOn";
 			}
 			
 			Sort sort = Sort.by(fieldName);
@@ -62,11 +66,10 @@ public class ServiceUtil {
 				} else if (orderBy.equals(ORDER_BY.DESC)) {
 					sort = sort.descending(); 
 				}
-			}		
-			pageable = PageRequest.of(
-					queryParam.getPage() != null ?  queryParam.getPage() : 0, 
-					queryParam.getPageSize() != null ?  queryParam.getPageSize() : 10,
-					sort);			
+			}	
+			
+			int page = queryParam.getPage() != null && queryParam.getPage() != 0 ?  queryParam.getPage() - 1 : 0;			
+			pageable = PageRequest.of(page , queryParam.getPageSize() != null ?  queryParam.getPageSize() : 10, sort);			
 		}		
 		return pageable;		
 	}

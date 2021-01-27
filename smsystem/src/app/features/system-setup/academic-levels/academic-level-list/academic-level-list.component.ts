@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
 import {NbDialogService } from '@nebular/theme';
 import {MatPaginator} from '@angular/material/paginator';
@@ -19,6 +20,7 @@ import { AcademicLevelCreateComponent } from '../academic-level-create/academic-
   styleUrls: [`./academic-level-list.component.scss`],
 })
 export class AcademicLevelListComponent implements OnInit {
+  baseURL: string = '/dashboard/system-setup/academic-levels';
 
   param: QueryParam = {
     page: 1,
@@ -45,6 +47,7 @@ export class AcademicLevelListComponent implements OnInit {
    constructor(
     private academicLevelService: AcademicLevelService,
     private dialogService: NbDialogService,
+    private router: Router,
     ) {
   }
   ngOnInit() {
@@ -98,6 +101,10 @@ export class AcademicLevelListComponent implements OnInit {
     }).onClose.subscribe(_data => {
       this.loadAcademicLevels();
     });
+  }
+
+  view(academicLevel: AcademicLevel) {
+    this.router.navigate([this.baseURL + '/' + academicLevel.id ]);
   }
   onPageChange(pageEvent: PageEvent) {
     this.param.page = pageEvent.pageIndex === 0 ? 1 : pageEvent.pageIndex;
