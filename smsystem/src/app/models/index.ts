@@ -20,3 +20,4 @@ export * from './academic-levels';
 export * from './securities';
 export * from './auth';
 export * from './score-standings';
+export * from './streams';

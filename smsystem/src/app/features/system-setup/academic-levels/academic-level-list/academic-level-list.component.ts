@@ -79,6 +79,7 @@ export class AcademicLevelListComponent implements OnInit {
         }
       });
   }
+
   edit(academicLevel: AcademicLevel) {
     this.dialogService.open(AcademicLevelCreateComponent, {
       context: {
@@ -90,6 +91,7 @@ export class AcademicLevelListComponent implements OnInit {
       this.loadAcademicLevels();
     });
   }
+
   delete(academicLevel: AcademicLevel) {
     this.dialogService.open(DeleteModalComponent, {
       context: {

@@ -1,8 +1,11 @@
+import { Stream } from '../streams';
+
 export interface AcademicLevel {
   id: number;
   name: string;
   code: string;
   description: string;
+  streams: Stream[];
   createdOn?: Date;
   updatedOn?: Date;
   prerequisites?: AcademicLevelPrerequisite[];

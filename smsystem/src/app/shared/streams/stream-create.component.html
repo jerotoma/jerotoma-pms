@@ -1,43 +1,48 @@
 <div class='row'>
   <div class="col-md-12 col-lg-12 col-xxxl-12">
-      <form  autocomplete="off" [formGroup]="academicLevelForm" (ngSubmit)="onSubmit()">
+      <form  autocomplete="off" [formGroup]="streamForm" (ngSubmit)="onSubmit()">
           <nb-card status="primary" class="dialog-card">
             <nb-card-header>{{ title }}</nb-card-header>
-            <nb-card-body>
+            <nb-card-body
+              [nbSpinner]="isSubmitting"
+              nbSpinnerStatus="success"
+              nbSpinnerSize="large"
+              [nbSpinnerMessage]="action == 'create' ? 'Creating stream......' :'Saving the changes......'"
+            >
               <div class="row">
                   <div class="col-md-12">
                       <div class="form-control-group">
-                        <label for="academicLevel-name" class="label">Name</label>
+                        <label for="stream-name" class="label">Name</label>
                         <input
                             type="text"
                             nbInput fullWidth
                             required
-                            id="academicLevel-name"
+                            id="stream-name"
                             formControlName="name"
-                            placeholder="eg. Engineering">
+                            placeholder="eg. PCM">
                       </div>
                   </div>
               </div>
               <div class="row">
                 <div class="col-md-12">
                     <div class="form-control-group">
-                      <label for="academicLevel-code" class="label">Code</label>
+                      <label for="stream-code" class="label">Code</label>
                       <input
                           type="text"
                           nbInput fullWidth
                           required
-                          id="academicLevel-code"
+                          id="stream-code"
                           formControlName="code"
-                          placeholder="eg. SM-1000">
+                          placeholder="eg. ST-1000">
                     </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-md-12">
                     <div class="form-control-group">
-                        <label for="academic-level-description" class="label">Description</label>
+                        <label for="stream-description" class="label">Description</label>
                         <textarea
-                          id="academic-level-description"
+                          id="stream-description"
                           nbInput
                           fullWidth
                           formControlName="description"
@@ -50,14 +55,10 @@
             </nb-card-body>
             <nb-card-footer>
               <button class='push-right'
-                  [disabled]="!academicLevelForm.valid"
+                  [disabled]="!streamForm.valid"
                   type="submit"
                   nbButton hero
-                  status="success"
-                  [nbSpinner]="isSubmitting"
-                  nbSpinnerStatus="success"
-                  nbSpinnerSize="large"
-                  [nbSpinnerMessage]="action == 'create' ? 'Creating academicLevel......' :'Saving the changes......'">
+                  status="success">
                     {{action == 'create' ? 'Create' : 'Save Changes'}}
               </button>
               <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>

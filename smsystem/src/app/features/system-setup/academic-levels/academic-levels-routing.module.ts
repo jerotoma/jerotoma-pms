@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import {AcademicLevelsComponent } from './academic-levels.component';
 import {AcademicLevelListComponent } from './academic-level-list/academic-level-list.component';
+import {AcademicLevelShowComponent } from './academic-level-show/academic-level-show.component';
 
 
 const routes: Routes = [{
@@ -13,6 +14,10 @@ const routes: Routes = [{
     {
       path: '',
       component: AcademicLevelListComponent,
+    },
+    {
+      path: ':id',
+      component: AcademicLevelShowComponent,
     },
   ],
 }];

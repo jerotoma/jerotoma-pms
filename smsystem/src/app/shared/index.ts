@@ -13,4 +13,5 @@ export * from './search';
 export * from './pickers';
 export * from './academic-years';
 export * from './logo';
+export * from './streams';
 

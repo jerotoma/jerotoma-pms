@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jerotoma.common.constants.DatabaseConstant;
@@ -36,8 +37,14 @@ public class Stream {
 	@Column
 	private String name;
 	
+	@Transient
+	private Integer academicLevelId;
+	
 	@Column
 	private String description;
+	
+	@Column(name="updated_by")
+	private Integer updatedBy;
 	
 	@Column(name="created_on")
 	private Date createdOn;
@@ -104,7 +111,15 @@ public class Stream {
 	public void setAcademicLevels(Set<AcademicLevel> academicLevels) {
 		this.academicLevels = academicLevels;
 	}
-	
+		
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -135,4 +150,12 @@ public class Stream {
         }
         return false;
 	}
+
+	public void setAcademicLevelId(Integer academicLevelId) {
+		this.academicLevelId = academicLevelId;		
+	}
+
+	public Integer getAcademicLevelId() {
+		return academicLevelId;
+	}	
 }

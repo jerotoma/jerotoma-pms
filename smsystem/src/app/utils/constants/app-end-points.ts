@@ -26,6 +26,7 @@ export const API_END_POINTS = {
   positions: '/api/secured/positions',
   academicDisciplines: '/api/secured/academic-disciplines',
   rooms: '/api/secured/rooms',
+  streams: '/api/secured/streams',
   courses: '/api/secured/courses',
   programs: '/api/secured/programs',
   studentClasses: '/api/secured/student-classes',

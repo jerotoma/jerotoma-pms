@@ -24,11 +24,13 @@ import { AcademicLevelsRoutingModule } from './academic-levels-routing.module';
 import { AcademicLevelsComponent } from './academic-levels.component';
 import { AcademicLevelListComponent } from './academic-level-list/academic-level-list.component';
 import { AcademicLevelCreateComponent } from './academic-level-create/academic-level-create.component';
+import {AcademicLevelShowComponent } from './academic-level-show/academic-level-show.component';
 
 const COMPONENTS = [
   AcademicLevelsComponent,
   AcademicLevelCreateComponent,
   AcademicLevelListComponent,
+  AcademicLevelShowComponent,
 ];
 
 const ENTRY_COMPONENTS = [

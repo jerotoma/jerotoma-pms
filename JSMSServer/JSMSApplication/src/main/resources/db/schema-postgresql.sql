@@ -131,6 +131,7 @@
 	    name character varying(255) NOT NULL,
 	    code character varying(255) NOT NULL,
 	    description text NOT NULL,
+	    updated_by bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL,
 	    updated_on timestamp with time zone NOT NULL,
 	    CONSTRAINT streams_ukey UNIQUE (code),

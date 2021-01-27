@@ -8,47 +8,43 @@
         nbSpinnerSize="large"
         [nbSpinnerMessage]="'Loading......'">
         <div class="row">
-            <div class="col-md-12">
-                <div class="form-control-group">
-                    <label for="program-name" class="label">Name</label>
-                    <p>{{program?.name}}</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
               <div class="form-control-group">
-                <label for="program-code" class="label">Code</label>
-                <p>{{program?.code}}</p>
+                  <label for="academiclevel-name" class="label">Name</label>
+                  <p>{{academiclevel?.name}}</p>
+              </div>
+          </div>
+          <div class="col-md-6">
+              <div class="form-control-group">
+                <label for="academiclevel-code" class="label">Code</label>
+                <p>{{academiclevel?.code}}</p>
               </div>
           </div>
         </div>
         <div class="row">
           <div class="col-md-12">
                 <div class="form-control-group">
-                  <label for="program-description" class="label">Description</label>
-                  <p>{{program?.description}}</p>
-                  <!-- <app-mce-editor (editorKeyup)=getDescriptionContent($event) ></app-mce-editor> -->
+                  <label for="academiclevel-description" class="label">Description</label>
+                  <p>{{academiclevel?.description}}</p>
                 </div>
           </div>
         </div>
         <div class="lists row">
           <div class="col-md-12">
               <div class="form-control-group">
-                <nb-card class="list-card" accent="success" *ngIf="program && program.academicLevels">
+                <nb-card class="list-card" accent="success" *ngIf="academiclevel && academiclevel.streams">
                   <nb-card-header>List of Stream for this Academic Level <button class="push-right" nbButton hero status='success' (click)="addNewStream()">Add New Stream</button></nb-card-header>
                   <nb-card-body style="padding: 0;">
                     <nb-list class="list-group">
                       <nb-list-item
                         class="list-group-item"
-                        *ngFor="let academicLevel of program.academicLevels; index as i;"
-                        (click)="showAcademicLevelPrerequisite($event, academicLevel)">
-                        <a href="#" (click)="showAcademicLevelPrerequisite($event, academicLevel)">
+                        *ngFor="let stream of academiclevel.streams; index as i;">
+                        <a href="#" (click)="preventDefault($event)">
                           <div class="row">
                             <div class="col-md-1">{{i + 1}}</div>
-                            <div class="col-md-9">{{academicLevel.name}}</div>
+                            <div class="col-md-9">{{stream.name}}</div>
                             <div class="col-md-2">
-                              <span class="push-right text-danger" (click)="removeAcademicLevel($event, academicLevel)">
+                              <span class="push-right text-danger" (click)="removeStream($event, stream)">
                                 <nb-icon icon="trash-2-outline"></nb-icon> Remove
                               </span>
                             </div>

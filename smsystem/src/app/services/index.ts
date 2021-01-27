@@ -27,3 +27,4 @@ export * from './securities';
 export * from './score-standings';
 export * from './student-classes';
 export * from './statuses';
+export * from './streams';

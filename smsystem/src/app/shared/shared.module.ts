@@ -64,6 +64,7 @@ import {
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
   ManageStudentProgressCreateComponent,
+  StreamCreateComponent,
 } from 'app/shared';
 
 const COMPONENTS = [
@@ -89,6 +90,7 @@ const COMPONENTS = [
   ManageStudentProgressComponent,
   ManageStudentProgressCreateComponent,
   StudentClassesProgressComponent,
+  StreamCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -108,7 +110,8 @@ const ENTRY_COMPONENTS = [
   AcademicLevelStudentEnrollmentCreateComponent,
   ManageStudentProgressComponent,
   ManageStudentProgressCreateComponent,
-  StudentClassesProgressComponent
+  StudentClassesProgressComponent,
+  StreamCreateComponent,
 ];
 
 const MODULES = [

@@ -2,12 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import {NbDialogService } from '@nebular/theme';
-import { AcademicLevel, AcademicLevelPrerequisite } from 'app/models';
+import { AcademicLevel, Stream } from 'app/models';
 import {
   AcademicLevelService,
   ModalService,
 } from 'app/services';
-import { QueryParam, OPEN_CLOSE_ANIMATION } from 'app/utils';
+import { OPEN_CLOSE_ANIMATION, APP_ACTION_TYPE } from 'app/utils';
+
+import { StreamCreateComponent } from 'app/shared';
 
 @Component({
   selector: 'app-academic-level-show',
@@ -19,13 +21,12 @@ export class AcademicLevelShowComponent implements OnInit {
 
   academiclevel: AcademicLevel;
   academiclevelId: number;
-  academicLevelPrerequisites: AcademicLevelPrerequisite[];
+  streams: Stream[];
   showRemoveAction: boolean = false;
-  isLoadingAcademicLevel: boolean = false;
-  isLoadingPrerequisite: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
-    private academiclevelService: AcademicLevelService,
+    private academicLevelService: AcademicLevelService,
     private dialogService: NbDialogService,
     private modalService: ModalService,
     private route: ActivatedRoute,
@@ -39,7 +40,34 @@ export class AcademicLevelShowComponent implements OnInit {
     });
   }
   loadAcademicLevel() {
-    // throw new Error('Method not implemented.');
+    this.isLoading = true;
+    this.academicLevelService.getAcademicLevel(this.academiclevelId)
+      .subscribe((academiclevel: AcademicLevel) => {
+        this.isLoading = false;
+        this.academiclevel = academiclevel;
+        this.streams = academiclevel.streams;
+      });
   }
 
+  preventDefault(event: any) {
+    event.preventDefault();
+  }
+
+  removeStream(event: any, stream: Stream) {
+    event.preventDefault();
+  }
+
+  addNewStream() {
+    this.dialogService.open(StreamCreateComponent, {
+      context: {
+        title: 'Add New Stream',
+        action: APP_ACTION_TYPE.create,
+        academicLevel: this.academiclevel,
+      },
+    }).onClose.subscribe(data => {
+      if (data.confirmed) {
+        this.loadAcademicLevel();
+      }
+    });
+  }
 }
