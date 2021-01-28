@@ -199,6 +199,10 @@ export const FRONTEND_ENDPOINTS = {
     path: '/dashboard/system-setup/rooms',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
   },
+  systemSetupStreams: {
+    path: '/dashboard/system-setup/streams',
+    allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,
+  },
   systemSetupAcademicYears: {
     path: '/dashboard/system-setup/academic-years',
     allowedRoles: ADMINS_AND_EXECUTIVES_ROLES,

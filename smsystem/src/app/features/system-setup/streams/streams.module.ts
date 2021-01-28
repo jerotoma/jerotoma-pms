@@ -15,42 +15,28 @@ import {
   NbInputModule,
   NbIconModule,
   NbAlertModule,
-  NbSelectModule,
-  NbCheckboxModule,
-  NbListModule,
 } from '@nebular/theme';
 
-import { AcademicLevelsRoutingModule } from './academic-levels-routing.module';
-import { AcademicLevelsComponent } from './academic-levels.component';
-import { AcademicLevelListComponent } from './academic-level-list/academic-level-list.component';
-import { AcademicLevelCreateComponent } from './academic-level-create/academic-level-create.component';
-import { AcademicLevelShowComponent } from './academic-level-show/academic-level-show.component';
-import { AddStreamComponent } from './academic-level-show/academic-level-streams/add-stream.component';
+import { StreamsRoutingModule } from './streams-routing.module';
+import { StreamsComponent } from './streams.component';
+import { StreamViewComponent } from './view/stream-view.component';
 
 const COMPONENTS = [
-  AcademicLevelsComponent,
-  AcademicLevelCreateComponent,
-  AcademicLevelListComponent,
-  AcademicLevelShowComponent,
-  AddStreamComponent,
+  StreamsComponent,
+  StreamViewComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  AcademicLevelCreateComponent,
-  AddStreamComponent
 ];
 
 const MODULES = [
   SharedModule,
-  AcademicLevelsRoutingModule,
+  StreamsRoutingModule,
   NbButtonModule,
   NbSpinnerModule,
   NbWindowModule,
   NbCardModule,
   NbInputModule,
-  NbSelectModule,
-  NbCheckboxModule,
-  NbListModule,
   NbIconModule,
   NbAlertModule,
   MatTableModule,
@@ -82,4 +68,4 @@ entryComponents: [
   ...ENTRY_COMPONENTS,
 ],
 })
-export class AcademicLevelsModule { }
+export class StreamsModule { }

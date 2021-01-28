@@ -180,6 +180,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: FRONTEND_ENDPOINTS.systemSetupRooms.path,
       },
       {
+        title: 'Streams',
+        link: FRONTEND_ENDPOINTS.systemSetupStreams.path,
+      },
+      {
         title: 'Academic Years',
         link: FRONTEND_ENDPOINTS.systemSetupAcademicYears.path,
       },

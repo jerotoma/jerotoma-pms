@@ -7,7 +7,7 @@ import {
   StreamService,
   ModalService,
 } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-stream-create',
@@ -16,7 +16,7 @@ import { QueryParam } from 'app/utils';
 })
 export class StreamCreateComponent implements OnInit {
   @Input() title: string;
-  @Input() action: string = 'create';
+  @Input() action: string = APP_ACTION_TYPE.create;
   @Input() academicLevel: AcademicLevel;
 
   streamForm: FormGroup;
@@ -32,7 +32,7 @@ export class StreamCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadForm();
-    if (this.action === 'edit') {
+    if (this.action === APP_ACTION_TYPE.edit) {
         this.loadStream();
     }
 
@@ -40,6 +40,8 @@ export class StreamCreateComponent implements OnInit {
   patchStream() {
     this.streamForm.patchValue({
       name: this.stream.name,
+      description: this.stream.description,
+      code: this.stream.code,
       id: this.stream.id,
     });
   }
@@ -87,7 +89,7 @@ export class StreamCreateComponent implements OnInit {
   loadForm() {
     this.streamForm = this.formBuilder.group({
       id: [null],
-      academicLevelId: ['', Validators.required ],
+      academicLevelId: [null],
       name: ['', Validators.required ],
       code: ['', Validators.required ],
       description: [''],

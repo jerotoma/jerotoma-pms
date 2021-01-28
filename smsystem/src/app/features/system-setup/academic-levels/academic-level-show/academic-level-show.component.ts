@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 
 import {NbDialogService } from '@nebular/theme';
 import { AcademicLevel, Stream } from 'app/models';
+import { AddStreamComponent } from './academic-level-streams/add-stream.component';
 import {
   AcademicLevelService,
   ModalService,
@@ -58,10 +59,9 @@ export class AcademicLevelShowComponent implements OnInit {
   }
 
   addNewStream() {
-    this.dialogService.open(StreamCreateComponent, {
+    this.dialogService.open(AddStreamComponent, {
       context: {
         title: 'Add New Stream',
-        action: APP_ACTION_TYPE.create,
         academicLevel: this.academiclevel,
       },
     }).onClose.subscribe(data => {

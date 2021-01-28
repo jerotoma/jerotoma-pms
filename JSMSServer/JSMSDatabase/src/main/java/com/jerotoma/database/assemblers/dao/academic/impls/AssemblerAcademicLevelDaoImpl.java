@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,10 +26,13 @@ import com.jerotoma.common.constants.AcademicLevelConstant;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.constants.SystemConstant;
+import com.jerotoma.common.models.academic.Stream;
 import com.jerotoma.common.viewobjects.AcademicLevelPrerequisiteVO;
 import com.jerotoma.common.viewobjects.AcademicLevelVO;
+import com.jerotoma.common.viewobjects.StreamVO;
 import com.jerotoma.database.assemblers.dao.academic.AssemblerAcademicLevelDao;
 import com.jerotoma.database.dao.DaoUtil;
+import com.jerotoma.database.dao.academic.StreamDao;
 
 
 @Repository
@@ -36,7 +41,8 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	private JdbcTemplate jdbcTemplate;
 	private Map<String, Object> map;
 	
-	@Autowired DataSource dataSource;	
+	@Autowired DataSource dataSource;
+	@Autowired StreamDao streamDao;
 	
 	@PostConstruct
 	private void initialize() {
@@ -118,10 +124,26 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 		}
 	}
 	
+	
 	private AcademicLevelVO mapAcademicLevel(ResultSet rs) throws SQLException {
-		return new AcademicLevelVO(rs);	
+		AcademicLevelVO academicLevel = new AcademicLevelVO(rs);
+		academicLevel.setStreams(loadStreams(academicLevel.getId()));
+		return academicLevel;	
 	}
 	
+	private Set<StreamVO> loadStreams(Integer academicLevelId) {
+		String query = "SELECT alst.stream_id FROM public.academic_level_streams alst INNER JOIN public.academic_levels al ON al.id = alst.academic_level_id WHERE alst.academic_level_id = ?";
+		List<StreamVO> streams = this.jdbcTemplate.query(query, new ArgumentPreparedStatementSetter(new Object[] {academicLevelId}), new RowMapper<StreamVO>() {
+			@Override
+			public StreamVO mapRow(ResultSet rs, int rowNum) throws SQLException {	
+				Optional<Stream> optionalStream = streamDao.findById(rs.getInt("stream_id"));
+				return optionalStream.isPresent() ? new StreamVO(optionalStream.get()) : null;
+			}			
+		});			
+		return new HashSet<StreamVO>(streams);
+	}
+	
+
 	public class AcademicLevelSingleResultProcessor implements ResultSetExtractor<AcademicLevelVO>{
 		@Override
 		public AcademicLevelVO extractData(ResultSet rs) throws SQLException, DataAccessException {

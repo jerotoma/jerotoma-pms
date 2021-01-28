@@ -2,8 +2,10 @@ package com.jerotoma.services.academic.impl;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -15,8 +17,10 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicLevelConstant;
 import com.jerotoma.common.constants.SystemConstant;
 import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.Stream;
 import com.jerotoma.database.dao.academic.AcademicLevelDao;
 import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.StreamService;
 import com.jerotoma.services.utils.ServiceUtil;
 
 @Transactional
@@ -24,6 +28,7 @@ import com.jerotoma.services.utils.ServiceUtil;
 public class AcademicLevelServiceImpl implements AcademicLevelService {
 	
 	@Autowired AcademicLevelDao academicLevelDao;
+	@Autowired StreamService streamService;
 
 	@Override
 	public AcademicLevel findObject(Integer primaryKey) throws SQLException {
@@ -72,5 +77,19 @@ public class AcademicLevelServiceImpl implements AcademicLevelService {
 	@Override
 	public List<AcademicLevel> getAllAcademicLevels() throws SQLException {
 		return academicLevelDao.getAllAcademicLevels();
+	}
+
+	@Override
+	public AcademicLevel addStreamsToAcademicLevel(Integer academicLevelId, List<Integer> streamIds)
+			throws SQLException {
+		Set<Stream> streams = new HashSet<>();
+		AcademicLevel academicLevel = findObject(academicLevelId);
+		streams.addAll(academicLevel.getStreams());
+		for (Integer streamId: streamIds) {
+			Stream stream = streamService.findObject(streamId);
+			streams.add(stream);		
+		}
+		academicLevel.setStreams(streams);		
+		return updateObject(academicLevel);
 	}
 }

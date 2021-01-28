@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ import com.jerotoma.api.controllers.Controller;
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.AcademicLevelConstant;
 import com.jerotoma.common.constants.EndPointConstants;
+import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.academic.AcademicLevel;
@@ -221,6 +223,34 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		response.setHttpStatus(HttpStatus.OK);
 		return response;
 	}
+
+	@PostMapping("/{entityId}/streams")
+	@SuppressWarnings("unchecked")
+	public HttpResponseEntity<Object> addStreamsToAcademicLevel(
+			Authentication auth, 
+			@PathVariable(required = true, value = "entityId") Integer entityId, 
+			@RequestBody Map<String, Object> params) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE + "/" + entityId);
+		this.securityCheckAccessByRoles(auth);	
+		
+		List<Integer> streamIds = (ArrayList<Integer>)params.get("streamIds");
+		if (streamIds == null) {
+			throw new FieldRequiredException("At least One Stream is required to continue");
+		}
+		
+		try {
+			AcademicLevel academicLevel = academicLevelService.addStreamsToAcademicLevel(entityId, streamIds);	
+			response.setData(academicLevel);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
 
 	@GetMapping(value = {"/{entityId}"})
 	@Override

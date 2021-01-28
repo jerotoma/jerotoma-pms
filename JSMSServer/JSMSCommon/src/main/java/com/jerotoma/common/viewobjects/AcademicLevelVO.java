@@ -20,6 +20,9 @@ public class AcademicLevelVO {
 	
 	private Date updatedOn;
 	
+	private Set<StreamVO> streams;	
+	
+	
 	private Set<AcademicLevelPrerequisiteVO> prerequisites;	
 	
 	public AcademicLevelVO(ResultSet rs) throws SQLException {
@@ -85,6 +88,14 @@ public class AcademicLevelVO {
 
 	public void setPrerequisites(Set<AcademicLevelPrerequisiteVO> prerequisites) {
 		this.prerequisites = prerequisites;
+	}
+	
+	public Set<StreamVO> getStreams() {
+		return streams;
+	}
+
+	public void setStreams(Set<StreamVO> streams) {
+		this.streams = streams;
 	}
 
 	@Override

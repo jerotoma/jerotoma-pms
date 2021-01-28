@@ -121,12 +121,6 @@ public class RestStreamController  extends BaseController {
 		return response;
 	}
 
-	protected HttpResponseEntity<Object> showStream() {
-		
-		return null;
-	}
-
-
 	@PutMapping
 	@ResponseBody
 	protected HttpResponseEntity<Object> editStream(
@@ -156,6 +150,22 @@ public class RestStreamController  extends BaseController {
 		return response;
 	}
 
+	@GetMapping("/{streamId}")
+	@ResponseBody
+	protected HttpResponseEntity<Object> getStream(Authentication auth, @PathVariable("streamId") Integer streamId) {
+		HttpResponseEntity<Object> instance = new HttpResponseEntity<>();
+			
+		this.securityCheckAccessByRoles(auth);	
+		try {
+			instance.setData(streamService.findObject(streamId));			
+			instance.setSuccess(true);
+			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));			
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return instance;
+	}
+	
 	@DeleteMapping("/{streamId}")
 	@ResponseBody
 	protected HttpResponseEntity<Object> deleteStream(Authentication auth, @PathVariable("streamId") Integer streamId) {
@@ -172,6 +182,7 @@ public class RestStreamController  extends BaseController {
 				return instance;
 			} 
 			boolean isDeleted = streamService.deleteObject(stream);
+			instance.setData(isDeleted);
 			instance.setSuccess(isDeleted);
 			instance.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			

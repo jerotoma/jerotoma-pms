@@ -9,4 +9,6 @@ import com.jerotoma.services.BaseService;
 public interface AcademicLevelService extends BaseService<AcademicLevel> {
 	List<AcademicLevel> getAllAcademicLevels() throws SQLException;
 
+	AcademicLevel addStreamsToAcademicLevel(Integer accademicLevelId, List<Integer> streamIds) throws SQLException;
+
 }

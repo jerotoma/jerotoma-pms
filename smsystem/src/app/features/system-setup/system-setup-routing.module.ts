@@ -33,6 +33,13 @@ const routes: Routes = [{
         .then(m => m.RoomsModule),
     },
     {
+      path: 'streams',
+      data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES},
+      canActivateChild: [AuthGuard],
+      loadChildren: () => import('./streams/streams.module')
+        .then(m => m.StreamsModule),
+    },
+    {
       path: 'academic-years',
       data: { roles: ADMINS_TEACHER_AND_EXECUTIVES_ROLES},
       canActivateChild: [AuthGuard],
