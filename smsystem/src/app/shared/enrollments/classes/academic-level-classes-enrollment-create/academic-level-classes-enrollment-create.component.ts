@@ -42,7 +42,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   courseId: number;
   programId: number;
   academicLevelId: number;
-  jClassIds: number[] = [];
+  classIds: number[] = [];
   teacherId: number;
   isLoading: boolean = false;
   confirmed: boolean = false;
@@ -62,7 +62,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     userType:  this.userType,
   };
 
-  jClasses: ClassView[];
+  classes: ClassView[];
   academicYears: AcademicYear[];
   studentClassForm: FormGroup;
   academicLevel: AcademicLevel;
@@ -105,17 +105,17 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   checkAllCourseBoxes(checked: boolean) {
     this.checkAllCourses = checked;
     if (checked) {
-      this.jClassIds = [];
-      this.jClasses.forEach((classView: ClassView) => {
-        this.jClassIds.push(classView.id);
+      this.classIds = [];
+      this.classes.forEach((classView: ClassView) => {
+        this.classIds.push(classView.id);
       });
       this.studentClassForm.patchValue({
-        jClassIds: this.jClassIds,
+        classIds: this.classIds,
       });
     } else {
-      this.jClassIds = [];
+      this.classIds = [];
       this.studentClassForm.patchValue({
-        jClassIds: this.jClassIds,
+        classIds: this.classIds,
       });
     }
   }
@@ -143,16 +143,16 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
 
   checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {
-      this.jClassIds.push(jClass.id);
+      this.classIds.push(jClass.id);
     } else {
-      for (let i = 0; i < this.jClassIds.length; i++) {
-        if ( this.jClassIds[i] === jClass.id) {
-          this.jClassIds.splice(i, 1);
+      for (let i = 0; i < this.classIds.length; i++) {
+        if ( this.classIds[i] === jClass.id) {
+          this.classIds.splice(i, 1);
         }
      }
     }
     this.studentClassForm.patchValue({
-      jClassIds: this.jClassIds,
+      classIds: this.classIds,
     });
   }
 
@@ -162,7 +162,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
       studentId: ['', Validators.required],
       academicYearId: ['', Validators.required],
       academicLevelId: ['', Validators.required],
-      jClassIds: [[], Validators.required],
+      classIds: [[], Validators.required],
     });
     this.onChanges();
   }
@@ -176,7 +176,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
       }, {emitEvent: false});
       if (academicLevelId && programId) {
         this.academicLevelId = academicLevelId;
-        this.jClasses = [];
+        this.classes = [];
         this.loadJClassesByAcademicYear(programId, academicLevelId, this.academicYearId);
       }
     });
@@ -196,7 +196,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     }
     this.isLoading = true;
     this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
-      this.jClasses = classViews;
+      this.classes = classViews;
       if (classViews && classViews.length === 0) {
         this.modalService.openSnackBar('No classes for the selected school year', 'info');
       }

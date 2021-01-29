@@ -92,4 +92,14 @@ public class AcademicLevelServiceImpl implements AcademicLevelService {
 		academicLevel.setStreams(streams);		
 		return updateObject(academicLevel);
 	}
+
+	@Override
+	public boolean deleteStreamsFromAcademicLevel(Integer entityId, Integer streamId) throws SQLException {
+		AcademicLevel academicLevel = findObject(entityId);
+		Stream stream = streamService.findObject(streamId);
+		if (academicLevel != null && stream != null) {			
+			academicLevel.getStreams().remove(stream);			
+		}
+		return true;
+	}
 }

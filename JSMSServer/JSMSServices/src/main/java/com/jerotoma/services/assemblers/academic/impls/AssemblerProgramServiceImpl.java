@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +45,7 @@ public class AssemblerProgramServiceImpl implements AssemblerProgramService {
 		return assemblerProgramDao.countObject();
 	}
 	
+	@Transactional
 	@Override
 	public List<ProgramVO> getAllProgram() throws SQLException {
 		return assemblerProgramDao.getAllProgram();

@@ -22,6 +22,7 @@ import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.constants.DatabaseConstant;
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.AcademicYear;
+import com.jerotoma.common.models.academic.Stream;
 
 @Entity
 @Table(name = DatabaseConstant.TABLES.STUDENT_ACADEMIC_LEVELS)
@@ -38,6 +39,9 @@ public class StudentAcademicLevel {
 	@Column
 	private Integer id;
 	
+	@Column(name="is_current_academic_level")
+	private Boolean isCurrentAcademicLevel;
+	
 	@ManyToOne
 	@JoinColumn(name="academic_level_id")
 	private AcademicLevel academicLevel;
@@ -46,6 +50,11 @@ public class StudentAcademicLevel {
 	@JoinColumn(name="student_id")
 	@JsonBackReference
 	private Student student;
+	
+	@ManyToOne
+	@JoinColumn(name="stream_id")
+	@JsonBackReference
+	private Stream stream;
 	
 	@ManyToOne
 	@JoinColumn(name="academic_year_id")
@@ -161,24 +170,42 @@ public class StudentAcademicLevel {
 	public void setAcademicYear(AcademicYear academicYear) {
 		this.academicYear = academicYear;
 	}
+	
+	public Stream getStream() {
+		return stream;
+	}
+
+	public void setStream(Stream stream) {
+		this.stream = stream;
+	}
+	
+	public Boolean getIsCurrentAcademicLevel() {
+		return isCurrentAcademicLevel;
+	}
+
+	public void setIsCurrentAcademicLevel(Boolean isCurrentAcademicLevel) {
+		this.isCurrentAcademicLevel = isCurrentAcademicLevel;
+	}
 
 	public static class Fields {
 		Integer studentId = null;
 		Integer academicLevelId = null;
+		Integer streamId = null;
 		Integer academicYearId = null;
 		Integer commpletionStatusId = null;
 		Boolean isCurrentStudentAcademicLevel = Boolean.FALSE;
 		List<Integer> classIds = new ArrayList<>();	
 		Integer id = null;
 			
-		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer academicYearId, List<Integer> classIds, Boolean isCurrentStudentAcademicLevel) {
+		public Fields(Integer id, Integer studentId, Integer commpletionStatusId, Integer academicLevelId, Integer streamId, Integer academicYearId, List<Integer> classIds, Boolean isCurrentStudentAcademicLevel) {
 			this.id = id;
 			this.studentId = studentId;
 			this.commpletionStatusId = commpletionStatusId;			
 			this.academicLevelId = academicLevelId;
+			this.streamId = streamId;
 			this.academicYearId = academicYearId;
 			this.classIds = classIds;
-			this.isCurrentStudentAcademicLevel = isCurrentStudentAcademicLevel;
+			this.isCurrentStudentAcademicLevel = isCurrentStudentAcademicLevel == null ? false : isCurrentStudentAcademicLevel;
 		}
 		
 		public Integer getId() {
@@ -236,6 +263,14 @@ public class StudentAcademicLevel {
 		public void setIsCurrentStudentAcademicLevel(Boolean isCurrentStudentAcademicLevel) {
 			this.isCurrentStudentAcademicLevel = isCurrentStudentAcademicLevel;
 		}
+
+		public Integer getStreamId() {
+			return streamId;
+		}
+
+		public void setStreamId(Integer streamId) {
+			this.streamId = streamId;
+		}		
 	}
 	
 }

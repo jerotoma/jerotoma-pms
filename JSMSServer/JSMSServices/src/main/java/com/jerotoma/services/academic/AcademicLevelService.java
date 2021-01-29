@@ -11,4 +11,5 @@ public interface AcademicLevelService extends BaseService<AcademicLevel> {
 
 	AcademicLevel addStreamsToAcademicLevel(Integer accademicLevelId, List<Integer> streamIds) throws SQLException;
 
+	boolean deleteStreamsFromAcademicLevel(Integer entityId, Integer streamId) throws SQLException;
 }

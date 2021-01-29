@@ -80,7 +80,7 @@ export class StreamViewComponent implements OnInit {
       context: {
         title: 'Edit Stream',
         action: APP_ACTION_TYPE.edit,
-        stream: stream
+        stream: stream,
       },
     }).onClose.subscribe(_data => {
       this.loadSchoolClasses();

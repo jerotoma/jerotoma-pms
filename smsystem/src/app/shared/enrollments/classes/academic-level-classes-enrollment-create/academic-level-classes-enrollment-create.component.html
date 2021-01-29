@@ -61,7 +61,7 @@
             <div class="lists row">
               <div class="col-md-12">
                   <div class="form-control-group">
-                    <nb-card class="list-card" accent="success" *ngIf="jClasses && jClasses.length > 0 && currentAcademicYear">
+                    <nb-card class="list-card" accent="success" *ngIf="classes && classes.length > 0 && currentAcademicYear">
                       <nb-card-header>
                         Choose courses for the {{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}
                       </nb-card-header>
@@ -72,7 +72,7 @@
                               status="primary"
                               class="push-right">Check All</nb-checkbox>
                           </nb-list-item>
-                          <nb-list-item *ngFor="let jClass of jClasses">
+                          <nb-list-item *ngFor="let jClass of classes">
                             <nb-checkbox
                             [id]="'jClass-'+ jClass?.id"
                             [checked]="checkAllCourses"

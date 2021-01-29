@@ -28,5 +28,6 @@ public class StudentConstant {
 		public static final String SCORE_STANDING_ID = "scoreStandingId";
 		public static final String COURSE_NAME = "courseName";
 		public static final String COURSE_ID = "courseId";
+		public static final String STREAM_ID = "streamId";
 	}
 }

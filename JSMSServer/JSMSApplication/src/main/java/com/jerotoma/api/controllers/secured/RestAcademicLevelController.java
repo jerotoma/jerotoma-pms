@@ -31,6 +31,7 @@ import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.utils.validators.AcademicLevelValidator;
 import com.jerotoma.common.viewobjects.StudentVO;
 import com.jerotoma.services.academic.AcademicLevelService;
+import com.jerotoma.services.academic.StreamService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
 import com.jerotoma.services.assemblers.academic.AssemblerAcademicLevelService;
 
@@ -41,6 +42,7 @@ public class RestAcademicLevelController extends BaseController implements Contr
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 	@Autowired AssemblerStudentService assemblerStudentService;
+	@Autowired StreamService streamService;
 
 	@GetMapping
 	@Override
@@ -251,6 +253,45 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		return response;
 	}
 	
+	
+	@GetMapping("/{entityId}/streams")
+	public HttpResponseEntity<Object> getStreamsByAcademicLevelId(
+			Authentication auth, 			
+			@PathVariable(required = true, value = "entityId") Integer entityId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE + "/" + entityId);
+		this.securityCheckAccessByRoles(auth);	
+		
+		try {
+		response.setData(streamService.getStreamsByAcademicLevelId(entityId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
+	
+	@DeleteMapping("/{entityId}/streams/{streamId}")
+	public HttpResponseEntity<Object> addStreamsToAcademicLevel(
+			Authentication auth, 
+			@PathVariable(required = true, value = "streamId") Integer streamId, 
+			@PathVariable(required = true, value = "entityId") Integer entityId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE + "/" + entityId);
+		this.securityCheckAccessByRoles(auth);	
+		
+		try {
+		response.setData(academicLevelService.deleteStreamsFromAcademicLevel(entityId, streamId));
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}				
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
+	}
 
 	@GetMapping(value = {"/{entityId}"})
 	@Override

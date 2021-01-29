@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.jerotoma.common.constants.ParentConstant;
 import com.jerotoma.common.constants.RoleConstant;
+import com.jerotoma.common.constants.StudentConstant;
 import com.jerotoma.common.constants.UserConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.addresses.Address;
@@ -45,6 +46,7 @@ public class UserValidator {
 	static Integer userId = null;
 	static Integer programId = null;
 	static Integer academicLevelId = null;
+	static Integer streamId = null;
 	static String userCode = null;
 	
 	public static Teacher validateTeacherInputInfo(Map<String, Object> params, List<String> requiredFields) {
@@ -183,8 +185,10 @@ public class UserValidator {
 		}
 		teacher.setPhoneNumber(phoneNumber);
 		
-		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_TEACHER);
-		teacher.setUser(newUser);
+		if (id == null && userId == null) {
+			User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_TEACHER);
+			teacher.setUser(newUser);
+		}	
 		
 		address = AddressValidator.validateAddress(params, requiredFields);
 		teacher.setAddress(address);
@@ -232,6 +236,10 @@ public class UserValidator {
 		
 		if(params.containsKey(UserConstant.ACADEMIC_LEVEL_ID)) {
 			academicLevelId = (Integer) params.get(UserConstant.ACADEMIC_LEVEL_ID);	
+		}
+		
+		if(params.containsKey(StudentConstant.Class.STREAM_ID)) {
+			streamId = (Integer) params.get(StudentConstant.Class.STREAM_ID);	
 		}
 		
 		if(params.containsKey(UserConstant.AGE)) {
@@ -358,14 +366,21 @@ public class UserValidator {
 		}
 		student.setAcademicLevelId(academicLevelId);
 		
+		if (streamId == null && requiredFields.contains(StudentConstant.Class.STREAM_ID)) {
+			throw new FieldRequiredException("Stream ID is required to continue");
+		}
+		student.setStreamId(streamId);
+		
 		requiredFields.remove(UserConstant.BIRTH_DATE);
 		requiredFields.remove(UserConstant.PROGRAM_ID);	
 		requiredFields.remove(UserConstant.ACADEMIC_LEVEL_ID);	
 		requiredFields.add(UserConstant.RELATIONSHIP_TYPE);
 		
 		student.setId(id);
-		student.setPrimaryParent(validateParentInputInfo(UserValidator.getParams(params, ParentConstant.PARENT), requiredFields));
-		student.setUser(User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STUDENT));
+		if (id == null && userId == null) {
+			student.setPrimaryParent(validateParentInputInfo(UserValidator.getParams(params, ParentConstant.PARENT), requiredFields));
+			student.setUser(User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STUDENT));
+		}		
 		student.setParentIds(parentIDs);
 		address = AddressValidator.validateAddress(params, requiredFields);
 		student.setAddress(address);
@@ -533,10 +548,12 @@ public class UserValidator {
 		}
 		parent.setId(id);
 		
-		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_PARENT);
+		if (id == null && userId == null) {
+			User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_PARENT);
+			parent.setUser(newUser);
+		}	
 		today = CalendarUtil.getTodaysDate();
-		address = AddressValidator.validateAddress(params, requiredFields);
-		parent.setUser(newUser);
+		address = AddressValidator.validateAddress(params, requiredFields);		
 		parent.setAddress(address);
 		parent.setCreatedOn(today);
 		parent.setUpdatedOn(today);
@@ -673,9 +690,10 @@ public class UserValidator {
 		address = AddressValidator.validateAddress(params, requiredFields);
 		staff.setAddress(address);
 		Date today = CalendarUtil.getTodaysDate();
-		
-		User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STAFF);
-		staff.setUser(newUser);
+		if (id == null && userId == null) {
+			User newUser = User.validateAndMapAuthUser(getParams(params, UserConstant.USER_LOGIN_INPUT), RoleConstant.USER_ROLES.ROLE_STAFF);
+			staff.setUser(newUser);
+		}		
 		staff.setCreatedOn(today);
 		staff.setUpdatedOn(today);
 		

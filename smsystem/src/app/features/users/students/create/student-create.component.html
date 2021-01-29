@@ -149,7 +149,7 @@
                       </div>
                   </div>
                   <div class="row mb-5">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-control-group">
                             <label for="student-program" class="label">Program</label>
                             <nb-select
@@ -164,7 +164,7 @@
                             </nb-select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-control-group">
                             <label for="student-current-level" class="label">Current Academic Level</label>
                             <nb-select
@@ -180,6 +180,21 @@
                             </nb-select>
                         </div>
                     </div>
+                    <div class="col-md-4" *ngIf="streams && streams.length > 0">
+                      <div class="form-control-group">
+                          <label for="student-stream" class="label">Stream</label>
+                          <nb-select
+                            fullWidth
+                            placeholder="Stream"
+                            formControlName="streamId"
+                            id="student-stream">
+                            <nb-option
+                                *ngFor='let stream of streams' [value]="stream.id">
+                                {{stream.name}}
+                            </nb-option>
+                          </nb-select>
+                      </div>
+                  </div>
                   </div>
                   <div class="form-control-group">
                     <button matStepperNext class='push-right mr-1' [disabled]="!studentForm.valid" type="submit" nbButton hero status="success">Next</button>

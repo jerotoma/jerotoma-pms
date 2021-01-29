@@ -39,6 +39,11 @@ export class AcademicLevelService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
+  loadAcademicLevelStreamsByAcademicLevelId(academicLevelId: number) {
+    return this.http.get(`${API_END_POINTS.academicLevels}/${academicLevelId}/streams`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
   loadAvailableAcademicLevelsByStudentId(studentId: number): Observable<AcademicLevel[]> {
     return this.http.get(`${API_END_POINTS.academicLevels}/students/${studentId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
@@ -58,6 +63,12 @@ export class AcademicLevelService {
     return this.http.delete(`${API_END_POINTS.academicLevels}/${academicLevelId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  deleteStreamsFromAcademicLevel(academicLevelId: number, streamId: number) : Observable<any> {
+    return this.http.delete(`${API_END_POINTS.academicLevels}/${academicLevelId}/streams/${streamId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
 
   updateAcademicLevel(data?: any): Observable<AcademicLevel> {
     return this.http.put(`${API_END_POINTS.academicLevels}`, data)

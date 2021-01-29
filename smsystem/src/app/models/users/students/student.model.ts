@@ -8,5 +8,7 @@ export interface Student extends User {
   programId: number;
   programName: string;
   academicLevelId: number;
+  streamId?: number;
+  streamName?: string;
   currentAcademicLevelName: string;
 }

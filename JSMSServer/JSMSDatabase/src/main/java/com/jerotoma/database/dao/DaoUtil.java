@@ -91,7 +91,7 @@ public class DaoUtil {
 	
 	public static <T> T getEntity(Optional<T> optionalEntity) {
 		
-		if (optionalEntity != null) {
+		if (optionalEntity != null && optionalEntity.isPresent()) {
 			return optionalEntity.get();
 		}
 		return null;

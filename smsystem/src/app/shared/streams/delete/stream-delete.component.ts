@@ -16,6 +16,7 @@ export class StreamDeleteComponent implements OnInit {
   action: string = '';
   name: string = '';
   confirmed: boolean = false;
+  isAcademicLevel: boolean = false;
   showMessage: ShowMessage = {
     error: false,
     success: false,
@@ -26,25 +27,29 @@ export class StreamDeleteComponent implements OnInit {
     private streamService: StreamService,
     protected ref: NbDialogRef<StreamDeleteComponent>) {}
   ngOnInit() {
-    this.confirmed = this.action === 'delete';
   }
 
-  deleteSchoolClass() {
-    if (this.confirmed) {
+  deleteStream() {
+    if (this.confirmed && !this.isAcademicLevel) {
     this.streamService.deleteStream(this.streamId).subscribe((result: boolean ) => {
         if (result) {
           this.dismiss();
         }
       });
+    } else {
+      this.dismiss();
     }
   }
 
   dismiss() {
-    this.ref.close();
+     this.ref.close({
+      confirmed: this.confirmed,
+      streamId: this.streamId
+    });
   }
   onConfirmed() {
     this.confirmed = true;
-    this.deleteSchoolClass();
+    this.deleteStream();
   }
 
 }

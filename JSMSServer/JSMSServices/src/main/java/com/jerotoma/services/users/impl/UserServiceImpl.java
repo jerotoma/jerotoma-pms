@@ -20,10 +20,8 @@ import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CompletionStatus;
-import com.jerotoma.common.constants.ErrorMessageConstant;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicLevel;
-import com.jerotoma.common.models.academic.AcademicYear;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
 import com.jerotoma.common.models.addresses.StaffAddress;
@@ -36,7 +34,7 @@ import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.models.users.students.Student;
-import com.jerotoma.common.models.users.students.StudentAcademicLevel;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel.Fields;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
 import com.jerotoma.common.viewobjects.PersonVO;
@@ -92,7 +90,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired PositionService positionService;
 	@Autowired AcademicDisciplineService academicDisciplineService;
 	@Autowired DepartmentService departmentService;
-	@Autowired ProgramService programService;
+	@Autowired ProgramService programService;	
 	@Autowired AssemblerAcademicLevelService assemblerAcademicLevelService;
 	@Autowired AcademicLevelService academicLevelService;
 	@Autowired StudentAcademicLevelService studentAcademicLevelService;
@@ -316,18 +314,17 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	protected Student createStudent(User newUser, Student student) throws SQLException {
 		AcademicYearVO academicYearVO = assemblerAcademicYearService.getCurrentAcademicYear();		
-		
+		Set<Parent> parents = new HashSet<>();
 		if (academicYearVO == null) {
 			throw new FieldRequiredException("Current Academic Year is required to continue.");
 		}
-		AcademicYear academicYear = academicYearService.findObject(academicYearVO.getId());	
 		
 		if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
 			throw new FieldRequiredException("Program or Academic Level is required to continue.");
 		}
 		student.setProgram(programService.findObject(student.getProgramId()));
+		AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
 		
-		Set<Parent> parents = new HashSet<>();
 		Parent primaryParent = student.getPrimaryParent();
 		primaryParent = createParent(primaryParent.getUser(), primaryParent);
 		student.setPrimaryParent(primaryParent);
@@ -337,22 +334,20 @@ public class UserServiceImpl implements UserService {
 			for (Integer parentId: student.getParentIds()) {
 				final Parent parent = parentService.findObject(parentId);
 				parents.add(parent);
-			}										
-			student.setParents(parents);
+			}		
 		}
 		UserVO loggedInUser = loadCurrentUser();
 		newUser = authUserService.createUserLoginAccount(newUser);
 		
+		student.setParents(parents);
 		student.setUserId(newUser.getId());	
 		student.setUpdatedBy(loggedInUser.getId());		
 		student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());	
-		AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());		
 		student.setAcademicLevelId(academicLevel.getId());
 		Address address = student.getAddress();
 		
 		student = studentService.createObject(student);	
-		createStudentAcademicLevel(student, academicYear, loggedInUser, academicLevel);
-						
+								
 		address.setUpdatedBy(loggedInUser.getId());
 		address = addressService.createObject(address);
 		StudentAddress studentAddress = new StudentAddress();
@@ -361,20 +356,15 @@ public class UserServiceImpl implements UserService {
 		studentAddress.setCreatedOn(today);
 		studentAddress.setUpdatedOn(today);
 		studentAddressService.createObject(studentAddress);
-		return student;
-	}
-
-	protected void createStudentAcademicLevel(Student student, AcademicYear academicYear, UserVO loggedInUser,
-			AcademicLevel academicLevel) throws SQLException {
 		
-		if (!prerequisiteClearance.hasMetPrerequisite(academicLevel, student)) {
-			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
-		}		
-		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel(student, academicLevel, academicYear, CompletionStatus.IN_PROGRESS);
-		studentAcademicLevel.setUpdatedBy(loggedInUser.getId());
-		studentAcademicLevel.setCreatedOn(today);
-		studentAcademicLevel.setUpdatedOn(today);
-		studentAcademicLevelService.createObject(studentAcademicLevel);
+		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
+		
+		Fields studentAcademicLevelField =  new Fields(
+				null, student.getId(), completionStatus.getID(), student.getAcademicLevelId(), 
+				academicYearVO.getId(), student.getStreamId(), null, true);
+		
+		studentAcademicLevelService.createStudentAcademicLevel(studentAcademicLevelField, loggedInUser);
+		return student;
 	}
 
 }

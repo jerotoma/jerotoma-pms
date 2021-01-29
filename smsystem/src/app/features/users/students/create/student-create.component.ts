@@ -10,6 +10,7 @@ import {
   UserLoginInput,
   UserLoginInputWrapper,
   ResponseWrapper,
+  Stream,
   Program,
   AcademicLevel,
   AcademicYear,
@@ -41,6 +42,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
   address: Address;
   parent: Parent;
   parents: Parent[] = [];
+  streams: Stream[] = [];
   selectedParents: Parent[] = [];
   academicLevels: AcademicLevel[] = [];
   academicYears: AcademicYear[] = [];
@@ -156,11 +158,18 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       parent: [null],
       programId: [null, Validators.required],
       academicLevelId: [null, Validators.required],
+      streamId: [null],
     });
 
     this.studentForm.get('programId').valueChanges.subscribe(programId => {
       if (programId) {
         this.loadAcademicLevelByProgram(programId);
+      }
+    });
+
+    this.studentForm.get('academicLevelId').valueChanges.subscribe(academicLevelId => {
+      if (academicLevelId) {
+        this.loadStreamsByAcademicID(academicLevelId);
       }
     });
   }
@@ -308,6 +317,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
       address: this.student.address ? this.student.address : null,
       programId: this.student.programId,
       academicLevelId: this.student.academicLevelId,
+      streamId: this.student.streamId,
     });
 
     if (this.student.address) {
@@ -324,10 +334,19 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     });
   }
 
+  loadStreamsByAcademicID(academicLevelId: number) {
+    this.streams = [];
+    this.academicLevelService.loadAcademicLevelStreamsByAcademicLevelId(academicLevelId).subscribe((streams: Stream[]) => {
+      if (streams) {
+        this.streams = streams;
+      }
+    });
+  }
+
   loadPrograms() {
     this.programService.loadProgramList()
       .subscribe((programs: Program[]) => {
-         if (programs) {
+        if (programs) {
          this.programs = programs;
         }
       });

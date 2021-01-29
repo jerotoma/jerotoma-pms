@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -144,7 +145,8 @@ public class AssemblerProgramDaoImpl extends JdbcDaoSupport implements Assembler
 			return l;
 		}				
 	}
-
+	
+	@Transactional
 	@Override
 	public List<ProgramVO> getAllProgram() throws SQLException {		
 		return this.jdbcTemplate.query(getBaseSelectQuery().toString(), new ProgramResultProcessor());

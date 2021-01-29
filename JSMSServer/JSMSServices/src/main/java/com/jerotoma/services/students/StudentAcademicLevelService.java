@@ -20,6 +20,6 @@ public interface StudentAcademicLevelService extends BaseService<StudentAcademic
 	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
 
 	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException;
-
+	
 	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;;
 }

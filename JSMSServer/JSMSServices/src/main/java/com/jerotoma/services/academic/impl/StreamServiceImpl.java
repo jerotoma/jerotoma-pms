@@ -93,4 +93,8 @@ public class StreamServiceImpl implements StreamService {
 		return map;
 	}
 
+	@Override
+	public List<Stream> getStreamsByAcademicLevelId(Integer entityId) throws SQLException {
+		return streamDao.getStreamsByAcademicLevelId(entityId);
+	}
 }

@@ -16,6 +16,7 @@ public class StudentAcadmicLevelValidator {
 		Boolean isCurrentStudentAcademicLevel = Boolean.FALSE;
 		Integer studentId = null;
 		Integer academicLevelId = null;
+		Integer streamId = null;
 		Integer commpletionStatusId = null;	
 		Integer academicYearId = null;
 		List<Integer> classIds = null;
@@ -45,6 +46,10 @@ public class StudentAcadmicLevelValidator {
 			academicLevelId = (Integer)params.get(StudentConstant.Class.ACADEMIC_LEVEL_ID);
 		}
 		
+		if(params.containsKey(StudentConstant.Class.STREAM_ID)) {
+			streamId = (Integer)params.get(StudentConstant.Class.STREAM_ID);
+		}
+		
 		if(params.containsKey(StudentConstant.Class.CLASS_IDS)) {
 			classIds  = (ArrayList<Integer>)params.get(StudentConstant.Class.CLASS_IDS);
 		}
@@ -70,6 +75,10 @@ public class StudentAcadmicLevelValidator {
 			throw new FieldRequiredException("Academic Level ID is required to continue");
 		}
 		
+		if (streamId == null && requiredFields.contains(StudentConstant.Class.STREAM_ID)) {
+			throw new FieldRequiredException("Stream ID is required to continue");
+		}
+		
 		if (academicYearId == null && requiredFields.contains(StudentConstant.Class.ACADEMIC_YEAR_ID)) {
 			throw new FieldRequiredException("Academic Year ID is required to continue");
 		}
@@ -79,9 +88,9 @@ public class StudentAcadmicLevelValidator {
 		}
 		
 		if (classIds == null && requiredFields.contains(StudentConstant.Class.CLASS_IDS)) {
-			throw new FieldRequiredException("Class ID is required to continue");
+			throw new FieldRequiredException("At lease one Class ID is required to continue");
 		}
 		
-		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId, academicYearId, classIds, isCurrentStudentAcademicLevel);
+		return new StudentAcademicLevel.Fields(id, studentId, commpletionStatusId, academicLevelId,  streamId, academicYearId, classIds, isCurrentStudentAcademicLevel);
 	}
 }

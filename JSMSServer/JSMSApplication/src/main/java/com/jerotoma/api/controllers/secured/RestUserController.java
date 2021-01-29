@@ -268,7 +268,7 @@ public class RestUserController extends BaseController {
 		return response;
 	}
 	
-	@PostMapping(value = {"", EndPointConstants.REST_USER_CONTROLLER.INDEX})
+	@PostMapping
 	@ResponseBody
 	public HttpResponseEntity<Object> createUser(Authentication auth, @RequestBody Map<String, Object> params) throws JDataAccessException{
 		

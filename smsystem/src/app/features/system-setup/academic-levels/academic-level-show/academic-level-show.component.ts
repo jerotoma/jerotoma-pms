@@ -10,7 +10,7 @@ import {
 } from 'app/services';
 import { OPEN_CLOSE_ANIMATION, APP_ACTION_TYPE } from 'app/utils';
 
-import { StreamCreateComponent } from 'app/shared';
+import { StreamDeleteComponent } from 'app/shared';
 
 @Component({
   selector: 'app-academic-level-show',
@@ -56,6 +56,24 @@ export class AcademicLevelShowComponent implements OnInit {
 
   removeStream(event: any, stream: Stream) {
     event.preventDefault();
+    this.dialogService.open(StreamDeleteComponent, {
+      context: {
+        title: 'Delete Stream',
+        streamId: stream.id,
+        name: stream.name,
+        isAcademicLevel: true,
+      },
+    }).onClose.subscribe(data => {
+      if (data.confirmed) {
+        this.academicLevelService.deleteStreamsFromAcademicLevel(this.academiclevel.id, stream.id, )
+        .subscribe((success: boolean) => {
+              if (success) {
+              this.modalService.openSnackBar('Stream(s) has been added to Academic Level', 'success');
+              this.loadAcademicLevel();
+            }
+        });
+      }
+    });
   }
 
   addNewStream() {

@@ -396,8 +396,7 @@
 	    phone_number character varying(255) NOT NULL,
 	    occupation character varying(255),
 	    gender character varying(25) NOT NULL,
-	    program_id bigint NOT NULL,
-	    current_academic_level_id bigint NOT NULL,
+	    program_id bigint NOT NULL,	   
 	    profile_image_id bigint,
 	    position character varying(255),
 	    birth_date timestamp with time zone NOT NULL,
@@ -421,11 +420,7 @@
 	    CONSTRAINT  programs_fkey FOREIGN KEY (program_id)
 	        REFERENCES public.programs (id) MATCH SIMPLE
 	        ON UPDATE CASCADE
-	        ON DELETE CASCADE,
-	   	CONSTRAINT academic_levels_fkey FOREIGN KEY (current_academic_level_id)
-	        REFERENCES public.academic_levels (id) MATCH SIMPLE
-	        ON UPDATE CASCADE
-	        ON DELETE CASCADE
+	        ON DELETE CASCADE	   
 	   	);
 	   	
 	   	
@@ -859,11 +854,12 @@
 	    id bigserial NOT NULL,
 	    student_id bigint NOT NULL,	    
 	    academic_level_id bigint NOT NULL,
-	    stream_id bigint NOT NULL,
+	    stream_id bigint,
+	    is_current_academic_level BOOLEAN NOT NULL DEFAULT false, 
 	    completion_status_id bigint NOT NULL,
 	    academic_year_id bigint NOT NULL,
 	   	updated_by bigint NOT NULL,
-	    created_on timestamp with time zone NOT NULL,
+	    created_on timestamp with time zone NOT NULL default now(),
 	    updated_on timestamp with time zone NOT NULL,
 	    UNIQUE(student_id, academic_level_id, stream_id),
 	    UNIQUE(student_id, academic_level_id, academic_year_id),
@@ -890,8 +886,8 @@
 		id bigserial NOT NULL,
 	    class_id bigint NOT NULL,
 	    student_academic_level_id bigint NOT NULL,
-	    score bigint NOT NULL,	
-	    score_standing_id bigint NOT NULL,	
+	    score bigint,	
+	    score_standing_id bigint,	
 	    completion_status_id bigint NOT NULL,
 	    created_on timestamp with time zone NOT NULL default now(),
 	    updated_on timestamp with time zone NOT NULL,
@@ -926,7 +922,7 @@
 	    student_id bigint NOT NULL,	    
 	    academic_level_id bigint NOT NULL,	    
 	   	updated_by bigint NOT NULL,
-	    created_on timestamp with time zone NOT NULL,
+	    created_on timestamp with time zone NOT NULL default now(),
 	    updated_on timestamp with time zone NOT NULL,
 	    UNIQUE(student_id, academic_level_id),
 	   	CONSTRAINT completed_academic_levels_pkey PRIMARY KEY(id),	   		

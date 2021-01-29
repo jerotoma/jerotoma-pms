@@ -57,6 +57,12 @@ public class Student extends Person implements Serializable{
 	
 	@Transient
 	Integer programId;
+	
+	@Transient
+	private Integer academicLevelId;
+	
+	@Transient
+	private Integer streamId;
 		
 	@Column(name="student_number")
 	private Integer studentNumber;
@@ -68,10 +74,7 @@ public class Student extends Person implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="primary_parent_id", referencedColumnName="id")	
 	private Parent primaryParent;
-	
-	@Column(name="current_academic_level_id")
-	private Integer academicLevelId;
-	
+		
 	@ManyToMany
     @JoinTable(
     	name = DatabaseConstant.TABLES.STUDENT_PARENTS,
@@ -183,5 +186,13 @@ public class Student extends Person implements Serializable{
 
 	public void setPrimaryParent(Parent primaryParent) {
 		this.primaryParent = primaryParent;
+	}
+
+	public Integer getStreamId() {
+		return streamId;
+	}
+
+	public void setStreamId(Integer streamId) {
+		this.streamId = streamId;
 	}
 }
