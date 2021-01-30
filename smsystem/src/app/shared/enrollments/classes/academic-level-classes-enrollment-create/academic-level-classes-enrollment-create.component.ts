@@ -33,6 +33,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   @Input() title: string;
   @Input() action: string = 'create';
   @Input('student') student: Student = null;
+  @Input() useSearch: boolean = false;
   @Output() onCreationSuccess = new EventEmitter();
   currentAcademicYearKey: string = APP_CONSTANTS.currentAcademicYear;
 
@@ -68,12 +69,6 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   academicLevel: AcademicLevel;
   academicLevels: AcademicLevel[];
   programs: Program[];
-  showMessage: ShowMessage = {
-    error: false,
-    success: false,
-    message: '',
-  };
-  listDisplay: string = 'none';
 
   constructor(
     private modalService: ModalService,
@@ -136,6 +131,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
     .subscribe((result: StudentClassAdmission) => {
       const resp = result;
       this.confirmed = true;
+      this.modalService.openSnackBar('Student AcademicLevel Classes have been created', 'success');
       this.studentClassForm.reset();
       this.dismiss();
     });
@@ -170,22 +166,34 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
   onChanges() {
     this.studentClassForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
       const programId = this.programId;
-      this.academicYearId = this.currentAcademicYear.id;
-      this.studentClassForm.patchValue({
-        academicYearId: this.academicYearId,
-      }, {emitEvent: false});
-      if (academicLevelId && programId) {
-        this.academicLevelId = academicLevelId;
-        this.classes = [];
+      this.academicLevelId = academicLevelId;
+      if (this.academicYearId && programId) {
         this.loadJClassesByAcademicYear(programId, academicLevelId, this.academicYearId);
+      }
+    });
+    this.studentClassForm.get('academicYearId').valueChanges.subscribe((academicYearId: number) => {
+      const programId = this.programId;
+      this.academicYearId = academicYearId;
+      this.setSelectedAcademicYear(academicYearId);
+      if (this.academicLevelId && programId) {
+        this.loadJClassesByAcademicYear(programId, this.academicLevelId, academicYearId);
+      }
+    });
+  }
+
+  setSelectedAcademicYear(academicYearId: number) {
+    this.academicYears.forEach(academicYear => {
+      if (academicYear.id === academicYearId) {
+        this.academicYear = academicYear;
       }
     });
   }
 
   loadData() {
     this.isLoading = true;
-    this.setSelectedUser(this.student);
-    this.getCurrentAcademicYear();
+    if (this.student) {
+      this.setSelectedUser(this.student);
+    }
     this.loadAcademicYears();
   }
 
@@ -194,6 +202,7 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
         this.modalService.openSnackBar('Program or Academic Level can not be empty', 'info');
         return;
     }
+    this.classes = [];
     this.isLoading = true;
     this.classService.loadJClassesByParams(programId, academicLevelId, academicYearId).subscribe((classViews: ClassView[]) => {
       this.classes = classViews;
@@ -241,16 +250,5 @@ export class AcademicLevelClassesEnrollmentCreateComponent implements OnInit {
           this.programs = programs;
         }
       });
-  }
-
-  getCurrentAcademicYear() {
-    this.isLoading = true;
-    this.academicYearService.getCurrentAcademicYear()
-    .subscribe((academicYear: AcademicYear) => {
-      this.isLoading = false;
-      if (academicYear) {
-        this.currentAcademicYear = academicYear;
-      }
-    });
   }
 }

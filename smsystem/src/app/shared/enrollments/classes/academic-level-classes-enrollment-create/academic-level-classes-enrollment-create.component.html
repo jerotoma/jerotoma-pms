@@ -8,39 +8,41 @@
           nbSpinnerMessage="Loading Scheduled Courses....">
           <nb-card-header>{{ title }}</nb-card-header>
           <nb-card-body>
-            <div class='row'>
+            <div class="row" *ngIf="useSearch">
+              <div class="col-md-6">
+                <app-search-user
+                  [title]="'Search for Student'"
+                  [placeholder]="'Type Student Initial'"
+                  [userType]="userType"
+                  (onUserSelected)="setSelectedUser($event)"
+                ></app-search-user>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                  <div class="form-control-group">
+                    <label for="student-program" class="label">Student Program</label>
+                    <p>{{student?.programName}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='row' *ngIf="student && !useSearch">
                 <div class='col-md-6'>
-                  <div class="form-control-group" *ngIf="student && student.fullName">
+                  <div class="form-control-group" *ngIf="student.fullName">
                     <label for="student-full-name" class="label">Full Name</label>
                     <p>{{student.fullName}}</p>
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-control-group" *ngIf="currentAcademicYear">
-                      <label for="class-academicYear" class="label">Current Academic Year</label>
-                      <p>{{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}</p>
+                  <div class="form-control-group">
+                    <div class="form-control-group">
+                      <label for="student-program" class="label">Student Program</label>
+                      <p>{{student?.programName}}</p>
+                    </div>
                   </div>
                 </div>
-            </div>
-            <div class="row" *ngIf="!currentAcademicYear && !isLoading">
-              <div class='col-md-12'>
-                <nb-alert status="warning">
-                  Looks like current academic year isn't set.
-                </nb-alert>
-              </div>
             </div>
             <div class="row">
-              <div class="col-md-6">
-                <div class="form-control-group">
-                  <div class="form-control-group" *ngIf="currentAcademicYear">
-                    <label for="student-program" class="label">Student Program</label>
-                    <p>{{student?.programName}}</p>
-                  </div>
-                </div>
-                <nb-alert status="warning" *ngIf="!currentAcademicYear && !isLoading">
-                  Current Academic Year has not been set yet
-                </nb-alert>
-              </div>
               <div class="col-md-6">
                   <div class="form-control-group">
                       <label for="class-academicLevel" class="label">Academic Level</label>
@@ -57,13 +59,29 @@
                       </nb-select>
                   </div>
               </div>
+              <div class="col-md-6">
+                <div class="form-control-group" *ngIf="academicYears">
+                    <label for="class-academicYearId" class="label">Academic Year</label>
+                    <nb-select
+                        fullWidth
+                        placeholder="Choose Academic Year......"
+                        formControlName="academicYearId"
+                        id="class-academicYearId">
+                        <nb-option
+                            *ngFor='let academicYear of academicYears'
+                            [value]="academicYear?.id">
+                            {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
+                        </nb-option>
+                      </nb-select>
+                </div>
+              </div>
             </div>
             <div class="lists row">
               <div class="col-md-12">
                   <div class="form-control-group">
-                    <nb-card class="list-card" accent="success" *ngIf="classes && classes.length > 0 && currentAcademicYear">
+                    <nb-card class="list-card" accent="success" *ngIf="classes && classes.length > 0">
                       <nb-card-header>
-                        Choose courses for the {{currentAcademicYear?.name}} - {{currentAcademicYear?.yearOfStudy}}
+                        Choose courses for the {{academicYear?.name}} - {{academicYear?.yearOfStudy}}
                       </nb-card-header>
                         <nb-list>
                           <nb-list-item >

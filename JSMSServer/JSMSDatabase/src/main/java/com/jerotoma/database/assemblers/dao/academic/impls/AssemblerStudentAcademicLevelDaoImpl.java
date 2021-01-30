@@ -263,6 +263,7 @@ public class AssemblerStudentAcademicLevelDaoImpl extends JdbcDaoSupport impleme
 	protected StringBuilder getBaseClassesSQL() {
 		return new StringBuilder("SELECT ")
 				.append(" cl.id, cl.teacher_id AS teacherId, cl.course_id AS courseId, cl.room_id AS roomId, cl.academic_year_id AS academicYearId, ")
+				.append("(SELECT count(sal.student_id) FROM public.student_academic_levels sal INNER JOIN public.student_classes sc ON sc.student_academic_level_id = sal.id AND sc.class_id = cl.id) AS totalStudents, ")
 				.append(" cl.meeting_time_id AS meetingTimeId, cl.capacity, cl.updated_by AS updatedBy, cl.created_on AS createdOn, cl.updated_on AS updatedOn ")
 				.append("FROM public.classes cl ")
 				.append("INNER JOIN public.student_classes sc ON sc.class_id = cl.id ")

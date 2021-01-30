@@ -12,7 +12,8 @@ import { ResponseWrapper, StudentClassAdmission, StudentAcademicLevel, StudentAc
 export class StudentAcademicLevelService {
 
   deleteStudentClass(data: { studentId: number; academicLevelId: number; academicYearId: number; jClassId: number; }): Observable<boolean> {
-    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/delete-student-class`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/delete-student-class`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
   constructor(private http: HttpClient) { }
 
@@ -41,19 +42,23 @@ export class StudentAcademicLevelService {
   }
 
   createStudentAcademicLevel(data?: any): Observable<StudentAcademicLevel> {
-    return this.http.post(`${API_END_POINTS.studentAcademicLevels}`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   createStudentAcademicLevelClasses(data?: StudentClassAdmission): Observable<StudentClassAdmission> {
-    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/${data.academicLevelId}/classes`, data).pipe(map((resp: ResponseWrapper) => resp.data));
+    return this.http.post(`${API_END_POINTS.studentAcademicLevels}/${data.academicLevelId}/classes`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   deleteStudentAcademicLevel(studentAcademicLevelId: number): Observable<boolean> {
-    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   deleteStudentAcademicLevelClass(classId: number, studentAcademicLevelId: number): Observable<boolean> {
-    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}/classes/${classId}`).pipe(map((resp: ResponseWrapper) => resp.data));
+    return this.http.delete(`${API_END_POINTS.studentAcademicLevels}/${studentAcademicLevelId}/classes/${classId}`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
   updateStudentAcademicLevel(data?: any): Observable<StudentAcademicLevel> {

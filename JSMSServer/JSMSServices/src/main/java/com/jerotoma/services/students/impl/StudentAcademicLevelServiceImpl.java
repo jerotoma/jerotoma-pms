@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -130,26 +131,108 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
-		List<StudentClass> studentClasses = new ArrayList<>();		
+		StudentAcademicLevel studentAcademicLevel = findObject(studentAcademicLevelField.getId());
+		studentAcademicLevel = processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, false);
+		studentAcademicLevel.setStudentClasses(new HashSet<>(processStudentClasses(studentAcademicLevelField, studentAcademicLevel, authUser, true)));
+		return studentAcademicLevel;
+	}
+	
+	@Override
+	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser)
+			throws SQLException {
+			
+		Integer studentId = studentAcademicLevelField.getStudentId(); 
+		Integer academicLevelId = studentAcademicLevelField.getAcademicLevelId(); 
+		Integer academicYearId = studentAcademicLevelField.getAcademicYearId(); 
+		StudentAcademicLevel studentAcademicLevel = null;
 		
+		if (studentAcademicLevelField.getStreamId() != null) {	
+			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
+			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId , stream.getId());
+			studentAcademicLevel.setStream(stream);
+		} else {
+			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId );
+		}		
+		studentAcademicLevel = processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, true);
+		studentAcademicLevel.setStudentClasses(new HashSet<>(processStudentClasses(studentAcademicLevelField, studentAcademicLevel, authUser, false)));		
+		return studentAcademicLevel;
+	}
+
+	@Override
+	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException {
+		Integer studentId = studentAcademicLevelField.getStudentId(); 
+		Integer academicLevelId = studentAcademicLevelField.getAcademicLevelId(); 
+		Integer academicYearId = studentAcademicLevelField.getAcademicYearId(); 
+		Integer jClassId = studentAcademicLevelField.getClassIds().get(0);
+		
+		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
+		return studentClassService.deleteStudentClass(studentAcademicLevel.getId(), jClassId);
+	}
+
+	@Override
+	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
+		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel();		
+		return processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, true);	
+	}
+	
+	private CompletionStatus getCompletionStatus(Integer commpletionStatusId) {
+		return commpletionStatusId != null 
+				?  CompletionStatus.getCompletionStatusfromID(commpletionStatusId) : CompletionStatus.IN_PROGRESS;
+		
+	}
+
+	@Override
+	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser)
+			throws SQLException {
+		
+		Integer studentId = studentAcademicLevelField.getStudentId(); 
+		Integer academicLevelId = studentAcademicLevelField.getAcademicLevelId(); 
+		Integer academicYearId = studentAcademicLevelField.getAcademicYearId(); 
+		StudentAcademicLevel studentAcademicLevel = null;
+		
+		if (studentAcademicLevelField.getStreamId() != null) {	
+			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
+			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId , stream.getId());
+			studentAcademicLevel.setStream(stream);
+		} else {
+			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId );
+		}
+		
+		return processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, false);
+	}
+	
+	private StudentAcademicLevel processStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser, StudentAcademicLevel studentAcademicLevel, boolean isCreate) throws SQLException {
 		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
 		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
 		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
-		
-		CompletionStatus completionStatus = CompletionStatus.getCompletionStatusfromID(studentAcademicLevelField.getAcademicLevelId());
-		if (completionStatus.equals(CompletionStatus.NOT_STARTED)) {
-			completionStatus = CompletionStatus.IN_PROGRESS;
+
+		CompletionStatus completionStatus = getCompletionStatus(studentAcademicLevelField.getCommpletionStatusId());
+		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
+			studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevelField.getIsCurrentStudentAcademicLevel());
+			studentAcademicLevelDao.updateAllCurrentAcademicLevel(student.getId());
 		}
 		
-		StudentAcademicLevel studentAcademicLevel = findObject(studentAcademicLevelField.getId());
-		studentAcademicLevel.setAcademicLevel(academicLevel);
-		studentAcademicLevel.setCompletionStatus(completionStatus);
-		studentAcademicLevel.setAcademicYear(academicYear);
-		studentAcademicLevel.setStudent(student);	
-		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
-		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel = updateObject(studentAcademicLevel);			
+		if (studentAcademicLevelField.getStreamId() != null) {	
+			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
+			studentAcademicLevel.setStream(stream);
+		} 
 		
+		studentAcademicLevel.setAcademicLevel(academicLevel);
+		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
+		studentAcademicLevel.setAcademicYear(academicYear);
+		studentAcademicLevel.setStudent(student);
+		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
+		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
+		studentAcademicLevel = isCreate ? createObject(studentAcademicLevel) : updateObject(studentAcademicLevel);		
+		
+		return studentAcademicLevel;
+	}
+	
+	private List<StudentClass> processStudentClasses(Fields studentAcademicLevelField, StudentAcademicLevel studentAcademicLevel, UserVO authUser, boolean isCreate) throws SQLException {
+		List<StudentClass> studentClasses = new ArrayList<>();	
+		CompletionStatus completionStatus = getCompletionStatus(studentAcademicLevelField.getCommpletionStatusId());
+		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
 		for (Integer classId : studentAcademicLevelField.getClassIds()) {		
 			Class jClass = jClassService.findObject(classId);
 			
@@ -173,134 +256,6 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			studentClasses.add(studentClass);				
 		}
-		studentClassService.updateBatchObject(studentClasses);
-		return studentAcademicLevel;
-	}
-
-	@Override
-	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser)
-			throws SQLException {
-		StudentClass studentClass;
-		List<StudentClass> studentClasses = new ArrayList<>();		
-		
-		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
-		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
-		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
-		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
-		
-		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(student.getId(), academicLevel.getId(), academicYear.getId());
-		studentAcademicLevel = studentAcademicLevel != null ? studentAcademicLevel : new StudentAcademicLevel();
-		studentAcademicLevel.setAcademicLevel(academicLevel);
-		studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevel == null ? true : studentAcademicLevelField.getIsCurrentStudentAcademicLevel());
-		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
-		studentAcademicLevel.setAcademicYear(academicYear);
-		studentAcademicLevel.setStudent(student);
-		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
-		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel = createObject(studentAcademicLevel);			
-		
-		for (Integer classId : studentAcademicLevelField.getClassIds()) {		
-			Class jClass = jClassService.findObject(classId);				
-			studentClass = new StudentClass();
-			studentClass.setmClass(jClass);	
-			studentClass.setCompletionStatusId(completionStatus.getID());				
-			studentClass.setStudentAcademicLevel(studentAcademicLevel);
-			studentClass.setUpdatedBy(authUser.getUserId());
-			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
-			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
-			studentClasses.add(studentClass);				
-		}
-		studentClassService.createBatchObject(studentClasses);
-		return studentAcademicLevel;
-	}
-
-	@Override
-	public boolean deleteStudentClass(Fields studentAcademicLevelField) throws SQLException {
-		Integer studentId = studentAcademicLevelField.getStudentId(); 
-		Integer academicLevelId = studentAcademicLevelField.getAcademicLevelId(); 
-		Integer academicYearId = studentAcademicLevelField.getAcademicYearId(); 
-		Integer jClassId = studentAcademicLevelField.getClassIds().get(0);
-		
-		StudentAcademicLevel studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
-		return studentClassService.deleteStudentClass(studentAcademicLevel.getId(), jClassId);
-	}
-
-	@Override
-	public StudentAcademicLevel createStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
-		
-		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
-		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
-		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
-
-		CompletionStatus completionStatus = studentAcademicLevelField.getCommpletionStatusId() != null 
-				?  CompletionStatus.getCompletionStatusfromID(studentAcademicLevelField.getCommpletionStatusId()) : CompletionStatus.IN_PROGRESS;
-		
-		StudentAcademicLevel studentAcademicLevel = new StudentAcademicLevel();
-		
-		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
-			studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevelField.getIsCurrentStudentAcademicLevel());
-			studentAcademicLevelDao.updateAllCurrentAcademicLevel(student.getId());
-		}
-		
-		if (studentAcademicLevelField.getStreamId() != null) {	
-			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
-			studentAcademicLevel.setStream(stream);
-		} 
-		
-		studentAcademicLevel.setAcademicLevel(academicLevel);
-		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
-		studentAcademicLevel.setAcademicYear(academicYear);
-		studentAcademicLevel.setStudent(student);
-		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
-		studentAcademicLevel.setCreatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
-		studentAcademicLevel = createObject(studentAcademicLevel);
-		
-		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
-			student.setAcademicLevelId(academicLevel.getId());
-			student = studentService.updateObject(student);
-			studentAcademicLevel.setStudent(student);
-		}
-		
-		return studentAcademicLevel;	
-	}
-
-	@Override
-	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser)
-			throws SQLException {
-		
-		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
-		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
-		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
-		
-		CompletionStatus completionStatus = studentAcademicLevelField.getCommpletionStatusId() != null 
-				?  CompletionStatus.getCompletionStatusfromID(studentAcademicLevelField.getCommpletionStatusId()) : CompletionStatus.IN_PROGRESS;
-		StudentAcademicLevel studentAcademicLevel;
-		
-		if (studentAcademicLevelField.getStreamId() != null) {	
-			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
-			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(student.getId(), academicYear.getId(), academicLevel.getId(), stream.getId());
-			studentAcademicLevel.setStream(stream);
-		} else {
-			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(student.getId(), academicYear.getId(), academicLevel.getId());
-		}
-		
-		studentAcademicLevel.setAcademicLevel(academicLevel);
-		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
-		studentAcademicLevel.setAcademicYear(academicYear);
-		studentAcademicLevel.setStudent(student);
-		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
-		studentAcademicLevel.setUpdatedOn(CalendarUtil.getTodaysDate());
-		
-		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
-			studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevelField.getIsCurrentStudentAcademicLevel());
-			studentAcademicLevelDao.updateAllCurrentAcademicLevel(student.getId());
-		}		
-		studentAcademicLevel = updateObject(studentAcademicLevel);
-		
-		
-		
-		return studentAcademicLevel;	
+		return isCreate ? studentClassService.createBatchObject(studentClasses) : studentClassService.updateBatchObject(studentClasses);
 	}
 }

@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { UserDeleteComponent, ParentCreateComponent } from 'app/shared';
+import { UserDeleteComponent, AddParentComponent } from 'app/shared';
 
 import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { UserService } from 'app/services';
@@ -61,7 +61,7 @@ export class ParentsViewComponent implements OnInit {
   }
 
   open() {
-    this.dialogService.open(ParentCreateComponent, {
+    this.dialogService.open(AddParentComponent, {
       context: {
         title: 'Add New Parent',
         action: 'create',
@@ -72,7 +72,7 @@ export class ParentsViewComponent implements OnInit {
   }
 
   edit(parent: Parent) {
-    this.dialogService.open(ParentCreateComponent, {
+    this.dialogService.open(AddParentComponent, {
       context: {
         title: 'Edit ' + parent.fullName + '\'s Details',
         action: APP_ACTION_TYPE.edit,

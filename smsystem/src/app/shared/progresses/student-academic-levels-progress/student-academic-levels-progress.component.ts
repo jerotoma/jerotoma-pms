@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { NbDialogService } from '@nebular/theme';
+import { AcademicLevelStudentEnrollmentCreateComponent } from 'app/shared/enrollments/academic-levels';
 import {
   StudentProgressService,
   StatusService,
@@ -16,11 +18,13 @@ import {
 export class StudentAcademicLevelsProgressComponent implements OnInit {
 
     @Input('student') student: Student;
+    @Input('title') title: string = 'Student Academic Levels'
 
     studentProgress: StudentAcademicLevelsProgress;
     studentAcademicLevelsCompletionAvarage: number = 0;
 
   constructor(
+    private dialogService: NbDialogService,
     private statusService: StatusService,
     private studentProgressService: StudentProgressService) { }
 
@@ -44,5 +48,19 @@ export class StudentAcademicLevelsProgressComponent implements OnInit {
 
   getCompletionStatus(completionStatus: string): string {
     return this.statusService.getCompletionStatusClass(completionStatus);
+  }
+
+  enrollNewAcademicLevel() {
+    this.dialogService.open(AcademicLevelStudentEnrollmentCreateComponent, {
+      context: {
+        title: 'Enroll New Academic Level',
+        action: 'create',
+        student: this.student,
+      },
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+
+      }
+    });
   }
 }

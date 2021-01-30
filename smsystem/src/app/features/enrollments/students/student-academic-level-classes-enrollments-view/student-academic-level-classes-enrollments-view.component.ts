@@ -1,19 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { PageEvent } from '@angular/material/paginator';
-import {NbDialogService } from '@nebular/theme';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { NbDialogService } from '@nebular/theme';
+import { MatPaginator} from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { DeleteModalComponent } from 'app/shared';
-
-import { StudentAcademicLevelClassesEnrollmentCreateComponent } from '../student-academic-level-classes-enrollment-create/student-academic-level-classes-enrollment-create.component';
-import { StudentAcademicLevelEnrollmentCreateComponent } from '../student-academic-level-enrollment-create/student-academic-level-enrollment-create.component';
+import { AcademicLevelStudentEnrollmentCreateComponent, AcademicLevelClassesEnrollmentCreateComponent } from 'app/shared';
 import { StudentAcademicLevelClassesEnrollmentEditComponent } from '../student-academic-level-classes-enrollment-edit/student-academic-level-classes-enrollment-edit.component';
 
 import { StudentAcademicLevel, ResponseWrapper, CompletionStatus } from 'app/models';
 import { StudentAcademicLevelService } from 'app/services';
-import { QueryParam } from 'app/utils';
+import { QueryParam, USER_TYPE } from 'app/utils';
 
 @Component({
   selector: 'app-student-academic-level-classes-enrollments-view',
@@ -75,10 +73,12 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
   }
 
   open() {
-    this.dialogService.open(StudentAcademicLevelClassesEnrollmentCreateComponent, {
+    this.dialogService.open(AcademicLevelClassesEnrollmentCreateComponent, {
       context: {
         title: 'Enroll New Student',
         action: 'create',
+        student: null,
+        useSearch: true,
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
@@ -88,10 +88,13 @@ export class StudentAcademicLevelClassesEnrollmentsViewComponent implements OnIn
   }
 
   enrollStudentAcademicLevel() {
-    this.dialogService.open(StudentAcademicLevelEnrollmentCreateComponent , {
+    this.dialogService.open(AcademicLevelStudentEnrollmentCreateComponent , {
       context: {
         title: 'Enroll Student Academic Level',
         action: 'create',
+        student: null,
+        useSearch: true,
+        userType: USER_TYPE.STUDENT
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {

@@ -39,7 +39,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
 
   academicYearId: number;
   courseId: number;
-  jClassIds: number[] = [];
+  classIds: number[] = [];
   teacherId: number;
   isLoading: boolean = false;
   confirmed: boolean = false;
@@ -77,16 +77,13 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
     private academicLevelService: AcademicLevelService,
     private classService: ClassService,
     private modalService: ModalService,
-    private studentClassService: StudentAcademicLevelService,
+    private studentAcademicLevelService: StudentAcademicLevelService,
     private formBuilder: FormBuilder,
     protected ref: NbDialogRef<StudentAcademicLevelClassesEnrollmentEditComponent>) {}
 
   ngOnInit() {
-    this.loadData();
     this.loadForm();
-    if (this.studentAcademicLevel) {
-      this.loadStudentClasses(this.studentAcademicLevel);
-    }
+    this.loadData();
   }
 
   dismiss() {
@@ -100,8 +97,9 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
     this.studentClassAdmission = this.studentAcademicLevelForm.value;
     this.updateStudentClass();
   }
+
   updateStudentClass() {
-    this.studentClassService.updateStudentAcademicLevelClasses(this.studentClassAdmission)
+    this.studentAcademicLevelService.updateStudentAcademicLevelClasses(this.studentClassAdmission)
           .subscribe((result: StudentClassAdmission) => {
             if (result) {
               const resp = result;
@@ -112,6 +110,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
             }
           });
   }
+
   removeJClass(event: any, classView: ClassView, isRemoveJClass: boolean) {
     event.preventDefault();
     event.stopPropagation();
@@ -133,7 +132,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
       academicYearId: this.academicYear.id,
       jClassId: classId,
     }
-    this.studentClassService.deleteStudentClass(data).subscribe((isDeleted: boolean) => {
+    this.studentAcademicLevelService.deleteStudentClass(data).subscribe((isDeleted: boolean) => {
       if (isDeleted) {
         this.modalService.openSnackBar('Student Class has been deleted', 'success');
       }
@@ -141,26 +140,27 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
   }
   checkedChange(checked: boolean, jClass: ClassView) {
     if (checked) {
-      this.jClassIds.push(jClass.id);
+      this.classIds.push(jClass.id);
     } else {
-      for (let i = 0; i < this.jClassIds.length; i++) {
-        if ( this.jClassIds[i] === jClass.id) {
-          this.jClassIds.splice(i, 1);
+      for (let i = 0; i < this.classIds.length; i++) {
+        if ( this.classIds[i] === jClass.id) {
+          this.classIds.splice(i, 1);
         }
      }
     }
     this.studentAcademicLevelForm.patchValue({
-      jClassIds: this.jClassIds,
+      jClassIds: this.classIds,
     });
   }
   loadForm() {
     this.studentAcademicLevelForm = this.formBuilder.group({
       id: [null],
-      academicYearId: ['', Validators.required],
-      academicLevelId: ['', Validators.required],
-      jClassIds: [[], Validators.required],
-      studentId: ['', Validators.required],
-      fullName: ['', Validators.required],
+      academicYearId: [null, Validators.required],
+      academicLevelId: [null, Validators.required],
+      classIds: [[], Validators.required],
+      studentId: [null, Validators.required],
+      fullName: [null, Validators.required],
+      isCurrentStudentAcademicLevel: [false, Validators.required],
     });
     this.onChanges();
   }
@@ -169,6 +169,7 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
     this.studentAcademicLevelForm.get('academicLevelId').valueChanges.subscribe((academicLevelId: number) => {
       if (academicLevelId) {
         this.setCurrentAcademicLevel(academicLevelId);
+        this.loadStudentRegisteredClasses(this.student.id, academicLevelId, this.academicYear.id)
       }
     });
 
@@ -179,12 +180,12 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
             this.academicYear = academicYear;
           }
         });
+        this.loadStudentRegisteredClasses(this.student.id, this.academicLevel.id, academicYearId);
       }
     });
   }
   addMoreCourses() {
     this.isAddMore = true;
-
     if (this.academicYear && this.academicLevel) {
       this.loadUnregisteredClassesByStudent(this.student.id, this.academicLevel.id, this.academicYear.id);
     } else {
@@ -192,19 +193,21 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
     }
   }
   loadData() {
-    this.loadAcademicYears();
+    if (this.studentAcademicLevel) {
+      this.patchStudentAcademicLevel(this.studentAcademicLevel);
+    }
   }
 
-  loadAcademicLevelsByProgramId(programId: number) {
+  loadAcademicLevelsByProgramId(programId: number, academicLevel: AcademicLevel) {
     this.academicLevels = [];
     this.isLoading = true;
     this.academicLevelService.loadAcademicLevelsByProgramId(programId)
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;
-        this.setCurrentAcademicLevel(this.studentAcademicLevel.student.academicLevelId);
+        this.setCurrentAcademicLevel(this.studentAcademicLevel.academicLevel.id);
         this.studentAcademicLevelForm.patchValue({
-          academicLevelId: this.studentAcademicLevel.student.academicLevelId,
+          academicLevelId: academicLevel.id,
         }, {emitEvent: false});
       }
       this.isLoading = false;
@@ -239,58 +242,71 @@ export class StudentAcademicLevelClassesEnrollmentEditComponent implements OnIni
     });
   }
 
-  loadAcademicYears() {
+  loadAcademicYears(currentAcademicYear: AcademicYear) {
     this.isLoading = true;
     this.academicYearService.getAcademicYears()
     .subscribe((academicYears: AcademicYear[]) => {
       if (academicYears) {
         this.academicYears = academicYears;
+        this.studentAcademicLevelForm.patchValue({
+          academicYearId: currentAcademicYear.id,
+        }, {emitEvent: false});
       }
       this.isLoading = false;
     });
   }
 
-  loadStudentClasses(sc: StudentAcademicLevel) {
-    this.isLoading = false;
-    this.studentClassService.getStudentAcademicLevel(sc.id).subscribe((studentAcademicLevel: StudentAcademicLevel) => {
-      if (studentAcademicLevel) {
-        this.loadAcademicLevelsByProgramId(studentAcademicLevel.student.programId);
-        this.student = studentAcademicLevel.student;
-        this.academicYear = studentAcademicLevel.academicYear;
-        this.registeredClasses = studentAcademicLevel.jClasses;
-        this.jClassIds =  this.pushJClasses(this.registeredClasses),
+  patchStudentAcademicLevel(studentAcademicLevel: StudentAcademicLevel) {
+    if (studentAcademicLevel) {
+      this.loadAcademicLevelsByProgramId(studentAcademicLevel.student.programId,  studentAcademicLevel.academicLevel);
+      this.loadAcademicYears(studentAcademicLevel.academicYear);
+      this.student = studentAcademicLevel.student;
+      this.academicYear = studentAcademicLevel.academicYear;
+      this.academicLevel = studentAcademicLevel.academicLevel;
+      this.studentAcademicLevelForm.patchValue({
+        id: studentAcademicLevel.id,
+        academicYearId: studentAcademicLevel.academicYear.id,
+        academicLevelId: studentAcademicLevel.academicLevel.id,
+        studentId: this.student.id,
+        fullName: this.student.fullName,
+        classIds: this.classIds,
+      }, {emitEvent: false});
+
+      this.loadStudentRegisteredClasses(this.student.id, studentAcademicLevel.academicLevel.id, studentAcademicLevel.academicYear.id)
+    }
+  }
+
+  loadStudentRegisteredClasses(studentId: number, academicLevelId: number, academicYearId: number) {
+    this.isLoading = true;
+    this.registeredClasses = [];
+    this.classService.loadStudentRegisteredClasses(studentId, academicLevelId, academicYearId).subscribe((classes: ClassView[]) => {
+      if (classes && classes.length > 0) {
+        this.registeredClasses = classes;
+        this.classIds =  this.pushJClasses(this.registeredClasses);
         this.studentAcademicLevelForm.patchValue({
-          id: studentAcademicLevel.id,
-          academicYearId: studentAcademicLevel.academicYear.id,
-          studentId: this.student.id,
-          fullName: this.student.fullName,
-          jClassIds: this.jClassIds,
+          classIds: this.classIds,
         }, {emitEvent: false});
       }
-      this.isLoading = true;
-    });
-  }
-  patchStudent(student: Student) {
-    this.student = student;
-    this.studentAcademicLevelForm.patchValue({
-      studentId: student.id,
+      this.isLoading = false;
     });
   }
 
-  pushJClasses(jClasses: ClassView[]) {
-    const jClassesIds  = [];
-    jClasses.forEach((jClass) => {
-      jClassesIds.push(jClass.id);
-    });
-    return jClassesIds;
+  pushJClasses(classes: ClassView[]) {
+    const classesIds  = [];
+    if (classes && classes.length > 0)  {
+      classes.forEach((jClass) => {
+        classesIds.push(jClass.id);
+      });
+    }
+    return classesIds;
   }
 
-  removeItemFromArray(jClasses: ClassView[], jClass: ClassView) {
-    for (let i = 0; i < this.classViews.length; i++) {
-      if ( this.classViews[i].id === jClass.id) {
-        this.classViews.splice(i, 1);
+  removeItemFromArray(classes: ClassView[], jClass: ClassView) {
+    for (let i = 0; i < classes.length; i++) {
+      if (classes[i].id === jClass.id) {
+        classes.splice(i, 1);
       }
-   }
-   return jClasses;
+    }
+    return classes;
   }
 }

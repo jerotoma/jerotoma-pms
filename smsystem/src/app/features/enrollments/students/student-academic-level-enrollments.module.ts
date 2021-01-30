@@ -33,25 +33,18 @@ import {
 import { StudentAcademicLevelEnrollmentsRoutingModule } from './student-academic-level-enrollments-routing.module';
 import { StudentCourseEnrollmentsComponent } from './student-academic-level-enrollments.component';
 import { StudentAcademicLevelClassesEnrollmentsViewComponent } from './student-academic-level-classes-enrollments-view/student-academic-level-classes-enrollments-view.component';
-import { StudentAcademicLevelClassesEnrollmentCreateComponent } from './student-academic-level-classes-enrollment-create/student-academic-level-classes-enrollment-create.component';
-import { StudentAcademicLevelEnrollmentCreateComponent } from './student-academic-level-enrollment-create/student-academic-level-enrollment-create.component';
 import { StudentAcademicLevelClassesEnrollmentEditComponent } from './student-academic-level-classes-enrollment-edit/student-academic-level-classes-enrollment-edit.component';
 import { StudentAcademicLevelClassesEnrollmentShowComponent } from './student-academic-level-classes-enrollment-show/student-academic-level-classes-enrollment-show.component';
 
 const COMPONENTS = [
   StudentCourseEnrollmentsComponent,
   StudentAcademicLevelClassesEnrollmentsViewComponent,
-  StudentAcademicLevelClassesEnrollmentCreateComponent,
   StudentAcademicLevelClassesEnrollmentEditComponent,
   StudentAcademicLevelClassesEnrollmentShowComponent,
-  StudentAcademicLevelEnrollmentCreateComponent,
 ];
 
 const ENTRY_COMPONENTS = [
-  StudentAcademicLevelClassesEnrollmentCreateComponent,
   StudentAcademicLevelClassesEnrollmentEditComponent,
-  StudentAcademicLevelEnrollmentCreateComponent,
-
 ];
 
 const MODULES = [

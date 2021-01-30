@@ -50,7 +50,9 @@ export class AddParentComponent implements OnInit {
     } else {
       this.parentForm.controls['parent'].setErrors(null);
       this.parent = parentWrapper.parent;
-      this.parent.studentId = this.student.id;
+      if (this.student) {
+        this.parent.studentId = this.student.id;
+      }
       this.parentForm.patchValue({parent: this.parent});
     }
   }
