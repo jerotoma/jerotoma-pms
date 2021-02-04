@@ -1,0 +1,64 @@
+<div class='row'>
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+      <form [formGroup]="changeProgressStatusForm" (ngSubmit)="onSubmit()">
+        <nb-card class="dialog-card">
+          <nb-card-header>
+            {{ title }}
+          </nb-card-header>
+          <nb-card-body>
+            <div class='row'>
+              <div class='col-md-6'>
+                <div class="form-control-group" *ngIf="student && student.fullName">
+                  <label for="student-full-name" class="label">Full Name</label>
+                  <p>{{student?.fullName}}</p>
+                </div>
+              </div>
+              <div class='col-md-6'>
+                <div class="form-control-group" *ngIf="student && student.programName">
+                  <label for="student-full-name" class="label">Program Name</label>
+                  <p>{{student?.programName}}</p>
+                </div>
+              </div>
+            </div>
+            <div class='row'>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                    <label for="class-academicLevel" class="label">Academic Level</label>
+                    <p>{{academicLevelProgress?.academicLevel?.name}}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-control-group">
+                  <label for="class-academicYear" class="label">Academic Year</label>
+                  <p>{{academicLevelProgress?.academicYear?.name}}</p>
+                </div>
+              </div>
+            </div>
+            <div class='row'>
+              <div class="col-md-6">
+                <div class="form-control-group" *ngIf="progressStatuses">
+                    <label for="progress-statusId" class="label">Progresses Status</label>
+                    <nb-select
+                      fullWidth
+                      placeholder="Choose......"
+                      formControlName="progressStatusId"
+                      id="progress-statusId">
+                      <nb-option
+                          *ngFor='let progressStatus of progressStatuses'
+                          [value]="progressStatus?.id">
+                          {{progressStatus?.description}}
+                      </nb-option>
+                    </nb-select>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+          <nb-card-footer>
+            <button class='push-right' [disabled]="!changeProgressStatusForm.valid" type="submit" nbButton hero status="success"> Change Status</button>
+            <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss(false)">Cancel</button>
+        </nb-card-footer>
+        </nb-card>
+      </form>
+  </div>
+</div>
+

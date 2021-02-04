@@ -34,6 +34,10 @@ public class StudentAcadmicLevelValidator {
 			commpletionStatusId  = (Integer)params.get(StudentConstant.Class.COMPLETION_STATUS_ID);
 		}
 		
+		if(params.containsKey(StudentConstant.Class.PROGRESS_STATUS_ID)) {
+			commpletionStatusId  = (Integer)params.get(StudentConstant.Class.PROGRESS_STATUS_ID);
+		}
+		
 		if(params.containsKey(StudentConstant.Class.IS_CURRENT_STUDENT_ACADEMIC_LEVEL)) {
 			isCurrentStudentAcademicLevel  = (Boolean)params.get(StudentConstant.Class.IS_CURRENT_STUDENT_ACADEMIC_LEVEL);
 		}
@@ -68,6 +72,10 @@ public class StudentAcadmicLevelValidator {
 		}
 		
 		if (commpletionStatusId == null && requiredFields.contains(StudentConstant.Class.COMPLETION_STATUS_ID)) {
+			throw new FieldRequiredException("Completion Status ID is required to continue");
+		}
+		
+		if (commpletionStatusId == null && requiredFields.contains(StudentConstant.Class.PROGRESS_STATUS_ID)) {
 			throw new FieldRequiredException("Completion Status ID is required to continue");
 		}
 		

@@ -22,28 +22,48 @@
             <nb-card class="list-card" accent="info">
               <nb-card-body style="padding: 0;">
                 <h5>List of Student Academic Levels</h5>
-                <nb-list class="list-group">
-                  <nb-list-item class="list-group-item" >
-                      <div class="row">
-                          <div class="col-md-5">Name</div>
-                          <div class="col-md-4">Academic Year</div>
-                          <div class="col-md-3">Status</div>
-                      </div>
-                  </nb-list-item>
-                  <nb-list-item class="list-group-item" *ngFor="let academicLevelProgress of studentProgress?.academicLevelProgresses">
-                    <a href="#" (click)="preventDefaultEvent($event)">
-                        <div class="row">
-                          <div class="col-md-5">{{academicLevelProgress?.academicLevel?.name}} ({{academicLevelProgress?.academicLevel?.code}})</div>
-                          <div class="col-md-4">{{academicLevelProgress?.academicYear?.name ? academicLevelProgress?.academicYear?.name + ' - ' + academicLevelProgress?.academicYear?.yearOfStudy  : 'Not Enrolled Yet'}}</div>
-                          <div class="col-md-3">
-                            <button nbButton outline hero shape="round" size="tiny"
-                            [status]="getCompletionStatus(academicLevelProgress?.completionStatusName)">
-                              {{academicLevelProgress?.completionStatusName}}
-                          </button> <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></div>
-                        </div>
-                    </a>
-                  </nb-list-item>
-                </nb-list>
+                <div class="mat-elevation-z0">
+                  <table mat-table [dataSource]="dataSource" matSort>
+                    <!-- id Column -->
+                    <ng-container matColumnDef="id">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                      <td mat-cell *matCellDef="let element; let i = index;"> {{i + 1}} </td>
+                    </ng-container>
+                    <!-- AcademicLevel Column -->
+                    <ng-container matColumnDef="academicLevel">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Level </th>
+                      <td mat-cell *matCellDef="let element"> <span class='text-primary'>{{element?.academicLevel?.name}} ({{element?.academicLevel?.code}})</span></td>
+                    </ng-container>
+                     <!-- academicYear Column -->
+                    <ng-container matColumnDef="academicYear">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Academic Year </th>
+                      <td mat-cell *matCellDef="let element"> <span class='text-primary'>{{element?.academicYear?.name ? element?.academicYear?.name + ' - ' + element?.academicYear?.yearOfStudy  : 'Not Enrolled Yet'}}</span></td>
+                    </ng-container>
+                     <!-- completionStatus Column -->
+                     <ng-container matColumnDef="completionStatus">
+                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                      <td mat-cell *matCellDef="let element">
+                        <button nbButton outline hero shape="round" size="tiny"
+                          [status]="getCompletionStatus(element?.completionStatusName)">
+                          {{element?.completionStatusName}}
+                        </button> <span class='push-right'><nb-icon icon="checkmark-outline"></nb-icon></span></td>
+                    </ng-container>
+                     <!-- action Column -->
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef>Action</th>
+                      <td mat-cell *matCellDef="let element">
+                          <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+                          <mat-menu #menu="matMenu" xPosition="before">
+                            <button mat-menu-item (click)="editStatus(element)"><mat-icon>edit</mat-icon> Edit Status</button>
+                          </mat-menu>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                </div>
               </nb-card-body>
             </nb-card>
           </div>

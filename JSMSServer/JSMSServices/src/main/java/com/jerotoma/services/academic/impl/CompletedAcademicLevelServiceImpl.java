@@ -2,8 +2,10 @@ package com.jerotoma.services.academic.impl;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -68,5 +70,21 @@ public class CompletedAcademicLevelServiceImpl implements CompletedAcademicLevel
 		map.put(SystemConstant.COUNT, pageCompletedAcademicLevel.getTotalElements());
 		map.put(SystemConstant.PAGE_COUNT, pageCompletedAcademicLevel.getTotalPages());			
 		return map;
+	}
+
+	@Override
+	public boolean exists(Integer studentId, Integer academicLevelId) {		
+		return completedAcademicLevelDao.exists(studentId, academicLevelId);
+	}
+
+	@Override
+	public CompletedAcademicLevel findCompletedAcademicLevel(Integer studentId, Integer academicLevelId) {
+		return completedAcademicLevelDao.findCompletedAcademicLevel(studentId, academicLevelId);
+	}
+
+	@Override
+	public Set<CompletedAcademicLevel> getCompletedAcademicLevels(Integer studentId) {
+		List<CompletedAcademicLevel> completedLevels = completedAcademicLevelDao.getCompletedAcademicLevels(studentId);
+		return new HashSet<CompletedAcademicLevel>(completedLevels);
 	}
 }

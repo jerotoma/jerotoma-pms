@@ -2,19 +2,22 @@ package com.jerotoma.services.securities;
 
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.ProgramAcademicLevelPrerequisite;
 import com.jerotoma.common.models.users.CompletedAcademicLevel;
-import com.jerotoma.common.models.users.students.Student;
+import com.jerotoma.services.academic.CompletedAcademicLevelService;
 
 @Service
 public class EnrollementPrerequisiteClearance {
 	
-	public boolean hasMetPrerequisite(AcademicLevel academicLevel, Student student) {
+	@Autowired CompletedAcademicLevelService  completedAcademicLevelService;
+	
+	public boolean hasMetPrerequisite(AcademicLevel academicLevel, Integer studentId) {
 		Set<ProgramAcademicLevelPrerequisite> prerequisites = academicLevel.getPrerequisites();
-		Set<CompletedAcademicLevel>  completedAcademicLevels = student.getCompletedAcademicLevels();
+		Set<CompletedAcademicLevel>  completedAcademicLevels = completedAcademicLevelService.getCompletedAcademicLevels(studentId);
 		
 		if (prerequisites == null || prerequisites.isEmpty()) {
 			return true;
@@ -24,10 +27,11 @@ public class EnrollementPrerequisiteClearance {
 			return false; 
 		}
 		
-		for (ProgramAcademicLevelPrerequisite prerequisite : prerequisites) {
+		for (ProgramAcademicLevelPrerequisite prerequisite : prerequisites) {			
+			AcademicLevel academicLevelPrerequisite = prerequisite.getPrerequisiteAcademicLevel();			
 			boolean found = false;
 			for (CompletedAcademicLevel completedAcademicLevel : completedAcademicLevels) {
-				if (completedAcademicLevel.getAcademicLevelId().equals(prerequisite.getAcademicLevel().getId())) {
+				if (completedAcademicLevel.getAcademicLevel().equals(academicLevelPrerequisite)) {
 					found = true;
 				}
 			}
@@ -36,6 +40,6 @@ public class EnrollementPrerequisiteClearance {
 				return false;
 			}
 		}		
-		return false;
+		return true;
 	}
 }

@@ -15,11 +15,12 @@ import { DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 export class AddParentComponent implements OnInit {
 
   @Input('student') student: Student;
+  @Input('parent') parent: Parent;
   @Input('title') title: string = 'Create New Parent';
   @ViewChild(ParentCreateComponent, {static: false}) appParent: ParentCreateComponent;
 
   parentForm: FormGroup;
-  parent: Parent;
+
   action: string = APP_ACTION_TYPE.create;
   userType: string = USER_TYPE.PARENT;
 

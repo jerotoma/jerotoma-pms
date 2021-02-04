@@ -1,12 +1,18 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NbDialogService } from '@nebular/theme';
+import { PageEvent } from '@angular/material/paginator';
+import {NbDialogService } from '@nebular/theme';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 import { AcademicLevelStudentEnrollmentCreateComponent } from 'app/shared/enrollments/academic-levels';
+import { ChangeAcademicLevelProgressStatusComponent } from 'app/shared/progresses/progress-statuses';
 import {
   StudentProgressService,
   StatusService,
  } from 'app/services';
 import {
   Student,
+  AcademicLevelProgress,
   StudentAcademicLevelsProgress,
 } from 'app/models';
 
@@ -21,7 +27,14 @@ export class StudentAcademicLevelsProgressComponent implements OnInit {
     @Input('title') title: string = 'Student Academic Levels'
 
     studentProgress: StudentAcademicLevelsProgress;
+    academicLevelProgresses: AcademicLevelProgress[];
     studentAcademicLevelsCompletionAvarage: number = 0;
+    hidePageSize: boolean = false;
+    isLoading: boolean = false;
+    totalNumberOfItems: number = 20;
+    pageSizeOptions: number[] = [10, 20, 30, 50, 70, 100];
+    displayedColumns: string[] = ['id', 'academicLevel', 'academicYear', 'completionStatus', 'action'];
+    dataSource: MatTableDataSource<AcademicLevelProgress> = new MatTableDataSource<AcademicLevelProgress>();
 
   constructor(
     private dialogService: NbDialogService,
@@ -37,8 +50,25 @@ export class StudentAcademicLevelsProgressComponent implements OnInit {
     .findStudentAcademicLevelsProgressByStudentId(this.student.id)
     .subscribe((studentProgress: StudentAcademicLevelsProgress) => {
       this.studentProgress = studentProgress;
+      this.academicLevelProgresses = studentProgress.academicLevelProgresses;
+      this.dataSource.data = studentProgress.academicLevelProgresses;
       this.studentAcademicLevelsCompletionAvarage = (studentProgress.completedLevels / studentProgress.requiredLevels) * 100;
 
+    });
+  }
+
+  editStatus(academicLevelProgress: AcademicLevelProgress) {
+    window.console.log(academicLevelProgress);
+    this.dialogService.open(ChangeAcademicLevelProgressStatusComponent, {
+      context: {
+        title: 'Change Academic Level Progress Status',
+        student: this.student,
+        academicLevelProgress: academicLevelProgress,
+      },
+    }).onClose.subscribe(result => {
+      if (result.confirmed) {
+
+      }
     });
   }
 

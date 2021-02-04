@@ -40,6 +40,7 @@ export const API_END_POINTS = {
   classes: '/api/secured/classes',
   studentAcademicLevels: '/api/secured/student-academic-levels',
   studentProgresses: '/api/secured/student-progresses',
+  progressStatuses: '/api/secured/progress-statuses',
   uploads: '/api/secured/uploads',
   themes: '/api/secured/themes',
   pubThemes: '/api/public/themes',

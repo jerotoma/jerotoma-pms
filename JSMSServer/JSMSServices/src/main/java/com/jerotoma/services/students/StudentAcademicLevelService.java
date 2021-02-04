@@ -11,11 +11,16 @@ import com.jerotoma.services.BaseService;
 public interface StudentAcademicLevelService extends BaseService<StudentAcademicLevel> {
 
 	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException;
-
-	List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevel) throws SQLException;
+	
+	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicYearId,	Integer academicLevelId, Integer streamId) throws SQLException;
+	
+	public List<StudentAcademicLevel> createBatchObject(List<StudentAcademicLevel> studentAcademicLevel) throws SQLException;
 
 	public StudentAcademicLevel updateStudentAcademicLevel(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
+	
 	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
+	
+	public StudentAcademicLevel updateStudentAcademicLevelClasses(StudentAcademicLevel studentAcademicLevel, Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
 
 	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException;
 

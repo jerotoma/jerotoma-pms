@@ -21,4 +21,9 @@ export class StudentProgressService {
     return this.http.get(`${API_END_POINTS.studentProgresses}/academic-levels/students/${studentId}`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
+
+  updateStudentAcademicLevelsProgress(data: any): Observable<StudentAcademicLevelsProgress> {
+    return this.http.post(`${API_END_POINTS.studentProgresses}/academic-levels/students`, data)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
 }

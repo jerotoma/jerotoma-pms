@@ -1,5 +1,7 @@
 package com.jerotoma.common.models.users;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,10 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.jerotoma.common.constants.DatabaseConstant;
+import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.users.students.Student;
 
 
@@ -34,8 +38,18 @@ public class CompletedAcademicLevel {
 	@JoinColumn(name="student_id")
 	private Student student;
 	
-	@Column(name="academic_level_id")
-	private Integer academicLevelId;
+	@OneToOne
+	@JoinColumn(name="academic_level_id")
+	private AcademicLevel academicLevel;
+	
+	@Column(name="updated_by")
+	private Integer updatedBy;
+	
+	@Column(name="created_on")
+	private Date createdOn;
+	
+	@Column(name="updated_on")
+	private Date updatedOn;
 
 	public Integer getId() {
 		return id;
@@ -53,11 +67,35 @@ public class CompletedAcademicLevel {
 		this.student = student;
 	}
 
-	public Integer getAcademicLevelId() {
-		return academicLevelId;
+	public AcademicLevel getAcademicLevel() {
+		return academicLevel;
 	}
 
-	public void setAcademicLevelId(Integer academicLevelId) {
-		this.academicLevelId = academicLevelId;
+	public void setAcademicLevel(AcademicLevel academicLevel) {
+		this.academicLevel = academicLevel;
 	}
+
+	public Integer getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(Integer updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Date getUpdatedOn() {
+		return updatedOn;
+	}
+
+	public void setUpdatedOn(Date updatedOn) {
+		this.updatedOn = updatedOn;
+	}	
 }

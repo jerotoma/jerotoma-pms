@@ -74,7 +74,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	@Override
 	public StudentAcademicLevel createObject(StudentAcademicLevel object) throws SQLException {
 		
-		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
+		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent().getId())) {
 			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
 		}		
 		return studentAcademicLevelDao.save(object);
@@ -82,7 +82,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel updateObject(StudentAcademicLevel object) throws SQLException {
-		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent())) {
+		if (!prerequisiteClearance.hasMetPrerequisite(object.getAcademicLevel(), object.getStudent().getId())) {
 			throw new RuntimeException(ErrorMessageConstant.PREREQUISITE_NOT_MET);
 		}
 		return studentAcademicLevelDao.save(object);
@@ -126,16 +126,22 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 
 	@Override
 	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicLevelId, Integer academicYearId) throws SQLException {
-		return studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicLevelId, academicYearId);
+		return studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId);
 	}
 
 	@Override
 	public StudentAcademicLevel updateStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
 		StudentAcademicLevel studentAcademicLevel = findObject(studentAcademicLevelField.getId());
+		return updateStudentAcademicLevelClasses(studentAcademicLevel, studentAcademicLevelField, authUser);
+	}
+	
+	@Override
+	public StudentAcademicLevel updateStudentAcademicLevelClasses(StudentAcademicLevel studentAcademicLevel, Fields studentAcademicLevelField, UserVO authUser) throws SQLException {
 		studentAcademicLevel = processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, false);
 		studentAcademicLevel.setStudentClasses(new HashSet<>(processStudentClasses(studentAcademicLevelField, studentAcademicLevel, authUser, true)));
 		return studentAcademicLevel;
 	}
+	
 	
 	@Override
 	public StudentAcademicLevel createStudentAcademicLevelClasses(Fields studentAcademicLevelField, UserVO authUser)
@@ -148,14 +154,20 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		
 		if (studentAcademicLevelField.getStreamId() != null) {	
 			Stream stream = streamService.findObject(studentAcademicLevelField.getStreamId());
-			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId , stream.getId());
+			studentAcademicLevel = findStudentAcademicLevel(studentId, academicYearId, academicLevelId , stream.getId());
 			studentAcademicLevel.setStream(stream);
 		} else {
-			studentAcademicLevel = studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId );
+			studentAcademicLevel = findStudentAcademicLevel(studentId, academicYearId, academicLevelId );
 		}		
 		studentAcademicLevel = processStudentAcademicLevel(studentAcademicLevelField, authUser, studentAcademicLevel, true);
 		studentAcademicLevel.setStudentClasses(new HashSet<>(processStudentClasses(studentAcademicLevelField, studentAcademicLevel, authUser, false)));		
 		return studentAcademicLevel;
+	}
+
+	public StudentAcademicLevel findStudentAcademicLevel(Integer studentId, Integer academicYearId,
+			Integer academicLevelId, Integer streamId) throws SQLException {
+		
+		return studentAcademicLevelDao.findStudentAcademicLevel(studentId, academicYearId, academicLevelId, streamId);
 	}
 
 	@Override
@@ -205,10 +217,10 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		Student student = studentService.findObject(studentAcademicLevelField.getStudentId());
 		AcademicLevel academicLevel  = academicLevelService.findObject(studentAcademicLevelField.getAcademicLevelId());
 		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
-
+		boolean isCurrent = studentAcademicLevelField.getIsCurrentStudentAcademicLevel();
 		CompletionStatus completionStatus = getCompletionStatus(studentAcademicLevelField.getCommpletionStatusId());
-		if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel()) {
-			studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevelField.getIsCurrentStudentAcademicLevel());
+		
+		if (isCurrent ) {			
 			studentAcademicLevelDao.updateAllCurrentAcademicLevel(student.getId());
 		}
 		
@@ -219,6 +231,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		
 		studentAcademicLevel.setAcademicLevel(academicLevel);
 		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
+		studentAcademicLevel.setIsCurrentAcademicLevel(isCurrent);
 		studentAcademicLevel.setAcademicYear(academicYear);
 		studentAcademicLevel.setStudent(student);
 		studentAcademicLevel.setUpdatedBy(authUser.getUserId());
@@ -231,8 +244,15 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 	
 	private List<StudentClass> processStudentClasses(Fields studentAcademicLevelField, StudentAcademicLevel studentAcademicLevel, UserVO authUser, boolean isCreate) throws SQLException {
 		List<StudentClass> studentClasses = new ArrayList<>();	
+		
+		if (studentAcademicLevelField.getClassIds() == null || studentAcademicLevelField.getClassIds().isEmpty()) {
+			return studentClasses;
+		}
+		
 		CompletionStatus completionStatus = getCompletionStatus(studentAcademicLevelField.getCommpletionStatusId());
 		AcademicYear academicYear = academicYearService.findObject(studentAcademicLevelField.getAcademicYearId());
+		
+		
 		for (Integer classId : studentAcademicLevelField.getClassIds()) {		
 			Class jClass = jClassService.findObject(classId);
 			
@@ -255,7 +275,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 			studentClass.setCreatedOn(CalendarUtil.getTodaysDate());
 			studentClass.setUpdatedOn(CalendarUtil.getTodaysDate());
 			studentClasses.add(studentClass);				
-		}
+		}	
 		return isCreate ? studentClassService.createBatchObject(studentClasses) : studentClassService.updateBatchObject(studentClasses);
 	}
 }

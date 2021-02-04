@@ -21,3 +21,4 @@ export * from './securities';
 export * from './auth';
 export * from './score-standings';
 export * from './streams';
+export * from './progress-statuses';

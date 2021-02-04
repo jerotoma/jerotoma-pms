@@ -82,11 +82,10 @@ public class StudentAcademicLevel {
 	public StudentAcademicLevel() {}
 	
 	public StudentAcademicLevel(Student student, AcademicLevel academicLevel, AcademicYear academicYear, CompletionStatus completionStatus) {
-		super();
 		this.student = student;
 		this.academicLevel = academicLevel;
 		this.completionStatus = completionStatus;
-		this.completionStatusId = completionStatus.getID();
+		this.completionStatusId = completionStatus.getID();		
 		this.academicYear = academicYear;
 	}
 
@@ -144,6 +143,7 @@ public class StudentAcademicLevel {
 	}
 
 	public void setCompletionStatusId(Integer completionStatusId) {
+		this.completionStatus = CompletionStatus.getCompletionStatusfromID(completionStatusId);
 		this.completionStatusId = completionStatusId;
 	}
 

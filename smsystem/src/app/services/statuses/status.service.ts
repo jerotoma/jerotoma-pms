@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
-import { CompletionStatus } from 'app/models';
+import { HttpClient } from '@angular/common/http';
+import { Observable, } from 'rxjs';
+import {  map } from 'rxjs/operators';
+import { API_END_POINTS, QueryParam } from 'app/utils';
+
+import { ResponseWrapper, CompletionStatus, ProgressStatus } from 'app/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatusService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   getCompletionStatusClass(completionStatus: string): string {
     if (CompletionStatus.IN_PROGRESS === completionStatus) {
@@ -17,5 +22,10 @@ export class StatusService {
       return 'warning';
     }
     return 'danger';
+  }
+
+  loadProgressStatuses():  Observable<ProgressStatus[]> {
+    return this.http.get(`${API_END_POINTS.progressStatuses}`)
+        .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 }
