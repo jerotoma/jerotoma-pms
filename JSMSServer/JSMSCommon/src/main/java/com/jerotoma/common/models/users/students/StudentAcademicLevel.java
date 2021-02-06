@@ -40,7 +40,7 @@ public class StudentAcademicLevel {
 	private Integer id;
 	
 	@Column(name="is_current_academic_level")
-	private Boolean isCurrentAcademicLevel;
+	private boolean isCurrentAcademicLevel;
 	
 	@ManyToOne
 	@JoinColumn(name="academic_level_id")
@@ -179,11 +179,11 @@ public class StudentAcademicLevel {
 		this.stream = stream;
 	}
 	
-	public Boolean getIsCurrentAcademicLevel() {
+	public boolean getIsCurrentAcademicLevel() {
 		return isCurrentAcademicLevel;
 	}
 
-	public void setIsCurrentAcademicLevel(Boolean isCurrentAcademicLevel) {
+	public void setIsCurrentAcademicLevel(boolean isCurrentAcademicLevel) {
 		this.isCurrentAcademicLevel = isCurrentAcademicLevel;
 	}
 

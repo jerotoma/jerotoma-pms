@@ -92,7 +92,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>jerotomasms</finalName>
+		<finalName>jerotoma_sms</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -103,7 +103,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
-					<warName>jerotomasms</warName>
+					<warName>jerotoma_sms</warName>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -55,7 +55,7 @@
           </nb-card-body>
           <nb-card-footer>
             <button class='push-right' [disabled]="!changeProgressStatusForm.valid" type="submit" nbButton hero status="success"> Change Status</button>
-            <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss(false)">Cancel</button>
+            <button  type='button' class='push-right' nbButton hero status="danger" (click)="dismiss()">Cancel</button>
         </nb-card-footer>
         </nb-card>
       </form>

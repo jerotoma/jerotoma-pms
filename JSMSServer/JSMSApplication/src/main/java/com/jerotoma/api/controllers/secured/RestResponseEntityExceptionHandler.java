@@ -53,8 +53,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 		bodyOfResponse.setStatusCode(String.valueOf(httpStatus.value()));
 		bodyOfResponse.setHttpStatus(httpStatus);
 		
-		if (message != null && message.contains(stringPattern)) {
-			//String field = message.substring((stringPattern + " ").length());			
+		if (message != null && message.contains(stringPattern)) {					
 			message = "The record you are trying to add already exists in the system";
 		}
 		

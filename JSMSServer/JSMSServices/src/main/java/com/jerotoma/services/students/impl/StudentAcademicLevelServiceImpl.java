@@ -220,8 +220,19 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		boolean isCurrent = studentAcademicLevelField.getIsCurrentStudentAcademicLevel();
 		CompletionStatus completionStatus = getCompletionStatus(studentAcademicLevelField.getCommpletionStatusId());
 		
-		if (isCurrent ) {			
+		if (studentAcademicLevel == null) {
+			studentAcademicLevel = new StudentAcademicLevel();
+		}		
+		
+		if (isCurrent) {			
 			studentAcademicLevelDao.updateAllCurrentAcademicLevel(student.getId());
+			studentAcademicLevel.setIsCurrentAcademicLevel(isCurrent);
+		} else {
+			if (studentAcademicLevelField.getIsCurrentStudentAcademicLevel() == null) {
+				studentAcademicLevel.setIsCurrentAcademicLevel(studentAcademicLevel.getIsCurrentAcademicLevel());
+			} else {
+				studentAcademicLevel.setIsCurrentAcademicLevel(isCurrent);
+			}
 		}
 		
 		if (studentAcademicLevelField.getStreamId() != null) {	
@@ -230,8 +241,7 @@ public class StudentAcademicLevelServiceImpl implements StudentAcademicLevelServ
 		} 
 		
 		studentAcademicLevel.setAcademicLevel(academicLevel);
-		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());
-		studentAcademicLevel.setIsCurrentAcademicLevel(isCurrent);
+		studentAcademicLevel.setCompletionStatusId(completionStatus.getID());		
 		studentAcademicLevel.setAcademicYear(academicYear);
 		studentAcademicLevel.setStudent(student);
 		studentAcademicLevel.setUpdatedBy(authUser.getUserId());

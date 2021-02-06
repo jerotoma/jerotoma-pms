@@ -33,15 +33,15 @@ ENV JPDA_ADDRESS="8000"
 ENV JPDA_TRANSPORT="dt_socket"
 
 # create mount point for volume with application
-RUN mkdir -p ${JSMS_SERVER_DIR}/lib
-RUN mkdir -p ${JSMS_SERVER_DIR}/classes
+RUN mkdir -p ${JSMS_SERVER_DIR}/WEB-INF/lib && \
+    mkdir -p ${JSMS_SERVER_DIR}/WEB-INF/classes && \
+    mkdir -p ${JSMS_SERVER_DIR}/META-INF
 
 #Copy files
 COPY tomcat .
 COPY nginx ${WORKING_DIR}/nginx
-COPY ${LOCAL_TARGET_DIR}/dependency ${JSMS_SERVER_DIR}/lib
-COPY ${LOCAL_TARGET_DIR}/classes ${JSMS_SERVER_DIR}/classes
-COPY ${LOCAL_RESOURCE_DIR}/index.html ${JSMS_SERVER_DIR}/classes/public
+COPY ${LOCAL_TARGET_DIR}/jerotoma_sms ${JSMS_SERVER_DIR}/WEB-INF
+COPY ${LOCAL_RESOURCE_DIR}/index.html ${JSMS_SERVER_DIR}/WEB-INF/classes/public
 
 #Expose tcp port
 EXPOSE 8080

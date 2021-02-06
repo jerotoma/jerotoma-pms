@@ -22,6 +22,7 @@ sudo reboot
  sudo systemctl restart tomcat
 
 # Copy file to remote server 
+   scp -r tomcat/jerotoma_sms root@jerotoma.com:/opt/tomcat
    pass: ut=]2YEvMp]w.&3DBQtr
    scp popup-image.jpeg root@jerotoma.com:/opt/tomcat/storage/resources/uploads/images
    scp Web/target/jerotoma.war root@jerotoma.com:/opt/tomcat/webapps

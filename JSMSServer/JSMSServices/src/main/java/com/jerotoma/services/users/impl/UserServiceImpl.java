@@ -313,8 +313,14 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional
 	protected Student createStudent(User newUser, Student student) throws SQLException {
+		
+		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
+		final Integer commpletionStatusId = completionStatus.getID();
+		final Integer academicLevelId = student.getAcademicLevelId(); 
+		final Integer streamId = student.getStreamId();
+		final Set<Parent> parents = new HashSet<>();
+		
 		AcademicYearVO academicYearVO = assemblerAcademicYearService.getCurrentAcademicYear();		
-		Set<Parent> parents = new HashSet<>();
 		if (academicYearVO == null) {
 			throw new FieldRequiredException("Current Academic Year is required to continue.");
 		}
@@ -322,6 +328,8 @@ public class UserServiceImpl implements UserService {
 		if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
 			throw new FieldRequiredException("Program or Academic Level is required to continue.");
 		}
+		
+		final Integer academicYearId = academicYearVO.getId();		
 		student.setProgram(programService.findObject(student.getProgramId()));
 		AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
 		
@@ -355,14 +363,9 @@ public class UserServiceImpl implements UserService {
 		studentAddress.setAddress(address);
 		studentAddress.setCreatedOn(today);
 		studentAddress.setUpdatedOn(today);
-		studentAddressService.createObject(studentAddress);
+		studentAddressService.createObject(studentAddress);	
 		
-		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
-		
-		Fields studentAcademicLevelField =  new Fields(
-				null, student.getId(), completionStatus.getID(), student.getAcademicLevelId(), 
-				academicYearVO.getId(), student.getStreamId(), null, true);
-		
+		Fields studentAcademicLevelField = new Fields(null, student.getId(), commpletionStatusId, academicLevelId, streamId, academicYearId, null, true);
 		studentAcademicLevelService.createStudentAcademicLevel(studentAcademicLevelField, loggedInUser);
 		return student;
 	}

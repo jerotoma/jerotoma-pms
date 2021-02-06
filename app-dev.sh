@@ -18,17 +18,16 @@ function startTomcat() {
 	echo 'Removing files at ./tomcat/jerotoma_sms/JSMSServer';
 	echo '......................................................';
 
-   	rm -rf ./tomcat/jerotoma_sms/JSMSServer/classes/*
-    rm -rf ./tomcat/jerotoma_sms/JSMSServer/lib/*
+   	rm -rf ./tomcat/jerotoma_sms/JSMSServer/WEB-INF/*
+	rm -rf ./tomcat/jerotoma_sms/JSMSServer/META-INF/*
     
 	echo '......................................................';
 	echo 'Copying files from ./JSMSServer/JSMSApplication/target';
 	echo '......................................................';
 	
-    cp -r ./JSMSServer/JSMSApplication/target/dependency/* ./tomcat/jerotoma_sms/JSMSServer/lib
-    cp -r ./JSMSServer/JSMSApplication/target/classes/* ./tomcat/jerotoma_sms/JSMSServer/classes
-	rm -rf ./tomcat/jerotoma_sms/JSMSServer/classes/public/index.html
-	cp -r ./tomcat/jerotoma_sms/resources/index.html ./tomcat/jerotoma_sms/JSMSServer/classes/public
+    cp -r ./JSMSServer/JSMSApplication/target/jerotoma_sms/* ./tomcat/jerotoma_sms/JSMSServer
+	rm -rf ./tomcat/jerotoma_sms/JSMSServer/WEB-INF/classes/public/index.html
+	cp -r ./tomcat/jerotoma_sms/resources/index.html ./tomcat/jerotoma_sms/JSMSServer/WEB-INF/classes/public
 
 	(cd ${HOME}/projects/jerotoma/tomcat && ./bin/catalina.sh jpda run)
 }

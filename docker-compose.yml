@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     image: jerotoma_sms
     volumes:
-      - ./tomcat/jerotoma_sms/resources:/usr/local/app/jerotoma_sms/resources
+      - ./tomcat/jerotoma_sms/:/usr/local/app/jerotoma_sms
       - ./tomcat/storage:/usr/local/app/storage
       - ./tomcat/logs:/usr/local/app/logs       
     networks:
