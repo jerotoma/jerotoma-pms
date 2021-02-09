@@ -3,12 +3,9 @@ package com.jerotoma.api.controllers.secured;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,18 +35,14 @@ import com.jerotoma.common.constants.UserConstant.USER_TYPE;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
-import com.jerotoma.common.models.academic.AcademicLevel;
 import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.academicDisciplines.AcademicDiscipline;
-import com.jerotoma.common.models.addresses.Address;
-import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.students.Student;
-import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.ResultBuilder;
@@ -429,7 +422,6 @@ public class RestUserController extends BaseController {
 		Teacher teacher;
 		Student student;
 		Department department;
-		Address address;
 		Position position;
 				
 		this.logRequestDetail("GET : " + EndPointConstants.REST_USER_CONTROLLER.BASE);
@@ -463,80 +455,14 @@ public class RestUserController extends BaseController {
 				if (teacher.getId() == null) {
 					throw new FieldRequiredException("Teacher ID is required");
 				}
-				Teacher mTeacher = teacherService.findObject(teacher.getId());
-							
-				mTeacher.setFirstName(teacher.getFirstName());
-				mTeacher.setLastName(teacher.getLastName());
-				mTeacher.setMiddleNames(teacher.getMiddleNames());
-				mTeacher.setFullName(teacher.getFullName());
-				mTeacher.setPosition(position);
-				mTeacher.setDepartment(department);
-				mTeacher.setAge(teacher.getAge());
-				mTeacher.setBirthDate(teacher.getBirthDate());
-				mTeacher.setGender(teacher.getGender());
-				mTeacher.setOccupation(teacher.getOccupation());
-				mTeacher.setPhoneNumber(teacher.getPhoneNumber());
-				mTeacher.setUserCode(teacher.getUserCode());
-				mTeacher.setPicture(teacher.getPicture());
-				mTeacher.setUpdatedOn(new Date());
-				mTeacher.setUpdatedBy(authUser.getId());
-				mTeacher.setAddress(teacher.getAddress());
-				
-				address = teacher.getAddress();
-				teacher = teacherService.updateObject(mTeacher);
-				
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.updateObject(address);
-				response.setData(teacher);				
+				teacher = userService.updateTeacher(teacher, department, position);
+				response.setData(userService.getUserVOByUserId(teacher.getUserId()));				
 				break;
 			case STUDENT:
-				requiredFields.add(UserConstant.PHONE_NUMBER);
-				
+				requiredFields.add(UserConstant.PHONE_NUMBER);				
 				student = UserValidator.validateStudentInputInfo(params, requiredFields);
-				if (student.getId() == null) {
-					throw new FieldRequiredException("Student ID is required");
-				}
-				Student mStudent = studentService.findObject(student.getId());	
-				mStudent.setFirstName(student.getFirstName());
-				mStudent.setLastName(student.getLastName());
-				mStudent.setMiddleNames(student.getMiddleNames());
-				mStudent.setFullName(student.getFullName());
-				mStudent.setAge(student.getAge());
-				mStudent.setBirthDate(student.getBirthDate());
-				mStudent.setGender(student.getGender());
-				mStudent.setOccupation(student.getOccupation());
-				mStudent.setPhoneNumber(student.getPhoneNumber());
-				mStudent.setParentIds(student.getParentIds());
-				mStudent.setUpdatedOn(new Date());
-				mStudent.setUpdatedBy(authUser.getId());
-				mStudent.setAddress(student.getAddress());
-				
-				if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), student.getAcademicLevelId())) {
-					throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
-				}
-				mStudent.setProgram(programService.findObject(student.getProgramId()));	
-				
-				AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
-				mStudent.setAcademicLevelId(academicLevel.getId());
-				
-				address = mStudent.getAddress();
-				
-				Set<StudentAcademicLevel>  studentAcademicLevels = mStudent.getStudentAcademicLevels();
-				student.setStudentAcademicLevels(studentAcademicLevels);
-				
-				if (mStudent.getParentIds() != null) {
-					Set<Parent> parents = new HashSet<>();
-					for (Integer parentId: mStudent.getParentIds()) {
-						parent = parentService.findObject(parentId);
-						parents.add(parent);
-					}										
-					mStudent.setParents(parents);
-				}
-				student = studentService.updateObject(mStudent);
-				
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.updateObject(address);				
-				response.setData(student);								
+				student = userService.updateStudent(student);				
+				response.setData(userService.getUserVOByUserId(student.getUserId()));								
 				break;
 			case STAFF:
 				requiredFields.add(UserConstant.POSITION);				
@@ -546,72 +472,14 @@ public class RestUserController extends BaseController {
 				if (staff.getId() == null) {
 					throw new FieldRequiredException("Staff ID is required");
 				}
-				Staff mStaff = staffService.findObject(staff.getId());
-				mStaff.setFirstName(staff.getFirstName());
-				mStaff.setLastName(staff.getLastName());
-				mStaff.setMiddleNames(staff.getMiddleNames());
-				mStaff.setFullName(staff.getFullName());
-				mStaff.setAge(staff.getAge());
-				mStaff.setBirthDate(staff.getBirthDate());
-				mStaff.setGender(staff.getGender());
-				mStaff.setOccupation(staff.getOccupation());
-				mStaff.setPhoneNumber(staff.getPhoneNumber());				
-				mStaff.setUpdatedOn(new Date());				
-				mStaff.setAddress(staff.getAddress());
-				address = staff.getAddress();				
-				mStaff.setPosition(position);
-				mStaff.setUpdatedBy(authUser.getId());
-				
-				staff = staffService.updateObject(mStaff);				
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.updateObject(address); 
-								
-				StaffAddress staffAddress = new StaffAddress();
-				staffAddress.setAddress(address);
-				staffAddress.setStaff(staff);
-				staffAddress.setCreatedOn(today);
-				staffAddress.setUpdatedOn(today);
-				staffAddressService.updateObject(staffAddress);
-				
-				response.setData(staff);				
+				staff = userService.updateStaff(staff, position);				
+				response.setData(userService.getUserVOByUserId(staff.getUserId()));				
 				break;
 			case PARENT:
 				
-				parent = UserValidator.validateParentInputInfo(params, requiredFields);
-				
-				if (parent.getId() == null) {
-					throw new FieldRequiredException("Parent ID is required");
-				}
-				
-				Parent mParent = parentService.findObject(parent.getId());	
-				mParent.setFirstName(parent.getFirstName());
-				mParent.setLastName(parent.getLastName());
-				mParent.setMiddleNames(parent.getMiddleNames());
-				mParent.setFullName(parent.getFullName());
-				mParent.setAge(parent.getAge());
-				mParent.setBirthDate(parent.getBirthDate());
-				mParent.setGender(parent.getGender());
-				mParent.setOccupation(parent.getOccupation());
-				mParent.setPhoneNumber(parent.getPhoneNumber());	
-				mParent.setStudentIds(parent.getStudentIds());
-				mParent.setUpdatedOn(new Date());
-				mParent.setUpdatedBy(authUser.getId());
-				mParent.setAddress(parent.getAddress());
-				address = mParent.getAddress();
-								
-				if (mParent.getStudentIds() != null) {
-					Set<Student> students = new HashSet<>();
-					for (Integer studentId: mParent.getStudentIds()) {
-						student = studentService.findObject(studentId);
-						students.add(student);
-					}										
-					mParent.setStudents(students);
-				}				
-				mParent = parentService.updateObject(mParent);
-				
-				address.setUpdatedBy(authUser.getId());
-				address = addressService.updateObject(address);
-				response.setData(mParent);
+				parent = UserValidator.validateParentInputInfo(params, requiredFields);								
+				Parent mParent = userService.updateParent(parent);
+				response.setData(userService.getUserVOByUserId(mParent.getUserId()));
 				break;
 			default:
 				throw new UsernameNotFoundException("User type not found");
@@ -624,8 +492,7 @@ public class RestUserController extends BaseController {
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setMessage("User has been updated");
-		return response;
-		
+		return response;		
 	}
 	
 	@DeleteMapping(value = {EndPointConstants.REST_USER_CONTROLLER.INDEX + "{userId}", EndPointConstants.REST_USER_CONTROLLER.INDEX+ "{userId}/"})

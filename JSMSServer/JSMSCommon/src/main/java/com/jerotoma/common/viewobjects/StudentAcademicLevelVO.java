@@ -21,6 +21,7 @@ public class StudentAcademicLevelVO {
 	
 	private CompletionStatus completionStatus;
 	private String completionStatusName;
+	private Integer completionStatusId;
 	
 	private List<ClassVO> jClasses;
 	
@@ -37,6 +38,7 @@ public class StudentAcademicLevelVO {
 		this.createdOn = rs.getDate(StudentConstant.Class.CREATED_ON);
 		this.completionStatus = CompletionStatus.getCompletionStatusfromID(rs.getInt(StudentConstant.Class.COMPLETION_STATUS_ID));
 		this.completionStatusName = this.completionStatus != null ? this.completionStatus.getDescription() : null;
+		this.completionStatusId =  this.completionStatus != null ? this.completionStatus.getID() : null;
 		
 	}
 
@@ -134,6 +136,12 @@ public class StudentAcademicLevelVO {
 	public void setCompletionStatusName(String completionStatusName) {
 		this.completionStatusName = completionStatusName;
 	}
-	
-	
+
+	public Integer getCompletionStatusId() {
+		return completionStatusId;
+	}
+
+	public void setCompletionStatusId(Integer completionStatusId) {
+		this.completionStatusId = completionStatusId;
+	}
 }

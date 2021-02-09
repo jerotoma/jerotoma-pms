@@ -126,7 +126,7 @@ export class AcademicLevelStudentEnrollmentCreateComponent implements OnInit {
 
   loadAvailableAcademicLevelsByStudentId(studentId: number) {
     this.academicLevels = [];
-    this.academicLevelService.loadAvailableAcademicLevelsByStudentId(studentId)
+    this.academicLevelService.loadStudentUnregisteredAcademicLevels(studentId)
     .subscribe((academicLevels: AcademicLevel[] ) => {
       if (academicLevels) {
         this.academicLevels = academicLevels;

@@ -128,9 +128,9 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		return response;
 	}
 	
-	@GetMapping("/students/{studentId}")
+	@GetMapping("/students/{studentId}/unregistered")
 	@ResponseBody
-	public HttpResponseEntity<Object> loadAvailableAcademicLevelsByStudentId(Authentication auth, @PathVariable(required = true, value = "studentId") Integer studentId) {
+	public HttpResponseEntity<Object> loadStudentUnregisteredAcademicLevelsByStudentId(Authentication auth, @PathVariable(required = true, value = "studentId") Integer studentId) {
 		
 		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
@@ -138,7 +138,27 @@ public class RestAcademicLevelController extends BaseController implements Contr
 		
 		try {
 			StudentVO student = assemblerStudentService.findObject(studentId);
-			response.setData(assemblerAcademicLevelService.loadAvailableAcademicLevelsByStudentId(student.getProgramId(), studentId));
+			response.setData(assemblerAcademicLevelService.loadStudentUnregisteredAcademicLevels(student.getProgramId(), studentId));
+			response.setSuccess(true);
+			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+			response.setHttpStatus(HttpStatus.OK);
+		} catch (SQLException e) {
+			throw new JDataAccessException(e.getMessage(), e);			
+		}
+		return response;
+	}
+	
+	@GetMapping("/students/{studentId}/registered")
+	@ResponseBody
+	public HttpResponseEntity<Object> loadStudentRegisteredAcademicLevelsByStudentId(Authentication auth, @PathVariable(required = true, value = "studentId") Integer studentId) {
+		
+		this.logRequestDetail("GET : "+ EndPointConstants.REST_ACADEMIC_LEVEL_CONTROLLER.BASE);
+		this.proccessLoggedInUser(auth);
+		this.securityCheckAccessByRoles(auth);
+		
+		try {
+			StudentVO student = assemblerStudentService.findObject(studentId);
+			response.setData(assemblerAcademicLevelService.loadStudentRegisteredAcademicLevels(student.getProgramId(), studentId));
 			response.setSuccess(true);
 			response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 			response.setHttpStatus(HttpStatus.OK);

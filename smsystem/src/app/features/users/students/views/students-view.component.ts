@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { StudentCreateComponent } from '../create/student-create.component';
-import { QueryParam } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { UserDeleteComponent, UploadsComponent } from 'app/shared';
 import { Student } from 'app/models/users';
@@ -77,7 +77,7 @@ export class StudentsViewComponent implements OnInit {
       this.dialogService.open(UploadsComponent, {
         context: {
           title: 'Import files',
-          action: 'create',
+          action:  APP_ACTION_TYPE.create,
         },
       }).onClose.subscribe(data => {
         this.loadUsers();
@@ -86,7 +86,7 @@ export class StudentsViewComponent implements OnInit {
       this.dialogService.open(UploadsComponent, {
         context: {
           title: 'Add New Student',
-          action: 'create',
+          action: APP_ACTION_TYPE.create,
         },
       }).onClose.subscribe(data => {
         this.loadUsers();
@@ -98,7 +98,7 @@ export class StudentsViewComponent implements OnInit {
     this.dialogService.open(StudentCreateComponent, {
       context: {
         title: 'Add New Student',
-        action: 'create',
+        action: APP_ACTION_TYPE.create,
       },
     }).onClose.subscribe(data => {
       this.loadUsers();
@@ -109,7 +109,7 @@ export class StudentsViewComponent implements OnInit {
     this.dialogService.open(StudentCreateComponent, {
       context: {
         title: 'Edit ' + student.fullName + '\'s Details',
-        action: 'edit',
+        action: APP_ACTION_TYPE.edit,
         userId: student.userId,
       },
     }).onClose.subscribe(data => {
@@ -128,7 +128,7 @@ export class StudentsViewComponent implements OnInit {
     this.dialogService.open(UserDeleteComponent, {
       context: {
         title: 'Delete Student',
-        action: 'delete',
+        action: APP_ACTION_TYPE.delete,
         userType: 'student',
         userId: student.userId,
         name: student.fullName,

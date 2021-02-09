@@ -15,5 +15,6 @@ export interface AcademicLevelProgress {
   academicLevel: AcademicLevel;
   academicYear: AcademicYear;
   completionStatus: CompletionStatus;
+  completionStatusId: number;
   completionStatusName: string;
 }

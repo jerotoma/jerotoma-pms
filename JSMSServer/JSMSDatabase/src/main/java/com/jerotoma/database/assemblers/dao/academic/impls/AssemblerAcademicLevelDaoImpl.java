@@ -184,14 +184,13 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	}
 
 	@Override
-	public List<AcademicLevelVO> loadAvailableAcademicLevelsByStudentId(Integer programId, Integer studentId) {
+	public List<AcademicLevelVO> loadStudentUnregisteredAcademicLevels(Integer programId, Integer studentId) {
 		StringBuilder queryBuilder  = getBaseSelectQuery()
 				.append("WHERE al.id NOT IN (")
 				.append("SELECT pal.academic_level_id FROM program_academic_levels pal ")
 				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id = pal.academic_level_id ")				
-				.append(" WHERE sal.completion_status_id <> ? AND sal.completion_status_id <> ? AND pal.program_id = ? AND sal.student_id = ? )");		
-		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(programId), 
-				CompletionStatus.COMPLETED.getID(), CompletionStatus.IN_PROGRESS.getID(), programId, studentId);
+				.append(" WHERE sal.completion_status_id <> ? AND pal.program_id = ? AND sal.student_id = ? )");		
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(programId), CompletionStatus.COMPLETED.getID(), programId, studentId);
 	}
 	
 	public Set<AcademicLevelPrerequisiteVO> findAcademicLevelPrerequisitesByAcademicLevelId(Integer programId, Integer academicLevelId) throws SQLException {
@@ -210,5 +209,17 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 			prerequisiteVO.setAcademicLevel(findObject(rs.getInt("prerequisite_academic_level_id")));			
 			return prerequisiteVO;
 		}	
+	}
+
+
+	@Override
+	public List<AcademicLevelVO> loadStudentRegisteredAcademicLevels(Integer programId, Integer studentId)
+			throws SQLException {
+		StringBuilder queryBuilder  = getBaseSelectQuery()
+				.append("WHERE al.id IN (")
+				.append("SELECT pal.academic_level_id FROM program_academic_levels pal ")
+				.append(" INNER JOIN student_academic_levels sal ON sal.academic_level_id = pal.academic_level_id ")				
+				.append(" WHERE pal.program_id = ? AND sal.student_id = ? )");		
+		return this.jdbcTemplate.query(queryBuilder.toString(), new AcademicLevelResultProcessor(programId), programId, studentId);
 	}
 }

@@ -8,6 +8,7 @@
                 <form [formGroup]="studentForm" class="step-container" (ngSubmit)="onSubmitStudentForm()">
                   <ng-template matStepLabel>Fill out Student Details</ng-template>
                   <app-user-login-input
+                      *ngIf="action === 'create'"
                       [userLoginInput]="userLoginInput"
                       [userType]="userType"
                       (onChanges)="onUserLoginInputChange($event)">
@@ -210,6 +211,8 @@
                     </div>
                   </div>
                   <app-parent-create
+                    [parent]="parent"
+                    [action]="action"
                     (onChanges)="onParentFormChanges($event)"
                   ></app-parent-create>
                   <div>

@@ -5,6 +5,7 @@
       <nb-card-body>
         <form [formGroup]="parentForm" class="step-container" (ngSubmit)="onSubmitParentForm()">
           <app-parent-create
+            [parent]="parent"
             (onChanges)="onParentFormChanges($event)"
           ></app-parent-create>
           <div class="form-control-group">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { AddressComponent } from 'app/shared/addresses';
@@ -22,17 +22,17 @@ import { DateFormatter, USER_TYPE, APP_ACTION_TYPE } from 'app/utils';
 })
 export class ParentCreateComponent implements OnInit {
   title: string = 'Create New Parent';
+  @Input('parent') parent: Parent = null;
+  @Input('action') action: string = APP_ACTION_TYPE.create;
   @Output() onChanges: EventEmitter<ParentWrapper> = new EventEmitter();
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
-  action: string = APP_ACTION_TYPE.create;
   userType: string = USER_TYPE.PARENT;
   parentForm: FormGroup;
   addressForm: FormGroup;
   address: Address;
   userLoginInput: UserLoginInput;
   studentIds: number[]  = [];
-  parent: Parent;
   parentWrapper: ParentWrapper;
 
   constructor(
@@ -43,6 +43,9 @@ export class ParentCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadParentForm();
+    if (this.parent) {
+      this.updateUseInput(this.parent);
+    }
   }
 
   resetForms() {
@@ -107,8 +110,8 @@ export class ParentCreateComponent implements OnInit {
       id: parent.id,
       firstName: parent.firstName,
       lastName: parent.lastName,
-      position: parent.position ? this.parent.position.id : null,
-      occupation: parent.occupation ? this.parent.occupation : 'Parent',
+      position: parent.position ? parent.position.id : null,
+      occupation: parent.occupation ? parent.occupation : 'Parent',
       employmentCode: parent.userCode,
       gender: parent.gender,
       picture: parent.picture,

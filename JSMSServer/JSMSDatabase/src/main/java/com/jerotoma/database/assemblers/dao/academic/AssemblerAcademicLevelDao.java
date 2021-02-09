@@ -13,7 +13,8 @@ public interface AssemblerAcademicLevelDao extends AssemblerDao<AcademicLevelVO>
 	public List<AcademicLevelVO> getAllAcademicLevel() throws SQLException;
 	public List<AcademicLevelVO> loadUnAddedAcademicLevelByProgram(Integer programId) throws SQLException;
 	public List<AcademicLevelVO> loadAcademicLevelByProgram(Integer programId) throws SQLException;
-	public List<AcademicLevelVO> loadAvailableAcademicLevelsByStudentId(Integer programId, Integer studentId) throws SQLException;
+	public List<AcademicLevelVO> loadStudentUnregisteredAcademicLevels(Integer programId, Integer studentId) throws SQLException;
 	public Set<AcademicLevelPrerequisiteVO> findAcademicLevelPrerequisitesByAcademicLevelId(Integer programId, Integer academicLevelId) throws SQLException;
+	public List<AcademicLevelVO> loadStudentRegisteredAcademicLevels(Integer programId, Integer studentId) throws SQLException;
 
 }

@@ -7,6 +7,7 @@ public class AcademicLevelProgress {
 	private AcademicYearVO academicYear;
 	private CompletionStatus completionStatus;
 	private String completionStatusName;
+	private Integer completionStatusId;
 	
 	public AcademicLevelVO getAcademicLevel() {
 		return academicLevel;
@@ -38,5 +39,13 @@ public class AcademicLevelProgress {
 	
 	public void setCompletionStatusName(String completionStatusName) {
 		this.completionStatusName = completionStatusName;
+	}
+
+	public Integer getCompletionStatusId() {
+		return completionStatusId;
+	}
+
+	public void setCompletionStatusId(Integer completionStatusId) {
+		this.completionStatusId = completionStatusId;
 	}
 }

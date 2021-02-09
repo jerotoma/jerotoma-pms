@@ -22,11 +22,13 @@ import com.jerotoma.common.QueryParam;
 import com.jerotoma.common.constants.CompletionStatus;
 import com.jerotoma.common.exceptions.FieldRequiredException;
 import com.jerotoma.common.models.academic.AcademicLevel;
+import com.jerotoma.common.models.academic.Department;
 import com.jerotoma.common.models.addresses.Address;
 import com.jerotoma.common.models.addresses.ParentAddress;
 import com.jerotoma.common.models.addresses.StaffAddress;
 import com.jerotoma.common.models.addresses.StudentAddress;
 import com.jerotoma.common.models.addresses.TeacherAddress;
+import com.jerotoma.common.models.positions.Position;
 import com.jerotoma.common.models.users.Parent;
 import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
@@ -34,6 +36,7 @@ import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.User;
 import com.jerotoma.common.models.users.UserContext;
 import com.jerotoma.common.models.users.students.Student;
+import com.jerotoma.common.models.users.students.StudentAcademicLevel;
 import com.jerotoma.common.models.users.students.StudentAcademicLevel.Fields;
 import com.jerotoma.common.utils.CalendarUtil;
 import com.jerotoma.common.viewobjects.AcademicYearVO;
@@ -344,19 +347,19 @@ public class UserServiceImpl implements UserService {
 				parents.add(parent);
 			}		
 		}
-		UserVO loggedInUser = loadCurrentUser();
+		UserVO user = loadCurrentUser();
 		newUser = authUserService.createUserLoginAccount(newUser);
 		
 		student.setParents(parents);
 		student.setUserId(newUser.getId());	
-		student.setUpdatedBy(loggedInUser.getId());		
+		student.setUpdatedBy(user.getId());		
 		student.setStudentNumber(sequenceGeneratorService.getNextNumber().intValue());	
 		student.setAcademicLevelId(academicLevel.getId());
 		Address address = student.getAddress();
 		
 		student = studentService.createObject(student);	
 								
-		address.setUpdatedBy(loggedInUser.getId());
+		address.setUpdatedBy(user.getId());
 		address = addressService.createObject(address);
 		StudentAddress studentAddress = new StudentAddress();
 		studentAddress.setStudent(student);
@@ -366,8 +369,190 @@ public class UserServiceImpl implements UserService {
 		studentAddressService.createObject(studentAddress);	
 		
 		Fields studentAcademicLevelField = new Fields(null, student.getId(), commpletionStatusId, academicLevelId, streamId, academicYearId, null, true);
-		studentAcademicLevelService.createStudentAcademicLevel(studentAcademicLevelField, loggedInUser);
+		studentAcademicLevelService.createStudentAcademicLevel(studentAcademicLevelField, user);
 		return student;
+	}
+	
+	@Transactional
+	public Student updateStudent(Student student) throws SQLException {
+		
+		CompletionStatus completionStatus = CompletionStatus.IN_PROGRESS;
+		final Integer commpletionStatusId = completionStatus.getID();
+		final Integer academicLevelId = student.getAcademicLevelId(); 
+		final Integer streamId = student.getStreamId();
+		final Set<Parent> parents = new HashSet<>();
+		Parent parent;
+		Address address;
+		
+		AcademicYearVO academicYearVO = assemblerAcademicYearService.getCurrentAcademicYear();		
+		if (academicYearVO == null) {
+			throw new FieldRequiredException("Current Academic Year is required to continue.");
+		}
+		
+		if (student.getId() == null) {
+			throw new FieldRequiredException("Student ID is required");
+		}
+		
+		if (!assemblerProgramService.doesProgramAcademicLevelExist(student.getProgramId(), academicLevelId)) {
+			throw new FieldRequiredException("Program or Academic Level can not be empty or null.");
+		}
+		
+		Fields studentAcademicLevelField = new Fields(null, student.getId(), commpletionStatusId, academicLevelId, streamId, academicYearVO.getId(), null, true);
+		UserVO user = loadCurrentUser();
+		
+		Student mStudent = studentService.findObject(student.getId());	
+		mStudent.setFirstName(student.getFirstName());
+		mStudent.setLastName(student.getLastName());
+		mStudent.setMiddleNames(student.getMiddleNames());
+		mStudent.setFullName(student.getFullName());
+		mStudent.setAge(student.getAge());
+		mStudent.setBirthDate(student.getBirthDate());
+		mStudent.setGender(student.getGender());
+		mStudent.setOccupation(student.getOccupation());
+		mStudent.setPhoneNumber(student.getPhoneNumber());
+		mStudent.setParentIds(student.getParentIds());
+		
+		if (student.getPrimaryParent() != null) {
+			parent = updateParent(student.getPrimaryParent());
+			mStudent.setPrimaryParent(parent);
+			parents.add(parent);
+		}
+		
+		mStudent.setUpdatedOn(new Date());
+		mStudent.setUpdatedBy(user.getId());
+		mStudent.setAddress(student.getAddress());
+		mStudent.setProgram(programService.findObject(student.getProgramId()));	
+		
+		AcademicLevel academicLevel = academicLevelService.findObject(student.getAcademicLevelId());
+		mStudent.setAcademicLevelId(academicLevel.getId());
+		
+		address = mStudent.getAddress();
+		
+		Set<StudentAcademicLevel>  studentAcademicLevels = mStudent.getStudentAcademicLevels();
+		student.setStudentAcademicLevels(studentAcademicLevels);
+		
+		if (mStudent.getParentIds() != null) {			
+			for (Integer parentId: mStudent.getParentIds()) {
+				parent = parentService.findObject(parentId);
+				parents.add(parent);
+			}										
+			mStudent.setParents(parents);
+		}
+		
+		student = studentService.updateObject(mStudent);
+		studentAcademicLevelService.updateStudentAcademicLevel(studentAcademicLevelField, user);
+		
+		address.setUpdatedBy(user.getId());
+		address = addressService.updateObject(address);
+		return student;
+	}
+	
+	@Transactional
+	public Parent updateParent(Parent parent) throws SQLException {
+		Student student;
+		Address address;
+		
+		if (parent.getId() == null) {
+			throw new FieldRequiredException("Parent ID is required");
+		}
+		
+		UserVO loggedInUser = loadCurrentUser();
+		Parent mParent = parentService.findObject(parent.getId());	
+		mParent.setFirstName(parent.getFirstName());
+		mParent.setLastName(parent.getLastName());
+		mParent.setMiddleNames(parent.getMiddleNames());
+		mParent.setFullName(parent.getFullName());
+		mParent.setAge(parent.getAge());
+		mParent.setBirthDate(parent.getBirthDate());
+		mParent.setGender(parent.getGender());
+		mParent.setOccupation(parent.getOccupation());
+		mParent.setPhoneNumber(parent.getPhoneNumber());	
+		mParent.setStudentIds(parent.getStudentIds());
+		mParent.setUpdatedOn(new Date());
+		mParent.setUpdatedBy(loggedInUser.getId());
+		mParent.setAddress(parent.getAddress());
+		address = mParent.getAddress();
+						
+		if (parent.getStudentIds() != null) {
+			Set<Student> students = new HashSet<>();
+			for (Integer studentId: parent.getStudentIds()) {
+				student = studentService.findObject(studentId);
+				students.add(student);
+			}										
+			mParent.setStudents(students);
+		}				
+		mParent = parentService.updateObject(mParent);
+		
+		address.setUpdatedBy(loggedInUser.getId());
+		address = addressService.updateObject(address);
+		return mParent;
+	}
+	
+	@Transactional
+	public Teacher updateTeacher(Teacher teacher, Department department, Position position) throws SQLException {
+		
+		Address address;
+		Teacher mTeacher = teacherService.findObject(teacher.getId());
+		UserVO user = loadCurrentUser();
+					
+		mTeacher.setFirstName(teacher.getFirstName());
+		mTeacher.setLastName(teacher.getLastName());
+		mTeacher.setMiddleNames(teacher.getMiddleNames());
+		mTeacher.setFullName(teacher.getFullName());
+		mTeacher.setPosition(position);
+		mTeacher.setDepartment(department);
+		mTeacher.setAge(teacher.getAge());
+		mTeacher.setBirthDate(teacher.getBirthDate());
+		mTeacher.setGender(teacher.getGender());
+		mTeacher.setOccupation(teacher.getOccupation());
+		mTeacher.setPhoneNumber(teacher.getPhoneNumber());
+		mTeacher.setUserCode(teacher.getUserCode());
+		mTeacher.setPicture(teacher.getPicture());
+		mTeacher.setUpdatedOn(new Date());
+		mTeacher.setUpdatedBy(user.getId());
+		mTeacher.setAddress(teacher.getAddress());
+		
+		address = teacher.getAddress();
+		teacher = teacherService.updateObject(mTeacher);
+		
+		address.setUpdatedBy(user.getId());
+		address = addressService.updateObject(address);
+		return teacher;
+	}
+	
+	@Transactional
+	public Staff updateStaff(Staff staff, Position position) throws SQLException {
+		
+		Address address;
+		UserVO user = loadCurrentUser();
+		
+		Staff mStaff = staffService.findObject(staff.getId());
+		mStaff.setFirstName(staff.getFirstName());
+		mStaff.setLastName(staff.getLastName());
+		mStaff.setMiddleNames(staff.getMiddleNames());
+		mStaff.setFullName(staff.getFullName());
+		mStaff.setAge(staff.getAge());
+		mStaff.setBirthDate(staff.getBirthDate());
+		mStaff.setGender(staff.getGender());
+		mStaff.setOccupation(staff.getOccupation());
+		mStaff.setPhoneNumber(staff.getPhoneNumber());				
+		mStaff.setUpdatedOn(new Date());				
+		mStaff.setAddress(staff.getAddress());
+		address = staff.getAddress();				
+		mStaff.setPosition(position);
+		mStaff.setUpdatedBy(user.getId());
+		
+		staff = staffService.updateObject(mStaff);				
+		address.setUpdatedBy(user.getId());
+		address = addressService.updateObject(address); 
+						
+		StaffAddress staffAddress = new StaffAddress();
+		staffAddress.setAddress(address);
+		staffAddress.setStaff(staff);
+		staffAddress.setCreatedOn(today);
+		staffAddress.setUpdatedOn(today);
+		staffAddressService.updateObject(staffAddress);
+		return staff;
 	}
 
 }

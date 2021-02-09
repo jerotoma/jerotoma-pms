@@ -44,8 +44,13 @@ export class AcademicLevelService {
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 
-  loadAvailableAcademicLevelsByStudentId(studentId: number): Observable<AcademicLevel[]> {
-    return this.http.get(`${API_END_POINTS.academicLevels}/students/${studentId}`)
+  loadStudentUnregisteredAcademicLevels(studentId: number): Observable<AcademicLevel[]> {
+    return this.http.get(`${API_END_POINTS.academicLevels}/students/${studentId}/unregistered`)
+    .pipe(map((resp: ResponseWrapper) => resp.data));
+  }
+
+  loadStudentRegisteredAcademicLevels(studentId: number): Observable<AcademicLevel[]> {
+    return this.http.get(`${API_END_POINTS.academicLevels}/students/${studentId}/registered`)
     .pipe(map((resp: ResponseWrapper) => resp.data));
   }
 

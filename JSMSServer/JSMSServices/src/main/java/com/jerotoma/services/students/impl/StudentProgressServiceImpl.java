@@ -114,6 +114,7 @@ public class StudentProgressServiceImpl implements StudentProgressService {
 				if (academicLevel.getId().equals(studentAcademicLevel.getAcademicLevel().getId())) {
 					academicLevelProgress.setCompletionStatus(studentAcademicLevel.getCompletionStatus());
 					academicLevelProgress.setCompletionStatusName(studentAcademicLevel.getCompletionStatusName());
+					academicLevelProgress.setCompletionStatusId(studentAcademicLevel.getCompletionStatusId());
 					academicLevelProgress.setAcademicYear(studentAcademicLevel.getAcademicYear());
 					hasStatus = true;
 
@@ -132,6 +133,7 @@ public class StudentProgressServiceImpl implements StudentProgressService {
 				academicLevelProgress.setAcademicLevel(academicLevel);
 				academicLevelProgress.setCompletionStatus(CompletionStatus.NOT_STARTED);
 				academicLevelProgress.setCompletionStatusName(CompletionStatus.NOT_STARTED.getDescription());
+				academicLevelProgress.setCompletionStatusId(CompletionStatus.NOT_STARTED.getID());
 				academicLevelProgresses.add(academicLevelProgress);
 			}
 		}
@@ -157,7 +159,7 @@ public class StudentProgressServiceImpl implements StudentProgressService {
 		studentAcademicLevelField.setId(studentAcademicLevel.getId());
 		studentAcademicLevel = studentAcademicLevelService.updateStudentAcademicLevelClasses(studentAcademicLevel, studentAcademicLevelField, user);
 		processCompletedAcademicLevel(studentId, academicLevelId, user, studentAcademicLevel);
-		return findStudentAcademicLevelsProgressByStudentId(studentAcademicLevelField.getStudentId());
+		return findStudentAcademicLevelsProgressByStudentId(studentId);
 	}
 
 	private void processCompletedAcademicLevel(Integer studentId, Integer academicLevelId, UserVO user, StudentAcademicLevel studentAcademicLevel) throws SQLException {

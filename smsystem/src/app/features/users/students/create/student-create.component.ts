@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, AfterViewInit } fro
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { NbDialogRef } from '@nebular/theme';
-import { AddressComponent, UserLoginInputComponent } from 'app/shared';
+import { AddressComponent, UserLoginInputComponent, ParentCreateComponent } from 'app/shared';
 import { Student, Parent } from 'app/models/users';
 import {
   Address,
@@ -29,10 +29,11 @@ import { ShowMessage } from 'app/models/messages/show-message.model';
 export class StudentCreateComponent implements OnInit, AfterViewInit {
   title: string = 'Create New Student';
   @Output() onUserCreationSuccess = new EventEmitter();
+  @ViewChild(ParentCreateComponent, {static: false}) appParent: ParentCreateComponent;
   @ViewChild(AddressComponent, {static: false}) appAddress: AddressComponent;
   @ViewChild(UserLoginInputComponent, {static: false}) appPassword: UserLoginInputComponent;
   userType: string = USER_TYPE.STUDENT;
-  action: string = 'create';
+  action: string = APP_ACTION_TYPE.create;
   linearMode: boolean = true;
   studentForm: FormGroup;
   parentForm: FormGroup;
@@ -103,8 +104,12 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
    if (!this.studentForm.valid && !this.parentForm.valid) {
       return;
     }
-    window.console.log(this.studentForm.value);
-    this.postData(this.studentForm.value);
+    if (this.action === APP_ACTION_TYPE.create) {
+      this.postData(this.studentForm.value);
+    } else {
+      this.updateData(this.studentForm.value);
+    }
+
   }
 
   postData(data: Student) {
@@ -211,6 +216,7 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
     this.userService.loadUser(userId).subscribe((student: Student) => {
        if (student) {
         this.student = student;
+        this.parent = student.primaryParent;
         this.updateUseInput();
       }
     }, error => {
@@ -322,6 +328,10 @@ export class StudentCreateComponent implements OnInit, AfterViewInit {
 
     if (this.student.address) {
       this.appAddress.patchAddressValue(this.student.address);
+    }
+
+    if (this.student.primaryParent) {
+      this.appParent.updateUseInput(this.student.primaryParent);
     }
   }
 

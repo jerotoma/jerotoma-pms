@@ -5,7 +5,6 @@ import {
   StudentAcademicLevelService,
   AcademicYearService,
   ClassService,
-  UserService,
   AcademicLevelService,
  } from 'app/services';
 import { USER_TYPE, QueryParam } from 'app/utils';
@@ -54,7 +53,6 @@ export class MyCourseComponent implements OnInit {
   constructor(
     private academicLevelService: AcademicLevelService,
     private academicYearService: AcademicYearService,
-    private userService: UserService,
     private classService: ClassService,
     private dialogService: NbDialogService,
     private studentAcademicLevelService: StudentAcademicLevelService) { }

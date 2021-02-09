@@ -48,17 +48,16 @@ export class StudentAcademicLevelsProgressComponent implements OnInit {
   loadStudentAcademicLevelsProgressByStudentId() {
     this.studentProgressService
     .findStudentAcademicLevelsProgressByStudentId(this.student.id)
-    .subscribe((studentProgress: StudentAcademicLevelsProgress) => {
-      this.studentProgress = studentProgress;
-      this.academicLevelProgresses = studentProgress.academicLevelProgresses;
-      this.dataSource.data = studentProgress.academicLevelProgresses;
-      this.studentAcademicLevelsCompletionAvarage = (studentProgress.completedLevels / studentProgress.requiredLevels) * 100;
+    .subscribe((studentAcademicLevelsProgress: StudentAcademicLevelsProgress) => {
+      this.studentProgress = studentAcademicLevelsProgress;
+      this.academicLevelProgresses = studentAcademicLevelsProgress.academicLevelProgresses;
+      this.dataSource.data = studentAcademicLevelsProgress.academicLevelProgresses;
+      this.studentAcademicLevelsCompletionAvarage = (studentAcademicLevelsProgress.completedLevels / studentAcademicLevelsProgress.requiredLevels) * 100;
 
     });
   }
 
   editStatus(academicLevelProgress: AcademicLevelProgress) {
-    window.console.log(academicLevelProgress);
     this.dialogService.open(ChangeAcademicLevelProgressStatusComponent, {
       context: {
         title: 'Change Academic Level Progress Status',
@@ -67,7 +66,10 @@ export class StudentAcademicLevelsProgressComponent implements OnInit {
       },
     }).onClose.subscribe(result => {
       if (result.confirmed) {
-
+        const studentAcademicLevelsProgress: StudentAcademicLevelsProgress =  result.studentAcademicLevelsProgress;
+        this.studentProgress = studentAcademicLevelsProgress;
+        this.academicLevelProgresses = studentAcademicLevelsProgress.academicLevelProgresses;
+        this.dataSource.data = studentAcademicLevelsProgress.academicLevelProgresses;
       }
     });
   }

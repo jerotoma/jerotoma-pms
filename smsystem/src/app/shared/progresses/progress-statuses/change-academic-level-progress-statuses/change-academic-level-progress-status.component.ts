@@ -85,6 +85,9 @@ export class ChangeAcademicLevelProgressStatusComponent implements OnInit {
   loadProgressStatuses() {
     this.statusService.loadProgressStatuses().subscribe((progressStatuses: ProgressStatus[]) => {
       this.progressStatuses = progressStatuses;
+      this.changeProgressStatusForm.patchValue({
+        progressStatusId: this.academicLevelProgress.completionStatusId,
+      });
     });
   }
 
