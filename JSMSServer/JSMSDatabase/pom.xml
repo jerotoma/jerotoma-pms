@@ -46,6 +46,10 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>			
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>JSMSDatabase</finalName>

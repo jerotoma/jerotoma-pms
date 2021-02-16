@@ -97,7 +97,8 @@ public class AssemblerAcademicLevelDaoImpl extends JdbcDaoSupport implements Ass
 	}
 	
 	private StringBuilder getBaseSelectQuery() {		
-		return new StringBuilder("SELECT al.id, al.name, al.code, al.description, al.created_on AS createdOn, al.updated_on AS updatedOn FROM ").append(DatabaseConstant.TABLES.ACADEMIC_LEVELS).append(" al ");		
+		return new StringBuilder("SELECT al.id, al.name, al.code, al.description, al.created_on AS createdOn, al.updated_on AS updatedOn FROM ")
+				.append(DatabaseConstant.TABLES.ACADEMIC_LEVELS).append(" al ");		
 	}
 	
 	public class AcademicLevelResultProcessor implements RowMapper<AcademicLevelVO>{

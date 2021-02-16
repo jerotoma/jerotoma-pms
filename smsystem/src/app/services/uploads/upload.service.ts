@@ -41,8 +41,11 @@ export class UploadService {
     return this.http.put(`${API_END_POINTS.uploads}`, data).pipe(map((resp: ResponseWrapper) => resp));
   }
 
-  uploadFileTrackProgress(data?: any): Observable<any> {
-    return this.http.post(`${API_END_POINTS.uploads}`, data, {
+  uploadFileTrackProgress(data?: any, uploadURL?: string): Observable<any> {
+
+    const url = uploadURL ? uploadURL : API_END_POINTS.uploads;
+
+    return this.http.post(`${url}`, data, {
       reportProgress: true,
       observe: 'events',
     }).pipe(catchError(this.errorMessage));

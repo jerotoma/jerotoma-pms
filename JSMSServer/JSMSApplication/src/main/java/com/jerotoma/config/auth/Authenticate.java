@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import com.jerotoma.common.models.users.User;
 
 public class Authenticate {
@@ -43,5 +44,4 @@ public class Authenticate {
 		Authentication newAuth =  new UsernamePasswordAuthenticationToken((User)currentUser.getPrincipal(), auth.getCredentials(), user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(newAuth);		
 	}
-
 }

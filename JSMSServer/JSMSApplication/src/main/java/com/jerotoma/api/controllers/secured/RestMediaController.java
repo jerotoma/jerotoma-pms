@@ -128,7 +128,7 @@ public class RestMediaController extends BaseController {
 	@ResponseBody
 	public HttpResponseEntity<Object> postCreateMedia(
 			@RequestParam Map<String, String> params, 
-			@RequestParam("media_files[]") MultipartFile[] files) throws SQLException{
+			@RequestParam("upload_files[]") MultipartFile[] files) throws SQLException{
 		
 		List<FileUploadWrapper>  fileUploadWrappers = new ArrayList<>();
 		List<FileUploadWrapper>  uploadedFiles = FileUpload.uploadMultipleFileHandler(files, context, "users");
@@ -146,7 +146,7 @@ public class RestMediaController extends BaseController {
 	@ResponseBody
 	public HttpResponseEntity<Object> createProfileMedia(
 			@RequestParam Map<String, String> params, 
-			@RequestParam("media_file") MultipartFile file,
+			@RequestParam("upload_file") MultipartFile file,
 			 @PathVariable("userId") Integer userId) throws SQLException {
 							
 		userSecurityClearance.checkChangeUserProfileImageClearance(userId);

@@ -127,11 +127,5 @@ public class FileUpload {
 			e.printStackTrace();
 		}
 		return false;	
-	}
-	
-	
-	
-	
-	
-	
+	}	
 }

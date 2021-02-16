@@ -1,5 +1,6 @@
 package com.jerotoma.api.controllers.secured;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jerotoma.api.controllers.BaseController;
 import com.jerotoma.common.QueryParam;
@@ -43,6 +45,7 @@ import com.jerotoma.common.models.users.Person;
 import com.jerotoma.common.models.users.Staff;
 import com.jerotoma.common.models.users.Teacher;
 import com.jerotoma.common.models.users.students.Student;
+import com.jerotoma.common.utils.ExcelUtility;
 import com.jerotoma.common.utils.validators.UserValidator;
 import com.jerotoma.common.viewobjects.ParentVO;
 import com.jerotoma.common.viewobjects.ResultBuilder;
@@ -195,6 +198,27 @@ public class RestUserController extends BaseController {
 		response.setHttpStatus(HttpStatus.OK);
 		return response;
 		
+	}
+	
+	@PostMapping("/excel/import")
+	@ResponseBody
+	public HttpResponseEntity<Object> importUserFromExcel(
+			@RequestParam Map<String, String> params, 
+			@RequestParam("upload_files[]") MultipartFile[] files) {
+		List<StudentVO> students = null;
+		try {
+			students = ExcelUtility.readStudent(files[0].getInputStream(), 0);
+			for (StudentVO student : students) {
+				System.out.println(student.getFirstName());
+			}
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
+		response.setData(students);	
+		response.setSuccess(true);
+		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 	
 	@GetMapping(value = {"/programs/{programId}/academic-levels/{academicLevelId}"})

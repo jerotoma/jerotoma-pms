@@ -31,6 +31,10 @@ public class StudentVO extends PersonVO {
 		this.programName = rs.getString(UserConstant.PROGRAM_NAME);
 	}
 
+	public StudentVO() {
+		
+	}
+
 	public Integer getId() {
 		return id;
 	}

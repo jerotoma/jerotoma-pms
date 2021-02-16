@@ -14,7 +14,7 @@ services:
       - jerotoma_sms_net
     ports:
       - "8082:8080"
-      - "8000:8000"            
+      - "8001:8000"            
     restart: always
 networks:
   jerotoma_sms_net:

@@ -79,7 +79,7 @@ export class UploadAvatarDialogComponent implements OnInit {
       disableMultipart : false,
       autoUpload: false,
       method: 'POST',
-      itemAlias: 'media_file',
+      itemAlias: 'upload_file',
       allowedFileType: ['image'],
       queueLimit: 1,
     });

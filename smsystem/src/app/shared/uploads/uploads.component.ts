@@ -20,8 +20,8 @@ export interface UploadFile {
 })
 export class UploadsComponent implements OnInit {
   @Input('uploadDir') uploadDir: string = 'users';
-  @Input('uploadURL') url: string = API_END_POINTS.uploads;
-  @Input('uploadURL') title: string = '';
+  @Input('uploadURL') uploadURL: string = API_END_POINTS.uploads;
+  @Input('title') title: string = '';
   @Input('action') action: string = APP_ACTION_TYPE.create;
   @Input('uploadLimit') uploadLimit: number = 10;
   @Output() onSuccess: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -66,9 +66,9 @@ export class UploadsComponent implements OnInit {
       if (this.uploadFiles) {
         const formData = new FormData();
         this.uploadFiles.forEach((uploadFile: UploadFile, index: number) => {
-          formData.append('media_files[]', uploadFile.file);
+          formData.append('upload_files[]', uploadFile.file);
         });
-        this.uploadService.uploadFileTrackProgress(formData).subscribe((event: HttpEvent<any>) => {
+        this.uploadService.uploadFileTrackProgress(formData, this.uploadURL).subscribe((event: HttpEvent<any>) => {
           switch (event.type) {
             case HttpEventType.Sent:
               break;
@@ -95,7 +95,7 @@ export class UploadsComponent implements OnInit {
 
     initUploader() {
       this.uploader = new FileUploader({
-        url: this.url,
+        url: this.uploadURL,
         disableMultipart : false,
         autoUpload: false,
         queueLimit: this.uploadLimit,

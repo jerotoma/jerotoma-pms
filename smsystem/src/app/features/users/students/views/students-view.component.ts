@@ -8,7 +8,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { StudentCreateComponent } from '../create/student-create.component';
-import { QueryParam, APP_ACTION_TYPE } from 'app/utils';
+import { QueryParam, APP_ACTION_TYPE, API_END_POINTS } from 'app/utils';
 import { UserService } from 'app/services/users';
 import { UserDeleteComponent, UploadsComponent } from 'app/shared';
 import { Student } from 'app/models/users';
@@ -72,12 +72,13 @@ export class StudentsViewComponent implements OnInit {
     });
   }
 
-  onItemSelection( title ) {
+  onItemSelection(title: string) {
     if ( title === 'Import Excel' ) {
       this.dialogService.open(UploadsComponent, {
         context: {
           title: 'Import files',
           action:  APP_ACTION_TYPE.create,
+          uploadURL: API_END_POINTS.users + '/excel/import'
         },
       }).onClose.subscribe(data => {
         this.loadUsers();
