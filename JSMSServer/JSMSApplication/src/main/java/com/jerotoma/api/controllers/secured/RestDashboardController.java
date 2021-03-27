@@ -17,6 +17,7 @@ import com.jerotoma.common.constants.EndPointConstants;
 import com.jerotoma.common.exceptions.JDataAccessException;
 import com.jerotoma.common.http.HttpResponseEntity;
 import com.jerotoma.common.models.DashboardCount;
+import com.jerotoma.common.viewobjects.UserVO;
 import com.jerotoma.services.assemblers.AssemblerParentService;
 import com.jerotoma.services.assemblers.AssemblerStaffService;
 import com.jerotoma.services.assemblers.AssemblerStudentService;
@@ -31,7 +32,6 @@ public class RestDashboardController extends BaseController implements Controlle
 	@Autowired AssemblerParentService assemblerParentService;
 	@Autowired AssemblerStaffService assemblerStaffService;
 	
-
 	@GetMapping(value = {"", "/"})
 	@ResponseBody
 	@Override
@@ -46,7 +46,7 @@ public class RestDashboardController extends BaseController implements Controlle
 		this.logRequestDetail("GET : " + EndPointConstants.REST_DASHBOARD_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
-		// QueryParam queryParam = this.setParams(search, page, pageSize, fieldName, orderby);								
+							
 		response.setSuccess(true);
 		response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
 		response.setData(map);
@@ -61,10 +61,20 @@ public class RestDashboardController extends BaseController implements Controlle
 		this.logRequestDetail("GET : " + EndPointConstants.REST_DASHBOARD_CONTROLLER.BASE);
 		this.proccessLoggedInUser(auth);
 		this.securityCheckAccessByRoles(auth);
-		
+		UserVO user = getAuthenticatedUserVO();
 		try {
 			DashboardCount dashboardCount = new DashboardCount();
 			dashboardCount.setTeacherCount(assemblerTeacherService.countObject().intValue());
+			
+			switch (user.getUserType()) {
+			case TEACHER:
+				dashboardCount.setClassCount(assemblerTeacherService.countTeacherClasses(user.getId()));
+				break;
+			default:
+				break;
+				
+			}
+			
 			dashboardCount.setStudentCount(assemblerStudentService.countObject().intValue());
 			dashboardCount.setParentCount(assemblerParentService.countObject().intValue());
 			dashboardCount.setStaffCount(assemblerStaffService.countObject().intValue());			

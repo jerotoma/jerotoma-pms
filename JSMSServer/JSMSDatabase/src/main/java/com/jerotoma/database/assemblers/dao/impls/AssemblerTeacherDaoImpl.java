@@ -250,5 +250,11 @@ public class AssemblerTeacherDaoImpl extends JdbcDaoSupport implements Assembler
 		return resultBuilder;
 	}
 
+	@Override
+	public Integer countTeacherClasses(Integer teacherId) throws SQLException {
+		StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM public.classes cl WHERE cl.teacher_id = ? ");
+		return this.jdbcTemplate.query(sql.toString(), new LongResultProcessor(), teacherId).intValue();
+	}
+
 
 }

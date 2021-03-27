@@ -69,4 +69,9 @@ public class AssemblerTeacherServiceImpl implements AssemblerTeacherService{
 		return assemblerTeacherDao.loadTeacherMapListByStudentID(queryParam, studentId);
 	}
 
+	@Override
+	public Integer countTeacherClasses(Integer teacherId) throws SQLException {
+		return  assemblerTeacherDao.countTeacherClasses(teacherId);
+	}
+
 }

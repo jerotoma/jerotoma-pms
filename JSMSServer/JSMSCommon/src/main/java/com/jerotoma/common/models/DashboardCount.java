@@ -2,6 +2,7 @@ package com.jerotoma.common.models;
 
 public class DashboardCount {
 	private int teacherCount;
+	private int classCount;
 	private int studentCount;
 	private int parentCount;
 	private int staffCount;
@@ -30,8 +31,11 @@ public class DashboardCount {
 	public void setStaffCount(int staffCount) {
 		this.staffCount = staffCount;
 	}
-	
-	
-	
+	public int getClassCount() {
+		return classCount;
+	}
+	public void setClassCount(int classCount) {
+		this.classCount = classCount;
+	}	
 
 }

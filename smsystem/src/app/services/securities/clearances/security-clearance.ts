@@ -12,6 +12,10 @@ export class SecurityClearanceService {
 
   constructor(private authService: AuthService) {}
 
+  set(userRoles: USER_ROLE[]) {
+    this.userRoles = userRoles;
+  }
+
   get hasResult() {
     return this.isLoading;
   }

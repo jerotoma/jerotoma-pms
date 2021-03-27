@@ -15,4 +15,5 @@ public interface AssemblerTeacherService extends AssemblerService<TeacherVO> {
 	public List<TeacherVO> search(QueryParam queryParam) throws SQLException;
 	
 	public ResultBuilder<TeacherVO> loadTeacherMapListByStudentID(QueryParam queryParam, Integer studentId) throws SQLException;
+	public Integer countTeacherClasses(Integer teacherId) throws SQLException;
 }

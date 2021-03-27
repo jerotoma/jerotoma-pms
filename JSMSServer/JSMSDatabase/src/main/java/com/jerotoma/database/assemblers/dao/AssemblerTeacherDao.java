@@ -14,4 +14,5 @@ public interface AssemblerTeacherDao extends AssemblerDao<TeacherVO>{
 	List<TeacherVO> findAllTeachers() throws SQLException;
 	List<TeacherVO> search(QueryParam queryParam) throws SQLException;
 	ResultBuilder<TeacherVO> loadTeacherMapListByStudentID(QueryParam queryParam, Integer studentId) throws SQLException;
+	Integer countTeacherClasses(Integer teacherId) throws SQLException;
 }

@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators' ;
 
-import { DashboardService, SecurityClearanceService } from 'app/services';
-import { DashboardCounter, USER_ROLE } from 'app/models';
+import { DashboardService, SecurityClearanceService, AuthService } from 'app/services';
+import { DashboardCounter, USER_ROLE, Auth } from 'app/models';
 import { QueryParam } from 'app/utils';
 
 interface CounterCardSettings {
@@ -41,6 +41,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     type: 'primary',
     count: 56,
   };
+  classCounterCard: CounterCardSettings = {
+    title: 'Classes',
+    iconClass: 'book-outline',
+    type: 'primary',
+    count: 56,
+  };
   studentCounterCard: CounterCardSettings = {
     title: 'Students',
     iconClass: 'people-outline',
@@ -64,52 +70,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   commonStatusCardsSet: CounterCardSettings[] = [
     this.teacherCounterCard,
+    this.classCounterCard,
     this.studentCounterCard,
     this.parentCounterCard,
     this.staffCounterCard,
   ];
 
   counterCardsByThemes: {
-    default: CounterCardSettings[];
-    cosmic: CounterCardSettings[];
-    corporate: CounterCardSettings[];
-    dark: CounterCardSettings[];
+    default?: CounterCardSettings[];
+    cosmic?: CounterCardSettings[];
+    corporate?: CounterCardSettings[];
+    dark?: CounterCardSettings[];
   } = {
-    default: this.commonStatusCardsSet,
-    cosmic: this.commonStatusCardsSet,
-    corporate: [
-      {
-        ...this.teacherCounterCard,
-        type: 'warning',
-      },
-      {
-        ...this.studentCounterCard,
-        type: 'primary',
-      },
-      {
-        ...this.parentCounterCard,
-        type: 'danger',
-      },
-      {
-        ...this.staffCounterCard,
-        type: 'info',
-      },
-    ],
-    dark: this.commonStatusCardsSet,
+    default: [],
+    cosmic: [],
+    corporate: [],
+    dark: [],
   };
 
   constructor(
     private dashboardService: DashboardService,
+    private authService: AuthService,
     private securityClearanceService: SecurityClearanceService,
     private themeService: NbThemeService) {}
 
   ngOnInit(): void {
     this.loadCurrentUser();
-    this.loadDashboardCounters();
   }
 
   loadCurrentUser() {
     this.securityClearanceService.loadCurrentUser();
+    this.authService.getAuthenticatedUser().subscribe((auth: Auth) => {
+      this.securityClearanceService.set(auth.roles);
+      this.loadDashboardCounters();
+    });
   }
 
   ngOnDestroy() {
@@ -118,13 +112,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadDashboardCounters() {
     this.dashboardService.getDashboardCount().subscribe((result: DashboardCounter) => {
-      this.teacherCounterCard.count = result.teacherCount;
       this.studentCounterCard.count = result.studentCount;
       this.parentCounterCard.count = result.parentCount;
       this.staffCounterCard.count = result.staffCount;
+      if (this.isAdminsOrExecutive || this.isAdmin) {
+        this.teacherCounterCard.count = result.teacherCount;
+        this.commonStatusCardsSet = this.commonStatusCardsSet.filter((counter: CounterCardSettings) => counter.title !== 'Classes');
+      } else if (this.isTeacher) {
+        this.classCounterCard.count = result.classCount;
+        this.commonStatusCardsSet = this.commonStatusCardsSet.filter((counter: CounterCardSettings) => counter.title !== 'Teachers');
+      }
       this.themeService.getJsTheme()
         .pipe(takeWhile(() => this.alive))
         .subscribe(theme => {
+          this.counterCardsByThemes[theme.name] = this.commonStatusCardsSet;
           this.counterCards = this.counterCardsByThemes[theme.name];
       });
     });
@@ -144,6 +145,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get isStaff() {
     return this.securityClearanceService.isStaff;
+  }
+
+  get isTeacher() {
+    return this.securityClearanceService.isTeacher;
   }
 
   get isStudent() {

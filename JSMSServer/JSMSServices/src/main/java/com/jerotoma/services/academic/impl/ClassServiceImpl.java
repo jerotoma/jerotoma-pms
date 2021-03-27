@@ -71,4 +71,10 @@ public class ClassServiceImpl implements ClassService{
 		return map;
 	}
 
+	@Override
+	public Integer countTeacherClasses(Integer teacherId) {
+		
+		return null;
+	}
+
 }
